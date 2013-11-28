@@ -32,7 +32,8 @@ class LodTypes{
 		static int Seq[4][3][100];
 		static int Add2List(int ind);
 		static int Del4List(int ind);
-		static void RemoveItemFromTree(char *name);
+		static void ReloadItem(char *name);
+		static int RemoveItemFromTree(char *name);
 		static int __inline Load(int ind, char *filename)
 		{
 			return (((int (__fastcall *)(Byte*,int,char *,int))0x4FAF30)(&LodTable[ind][4],0,filename,1/*read only*/));

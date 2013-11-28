@@ -443,12 +443,13 @@ __newCallers newCallers[]=
 	{0x4926B9, 0x49272B, H_JMP5}, // show damage no metter creature info enabled or not
 	{0x5776EF, 0x57772F, H_JMP5}, // remove buggy disk space check
 	{0x4FBDCF, 0xEB, H_BYTE}, // remove buggy disk space check
-	{0x4FDF2C, (long)_OnEarlyNewGame, H_CALL5}, // New Game before loading placed objects
+	//{0x4FDF2C, (long)_OnEarlyNewGame, H_CALL5}, // New Game before loading placed objects
 	{0x4EDD65, (long)_OnLodsLoaded, H_CALL5}, // Load h3wog.lod from DeveloperPath
 	{0x55C9C0, (long)_OnLoadDef, H_CALL5}, // Don't use global cache for def frames
 	{0x55CDE2, (long)_OnLoadDefFindCadre, H_JMP5}, // Don't use global cache for def frames
 	{0x55CEFA, (long)_OnLoadDefAddCadre, H_CALL5}, // Don't use global cache for def frames
 	{0x63D6C0, (long)_OnDefCadreDeref, H_DWORD}, // Don't use global cache for def frames
+	{0x4EC685, (long)OnNoNewMessage, H_CALL5}, // Insert Sleep(1) into message loop
 
 	{0}
 };

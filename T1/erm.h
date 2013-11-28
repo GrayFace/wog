@@ -132,7 +132,6 @@ int __fastcall ChangeFlagColor(_MapItem_ *mip, int r);
 int __fastcall DigGrailTrigger(_Hero_ * hero, int r, int x, int y, int z);
 ////////////////////////////////////////
 bool CheckWogify(int HasInternalScripts, int YesERMFile, int HasLua);
-void FindERMnew();
 void FindERM(void);
 int SaveERM(void);
 int LoadERM(int ver);

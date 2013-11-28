@@ -541,13 +541,13 @@ end
 local function RunMapScripts()
 	local ver = u4[u4[0x699538] + 0x1F86C]
 	map.version = ver
-	
+
 	LoadAllERT()
 	event("EnterContext")
 	
 	LoadScripts("map")
 	event("BeforeMapScripts")
-
+	
 	local hasScripts, hasExternal, hasLua = false, false, false
 	-- execute map scripts if it's a WoG map
 	if ver == 0x33 then
@@ -581,13 +581,6 @@ local function RunMapScripts()
 	if wogify then
 		--LoadAllERT()
 		LoadScripts("wogify")
-		-- LoadAllERM()
-	end
-end
-
-function internal.EnterMapNewGame()
-	if internal.wogified then
-		event("Wogify")
 		LoadAllERM()
 		event("Wogified")
 	else
@@ -608,25 +601,32 @@ end
 
 --------------------------- ERM Errors -------------------------
 
+local function FindERMScriptInfo(pos)
+	for _, t in ipairs(StoredScripts) do
+		if t.erm then
+			local p = internal.ErmDynString + 12*t[1]
+			if pos >= u4[p] and pos < u4[p] + i4[p + 4] then
+				return t, p
+			end
+		end
+	end
+end
+
 function internal.ERMErrorInfo(pos, OneLine)
 	local str = mem_string(pos, 200) or ""
 	if OneLine then
 		str = string_match(str, "[^\n\r]*")
 	end
-	for _, t in ipairs(StoredScripts) do
-		if t.erm then
-			local p = internal.ErmDynString + 12*t[1]
-			if pos >= u4[p] and pos < u4[p] + i4[p + 4] then
-				local n = 1
-				for i = u4[p], pos - 1 do
-					if u1[i] == 10 then  -- "\n"
-						n = n + 1
-					end
-				end
-				local fmt = (OneLine and "%s:%d:\n%s" or "{%s:%d:}\n%s")
-				return format(fmt, t[2], n, str)
+	local t, p = FindERMScriptInfo(pos)
+	if t then
+		local n = 1
+		for i = u4[p], pos - 1 do
+			if u1[i] == 10 then  -- "\n"
+				n = n + 1
 			end
 		end
+		local fmt = (OneLine and "%s:%d:\n%s" or "{%s:%d:}\n%s")
+		return format(fmt, t[2], n, str)
 	end
 	return str
 end

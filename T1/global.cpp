@@ -1583,17 +1583,6 @@ _after:
 	}
 }
 
-__declspec(naked) void _OnEarlyNewGame()
-{
-	__asm
-	{
-		call FindERMnew
-		mov ecx, esi
-		push 0x504AC0
-		ret
-	}
-}
-
 //void BaseFileLoader(); // in _B1.cpp
 
 static void OnLodsLoaded()
@@ -1712,6 +1701,13 @@ __declspec(naked) void _OnDefCadreDeref()
 _done:
 		ret
 	}
+}
+
+void __fastcall OnNoNewMessage(int *p)
+{
+	if (p[13] != 1 || p[526] == p[527])
+		Sleep(1);
+	((void (*)())0x4EDB20)();
 }
 
 

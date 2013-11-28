@@ -8637,22 +8637,13 @@ void FindERMn(void)
 }
 */
 
-void FindERMnew()
-{
-	STARTNA(__LINE__, 0)
-	GameWasLoaded = 0;
-	InitERM();
-	FindERM();
-	STOP
-}
-
 void FindERMn(void)
 {
 	__asm pusha;
 	__asm mov GameWasLoaded,0
 	STARTNA(__LINE__, 0)
-	LuaCall("EnterMapNewGame");
-	ClearCrChanged();
+	InitERM();
+	FindERM();
 // настроим анимацию
 	StartAnimation();
 	STOP
