@@ -450,6 +450,7 @@ __newCallers newCallers[]=
 	{0x55CEFA, (long)_OnLoadDefAddCadre, H_CALL5}, // Don't use global cache for def frames
 	{0x63D6C0, (long)_OnDefCadreDeref, H_DWORD}, // Don't use global cache for def frames
 	{0x4EC685, (long)OnNoNewMessage, H_CALL5}, // Insert Sleep(1) into message loop
+	{0x4CCC40+3, 0x696DE8, H_DWORD}, // Fix rear crash on map start related to tavern rumors
 
 	{0}
 };
