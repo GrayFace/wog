@@ -141,6 +141,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\socket.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

@@ -231,7 +231,7 @@ void doWriteInMemory(int queue, int pass2)
 				WhatPtr=newCallers[i].what;
 
 			Dword OldProtect;
-			VirtualProtect((void*)where, 6, PAGE_EXECUTE_READWRITE, &OldProtect);
+			VirtualProtect((void*)where, 6, PAGE_EXECUTE_READWRITE, &OldProtect); // !!! dirty
 			if(flag&H_CALL)
 			{
 				switch(*((unsigned char*)where))

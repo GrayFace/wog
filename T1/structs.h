@@ -27,9 +27,9 @@
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x38\x0\x66\x0"
 #define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x39\x0\x0\x0"
 
-// !release! Last number is the build number. After build 10 it would be 3.10 etc. Will there be build 100?
-#define ERM_VERSION 303
-#define ERM_STRING_VERSION "3 . 0 . 4"/*BETAVERSION""*/
+// !release! 300 + build number.
+#define ERM_VERSION 304
+#define ERM_STRING_VERSION "304"/*BETAVERSION""*/
 
 #define SAVEWOGLETTER 'S'
 #define SAVEWOG359    (SAVEWOGLETTER-'A')

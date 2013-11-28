@@ -98,7 +98,7 @@
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\Release/t1.pdb"
 				GenerateMapFile="true"
-				MapFileName=".\Release/t1.map"
+				MapFileName="..\Build/t1.map"
 				MapExports="true"
 				SubSystem="2"
 				LargeAddressAware="1"
