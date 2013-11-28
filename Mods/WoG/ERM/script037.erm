@@ -1,0 +1,607 @@
+ZVSE
+ERMS_ScriptDate=1.8(August).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Rebalanced Factions v1.4 by Steven Lynch
+** WoGify Name: script37.erm
+** Last Updated: 1 August, 2006
+
+Variables used:
+z860-z876, z879-z880
+v1400-v1418
+
+Timers used:
+No unique timers - Universal Timer used.
+
+Flags used:
+None
+
+Functions used:
+4850-4854
+
+[MAIN FUNCTION]
+
+!?FU4850;
+
+!!UN:P37/?v1400; [Rebalanced Creatures: v1400]
+!!UN:P198/?v1401; [Rebalanced Hero Abilities: v1401]
+!!UN:P199/?v1402; [Rebalanced Starting Armies: v1402]
+!!UN:P202/?v1403; [Eagle Eye I]
+!!UN:P103/?v1404; [Eagle Eye II]
+!!UN:P216/?v1405; [Resistance I]
+!!UN:P210/?v1406; [Resistance II]
+!!UN:P203/?v1407; [Estates I]
+!!UN:P191/?v1408; [Estates II]
+!!UN:P39/?v1409; [Hero Specialization Boost]
+!!UN:P50/?v1410; [Enhanced Monsters]
+!!UN:P189/?v1412; [Reduce Conflux Firebird/Phoenix Growth]
+!!UN:P39/?v1413; [Alexis Battle Extender]
+!!UN:P35/?v1414; [Mysticism I]
+!!UN:P207/?v1415; [Mysticism II]
+!!UN:P67/?v1416; [Neutral Town]
+!!UN:P205/?v1417; [Learning II]
+!!UN:P188/?v1418; [Rampart Faerie Dragon]
+
+!!FU4851&v1400=1:P;
+!!FU4852&v1401=1:P;
+!!FU4853&v1402=1:P;
+!!FU4854&v1402=1:P;
+
+!?CM2&v1401=1;
+!!CM:I?y-1 S?y-2;
+!!FU|y-1<>45/y-2<>14:E;
+!!CM:R0;
+!!HE-1:N?y-1;
+!!VRz-1:Sz137000;
+!!VRz-1&y-1=3:Sz137001;
+!!VRz-1&y-1=4/v1407<>1/v1408<>1:Sz137002;
+!!VRz-1&y-1=5/v1409<>1:Sz137003;
+!!VRz-1&y-1=5/v1409=1:Sz137004;
+!!VRz-1&y-1=6:Sz137005;
+!!VRz-1&y-1=6/v1409<>1:+z137006;
+!!VRz-1&y-1=7/v1409<>1:Sz137007;
+!!VRz-1&y-1=7/v1409=1:Sz137008;
+!!VRz-1&y-1=8:Sz137009;
+!!VRz-1&y-1=9:Sz137010;
+!!VRz-1&y-1=10:Sz137011;
+!!VRz-1&y-1=10/v1409<>1:+z137012;
+!!VRz-1&y-1=11:Sz137013;
+!!VRz-1&y-1=11/v1409<>1:+z137014;
+!!VRz-1&y-1=12/v1409<>1:Sz137015;
+!!VRz-1&y-1=12/v1409=1:Sz137016;
+!!VRz-1&y-1=13/v1403<>1/v1404<>1/v1409<>1:Sz137017;
+!!VRz-1&y-1=14:Sz137018;
+!!VRz-1&y-1=17/v1405<>1/v1406<>1/v1409<>1:Sz137019;
+!!VRz-1&y-1=17/v1405<>1/v1406<>1/v1409=1:Sz137020;
+!!VRz-1&y-1=19:Sz137021;
+!!VRz-1&y-1=20/v1405<>1/v1406<>1:Sz137022;
+!!VRz-1&y-1=22/v1405<>1/v1406<>1:Sz137023;
+!!VRz-1&y-1=23:Sz137024;
+!!VRz-1&y-1=24:Sz137025;
+!!VRz-1&y-1=25:Sz137026;
+!!VRz-1&y-1=27:Sz137027;
+!!VRz-1&y-1=28/v1403<>1/v1404<>1:Sz137028;
+!!VRz-1&y-1=29:Sz137029;
+!!VRz-1&y-1=30:Sz137030;
+!!VRz-1&y-1=31/v1409<>1:Sz137031;
+!!VRz-1&y-1=32:Sz137032;
+!!VRz-1&y-1=33/v1409<>1:Sz137033;
+!!VRz-1&y-1=34/v1409<>1:Sz137034;
+!!VRz-1&y-1=34/v1409=1:Sz137035;
+!!VRz-1&y-1=36:Sz137036;
+!!VRz-1&y-1=37/v1409<>1:Sz137037;
+!!VRz-1&y-1=37/v1409=1:Sz137038;
+!!VRz-1&y-1=39/v1409<>1:Sz137039;
+!!VRz-1&y-1=39/v1409=1:Sz137040;
+!!VRz-1&y-1=40:Sz137041;
+!!VRz-1&y-1=45:Sz137042;
+!!VRz-1&y-1=46:Sz137043;
+!!VRz-1&y-1=49:Sz137044;
+!!VRz-1&y-1=54:Sz137045;
+!!VRz-1&y-1=57:Sz137046;
+!!VRz-1&y-1=59:Sz137047;
+!!VRz-1&y-1=63/v1409<>1:Sz137048;
+!!VRz-1&y-1=64/v1409<>1:Sz137049;
+!!VRz-1&y-1=64/v1409=1:Sz137116;
+!!VRz-1&y-1=65/v1409=1:Sz137050;
+!!VRz-1&y-1=65/v1409<>1:Sz137051;
+!!VRz-1&y-1=67/v1409<>1:Sz137052;
+!!VRz-1&y-1=67/v1409=1:Sz137053;
+!!VRz-1&y-1=68/v1409<>1:Sz137054;
+!!VRz-1&y-1=68/v1409=1:Sz137055;
+!!VRz-1&y-1=72/v1409<>1:Sz137056;
+!!VRz-1&y-1=72/v1409=1:Sz137057;
+!!VRz-1&y-1=73:Sz137058;
+!!VRz-1&y-1=76:Sz137059;
+!!VRz-1&y-1=77/v1409<>1:Sz137061;
+!!VRz-1&y-1=77/v1409=1:Sz137062;
+!!VRz-1&y-1=81:Sz137060;
+!!VRz-1&y-1=85:Sz137063;
+!!VRz-1&y-1=86/v1409<>1:Sz137064;
+!!VRz-1&y-1=86/v1409=1:Sz137065;
+!!VRz-1&y-1=88:Sz137066;
+!!VRz-1&y-1=91:Sz137067;
+!!VRz-1&y-1=93:Sz137068;
+!!VRz-1&y-1=95/v1409<>1:Sz137069;
+!!VRz-1&y-1=96/v1409<>1:Sz137070;
+!!VRz-1&y-1=97:Sz137071;
+!!VRz-1&y-1=99/v1409<>1:Sz137072;
+!!VRz-1&y-1=99/v1409=1:Sz137073;
+!!VRz-1&y-1=101/v1409<>1:Sz137074;
+!!VRz-1&y-1=105/v1409<>1:Sz137075;
+!!VRz-1&y-1=106:Sz137076;
+!!VRz-1&y-1=108/v1409<>1:Sz137077;
+!!VRz-1&y-1=118:Sz137078;
+!!VRz-1&y-1=119/v1409<>1:Sz137079;
+!!VRz-1&y-1=119/v1409=1:Sz137080;
+!!VRz-1&y-1=120/v1409<>1:Sz137081;
+!!VRz-1&y-1=121/v1409=1:Sz137082;
+!!VRz-1&y-1=121/v1409<>1:Sz137083;
+!!VRz-1&y-1=122:Sz137084;
+!!VRz-1&y-1=123:Sz137085;
+!!VRz-1&y-1=124/v1409<>1:Sz137086;
+!!VRz-1&y-1=124/v1409=1:Sz137087;.
+!!VRz-1&y-1=128:Sz137088;
+!!VRz-1&y-1=129/v1407<>1/v1408<>1/v1416<>1:Sz137089;
+!!VRz-1&y-1=130:Sz137090;
+!!VRz-1&y-1=131/v1416=1:Sz137118;
+!!VRz-1&y-1=132/v1409<>1:Sz137091;
+!!VRz-1&y-1=132/v1409=1:Sz137092;
+!!VRz-1&y-1=133/v1407<>1/v1408<>1/v1416<>1:Sz137093;
+!!VRz-1&y-1=133/v1409<>1/v1416<>1:Sz137094;
+!!VRz-1&y-1=134/v1409<>1/v1416<>1:Sz137095;
+!!VRz-1&y-1=135/v1409<>1/v1416<>1/v1417<>1:Sz137096;
+!!VRz-1&y-1=135/v1409<>1/v1416<>1/v1417=1:Sz137097;
+!!VRz-1&y-1>=136/y-1<=143:Sz137098;
+!!VRz-1&y-1=136:+z137099;
+!!VRz-1&y-1=139:+z137100;
+!!VRz-1&y-1=140/v1409<>1:+z137101;
+!!VRz-1&y-1=143:+z137102;
+!!VRz-1&y-1=144:Sz137103;
+!!IF:Q1/-1/-1/4^%Z-1^;
+
+
+[CREATURE TWEAKS]
+!?FU4851;
+
+!!MA&v1416<>1:D138/d2; [Halfling Defense increased by 2]
+!!MA&v1416<>1:N138/d-10; [Halfling Shots decreased by 10]
+!!MA&v1416<>1:S138/d1; [Halfling Speed increased by 1]
+!!MA&v1416<>1:E138/d-1; [Halfling Maximum Damage decreased by 1]
+!!MA&v1416<>1:U29/138; [Master Gremlins/Halflings Switch]
+!!MA&v1416<>1:U138/29;
+
+*** Inferno ***
+!!MA&v1410<>1:G42/d5; [Imp Growth increased by 5]
+!!MA&v1410<>1:G43/d5; [Familiar Growth increased by 5]
+!!MA&v1410<>1:D44/d1; [Gog Defense increased by 1]
+!!MA&v1410<>1:P44/d2; [Gog HitPoints increased by 2]
+!!MA&v1410<>1:C44/6/d10; [Gog Cost increased by 10 gold]
+!!MA&v1410<>1:P45/d2; [Magog Health increased by 2]
+!!MA&v1410<>1:D45/d1; [Magog Defense increased by 1]
+!!MA&v1410<>1:E45/d1; [Magog Maximum Damage increased by 1]
+!!MA:G46/d1; [Hell Hound Growth increased by 1]
+!!MA:G47/d1; [Cerberus Growth increased by 1]
+!!MA&v1410<>1:P49/d5; [Horned Demon HitPoints increased by 5]
+!!MA&v1410<>1:E49/d1; [Horned Demon Maximum Damage increased by 1]
+!!MA&v1410<>1:C49/6/d20; [Horned Demon Cost increased by 20 gold]
+!!MA&v1410<>1:C51/6/d-25; [Pit Lord Cost decreased by 25 gold]
+!!MA:D53/d1; [Efreet Sultan Defense increased by 1]
+!!MA:P53/d10; [Efreet Sultan HitPoints increased by 10]
+!!MA:C53/6/d50;  [Efreet Sultan Cost increased by 50 gold]
+!!MA&v1410<>1:C55/6/d-600; [Arch Devil Gold Cost decreased by 600]
+
+*** Fortress ***
+!!MA:X101/?y-1;
+!!VRy-1:|32768;
+!!MA:X101/y-1; [Lizard Warrior gets Double Shot if it doesn't already]
+!!MA:A101/d-1; [Lizard Warrior Attack decreased by 1]
+!!MA:D101/d-2; [Lizard Warrior Defense decreased by 2]
+!!MA:E101/d-2; [Lizard Warrior Maximum Damage decreased by 2]
+!!MA:C101/6/d20; [Lizard Warrior Cost increased by 20 gold]
+!!MA&v1410<>1:A109/d2; [Wyvern Monarch Attack increased by 2]
+!!MA&v1410<>1:D109/d1;  [Wyvern Monarch Defense increased by 1]
+!!MA&v1410<>1:A111/d2; [Chaos Hydra Attack increased by 2]
+!!MA&v1410<>1:P111/d50; [Chaos Hydra HitPoints increased by 50]
+!!MA&v1410<>1:S111/d2; [Chaos Hydra Speed increased by 2]
+!!MA&v1410<>1:C111/6/d500; [Chaos Hydra Cost increased by 500 gold]
+
+*** Conflux ***
+!!MA&v1410<>1/v1412<>1:P131/d-50; [Phoenix HitPoints decreased by 50]
+
+[Wyvern Monarch Timed HP and Cost Increase]
+!?TM2&v1400=1/v1410<>1/$day$<23/$day$>14/$weekday$=1;
+!!VRy-1:Sc; [Set y-1 to current date]
+!!FU&y-1<=v1411:E; [Exit trigger if increase already done this day]
+!!MA:C109/6/d25; [Wyvern Monarch Cost increased by 25 gold on Day 15 and 22]
+!!MA:P109/d20;  [Wyvern Monarch HitPoints increased by 20 on Day 15 and 22]
+!!VRv1411:Sc; [Set v1411 to current date]
+
+[HERO TWEAKING]
+!?FU4852;
+
+!!HE3:S5/3; [Sylvia now starts with Expert Navigation]
+!!HE4&v1406<>1/v1407<>1:S13/2; [Lord Haart's Estates skill upgraded to Advanced if no Estates scripts are on]
+!!HE6:F3/1/1/1; [Christian starts with +1AS and -1DS]
+!!HE6:A1/4/13; [Christian always starts with a Ballista]
+!!HE8:A1/6/15; [Rion always starts with a First Aid Tent]
+!!HE9:S4/0; [Adela's Diplomacy is replaced by Leadership]
+!!HE9:S6/1;
+!!HE10:S16/1; [Cuthbert starts with Basic Water Magic instead of  ->]
+!!HE10:S13/0; [ -> Basic Estates]
+!!HE11:S7/0; [Adelaide gets Adv. Water Magic instead of Adv. ->]
+!!HE11:S16/2; [ -> Wisdom, so maybe Frost Ring gets used sometimes =)]
+!!HE11&v1409<>1:M2/1; [Adelaide also starts with Visions and Cure]
+!!HE11&v1409<>1:M37/1;
+!!HE13&v1409<>1/v1407<>1/v1408<>1:S11/3; [Sanya starts with Expert Eagle Eye when no Eagle Eye scripts are active]
+!!HE14:F0/0/2/2; [Loynis starts with one less primary skill point]
+!!HE17&v1405<>1/v1406<>1:S26/2; [Ufretin starts with Adv. Resistance]
+!!HE19:S4/0; [Ryland's Diplomacy is replaced by an extra level of ->]
+!!HE19:S6/2; [-> Leadership]
+!!HE20&v1405<>1/v1406<>1:S26/3; [Thorgrim starts with Expert Resistance when no Resistance scripts are active]
+!!HE22&v1409<>1:X4/24/3/2/1; [Clancy now gives +3AS, +2DS, +1Dmg. for Unicorns when Hero Specialization Boost is off]
+!!HE22&v1405<>1/v1406<>1:S26/2; [Clancy gets an extra level of Resistance when no Resistance scripts are active]
+!!HE23:F1/1/1/1; [Kyrre's starts with less primary skill points because Logistics is such a powerful specialty]
+!!HE25:S10/0; [Uland gets Adv Water and Basic Wisdom instead of]
+!!HE25:S16/2; [-> Advanced Wisdom and Basic Ballistics]
+!!HE25:S7/1;
+!!HE27:A1/6/15; [Gem always starts with a First Aid Tent]
+!!HE27:M0/0; [Gem no longer has Summon Boat]
+!!HE27:M41/1; [Gem now starts with Bless]
+!!HE28&v1403<>1/v1404<>1:M11/3; [Malcom starts with Expert Eagle Eye when no Eagle Eye scripts are active]
+!!HE29:S9/0; [Melodia now starts with Basic Wisdom and Air Magic ->]
+!!HE29:S15/1; [-> instead of Basic Wisdom and Basic Luck]
+!!HE29:M5/1; [Melodia starts with View Air and Visions as well as Fortune]
+!!HE30&v1409<>1:S16/1; [Alagar now also has Basic Water Magic (see his bio)]
+!!HE30&v1409<>1:M2/1; [Alagar also starts with Visions ->
+!!HE30&v1409<>1:M37/1; [-> and Cure, because he trained with Vori too =)]
+!!HE36:A1/4/13; [Torosar always starts with a Ballista]
+!!HE36:S20/1; [Torosar now starts with Basic Artillery instead of ->]
+!!HE36:S8/0; [-> Basic Mysticism]
+!!HE37&v1409<>1:X4/38/3/1/1; [Fafner now gives +3AS, +1DS and +1Dmg. to Nagas/N. Queens]
+!!HE40:S7/1; [Astral now has Basic Wisdom and Air Magic instead of ->]
+!!HE40:S15/1; [ -> Advanced Wisdom]
+!!HE40:M17/1; [Astral now has Lightning Bolt because he deserves better =)]
+!!HE45:F0/0/1/3; [Solmyr starts with one less primary skill point]
+!!HE45:S25/0; [Solmyr starts with Advanced Wisdom instead of ->]
+!!HE45:S7/2; [-> Basic Wisdom and Basic Sorcery]
+!!HE46:S4/0; [Cyra's Diplomacy is replaced by Leadership]
+!!HE46:S6/1;
+!!HE49:S18/0; [Rashka now starts with Basic Wisdom and Offense ->]
+!!HE49:S22/1; [-> more in keeping with his bio]
+!!HE49&v1409<>1:X4/52/3/3/0; [Rashka now adds +3 AS & +3 DS to Efreeti/Efreet Sultans]
+!!HE54:S2/0; [Pyre now starts with Advanced Artillery instead of Basic ->]
+!!HE54:S20/2; [-> Logistics and Basic Artillery]
+!!HE54:A1/4/13; [Pyre starts with a Ballista, and it is equipped]
+!!HE55&v1409<>1:X4/50/2/3/1; [Nymus adds +2AS, +3DS and +1Dmg. to Pit Fiends/Lords]
+!!HE57:S18/0; [Xydar now starts with Basic Wisdom and Basic Fire Magic ->]
+!!HE57:S14/1; [-> since he delights with everything to do with fire and lava]
+!!HE57:F1/1/1/2; [Xyron - +1K & -1SP to have enough to cast his spell]
+!!HE59:S16/1; [Olema now starts with Basic Water Magic and Basic Leadership]
+!!HE59:S10/0;
+!!HE59:S7/0;
+!!HE59:S6/1;
+!!HE63&v1409<>1:S7/2; [Xarfax now starts with Adv Wisdom and Leadership since ->]
+!!HE63&v1409<>1:S6/2; [-> he has such a weak specialty]
+!!HE63&v1409<>1:M15/1; [Xarfax also starts with Magic Arrow and Visions]
+!!HE63&v1409<>1:M2/1;
+!!HE63:F1/1/1/2; [Xarfax starts with more knowledge and less spell power]
+!!HE65&v1409<>1:X4/62/2/2/0; [Vokial now gives +2 AS and +2 DS to vampires/v. lords]
+!!HE65:A1/4/13; [Vokial starts with a Ballista, and it is equipped]
+!!HE65:F2/1/2/1; [Vokial starts with +1AS and -1DS]
+!!HE67&v1409<>1:X4/60/3/3/3; [Charna gives +3 AS, +3 DS, +3 Dmg. to Wights]
+!!HE68&v1409<>1:X4/66/3/3/0; [Tamika's Black/Dread Knights get +3 AS and +3 DS]
+!!HE72&v1409<>1:S17/1; [Septienna now starts with Necromancy & Earth Magic ->]
+!!HE72&v1409<>1:S18/0; [-> instead of Basic Necromancy and Basic Scholar]
+!!HE72:M2/1; [Septienna now starts with Visions]
+!!HE72:M12/1; [Septienna now starts with Force Field]
+!!HE73:F0/0/1/2; [Aislinn starts with two less primary skill points]
+!!HE76:M39/0; [Thant no longer starts with Animate Dead]
+!!HE76:M46/1; [Thant now starts with Stone Skin]
+!!HE77:F0/1/2/2; [Xsi starts with 1 Defense Skill instead of 1 Attack Skill because of her bio]
+!!HE81:A1/4/13; [Arlach always starts with a Ballista]
+!!HE85:F1/1/1/1; [Gunnar starts with two less primary skill points]
+!!HE86&v1409<>1:X4/80/1/3/1; [Synca now gives +1AS, +3DS, and +1 Dmg. to Manticores]
+!!HE88:F0/0/1/2; [Alamar now starts with two less primary skill points]
+!!HE88:S18/0; [Alamar has one more level of Wisdom instead of ->]
+!!HE88:S7/2; [-> Basic Scholar and Basic Wisdom]
+!!HE91:F0/0/2/2; [Jeddite now starts with one less primary skill point]
+!!HE91:M62/1; [Jeddite now starts with Blind instead of ->
+!!HE91:M38/0; [-> Resurrection]
+!!HE93:F0/0/1/2; [Deemer now starts with two less primary skill points]
+!!HE93:S3/1; [Deemer has Advanced Scouting replaced by Basic Scouting ->]
+!!HE93:S7/1; [-> and Basic Wisdom]
+!!HE95&v1409<>1:S17/1; [Darkstorn starts with an extra SS since his specialty is so weak]
+!!HE96&v1409<>1:X6/91/94/95; [Yog can now upgrade Ogre Magi and Cyclops to Cyclops Kings]
+!!HE97:S20/0; [Gurnisson now starts with Basic Offense and ->]
+!!HE97:S1/1; [-> Basic Archery]
+!!HE99&v1409<>1:X4/92/1/3/1; [Shiva now gives +1AS, +3DS, +1 Dmg. to Rocs/Thunderbirds]
+!!HE105&v1409<>1:S7/2; [Vey now starts with Advanced Wisdom and Advanced ->]
+!!HE105&v1409<>1:S6/2; [-> Leadership]
+!!HE106:F1/1/1/1; [Dessa now gets one less primary skill point]
+!!HE108&v1409<>1:A1/4/13; [Zubin starts with a Ballista when HSB isn't active]
+!!HE118:A1/4/13; [Gerwulf starts with a Ballista, and it is equipped]
+!!HE118&v1409<>1:F3/1/1/1; [Gerwulf now starts with some Attack Skill]
+!!HE119&v1409<>1:X4/108/0/3/1; [Broghild now gives +3 DS & +1 Dmg. to Wyverns/W. Monarchs]
+!!HE120&v1409<>1:S7/0; [Mirlanda now starts with ->]
+!!HE120&v1409<>1:S16/1; [Basic Water Magic and Basic Fire Magic]
+!!HE120&v1409<>1:S14/1; ["She has learned to walk a fine line between good and evil"]
+!!HE120&v1409<>1:M62/1; [Mirlanda now starts with Blind]
+!!HE121:M41/1; [Rosic now starts with Bless]
+!!HE122:S5/3; [Voy now starts with Expert Navigation]
+!!HE123:A1/6/15; [Verdish always starts with a First Aid Tent]
+!!HE124&v1409<>1:S17/1; [Merist starts with an extra skill because of weak specialty]
+!!HE128:A1/4/13; [Pasis starts with a Ballista, and it is equipped]
+!!HE129&v1407<>1/v1408<>1/v1416<>1:S13/0; [When no Estates scripts are on, Thunar has Basic Estates replaced ->]
+!!HE129&v1407<>1/v1408<>1/v1416<>1:S19/2; [-> by an extra level of Tactics]
+!!HE130:A1/4/13; [Ignissa starts with a Ballista, and it is equipped]
+!!HE131&v1416=1:F1/0/1/1; [Lacus starts with three primary skill points when Neutral Town and Rebalanced Hero Abilities is on because Advanced Tactics and +2 speed specialty is a super powerful starting combination =)]
+!!HE132:S2/0; [Monere now starts with ->
+!!HE132&v1409<>1:S24/1; [-> Basic Intelligence when HSB is inactive]
+!!HE132&v1409=1:S22/2; [-> or Advanced Offense when HSB is active]
+!!HE133&v1407<>1/v1408<>1/v1416<>1:S13/0; [Erdamon has Basic Estates replaced by ->]
+!!HE133&v1407<>1/v1408<>1/v1416<>1:S23/1; [ -> Basic Armorer when no Estates script is on]
+!!HE136:F0/0/2/3; [Elementalists down to 2SP]
+!!HE137:F0/0/2/3;
+!!HE138:F0/0/2/3;
+!!HE139:F0/0/2/3;
+!!HE140:F0/0/2/3;
+!!HE141:F0/0/2/3;
+!!HE142:F0/0/2/3;
+!!HE143:F0/0/2/3;
+!!HE136&v1409<>1:M2/1; [Luna starts with Visions]
+!!HE139:S7/0; [Labetha starts with just Basic Earth Magic]
+!!HE140&v1409<>1:S14/2; [Inteus starts with Advanced Fire Magic and Visions]
+!!HE140&v1409<>1:M2/1;
+!!HE143:S7/0; [Grindan starts with just Basic Earth Magic]
+!!HE144:S6/1; [Sir Mullich to start with Basic Leadership since he has one of the most powerful specialties]
+!!HE144:F1/1/1/1; [Sir Mullich to start with two less primary skill points]
+
+[HERO TWEAKING: BLESSINGS]
+!!HE3:Y21/300/999/2;           [Sylvia 300 gold/day for Exp. Nav. slot]
+!!HE3:Y65/200/999/2;           [Sylvia 200 movement/day]
+!!HE5&v1409<>1:Y21/200/999/2;   [Sorsha 200 gold/day when HSB isn't active]
+!!HE6&v1409<>1:Y21/150/999/2;   [Christian 150 gold/day when HSB isn't active]
+!!HE7&v1409<>1:Y21/250/999/2;   [Tyris 250 gold/day when HSB isn't active]
+!!HE10&v1409<>1:Y7/3/999/2;     [Cuthbert 3 extra mana/day when HSB isn't active]
+!!HE10&v1409<>1:Y21/150/999/2;  [Cuthbert 150 gold/day when HSB isn't active]
+!!HE11&v1409<>1:Y7/3/999/2;     [Adelaide 3 extra mana/day when HSB isn't active]
+!!HE12&v1409<>1:Y21/250/999/2;  [Ingham 250 gold/day when HSB isn't active]
+!!HE13&v1409<>1:Y7/3/999/2;     [Sanya 3 extra mana/day when HSB isn't active];
+!!HE19&v1409<>1:Y21/200/999/2;  [Ryland 200 gold/day when HSB isn't active]
+!!HE24:Y9/200/999/2;            [Coronius 200 experience/day]
+!!HE29&v1409<>1:Y7/3/999/2;     [Melodia 3 extra mana/day when HSB isn't active]
+!!HE29&v1409<>1:Y65/200/999/2;  [Melodia 200 gold/day when HSB isn't active]
+!!HE31&v1409<>1:Y21/200/999/2;  [Aeris 200 gold/day when HSB isn't active]
+!!HE33&v1409<>1:Y7/4/999/2;     [Thane 4 mana/day when HSB isn't active]
+!!HE39&v1409<>1:Y21/100/999/2;  [Iona 100 gold/day when HSB isn't active]
+!!HE43&v1409<>1:Y7/3/999/2;     [Daramyth 3 extra mana/day when HSB isn't active]
+!!HE59&v1409<>1:Y7/3/999/2;     [Olema 3 extra mana/day when HSB isn't active]
+!!HE63&v1409<>1:Y21/150/999/2;  [Xarfax 150 gold/day when HSB isn't active]
+!!HE101&v1409<>1:Y21/200/999/2; [Krellion 200 gold/day when HSB isn't active]
+!!HE121&v1409<>1:Y7/4/999/2;    [Rosic extra 4 mana/day when HSB isn't active]
+!!HE122:Y21/300/999/2;          [Voy 300 gold bonus/day for Exp. Nav. slot]
+!!HE122:Y65/200/999/2;          [Voy 200 movement/day]
+!!HE129&v1409<>1/v1416<>1:Y21/150/999/2; [Thunar 150 gold/day when HSB isn't active]
+!!HE133&v1409<>1/v1416<>1:Y21/150/999/2; [Erdamon 150 gold/day when HSB isn't active]
+!!HE135&v1409<>1/v1416<>1/v1417<>1:Y9/225/999/2; [Due to biography, Kalt receives an experience/day blessing when HSB isn't active]
+!!HE135&v1409<>1/v1416<>1/v1417=1:Y9/150/999/2;
+
+[HERO TWEAKING: NEW SPECIALTIES INCLUDING UPGRADERS OF CREATURES]
+!!HE17&v1409<>1:X6/16/16/17; [Ufretin Dwarf Upgrade if HSB is inactive]
+!!HE34&v1409<>1:X6/30/32/33; [Josephine Gargoyle/Golem Upgrade if HSB is inactive]
+!!HE44&v1409<>1:X6/34/34/35; [Theodorus New Specialty - Mage Upgrade]
+!!HE64&v1409<>1:X6/58/58/59; [Straker W.Dead Upgrade if HSB is inactive]
+!!HE76:X6/56/56/57; [Thant Skeleton Upgrade to Replace Animate Dead]
+!!HE77&v1409<>1:X6/64/64/65; [Xsi New Specialty - Lich Upgrade if HSB is inactive]
+!!HE108&v1409<>1:X6/88/88/89; [Zubin New Specialty - Orc Upgrade]
+!!HE132&v1409<>1/v1416<>1:X0/24; [Monere Intelligence Specialty if HSB is inactive]
+!!HE133&v1409<>1/v1416<>1:X6/113/113/125; [Erdamon Earth to Magma Elemental Upgrade if HSB is inactive]
+!!HE134&v1409<>1/v1416<>1:X0/22; [Fiur Offense Specialty if HSB is inactive]
+!!HE135&v1409<>1/v1416<>1:X2/100; [Filler for Special Icon - Kalt New Specialty is +225 experience per day - see above]
+
+[CHANGING BIOGRAPHIES AND SPECIALTY TEXT]
+!!VRz860:Sz137104;
+!!UN:G2/76/2/860;
+!!VRz861:Sz137105;
+!!UN&v1416<>1:G2/134/2/861;
+!!VRz862:Sz137106;
+!!UN&v1416<>1:G2/133/2/862;
+!!VRz863:Sz137107;
+!!VRz864:Sz137117;
+!!UN&v1409<>1:G2/64/2/864;
+!!UN&v1416<>1:G2/132/2/863;
+!!VRz865:Sz137077;
+!!UN&v1409<>1:G2/108/2/865;
+!!VRz870:Sz137108;
+!!HE129&v1407<>1/v1408<>1:B1/z870;
+!!VRz872:Sz137109;
+!!UN&v1409<>1:G2/77/2/872;
+!!VRz873:Sz137110;
+!!UN:G2/67/2/873;
+!!VRz874:Sz137111;
+!!UN:G2/96/2/874;
+!!VRz876:Sz137113;
+!!UN:G2/99/2/876;
+!!VRz879:Sz137114;
+!!HE140:B1/z879;
+!!VRz880:Sz137115;
+!!UN&v1416<>1:G2/135/2/880;
+
+
+[REBALANCED START CREATURES - STARTING HEROES]
+!?FU4853; [Note - this part of the script rebalances starting troops and makes sure that heroes starting on the map start with creatures no slower than speed 4]
+
+!!HE1:C0/1/2/5; [Valeska starts with Archers and Marksman]
+!!HE1:C0/2/3/1;
+!!HE16:C1/16/14/5; [All Rangers and Druids get dwarves replaced by ->]
+!!HE18:C1/16/14/5; [-> 5 Centaurs, except for Dwarf Master Ufretin]
+!!HE19:C1/16/14/5;
+!!HE20:C1/16/14/5;
+!!HE21:C1/16/14/5;
+!!HE22:C1/16/14/5;
+!!HE23:C1/16/14/5;
+!!HE24:C1/16/14/5;
+!!HE25:C1/16/14/5;
+!!HE26:C1/16/14/5;
+!!HE27:C1/16/14/5;
+!!HE28:C1/16/14/5;
+!!HE29:C1/16/14/5;
+!!HE30:C1/16/14/5;
+!!HE31:C1/16/14/5;
+!!HE17:C1/16/17/5; [Ufretin now starts with Battle Dwarves instead]
+!!HE16:C1/18/14/10; [All Rampart Heroes get Wood Elves replaced by 10 Centaurs]
+!!HE17:C1/18/14/10;
+!!HE18:C1/18/14/10;
+!!HE19:C1/18/14/10;
+!!HE20:C1/18/14/10;
+!!HE21:C1/18/14/10;
+!!HE22:C1/18/14/10;
+!!HE23:C1/18/14/10;
+!!HE24:C1/18/14/10;
+!!HE25:C1/18/14/10;
+!!HE26:C1/18/14/10;
+!!HE27:C1/18/14/10;
+!!HE28:C1/18/14/10;
+!!HE29:C1/18/14/10;
+!!HE30:C1/18/14/10;
+!!HE31:C1/18/14/10;
+!!HE32:C1/32/30/d; [All Tower Heroes get Stone Golems replaced by ->]
+!!HE33:C1/32/30/d; [-> the same number of Stone Gargoyles except for ->]
+!!HE34:C1/32/33/2; [-> Golem Master Josephine]
+!!HE35:C1/32/30/d;
+!!HE36:C1/32/30/d;
+!!HE37:C1/32/30/d;
+!!HE38:C1/32/30/d;
+!!HE39:C1/32/30/d;
+!!HE40:C1/32/30/d;
+!!HE41:C1/32/30/d;
+!!HE42:C1/32/30/d;
+!!HE43:C1/32/30/d;
+!!HE44:C1/32/30/d;
+!!HE45:C1/32/30/d;
+!!HE46:C1/32/30/d;
+!!HE47:C1/32/30/d;
+!!HE48&v1410=1:C1/44/44/3; [When Enhanced Monsters is active, Starting Inferno Heroes ->]
+!!HE49&v1410=1:C1/44/44/3; [-> start with 3 Gogs for every Gog slot]
+!!HE50&v1410=1:C1/44/44/3;
+!!HE51&v1410=1:C1/44/44/3;
+!!HE52&v1410=1:C1/44/44/3;
+!!HE53&v1410=1:C1/44/44/3;
+!!HE54&v1410=1:C1/44/44/3;
+!!HE55&v1410=1:C1/44/44/3;
+!!HE56&v1410=1:C1/44/44/3;
+!!HE57&v1410=1:C1/44/44/3;
+!!HE58&v1410=1:C1/44/44/3;
+!!HE59&v1410=1:C1/44/44/3;
+!!HE60&v1410=1:C1/44/44/3;
+!!HE61&v1410=1:C1/44/44/3;
+!!HE62&v1410=1:C1/44/44/3;
+!!HE63&v1410=1:C1/44/44/3;
+!!HE64:C0/0/59/5;
+!!HE64:C0/1/59/4; [Straker starts with some Zombies]
+!!HE64:C0/2/59/5;
+!!HE65:C1/58/60/3; [All Heroes except Straker start with 3 Wights ->]
+!!HE66:C1/58/60/3; [-> instead of Walking Dead]
+!!HE67:C1/58/60/3;
+!!HE68:C1/58/60/3;
+!!HE69:C1/58/60/3;
+!!HE70:C1/58/60/3;
+!!HE71:C1/58/60/3;
+!!HE72:C1/58/60/3;
+!!HE73:C1/58/60/3;
+!!HE74:C1/58/60/3;
+!!HE75:C1/58/60/3;
+!!HE76:C1/58/60/3;
+!!HE77:C1/58/60/3;
+!!HE78:C1/58/60/3;
+!!HE79:C1/58/60/3;
+!!HE71:C0/1/56/0; [Galthran in Necropolis, starts with less Skeletons]
+!!HE71:C0/2/56/0;
+!!HE87:C0/2/70/0; [Shakti starts with no Troglodytes in Slot 3]
+!!HE100:C0/2/84/0; [Gretchin starts with no Goblins in Slot 3]
+!!HE112:C1/106/98/15; [Bron starts with Gnolls instead of Level 4 Basilisks]
+!!HE113:C0/2/99/1; [Drakon starts with a Gnoll Marauder in Slots 3 and 4]
+!!HE113:C0/3/99/1;
+!!HE114:C1/100/98/12; [Wystan starts with Gnolls instead of Lizardmen]
+!!HE114:C0/2/101/1; [Wystan starts with 1 Lizard Warrior in Slot 3]
+
+[REBALANCED START CREATURES - TAVERN HEROES]
+!?TM2&$weekday$=7;
+!!FU4854&v1402=1:P;
+
+!?FU4854;
+!!HE0:H2/3/1/1;   [Orrin sometimes starts with 1 Marksman]
+!!HE1:H2/3/1/2;   [Valeska sometimes starts with 1-2 Marksman]
+!!HE2:H2/4/1/3;   [Edric sometimes starts with 1-3 Griffins]
+!!HE3:H2/115/1/3; [Sylvia sometimes starts with 1-3 Water Elementals]
+!!HE4:H2/1/1/2;   [Lord Haart sometimes starts with 1-2 Halberdiers]
+!!HE5:H2/1/2/3;   [Sorsha sometimes starts with 2-3 Halberdiers]
+!!HE6:H2/2/1/2;   [Christian sometimes starts with 1-2 Archers]
+!!HE7:H2/1/1/4;   [Tyris sometimes starts with 1-4 Halberdiers]
+!!HE16:H2/3/1/2;  [Mephala sometimes starts with 1-2 Marksman, see bio]
+!!HE17:H0/17/5/6; [Ufretin - Battle Dwarves in Slot 1 (always there)]
+!!HE17:H1/17/4/6; [Ufretin - Battle Dwarves in Slot 2 (usually there)]
+!!HE17:H2/17/4/6; [Ufretin - Battle Dwarves in Slot 3 (occasionally there)]
+!!HE18:H2/18/1/2; [Jenova sometimes starts with 1-2 Wood Elves]
+!!HE19:H2/22/1/1; [Ryland sometimes starts with 1 Dendroid Guard]
+!!HE20:H2/16/2/4; [Thorgrim sometimes starts with 2-4 Dwarves]
+!!HE21:H1/18/2/3; [Ivor starts with 2-3 Wood Elves in Slot 2]
+!!HE21:H2/19/1/1; [Ivor sometimes has 1 Grand Elf in Slot 3]
+!!HE22:H2/16/1/4; [Clancy sometimes starts with 1-4 Dwarves]
+!!HE23:H2/18/1/1; [Kyrre sometimes starts with 1 Wood Elf]
+!!HE24:H2/-1/0/0; [Druids - No Elves in the third slot]
+!!HE25:H2/-1/0/0;
+!!HE26:H2/-1/0/0;
+!!HE27:H2/-1/0/0;
+!!HE28:H2/-1/0/0;
+!!HE29:H2/-1/0/0;
+!!HE30:H2/-1/0/0;
+!!HE31:H2/-1/0/0;
+!!HE34:H2/33/1/1;
+!!HE18:H0/14/13/17; [Rampart Heroes start with 13-17 Centaurs in first slot]
+!!HE19:H0/14/13/17;
+!!HE20:H0/14/13/17;
+!!HE21:H0/14/13/17;
+!!HE22:H0/14/13/17;
+!!HE23:H0/14/13/17;
+!!HE24:H0/14/13/17;
+!!HE25:H0/14/13/17;
+!!HE26:H0/14/13/17;
+!!HE27:H0/14/13/17;
+!!HE28:H0/14/13/17;
+!!HE29:H0/14/13/17;
+!!HE30:H0/14/13/17;
+!!HE31:H0/14/13/17;
+!!HE64:H0/59/4/5; [Straker starts with some Zombies]
+!!HE64:H1/59/4/5;
+!!HE64:H2/59/4/5;
+!!HE71:H1/-1/0/0; [Galthran starts with less Skeletons]
+!!HE71:H2/-1/0/0;
+!!HE87:H1/-1/0/0; [Shatki starts with less Troglodytes]
+!!HE87:H2/-1/0/0;
+!!HE112:H1/98/10/15; [Bron starts with more Gnolls]
+!!HE112:H2/98/10/15;
+!!HE114:H0/100/4/5; [Wystan starts with less Lizardmen]
+!!HE114:H1/100/3/5;
+!!HE114:H2/101/1/1;
+!!HE122:H2/115/1/3; [Voy sometimes starts with 1-3 Water Elementals]
+
+!#FU4850:P;
+
+[Hill Fort]
+!?OB35&v1400=1/v1416<>1/v1418<>1;
+!!MA:U133/134;
+!!MA:U134/135;
+!!MA:U135/133;
+!!MA:L133/0;
+!!MA:L134/0;
+!!MA:L135/0;
+
+[Restore Dragon Levels at Hill Fort]
+!$OB35&v1400=1/v1416<>1/v1418<>1;
+!!MA:L133/6;
+!!MA:L134/6;
+!!MA:L135/6;
+

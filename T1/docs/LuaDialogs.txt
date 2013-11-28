@@ -1,0 +1,417 @@
+Here is a list of properties, methods and events of dialog objects. No descriptions yet.
+
+	dialogs.new:
+	
+(ControlKind = "Dialog")
+
+properties:
+X	(center by default)
+Y	(center by default)
+Width	(taken from background pcx or autosized by default)
+Height	(taken from background pcx or autosized by default)
+DropShadow
+Transparent
+BackgroundPcx
+BackgroundHiColor
+Border
+ShowLongHints
+PlayerColor
+AutoWidth
+AutoHeight
+ExpandWidth
+ExpandHeight
+
+runtime:
+Items[<item id>]
+Items[<item name>]
+ItemByHandle[<item address>]
+Items.HintControl
+FocusedItemId
+ClassPtr
+ControlKind
+?ptr
+
+methods:
+Add(items...)
+Show(right_click)
+Redraw()
+NeedHandle()
+ItemAtPos(x, y)
+ItemAtPosAbs(x, y)
+
+events:
+OnAction(self, cmd)
+OnKeyDown(self, cmd)
+OnKeyUp(self, cmd)
+OnMouseAction(self, cmd)
+OnClick(self, cmd)
+OnRightClick(self, cmd)
+OnClose(self, cmd)
+OnMouseMove(self, cmd)
+
+
+----------------------------------------------------------------------------
+	All "real" controls:
+
+properties:
+Id
+X
+Y
+Width
+Height
+Hint
+LongHint	(extended right click hint)
+Visible
+Disabled	Disabled
+Shaded	Disabled and drawn with a shadow over it
+Active	Reacts to mouse etc.
+
+inside Align control:
+MinWidth
+MinHeight
+ExpandWidth
+ExpandHeight
+
+runtime:
+Parent
+Flags	(a value that includes Visible, Disabled, Shaded, Pressed etc.)
+Pressed
+ControlKind
+?ptr
+
+methods:
+SendCmd(subtype, par)
+Redraw()
+NeedHandle()
+NeedSize()
+SetBounds(x, y, w, h)
+Delete()
+
+events:
+OnAction(self, cmd)
+OnMouseAction(self, cmd)
+OnClick(self, cmd)
+OnRightClick(self, cmd)
+OnClose(self, cmd)
+OnMouseMove(self, cmd)
+
+
+	dialogs.Area:
+
+(ControlKind = "Area")
+
+
+	dialogs.Frame:
+
+(ControlKind = "Frame")
+
+properties:
+Color
+Fill
+
+
+	dialogs.ScrollableText:
+
+(ControlKind = "ScrollableText")
+
+properties:
+Font	(default is SmalFont.fnt)
+Color
+IsBlue
+
+
+	dialogs.Text:
+
+(ControlKind = "Text")
+
+properties:
+Text
+Font	(default is SmalFont.fnt)
+Color
+Align	(default is 5)
+BackgroundColor
+AutoWidth
+AutoHeight
+
+
+	dialogs.TextOnPcx:
+
+(ControlKind = "TextOnPcx")
+
+properties:
+Text
+Font	(default is SmalFont.fnt)
+Color
+Align	(default is 5)
+BackgroundPcx	(required parameter)
+
+
+	dialogs.Edit:
+
+(ControlKind = "Edit")
+
+properties:
+Text
+Font	(default is SmalFont.fnt)
+MaxLength
+Color
+Align	(default is 4)
+BackgroundPcx
+Border	(default is 4)
+BorderWidth
+BorderHeight
+CaretPos
+
+runtime:
+Focused
+
+events:
+OnIgnoreKey(self, cmd)
+OnTextChanged(self, cmd)
+OnKeyPressed(self, cmd)
+OnEnter(self)
+OnExit(self)
+
+
+	dialogs.ScrollBar:
+
+(ControlKind = "ScrollBar")
+
+properties:
+TicksCount
+Tick
+IsBlue
+BigStepSize
+
+events:
+OnScroll(self, pos)
+
+
+	dialogs.Pcx:
+
+(ControlKind = "Pcx")
+
+properties:
+File
+HiColor
+Tile	(not available for controls created by the game in standard dialogs)
+
+
+	dialogs.Def:
+
+(ControlKind = "Def")
+
+properties:
+File
+Frame
+Animation
+Mirror
+CloseDialog
+MonsterAlign
+Tile	(not available for controls created by the game in standard dialogs)
+
+
+	dialogs.Button:
+
+(ControlKind = "Button")
+
+properties:
+File
+Frame
+PressedFrame
+CloseDialog
+HotKey
+DrawX	(not available for controls created by the game in standard dialogs)
+DrawY	(not available for controls created by the game in standard dialogs)
+
+
+	dialogs.MainMenuButton:
+
+(ControlKind = "Button")
+
+Same as dialogs.Button, but without DrawX, DrawY.
+
+
+	dialogs.TextButton:
+
+(ControlKind = "TextButton")
+	
+properties:
+File
+Frame
+PressedFrame
+Text
+Font	(default is SmalFont.fnt)
+CloseDialog
+HotKey
+Color
+DrawX	(not available for controls created by the game in standard dialogs)
+DrawY	(not available for controls created by the game in standard dialogs)
+
+
+----------------------------------------------------------------------------
+	Composite controls:
+
+standard properties:
+X
+Y
+Width
+Height
+Disabled
+Visible
+Active
+Shaded
+
+inside Align control:
+MinWidth
+MinHeight
+ExpandWidth
+ExpandHeight
+
+standard methods:
+Redraw()
+NeedSize()
+Delete()
+
+methods:
+AddItem
+RemoveItem
+
+runtime:
+Items[<index>]	(array of items)
+Items[<item name>]	(named items)
+
+
+	dialogs.AlignH, dialogs.AlignV, dialogs.AlignLayers:
+
+(ControlKind = "Align")
+
+properties:
+AutoWidth
+AutoHeight
+MinWidth
+MinHeight
+SpaceX
+SpaceY
+Margin
+MarginLeft
+MarginRight
+MarginTop
+MarginBottom
+Multiline
+ScrollBar
+
+runtime:
+Horizontal
+AlignLayers
+
+methods:
+UpdateScroll
+
+
+	dialogs.CheckBox:
+
+(ControlKind = "CheckBox")
+
+properties:
+Text
+Group
+HotKey
+On
+Radio
+RadioDefs	(default is {"ZRadOff.def", "ZRadOn.def"})
+CheckDefs	(default is {"ZChkClr.def", "ZChkOn.def", "ZChkOff.def"})
+States
+Border 
+BorderLColor 
+BorderSColor 
+BorderHeight 
+FillColor 
+FillVisible 
+AutoWidth
+AutoHeight
+Font
+Hint
+LongHint
+HotKey
+CloseDialog
+Id
+
+runtime:
+items.Fill
+items.Text
+items.BorderS
+items.BorderL
+items.Button
+
+methods:
+RedrawButton()
+
+events:
+OnChange()
+OnClick(cmd)
+
+standard properties:
+Hint
+LongHint	(extended right click hint)
+
+
+	dialogs.CheckGroup:
+
+(ControlKind = "CheckGroup")
+
+Inherits all properties of Align control.
+
+properties:
+Texts
+Hints
+Count
+Radio
+Selected	(array of booleans)
+States
+RadioDefs	(default is {"ZRadOff.def", "ZRadOn.def"})
+CheckDefs	(default is {"ZChkClr.def", "ZChkOn.def", "ZChkOff.def"})
+On
+CloseDialog
+Hint 
+LongHint 
+Border 
+BorderLColor 
+BorderSColor 
+BorderHeight 
+FillColor 
+FillVisible 
+
+runtime:
+Items[<index>]	(array of items)
+[<index>]	(works the same as above)
+
+events:
+OnChange()
+OnClick(cmd)
+
+
+----------------------------------------------------------------------------
+	Other dialogs functions:
+
+dialogs.Current()
+dialogs.ByHandle()
+
+
+	dialogs.CheckBoxesDialog:
+
+properties:
+Caption
+Texts	(array)
+Hints	(array)
+LongHints	(array)
+Radio
+On	(array)
+OnBits
+SelectedItem
+Disabled	(array)
+Shaded	(array)
+SuspendShow
+
+methods:
+Show()

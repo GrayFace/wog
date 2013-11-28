@@ -1,0 +1,382 @@
+ZVSE
+ERMS_ScriptDate=20.11(November).2007
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+************************************************************************************************************************
+**CAVE OF INFINITY (script088.erm)
+**by Rich Reed
+
+**LAST UPDATED: November 20, 2007
+
+**The "Cave of Infinity" is a new creature bank where a hero must battle hordes of random
+**creatures.  ALL of the possible creature types (except for Commanders and Emissaries) can
+**exist in the cavern--ANYTHING from Sprites, Peasants, Halflings, Hobgoblins, Enchanters, Rust Dragons,
+**and Unicorns to Sorceresses, Nightmares, Werewolves, Power Liches, Water Elementals.....etc!
+
+**ALL creature stacks on the battlefield (including clones, summoned stacks, split stacks, and resurrected stacks)
+**have a base speed of 50 enabling everything to move about the battlefield at will.
+
+**The random creature stacks cast "Prayer" on themselves before attacking REGARDLESS of their type.
+
+**Upon defeating the guards, the hero receives a stack of monsters of the same type as the guards fought.  Also,
+**a random stack in the hero's army increases in numbers!
+
+**This script uses object 63/60 under the Castle Objects (the cave with the two "Titan statues" with torches
+**standing at the the entrance). It is the 21st object under the CASTLE town in the left-hand column of
+**the Map Editor.
+
+**z3 used temporarily to get name of the creatures fought in the cave
+**z894 and z895  store the hint text for the Cave of Infinity
+
+**v977 keeps value of PO square of each cave on the map
+**v1127 keeps the type of random creature the hero fights in the caverns
+**v1128 gets random amount of the random creatures
+**v1129 used to keep the level of the random creatures in the cave
+**v374-v376 used to increase number of initial guards weekly
+
+**w87 used to remember that a hero has already visited a Cave of Infinity
+
+**FUNCTION 7114 used to reset hero's w87 variable
+**FUNCTIONS 14200-14202 used to handle special stats for the guards
+**FUNCTION 14209 used to increase numbers of a hero's monster stack upon defeating guards
+
+**FLAG 803 used for Cave of Infinity battles ONLY
+
+**TIMER 91 used to change the PO values of all caves DAILY
+
+********************************************************************************************************************
+
+!?TM91;  **Trigger to reset values of all "Cave of Infinity' Map squares back to 255 DAILY
+!!POv998/v999/v1000:H255;  **Reset values of all Map Squares of each 'Cave of Infinity' DAILY
+
+!?TM2&$weekday$=$monday$/$once$=1;  **Timer to reset all of the heroes' w87 variables on DAY 1 of each week
+!!IF:W-1;  **Switch to current hero's variables
+!!DO7114/0/155/1:P;
+
+**Timer to increase number of guards weekly
+!?TM2&$weekday$=$monday$/$day$>=8/$once$=1;
+!!UN:P235/?y1; **Check if "Creature Bank/Neutral Town" option is enabled
+!!FU&y1<>1:E; **Exit timer if NOT enabled
+!!VRv374&y1=1:+1;  **Number of cave guards increases weekly
+
+!?FU7114;  **Function to reset all of the heroes' w87 variables WEEKLY
+!!IF:Wx16;
+!!VRw87:S0;
+
+*********************************************************************************************************************
+
+!#VRv977:S0;
+!#VRv374:C0/0/0;   **Clear variables at map start
+
+!#VRz894:S^Cave of Infinity
+(Not visited)^;
+!#HT63/60:V977/0/894;
+
+!#VRz895:S^Cave of Infinity
+(Visited)^;
+!#HT63/60:V977/1/895;
+
+**********************************************************************************************************************
+
+!?OB63/60&v977=0/1000;  *Triggers when any "Cave of Infinity" is visited
+
+!!HE-1:B0/?z1;  **Get current hero's name into "z1" temporarily
+!!HE-1:R2/?j;  **Get sex of current hero into "j" temporarily
+!!HE-1:W?m;  **Get current hero's movement points into "m" temporarily
+
+!!POv998/v999/v1000:H?v1;  **Get the current value of the Map Square of the 'Cave of Infinity' being visited into "v1"
+
+!!VRi:S0;
+!!VRi&v1=255:T11;  **Random number from 0-11 to determine creatures in the cave
+
+!!VRv1127&v1<>255:Sv1127;  **Keep the same random creature generated if player presses CANCEL to refuse the battle offered
+
+!!VRv1127&i=0/v1=255:T13;  **Random CASTLE creatures
+
+!!VRv1127&i=1/v1=255:S14;
+!!VRv1127&i=1/v1=255:T13;  **Random RAMPART creatures
+
+!!VRv1127&i=2/v1=255:S28;
+!!VRv1127&i=2/v1=255:T13;  **Random TOWER creatures
+
+!!VRv1127&i=3/v1=255:S42;
+!!VRv1127&i=3/v1=255:T13;  **Random INFERNO creatures
+
+!!VRv1127&i=4/v1=255:S56;
+!!VRv1127&i=4/v1=255:T13;  **Random NECROPOLIS creatures
+
+!!VRv1127&i=5/v1=255:S70;
+!!VRv1127&i=5/v1=255:T13;  **Random DUNGEON creatures
+
+!!VRv1127&i=6/v1=255:S84;
+!!VRv1127&i=6/v1=255:T13;  **Random STRONGHOLD creatures
+
+!!VRv1127&i=7/v1=255:S98;
+!!VRv1127&i=7/v1=255:T13;  **Random FORTRESS creatures
+
+!!VRv1127&i=8/v1=255:S112;
+!!VRv1127&i=8/v1=255:T19;
+!!VRv1127&v1127=116/v1=255:S115;
+!!VRv1127&v1127=122/v1=255:S121;
+!!VRv1127&v1127=117/v1=255:S118;
+!!VRv1127&v1127=124/v1=255:S123;
+!!VRv1127&v1127=128/v1=255:S127;   **Random CONFLUX creatures
+
+!!VRv1127&i=9/v1=255:S132;
+!!VRv1127&i=9/v1=255:T12;  **Random NEUTRAL creatures (before WoG)
+
+!!VRv1127&i=10/v1=255:S150;
+!!VRv1127&i=10/v1=255:T9;  **Random LEVEL 8 GOD creatures or ghosts
+
+!!VRv1127&i=11/v1=255:S164;
+!!VRv1127&i=11/v1=255:T32;
+!!VRv1127&v1127>=174/v1127<=191/v1=255:S192;  **Random NEUTRAL creatures (WoG)
+
+!!MA:Lv1127/?v1129;  **Get LEVEL of random creature into "v1129" (variable will be also used later)
+
+**Calculate weekly guard increase for creatures level 1-6 (only if "Creature Bank/Neutral Town" option is enabled)
+!!VRv375&v1129=0:+v374 *12; +12 LEVEL ONE weekly
+!!VRv375&v1129=1:+v374 *10; +10 LEVEL TWO weekly
+!!VRv375&v1129=2:+v374 *8;  +8 LEVEL THREE weekly
+!!VRv375&v1129=3:+v374 *6;  +6 LEVEL FOUR weekly
+!!VRv375&v1129=4:+v374 *4;  +4 LEVEL FIVE weekly
+!!VRv375&v1129=5:+v374 *2;  +2 LEVEL SIX weekly
+
+!!VRv1128&v1129=0:S24 +v375;  24 LEVEL ONE BASE
+!!VRv1128&v1129=1:S20 +v375;  20 LEVEL TWO BASE
+!!VRv1128&v1129=2:S16 +v375;  16 LEVEL THREE BASE
+!!VRv1128&v1129=3:S12 +v375;  12 LEVEL FOUR BASE
+!!VRv1128&v1129=4:S8 +v375;   8 LEVEL FIVE BASE
+!!VRv1128&v1129=5:S4 +v375;   4 LEVEL 6 BASE
+!!VRv1128&v1129=6:S1;          1 LEVEL 7 BASE
+
+!!IF:W-1;  **Switch to current hero's variables
+
+**Display this message if the hero hasn't already visited a cave but doesn't have a least 400 movement points left
+!!IF&m<400/w87=0:Q7/21/v1127/1^{Cave of Infinity}
+
+%Z1 is currently too weak from travelling to do battle with the forces inside this cave right now.....^;
+
+**Display these messages if a hero has already visited a cave
+!!IF&j=0/w87=1:Q7/21/v1127/1^%Z1 has returned to a Cave of Infinity, but the guards have closed off all access for him until the week begins anew.....^;
+
+!!IF&j=1/w87=1:Q7/21/v1127/1^%Z1 has returned to a Cave of Infinity, but the guards have closed off all access for her until the week begins anew.....^;
+
+**Display these messages if hero hasn't already visited a cave but has at least 400 movement points left
+!!IF&j=0/w87=0/m>=400:Q7/21/v1127/2^{Cave of Infinity}
+
+%Z1 has found a Cave of Infinity.  Will he battle the powerful forces that lie within?^;
+
+!!IF&j=1/w87=0/m>=400:Q7/21/v1127/2^{Cave of Infinity}
+
+%Z1 has found a Cave of Infinity.  Will she battle the powerful forces that lie within?^;
+
+!!IF&7:V803/1; **If OK is pressed, set FLAG 803 to TRUE
+
+!!POv998/v999/v1000&7:H255;    **If OK is pressed, reset PO:H value to "255" for the location of that map square
+!!POv998/v999/v1000&-7:Hv1127; **If CANCEL is pressed, store the value of the random creature into the location of that map square
+
+!!TM91:S1/999/1/255;  **Call TIMER 91 and set it to occur DAILY for all players and heroes
+
+!!HE-1&7:R4/0;       **Disable "Tactics" for Cave of Infinity battles
+
+**Trigger the battle with random creatures
+!!HE-1&7/m>=400:Tv998/v999/v1000/v1127/v1128;
+
+*********************************************************************************
+**TRIGGERS TO SET UP THE BATTLEFIELD
+*********************************************************************************
+
+!?BA0&803;
+!!UN:J8/1/^p\s088_infinity.pcx^;  **Check to see if custom image exists in DATA folder
+!!BA&1:B^p\s088_infinity.pcx^;  **Set background to "Infinity"
+!!BA&-1:B16;  **Set background to "Magic Clouds"
+
+!?BF&803; **Sets up special battlefield
+!!BF:C; **Clear the battlefield
+!!DO14200/0/41/1:P;  **Call function to give ALL stacks 50 speed!
+
+!?FU14200;
+!!BMx16:S50;
+
+**************************************************************************************
+**TRIGGER TO INFINITELY INCREASE NUMBER OF GUARDIANS EVERY ROUND
+**************************************************************************************
+!?BR&803;
+!!DO14201/21/41/1&v997>0:P;
+
+!?FU14201;
+!!BMx16:N?y1;  **Get number of guards in stack into "y1"
+!!BMx16&v1129=0/y1>0:Nd10;
+!!BMx16&v1129=1/y1>0:Nd8;
+!!BMx16&v1129=2/y1>0:Nd6;
+!!BMx16&v1129=3/y1>0:Nd4;
+!!BMx16&v1129=4/y1>0:Nd3;
+!!BMx16&v1129=5/y1>0:Nd2;
+!!BMx16&v1129=6/y1>0:Nd1;  **Guards increase in numbers every round
+!!BMx16&y1>0:V4;  **Show "Dark Regeneration" animation
+
+*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+**TRIGGER TO SUMMON "INFINITE" CREATURES ONTO THE BATTLEFIELD
+*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!?BG&803;
+
+!!VRp:S0 T186;  **Clear temporary variable "p" and store random number from 0-186
+
+**Store numbers into "p" for possible battlefield positions
+!!VRp&p=0:S1;
+!!VRp&p=16:S15;
+!!VRp&p=17:S18;
+!!VRp&p=33:S32;
+!!VRp&p=34:S35;
+!!VRp&p=50:S49;
+!!VRp&p=51:S52;
+!!VRp&p=67:S66;
+!!VRp&p=68:S69;
+!!VRp&p=84:S83;
+!!VRp&p=85:S86;
+!!VRp&p=101:S100;
+!!VRp&p=102:S103;
+!!VRp&p=118:S117;
+!!VRp&p=119:S120;
+!!VRp&p=135:S134;
+!!VRp&p=136:S137;
+!!VRp&p=152:S151;
+!!VRp&p=153:S154;
+!!VRp&p=169:S168;
+!!VRp&p=170:S171;
+!!VRp&p=186:S185;
+
+!!BU:Ep/?i;     **Check to see if there's an alive creature stack at position "p"
+
+!!VRj&i=-1:Sp-1;  **If position "p" is open, store the position one hex to the LEFT of "p" into "j"
+!!VRk&i=-1:Sp+1;  **If position "p" is open, store the position one hex to the RIGHT of "p" into "k"
+
+!!BU&i=-1:Ej/?l;  **If position "p" is open, check to see if the position one hex to the LEFT of "p" is open
+!!BU&i=-1:Ek/?m;  **If position "p" is open, check to see if the position one hex to the RIGHT of "p" is open
+
+**Calculate additional enemy troops summmoned
+!!VRv375:S0 S1;
+!!VRv375&v1129=0:*10; +10 LEVEL ONE
+!!VRv375&v1129=1:*8;  +8 LEVEL TWO
+!!VRv375&v1129=2:*6;  +6 LEVEL THREE
+!!VRv375&v1129=3:*4;  +4 LEVEL FOUR
+!!VRv375&v1129=4:*3;  +2 LEVEL FIVE
+!!VRv375&v1129=5:*2;  +1 LEVEL SIX
+!!VRv375&v1129=6:*1;  +1 LEVEL SEVEN
+
+!!VRr:S0 R7;
+!!BU&l=-1/m=-1/r<7:Sv1127/v375/p/1/-1/1;
+!!BU&l=-1/m=-1/r<7:Sv1127/v375/p/1/-1/1;  **84% chance that 2 additional enemy stacks summoned to the battlefield  at every action
+
+!!DO14200/0/41/1:P;  **Call function 14200 again to give 50 speed to any stacks that have just been summoned to the field
+!!FU14202:P;  **Call function to handle guards' spellcasting
+
+!?FU14202;
+!!BG:N?y1;  **Get current stack
+!!BMy1&y1>20:P?y2;  **Get position of current stack
+!!BMy1&y1>20:G48/?y3/?y4;  **Check to see if current stack already has "Prayer" spell applied
+!!BMy1&y1>20/y3=0:C48/y2/2/2/1;  **Cast "ADVANCED PRAYER"
+
+
+****************************************************************************************
+**POST-BATTLE TRIGGER AND CODE
+****************************************************************************************
+
+!?BA1&803; **Do the following while FLAG 803 is still TRUE
+
+**Clear variables
+!!VRj:S0;
+!!VRk:S0;
+!!VRm:S0;
+!!VRn:S0;
+!!VRo:S0;
+!!VRp:S0;
+!!VRv375:C0/0;
+
+
+!!HE-1:B0/?z1;  **Get current hero's name into "z1" temporarily again
+!!HE-1:R2/?j;  **Get sex of current hero into "j" temporarily again
+
+!!HE-1:O?k;  **Get current hero's owner into "k"
+
+**Store name of random creatures fought into "z3"
+!!UN:N3/3/v1127/1;
+
+**Display reward message
+!!IF&k>=0/j=0:Q1/21/v1127/1^Upon defeating the guards, %Z1 is ambushed by a group of summoned %Z3 but uses his diplomatic tongue to persuade them to join his army!^;
+!!IF&k>=0/j=1:Q1/21/v1127/1^Upon defeating the guards, %Z1 is ambushed by a group of summoned %Z3 but uses her diplomatic tongue to persuade them to join her army!^;
+
+**Store base number of creatures awarded
+!!VRv375&v1129=0:S120;
+!!VRv375&v1129=1:S64;
+!!VRv375&v1129=2:S48;
+!!VRv375&v1129=3:S32;
+!!VRv375&v1129=4:S16;
+!!VRv375&v1129=5:S8;
+!!VRv375&v1129=6:S4;
+
+**Calculate number of additional creatures awarded weekly
+!!VRv376:+v374;
+!!VRv376&v1129=0:*12;
+!!VRv376&v1129=1:*10;
+!!VRv376&v1129=2:*8;
+!!VRv376&v1129=3:*6;
+!!VRv376&v1129=4:*4;
+!!VRv376&v1129=5:*2;
+!!VRv376&v1129=6:*1;
+
+**Calculate total number of creatures awarded
+!!VRv375:+v376;
+
+**Award hero with creatures based on the ones that were fought
+!!HE-1&k>=0/v1129=0:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=1:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=2:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=3:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=4:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=5:C2/v1127/v375/1;
+!!HE-1&k>=0/v1129=6:C2/v1127/v375/1;
+
+**Increase numbers of a random stack in hero's army
+!!VRv1128:S0;
+!!VRn:S0 T6;
+!!DO14209/0/999/1&k>=0:P;
+
+**Hero loses 400 movement points after each successful battle
+!!HE-1&k>=0:Wd-400;
+
+!!IF:V803/0;  **Clear FLAG 803
+!!IF:V7/0;  **Clear FLAG 7
+
+!!IF:W-1;         **Switch to current hero's variables
+!!VRw87&k>=0:S1;  **If hero is still alive, remember the hero the next time he/she visits another Cave of Infinity
+
+!!HE-1:R4/-1; **If hero had "Tactics" before the battle started, re-enable it now
+
+**Clear variables
+!!VRv1127:S0;
+!!VRv1128:S0;
+!!VRv1129:S0;
+!!VRv375:C0/0;
+
+************************************************************************************************
+*FUNCTION TO INCREASE NUMBERS OF A RANDOM MONSTER STACK
+************************************************************************************************
+!?FU14209;
+
+!!VRy1:S0 R6;
+!!HE-1:C0/y1/?v1128/?y2;  **Get type of stack into "v1128" if it exists (y2 > 0)
+!!MA&y2>0:Lv1128/?y3;  **Get level of stack into "y3"
+
+!!HE-1&y2>0/y3=0:C0/y1/?y2/d20;
+!!HE-1&y2>0/y3=1:C0/y1/?y2/d16;
+!!HE-1&y2>0/y3=2:C0/y1/?y2/d10;
+!!HE-1&y2>0/y3=3:C0/y1/?y2/d8;
+!!HE-1&y2>0/y3=4:C0/y1/?y2/d4;
+!!HE-1&y2>0/y3=5:C0/y1/?y2/d2;
+!!HE-1&y2>0/y3=6:C0/y1/?y2/d1;
+!!IF&y2>0:Q7/21/y2/1^The life-sustaining forces emanating within the cave allow some monsters to increase in numbers!^;
+
+!!VRx16&y2>0:S999;  **Exit loop as soon as a stack is found
+

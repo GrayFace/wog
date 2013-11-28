@@ -1,0 +1,161 @@
+128000	{School of Wizardry} 
+ 
+You arrive at a huge building, but the doors are locked and there's no one to be seen. You think you'd better try tomorrow instead.	String type = <!!M>	09/02/03
+128001	{School of Wizardry} 
+ 
+You come to a huge building. Outside it you find an old archmage waiting for you. "Welcome to my school of wizardry, hero. Here I have gathered many teachers who can teach you many different skills. Do you want to spend some time looking around to see if there's any class you would like to join?"	String type = <!!Q>	09/02/03
+128002	{School of Wizardry} 
+ 
+"It makes me sad that you do not wish to learn!"	String type = <!!M>	09/02/03
+128003	Skills	String type = <!!S>	09/02/03
+128004	Learn or improve Primary or Secondary skills	String type = <!!S>	09/02/03
+128005	Spells	String type = <!!S>	09/02/03
+128006	Learn new spells or copy spells from scrolls	String type = <!!S>	09/02/03
+128007	{School of Wizardry} 
+ 
+"Here at the school, there are four branches of studies you can use, divided into two areas. Do you want to learn about Skills or Spells?"	String type = <!!Q>	09/02/03
+128008	secondary skill tutoring	String type = <!!S>	09/02/03
+128009	Learn or improve a secondary skill	String type = <!!S>	09/02/03
+128010	primary skill tutoring	String type = <!!S>	09/02/03
+128011	Improve Spell Power or Knowledge level	String type = <!!S>	09/02/03
+128012	{School of Wizardry} 
+ 
+"Ahh, you think you know enough spells, but need the skills to use them? We can improve your base skills, or the more specialized ones. We can even teach you skills when other tutors would give up, saying you already know too much! Do you want to learn about Primary or Secondary Skills?"	String type = <!!Q>	09/02/03
+128013	Learn a new spell	String type = <!!S>	09/02/03
+128014	Copy spells from scrolls	String type = <!!S>	09/02/03
+128015	{School of Wizardry} 
+ 
+"We can teach you new spells, or help you write spells from any spell scrolls you might have. The latter does however require that you have acquired a very high Wisdom. Do you want to learn a new spell or copy one from a spell scroll?"	String type = <!!Q>	09/02/03
+128016	{School of Wizardry} 
+ 
+"So you think you need to be better at the very basics of spellcasting? As you surely know, there are two basic types of skills: Spell Power and Knowledge. Here, you can improve both. Do you want to learn Spell Power or Knowledge?"	String type = <!!Q>	09/02/03
+128017	{School of Wizardry} 
+ 
+"Today, our tutors %Z1. Are you interested?"	String type = <!!Q>	09/02/03
+128018	{School of Wizardry} 
+ 
+"The spell they are going to teach you is called %Z2. It can %Z3. Are you still interested?"	String type = <!!Q>	09/02/03
+128019	{School of Wizardry}
+
+"You don't have a Spellbook. Without one, they can't teach you any spells!
+
+Do you wish to buy one for %Y30 gold?"		
+128020	{School of Wizardry} 
+ 
+"Your loss! You can't get it cheaper anywhere!"	String type = <!!M>	09/02/03
+128021	{School of Wizardry} 
+ 
+"Knowledge seldom comes without a price. The price for learning %Z2 is %V1 gold. Are you still interested?"	String type = <!!Q>	09/02/03
+128022	{School of Wizardry} 
+ 
+"You can now cast the mighty %Z2 in battles! It will %Z3."	String type = <!!Q>	09/02/03
+128023	{School of Wizardry} 
+ 
+"I am sorry, but you are not Wise enough!"	String type = <!!Q>	09/02/03
+128024	{School of Wizardry} 
+ 
+"They say that you already know %Z2 and that they can teach you nothing more today."	String type = <!!M>	09/02/03
+128025	Learn or improve your 	String type = <!!S>	09/02/03
+128026	 tutoring	String type = <!!S>	09/02/03
+128027	{School of Wizardry} 
+ 
+"Today, our tutors can teach you more about %Z1. Are you interested?"	String type = <!!Q>	09/02/03
+128028	{School of Wizardry} 
+ 
+"You have already mastered Expert %Z1!"	String type = <!!Q>	09/02/03
+128029	{School of Wizardry} 
+ 
+"Our tutors say that you have mastered Advanced %Z1. They can teach you Expert %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+128030	{School of Wizardry} 
+ 
+"Our tutors say that you have mastered Basic %Z1. They can teach you Advanced %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+128031	{School of Wizardry} 
+ 
+"Our tutors say that you know nothing about %Z1. They can teach you Basic %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+128032	{School of Wizardry} 
+ 
+"Your skill slots are filled! To learn Basic %Z1, you'll have to pay %Y3 Gold extra! Are you willing to do that?"	String type = <!!Q>	09/02/03
+128033	{School of Wizardry} 
+ 
+It's very clear that the instructors know what they're doing. In what felt like no time at all, you've learned a lot about %Z1!	String type = <!!M>	09/02/03
+128034	{School of Wizardry} 
+ 
+"So little Spell Power... This one's for free!"	String type = <!!Q>	09/02/03
+128035	{School of Wizardry} 
+ 
+"So little Spell Power... Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128036	{School of Wizardry} 
+ 
+"Your Spell Power is very good... But it could be better! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128037	{School of Wizardry} 
+ 
+"Your Spell Power is very impressive... But it could still be increased! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128038	{School of Wizardry} 
+ 
+The instructors are excellent-- you've barely begun practising when you feel your Spell Power increasing and they declare that you're finished with your lessons.	String type = <!!Q>	09/02/03
+128039	{School of Wizardry} 
+ 
+"So little Knowledge... This one's for free!"	String type = <!!Q>	09/02/03
+128040	{School of Wizardry} 
+ 
+"So little Knowledge... Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128041	{School of Wizardry} 
+ 
+"Your Knowledge is very good... But it could be better! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128042	{School of Wizardry} 
+ 
+"Your Knowledge is very impressive... But it could still be increased! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+128043	{School of Wizardry} 
+ 
+The instructors are excellent-- you've barely begun practising when you feel your Knowledge increasing and they declare that you're finished with your lessons.	String type = <!!Q>	09/02/03
+128044	{School of Wizardry} 
+ 
+"I am sorry, but if you want to copy spells, you need to be wiser!"	String type = <!!Q>	09/02/03
+128045	{School of Wizardry} 
+ 
+"You don't have any new Spell Scrolls! Come back when you have!"	String type = <!!Q>	09/02/03
+128046	{School of Wizardry} 
+ 
+"That was all the spell scrolls you had containing spells you didn't already know. Do come back when you have more!"	String type = <!!Q>	09/02/03
+128047	{School of Wizardry} 
+ 
+"You have a scroll of %Z2. That spell will %Z3. Do you want to copy it to your spellbook for %V1 gold? You will lose the scroll!"	String type = <!!Q>	09/02/03
+128048	{School of Wizardry} 
+ 
+"You don't have a spellbook. Without one, we can't copy any spells to it!
+
+Do you want to buy one for %Y30 gold?"	String type = <!!Q>	09/02/03
+128049	{School of Wizardry} 
+ 
+"You can now cast the mighty %Z2 in order to %Z3!"	String type = <!!Q>	09/02/03
+128050	are totally exhausted. Therefore, they can only teach you a spell of the First Level	String type = <!!S>	09/02/03
+128051	are tired. Therefore, they can only teach you a spell of the Second Level	String type = <!!S>	09/02/03
+128052	are slightly out of shape. However, they can teach you a spell of the Third Level	String type = <!!S>	09/02/03
+128053	are in great shape. Therefore, they can teach you a spell of the Fourth Level	String type = <!!S>	09/02/03
+128054	aid you in your travels	String type = <!!S>	09/02/03
+128055	change the battlefield	String type = <!!S>	09/02/03
+128056	make the earth tremble	String type = <!!S>	09/02/03
+128057	damage your enemies	String type = <!!S>	09/02/03
+128058	smite your enemies. Just be careful so you don't smite your allies as well	String type = <!!S>	09/02/03
+128059	protect your allies	String type = <!!S>	09/02/03
+128060	remove magic	String type = <!!S>	09/02/03
+128061	protect your allies	String type = <!!S>	09/02/03
+128062	heal the wounds of your allies	String type = <!!S>	09/02/03
+128063	affect damage dealt	String type = <!!S>	09/02/03
+128064	grant you the favor of the gods	String type = <!!S>	09/02/03
+128065	affect morale	String type = <!!S>	09/02/03
+128066	affect luck	String type = <!!S>	09/02/03
+128067	change distances traveled	String type = <!!S>	09/02/03
+128068	make your allies deal more damage	String type = <!!S>	09/02/03
+128069	make your allies more resilient	String type = <!!S>	09/02/03
+128070	affect the minds of others	String type = <!!S>	09/02/03
+128071	move others	String type = <!!S>	09/02/03
+128072	change the battlefield	String type = <!!S>	09/02/03
+128073	duplicate other beings	String type = <!!S>	09/02/03
+128074	summon new allies	String type = <!!S>	09/02/03
+128075	{School of Wizardry}
+
+"You don't have enough gold!"	String type = <!!M>	09/02/03
+128076	School of Wizardry		
+128077	 skill		
+			

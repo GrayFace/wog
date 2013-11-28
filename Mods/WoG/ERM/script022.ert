@@ -1,0 +1,402 @@
+		Monster Mutterings!	
+			
+			
+		Non-table text:	
+			
+122000	a		14/02/03
+122001	an		14/02/03
+122002	{%Z469 Mutterings} 
+ 
+%Z129%Z130 
+ 
+({Right-click System Options}
+{to disable further messages})		14/02/03
+			
+		Table of Resources begin here:	
+			
+122010	wood		14/02/03
+122011	mercury		14/02/03
+122012	ore		14/02/03
+122013	sulfur		14/02/03
+122014	crystals		14/02/03
+122015	gems		14/02/03
+122016	gold		14/02/03
+122017	mithril		14/02/03
+122018	silver		14/02/03
+122019	copper		14/02/03
+122020	diamonds		14/02/03
+122021	rubies		14/02/03
+122022	emeralds		14/02/03
+122023	coal		14/02/03
+122024	iron		14/02/03
+			
+			
+		Table of H3 Classes begins here:	
+			
+122050	alchemist		14/02/03
+122051	barbarian		14/02/03
+122052	battle mage		14/02/03
+122053	beastmaster		14/02/03
+122054	cleric		14/02/03
+122055	death knight		14/02/03
+122056	demoniac		14/02/03
+122057	druid		14/02/03
+122058	heretic		14/02/03
+122059	knight		14/02/03
+122060	necromancer		14/02/03
+122061	overlord		14/02/03
+122062	ranger		14/02/03
+122063	warlock		14/02/03
+122064	witch		14/02/03
+122065	wizard		14/02/03
+122066	planeswalker		14/02/03
+122067	elementalist		14/02/03
+			
+		Table of H4 classes begin here:	
+			
+122068	general		14/02/03
+122069	field marshal		14/02/03
+122070	lord commander		14/02/03
+122071	crusader		14/02/03
+122072	illusionist		14/02/03
+122073	reaver		14/02/03
+122074	pyromancer		14/02/03
+122075	warden		14/02/03
+122076	archer		14/02/03
+122077	warlord		14/02/03
+122078	paladin		14/02/03
+122079	assassin		14/02/03
+122080	fireguard		14/02/03
+122081	thief		14/02/03
+122082	guildmaster		14/02/03
+122083	prophet		14/02/03
+122084	seer		14/02/03
+122085	ninja		14/02/03
+122086	fire diviner		14/02/03
+122087	bard		14/02/03
+122088	cardinal		14/02/03
+122089	wizard king		14/02/03
+122090	dark lord		14/02/03
+122091	witch king		14/02/03
+122092	beast lord		14/02/03
+122093	priest		14/02/03
+122094	monk		14/02/03
+122095	dark priest		14/02/03
+122096	summoner		14/02/03
+122097	mage		14/02/03
+122098	shadow mage		14/02/03
+122099	enchanter		14/02/03
+			
+		Table of Castle names begin here:	
+			
+122040	castle		14/02/03
+122041	rampart		14/02/03
+122042	tower		14/02/03
+122043	inferno		14/02/03
+122044	necropolis		14/02/03
+122045	dungeon		14/02/03
+122046	stronghold		14/02/03
+122047	fortress		14/02/03
+122048	conflux		14/02/03
+			
+		Table of Adventure Map Objects begin here:	
+			
+122100	arena		14/02/03
+122101	black market		14/02/03
+122102	boat		14/02/03
+122103	borderguard		14/02/03
+122104	campfire		14/02/03
+122105	cartographer		14/02/03
+122106	keymaster's tent		14/02/03
+122107	swan pond		14/02/03
+122108	marletto tower		14/02/03
+122109	derelict ship		14/02/03
+122110	dragon utopia		14/02/03
+122111	eye of the magi		14/02/03
+122112	faerie ring		14/02/03
+122113	fountain of fortune		14/02/03
+122114	fountain of youth		14/02/03
+122115	garden of revelation		14/02/03
+122116	garrison		14/02/03
+122117	hill fort		14/02/03
+122118	hut of the magi		14/02/03
+122119	idol of fortune		14/02/03
+122120	lean to		14/02/03
+122121	library of enlightenment		14/02/03
+122122	lighthouse		14/02/03
+122123	monolith		14/02/03
+122124	school of magic		14/02/03
+122125	magic spring		14/02/03
+122126	magic well		14/02/03
+122127	mercenary camp		14/02/03
+122128	oasis		14/02/03
+122129	obelisk		14/02/03
+122130	redwood observatory		14/02/03
+122131	pillar of fire		14/02/03
+122132	star axis		14/02/03
+122133	prison		14/02/03
+122134	pyramid		14/02/03
+122135	rally flag		14/02/03
+122136	sanctuary		14/02/03
+122137	seer's hut		14/02/03
+122138	crypt		14/02/03
+122139	shipwreck		14/02/03
+122140	shipyard		14/02/03
+122141	shrine of magic incantation		14/02/03
+122142	shrine of magic gesture		14/02/03
+122143	shrine of magic thought		14/02/03
+122144	stables		14/02/03
+122145	tavern		14/02/03
+122146	temple		14/02/03
+122147	den of thieves		14/02/03
+122148	trading post		14/02/03
+122149	learning stone		14/02/03
+122150	tree of knowledge		14/02/03
+122151	subterranean gate		14/02/03
+122152	university		14/02/03
+122153	wagon		14/02/03
+122154	war machine factory		14/02/03
+122155	school of war		14/02/03
+122156	warrior's tomb		14/02/03
+122157	waterwheel		14/02/03
+122158	watering hole		14/02/03
+122159	whirlpool		14/02/03
+122160	windmill		14/02/03
+122161	witch hut		14/02/03
+122162	border gate		14/02/03
+122163	freelancer's guild		14/02/03
+122164	quest guard		14/02/03
+122165	mine		14/02/03
+122166	market of time		14/02/03
+122167	altar of sacrifice		14/02/03
+			
+		Table of Wierd Stuff 1 begin here:	
+			
+122200	toadstool		14/02/03
+122201	lizard parts		14/02/03
+122202	mushroom		14/02/03
+122203	demon horn		14/02/03
+122204	chicken teeth		14/02/03
+122205	mandrake root		14/02/03
+122206	pig's feet		14/02/03
+122207	wolvesbane		14/02/03
+122208	powdered earwig		14/02/03
+122209	chopped beetle		14/02/03
+122210	unicorn's horn		14/02/03
+122211	gargoyle's egg		14/02/03
+122212	mouldy cheese		14/02/03
+122213	yak's liver		14/02/03
+122214	glow-moss		14/02/03
+122215	mummy's dust		14/02/03
+122216	elf blood		14/02/03
+122217	cobra venom		14/02/03
+122218	boisenberry		14/02/03
+122219	blue sugar		14/02/03
+122220	pond slime		14/02/03
+122221	stinging nettle		14/02/03
+			
+		Table of Wierd Stuff 2 begin here:	
+			
+122250	red berries		14/02/03
+122251	bat wings		14/02/03
+122252	dried ginger		14/02/03
+122253	demon tails		14/02/03
+122254	chicken feathers		14/02/03
+122255	chestnuts		14/02/03
+122256	cow brains		14/02/03
+122257	boiled onions		14/02/03
+122258	powdered tadpoles		14/02/03
+122259	chopped millipedes		14/02/03
+122260	pegasus wings		14/02/03
+122261	ectoplasm		14/02/03
+122262	mouldy cheese		14/02/03
+122263	harpy intestines		14/02/03
+122264	purple moss		14/02/03
+122265	eyes of newt		14/02/03
+122266	zombie's dust		14/02/03
+122267	snake eggs		14/02/03
+122268	dragon's tongues		14/02/03
+122269	slippery elm		14/02/03
+122270	pond scum		14/02/03
+122271	prickly cactus		14/02/03
+			
+		Table of Body Parts:	
+			
+122300	eyes		14/02/03
+122301	feet		14/02/03
+122302	claws		14/02/03
+122303	ears		14/02/03
+122304	hands		14/02/03
+122305	lips		14/02/03
+122306	toes		14/02/03
+122307	teeth		14/02/03
+122308	heads		14/02/03
+122309	head		14/02/03
+			
+		Table of Ordinary(strange) objects:	
+			
+122330	rubix cube		14/02/03
+122331	three dimensional game of chess		14/02/03
+122332	mystery novel		14/02/03
+122333	puzzle box		14/02/03
+122334	imaginary maze		14/02/03
+122335	riddle		14/02/03
+122336	conundrum		14/02/03
+122337	murder mystery		14/02/03
+122338	cubix rube		14/02/03
+122339	illogical dilemma		14/02/03
+122340	pointless quest		14/02/03
+122341	question that cannot be answered		14/02/03
+			
+		Table of Adjectives	
+			
+122350	demonic		14/02/03
+122351	supernatural		14/02/03
+122352	truly evil		14/02/03
+122353	scary		14/02/03
+122354	puzzling		14/02/03
+122355	terribly intriguing		14/02/03
+122356	nauseating		14/02/03
+122357	mind-boggling		14/02/03
+122358	ritualistic		14/02/03
+122359	divine		14/02/03
+			
+		Table of colours:	
+			
+122370	blue		14/02/03
+122371	red		14/02/03
+122372	green		14/02/03
+122373	pink		14/02/03
+122374	white		14/02/03
+122375	yellow		14/02/03
+122376	purple		14/02/03
+122377	saffron		14/02/03
+122378	scarlet		14/02/03
+122379	black		14/02/03
+122380	lavender		14/02/03
+122381	chartreuse		14/02/03
+122382	mauve		14/02/03
+122383	brown		14/02/03
+122384	grey		14/02/03
+			
+		Table of Verbs:	
+			
+122400	ravenous		14/02/03
+122401	sleepy		14/02/03
+122402	sad		14/02/03
+122403	bored		14/02/03
+122404	angry		14/02/03
+122405	evil		14/02/03
+122406	magical		14/02/03
+122407	wealthy		14/02/03
+122408	%Z138		14/02/03
+122409	a %Z134		14/02/03
+122410	%Z121 in disguise		14/02/03
+122411	royalty		14/02/03
+122412	fuzzy		14/02/03
+122413	peaceful		14/02/03
+122414	dangerous		14/02/03
+			
+		Table of Nouns:	
+			
+122430	storm cloud		14/02/03
+122431	sky		14/02/03
+122432	moon		14/02/03
+122433	sun		14/02/03
+122434	midnight star		14/02/03
+122435	chaos		14/02/03
+122436	other world		14/02/03
+122437	future		14/02/03
+122438	past		14/02/03
+122439	waterfall		14/02/03
+122440	energy vortex		14/02/03
+			
+		Table of Adjectives for Monsters or Body Parts	
+			
+122460	warty		14/02/03
+122461	slimy		14/02/03
+122462	sticky		14/02/03
+122463	scaley		14/02/03
+122464	bumpy		14/02/03
+122465	slippery		14/02/03
+122466	rubbery		14/02/03
+122467	spongy		14/02/03
+122468	watery		14/02/03
+122469	barnacle-covered		14/02/03
+122470	rotting		14/02/03
+122471	shiny		14/02/03
+			
+		Table of Music:	
+			
+122500	opera		14/02/03
+122501	blues		14/02/03
+122502	folk music		14/02/03
+122503	jazz tunes		14/02/03
+122504	rock music		14/02/03
+122505	old songs		14/02/03
+122506	melodies		14/02/03
+122507	country music		14/02/03
+122508	pop songs		14/02/03
+			
+		Table of Wierd Phrases:	
+			
+122530	knocking their heads together		14/02/03
+122531	gazing at the stars		14/02/03
+122532	clapping and stomping		14/02/03
+122533	banging on drums		14/02/03
+122534	composing a ballad		14/02/03
+122535	playing in the mud		14/02/03
+122536	bathing in a stream		14/02/03
+122537	gathering roots and berries		14/02/03
+122538	scratching symbols in the dirt		14/02/03
+122539	growling		14/02/03
+122540	giving each other piggy back rides		14/02/03
+122541	hopping on one foot		14/02/03
+			
+		Table of First Parts of Sentences:	
+			
+122600	The %Z120 lick their lips, having just eaten a delicious %Z480,		14/02/03
+122601	 "You lowlife offspring of %Z123 and %Z124!" screech the %Z120 as you approach,		14/02/03
+122602	These %Z120 are building a campfire with pieces of the legendary %Z122 and a dead drunken %Z126,		14/02/03
+122603	These crazy %Z120 are tuning their instruments and singing %Z135 %Z486,		14/02/03
+122604	When you reach the %Z120, they're dancing around wildly and howling at the %Z135 %Z140,		14/02/03
+122605	You come upon some %Z120, relaxing and soaking up the %Z140 vibes,		14/02/03
+122606	These %Z120 seem lost in thought, trying to work out something terribly important,		14/02/03
+122607	At first glance, the %Z120 look normal, but then they sprout tiny %Z131 %Z133 on their %Z482 legs,		14/02/03
+122608	These %Z120 are playing a strange game, involving %Z137 and a miniature %Z128,		14/02/03
+122609	Bouncing up and down, these %Z120 seem extremely happy to see you,		14/02/03
+122610	 "You have the manners of a %Z138 %Z126 and the deameanor of a dead %Z131!" sneer the %Z120,		14/02/03
+122611	These %Z120 are gathered around a large %Z128, chanting the name "%Z121" over and over,		14/02/03
+122612	These %Z120 are arguing about how to cook %Z126s when you approach, with the consensus being that boiled %Z489 and %Z137 work best,		14/02/03
+122613	 "Are you going to kill us?" gasp the %Z120 incredulously! "This is just like a surrealistic %Z134," 		14/02/03
+122614	 "So, you've found us!" shout the %Z120. "Well, if you don't mind eating %Z138 %Z489, we can take you to the %Z136's %Z128 for lunch." Yet strangely, all they offer you is %Z137,		14/02/03
+122615	These %Z482 %Z138 %Z120 are digging a deep pit and muttering about crazy %Z126s when you come upon them,		14/02/03
+122616	You surprise these sleeping %Z120 who groggily awake and toss a %Z482 %Z134 at you,		14/02/03
+122617	 "We thought you were a %Z135 %Z126!" gasp the %Z120, wiggling their %Z133 in bewilderment,		14/02/03
+122618	 "You think you're so tough, do you!" scream the %Z135 %Z120. "Well you stink of %Z137 and %Z481," 		14/02/03
+122619	You step on some %Z482 %Z137 and momentarily lose your footing. When you get up, you see a bunch of %Z120 %Z487 and %Z488,		14/02/03
+122620	The %Z120 shout at you as you approach, "We were just minding our own business writing %Z486 and %Z488 when we fell through a %Z135 %Z140," 		14/02/03
+			
+		Table of Second Parts of Sentences	
+			
+122650	 and now the %Z120 are anxiously trying to solve a %Z484 %Z134.		14/02/03
+122651	 "...you know, stranger, we seem to be a bit lost. Do you know the way to the nearest %Z128?" 		14/02/03
+122652	 "...say, aren't you the cousin of %Z121 from the %Z127 over yonder?" they ask suspiciously.		14/02/03
+122653	 and for some reason, they're trying to build a %Z128 out of %Z125!		14/02/03
+122654	 "...you know, we were once %Z123, but we were transformed by an evil half-%Z131 named %Z121!" 		14/02/03
+122655	 "we were once the royal property of %Z121 but now we just want to find a nice %Z128 to call our own." 		14/02/03
+122656	 and then, without warning, they turn %Z138 and %Z482 and start to froth at the mouth!		14/02/03
+122657	 "but you know, we're really just passing through from the %Z484 %Z127 to the south with a delivery of %Z481 and a %Z138 %Z134 for King %Z121." 		14/02/03
+122658	 and then, for no reason at all, the %Z120 declare they're %Z139!		14/02/03
+122659	 "%Z121 the %Z126 killed our half-sister (she's %Z141 %Z136) and we're looking for revenge!" 		14/02/03
+122660	 then they stand on their heads and sip a drink made from crushed %Z125.		14/02/03
+122661	 and they seem to be cooking up some foul-smelling %Z481 stew!		14/02/03
+122662	 but it isn't at all clear why they're trying to put the %Z485 of %Z119 %Z131 onto %Z141 %Z136!		14/02/03
+122663	 and then from the %Z128 (that immediately fades into nothing) comes the faint %Z484 smell of %Z481.		14/02/03
+122664	 but just then, a hungry %Z136 ridden by a %Z484 %Z480 swoops down and sprinkles everyone with powdered %Z125!		14/02/03
+122665	 and then from the %Z483 comes a torrent of %Z484 %Z137!		14/02/03
+122666	 and they're carrying large wooden signs with pictures of %Z484 %Z138 %Z133 painted on them!		14/02/03
+122667	 and then they become awfully agitated and %Z482!		14/02/03
+122668	 then they request %Z125 from the nearest %Z127.		14/02/03
+122669	 and you realize that the strange shape of their %Z482 %Z133 is a sure sign that they're crazy!		14/02/03
+122670	 and they offer you a %Z484 %Z134 as irrefutable proof!		14/02/03

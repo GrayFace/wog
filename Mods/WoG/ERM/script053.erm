@@ -1,0 +1,182 @@
+ZVSE
+
+ERMS_ScriptDate=29.5(May).2006
+
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Dungeon of the Dragonmaster
+** Wogify Name: script53.erm
+** This strengthens all Dragon Utopias an a map. AI will visit normal DU but gets some extra bonuses.
+
+** Requires ERM v2.80 or higher
+** Version: 1.2
+** Updated: May 12. 2004
+** Made by Hermann the Weird
+** Idea by Janus
+
+** To use this code, copy it (from ZVSE to the end) into a global event, set day of first occurence
+** to something after 600.
+
+** v-Variables used: v8033, v8035-v8043
+** Functions: 20001-20003
+** Strings: z455-461
+
+** Uses FU709 from script01 (map rules) to determine the strength of the DOTDM.
+** Compatible with script57 (neutral units).
+
+** This script will only give enabled artifacts (Map or WoG options).
+** If all artifacts of one level are disabled, artifacts of other random levels will be given.
+
+
+***** Check for WoGify option *****
+!#UN:P53/?v1;
+
+***** Setting hint text *****
+!#VRz455&v1=1:Sz153000;
+!#VRz456&v1=1:Sz153001;
+!#HT25/-1&v1=1:T455;
+
+***** Section for human attacker *****
+!?OB25&1000;
+!!UN:P53/?y-1;     [Check if enabled in WoG options]
+!!FU&y-1=0:E;     [Exit if it isn't]
+
+!!VRv100:S1;     [Activate Neutral Units]
+
+!!HE-1:P?v8040/?v8041/?v8042;     [Get position]
+!!OBv8040/v8041/v8042:S;     [Disable normal DU]
+!!HE-1:O?v8043;     [Checks hero's owner before battle - used to check if battle won]
+
+***** Ask player for battle *****
+!!IF:Q1/21/155/2/z153002;
+
+!!FU&-1:E;     [Exit if no answered]
+
+!!VRv8033:S0 R3 +1;     [Generate random number as classification for the strength of the Bank]
+
+!!FU709:P15;     [Check for map rule 15]
+!!VRy-7&3:Sv8033 +1 *4;     [Translate to number of Dragons if rule 15 selected]
+!!VRy-7&-3:Sv8033 *3;     [Translate to number of Dragons if rule 15 not selected]
+
+!!VRv8033:+1;     [Number of relics]
+
+!!HE-1:Tv8040/v8041/v8042/155/y-7;     [Provoke battle]
+
+!!HE-1:O?y-2;     [Checks hero's owner after battle - used to check if battle won]
+!!FU&v8043<>y-2:E;     [Exit if battle lost]
+
+!!DO20001/1/v8033/1:P8035/457;     [Loop for generating relics]
+
+!!DO20002/1/v8033/1:P8035;     [Loop for passing relics to hero]
+
+***** Displaying relics *****
+!!IF&v8033=2:Q1/8/v8035/8/v8036/1/z153003;
+!!IF&v8033=3:Q1/8/v8035/8/v8036/8/v8037/1/z153004;
+!!IF&v8033=4:N8/v8035/8/v8036/8/v8037/8/v8038;
+!!IF&v8033=4:N^%Z153005^;
+!!IF&v8033=5:N8/v8035/8/v8036/8/v8037/8/v8038/8/v8039;
+!!IF&v8033=5:N^%Z153006^;
+
+!!DO20003/1/3/1:P8035/457;    [Loop for minor/major artifacts]
+
+***** Displaying and passing minor/major artifacts *****
+
+!!UN:P900/?y-3;     [Check for Stack Experience]
+!!UN:P143/?y-4;     [Check for New Artifacts]
+!!UN:P234/?y-5;     [Check for Warlord's Banner banning]
+
+***** If Stack Experience and New Arts enabled *****
+!!IF&y-3=1/y-4=1/y-5=0:N8/v8035/8/v8036/8/v8037/8/156;
+!!IF&y-3=1/y-4=1/y-5=0:N^%Z153007^;
+!!HE-1&y-3=1/y-4=1/y-5=0:A4/156;
+
+***** If Stack Experience and New Arts not enabled *****
+!!IF|y-3<>1/y-4<>1/y-5<>0:Q1/8/v8035/8/v8036/8/v8037/1/z153008;
+
+!!HE-1:A4/v8035;
+!!HE-1:A4/v8036;
+!!HE-1:A4/v8037;
+
+
+***** Preparing variables for money or experience *****
+!!VRv8033:*10000;
+!!VRy-8:Sv8033;
+!!VRy-8::2;
+
+***** Asking for money or experience *****
+!!IF:Q1/6/v8033/17/y-8/7/z153009;
+
+***** Displaying and passing money *****
+!!IF&1:Q1/6/v8033/1/z153010;
+!!OW&1:R-1/6/dv8033;
+
+***** Displaying and passing experience *****
+!!IF&-1:Q1/17/y-8/1/z153011;
+!!HE-1&-1:Edy-8;
+
+!!IF:M1/z153012;
+
+!!UN:Iv8040/v8041/v8042/60/0;     [Place Pillar of fire to block entrance]
+!!OBv8040/v8041/v8042:H456;     [Set visited hint text]
+!!TRv8040/v8041/v8042:E1;     [Disables yellow trigger square]
+!!TRv8040/v8041/v8042:P0;     [Makes it impassable]
+
+***** End of section for human attacker *****
+
+
+***** Section for AI attacker *****
+
+!?OB25&-1000;
+!!UN:P53/?y-1;     [Check if enabled in WoG options]
+!!FU&y-1=0:E;     [Exit if it isn't]
+
+!!HE-1:P?v8040/?v8041/?v8042;     [Get position]
+!!HE-1:O?v8043;     [Checks hero's owner before battle - used to check if battle won]
+
+!$OB25&-1000;     [Post visit trigger]
+!!UN:P53/?y-1;     [Check if enabled in WoG options]
+!!FU&y-1=0:E;     [Exit if it isn't]
+
+!!HE-1:O?y-2;     [Checks hero's owner after battle - used to check if battle won]
+!!FU&v8043<>y-2:E;     [Exit if battle lost]
+
+!!HE-1:Fd5/d5/d5/d5;     [AI receives additional primary skills]
+!!HE-1:Ed15000;     [AI receives additional experience]
+!!OW:R-1/6/d30000;     [AI receives additional gold]
+
+!!UN:Iv8040/v8041/v8042/60/0;     [Place Pillar of fire to block entrance]
+!!OBv8040/v8041/v8042:S;     [Disable it]
+!!OBv8040/v8041/v8042:H456;     [Set visited hint text]
+!!TRv8040/v8041/v8042:E1;     [Disables yellow trigger square]
+!!TRv8040/v8041/v8042:P0;     [Makes it impassable]
+
+***** End of section for AI attacker *****
+
+
+********** Function Section **********
+
+!?FU20001;     [Function for generating relics]
+
+!!UN:J6/16/?y1;     [Generates relic]
+!!VRvx1:Sy1;     [Store result in v-variable for use outside function]
+!!UN:N0/zx2/y1;     [Look up artifacts name]
+!!VRx1:+1;     [Increase v-var index]
+!!VRx2:+1;     [Increase z-var index]
+
+
+!?FU20002;     [Function for passing relics to hero]
+
+!!HE-1:A4/vx1;     [Passes relics to hero]
+!!VRx1:+1;     [Increase v-var index]
+
+
+!?FU20003;     [Function for generating 3 minor/major]
+
+!!UN:J6/12/?y1;     [Generates minor/major]
+!!VRvx1:Sy1;     [Store result in v-variable for use outside function]
+!!UN:N0/zx2/y1;     [Look up artifacts name]
+!!VRx1:+1;     [Increase v-var index]
+!!VRx2:+1;     [Increase z-var index]
+

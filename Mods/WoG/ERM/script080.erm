@@ -1,0 +1,1014 @@
+ZVSE
+ERMS_ScriptName=Interface Improvements
+ERMS_ScriptAuthor=Perfect0 (ideas: Horn, Rob Burleson)
+ERMS_ScriptVersion=1.0.3
+ERMS_ScriptDate=24.11(November).2013
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=4137
+ERMS_AdditionalFiles=trade2.pcx
+ERMS_ScriptUsedFlags=80
+ERMS_ScriptUsedFunctions=4101-4153
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+********************************************************************************
+*
+* INTERFACE IMPROVEMENTS v1.0.3b by Perfect0
+* (based on TE scripts by Horn, STACK DIVIDER by Rob Burleson)
+*
+********************************************************************************
+* DESCRIPTION:
+********************************************************************************
+* Ctrl + Left Mouse Click on slot will spread army by 1 in empty slots.
+* Alt + Left Mouse Click on slot will consolidate stacks with the same type of monster in current slot.
+* Ctrl + Shift + Left Mouse Click on slot will call the dialog where you should confirm the deleting of army in current slot.
+* Ctrl + Alt + Left Mouse Click on slot will move it to another hero or town (at town screen or at hero meeting screen)
+* Ctrl + Left Mouse Click on hero portrets or flag at town screen will exchange each other's army.
+* Alt + Left Mouse Click on hero portrets or flag at town screen will move army to the other side.
+* Alt + Shift + Left Mouse Click on slot will split stack to equal stacks.
+* Heroes Meeting Screen has additional graphical arrows. They let exchange or move heroes' armies and artifacts.
+********************************************************************************
+
+********************************************************************************
+** 1. Heroes Screen:
+********************************************************************************
+** 1.1 [Spreading army (hero)] v1.0.1b by Perfect0 (idea: Horn)
+** 1.2 [Consolidating army (hero)] v1.0.1b by Perfect0 (idea: Horn)
+** 1.3 [Deleting army (hero)] v1.0b by Perfect0 (idea: Horn)
+** 1.4 [Split stack to equal stacks (hero)] v1.0b by Perfect0 (idea: by Rob Burleson)
+********************************************************************************
+** 2. Town Screen:
+********************************************************************************
+** 2.1 [Spreading army (town)] v1.0b by Perfect0 (idea: Horn)
+** 2.2 [Consolidating army (town)] v1.0b by Perfect0 (idea: Horn)
+** 2.3 [Deleting army (town)] v1.0b by Perfect0 (idea: Horn)
+** 2.4 [Exchange armies (hero <-> town)] v1.0b by Perfect0 (idea: Horn)
+** 2.5 [Move stack (hero <-> hero)] v1.0b by Perfect0 (idea: Horn)
+** 2.6 [Move stack (town -> hero)] v1.0b by Perfect0 (idea: Horn)
+** 2.7 [Move stack (hero -> town)] v1.0b by Perfect0 (idea: Horn)
+** 2.8 [Move all stacks (hero -> town)] v1.0b by Perfect0 (idea: Horn)
+** 2.9 [Move all stacks (town -> hero)] v1.0b by Perfect0 (idea: Horn)
+** 2.10 [Move all stacks (hero -> hero)] v1.0b by Perfect0 (idea: Horn)
+** 2.11 [Split stack to equal stacks (town)] v1.0b by Perfect0 (idea: by Rob Burleson)
+********************************************************************************
+** 3. Mouse click on Heroes Meeting Screen:
+********************************************************************************
+** 3.1 [Move artefacts (hero -> hero)] v1.0b by Perfect0 (idea: Horn)
+** 3.2 [Exchange artefacts (hero <-> hero)] v1.0b by Perfect0 (idea: Horn)
+********************************************************************************
+
+!#UN:P80/=1;    [check for Interface Improvements option]
+!#IF&1:V80/1;   [flag 80 meen script is active]
+
+!#VRv4137:S155; [max hero number]
+
+!?FU4101; [x1 = 1 if current player is "me" and x1 = 0 if it is another Human]
+!!OW:C?y1;
+!!OW:Gy1/?x1;
+
+-----------1. Mouse click on Heroes Screen --------------------------------------
+!?CM2&80;
+!!FU4101:P?y1;              [=1 if current player, =0 if another Human]
+!!FU&y1=0:E;                [exit if it is not current player]
+!!CM:F?y1;                  [get type of click]
+!!CM:S?y2;                  [get subtype of click]
+!!if|y1=4/y1=32/y1=5/y1=33;  [if Ctrl(4) or Alt(32) or Ctrl+Shift(5) or Alt+Shift(33) push click]
+  !!FU&y2<>12:E;
+  !!CM:I?y-1;                   [get index of place clicked on]
+  !!if&y-1>67/y-1<75;           [if clicking on troop slots]
+    !!VRy-1:-68;                [y-1: set to current slot number]
+    !!CM:H?y-2/=0;              [y-2: get hero number]
+    !!HEy-2:C0/y-1/?y3/?y4;
+    !!FU&y3=-1:E;         (exit if click on empty slot)
+    !!CM:R0;             [disable standard message]
+
+    !!FU4102&y1=4:Py-1/y-2;     [SPREAD TROOPS by 1]
+    !!FU4104&y1=32:Py-1/y-2;    [CONSOLIDATE TROOPS]
+    !!FU4107&y1=5:Py-1/y-2/1;   [DISMISS STACK]
+    !!FU4138&y1=33:Py-1/y-2;     [SPLIT TO EQUAL]
+    !!UN:R3/-1; redraw screen
+  !!en;
+!!en;
+-----------1. Mouse click on Heroes Screen -------------------------------------
+
+
+---------- 1.1 [Spreading heroes army] -----------------------------------------
+!?FU4102; [x1 = hero's slot number (0..6), x2 = hero's number(0..v4137)]
+!!FU|x1<0/x1>6/x2<0/x2>v4137:E;    [EXCEPTIONS: exit]
+!!HEx2:C0/x1/?y-3/?y-4/?y-5/2;   [y-3 = type of monsters, y-4 = quantity, y-5 = expirience]
+!!EXx2/x1:Rd/d/?y-7/?y-6;        [get active slot Banners copies]
+!!DO4103/0/6/1:Px1/x2;           [make spreading]
+!!HEx2:C0/x1/d/y-4/y-5/2;        [the initial stack quantity is set]
+!!EXx2/x1:Rd/d/d/y-6;            [set Banners copies]
+
+!?FU4103&y-4>1;
+!!HEx2:C0/x16/d/=0;             [check if current slot is empty]
+!!if&1;                         [if empty]
+!!HEx2:C0/x16/y-3/1/y-5/2;      [add 1 unit]
+!!if&y-6>0;
+!!EXx2/x16:R1/d/y-7/0;          [set Banners]
+!!VRy-6:-1;
+!!en;
+!!VRy-4:-1;                     [-1 to active slot quantity]
+!!en;
+---------- 1.1 [Spreading heroes army] -----------------------------------------
+
+---------- 1.2 [Consolidating heroes army] -------------------------------------
+!?FU4104; [x1 = hero's slot number (0..6), x2 = hero's number (0..v4137)]
+!!FU|x1<0/x1>6/x2<0/x2>v4137:E;    [EXCEPTIONS: exit]
+!!HEx2:C0/x1/?y-3/?y-4/?y-5/2;   [y-3 = type of monsters, y-4 = quantity, y-5 = expirience]
+!!FU&y-4=0:E;                    [exit if slot is empty]
+!!EXx2/x1:R?y-6/d/?y-7/?y1;      [get active slot Banners]
+!!VRy-7&y-6=0:S-1;
+!!VRy-6:+y1;                     [add copies]
+!!DO4105/0/6/1:Px1/x2;           [consolidating]
+!!FU&y-6=0:E;                    [exit if army has not Banners]
+!!if&y-6<5;                      [if 1..4 Banners]
+!!VRy-6:-1;
+!!EXx2/x1:R1/d/y-7/y-6;          [set Banners]
+!!el;
+!!VRy-6:-4;
+!!EXx2/x1:R1/d/y-7/3;            [set Banners]
+!!DO4106/1/y-6/1:Px2;            [add y-6 Banners into backpack]
+!!en;
+
+!?FU4105;
+!!FU&x1=x16:E;                   [if the same slot]
+!!HEx2:C0/x16/?y1/?y2/?y3/2;     [get current slot monster type, quantity, experience]
+!!if&y-3=y1;                     [if the same types]
+!!HEx2:C0/x1/d/dy2/y3/0;         [add units]
+!!EXx2/x16:R?y1/d/?y3/?y2;       [get current stack Banners]
+!!VRy-6:+y1+y2;                  [calculate Banners]
+!!VRy-7&y-7=-1/y1=1:Sy3;         [set Banner option if it wasn't seted]
+!!HEx2:C0/x16/-1/0;              [clear slot]
+!!en;
+
+!?FU4106;  - to add multiple Banners
+!!HEx1:A156;
+---------- 1.2 [Consolidating heroes army] -------------------------------------
+
+---------- 1.3 [Deleting heroes army] ------------------------------------------
+!?FU4107;  [x1 = hero's slot number (0..6), x2 = hero's number (0..v4137), x3 = promt]
+!!FU|x1<0/x1>6/x2<0/x2>v4137:E;    [EXCEPTIONS: exit]
+!!HEx2:C0/x1/d/=0;
+!!if&-1;
+!!IF&x3=1:Q1/z180001;
+!!HEx2|1/x3=0:C0/x1/-1/0;
+!!en;
+---------- 1.3 [Deleting heroes army] ------------------------------------------
+
+---------- 1.4 [Split stack to equal stacks (hero)] ----------------------------
+!?FU4138;  [x1 = slot, x2 = hero]
+!!FU|x1<0/x1>6/x2<0/x2>v4137:E;    (EXCEPTIONS: exit)
+
+!!HEx2:C0/x1/?y-1/?y-2;     [y-1 = type of monsters, y-2 = quantity]
+!!FU4143:Px2/y-1/?y-2;      [get in y-2 common quantity of units with type y-1]
+!!FU&y-2<2:E;               (exit if less then 2 units)
+
+!!FU4140:Px2/y-1/x1;        [get in v1: quantity of free slots or with the same type of monsters, v2..v8: their numbers]
+
+!!VRz23:S^^;
+!!VRz24:S^^;
+!!VRz25:S^^;
+!!VRz26:S^^;
+!!VRz27:S^^;
+!!VRz28:S^^;
+
+!!VRz22:S180002;
+!!VRz23&v1>1/y-2>1:S^2^;
+!!VRz24&v1>2/y-2>2:S^3^;
+!!VRz25&v1>3/y-2>3:S^4^;
+!!VRz26&v1>4/y-2>4:S^5^;
+!!VRz27&v1>5/y-2>5:S^6^;
+!!VRz28&v1>6/y-2>6:S^7^;
+!!VRz29:S180003;
+!!VRv1:S0;
+!!IF&1000:G1/1/1/22/29/23/24/25/26/27/28/0/0/0/0/0;   [display checkbox dialogue]
+!!FU|v1=0/v1=1:E;                                     [chose to cancel, exit]
+
+
+!!FU4104:Px1/x2;                  [consolidate all units of the same type]
+!!HEx2:C0/x1/?y-1/?y-2/?y-3/2;    [y-1 = type of monsters, y-2 = quantity, y-3 = expirience]
+
+!!VRv1&v1=4:S3;
+!!VRv1&v1=8:S4;
+!!VRv1&v1=16:S5;
+!!VRv1&v1=32:S6;
+!!VRv1&v1=64:S7;
+
+!!EXx2/x1:R?y-5/d/?y-7/?y-6;          [get Banners: y-5 = has/hasn't, y-6 = quantity, y-7 = option]
+!!VRy-6:+y-5;                         [y-6: quantity of benners]
+
+!!VRy-4:Sy-2:v1;                      [y-4: divided quatity of monsters]
+!!VRy-5:Sy-2%v1;                      [y-5: reminder from division]
+!!VRy1:Sv1+1;
+!!DO4142/2/y1/1&y1>2:Px2/y-1/y-3;     [make splitting]
+
+!!if&y-6>0;                           [put residual Banners in back pack]
+!!DO4135/1/y-6/1:Px2/156;
+!!en;
+
+  [finding quantity of free slots (or with the same type of monster) and their numbers]
+!?FU4140; [x1 = hero, x2 = type of monster, x3 = first slot]
+!!VRv1:C0/-1/-1/-1/-1/-1/-1/-1;
+!!if&x3>-1/x3<7;
+  !!DO4141/x3/x3/1:Px1/x2/-1;
+  !!DO4141/0/6/1:Px1/x2/x3;
+  !!DO4141/0/6/1&x2<>-1:Px1/-1/-1;
+!!en;
+!?FU4141; [x1 = hero, x2 = type of monster, x3 = slot to skip]
+!!HEx1:C0/x16/?y1/?y2;
+!!if&y1=x2/x3<>x16;
+  !!VRv1:+1;
+  !!VRy1:Sv1+1;
+  !!VRvy1:Sx16;
+!!en;
+
+  [put army to slot and decrease common quantity]
+!?FU4142;
+!!VRy1:Sy-4;              [divided quantity]
+!!if&y-5>0;               [correction if reminder is present]
+  !!VRy1:+1;
+  !!VRy-5:-1;
+!!en;
+!!HEx1:C0/vx16/x2/y1/x3;  [add unit]
+!!if&y-6>0;               [add Banner]
+!!EXx1/vx16:R1/d/y-7/0;
+!!VRy-6:-1;
+!!en;
+
+  [get hero common quantity of certain type units]
+!?FU4143; [x1 = hero number, x2 = type of monsters]
+!!VRv1:S0;
+!!DO4144/0/6/1:Px1/x2;
+!!VRx3:Sv1;
+!?FU4144;
+!!HEx1:C0/x16/?y1/?y2; [y1: type, y2: quantity]
+!!VRv1&y1=x2:+y2;
+
+---------- 1.4 [Split stack to equal stacks (hero)] ----------------------------
+
+
+-----------2. Mouse click in Town Screen ---------------------------------------
+!?CM1&80;
+!!FU4101:P?y1;              [=1 if current player, =0 if another Human]
+!!FU&y1=0:E;                (exit if it is not current MP player)
+!!OW:C?y1;                  [current player]
+!!CA-1:O?y2;                [castle owner]
+!!FU&y1<>y2:E;              (exit if current player doesn't own castle)
+!!CM:F?y1;                  [get type of click]
+!!CM:S?y3;                  [get subtype of click]
+
+
+!!if|y1=4/y1=32/y1=5/y1=36/y1=1; [if Shift(1) or Ctrl(4) or Alt(32) or Ctrl+Shift(5) or Ctrl+Alt(36) push click]
+!!FU&y3<>12:E;
+!!CM:I?y2;                  [y2: index of place clicked on]
+!!VRy-1:Sy2-115;            [y-1: set to town slot number]
+!!VRy-2:Sy2-140;            [y-2: set to visiting hero slot number]
+!!CA-1:H0/?y-3 H1/?y-4;     [y-3, y-4: heroes' numbers]
+
+!!CA-1:P?y-11/?y-12/?y-13;  [y-11, y-12, y-13: town coordinates]
+
+!!if|y2=123/y2=125;         [if clicking on hero portrets in town screen]
+  !!FU&y1<>4/y1<>5/y1<>32:E; (exit if not Ctrl(4) or Ctrl+Shift(5) or Alt(32) click)
+  !!CM:R0;  [disable standard message]
+  !!FU4113&y1=4/y-3=-1:Py-4/y-11/y-12/y-13;   [CHANGE ARMIES - HERO <-> town]
+  !!FU4115&y1=4/y-3<>-1/y-4<>-1:Py-3/y-4;     [CHANGE ARMIES - HERO <-> HERO]
+  !!FU4126&y1=32/y-3=-1/y-4<>-1/y2=125:Py-4/y-11/y-12/y-13; [MOVE ARMY FROM VISITING HERO TO town]
+  !!FU4128&y1=32/y-3=-1/y-4<>-1/y2=123:Py-11/y-12/y-13/y-4; [MOVE ARMY FROM town TO VISITING HERO]
+  !!FU4130&y1=32/y-3<>-1/y-4<>-1/y2=123:Py-3/y-4; [MOVE ARMY FROM town HERO TO VISITING HERO]
+  !!FU4130&y1=32/y-3<>-1/y-4<>-1/y2=125:Py-4/y-3; [MOVE ARMY FROM VISITING HERO TO town HERO]
+!!en;
+
+
+!!if&y2>114/y2<122;        [if clicking on troop slots (town)]
+
+  !!if&y-3<>-1;                   [if hero in town]
+
+    !!HEy-3:C0/y-1/?y3/?y4;       [get quatity of troops in the slot]
+    !!FU&y3=-1:E;                 (exit if click on empty slot)
+    !!CM:R0;                      [disable standard message]
+
+    !!FU4102&y1=4:Py-1/y-3;       [SPREAD TROOPS by 1]
+    !!FU4104&y1=32:Py-1/y-3;      [CONSOLIDATE TROOPS]
+    !!FU4107&y1=5:Py-1/y-3/1;     [DISMISS STACK]
+    !!FU4138&y1=1:Py-1/y-3;       [SPLIT STACK TO EQUAL]
+    !!FU4117&y1=36/y-4<>-1:Py-3/y-4/y-1; [MOVE SLOT FROM town HERO TO VISITING HERO]
+  !!en;
+
+  !!if&y-3=-1;                         [if NON hero in town]
+
+    !!CA-1:M2/y-1/?y3/?y4;        [get quatity of troops in the slot]
+    !!FU&y3=-1:E;                 (exit if click on empty slot)
+    !!CM:R0;                      [disable standard message]
+
+    !!FU4108&y1=4:Py-1/y-11/y-12/y-13;    [SPREAD TROOPS by 1]
+    !!FU4110&y1=32:Py-1/y-11/y-12/y-13;   [CONSOLIDATE TROOPS]
+    !!FU4112&y1=5:Py-1/y-11/y-12/y-13/1;  [DISMISS STACK]
+    !!FU4146&y1=1:Py-1/y-11/y-12/y-13;    [SPLIT STACK TO EQUAL]
+    !!FU4120&y1=36/y-4<>-1:Py-11/y-12/y-13/y-4/y-1; [MOVE SLOT FROM town TO VISITING HERO]
+  !!en;
+
+!!en;
+
+!!if&y2>139/y2<147/y-4<>-1;     [if clicking on troop slots (visiting hero)]
+
+  !!HEy-4:C0/y-2/?y3/?y4;       [get quatity of troops in the slot]
+  !!FU&y3=-1:E;                 (exit if click on empty slot)
+  !!CM:R0;                      [disable standard message]
+
+  !!FU4102&y1=4:Py-2/y-4;               [SPREAD TROOPS by 1]
+  !!FU4104&y1=32:Py-2/y-4;              [CONSOLIDATE TROOPS]
+  !!FU4107&y1=5:Py-2/y-4/1;             [DISMISS STACK]
+  !!FU4138&y1=1:Py-2/y-4;               [SPLIT STACK TO EQUAL]
+  !!FU4117&y1=36/y-3<>-1:Py-4/y-3/y-2;  [MOVE STACK FROM VISITING HERO TO town HERO]
+  !!FU4123&y1=36/y-3=-1:Py-4/y-11/y-12/y-13/y-2; [MOVE STACK FROM VISITING HERO TO town]
+!!en;
+
+!!UN:R4/-1; redraw screen
+!!en;
+-----------2. Mouse click in Town Screen ---------------------------------------
+
+---------- 2.1 [Spreading army (town)] -----------------------------------------
+!?FU4108;  [x1 = slot number (0..6), x2..x4 = town coordinates]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>6/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+!!EXx2/x3/x4/x1/2:A?y-3/?y-4/?y-5;       [y-3 = type of monsters, y-4 = quantity, y-5 = creature expirience]
+!!EXx2/x3/x4/x1/2:Rd/d/?y-7/?y-6;        [get active slot Banners copies]
+!!DO4109/0/6/1:Px1/x2/x3/x4;             [make spreading]
+!!CAx2/x3/x4:M2/x1/y-3/y-4;              [the initial stack quantity is set]
+!!EXx2/x3/x4/x1/2:Rd/d/d/y-6;            [set Banners copies]
+
+!?FU4109&y-4>1;
+!!CAx2/x3/x4:M2/x16/d/=0;        [check if current slot is empty]
+!!if&1;                          [if empty]
+!!CAx2/x3/x4:M2/x16/y-3/1;       [add 1 unit]
+!!EXx2/x3/x4/x16/2:Ay-3/1/y-5;   [y-3 = type of monsters, y-5 = creature expirience]
+!!if&y-6>0;
+!!EXx2/x3/x4/x16/2:R1/d/y-7/0;   [set Banners]
+!!VRy-6:-1;
+!!en;
+!!VRy-4:-1;                      [-1 to active slot quantity]
+!!en;
+
+---------- 2.1 [Spreading army (town)] -----------------------------------------
+
+---------- 2.2 [Consolidating army (town)] -------------------------------------
+!?FU4110; [x1 = slot number (0..6), x2..x4 = town coordinates]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>6/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+
+!!EXx2/x3/x4/x1/2:A?y-3/?y-4/?y-5;    [y-3 = type of monsters, y-4 = quantity, y-5 = creature expirience]
+!!FU&y-4=0:E;                         [exit if slot is empty]
+!!EXx2/x3/x4/x1/2:R?y-6/d/?y-7/?y1;   [get active slot Banners copies]
+!!VRy-7&y-6=0:S-1;
+!!VRy-6:+y1;                         [add copies]
+!!DO4111/0/6/1:Px1/x2/x3/x4;         [consolidating]
+!!FU&y-6=0:E;                        [exit if army has not Banners]
+!!if&y-6<5;                          [if 1..4 Banners]
+  !!VRy-6:-1;
+  !!EXx2/x3/x4/x1/2:R1/d/y-7/y-6;      [set Banners]
+!!el;
+  !!VRy-6:-4;
+  !!EXx2/x3/x4/x1/2:R1/d/y-7/3;           [set Banners]
+  !!CAx2/x3/x4:H1/?y1;                    [y1 = heroes' number]
+  !!DO4106/1/y-6/1&y1>-1/y1<156:Py1;      [add y-6 Banners into backpack of visiting hero]
+!!en;
+
+!?FU4111;
+!!FU&x1=x16:E;                         [if the same slot]
+!!EXx2/x3/x4/x16/2:A?y1/?y2/?y3;       [y1 = type of monsters, y2 = quantity, y3 = creature expirience]
+!!if&y-3=y1;                           [if the same types]
+  !!EXx2/x3/x4/x16/2:R?y1/d/?y3/?y2;     [get current stack Banners]
+  !!EXx2/x3/x4/x1/2:C2/x2/x3/x4/x16/1;   [add units]
+  !!VRy-6:+y1+y2;                        [calculate Banners]
+  !!VRy-7&y-7=-1/y1=1:Sy3;               [set Banner option if it wasn't seted]
+!!en;
+---------- 2.2 [Consolidating army (town)] -------------------------------------
+
+---------- 2.3 [Deleting army (town)] ------------------------------------------
+!?FU4112;  [x1 = slot number (0..6), x2..x4 = town coordinates, x5 = promt]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>6/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+
+!!CAx2/x3/x4:M2/x1/d/=0;          [check if current slot is empty]
+!!if&-1;
+!!IF&x5=1:Q1/z180001;
+!!CAx2/x3/x4|1/x5=0:M2/x1/-1/0;
+!!EXx2/x3/x4/x1/2|1/x5=0:A-1/0/0;
+!!en;
+---------- 2.3 [Deleting army (town)] ------------------------------------------
+
+---------- 2.4 [Exchange armies (hero <-> town)] -------------------------------
+!?FU4113;  [x1 = hero's number (0..v4137), x2..x4 = town coordinates]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>v4137/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+
+!!DO4114/0/6/1:Px1/x2/x3/x4;
+
+!?FU4114;
+!!HEx1:C0/x16/?y1/?y2/?y3/2;       [y1 = type, y2 = quantity, y3 = exp.]
+!!EXx1/x16:R?y11/?y12;             [get art. & option]
+!!EXx1/x16:R?y7/?y8/?y9/?y10;      [get art. copies]
+
+!!EXx2/x3/x4/x16/2:A?y4/?y5/?y6;   [y4 = type, y5 = quantity, y6 = exp.]
+!!EXx2/x3/x4/x16/2:R?y13/?y14;                [get art. & option]
+!!EXx2/x3/x4/x16/2:R?y15/?y16/?y17/?y18;      [get art. copies]
+
+!!CAx2/x3/x4:M2/x16/y1/y2;
+!!EXx2/x3/x4/x16/2:Ay1/y2/y3;
+!!EXx2/x3/x4/x16/2:Ry11/y12;             [set art. & option]
+!!EXx2/x3/x4/x16/2:Ry7/y8/y9/y10;        [set art. copies]
+
+!!HEx1:C0/x16/y4/y5/y6/2;
+!!EXx1/x16:Ry13/y14;                [set art. & option]
+!!EXx1/x16:Ry15/y16/y17/y18;        [set art. copies]
+---------- 2.4 [Exchange armies (hero <-> town)] -------------------------------
+
+---------- 2.4 [Exchange armies (hero <-> hero)] -------------------------------
+!?FU4115;  [x1,x2 = heroes' number]
+!!FU|x1<0/x1>v4137/x2<0/x2>v4137:E;  [EXCEPTIONS: exit]
+
+!!DO4116/0/6/1:Px1/x2;
+
+!?FU4116;
+!!HEx1:C0/x16/?y1/?y2/?y3/2;       [y1 = type, y2 = quantity, y3 = exp.]
+!!EXx1/x16:R?y4/?y5;               [get art. & option]
+!!EXx1/x16:R?y6/?y7/?y8/?y9;       [get art. copies]
+
+!!HEx2:C0/x16/?y11/?y12/?y13/2;    [y11 = type, y12 = quantity, y13 = exp.]
+!!EXx2/x16:R?y14/?y15;             [get art. & option]
+!!EXx2/x16:R?y16/?y17/?y18/?y19;   [get art. copies]
+
+!!HEx1:C0/x16/y11/y12/y13/2;
+!!EXx1/x16:Ry14/y15;               [set art. & option]
+!!EXx1/x16:Ry16/y17/y18/y19;       [set art. copies]
+
+!!HEx2:C0/x16/y1/y2/y3/2;
+!!EXx2/x16:Ry4/y5;                 [set art. & option]
+!!EXx2/x16:Ry6/y7/y8/y9;           [set art. copies]
+---------- 2.4 [Exchange armies (hero <-> hero)] -------------------------------
+
+---------- 2.5 [Move stack (hero <-> hero)] ------------------------------------
+!?FU4117; [x1 = 'from' hero, x2 = 'to' hero, x3 = 'from' stack]
+!!FU|x1<0/x1>v4137/x2<0/x2>v4137:E/x3<0/x3>6;  [EXCEPTIONS: exit]
+
+!!HEx1:C0/x3/?y2/=0;
+!!FU&1:E; exit if slot is empty
+!!DO4118/0/6/1:Px1/x2/x3/y2;  [add to current stack if the same type]
+!!DO4119/0/6/1&-1:Px1/x2/x3;     [add to free stack if not presents the same type]
+
+!?FU4118; [x1 = 'from' hero, x2 = 'to' hero, x3 = 'from' stack, x4 = type of monsters]
+!!HEx2:C0/x16/?y1/d;
+!!if&y1=x4;                          [if the same type]
+  !!IF:V1/1;
+  !!HEx1:C0/x3/?y1/?y2/?y3/2;        [y1 = type, y2 = quantity, y3 = exp.]
+  !!EXx1/x3:R?y4/?y5;                [get art. & option]
+  !!EXx1/x3:R?y6/?y7/?y8/?y9;        [get art. copies]
+
+  !!EXx2/x16:R?y16/?y17/?y18/?y19;   [get art. copies]
+
+  !!HEx1:C0/x3/-1/0/0/2;             [clear 'from' slot]
+  !!EXx1/x3:R0/d/d/0;                [clear art.]
+
+  !!HEx2:C0/x16/d/dy2/y3/0;          [add creatures]
+
+  !!VRy10:S0+y6+y9+y16+y19;          [y10 = common quantity of art.]
+  !!FU&y10=0:E;                      [exit if army has not Banners]
+  !!if&y10<5;                        [if 1..4 Banners]
+    !!VRy10:-1;
+    !!EXx2/x16:R1/d/d/y10;           [set Banners]
+  !!el;
+    !!VRy10:-4;
+    !!EXx2/x16:R1/d/d/3;             [set Banners]
+    !!HEx2:N?y1;                     [y1 = heroes' number]
+    !!FU&y1<0/y1>v4137;              [EXCEPTIONS: exit]
+    !!DO4106/1/y10/1:Py1;            [add y10 Banners into backpack of hero y1]
+  !!en;
+
+  !!VRx16:S6;                        [exit if done]
+!!en;
+
+
+!?FU4119; [x1 = 'from' hero, x2 = 'to' hero, x3 = 'from' stack]
+!!HEx2:C0/x16/d/=0;                  [check if empty slot]
+!!if&1;                              [if have found free slot]
+  !!HEx1:C0/x3/?y1/?y2/?y3/2;        [y1 = type, y2 = quantity, y3 = exp.]
+  !!EXx1/x3:R?y4/?y5;                [get art. & option]
+  !!EXx1/x3:R?y6/?y7/?y8/?y9;        [get art. copies]
+
+
+  !!HEx2:C0/x16/y1/y2/y3/2;          [set army]
+  !!EXx2/x16:Ry4/y5;                 [set art. & option]
+  !!EXx2/x16:Ry6/y7/y8/y9;           [set art. copies]
+
+  !!HEx1:C0/x3/-1/0/0/2;             [cler 'from' slot]
+  !!EXx1/x3:R0/d/d/0;                [clear art.]
+
+  !!VRx16:S6;                        [exit if done]
+!!en;
+---------- 2.5 [Move stack (hero <-> hero)] ------------------------------------
+
+---------- 2.6 [Move stack (town -> hero)] -------------------------------------
+!?FU4120; [x1-x3 = 'from' town, x4 = 'to' hero, x5 = 'from' slot]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x4<0/x4>v4137/x1<0/x2<0/x3<0/x1>y5/x2>y5/x3>y6:E/x5<0/x5>6;  [EXCEPTIONS: exit]
+
+!!EXx1/x2/x3/x5/2:A?y2/=0/d;         [check if empty slot]
+!!FU&1:E; exit if slot is empty
+
+!!DO4121/0/6/1:Px1/x2/x3/x4/x5/y2; [add to current stack if the same type]
+!!DO4122/0/6/1:Px1/x2/x3/x4/x5;    [add to free stack if not presents the same type]
+
+!?FU4121; [x1-x3 = 'from' town, x4 = 'to' hero, x5 = 'from' slot]
+!!HEx4:C0/x16/?y1/d;
+!!if&y1=x6;                          [if the same type]
+  !!EXx1/x2/x3/x5/2:A?y1/?y2/?y3;       [y1 = type, y2 = quantity, y3 = exp.]
+  !!EXx1/x2/x3/x5/2:R?y4/?y5;           [get art. & option]
+  !!EXx1/x2/x3/x5/2:R?y6/?y7/?y8/?y9;   [get art. copies]
+
+  !!EXx4/x16:R?y16/?y17/?y18/?y19;   [get art. copies]
+
+  !!CAx1/x2/x3:M2/x5/-1/0;      [clear 'from' slot]
+  !!EXx1/x2/x3/x5/2:A-1/0/0;    [clear 'from' slot]
+  !!EXx1/x2/x3/x5/2:R0/d/d/0;   [clear art. copies]
+
+  !!HEx4:C0/x16/d/dy2/y3/0;          [add creatures]
+
+  !!VRy10:S0+y6+y9+y16+y19;          [y10 = common quantity of art.]
+  !!FU&y10=0:E;                      [exit if army has not Banners]
+  !!if&y10<5;                        [if 1..4 Banners]
+    !!VRy10:-1;
+    !!EXx4/x16:R1/d/d/y10;           [set Banners]
+  !!el;
+    !!VRy10:-4;
+    !!EXx4/x16:R1/d/d/3;             [set Banners]
+    !!HEx4:N?y1;                     [y1 = heroes' number]
+    !!FU&y1<0/y1>v4137;              [EXCEPTIONS: exit]
+    !!DO4106/1/y10/1:Py1;            [add y10 Banners into backpack of hero y1]
+  !!en;
+  !!VRx16:S6;                        [exit if done]
+!!en;
+
+!?FU4122; [x1-x3 = 'from' town, x4 = 'to' hero, x5 = 'from' slot]
+!!HEx4:C0/x16/d/=0;                  [check if empty slot]
+!!if&1;                              [if have found free slot]
+  !!EXx1/x2/x3/x5/2:A?y1/?y2/?y3;       [y1 = type, y2 = quantity, y3 = exp.]
+  !!EXx1/x2/x3/x5/2:R?y4/?y5;           [get art. & option]
+  !!EXx1/x2/x3/x5/2:R?y6/?y7/?y8/?y9;   [get art. copies]
+
+
+  !!HEx4:C0/x16/y1/y2/y3/2;          [set army]
+  !!EXx4/x16:Ry4/y5;                 [set art. & option]
+  !!EXx4/x16:Ry6/y7/y8/y9;           [set art. copies]
+
+  !!CAx1/x2/x3:M2/x5/-1/0;           [clear 'from' slot]
+  !!EXx1/x2/x3/x5/2:A-1/0/0;         [clear 'from' slot]
+  !!EXx1/x2/x3/x5/2:R0/d/d/0;        [clear art. copies]
+
+  !!VRx16:S6;                        [exit if done]
+!!en;
+---------- 2.6 [Move stack (town -> hero)] -------------------------------------
+
+---------- 2.7 [Move stack (hero -> town)] -------------------------------------
+!?FU4123; [x1 = 'from' hero, x2-x4 = 'to' town, x5 = 'from' slot]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>v4137/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6/x5<0/x5>6:E;  [EXCEPTIONS: exit]
+
+!!HEx1:C0/x5/?y1/=0;
+!!FU&1:E;                          [exit if slot is empty]
+
+!!DO4124/0/6/1:Px1/x2/x3/x4/x5/y1; [add to current stack if the same type]
+!!DO4125/0/6/1&-1:Px1/x2/x3/x4/x5; [add to free stack if not presents the same type]
+
+!?FU4124; [x1 = 'from' hero, x2-x4 = 'to' town, x5 = 'from' slot]
+!!EXx2/x3/x4/x16/2:A?y1/d/d;
+!!if&y1=x6;                          [if the same type]
+  !!IF:V1/1;                         [adding flag = true]
+
+  !!EXx1/x5:R?y6/d/d/?y9;            [get art. copies]
+  !!EXx2/x3/x4/x16/2:R?y16/d/d/?y19; [get art. copies]
+
+  !!EXx2/x3/x4/x16/2:C0/x1/x5/1;     [move creatures]
+
+  !!VRy10:S0+y6+y9+y16+y19;          [y10 = common quantity of art.]
+  !!if&y10>4;                        [if more then 4 Banners]
+    !!VRy10:-4;
+    !!HEx1:N?y1;                     [y1 = heroes' number]
+    !!FU&y1<0/y1>v4137:E;            [EXCEPTIONS: exit]
+    !!DO4106/1/y10/1:Py1;            [add y10 Banners into backpack of hero y1]
+  !!en;
+
+  !!VRx16:S6;                        [exit if done]
+!!en;
+
+!?FU4125; [x1 = 'from' hero, x2-x4 = 'to' town, x5 = 'from' slot]
+!!EXx2/x3/x4/x16/2:Ad/=0/d;          [check if empty slot]
+!!if&1;                              [if have found free slot]
+  !!HEx1:C0/x5/?y1/d;                [y1 = type]
+  !!CAx2/x3/x4:M2/x16/y1/0;          [add creatures]
+  !!EXx2/x3/x4/x16/2:C0/x1/x5/1;     [move creatures]
+  !!VRx16:S6;                        [exit if done]
+!!en;
+---------- 2.7 [Move stack (hero -> town)] -------------------------------------
+
+
+---------- 2.8 [Move all stacks (hero -> town)] --------------------------------
+!?FU4126; [x1 = 'from' hero, x2-x4 = 'to' town]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>v4137/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+!!DO4127/0/6/1:Px1/x2/x3/x4;
+
+!?FU4127;
+!!FU4123:Px1/x2/x3/x4/x16;
+---------- 2.8 [Move all stacks (hero -> town)] --------------------------------
+
+---------- 2.9 [Move all stacks (town -> hero)] --------------------------------
+!?FU4128; [x1-x3 = 'from' town, x4 = 'to' hero]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x4<0/x4>v4137/x1<0/x2<0/x3<0/x1>y5/x2>y5/x3>y6:E;  [EXCEPTIONS: exit]
+!!DO4129/0/6/1:Px1/x2/x3/x4;
+
+!?FU4129;
+!!FU4120:Px1/x2/x3/x4/x16;
+---------- 2.9 [Move all stacks (town -> hero)] --------------------------------
+
+---------- 2.10 [Move all stacks (hero -> hero)] -------------------------------
+!?FU4130; [x1 = 'from' hero, x2 = 'to' hero]
+!!FU|x1<0/x1>v4137/x2<0/x2>v4137:E;  [EXCEPTIONS: exit]
+!!DO4131/0/6/1:Px1/x2;
+
+!?FU4131;
+!!FU4117:Px1/x2/x16;
+---------- 2.10 [Move all stacks (hero -> hero)] -------------------------------
+
+---------- 2.11 [Split stack to equal stacks (town)] ---------------------------
+!?FU4146; [x1 = slot, x2-x4 = town]
+!!UN:X?y5/?y6; [get size of map]
+!!FU|x1<0/x1>6/x2<0/x3<0/x4<0/x2>y5/x3>y5/x4>y6:E;  [EXCEPTIONS: exit]
+
+!!CAx2/x3/x4:M2/x1/?y-1/?y-2;     [y-1 = type of monsters, y-2 = quantity]
+!!FU4147:Px2/x3/x4/y-1/?y-2/?y-6; [y-2: common quantity of the same monsters, y-6: common quantity of banners]
+!!FU&y-2<2:E;                     (exit if less then 2 units)
+
+!!FU4149:Px2/x3/x4/y-1/x1;        [get in v1: quantity of free slots or with the same type of monsters, v2..v8: their numbers]
+
+!!VRz23:S^^;
+!!VRz24:S^^;
+!!VRz25:S^^;
+!!VRz26:S^^;
+!!VRz27:S^^;
+!!VRz28:S^^;
+
+!!VRz22:S180002;
+!!VRz23&v1>1/y-2>1:S^2^;
+!!VRz24&v1>2/y-2>2:S^3^;
+!!VRz25&v1>3/y-2>3:S^4^;
+!!VRz26&v1>4/y-2>4:S^5^;
+!!VRz27&v1>5/y-2>5:S^6^;
+!!VRz28&v1>6/y-2>6:S^7^;
+!!VRz29:S180003;
+!!VRv1:S0;
+!!IF&1000:G1/1/1/22/29/23/24/25/26/27/28/0/0/0/0/0;     [display checkbox dialogue]
+!!FU|v1=0/v1=1:E;                                  [chose to cancel, exit]
+
+
+!!EXx2/x3/x4/x1/2:Rd/d/?y3/d;       [y3 = banner option]
+!!DO4152/0/6/1:Px2/x3/x4/y-1;       [remove banners before consolidating]
+!!VRy1:Sv1;                         [buffering v1]
+!!VRy2:Sy-6;                        [buffering y-6]
+!!FU4110:Px1/x2/x3/x4;              [consolidate all units of the same type]
+!!VRy-6:Sy2;                        [restoring y-6]
+!!VRy-7:Sy3;                        [y-7 = banner option]
+!!EXx2/x3/x4/x1/2:A?y-1/?y-2/?y-3;  [y-1 = type, y-2 = quantity, y-3 = exp.]
+
+!!VRv1&y1=2:S2; [v1 = in how many slots will be divided unit]
+!!VRv1&y1=4:S3;
+!!VRv1&y1=8:S4;
+!!VRv1&y1=16:S5;
+!!VRv1&y1=32:S6;
+!!VRv1&y1=64:S7;
+
+
+!!VRy-4:Sy-2:v1;                      [y-4: divided quatity of monsters]
+!!VRy-5:Sy-2%v1;                      [y-5: reminder from division]
+!!VRy1:Sv1+1;
+!!DO4151/2/y1/1&y1>2:Px2/x3/x4/y-1/y-3;     [make splitting]
+!!DO4153/2/y1/1&y-6>0:Px2/x3/x4;            [add banner copies]
+!!IF&1000/y-6>0:L180004;
+
+  [finding quantity of free slots (or with the same type of monster) and their numbers in town]
+!?FU4149; [x1-x3 = town, x4 = type of monster, x5 = first slot]
+!!VRv1:C0/-1/-1/-1/-1/-1/-1/-1;
+!!if&x5>-1/x5<7;
+  !!DO4150/x5/x5/1:Px1/x2/x3/x4/-1;
+  !!DO4150/0/6/1:Px1/x2/x3/x4/x5;
+  !!DO4150/0/6/1&x4<>-1:Px1/x2/x3/-1/-1;
+!!en;
+!?FU4150; [x1-x3 = town, x4 = type of monster, x5 = slot to skip]
+!!CAx1/x2/x3:M2/x16/?y1/?y2;
+!!if&y1=x4/x5<>x16;
+  !!VRv1:+1;
+  !!VRy1:Sv1+1;
+  !!VRvy1:Sx16;
+!!en;
+
+  [put army to slot and decrease common quantity]
+!?FU4151; [x1-x3 = town coordinates, x4 = type of creature, x5 = exp.]
+!!VRy1:Sy-4;              [divided quantity]
+!!if&y-5>0;               [correction if reminder is present]
+  !!VRy1:+1;
+  !!VRy-5:-1;
+!!en;
+!!CAx1/x2/x3:M2/vx16/x4/y1;
+!!EXx1/x2/x3/vx16/2:Ax4/y1/x5;  [add unit]
+!!if&y-6>0;               [add Banner]
+!!EXx1/x2/x3/vx16/2:R1/d/y-7/0;
+!!VRy-6:-1;
+!!en;
+
+  [get town garrison common quantity of certain type units]
+!?FU4147; [x1-x3 = town coordinates, x4 = type of monsters]
+!!VRv1:S0;
+!!VRv2:S0;
+!!DO4148/0/6/1:Px1/x2/x3/x4;
+!!VRx5:Sv1; [return quantity of creatures]
+!!VRx6:Sv2; [return quantity of banners]
+!?FU4148;
+!!CAx1/x2/x3:M2/x16/?y1/?y2; [y1: type, y2: quantity]
+!!if&y1=x4;
+!!VRv1:+y2;
+!!EXx1/x2/x3/x16/2:R?y3/d/d/?y4;
+!!VRv2:+y3+y4;
+!!en;
+
+  [remove banners]
+!?FU4152; [x1-x3 = town coordinates, x4 = type of monsters]
+!!CAx1/x2/x3:M2/x16/?y1/?y2; [y1: type, y2: quantity]
+!!if&y1=x4;
+!!EXx1/x2/x3/x16/2:R0/d/d/0;
+!!en;
+
+  [add banner copies]
+!?FU4153; [x1-x3 = town]
+!!if&y-6>3;
+  !!EXx1/x2/x3/vx16/2:Rd/d/d/3;         [add banner copies]
+  !!VRy-6:-3;
+!!el;
+  !!EXx1/x2/x3/vx16/2&y-6>0:Rd/d/d/y-6; [add banner copies]
+  !!VRy-6:S0;
+!!en;
+---------- 2.11 [Split stack to equal stacks (town)] ---------------------------
+
+-----------3. Mouse click on Heroes Meeting Screen -----------------------------
+!?CM3&80;
+!!CM:A?y-1/?y-2;  [coordinates]
+!!CM:H?y-3/?y-4;  [y-3 = left hero, y-4 = right hero]
+!!CM:I?y-5;       [index of place clicked on]
+!!CM:F?y-6 S?y-7; [type and sybtype of click]
+
+!!VRy1:S-1;
+!!VRy2:S-1;
+!!VRy1&y-5>12/y-5<20:Sy-5-13;   [y1 = left hero slot]
+!!VRy1&y-5>64/y-5<72:Sy-5-65;   [y1 = left hero slot]
+!!VRy2&y-5>19/y-5<27:Sy-5-20;   [y2 = right hero slot]
+!!VRy2&y-5>71/y-4<79:Sy-5-72;   [y2 = right hero slot]
+
+!!if|y-6=4/y-6=32/y-6=36/y-6=5;
+!!FU&y-7<>12:E;                 [exit if not a push click]
+!!CM:R0;                        [disable standard message]
+
+  !!if&y1>-1/y1<7;               [if LEFT hero slot clicked on]
+    !!FU4102&y-6=4:Py1/y-3;      [spreading troops by 1 (Ctrl)]
+    !!FU4104&y-6=32:Py1/y-3;     [consolidate troops (Alt)]
+    !!FU4107&y-6=5:Py1/y-3/1;    [deleting troops (Ctrl+Shift)]
+    !!FU4117&y-6=36:Py-3/y-4/y1; [moving troops (Ctrl+Alt)]
+  !!en;
+
+  !!if&y2>-1/y2<7;               [if RIGHT hero slot clicked on]
+    !!FU4102&y-6=4:Py2/y-4;      [spreading troops by 1 (Ctrl)]
+    !!FU4104&y-6=32:Py2/y-4;     [consolidate troops (Alt)]
+    !!FU4107&y-6=5:Py2/y-4/1;    [deleting troops (Ctrl+Shift)]
+    !!FU4117&y-6=36:Py-4/y-3/y2; [moving troops (Ctrl+Alt)]
+  !!en;
+
+!!en;
+
+; left zone:    320-365
+; central zone: 375-425
+; right zone:   435-470
+
+; 1st row:   187-217
+; 2nd row:   250-280
+; 3rd row:   327-357
+; 4th row:   403-433
+; 5th row:   480-510
+
+!!IF:V1/0; [left flag]
+!!IF:V2/0; [central flag]
+!!IF:V3/0; [right flag]
+
+!!IF&y-1>319/y-1<366:V1/1; [set left flag]
+!!IF&y-1>374/y-1<426:V2/1; [set central flag]
+!!IF&y-1>434/y-1<471:V3/1; [set right flag]
+
+!!FU&-1/-2/-3:E; [exit if flags have not seted]
+
+
+!!if&y-2>186/y-2<218;      [1st row]
+  !!FU4130&1:Py-4/y-3;     [move army]
+  !!FU4115&2:Py-3/y-4;     [exchange army]
+  !!FU4130&3:Py-3/y-4;     [move army]
+!!en;
+
+!!if&y-2>249/y-2<281;      [2nd row]
+  !!FU4132&1:Py-4/y-3/-1;  [move equiped art.]
+  !!FU4136&2:Py-3/y-4/-1;  [exchange equiped art.]
+  !!FU4132&3:Py-3/y-4/-1;  [move equiped art.]
+!!en;
+
+!!if&y-2>326/y-2<358;      [3rd row]
+  !!FU4132&1:Py-4/y-3/1;   [move backpack art.]
+  !!FU4136&2:Py-3/y-4/1;   [exchange backpack art.]
+  !!FU4132&3:Py-3/y-4/1;   [move backpack art.]
+!!en;
+
+!!if&y-2>402/y-2<434;      [4th row]
+  !!FU4132&1:Py-4/y-3/0;   [move all art.]
+  !!FU4136&2:Py-3/y-4/0;   [exchange all art.]
+  !!FU4132&3:Py-3/y-4/0;   [move all art.]
+!!en;
+
+!!if&y-2>479/y-2<511;      [5th row]
+  !!FU4130&1:Py-4/y-3;     [move army]
+  !!FU4132&1:Py-4/y-3/0;   [move all art.]
+  !!FU4115&2:Py-3/y-4;     [exchange army]
+  !!FU4136&2:Py-3/y-4/0;   [exchange all art.]
+  !!FU4132&3:Py-3/y-4/0;   [move all art.]
+  !!FU4130&3:Py-3/y-4;     [move army]
+!!en;
+-----------3. Mouse click on Heroes Meeting Screen -----------------------------
+
+---------- 3.1 [Move artefacts (hero -> hero)] ---------------------------------
+!?FU4132; [x1 = 'from' hero, x2 = 'to' hero, x3 = transfering type (-1 for equiped art., 0 - for all art., 1 - for backpack)]
+
+!!DO4133/0/18/1&x3=-1:Px1/x2/x3;
+!!DO4133/0/82/1&x3=0:Px1/x2/x3;
+!!DO4133/19/82/1&x3=1:Px1/x2/x3;
+
+!?FU4133; [x1 = 'from' hero, x2 = 'to' hero, x3 = transfering type (-1 for equiped art., 0 - for all art., 1 - for backpack)]
+
+!!FU&x16=17:E;     (exit if spell book)
+!!HEx1:A1/?y1/x16;  [y1 = art. at position x16]
+!!FU&y1=-1:E;       (exit if slot is empty)
+
+!!if|y1=86/y1=87/y1=88/y1=89/y1=123/y1=124/y1=128/y1=135/y1=136/y1=144/y1=145:V1/1; [EXCEPTIONS]
+!!FU&x16<19:E;      (exit if equiped art. gives spell)
+!!en;
+
+
+!!HEx1:A2/y1/?y12/?y13;         [check art. quantity before adding]
+!!VRy6&x3=0:Sy12;               [y6 = quantity of art. to move]
+!!VRy6&x3=1:Sy12-y13;
+!!VRy6&x3=-1:Sy13;
+
+!!HEx2:A2/y1/?y2/?y3;           [check art. quantity before adding]
+!!DO4134/1/y6/1&y6>0:Px2/y1;    [add art. to 2nd hero]
+!!HEx2:A2/y1/?y4/?y5;           [check art. quantity after adding]
+!!VRy1:*-1;
+!!HEx1&y2<>y4:Ay1;              [remove art. from 1st hero if 2nd recieved art.]
+!!VRy1:*-1;
+!!VRy4:-y2-y6;                  [y4 = quantity of art. which 2nd hero hasn't recieved]
+!!if&y4>0;
+!!DO4134/1/y4/1:Px1/y1;         [get back art. which 2nd hasn't recieved]
+!!IF:L^System: Backpack is full.^;
+!!en;
+
+!!DO4134/1/y13/1&y13>0/x3=1:Px1/y1;  [get back art.(equiped) for backpack option]
+!!VRy12&x3=-1:-y13;
+!!DO4135/1/y12/1&y12>0/x3=-1:Px1/y1;  [get back art.(backpack) for equiped option]
+
+
+ [equip art. or add to backpack]
+!?FU4134; [x1 = 'to' hero, x2 = number of art.]
+!!HEx1:A4/x2;
+
+ [add art. to backpack]
+!?FU4135; [x1 = 'to' hero, x2 = number of art.]
+!!HEx1:Ax2;
+---------- 3.1 [Move artefacts (hero -> hero)] ---------------------------------
+
+---------- 3.2 [Exchange artefacts (hero <-> hero)] ----------------------------
+!?FU4136; [x1 = 1st hero, x2 = 2nd hero, x3 = transfering type (-1 for equiped art., 0 - for all art., 1 - for backpack)]
+!!DO4137/4/170/1:Px1/x2/x3;
+
+!?FU4137;
+!!IF:V1/0;
+!!IF|x16=86/x16=87/x16=88/x16=89/x16=123/x16=124/x16=128/x16=135/x16=136/x16=144/x16=145:V1/1; [EXCEPTIONS]
+!!IF:V2/0;
+!!IF:V3/0;
+!!HEx1:A2/x16/?y1/?y2;            [get quantity of art. with number x16]
+!!HEx2:A2/x16/?y11/?y12;          [get quantity of art. with number x16]
+!!IF&1/y2>0:V2/1;                 [left hero has excepted art]
+!!IF&1/y12>0:V3/1;                [right hero has excepted art]
+!!FU&y1<1/y11<1:E;                [exit if there are no such art.]
+!!VRy3:Sx16*-1;
+
+!!if&x3=0;                        [all artefacts]
+
+  !!HEx1:Ay3;                     [remove art. from left hero]
+  !!HEx2:Ay3;                     [remove art. from right hero]
+
+  !!DO4134/1/y2/1&2:Px1/x16;      [return to left hero artefacts from exception list]
+  !!DO4134/1/y12/1&3:Px2/x16;      [return to right hero artefacts from exception list]
+
+  !!VRy4Sy1;                      [quantity of artefacts to add to right hero]
+  !!VRy14Sy11;                    [quantity of artefacts to add to left hero]
+
+  !!VRy4&2:-y2;                   [substract excepted artefacts]
+  !!VRy14&3:-y12;                 [substract excepted artefacts]
+
+  !!DO4134/1/y4/1&y4>0:Px2/x16;   [give artefacts to right hero]
+  !!DO4134/1/y14/1&y14>0:Px1/x16; [give artefacts to left hero]
+
+  !!VRy5:Sy1+y14-y4;              [new expected quantity of artefacts (left hero)]
+  !!VRy15:Sy11+y4-y14;            [new expected quantity of artefacts (right hero)]
+
+  !!HEx1:A2/x16/?y1/?y2;          [get quantity of art. with number x16 (left hero)]
+  !!HEx2:A2/x16/?y11/?y12;        [get quantity of art. with number x16 (right hero)]
+
+  !!VRy5:-y1;                     [quantity of art. which didn't get left hero]
+  !!VRy15:-y11;                   [quantity of art. which didn't get right hero]
+
+  !!DO4134/1/y5/1&y5>0:Px2/x16;   [getback art. which didn't get left hero]
+  !!DO4134/1/y15/1&y15>0:Px1/x16; [getback art. which didn't get right hero]
+
+!!en;
+
+
+!!if&x3=-1;                       [equiped art.]
+
+  !!HEx1:Ay3;                     [remove art. from left hero]
+  !!HEx2:Ay3;                     [remove art. from right hero]
+
+  !!DO4134/1/y2/1&2:Px1/x16;      [return to left hero artefacts from exception list]
+  !!DO4134/1/y12/1&3:Px2/x16;     [return to right hero artefacts from exception list]
+
+  !!VRy4Sy2;                      [quantity of artefacts to add to right hero]
+  !!VRy14Sy12;                    [quantity of artefacts to add to left hero]
+
+  !!VRy4&2:-y2;                   [substract excepted artefacts]
+  !!VRy14&3:-y12;                 [substract excepted artefacts]
+
+  !!DO4134/1/y4/1&y4>0:Px2/x16;   [give artefacts to right hero]
+  !!DO4134/1/y14/1&y14>0:Px1/x16; [give artefacts to left hero]
+
+  !!VRy1:-y2;                     [quantity of art. in backpack of left hero]
+  !!VRy11:-y12;                   [quantity of art. in backpack of right hero]
+
+  !!DO4135/1/y1/1&y1>0:Px1/x16;   [getback art. from backpack of left hero]
+  !!DO4135/1/y11/1&y11>0:Px2/x16; [getback art. from backpack of right hero]
+
+  !!VRy5:Sy1+y14-y4;              [new expected quantity of artefacts (left hero)]
+  !!VRy15:Sy11+y4-y14;            [new expected quantity of artefacts (right hero)]
+
+  !!HEx1:A2/x16/?y1/?y2;          [get quantity of art. with number x16 (left hero)]
+  !!HEx2:A2/x16/?y11/?y12;        [get quantity of art. with number x16 (right hero)]
+
+  !!VRy5:-y1;                     [quantity of art. which didn't get left hero]
+  !!VRy15:-y11;                   [quantity of art. which didn't get right hero]
+
+  !!DO4134/1/y5/1&y5>0:Px2/x16;   [getback art. which didn't get left hero]
+  !!DO4134/1/y15/1&y15>0:Px1/x16; [getback art. which didn't get right hero]
+
+!!en;
+
+!!if&x3=1;                        [backpack art.]
+
+  !!HEx1:Ay3;                     [remove art. from left hero]
+  !!HEx2:Ay3;                     [remove art. from right hero]
+
+  !!DO4134/1/y2/1&y2>0:Px1/x16;   [return to left hero equiped artefacts]
+  !!DO4134/1/y12/1&y12>0:Px2/x16; [return to right hero equiped artefacts]
+
+  !!VRy4Sy1-y2;                   [quantity of artefacts to add to right hero]
+  !!VRy14Sy11-y12;                [quantity of artefacts to add to left hero]
+
+  !!DO4134/1/y4/1&y4>0:Px2/x16;   [give artefacts to right hero]
+  !!DO4134/1/y14/1&y14>0:Px1/x16; [give artefacts to left hero]
+
+  !!VRy5:Sy1+y14-y4;              [new expected quantity of artefacts (left hero)]
+  !!VRy15:Sy11+y4-y14;            [new expected quantity of artefacts (right hero)]
+
+  !!HEx1:A2/x16/?y1/?y2;          [get quantity of art. with number x16 (left hero)]
+  !!HEx2:A2/x16/?y11/?y12;        [get quantity of art. with number x16 (right hero)]
+
+  !!VRy5:-y1;                     [quantity of art. which didn't get left hero]
+  !!VRy15:-y11;                   [quantity of art. which didn't get right hero]
+
+  !!DO4134/1/y5/1&y5>0:Px2/x16;   [getback art. which didn't get left hero]
+  !!DO4134/1/y15/1&y15>0:Px1/x16; [getback art. which didn't get right hero]
+
+!!en;
+---------- 3.2 [Exchange artefacts (hero <-> hero)] ----------------------------
+

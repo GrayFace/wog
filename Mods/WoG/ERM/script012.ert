@@ -1,0 +1,202 @@
+112000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Living Skull version 1.1 script.} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+112001	Living Skull	String type = <!#S>	07.06.2003
+112002	The living skull speaks when you approach...
+
+What artifact do you seek, %Z26?	String type = <!!S>	07.06.2003
+112003	Enter a full or partial artifact or scroll name.	String type = <!!S>	07.06.2003
+112004	Grail	String type = <!!S>	07.06.2003
+112005	The Grail	String type = <!!S>	07.06.2003
+112006	Scroll	String type = <!!S>	07.06.2003
+112007	Spell Scroll	String type = <!!S>	07.06.2003
+112008	Spell	String type = <!!S>	07.06.2003
+112009	Spellbook	String type = <!!S>	07.06.2003
+112010	Spell Book	String type = <!!S>	07.06.2003
+112011	Pandora's Box	String type = <!!S>	07.06.2003
+112012	Pandoras Box	String type = <!!S>	07.06.2003
+112013	Pandora Box	String type = <!!S>	07.06.2003
+112014	Pandora's Box	String type = <!!S>	07.06.2003
+112015	Spell Scroll	String type = <!!S>	07.06.2003
+112016	You seek the %Z23! 
+ 
+For 100 pieces of {gold} I will 
+search the lands for 
+any unclaimed %Z23. 
+ 
+Will you pay the price?	String type = <!!Q>	07.06.2003
+112017	You seek the %Z23! 
+ 
+For 100 pieces of {gold} I will 
+search the lands for 
+an unclaimed %Z23. 
+ 
+Will you pay the price?	String type = <!!Q>	07.06.2003
+112018	You seek %Z23! 
+ 
+For 100 pieces of {gold} I will 
+search the lands for 
+the mysterious %Z23. 
+ 
+Will you pay the price?	String type = <!!Q>	07.06.2003
+112019	Perhaps another day when 
+you are feeling richer.	String type = <!!M>	07.06.2003
+112020	You haven't the {gold}. 
+Return when you are richer.	String type = <!!M>	07.06.2003
+112021	I have no knowledge of 
+ 
+{"%Z1"} 
+ 
+Perhaps you have given 
+me the wrong name.	String type = <!!M>	07.06.2003
+112022	Thank you, %Z26. 
+ 
+If you're ready I will search.	String type = <!!Q>	07.06.2003
+112023	on the surface	String type = <!!S>	07.06.2003
+112024	underground	String type = <!!S>	07.06.2003
+112025	nowhere to be found	String type = <!!S>	07.06.2003
+112026	It is	String type = <!!S>	07.06.2003
+112027	is	String type = <!!S>	07.06.2003
+112028	it	String type = <!!S>	07.06.2003
+112029	They are	String type = <!!S>	07.06.2003
+112030	are	String type = <!!S>	07.06.2003
+112031	them	String type = <!!S>	07.06.2003
+112032	It is	String type = <!!S>	07.06.2003
+112033	is	String type = <!!S>	07.06.2003
+112034	it	String type = <!!S>	07.06.2003
+112035	{Helm} {of} {Heavenly} {Enlightenment}	String type = <!!S>	07.06.2003
+112036	{Bowstring} {of} {the} {Unicorn's} {Mane}	String type = <!!S>	07.06.2003
+112037	The fabled artifact you seek: 
+ 
+{"}{%Z23}{"} 
+ 
+%Z43 %Z24.	String type = <!!M>	07.06.2003
+112038	Helm of Heavenly Enlightenment	String type = <!!S>	07.06.2003
+112039	Bowstring of the Unicorn's Mane	String type = <!!S>	07.06.2003
+112040	Mercury	String type = <!!S>	07.06.2003
+112041	Sulfur	String type = <!!S>	07.06.2003
+112042	Crystal	String type = <!!S>	07.06.2003
+112043	Gems	String type = <!!S>	07.06.2003
+112044	For two %Z41 I will 
+tell you exactly where to find 
+the %Z23. 
+ 
+Will you pay this price?	String type = <!!Q>	07.06.2003
+112045	Good luck finding 
+the %Z23 
+in this vast land.	String type = <!!M>	07.06.2003
+112046	Sorry, you don't have 
+enough %Z41. 
+Please return when you 
+have more resources.	String type = <!!Q>	07.06.2003
+112047	Thank you.	String type = <!!Q>	07.06.2003
+112048	pace	String type = <!!S>	07.06.2003
+112049	paces	String type = <!!S>	07.06.2003
+112050	pace	String type = <!!S>	07.06.2003
+112051	paces	String type = <!!S>	07.06.2003
+112052	{Helm} {of} {Heavenly} {Enlightenment}	String type = <!!S>	07.06.2003
+112053	{Bowstring} {of} {the} {Unicorn's} {Mane}	String type = <!!S>	07.06.2003
+112054	The {%Z23} 
+%Z43 to the Northeast of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 North and %V26 %Z28 East.	String type = <!!M>	07.06.2003
+112055	The {%Z23} 
+%Z43 Southeast of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 South and %V26 %Z28 East.	String type = <!!M>	07.06.2003
+112056	The {%Z23} 
+%Z43 directly East of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V26 %Z28 East.	String type = <!!M>	07.06.2003
+112057	The {%Z23} 
+%Z43 Northwest of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 North and %V26 %Z28 West.	String type = <!!M>	07.06.2003
+112058	The {%Z23} 
+%Z43 Southwest of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 South and %V26 %Z28 West.	String type = <!!M>	07.06.2003
+112059	The {%Z23} 
+%Z43 directly West of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V26 %Z28 West.	String type = <!!M>	07.06.2003
+112060	The {%Z23} 
+%Z43 directly South of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 South.	String type = <!!M>	07.06.2003
+112061	The {%Z23} 
+%Z43 directly North of here 
+%Z24. 
+ 
+%Z42 located exactly 
+%V25 %Z27 North.	String type = <!!M>	07.06.2003
+112062	Helm of Heavenly Enlightenment	String type = <!!S>	07.06.2003
+112063	Bowstring of the Unicorn's Mane	String type = <!!S>	07.06.2003
+112064	For {1000 gold} I will 
+reveal the fabled 
+%Z23 
+to you on the map, 
+removing any shroud 
+that may conceal %Z44. 
+ 
+Will you pay this price?	String type = <!!Q>	07.06.2003
+112065	Good luck finding 
+the %Z23 
+in this vast land.	String type = <!!M>	07.06.2003
+112066	Sorry, %Z26, you don't have 
+enough gold. 
+Please return when you are richer.	String type = <!!Q>	07.06.2003
+112067	Thank you, %Z26. 
+ 
+If you're ready, I will show you 
+the %Z23 now.	String type = <!!Q>	07.06.2003
+112068	You are searching for a magic Spell Scroll...	String type = <!!S>	07.06.2003
+112069	Which spell do you seek, %Z26?	String type = <!!S>	07.06.2003
+112070	Scroll of %Z22	String type = <!!S>	07.06.2003
+112071	Scroll of %Z23	String type = <!!S>	07.06.2003
+112072	I grow weary of searching. Please return tomorrow. 		
+112073	For %Y2 Mithril I can bring the
+%Z23 to you.
+
+Will you pay this price?		
+112074	Sorry, %Z26, you don't have 
+enough Mithril. 
+
+Please return when you have found some.		
+112075	Thank you, %Z26.
+
+It has been a pleasure conducting business with you.		
+112076	Thank you, %Z26.
+
+It has been a pleasure conducting business with you.		
+112077	{Living Skull}
+
+The Living Skull speaks as you approach...
+
+%Z26, you are the first traveller to visit me this week so I grant you the gift of a free vision.		
+112078	prot		
+112079	Protection		
+112080	{Barbarian} {Lord's} {Axe} {of} {Ferocity}		
+112081	I'm very sorry, but everyone has some restrictions, and it is prohibited for me to show you the exact location of Warlord's Banners. 
+
+You ask why? - I'm not sure, but I think a good reason would be the protection of the neutral towns in this Kingdom against aggressors.	added by Thomas	22.12.2004
+112082	As you pick the %Z-2 out of the mouth of the skull, you realize that there is a second one. Of course, you take it too.	added by Thomas	22.12.2004
+112083	I'm very sorry, but there are some guards and this prevents me from taking the artifact.	added by Thomas	22.12.2004

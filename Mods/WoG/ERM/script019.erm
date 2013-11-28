@@ -1,0 +1,104 @@
+ZVSE
+ERMS_ScriptName=script19
+ERMS_ScriptAuthor=Sir Four
+ERMS_ScriptVersion=1.1.0
+ERMS_ScriptDate=13.7(July).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptUsedTimers=TM2(defined in script00)
+ERMS_ScriptUsedFunctions=FU100
+ERMS_ScriptUsedMacroNames=$once$(defined in script00)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**  Updated to support experience system: 25 august 2004
+
+** "Masters of Life" v1.8 - Sir Four
+**  Upgrade at the beginning of each turn
+**  peasants & 1st level creatures of the same town that hero
+**  into upgraded 1st level creatures of that town
+**  in all hero armies (except Necromancers)
+
+** Modified by Thomas Franz (samot) 19.10.04
+** - Replaced Timer 11 by TM2
+** - rewrote the upgrade-routine to work with Extension Heroes
+** - do not upgrade if Town=Conflux and Neutral Town is active,
+**   otherwise it would upgrade the shooting Halflings to not shooting Rogues
+** - set the costs of Halflings and Rogues equal if Neutral town is active to
+**   give he same changes to the Neutral town
+
+** Modified by Ennin - 09.07.06
+** option 265 - extended masters of life
+**  masters of creatures also upgrade their creatures
+**  if they are of not more than 4th level (except for vampires)
+**  also these creatures get level*100 experience every day
+**  note: galthran will upgrade skeletons cause he is skeletons master
+**  note: necromancer master gain level*25 exp
+
+** To use this code, put it into a Global Event, set to never happen.
+
+** Variables Used: none
+** Flags Used: none
+** Functions Used: 100
+** Timers used: TM2 (from script00)
+
+!#UN:P19/?v1; !#UN:P67/?v2; // check if Masters of Life and Neutral town are both active
+!#MA&v1=1/v2=1:C138/6/?v3 C143/6/v3; // if yes set costs of Halfing and Rogue to the same if script active
+**                                   // allows to upgrade your Halfings for free (to give the neutral town
+**                                   // the same chances as any other)
+
+** Timer routine
+
+!?TM2&$once$=1; // one times daily
+!!UN:P19/?y-1; ** [asking for turn option on]
+** [1 - enabled]
+** [0 - disabled]
+!!DO100/0/155/1&y-1=1:P; [do conversion for each hero if enabled]
+** end of timer routine
+
+** original function to do conversion
+~?FU100;
+~!HEx16:B2/?y-2; // get class of the hero
+~!VRy-2::2;   // divide by 2 to get the town typ
+~!FU&y-2=4:E; // exit if Necro
+~!UN:P67/?y-1; // check if neutral town script is activ
+~!FU&y-2=8/y-1=1:E; // exit if neutral town active and town = conflux (otherwise
+**                     it would upgrade the shooting Halflings to not shooting Rogues)
+~!UN:Ty-2/0/0/?y-3;  [1st level creature of his town]
+~!UN:Ty-2/0/1/?y-4;  [(upg) 1st level creature of his town]
+** The new experience will be the old experience multiplied by the Upgrade Multiplier
+~!HEx16:C1/y-3/y-4/d/d/0/5; [upg 1st level creatures]
+~!HEx16:C1/139/y-4/d/d/0/5; [upg peasants]
+** end of function
+
+**ennin**
+!?FU100;
+!!HEx16:B2/?y-2; // get class of the hero
+!!VRy-2::2;   // divide by 2 to get the town type
+** masters of life code**
+ !!if&y-2<>4:;
+ !!UN:P67/?y-1; // check if neutral town script is activ
+ !!FU&y-2=8/y-1=1:E; // exit if neutral town active and town = conflux (otherwise
+**                     it would upgrade the shooting Halflings to not shooting Rogues)
+ !!UN:Ty-2/0/0/?y-3;  [1st level creature of his town]
+ !!UN:Ty-2/0/1/?y-4;  [(upg) 1st level creature of his town]
+** The new experience will be the old experience multiplied by the Upgrade Multiplier
+ !!HEx16:C1/y-3/y-4/d/d/0/5; [upg 1st level creatures]
+ !!HEx16:C1/139/y-4/d/d/0/5; [upg peasants]
+!!en:;
+**/masters of life code**
+** extended masters of life code**
+!!UN:P265/?y1;
+~!FU&y1=0:E;
+!!HEx16:X?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!FU&y5<>1/y5<>4:E; //if hero is master of creatures
+!!MA:Ly6/?y12;
+!!FU&y12>3:E;      //and creatures are not level 5 or higher
+!!FU&y12>2/y-2=4:E; //and not for vampires
+!!UN:Ty-2/y12/1/?y13;
+!!VRy15:Sy12+1*100;
+!!VRy15&y-1=4::4;
+!!HEx16:C1/y13/d/d/y15/5; //train already upgraded
+!!HEx16&y6<>y13:C1/y6/y13/d/d/5; //upgrade them
+**/extended masters of life code**
+**/ennin**
+

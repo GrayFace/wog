@@ -1,0 +1,22 @@
+#	Text resource for "script53.erm" document		
+153000	Dungeon of the Dragon Master (not visited)	<!#S>	01.08.2004
+153001	Dungeon of the Dragon Master (visited)	<!#S>	01.08.2004
+153002	{Dungeon of the Dragonmaster}
+
+Aeons ago this place was known as {Dragon Utopia}.
+
+But once upon a time a powerful Wizard called {Nicodemus} slaughtered the Dragons guarding their treasures in order to use this well fortified building to store his own riches. But as guards he chose better ones than before...
+
+Do you wish to challange Nicodemus' guardians?	<!!Q>	01.08.2004
+153003	Having defeated Nicodemus' Dragons, you discover the %Z457 and the %Z458!	<!!Q>	01.08.2004
+153004	Having defeated Nicodemus' Dragons, you discover the %Z457, the %Z458 and the %Z459!	<!!Q>	01.08.2004
+153005	Having defeated Nicodemus' Dragons, you discover the %Z457, the %Z458, the %Z459 and the %Z460!	<!!S>	01.08.2004
+153006	Having defeated Nicodemus' Dragons, you discover the %Z457, the %Z458, the %Z459, the %Z460 and the %Z461!	<!!S>	01.08.2004
+153007	Inside a little chest, you find the %Z457, the %Z458 and the %Z459 too! And for bravery, your troops are rewarded with the Warlord's Banner.	<!!S>	01.08.2004
+153008	Inside a little chest, you find the %Z457, the %Z458 and the %Z459 too!	<!!Q>	01.08.2004
+153009	On an ivory table at the end of the main hall, you discover Nicodemus' {Ancient} {Tome} {of} {Knowledge}!
+
+Will you sell it or read it?	<!!Q>	01.08.2004
+153010	The merchant smiles as you pass him the book. "I think this is a good deal for both of us. You wouldn't have understood it anyway."	<!!Q>	01.08.2004
+153011	After you have worked through this heavy book, you feel somehow enlighted.	<!!Q>	01.08.2004
+153012	As you leave, the walls begin to shake and a huge Pillar of Fire blocks the entrance forever!	<!!M>	01.08.2004

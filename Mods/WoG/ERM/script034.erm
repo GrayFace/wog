@@ -1,0 +1,276 @@
+ZVSE
+ERMS_ScriptName=Mystic cards
+ERMS_ScriptAuthor=Matthew Charlap (Qurqirish Dragon)
+ERMS_ScriptVersion=1.7.2
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.5
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedVariables=v1300-1336;v3393-3400;z698
+ERMS_ScriptUsedFlags=270;271
+ERMS_ScriptUsedFunctions=13500-13507
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** this script alters the Cards of Prophecy to give, in addition to the standard
+** +1 luck, a random bonus or penalty to the hero's primary statistics,
+** different in every battle. Bonus does not apply in network human vs. human battles,
+** or to AI players.
+** 1.1 changes: Bonus can now be +5, hint text and battle text added
+** 1.1.1 changes: Battle text modified to include hero names. Function 6669 added
+** Thanks to Timothy Pulver for function 6669 to detect network human-vs.-human battles
+** 1.1.2 changes: minor text corrections. Function 6669 renumbered to 13503. remaining
+** references to Legs of Legion replaced by Cards of Prophecy
+** 1.2 changes: random card routine broken into multiple pieces, to make future expansion
+** of the script easier. Some more flavor changes.
+** 1.3 changes: Emperor, Empress, Hermit, Magician, Hierophant, and Fool added
+**     game setup control check added.
+** 1.4 changes: localization-friendly form made. ERT file now needed.
+**              negative spell-point problem fixed. New ERM command allows removal of
+**              function 13503.
+** 1.5 changes: use of version 1.3 cards keyed to difficulty level:
+**              easy, normal, hard: only original cards + hierophant + fool
+**              difficult: any except inverted fool
+**              impossible: any card
+** 1.6 changes: Inverted forms for Emperor, Empress, Hermit, and Magician added.
+**              these are active at hard and higher levels.
+** 1.6.1 changes: graphic added to message display.
+** 1.7 changes: message deactivation code added.
+** 1.7.1 changes: compatibility with quick combat added
+** 1.7.2 changes: compatibility with Mysticism II added
+** 1.8 changes: Hermit, Magician, and inverts changed so 1/2 knowledge / power
+**             is lost (rounded down)
+
+!#UN:P34/?v1321; [is script active?]
+
+!#VRz698:Sz134001;
+
+!#HT5/47&v1321=1:T698; [set new artifact text if active]
+
+!?BA0&v1321=1/-998; [start of battle]
+
+!!BA:E?v1331; [check for multiplayer]
+!!FU13502&v1331=0:P; [if it isn't, then continue with the rest of the script.
+
+!?FU13502; [start of main script]
+!!BA:H0/?v1300; [get attacking hero's number]
+!!BA:H1/?v1310; [get defending hero's number]
+
+!!HEv1300:A2/47/0/?v1301; [Attacker has Cards of Prophecy equipped?]
+!!HEv1310&v1310>=0:A2/47/0/?v1311; [Defender has Cards of Prophecy equipped?]
+!!FU13500&v1301>0/v1300>=0:Pv1300; [if any equipped, generate bonus for attacker]
+!!FU13500&v1311>0/v1310>=0:Pv1310; [if any equipped, generate bonus for defender]
+
+!?BA1&v1321=1/v1331=0/-998; [end of battle]
+!!FU13507&v1301>0/v1300>=0/v1307<=34:Pv1300/v1308/v1309/v1328/v1326/v1306/v1307/v1307; [undo attacker bonus]
+!!FU13507&v1311>0/v1310>=0/v1317<=34:Pv1310/v1318/v1319/v1320/v1327/v1316/v1317/v1317; [undo defender bonus]
+
+** function to generate card and apply its effect
+
+!?FU13500;
+!!UN:J2/?y11; [get difficulty level of map]
+!!VRv1307&x1=v1300/y11=4:S0T34; [attacker's card, if impossible]
+!!VRv1317&x1=v1310/y11=4:S0T34; [defender's card, if impossible]
+!!VRv1307&x1=v1300/y11=3:S0T33; [attacker's card, if difficult]
+!!VRv1317&x1=v1310/y11=3:S0T33; [defender's card, if difficult]
+!!VRv1307&x1=v1300/y11=2:S0T29; [attacker's card, if hard]
+!!VRv1317&x1=v1310/y11=2:S0T29; [defender's card, if hard]
+!!VRv1307&x1=v1300/y11<=1:S0T25; [attacker's card, if easy or normal]
+!!VRv1317&x1=v1310/y11<=1:S0T25; [defender's card, if easy or normal]
+
+!!HEx1&x1=v1300:F?v1302/?v1303/?v1304/?v1305; [if attacker, get hero statistics]
+!!HEx1&x1=v1310:F?v1312/?v1313/?v1314/?v1315; [if defender, get hero statistics]
+!!HEx1:I?y10; [get hero's current spell points]
+!!VRv1306&x1=v1300:Sy10; [if attacker's hero, store current spell points]
+!!VRv1316&x1=v1310:Sy10; [if defender's hero, store current spell points]
+!!FU13505&x1=v1300:Px1/v1302/v1303/v1304/v1305/v1306/v1307; [if v1.3 card]
+!!FU13505&x1=v1310:Px1/v1312/v1313/v1314/v1315/v1316/v1317; [if v1.3 card]
+!!HEx1:F?y1/?y2/?y3/?y4; [get modified stats]
+!!VRv1308&x1=v1300:Sv1302-y1; [get -attacker's attack change]
+!!VRv1309&x1=v1300:Sv1303-y2; [get -attacker's defnese change]
+!!VRv1328&x1=v1300:Sv1304-y3; [get -attacker's spell power change]
+!!VRv1326&x1=v1300:Sv1305-y4; [get -attacker's knowledge change]
+!!VRv1318&x1=v1310:Sv1302-y1; [get -defender's attack change]
+!!VRv1319&x1=v1310:Sv1303-y2; [get -defender's defnese change]
+!!VRv1320&x1=v1310:Sv1304-y3; [get -defender's spell power change]
+!!VRv1327&x1=v1310:Sv1305-y4; [get -defender's knowledge change]
+** End of function 13500
+
+** Function to apply bonus, if it is a statistic bonus.
+
+!?FU13504;
+!!VRx2:%4; [calculate hero primary stat]
+!!VRx3::4; [calculate bonus to stat]
+!!VRx3&x3=0:S-1; [if random bonus is 0, then make it -1]
+!!VRy1&x2=0:Sx3; [If primary stat is 0, set y1 to bonus]
+!!VRy2&x2=1:Sx3; [If primary stat is 1, set y2 to bonus]
+!!VRy3&x2=2:Sx3; [If primary stat is 2, set y3 to bonus]
+!!VRy4&x2=3:Sx3; [If primary stat is 3, set y4 to bonus]
+!!HEx1:Fdy1/dy2/dy3/dy4; [add bonus]
+** [Check if Cards of Prophecy Start of Battle messages are disabled]
+!!OW:C?y10; [Current player: y10]
+!!VRy10:+1; [Add 1 to y10]
+!!FU13501:Py10; [Convert to bit number: y-100]
+!!VRy11:Sv3323; [Set y11 to v3323]
+!!VRy11:&y-100; [Check if message is disabled for current player: y4]
+!!FU&y11=y-100:E; [Exit Function if messages are disabled for current player]
+
+** z1, z2, and z3 contain words needed for the start-of-battle message.
+** Chaeck script34.ert for actual text.
+!!VRz2&x3=-1:Sz134002;
+!!VRz2&x3=1:Sz134003;
+!!VRz2&x3=2:Sz134004;
+!!VRz2&x3=3:Sz134005;
+!!VRz2&x3=4:Sz134006;
+!!VRz2&x3=5:Sz134007;
+!!VRz2&x2=0:+z134008;
+!!VRz2&x2=1:+z134009;
+!!VRz2&x2=2:+z134010;
+!!VRz2&x2=3:+z134011;
+!!VRz3&x2=0:Sz134012;
+!!VRz3&x2=1:Sz134013;
+!!VRz3&x2=2:Sz134014;
+!!VRz3&x2=3:Sz134015;
+!!VRz5:Sz134016;
+!!VRz5&x3=-1:Sz134017;
+!!HEx1:B0/?z4; [get hero name]
+!!HEx1:O?y6; [get hero owner]
+!!OW:Iy6/?y7; [is owner an AI?- if so, message will not display]
+!!VRz9:Sz134018;
+!!IF&y7=0:Q1/8/47/1^%Z9^;
+** end of function 13504
+
+** version 1.3 cards
+!?FU13505;
+!!VRy12:Sx4:2; [set y12 to half power stat]
+!!VRy13:Sx5:2; [set y13 to half knowledge stat]
+!!VRy14:Sx4-y12; [set y14 to other half of power stat (if stat is odd, will differ from y12]
+!!VRy15:Sx5-y13; [set y15 to other half of knowledge stat (if stat is odd, will differ from y13]
+!!VRy1:Sx2+x3+x4+x5-2; [set y1 to sum of hero stats, less 2]
+!!VRy1&x7=33:+2-y15; [reduce y1 by half knowledge if Magician]
+!!VRy1&x7=32:+2-y14; [reduce y1 by half power if hermit]
+!!VRy11&x7=26:Sx2+2:3; [if inverted Emperor, set y11 to attack/3]
+!!VRy11&x7=27:Sx3+2:3; [if inverted Empress, set y11 to defense/3]
+!!VRy11&x7=28:Sy12+2:3; [if inverted Magician, set y11 to power/6]
+!!VRy11&x7=29:Sy13+2:3; [if inverted Hermit, set y11 to knowledge/6]
+!!HEx1&x7=30:Fy1/0/1/1; [If Emperor, shift all primary stats to attack]
+!!HEx1&x7=31:F0/y1/1/1; [If Empress, shift all primary stats to defense]
+!!HEx1&x7=33:F0/0/y1/y15; [If Magician, shift all primary stats (half knowledge)to power]
+!!HEx1&x7=32:F0/0/y14/y1; [If Hermit, shift all primary stats (half power) to knowledge]
+!!HEx1&x7=26:F0/dy11/dy11/dy11; [If inv.Emperor, shift attack to other stats]
+!!HEx1&x7=27:Fdy11/0/dy11/dy11; [If inv.Empress, shift defense to other stats]
+!!HEx1&x7=28:Fdy11/dy11/y14/dy11; [If inv.Magician, shift hlaf power to other stats]
+!!HEx1&x7=29:Fdy11/dy11/dy11/y15; [If inv.Hermit, shift half knowledge to other stats]
+!!HEx1&x7=34:F0/0/1/1; [If Inverted Fool, remove all primary stats]
+!!VRy1&x7=24:+5;
+!!VRy1&x7=24::4; [Get average of primary stats, rounded up, if Hierophant]
+!!HEx1&x7=24:Fy1/y1/y1/y1; [If Hierophant, balance statistics]
+!!FU13506&x7=25:Px1/x2/x3/x4/x5; [If Fool, call stat shuffle routine]
+!!FU13504&x7<=23:Px1/x7/x7; [if card is an original bonus/penalty]
+!!HEx1&x1=v1300:F?v1322/?v1323/?v1324/?v1325; [store new stats for attacker]
+!!HEx1&x1=v1310:F?v1332/?v1333/?v1334/?v1335; [store new stats for defender]
+!!VRy5&x1=v1300:Sv1325-x5; [set y5 to change in knowledge skill (attacker)]
+!!VRy5&x1=v1310:Sv1335-x5; [set y5 to change in knowledge skill (defender)]
+!!HEx1:S24/?y9; [get level of hero's intelligence skill. Specialty is ignored]
+!!VRy5&y9=0:*10; [spell points with no intelligence]
+!!VRy5&y9=1:*25; [spell points with basic intelligence, part 1]
+!!VRy5&y9=1::2; [spell points with basic intelligence, part 2]
+!!VRy5&y9=2:*15; [spell points with advanced intelligence]
+!!VRy5&y9=3:*20; [spell points with expert intelligence]
+!!VRy16:S0; [initialize y16]
+!!VRy16&x7=29:S1; [flag for inverted hermit]
+!!VRy16&x7=33:S1; [flag for magician]
+!!VRy5&x1=v1300/y16=1:S0-v1306:2; [if flag is set, set penalty spell points to half, attacker]
+!!VRy5&x1=v1310/y16=1:S0-v1316:2; [if flag is set, set penalty spell points to half, defender]
+!!HEx1:Idy5; [add/subtract bonus/penalty spell points]
+!!HEx1:I?y13;
+!!HEx1&y13<0:I0; [if spell points are less than 0, set them to 0]
+!!VRv1329&x1=v1300:Sy5; [store spell point change for attacker]
+!!VRv1330&x1=v1310:Sy5; [store spell point change for defender]
+
+!!HEx1:B0/?z1; [get hero name]
+!!HEx1:O?y6; [get hero owner]
+!!OW:Iy6/?y7; [is owner an AI?- if so, message will not display]
+
+** [Check if Cards of Prophecy Start of Battle messages are disabled]
+!!OW:C?y10; [Current player: y10]
+!!VRy10:+1; [Add 1 to y10]
+!!FU13501:Py10; [Convert to bit number: y-100]
+!!VRy11:Sv3323; [Set y11 to v3323]
+!!VRy11:&y-100; [Check if message is disabled for current player: y4]
+!!FU&y11=y-100:E; [Exit Function if messages are disabled for current player]
+
+!!VRz9&y7=0/x7=30:Sz134019;
+!!VRz9&y7=0/x7=31:Sz134020;
+!!VRz9&y7=0/x7=33:Sz134021;
+!!VRz9&y7=0/x7=32:Sz134022;
+!!VRz9&y7=0/x7=24:Sz134023;
+!!VRz9&y7=0/x7=34:Sz134024;
+!!VRz9&y7=0/x7=25:Sz134025;
+!!VRz9&y7=0/x7=26:Sz134026;
+!!VRz9&y7=0/x7=27:Sz134027;
+!!VRz9&y7=0/x7=28:Sz134028;
+!!VRz9&y7=0/x7=29:Sz134029;
+!!IFz9&y7=0/x7>=24/x7<=34:Q1/8/47/1^%Z9^;
+** end of function 13505
+
+** Fool stat-shuffle
+!?FU13506;
+!!VRy1:S0T22; [choose a permutation. next 23 lines sets it. No-change permutation is not allowed]
+!!HEx1&y1=0:Fx2/x3/x5/x4;
+!!HEx1&y1=1:Fx2/x4/x3/x5;
+!!HEx1&y1=2:Fx2/x4/x5/x3;
+!!HEx1&y1=3:Fx2/x5/x3/x4;
+!!HEx1&y1=4:Fx2/x5/x4/x3;
+!!HEx1&y1=5:Fx3/x2/x4/x5;
+!!HEx1&y1=6:Fx3/x2/x5/x4;
+!!HEx1&y1=7:Fx3/x4/x2/x5;
+!!HEx1&y1=8:Fx3/x4/x5/x2;
+!!HEx1&y1=9:Fx3/x5/x2/x4;
+!!HEx1&y1=10:Fx3/x5/x4/x2;
+!!HEx1&y1=11:Fx4/x2/x3/x5;
+!!HEx1&y1=12:Fx4/x2/x5/x3;
+!!HEx1&y1=13:Fx4/x3/x2/x5;
+!!HEx1&y1=14:Fx4/x3/x5/x2;
+!!HEx1&y1=15:Fx4/x5/x2/x3;
+!!HEx1&y1=16:Fx4/x5/x3/x2;
+!!HEx1&y1=17:Fx5/x2/x3/x4;
+!!HEx1&y1=18:Fx5/x2/x4/x3;
+!!HEx1&y1=19:Fx5/x3/x2/x4;
+!!HEx1&y1=20:Fx5/x3/x4/x2;
+!!HEx1&y1=21:Fx5/x4/x2/x3;
+!!HEx1&y1=22:Fx5/x4/x3/x2;
+** end of function 13506
+
+** undo routine
+!?FU13507;
+!!HEx1:Fdx2/dx3/dx4/dx5; [restore hero stats to pre-battle levels]
+!!HEx1:I?y1; [get final spell-point total]
+!!HEx1:O?y2; [get hero owner]
+!!VRy2:+3393; [get quick combat variable number]
+!!UN:P233/?y3; [get quick-combat option status]
+!!UN:P207/?y4; [get mysticism (reduced spell points) status]
+!!HEv1300&x1=v1310/y4<>0:S8/?y6; [get attacker's mysticism skill for defender]
+!!HEv1310&v1310>=0/x1=v1300/y4<>0:S8/?y6; [get defender's mysticism skill for attacker]
+!!VRy5:S100; [mysticism percentage if inactive or no skill]
+!!VRy5&y6=1/y4=1:S80; {mysticism percentage for basic]
+!!VRy5&y6=2/y4=1:S70; {mysticism percentage for advanced]
+!!VRy5&y6>2/y4=1:S60; {mysticism percentage for expert or overloaded]
+!!VRvy2&y3=0:S0; [if quick-combat script is not active, set option status to 0]
+!!VRy1&x1=v1300/v1329<0:-v1329; [remove penalty to attacker's spell points]
+!!VRy1&x1=v1310/v1330<0:-v1330; [remove penalty to defender's spell points]
+!!VRy7:Sx6*y5:100; [set y7 to mysticism-modified starting spell points]
+!!VRy1&y1>y7:Sy7; [if spell points are more than before battle (but after mysticism modifications), reduce to that level]
+!!VRy1&y1<0:S0; [if spell points are somehow negative, set to 0]
+!!HEx1&vy2<>4:Iy1; [set hero spell points to correct total, unless quick-combat already did so]
+**end of 1.3 undo function
+
+** bit conversion routine
+!?FU13501;
+!!VRv1336:S1; [set default bit value to 1]
+!!DO13503/2/x1/1:P; [if bit number is 2 or larger, multiply by 2^n-1]
+!!VRy-100:Sv1336; [get converted bit value]
+!!VRy-100&x1=0:S0; [if bit number is 0, set value to 0]
+
+!?FU13503;
+!!VRv1336:*2; [double bit value]
+** end of bit conversion.
+

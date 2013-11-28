@@ -1,0 +1,64 @@
+#	Text resource for "script70.erm" document		
+170000	Death Chamber (Not visited)	!#S	9/24/05
+170001	Death Chamber (Visited)	!#S	9/24/05
+170002	As you approach the ominous skull structure, you smell the horrible stench of blood.  Obviously, a battle has already been fought here.	!!M	9/24/05
+170003	small army	!!S	9/24/05
+170004	sufficient gathering	!!S	9/24/05
+170005	great horde	!!S	9/24/05
+170006	vast throng	!!S	9/24/05
+170007	massive legion	!!S	9/24/05
+170008	ominous skull structure	!!S	9/24/05
+170009	haunted skull chamber	!!S	9/24/05
+170010	spooky skull fortress	!!S	9/24/05
+170011	creepy skull palace	!!S	9/24/05
+170012	terrifying skull tower	!!S	9/24/05
+170013	a grotesque undead Lich King	!!S	9/24/05
+170014	a hideous undead Lich King	!!S	9/24/05
+170015	a disgusting undead Lich King	!!S	9/24/05
+170016	a scary-looking undead Lich King	!!S	9/24/05
+170017	a repulsive undead Lich King	!!S	9/24/05
+170018	Lich King	!!S	9/24/05
+170019	proclaims in a sinister voice	!!S	9/24/05
+170020	announces in an evil voice	!!S	9/24/05
+170021	shouts in a malevolent voice	!!S	9/24/05
+170022	states in a wicked voice	!!S	9/24/05
+170023	declares in a frightening voice	!!S	9/24/05
+170024	ancient treasures	!!S	9/24/05
+170025	precious riches	!!S	9/24/05
+170026	priceless wealth	!!S	9/24/05
+170027	prized fortunes	!!S	9/24/05
+170028	golden valuables	!!S	9/24/05
+170029	of loyal servants will destroy you with the deadliest force possible	!!S	9/24/05
+170030	of superior guardsmen will eradicate you with the most destructive force imaginable	!!S	9/24/05
+170031	of supreme protectors will annihilate you with the most lethal force possible	!!S	9/24/05
+170032	of mighty defenders will decimate you with the most ruthless force imaginable	!!S	9/24/05
+170033	of elite warriors will exterminate you with the most savage force possible	!!S	9/24/05
+170034	Will you HEED my warning or SUFFER a grisly death	!!S	9/24/05
+170035	Do you OBEY this warning or ACCEPT certain death	!!S	9/24/05
+170036	Will you TURN AWAY from this chamber now or FACE total devastation	!!S	9/24/05
+170037	Will you FLEE from my chamber now or ENDURE my eternal wrath	!!S	9/24/05
+170038	BE GONE, hero!  Or do you wish to become like the dead souls that inhabit this chamber	!!S	9/24/05
+170039	{Death Chamber}
+
+As you approach the %Z4, you are greeted by %Z5. "Welcome to my Death Chamber!" he %Z7.  "I know you are here to steal my %Z8!  If you enter this chamber, my {%Z3} %Z9!  %Z10?"	!!Q	9/24/05
+170040	s070_death.pcx	!!S	9/24/05
+170041	..\data\p\s070_death.pcx	!!S	9/24/05
+170042	"You may have killed our King, but the souls of this chamber will soon rise to avenge his death forever!"	!!Q	9/24/05
+170043	"Our King is dead, but the spirits of those who have fallen at his wrath will serve us now!"	!!Q	9/24/05
+170044	"Our King has been slain!  The souls that we call upon now will surely avenge his death!"	!!Q	9/24/05
+170045	"You have slaughtered our King, but you shall NOT survive the slaughter that his spirits will exact upon you now!"	!!Q	9/24/05
+170046	"You may have killed our powerful Dracolich King, but the souls of this chamber will soon rise to avenge his death forever!"	!!Q	9/24/05
+170047	"Our Mighty Dracolich King is dead, but the spirits of those who have fallen at his wrath will serve us now!"	!!Q	9/24/05
+170048	"Our Supreme Dracolich King has been slain!  The souls that we call upon now will surely avenge his death!"	!!Q	9/24/05
+170049	"You have slaughtered our Great Dracolich King, but you shall NOT survive the slaughter that his spirits will exact upon you now!"	!!Q	9/24/05
+170050	LICH KING	!!S	9/24/05
+170051	LICH KING	!!S	9/24/05
+170052	THE LICH KING IS DEAD!	!!S	9/24/05
+170053	"HA!  You have been fooled by my DECEPTION!  I am the TRUE KING of this chamber!  All shall now die before me!"	!!Q	9/24/05
+170054	"HA!  You have been TRICKED!  I am the TRUE RULER of this chamber!  I now welcome you to die a merciless death!"	!!Q	9/24/05
+170055	"HA! I have DECEIVED you!  The Lich King as you knew him before was a weak and inferior impostor!  I am the TRUE AND SUPERIOR KING!"	!!Q	9/24/05
+170056	"HA!  My DECEPTION has lured yet another foolish mortal into my death trap!  I am the TRUE LICH KING!  You will SURELY feel the wrath of him now!"	!!Q	9/24/05
+170057	Upon defeating the Undead King and his guards, you ransack the Death Chamber and discover an ancient treasure chest sitting atop a pile of dead corpses.  The chest magically opens, releasing the spirits of tortured souls into the air.
+
+"Thank you for releasing us from the wrath of the evil King!" the spirits chant in unison.  "To show our eternal gratitude, we will accompany you in your journeys throughout this hostile land!"	!!Q	9/24/05
+170058	After releasing the spirits, you dig through the treasure chest further and find the King’s precious riches buried beneath the decayed skulls and bones of fallen heroes!	!!Q	9/24/05

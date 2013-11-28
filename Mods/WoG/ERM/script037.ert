@@ -1,0 +1,120 @@
+#	Text resource for "script37.erm" document		
+137000	No abilities have been changed by Rebalanced Hero Abilities.	!!S	01.08.2004
+137001	Sylvia starts with Expert Navigation (boosted from Basic) and two blessings, 300 gold/day and 200 movement/day (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137002	Lord Haart the Knight starts with Adv. Estates as long as no Estates scripts are active.	!!S	01.08.2004
+137003	As well as her standard Swordsman/Crusader specialty, Sorsha gets a 200 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137004	No change by Rebalanced Hero Abilities (Sorsha starts with the Hero Specialization Boost's Swordsman/Crusader specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137005	As well as his standard Ballista specialty, Christian starts with +1 Attack and -1 Defense (so the Ballista does more damage).	!!S	01.08.2004
+137006	  Christian also starts with a 150 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137007	As well as her standard Cavalier/Champion specialty, Tyris gets a 250 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137008	No change by Rebalanced Hero Abilities (Tyris starts with the Hero Specialization Boost's Cavalier/Champion specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137009	Rion always starts with a First Aid Tent.	!!S	01.08.2004
+137010	Adela starts with Leadership instead of Diplomacy.	!!S	01.08.2004
+137011	Cuthbert starts with Water Magic instead of Estates.	!!S	01.08.2004
+137012	  He also starts with two blessings, 3 extra mana/day and 150 gold/day, as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137013	Due to her bio, and also because her specialty is quite weak, Adelaide starts with Advanced Water Magic instead of Advanced Wisdom.	!!S	01.08.2004
+137014	  She also starts with Visions and Cure and a 3 extra mana/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137015	As well as his standard Monk/Zealot specialty, Ingham starts with a 250 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137016	No change by Rebalanced Hero Abilities (Ingham starts with the Hero Specialization Boost's Monk/Zealot specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137017	Sanya starts with Expert Eagle Eye and a 3 extra mana/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137018	Loynis starts with 1 less primary skill point because he starts with Prayer.	!!S	01.08.2004
+137019	Ufretin starts with an extra level of Resistance because this secondary skill is quite weak normally.  He also starts with the ability to upgrade Dwarves to Battle Dwarves instead of his standard Dwarf specialty.	!!S	01.08.2004
+137020	Ufretin starts with an extra level of Resistance because this secondary skill is quite weak normally.	!!S	01.08.2004
+137021	Ryland starts with an extra level of Leadership instead of one level of Diplomacy and one of Leadership.	!!S	01.08.2004
+137022	Thorgrim starts with an extra level of Resistance because this secondary skill is quite weak normally.	!!S	01.08.2004
+137023	Clancy starts with an extra level of Resistance because by itself it is normally quite weak.	!!S	01.08.2004
+137024	Kyrre starts with 2 less primary skill points because the Logistics specialty is one of the most powerful.	!!S	01.08.2004
+137025	Coronius starts with a 200 experience/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137026	Uland starts with Adv. Water Magic and Bas. Wisdom instead of Adv. Wisdom and Bas. Ballistics).	!!S	01.08.2004
+137027	Gem starts with Bless instead of Summon Boat, so it doesn't break some maps. =)  Also making sure that Gem starts with a First Aid Tent.	!!S	01.08.2004
+137028	Malcom starts with Expert Eagle Eye.	!!S	01.08.2004
+137029	Melodia starts with Basic Wisdom and Air Magic instead of Basic Wisdom and Basic Luck.	!!S	01.08.2004
+137030	Alagar starts with Basic Water Magic, and Visions and Cure (see his bio - matches learning with Vori elves =).	!!S	01.08.2004
+137031	Aeris starts with a 200 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137032	No change by Rebalanced Hero Abilities (Piquedram starts with the Hero Specialization Boost's Stone/Obsidian Gargoyle specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137033	Thane starts with 4 extra mana/day (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137034	Josephine starts with the ability to upgrade Stone and Obsidian Gargoyles and Stone Golems to Iron Golems.	!!S	01.08.2004
+137035	No change by Rebalanced Hero Abilities (Josephine starts with the Hero Specialization Boost's Stone/Iron Golems specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137036	Torosar starts with Artillery instead of Mysticism.  Torosar always starts with a Ballista.	!!S	01.08.2004
+137037	Fafner gives +3 AS, +1 DS and +1 Dmg. to Nagas/Naga Queens.	!!S	01.08.2004
+137038	No change by Rebalanced Hero Abilities (Fafner starts with the Hero Specialization Boost's Naga/N.Queens specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137039	In addition to her standard Genie/Master Genie specialty, Iona gets a 100 gold/day blessing.	!!S	01.08.2004
+137040	No change by Rebalanced Hero Abilities (Iona starts with the Hero Specialization Boost's Genie/Master Genie specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137041	Astral has Basic Wisdom and Air Magic instead of Advanced Wisdom.  Astral also starts with Lightning Bolt.	!!S	01.08.2004
+137042	Solmyr starts with Advanced Wisdom instead of Basic Wisdom and Basic Sorcery.	!!S	01.08.2004
+137043	Cyra starts with Leadership instead of Diplomacy.	!!S	01.08.2004
+137044	Rashka starts with Offense instead of Scholar, more in keeping with his bio.	!!S	01.08.2004
+137045	Pyre now starts with Advanced Artillery instead of Basic Logistics and Basic Artillery (No starting Logistics except for Logistics specialists).	!!S	01.08.2004
+137046	Xyron starts with Fire Magic since he delights with everything to do with fire and lava.  He also starts with Magic Arrow.	!!S	01.08.2004
+137047	Olema now starts with Water Magic and Leadership (instead of Ballistics and Wisdom) and a 3 extra mana/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137048	Xarfax starts with Adv. Wisdom and Leadership.  Xarfax also starts with Magic Arrow and Visions and a 150 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137049	Instead of his standard Walking Dead specialty, Straker starts with the ability to upgrade Walking Dead into Zombies.	!!S	01.08.2004
+137050	Vokial starts with +1 Attack and -1 Defense for the Ballista effect.  (Vokial also starts with the Hero Specialization Boost's Vampire/Vampire Lord specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137051	Vokial starts with +1 Attack and -1 Defense for the Ballista effect.	!!S	01.08.2004
+137052	Charna gives +3AS, +3DS and +3 Dmg. to Wights/Wraiths.	!!S	01.08.2004
+137053	No change by Rebalanced Hero Abilities (Charna starts with the Hero Specialization Boost's Wight/Wraith specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137054	Tamika gives +3AS and +3DS to Black Knights/Dread Knights.	!!S	01.08.2004
+137055	No change by Rebalanced Hero Abilities (Tamika starts with the Hero Specialization Boost's Black Knight/Dread Knight specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137056	Septienna starts with Necromancy & Earth Magic instead of Basic Necromancy and Basic Scholar.  She also starts with Visions and Force Field.	!!S	01.08.2004
+137057	Septienna starts with Force Field and Visions and the Hero Specialization Boost's Disrupting Ray spell (as can be seen by left- or right-clicking on the specialty icon.)	!!S	01.08.2004
+137058	Aislinn starts with 2 less primary skill points because she starts with a powerful L4 spell.	!!S	01.08.2004
+137059	Instead of Thant's Animate Dead specialty, Thant has the unique ability to Upgrade Skeletons to Skeleton Warriors.  This is a replacement for his Animate Dead spell and specialty - which proved to be *extremely* powerful when Commanders are turned on and the hero had a Soul Eater Commander with maxed Magic Power.	!!S	01.08.2004
+137060	Arlach always starts with a Ballista.	!!S	01.08.2004
+137061	Instead of her Stone Skin specialty, Xsi can now Upgrade Liches into Power Liches, and she also starts with +1DS & -1AS, reflecting her "ability to resist physical damage" as a Necromancer.	!!S	01.08.2004
+137062	No change from Rebalanced Hero Abilities (Xsi starts with her upgraded version of Stone Skin which also gets cast automatically by Hero Specialization Boost).	!!S	01.08.2004
+137063	Gunnar starts with two less primary skill points because Logistics is such a powerful specialty.	!!S	01.08.2004
+137064	Synca gives +1AS, +3DS, and +1 Dmg. to Manticores.	!!S	01.08.2004
+137065	No change by Rebalanced Hero Abilities (Synca starts with the Hero Specialization Boost's Manticore/Scorpicore specialty as shown by right-clicking on the specialty icon.)	!!S	01.08.2004
+137066	Alamar starts with 2 less primary skill points because Resurrection is a very powerful spell, only slightly less powerful than Animate Dead.  Alamar also starts with one more level of Wisdom instead of Basic Scholar and Basic Wisdom.	!!S	01.08.2004
+137067	Jeddite starts with 1 less primary skill point, and Blind instead of Resurrection.	!!S	01.08.2004
+137068	Deemer starts with Basic Scouting and Basic Wisdom instead of Advanced Scouting.	!!S	01.08.2004
+137069	Darkstorn starts with an extra secondary skill (Earth Magic) because his regular specialty is quite weak.	!!S	01.08.2004
+137070	Yog starts with the ability to upgrade Ogre Magi and Cyclops into Cyclops Kings.	!!S	01.08.2004
+137071	Gurnisson starts with the Ballista specialty, which adds attack and defense to all Ballistas in a hero's army.  However, because having both a Stronghold Commander (extra Ballistas) and a Ballista specialty is really powerful, he starts with Basic Archery instead of Artillery.  (This still relates to his ability to improve ranged creatures/machines. =)	!!S	01.08.2004
+137072	Shiva gives +1AS, +3DS, 1Dmg. to Rocs/Thunderbirds.	!!S	01.08.2004
+137073	No change by Rebalanced Hero Abilities (Shiva starts with the Hero Specialization Boost's Roc/Thunderbird specialty as shown by right-clicking on the specialty icon.)	!!S	01.08.2004
+137074	Krellion starts with a 200 gold/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137075	Vey now starts with Advanced Wisdom and Advanced Leadership because her regular specialty is quite weak.	!!S	01.08.2004
+137076	Dessa starts with 1 less primary skill point because Logistics is one of the most powerful specialties.	!!S	01.08.2004
+137077	Zubin's New Specialty: Can Upgrade Orcs into Orc Chieftains.	!!S	01.08.2004
+137078	Gerwulf always starts with a Ballista.  He also starts with more Attack for the benefit of Ballista damage.	!!S	01.08.2004
+137079	Broghild gives +3DS and +1Dmg. to Wyverns/Wyvern Monarchs.	!!S	01.08.2004
+137080	No change by Rebalanced Hero Abilities (Broghild starts with the Hero Specialization Boost's Wyvern/Wyvern Monarch specialty as shown by right-clicking on the specialty icon.	!!S	01.08.2004
+137081	Mirlanda starts with Basic Water Magic and Basic Fire Magic.  "She has learned to walk a fine line between good and evil."  She also starts with Blind.	!!S	01.08.2004
+137082	Rosic starts with Bless and the Hero Specialization Boost's Mysticism bonus (as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137083	Rosic starts with Bless and a 4 extra mana/day blessing (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137084	Voy starts with Expert Navigation (boosted from Basic), and two blessings, 300 gold/day and 200 movement/day.	!!S	01.08.2004
+137085	Verdish always starts with a First Aid Tent.	!!S	01.08.2004
+137086	Merist starts with an extra skill (Earth Magic) because she normally has quite a weak specialty.	!!S	01.08.2004
+137087	No change by Rebalanced Hero Abilities (Merist has the Hero Specialization Boost's Stone Skin specialty as shown by right-clicking on the specialty icon).	!!S	01.08.2004
+137088	Pasis always starts with a Ballista.	!!S	01.08.2004
+137089	Thunar has Basic Estates replaced by an extra level of Tactics.	!!S	01.08.2004
+137090	Ignissa always starts with a Ballista.	!!S	01.08.2004
+137091	Monere starts with Offense and Intelligence instead of Offense and Logistics because Logistics is one of the most powerful secondary skills, and Monere will probably not get as high Knowledge (or bonus Spell Points) as a magic class.	!!S	01.08.2004
+137092	Monere starts with Advanced Offense (instead of Basic Offense and Basic Logistics), because Logistics is one of the most powerful secondary skills.	!!S	01.08.2004
+137093	Erdamon has Basic Estates replaced by Basic Armorer.	!!S	01.08.2004
+137094	Erdamon can upgrade Earth Elementals into Magma.	!!S	01.08.2004
+137095	Fiur now starts with a +5% per level bonus to his Offense percentage (instead of the Fire Elemental bonus) so his biography rings true.	!!S	01.08.2004
+137096	Kalt's New Specialty: Receives 225 bonus experience per day (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137097	Kalt's New Specialty: Receives 150 bonus experience per day (as shown by left- or right-clicking on the icon two spaces right from the specialty icon).	!!S	01.08.2004
+137098	Elementalists start with the same number of primary skill points as all the rest of the magic heroes.	!!S	01.08.2004
+137099	  Luna also starts with Visions.	!!S	01.08.2004
+137100	  And since Labetha starts with one of the most valuable secondary skills and a powerful version of Stone Skin, she starts with just Earth Magic.	!!S	01.08.2004
+137101	  Inteus also starts with Advanced Fire Magic and Visions because Fire Magic is generally weaker than other schools of magic.	!!S	01.08.2004
+137102	  And since Grindan starts with one of the most powerful secondary skills plus receives 350 gold/day, he starts with just Earth Magic.	!!S	01.08.2004
+137103	Since Sir Mullich has one of the best specialties of all regular heroes, he starts with two less primary skill points and Basic Leadership.	!!S	01.08.2004
+137104	Thant's New Specialty: Can Upgrade Skeletons into Skeleton Warriors.	!!S	01.08.2004
+137105	Fiur receives a 5% per level bonus to his Offense percentage.	!!S	01.08.2004
+137106	Erdamon's New Specialty: Can Upgrade Earth into Magma Elementals.	!!S	01.08.2004
+137107	Monere receives a 5% per level bonus to his Intelligence percentage.	!!S	01.08.2004
+137108	Living around the Erathian Capitol for many years Thunar learned extensive skills.  Her curiosity and respect of mortals gained her a place in the Conflux.	!!S	01.08.2004
+137109	Xsi's New Specialty: Can Upgrade Liches into Power Liches.	!!S	01.08.2004
+137110	Charna gives +3AS, +3DS and +3 Dmg. to Wights/Wraiths.	!!S	01.08.2004
+137111	Yog's New Specialty: Can Upgrade Ogre-Magi & Cyclopes into Cyclops Kings.	!!S	01.08.2004
+137112	Gurnisson's New Specialty: Can Upgrade Goblins into Hobgoblins.	!!S	01.08.2004
+137113	Shiva gives +1 AS, +3 DS and +1 Dmg. to Rocs/Thunderbirds.	!!S	01.08.2004
+137114	At an early age, Inteus' mastery of fire earned him a spot with a troupe of entertainers.  Some believed he was the son of a Fire Elemental.  One night, he felt a calling and left his profession.  Now he serves the Conflux.	!!S	01.08.2004
+137115	Kalt receives bonus experience each day as his specialty.	!!S	01.08.2004
+137116	No changes from Rebalancing Hero Abilities (Straker starts with the Hero Specialization Boost's Walking Dead/Zombie specialty as shown by left- or right-clicking on the specialty icon).		
+137117	Straker can now upgrade Walking Dead into Zombies.		
+137118	Lacus starts with only three primary skill points when Neutral Town is active because Advanced Tactics and the +2 speed specialty is a very powerful starting combination, even more powerful than Sir Mullich's +2 speed and Leadership.		

@@ -1,0 +1,815 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_ScriptLanguage=Russian or русский (native)
+ERMS_ScriptERMVersion=2,5
+ERMS_ScriptDate=29.6(June).2006
+ERMS_ScriptVersion=15
+ERMS_ScriptAuthor=Alexis Koz
+ERMS_ScriptName=Hero Specialization Boost
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** HERO SPECIALIZATION BOOST (HSB)
+** by Alexis Koz
+**
+** (Updated by samot on 28.6(June).2006: changed FU804, so that it will now use FU$GetBasicPrim$ to get the correct basic primary skill; Monster bonus will be refreshed before every battle
+** (Updated by Tobyn on 2005 December 10: corrected hero meeting screen spec desc click)
+** (Updated by Perfect0 on 2005 August 26: added interaction with script17 (Berserker Potion))
+** (Updated by Perfect0 on 2005 August 25: added interaction with script25 (quick combat without mana))
+** (Updated by Tobyn on 2004 October 26: added debug msg at negative attack for monster specialists)
+** (Updated by samot on Oct 2004: added to FU850, it may be given a 3rd parameter for duration (if not given duration = power))
+** (Updated by Fnord on August 23, 2004 to add additional disabling for MP battles)
+** (Updated by Tobyn in Aug 2004: to fit Neutral Town script67 Planeswalkers and Rebalanced Heroes script37)
+
+;Thanks to: Fnord the Wizard who enchanted me
+;Thanks to: All WoG command
+;USED:
+;v423-v441 dont use these variables in all scripts before I agreed.
+;w28-w32
+;z405-406
+;FU803-808, 836-838, 850-853
+;Flags 428, 429, 430
+;Timer 77 [TOBYN: this timer isn't used here. Check if unused by other scripts and update usage358.txt]
+
+;-------------------------------Description-------------------------------------
+;New abilities:
+;    - All heroes with monster specialities improve their unit stats (Vampire and Skeleton specialists not so high as the others)
+;    - Most spell-casters can randomly cast their spells in a battle at no cost (Animate Dead,
+;        Resurrection and some other cause problems, therefore those heroes use other auto-spells.
+;        Thant and Jeddite get nothing from HSB at all.)
+;    - All heroes with Intelligence specialization have commander with DeathStare ability
+;    - All heroes with Navigation specialization have commander with flying ability
+;    - All heroes with Ballista specialization have commander which can shoot
+;    - All heroes with Archery specialization cast Precision spell on all allied units at the beginning of a battle (even if hero doesn't know this spell or has no spellbook)
+;    - All heroes with First Aid specialization cast StoneSkin spell on all allied units except undeads at the beginning of a battle (even if hero doesn't know this spell or has no spellbook)
+;    - All heroes with Fire Magic specialization cast Curse spell on all enemy units at the beginning of a battle (even if hero doesn't know this spell or has no spellbook)
+;    - All heroes with Sorcery specialization cast Misfortune spell on all enemy units at the beginning of a battle (even if hero doesn't know this spell or has no spellbook)
+;    - All heroes with Eagle Eye specialization let all own 1st and 2nd level units fly in a battle
+;    - All heroes with Mysticism specialization add 12+4*Herolevel mana to hero's mana-pool in the beginning of battle. (Remarks: After battle amount of mana cannot be more than before battle).
+;    - All heroes with Resistance specialization decrease 12+4*Herolevel mana from enemy hero's mana-pool in the beginning of battle.
+
+;---------------------Function that sets W28, W29, W30--------------------------
+;if 0<w28<1000 then hero is spell-caster
+;w28 = number of spell
+;w29 = chance to cast (1 of w29)
+;w30 = to ally (0) or to enemy (1)
+;w31 = chance  improver
+;w32 = type of spell nature: 0 all, 14 fire, 15 air, 16 water, 17 earth
+
+;if 1000<=w28<2000 then hero is monster-specialist
+;w28-1000 = additional damage to monster
+;w29 = number of monster
+;w30 = percent of additional hitpoints
+;w31 = amount of additional Attack
+;w32 = amount of additional Defense
+
+;w28=2000 -  2 Logistics
+;w28=2001 - (AntiScouting, Nagash)
+;w28=2002 -  5 Navigation
+;w28=2003 - 13 Estates
+;w28=2004 - 23 Armorer
+;w28=2005 - 22 Offense
+;w28=2006 -  1 Archery
+;w28=2007 - (speed +2, Sir Mullich)
+;w28=2008 - 20 Artillery (Ballista spec)
+;w28=2009 - 27 First Aid
+;w28=2010 - 25 Sorcery
+;w28=2011 - 11 Eagle Eye
+;w28=2012 - 24 Intelligence
+;w28=2013 -  8 Mysticism,  w29 - amount of mana added to friendly hero in the beginning of game [TOBYN: really?]
+;w28=2014 - 26 Resistance, w29 - amount of mana deducted from enemy hero in the beginning of game [TOBYN: really?]
+;w28=2015 - 14 Fire Magic
+;w28=2016 - 12 Necromancy
+
+;w28=210x - Adds resources (x= number of resource), w29 - number for a day [TOBYN: how is w29 used?]
+;              [TOBYN: I think he meant "adds daily resources (x= resource type, w29=daily amount)"]
+
+;w28=2200 - Behemoth specialist
+;w28=2201 - Lord Haart Black Knight
+;w28=2202 - Xeron Devils specialist
+;w28=2203 - Mutare Dragon spec
+;w28=2204 - Gelu Sharpshooter spec
+;w28=2205 - Dracon Enchanter spec
+
+TOBYN SUGGESTS:
+; w28= -1 init
+; w28= xxx with xxx = creature (and w29 att/def bonus, w30 damage bonus then)
+; w28=10xx with  xx = spell
+; w28=20xx with  xx = secondary skill (00 Pathfinding .. 27 First Aid)
+; w28=210x with   x = resource can stay, but add x=7 Mithril, x=8 Wood+Ore, x=9 each_precious
+; w28=2200 - Darkness (Nagash)
+; w28=2201 - Builder (Jeddite)
+; w28=2202 - Speed+2 (Mullich)
+; w28=2203 - Dragons (Mutare/Drake)
+; w28=3xxx - Upgrade (to creature type xxx), perhaps here own msgbox with three pics
+; and integrate the Behemoth (Kilgor), BlackKnight (LordHaart), Devil (Xeron) specialists
+;   in std creature type specialists, and in general:
+;   RoE style if no further parameter, AB style if att/def/dam parameter
+
+--------------------------------------------------------------------------------
+
+ [Check for network battle: sets v9001 to 1 or 2 if it's a network battle]
+ [and sets v9001 to 0 if it's not a network battle]
+!?BA52;
+
+!!BA:E?v9001;
+
+--------------------------------------------------------------------------------
+!?FU838;
+
+ note by Tobyn: FU836:P#1/#2/#3/#4/#5 seems to be
+   #1 = w28 (lead variable for spec desc. See above how w29-32 depend on this one.)
+   #2 = w29 (chance to cast spell | monster number)
+   #3 = w30 (spell to ally or enemy | percentage of HitPoint bonus for monsters)
+   #4 = hero number, all other calculations effectively rely on this one, sometimes only indirectly (via FU836 parameter here)
+   #5 = w32 (which spell school, needed for friendly beneficial spells | Def bonus for monsters)
+
+!!UN:P67/?y1;                check if Neutral Town script67 active
+
+;Castle
+!!FU836:P2006/0/0/0/0;       Orrin - Archery
+!!FU836:P1002/2/2/1/0;       Valeska - Archers (+2 dam / creature 2 / +2 HP / hero 2 / +0 def) [TOBYN: creature lvl x always adds x dam and x HP, although x HP doesn't seem to be used later on. The att and def bonus will come otherwise.]
+!!FU836:P1003/4/3/2/0;       Edric  - Griffins +3 (= +3 dam, +3 HP because this is a lvl 3 creature)
+!!FU836:P2002/0/0/3/0;       Sylvia - Navigation (Commander can fly)
+!!FU836:P2003/0/0/4/0;       L.Haart - Estates
+!!FU836:P1004/6/4/5/0;       Sorsha - Swordsmen +4
+!!FU836:P2008/0/0/6/0;       Christian - Ballista (Commanders can shoot)
+!!FU836:P1006/10/6/7/0;      Tyris - Cavaliers +6
+!!FU836:P2009/0/0/8/0;       Rion - First Aid (allied army has Stone Skin)
+!!FU836:P41/7/0/9/16;        Adela - Bless (spell 41 / 1 of 7 / ally / hero 9 / water)
+!!FU836:P45/7/1/10/16;       Cuthbert - Weakness (1 of 7, enemy, water)
+!!FU836:P15/11/1/11/0;     + Adelaide gets auto Magic Arrow (1 of 11, enemy) instead of her Frost Ring (20)
+!!FU836:P1005/8/5/12/0;      Ingham - Monks +5
+!!FU836:P2011/0/0/13/0;      Sanya - Eagle Flying
+!!FU836:P48/15/0/14/16;      Loynis - Prayer (1 of 15, ally, water)
+!!FU836:P2106/350/0/15/0;    Caitlin - 350 Gold
+
+;Rampart
+!!FU836:P2004/0/0/16/0;      Mephala - Armorer
+!!FU836:P1002/16/2/17/0;     Ufretin - Dwarves +2
+!!FU836:P2106/350/0/18/0;    Jenova - 350 Gold
+!!FU836:P1005/22/5/19/0;     Ryland - Dendroid Guards +5
+!!FU836:P2014/10/0/20/0;     Thorgrim - Resistance
+!!FU836:P1003/18/3/21/0;     Ivor - Wood Elves +3
+!!FU836:P1006/24/6/22/0;     Clancy - Unicorns +6
+!!FU836:P2000/0/0/23/0;      Kyrre - Logistics
+!!FU836:P55/9/0/24/14;       Coronius - Slayer (1 of 9, ally, fire)
+!!FU836:P37/7/0/25/16;       Uland - Cure (1 of 7, ally, water)
+!!FU836:P2012/0/0/26/0;      Elleshar - Intelligence (Commander has DeathStare)
+!!FU836:P2009/0/0/27/0;      Gem - First Aid (allied army has Stone Skin)
+!!FU836:P2011/0/0/28/0;      Malcom - Eagle Flying
+!!FU836:P51/6/0/29/15;       Melodia - Fortune (1 of 6, ally, air)
+!!FU836:P16/14/1/30/16;      Alagar - Ice Bolt (1 of 14, enemy, water)
+!!FU836:P1004/20/4/31/0;     Aeris - Pegasus +4 dam, +4  HP
+
+;Tower
+!!FU836:P1002/30/2/32/0;     Piquedram - Stone Gargoyles +2
+!!FU836:P1005/36/5/33/0;     Thane - Genies +5
+!!FU836:P1003/32/3/34/0;     Josephine - Stone Golem +3
+!!FU836:P2004/0/0/35/0;      Neela - Armorer
+!!FU836:P2008/0/0/36/0;      Torosar - Ballista (Commanders can shoot)
+!!FU836:P1006/38/6/37/0;     Fafner - Nagas + 6
+!!FU836:P2101/1/0/38/0;      Rissa - 1 Mercury
+!!FU836:P1005/36/5/39/0;     Iona - Genies +5
+!!FU836:P60/17/1/40/15;      Astral - Hypnotize (1 of 17, enemy, air)
+!!FU836:P2013/10/0/41/0;     Halon - Mysticism
+!!FU836:P2011/0/0/42/0;      Serena - Eagle Flying
+!!FU836:P51/6/0/43/15;       Daremyth - Fortune (1 of 6, ally, air)
+!!FU836:P1004/34/4/44/0;     Theodorus - Magi +4
+!!FU836:P15/11/1/45/0;     + Solmyr gets auto Magic Arrow (15) (1 of 11, enemy, all) instead of his Chain Lightning (19)
+!!FU836:P53/7/0/46/15;       Cyra - Haste (1 of 7, ally, air)
+!!FU836:P2106/350/0/47/0;    Aine - 350 Gold
+
+;Inferno
+!!FU836:P1003/46/3/48/0;     Fiona - Hell Hounds + 3
+!!FU836:P1006/52/6/49/0;     Rashka - Efreet +6
+!!FU836:P1004/48/4/50/0;     Marius - Demons +4
+!!FU836:P1001/42/1/51/0;     Ignatius - Imps +1
+!!FU836:P2106/350/0/52/0;    Octavia - 350 Gold
+!!FU836:P1002/44/2/53/0;     Calh - Gogs +2
+!!FU836:P2008/0/0/54/0;      Pyre - Ballista (Commanders can shoot)
+!!FU836:P1005/50/5/55/0;     Nymus - Pit Fiends +5
+!!FU836:P2012/0/0/56/0;      Ayden - Intelligence (Commander has Death Stare)
+!!FU836:P29/11/0/57/14;    + Xyron gets auto Fire Shield (29) (1 of 11, ally, fire) instead of his Inferno (22)
+!!FU836:P2013/10/0/58/0;     Axsis - Mysticism
+!!FU836:P45/7/1/59/16;       Olema - Weakness (1 of 7, enemy, water)
+!!FU836:P2103/1/0/60/0;      Calid - 1 Sulfur
+!!FU836:P43/7/0/61/14;       Ash - Bloodlust (1 of 7, ally, fire)
+!!FU836:P2010/0/0/62/0;      Zydar - Sorcery (enemy army Misfortune)
+!!FU836:P29/11/0/63/14;    + Xarfax gets auto Fire Shield (29) instead of his Fireball (21)
+
+;Necropolis
+!!FU836:P1002/58/2/64/0;     Straker - Walking Dead +2
+!!FU836:P1002/62/2/65/0;     Vokial - Vampires (+2 only)
+!!FU836:P1005/64/5/66/0;     Moandor - Liches +5
+!!FU836:P1003/60/3/67/0;     Charna - Wights +3
+!!FU836:P1006/66/6/68/0;     Tamika - Black Knights +6
+!!FU836:P2016/0/0/69/0;      Isra - Necromancy
+!!FU836:P2106/350/0/70/0;    Clavius - 350 Gold
+!!FU836:P1001/56/1/71/0;     Galthran - Skeletons +1
+!!FU836:P47/9/1/72/15;     + Septienna gets auto Disrupting Ray (47) (1 of 9, enemy, air) instead of her Death Ripple (24)
+!!FU836:P15/11/1/73/0;     + Aislinn gets auto Magic Arrow (15) (1 of 11, enemy, all) instead of Meteor Shower (23)
+!!FU836:P2010/0/0/74/0;      Sandro - Sorcery (enemy army Misfortune)
+!!FU836:P2011/0/0/75/0;      Nimbus - Eagle Flying
+*!FU836:P54/7/1/76/17;     + Thant gets auto Slow (1 of 7, enemy, earth) instead of Animate Dead (39)
+!!FU836:P-1/0/0/76/0;  MOD:+ Thant gets nothing from HSB, leaves standard description (script37 may give him Skel Upgr instead)
+!!FU836:P46/7/0/77/17;       Xsi really has Stone Skin (1 of 7, ally, earth)
+!!FU836:P2016/0/0/78/0;      Vidomina - Necromancy
+!!FU836:P2001/0/0/79/0;      Nagash - Darkness
+
+;Dungeon
+!!FU836:P1002/72/2/80/0;     Lorelei - Harpies +2
+!!FU836:P2008/0/0/81/0;      Arlach - Ballista (Commanders can shoot)
+!!FU836:P1005/78/5/82/0;     Dace - Minotaurs +5
+!!FU836:P1003/74/3/83/0;     Ajit - Beholders +3
+!!FU836:P2106/350/0/84/0;    Damacon - 350 Gold
+!!FU836:P2000/0/0/85/0;      Gunnar - Logistics
+!!FU836:P1006/80/6/86/0;     Synca - Manticores +6
+!!FU836:P1001/70/1/87/0;     Shakti - Troglodytes +1
+!!FU836:P54/7/1/88/17;     + Alamar gets auto Slow (54) (1 of 7, enemy, earth) instead of his Resurrection (38)
+!!FU836:P2013/10/0/89/0;     Jaegar - Mysticism
+!!FU836:P2010/0/0/90/0;      Malekith - Sorcery (enemy army Misfortune)
+*!FU836:P54/7/1/91/17;     + Jeddite gets auto Slow (54) (1 of 7, enemy, earth) instead of his Resurrection (38)
+!!FU836:P-1/0/0/91/0;  MOD:+ Jeddite gets nothing from HSB, leaves standard description and effects
+!!FU836:P2011/0/0/92/0;      Geon - Eagle Flying
+!!FU836:P15/11/1/93/0;     + Deemer gets auto Magic Arrow (15) (1 of 11, enemy, all) instead of his Meteor Shower (23)
+!!FU836:P2104/1/0/94/0;      Sephinroth - 1 Crystal
+!!FU836:P46/7/0/95/17;       Darkstorn really has Stone Skin (1 of 7, ally, earth)
+
+;Stronghold
+!!FU836:P1006/94/6/96/0;     Yog - Cyclopes +6
+!!FU836:P2008/0/0/97/0;      Gurnisson - Ballista (Commanders can shoot)
+!!FU836:P1003/88/3/98/0;     Jarbakas - Orcs +3
+!!FU836:P1005/92/5/99/0;     Shiva - Rocs +5
+!!FU836:P1001/84/1/100/0;    Gretchin - Goblins +1
+!!FU836:P1004/90/4/101/0;    Krellion - Ogres +4
+!!FU836:P2005/0/0/102/0;     Crag Hack - Offense
+!!FU836:P1002/86/2/103/0;    Tyraxor - Wolf Riders +2
+!!FU836:P2010/0/0/104/0;     Gird - Sorcery (enemy army Misfortune)
+!!FU836:P1004/90/4/105/0;    Vey - Ogres +4
+!!FU836:P2000/0/0/106/0;     Dessa - Logistics
+!!FU836:P53/7/0/107/15;      Terek - Haste (1 of 7, ally, air)
+!!FU836:P28/8/0/108/15;    + Zubin gets auto Air Shield (28) instead of his Precision (44)
+!!FU836:P2005/0/0/109/0;     Gundula - Offense
+!!FU836:P2011/0/0/110/0;     Oris - Eagle Flying
+!!FU836:P2105/1/0/111/0;     Saurug - 1 Gem
+
+;Fortress
+!!FU836:P1004/106/4/112/0;   Bron - Basilisks +4
+!!FU836:P1001/98/1/113/0;    Drakon - Gnolls +1
+!!FU836:P1002/100/2/114/0;   Wystan - Lizardmen +2
+!!FU836:P2004/0/0/115/0;     Tazar - Armorer
+!!FU836:P1005/102/5/116/0;   Alkin - Gorgon +5
+!!FU836:P1003/104/3/117/0;   Korbac - Serpent Flies +3
+!!FU836:P2008/0/0/118/0;     Gerwulf - Ballista (Commanders can shoot)
+!!FU836:P1006/108/6/119/0;   Broghild - Wyverns +6
+!!FU836:P45/7/1/120/16;      Mirlanda - Weakness (1 of 7, enemy, water)
+!!FU836:P2013/10/0/121/0;    Rosic - Mysticism
+!!FU836:P2002/0/0/122/0;     Voy - Navigation (Commander can fly)
+!!FU836:P2009/0/0/123/0;     Verdish - First Aid (allied army has Stone Skin)
+!!FU836:P46/7/0/124/17;      Merist - Stone Skin (1 of 7, ally, earth (was fire))
+!!FU836:P2010/0/0/125/0;     Styg - Sorcery (enemy army Misfortune)
+!!FU836:P2012/0/0/126/0;     Andra - Intelligence (Commander has DeathStare)
+!!FU836:P2011/0/0/127/0;     Tiva - Eagle Flying
+
+;Confluxers
+!!FU836&y1=1:P-1/0/0/128/0;     Pasis - none if Neutral Town active
+!!FU836&y1=1:P-1/0/0/129/0;     . Thunar - none
+!!FU836&y1=1:P-1/0/0/130/0;     . Ignissa - none
+!!FU836&y1=1:P-1/0/0/131/0;     . Lacus - none
+!!FU836&y1=1:P-1/0/0/132/0;     . Monere - none
+!!FU836&y1=1:P-1/0/0/133/0;     . Erdamon - none
+!!FU836&y1=1:P-1/0/0/134/0;     . Fiur - none
+!!FU836&y1=1:P-1/0/0/135/0;     . Kalt - none
+!!FU836&y1=0:P1006/120/6/128/0; Pasis - Psychic Elementals +6
+!!FU836&y1=0:P1005/113/5/129/0; Thunar - Earth Elementals +5
+!!FU836&y1=0:P1004/114/4/130/0; Ignissa - Fire Elementals +4
+!!FU836&y1=0:P1003/115/3/131/0; Lacus - Water Elementals +3
+!!FU836&y1=0:P1006/120/6/132/0; Monere - Psychic Elementals +6
+!!FU836&y1=0:P1005/113/5/133/0; Erdamon - Earth Elementals +5
+!!FU836&y1=0:P1004/114/4/134/0; Fiur - Fire Elementals +4
+!!FU836&y1=0:P1003/115/3/135/0; Kalt - Water Elementals +3
+!!FU836:P27/7/0/136/17;    + Luna gets auto Shield (27) (1 of 7, ally, earth) instead of her Fire Wall (13)
+!!FU836:P53/8/0/137/15;      Brissa - Haste (1 of 8, ally, air)
+!!FU836:P15/11/1/138/0;      Ciele - Magic Arrow (1 of 11, enemy, all)
+!!FU836:P46/7/0/139/17;      Labetha - Stone Skin (1 of 7, ally, earth)
+!!FU836:P43/7/0/140/14;      Inteus - Bloodlust (1 of 7, ally, fire)
+!!FU836:P47/9/1/141/15;      Aenain - Disrupting Ray (1 of 9, enemy, air)
+!!FU836:P2106/350/0/142/0;   Gelare - 350 Gold
+!!FU836:P2106/350/0/143/0;   Grindan - 350 Gold
+
+;Others
+!!FU836:P2007/0/0/144/0;     Sir Mullich - 2 Speed
+!!FU836:P2015/0/0/145/0;     Adrienne - Expert Fire Magic
+!!FU836:P1000/6/4/146/0;     Catherine - Swordsmen (+0 dam, +4 HP)
+!!FU836:P2205/0/0/147/0;     Dracon - upg to Enchanter
+!!FU836:P2204/0/0/148/0;     Gelu - upg to Sharpshooter
+!!FU836:P2200/0/0/149/0;     Kilgor - Behemoths
+!!FU836:P2201/0/0/150/0;     Lord Haart - Black Knights
+!!FU836:P2203/0/0/151/0;     Mutare - Dragons
+!!FU836:P1000/6/4/152/0;     Roland - Swordsmen (+0 dam, +4 HP)
+!!FU836:P2203/0/0/153/0;     Mutare Drake - Dragons
+!!FU836:P1000/90/4/154/0;    Boragus - Ogres (+0 dam, +4 HP)
+!!FU836:P2202/0/0/155/0;     Xeron - Devils
+
+
+!?FU836;
+!!IF:Wx4;
+!!VRw28:Sx1;
+!!VRw29:Sx2;
+!!VRw30:Sx3;
+
+!!HEx4&w28>0/w28<1000:Mw28/1;          //give spell
+!!VRw31&w28>0/w28<1000:S0;
+!!VRw32&w28>0/w28<1000:Sx5;
+
+!!FU803&w28>=1000/w28<2000:Px4/0;      //monster specialists boost
+
+!!UN:P3/?y1;               TOBYN: changed unused v430 with check for commanders enabled and added control below
+!!COx4&w28=2012/x4>=0/y1=1:B1/12/1;    //commanders of Intelligence heroes have DeathStare
+!!COx4&w28=2008/x4>=0/y1=1:B1/4/1;     //commanders of Ballista heroes can shoot
+!!COx4&w28=2002/x4>=0/y1=1:B1/8/1;     //commanders of Navigation heroes can fly
+
+!!FU806&w28>=0:Px4/0;      //init hint for speciality
+!!UN&w28>=0:G2/x4/2/405;   TOBYN: added check to be able to circumvent HSB (if lead var w28<0)
+
+---------------------------Hero level increasing--------------------------------
+!?HL-1&429;
+*!UN:P39/?v425;             check if HSB active    [DISABLED BY TOBYN: unnecessary IMO]
+*!HE-1:N?v426;              get hero number
+*!HL:S?v427/?v428/?v429;               //next level check    [TOBYN: check for v428 unnecessary here]
+*!VRv428:S0;
+*!VRv428&v427=0:S1;
+*!VRv428&v427=1:S2;
+*!FU803:Pv426/v428;
+
+!!HE-1:N?y-1;               get hero number
+!!HL:S?y-2/d/d;             check if next level gave attack or defense
+!!FU803&y-2=0:Py-1/1;       if attack
+!!FU803&y-2=1:Py-1/2;       if defense
+
+!!IF:Wy-1;                //Mysticism and Resistance
+!!VRw29&w28=2013:+3;
+!!VRw29&w28=2014:+3;
+
+-------------------------Monsters specialists boost-----------------------------
+!?BA0&429; // start of every battle                       added by Thomas Franz (samot)
+!!BA:H0/?y-1; // get attacking hero
+!!IF&y-1>-1:Wy-1; // activate heroes w-vars
+!!FU804&y-1>-1/w28>=1000/w28<2000:Py-1/3; //refresh monster bonus, if that hero is monster spec
+
+!!BA:H1/?y-1; // get defending hero
+!!IF&y-1>-1:Wy-1; // activate heroes w-vars
+!!FU804&y-1>-1/w28>=1000/w28<2000:Py-1/3; //refresh monster bonus, if that hero is monster spec
+
+!?FU804;
+;x1 = number of hero
+;x2 = next level advance (1 = attack will +1, 2 = defense will +1 see HL-1 trigger code above)
+;do not change v426 and v427
+!!FU$GetBasicPrim$:Px1/?v430/?v431/?y99/?y100; // get basic attribs (do not use HE:F because it returns sometimes
+**                                             // negative values and does not work with the Enhanced (Commander-)artifacts
+
+!!VRv430&x2=1:+1;                      //take account of next level advances
+!!VRv431&x2=2:+1;
+!!VRw31:Sv430;
+!!VRw32:Sv431;
+
+!!HEx1:E?v429/?v428;                   //v428=level of hero             TOBYN: this v429 is useless
+
+!!VRw30:Sv428*3+12;                    //Additional percent to HP = 12+3*level of hero
+!!VRw30|w29=62/w29=56:S0;   [TOBYN: Skeleton and Vampire specialists dont give health bonus]
+!!MA:Lw29/?v430;                                                        TOBYN: new local 430
+!!VRv429:S8-v430;                                                       TOBYN: new local 429
+!!VRw28:Sv428:v429+1;                                                   TOBYN: w28 set here
+!!VRw28|w29=62/w29=56:S0;
+!!HEx1:X4/w29/w31/w32/w28;
+!!VRw28:+1000;
+
+!?FU803;                  in: x1=hero number
+!!VRy1:Sx1;                 TOBYN: changed x3 to y1 because modding x vars now has outside effects
+!!VRx1&x1<0:Sx16;           what's this and why?
+!!IF:Wx1;
+!!FU804&w28>=1000/w28<2000:Px1/x2;     //check that hero is monster spec
+!!VRx1:Sy1;
+
+
+
+
+
+-------------------------------After battle-------------------------------------
+!?BA1&429/v9001=0/-998/v4071<>4; [Perfect0: v4071 = 4 if it was battle without mana]
+
+!!BA:H0/?v426;                          //set v426 is number of left hero - used in BG section
+!!BA:H1/?v427;                          //set v427 is number of right hero - used in BG section
+
+!!IF&v426>=0:Wv426;
+!!HEv426&w28=2013/v426>=0:I?v433/1; //mysticism
+!!VRv433&v433>w30/w28=2013/v426>=0:Sw30;
+!!HEv426&w28=2013/v426>=0/-904:Iv433/1;
+
+!!IF&v427>=0:Wv427;
+!!HEv427&w28=2013/v427>=0:I?v433/1;
+!!VRv433&v433>w30/w28=2013/v427>=0:Sw30;
+!!HEv427&w28=2013/v427>=0/-905:Iv433/1;
+
+----------------------------------Before battle---------------------------------
+!?BF&429/v9001=0/-998;
+!!VRv437:S0R8;                           //v437 = random value generator
+!!BH0:N?v426;                          //set v426 is number of left hero - used in BG section
+!!HEv426&v426>=0:F?v438/?v439/?v434/?v431;     ;set variables of attack and defense (v438-441)
+!!BH1:N?v427;                          //set v427 is number of right hero - used in BG section
+!!HEv427&v427>=0:F?v440/?v441/?v434/?v431;
+
+!!IF&v426>=0:Wv426;
+!!DO851/0/19/1&w28=2011/v426>=0:P0/v426; //eagle eye
+!!DO837/0/19/1&w28>=1000/w28<2000/v426>=0:P0/v426/0; //monster specs add bonuses
+!!COv426&w28=2012/v426>=0:B1/12/1;     //commanders of Intelligence heroes have DeathStare
+!!COv426&w28=2008/v426>=0:B1/4/1;      //commanders of Ballista heroes can shoot
+!!COv426&w28=2002/v426>=0:B1/8/1;      //commanders of Navigation heroes can fly
+
+!!IF&v427>=0:Wv427;
+!!DO851/20/40/1&w28=2011/v427>=0:P1/v427;
+!!DO837/20/40/1&w28>=1000/w28<2000/v427>=0:P1/v427/0;
+!!COv427&w28=2012/v427>=0:B1/12/1;
+!!COv427&w28=2008/v427>=0:B1/4/1;
+!!COv427&w28=2002/v427>=0:B1/8/1;
+
+;Code below - Mysticism and Resistance
+!!IF&v426>=0:Wv426;
+!!HEv426&w28=2013/v426>=0:I?v433/1;    //mysticism
+!!VRw30&w28=2013/v426>=0:Sv433;        //w30 contains initial mana's amount
+!!VRv433&v426>=0:+w29;
+!!HEv426&w28=2013/v426>=0/-904:Iv433/1; [by Perfect0: don't give mana if Berserker Potion is in use]
+
+!!IF&v427>=0:Wv427;
+!!HEv426&w28=2014/v426>=0/v427>=0:I?v433/1; //resistance
+!!VRv433&v427>=0:-w29;
+!!VRv433&v433<0/v427>=0:S0;
+!!HEv426&w28=2014/v426>=0/v427>=0/-905:Iv433/1; [by Perfect0: don't give mana if Berserker Potion is in use]
+
+!!IF&v427>=0:Wv427;
+!!HEv427&w28=2013/v427>=0:I?v433/1;
+!!VRw30&w28=2013/v427>=0:Sv433;
+!!VRv433&v427>=0:+w29;
+!!HEv427&w28=2013/v427>=0:Iv433/1;
+
+!!IF&v426>=0:Wv426;
+!!HEv427&w28=2014/v427>=0/v426>=0:I?v433/1;
+!!VRv433&v427>=0:-w29;
+!!VRv433&v433<0/v427>=0:S0;
+!!HEv427&w28=2014/v427>=0/v426>=0:Iv433/1;
+
+!!IF&v426>=0:Wv426;
+!!DO850/0/20/1&v426>=0/w28=2006:P44/5;
+!!DO850/0/20/1&v426>=0/w28=2009:P46/5;
+!!DO850/21/41/1&v426>=0/w28=2010:P52/5;
+!!DO850/21/41/1&v426>=0/w28=2015:P42/5;
+!!IF&v427>=0:Wv427;
+!!DO850/21/41/1&v427>=0/w28=2006:P44/5;
+!!DO850/21/41/1&v427>=0/w28=2009:P46/5;
+!!DO850/0/20/1&v427>=0/w28=2010:P52/5;
+!!DO850/0/20/1&v427>=0/w28=2015:P42/5;
+
+!?FU850;
+!!VRx3&x3=0:Sx2; // set x3 (duration) to x2 (Power) if not set
+!!BMx16:Mx1/x3/x2;
+
+------------------------When next turn of battle started------------------------
+!?BR&429/v9001=0/-998;
+!!IF:V428/0;
+
+!!BH0:N?v426;                          //set v426 is number of left hero - used in BG section
+!!BH1:N?v427;                          //set v427 is number of right hero - used in BG section
+
+!!IF&v997>=0:V428/1;                   //if tactics phase finished and script is enabled set flag428=1
+
+-----------------------When next monster gain control---------------------------
+;v426 is number of left hero - initialized in BR section above
+;v427 is number of right hero - initialized in BR section above
+;v426 and v428 do not change in code for CM trigger
+;All v429-... can be modified outside later
+;flag428 must be set in BR section above if script enabled and tactics turn finished
+;flag429 must be set in BF section to set up first spells procedures
+;v432 do not change in BG sections.
+!?BG&429/v9001=0/-998;
+
+!!VRv437: +1;                          //random value randomizing
+!!BG&428:Q?v425;                       //v425 is attacking side
+!!VRv433&v425=0:Sv426;                 //v433 is number of casting hero
+!!VRv433&v425=1:Sv427;
+!!IF&428/v433>=0:Wv433;
+!!FU805&428/v433>=0/w28>0/w28<1000:P;  //call spellcaster procedure if hero is spellcaster
+
+!!BG:A?v429;
+!!VRv425:S0;
+!!BG&v429=1:S?v425;
+!!VRv425&v429=10/v433>=0/v433<=15:S37;
+!!BG&v425=37:E?v429;
+!!BG:Q?v436;
+
+----------------------------When Cure spell was cast----------------------------
+;After action
+!?BG1&429/v425=37/v9001=0/-998;
+
+;IF:M^debugging Cure spell: v429=%V429 v436=%V436^;
+!!DO837/v429/v429/1&v436=0/v429>=0:P0/v426/1;
+!!DO837/0/20/1&v436=0/v429=-1:P0/v426/1;
+!!DO837/v429/v429/1&v436=1/v429>=0:P1/v427/1;
+!!DO837/21/41/1&v436=1/v429=-1:P1/v427/1;
+
+-------------------------------Spell Casters------------------------------------
+!?FU805;
+!!VRv428&v425=0/w30=0:S0;              //v428 is side which will under spell
+!!VRv428&v425=0/w30=1:S1;
+!!VRv428&v425=1/w30=0:S1;
+!!VRv428&v425=1/w30=1:S0;
+
+!!VRv437: *5 +3 %8;
+!!VRv430:Sv428*20 +v437;               //v430 - target monster            TOBYN: new local 430
+!!BMv430:N?v429;                       //v429 - number of monsters
+!!BMv430:T?v435;
+!!VRv429&v435>=145/v435<=149:S0;       //tower arrows and ballistas cannot be target
+!!VRv437: *5 +3 %8;
+!!VRv430&v429<=0:Sv428*20 +v437;                 TOBYN: possible new local 430
+!!BMv430&v429<=0:N?v429;
+!!BMv430:T?v435;
+!!VRv429&v435>=145/v435<=149:S0;
+!!VRv437: *5 +3 %8;
+!!VRv430&v429<=0:Sv428*20 +v437;                 TOBYN: possible new local 430
+!!BMv430&v429<=0:N?v429;
+!!BMv430:T?v435;
+!!VRv429&v435>=145/v435<=149:S0;
+!!VRv437: *5 +3 %8;
+!!VRv430&v429<=0:Sv428*20 +v437;                 TOBYN: possible new local 430
+!!BMv430&v429<=0:N?v429;
+!!BMv430:T?v435;
+!!VRv429&v435>=145/v435<=149:S0;
+
+!!VRv431:S0;                           //v431 - position to cast if 0 then do not cast
+!!BMv430&v429>0:P?v431;
+
+!!VRv429:Sw29+w31;                     //v429 - chance is 1 of (w29+w31)
+!!VRv437: *5 +3 %v429;
+!!VRv432&v431>0/v429>0:S0 +v437;       //randomize v432
+
+!!VRv432&v431>0/v429<1:S1;             //if (w29+w31)<=1 that means the time to cast
+
+!!HEv433:I?v429/1;
+!!HEv433:I100/1;
+!!HEv433:Sw32/?v435;
+!!HEv433:Sw32/0;
+!!BHv425:M?v434;
+
+!!BG:A?v430;                           //if hero or monster casts spell do not randomly spell
+!!VRv432|v430=1/v430=10:S2;
+
+!!BHv425&v432=1/v431>0:Cw28/v431/0/0;  //v432=1 means that time to cast
+!!VRw31&v432=1/v431>0/w28>0/w28<1000:+w29; //if hero casts spell then w31 increasing by w29 value
+!!VRw31|v432<>1/v431<=0/w28>0/w28<1000:-1; //w43 keeps addition value that added to w29. w31 decrement every turn and the chance is increasing
+
+!!BHv425:Mv434;
+!!HEv433:Sw32/v435;
+!!HEv433:Iv429/1;
+
+!!VRv429:Sw29+w31;
+!!VRw31&v429<2:S-1*w29+2;              //if chance is more than 1/2 then decrease to 1/2
+
+
+------------------------------Eagle eye flying----------------------------------
+;do not change v432
+!?FU851;
+!!VRv434:S-1;
+!!BMx16:T?v434;
+!!BMx16:I?v431;
+!!MA&v434>=0/x1=v431:Lv434/?v435;
+!!BMx16&v434>=0/x1=v431:F?v430;                  TOBYN: possible new local 430
+!!VRv433&v435>=0/x1=v431/v435<=1/v434>=0:Sv430|2;
+!!BMx16&v435>=0/x1=v431/v435<=1/v434>=0:Fv433;
+
+-------------------------Monster specs add bonuses------------------------------
+;do not change v432
+;x1=side
+;x2=number of hero
+;x3=1 if non first call of the function
+!?FU837;
+!!VRv430&x1=0:Sv438;                   //restore hero parameters      TOBYN: new local 430
+!!VRv431&x1=0:Sv439;                                                     |
+!!VRv430&x1=1:Sv440;                                                  TOBYN: new local 430
+!!VRv431&x1=1:Sv441;
+!!BMx16:T?v434;                        //v434=type of creature
+!!BMx16:I?v435;                        //v435=left or right
+
+;Standard
+!!FU852&w29=v434/x1=v435:Px16/v434/v430/v431/x3;
+;Non-confluxers upgraded creatures
+!!VRv433:Sv434-1;
+!!FU852&w29=v433/x1=v435/w29<>112/w29<>113/w29<>114/w29<>115:Px16/v434/v430/v431/x3;
+;Conflux upgraded
+!!FU852&w29=112/v434=127/x1=v435:Px16/v434/v430/v431/x3;
+!!FU852&w29=113/v434=125/x1=v435:Px16/v434/v430/v431/x3;
+!!FU852&w29=114/v434=129/x1=v435:Px16/v434/v430/v431/x3;
+!!FU852&w29=115/v434=123/x1=v435:Px16/v434/v430/v431/x3;
+
+!?FU852;
+;x1=monster place ID
+;x2=monster type
+;x3=hero attack skill
+;x4=hero defense skill
+;x5=1 if non first call of the function
+!!BMx1&x5<>1:Sd1;                      //speed +1
+!!MA:Px2/?v433;                        //hitpoints bonus percentage = 12 + 3 * herolevel
+!!VRv433:*w30:100;
+!!BMx1:Hdv433;
+!!MA:Ax2/?v433;                        //attack for each specified monster = Standard+HeroBonus+CleanHeroBonus
+!!HEx1&w31<0:F?y10/d/d/d/1; get hero's  basic  attack [DEBUGGING]
+!!HEx1&w31<0:F?y11/d/d/d;   get hero's current attack [DEBUGGING]
+!!IF&w31<0:M^{DEBUG INFORMATION - FU852}
+Hero #%X1 gave negative attack bonus to the creatures, now compensated.^;
+!!VRw31&w31<0:Sy10 +y11;    set correct w31 instead   [DEBUGGING]
+!!VRv433:+x3+w31;
+!!BMx1:Av433;
+!!MA:Dx2/?v433;                        //defense
+!!VRv433:+x4+w32;
+!!BMx1:Dv433;
+
+-----------------------Right mouse click in battle info-------------------------
+;VRv425-428 cannot touch                                         [SECTION EDITED by Tobyn]
+!?CM4&429/v9001=0/-998;
+!!CM:F?y-1;                            //check for right button
+!!VRy-1:&512;
+!!CM:A?y-2/?y-3;                       get pixel pos at click location
+
+!!IF&y-2>0/y-2<58:Wv426;               attacking hero number
+!!IF&y-2>739/y-2<800:Wv427;            defending hero number
+
+!!VRy-4&w28>=0/y-2>0/y-2<58/y-3>16/y-3<90:S1;    attacker
+!!VRy-4&w28>=0/y-2>739/y-2<800/y-3>16/y-3<90:S2; defender
+
+!!CM&v426>=0/y-4=1/y-1=512:R0;         //disable standard handling
+!!CM&v427>=0/y-4=2/y-1=512:R0;
+
+!!FU806&v426>=0/y-4=1/y-1=512:Pv426/1;
+!!IF&v426>=0/y-4=1/y-1=512:M1/405;     //show message
+
+!!FU806&v427>=0/y-4=2/y-1=512:Pv427/1;
+!!IF&v427>=0/y-4=2/y-1=512:M1/405;
+
+-----------------------Hero screen specialization click-------------------------
+!?CM2&429;                                                       [SECTION EDITED by Tobyn]
+!!HE-1:N?y-1;
+!!IF:Wy-1;                to check if w28>=0 (circumvent HSB with w28<0)
+!!CM:I?y-2;
+!!FU806&y-1>=0/y-2=118:Py-1/0;
+!!UN&w28>=0/y-1>=0/y-2=118:G2/y-1/2/405;   //set new spec description
+
+-----------------------Hero meeting screen specialization click-----------------
+!?CM3&429;                                                       [SECTION INSERTED by Tobyn]
+!!CM:I?y-1;                  y-1= 105 left, 106 right hero spec icon
+!!FU&y-1<>105/y-1<>106:E;    exit if neither left nor right hero spec clicked
+!!CM:H?y-2/?y-3;             get left/right hero numbers
+!!VRy-4&y-1=105:Sy-2;
+!!VRy-4&y-1=106:Sy-3;
+!!IF:Wy-4;                   to check if w28>=0 (circumvent HSB with w28<0)
+!!FU806&y-4>=0:Py-4/0;
+!!UN&w28>=0/y-4>=0:G2/y-4/2/405;           //set new spec description
+
+-----------------------------Setting heroes info--------------------------------
+;sets to z405 text for hero's info
+;x1 = hero number                                                [SECTION EDITED by Tobyn]
+;x2 = 1 if was called from battle
+!?FU806;
+!!IF:Wx1;
+!!FU&w28<0:E;      just exit if lead var w28 is negative (this might be useful for custom specialty descriptions)
+*!UN:P198/?y1;     check if Rebalanced Hero script37 is active
+
+!!HEx1:B0/?z-1; ?z406;
+!!VRz405:Sz139087;
+;                          init spell strings
+!!VRz-2&w28=15:Sz139088;     Magic Arrow
+!!VRz-2&w28=16:Sz139089;     Ice Bolt
+!!VRz-2&w28=17:Sz139090;     Lightning Bolt
+!!VRz-2&w28=27:Sz139091;     Shield
+!!VRz-2&w28=28:Sz139092;     Air Shield
+!!VRz-2&w28=29:Sz139093;     Fire Shield
+!!VRz-2&w28=37:Sz139094;     Curse
+!!VRz-2&w28=41:Sz139095;     Bless
+!!VRz-2&w28=43:Sz139096;     Bloodlust
+!!VRz-2&w28=45:Sz139097;     Weakness
+!!VRz-2&w28=46:Sz139098;     Stone Skin
+!!VRz-2&w28=47:Sz139099;     Disrupting Ray
+!!VRz-2&w28=48:Sz139100;     Prayer
+!!VRz-2&w28=51:Sz139101;     Fortune
+!!VRz-2&w28=53:Sz139102;     Haste
+!!VRz-2&w28=54:Sz139103;     Slow
+!!VRz-2&w28=55:Sz139104;     Slayer
+!!VRz-2&w28=60:Sz139105;     Hypnotize
+!!VRz-3:Sz-2;              init string for original spell names
+!!VRz-3&x1=11:Sz139106;      Adelaide
+!!VRz-3&x1=45:Sz139107;      Solmyr
+!!VRz-3&x1=57:Sz139108;      Xyron
+!!VRz-3&x1=63:Sz139109;      Xarfax
+!!VRz-3&x1=72:Sz139110;      Septienna
+!!VRz-3&x1=73:Sz139111;      Aislinn
+!!VRz-3&x1=76:Sz139112;      Thant
+!!VRz-3&x1=88:Sz139113;      Alamar
+*!VRz-3&y1=0/x1=91:Sz139113; Jeddite [somewhat incorrect: it's just Resurrection, not *stronger* Resurrection... no more Res spec but Rebuild spec instead]
+*!VRz-3&y1=1/x1=91:Sz139114; Jeddite if Rebalanced Heroes active (Blind) [somewhat incorrect: it's just Blind, not *stronger* Blind]
+!!VRz-3&x1=93:Sz139115;      Deemer
+!!VRz-3&x1=108:Sz139116;     Zubin
+!!VRz-3&x1=136:Sz139117;     Luna
+
+!!HEx1:R2/?v432;
+!!VRz-4&v432=0:Sz139118;
+!!VRz-4&v432=1:Sz139119;
+!!VRz-5&v432=0:Sz139120;
+!!VRz-5&v432=1:Sz139121;
+
+;Spellcasters
+!!VRz405&w28>0/w28<1000:+z139122;
+!!FU807&w28>0/w28<1000:Px1;
+;Monstermasters
+!!VRz405&w28>=1000/w28<2000:+z139123;
+!!FU808&w28>=1000/w28<2000:Px1/x2;
+;Logistics
+!!VRz405&w28=2000:+z139124;
+;AntiScouting
+!!VRz405&w28=2001:+z139125;
+;Navigators
+!!VRz405&w28=2002:+z139126;
+;Estates
+!!VRz405&w28=2003:+z139127;
+;Armorer
+!!VRz405&w28=2004:+z139128;
+;Offence
+!!VRz405&w28=2005:+z139129;
+;Archery
+!!VRz405&w28=2006:+z139130;
+;Sir Mullich
+!!VRz405&w28=2007:+z139131;
+;Ballista
+!!VRz405&w28=2008:+z139132;
+;First Aid
+!!VRz405&w28=2009:+z139133;
+;Sorcery
+!!VRz405&w28=2010:+z139134;
+;Eagle Eye
+!!VRz405&w28=2011:+z139135;
+;Intelligence
+!!VRz405&w28=2012:+z139136;
+;Mysticism
+!!VRz405&w28=2013:+z139137;
+;Resistance
+!!VRz405&w28=2014:+z139138;
+;Fire Magic
+!!VRz405&w28=2015:+z139139;
+;Necromancy
+!!VRz405&w28=2016:+z139140;
+;Resource
+!!VRz405&w28=2100:+z139141;
+!!VRz405&w28=2101:+z139142;
+!!VRz405&w28=2102:+z139143;
+!!VRz405&w28=2103:+z139144;
+!!VRz405&w28=2104:+z139145;
+!!VRz405&w28=2105:+z139146;
+!!VRz405&w28=2106:+z139147;
+!!VRz405&w28=2107:+z139148;
+;Behemoths
+!!VRz405&w28=2200:+z139149;
+;Black Knights
+!!VRz405&w28=2201:+z139150;
+;Devils
+!!VRz405&w28=2202:+z139151;
+;Dragon
+!!VRz405&w28=2203:+z139152;
+;Gelu
+!!VRz405&w28=2204:+z139153;
+;Enchanter
+!!VRz405&w28=2205:+z139154;
+
+!?FU807;                                //spell
+!!VRv432:Sw29+w31;
+!!VRz405:+z139155+^ %W29.^;
+!!VRz405&x2=1:+z139156+^ %V432^;
+
+!?FU808;                                //monsters
+!!UN:N3/406/w29/1;
+!!VRz405:+z139157;
+!!VRz405&w31>0:+z139158;
+!!VRz405&w32>0:+z139159;
+!!VRv432:Sw28-1000;
+!!UN:N3/406/w29/0;
+!!VRz405&v432>0:+z139160;
+!!VRz405&w30>0:+z139161;
+!!VRz405&x1<128:+z139162;
+
+*!VRz405:+^
+%Z-1's stats and level
+determine the bonus
+(except for speed).^;   disabled to have a nicer msgbox
+
+-----------------------------------Init-----------------------------------------
+!#UN:P39/?v425;
+!#IF&v425=1:V429/1;                    //flag 429 - if script enabled
+!#VRv436:S255;
+!#VRv436&429:S0;                       //on first battle of the player message appears
+!#FU838&429:P;                             //initialize of heroes w28-w32
+

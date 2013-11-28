@@ -1,0 +1,230 @@
+ZVSE
+ERMS_ScriptName=Script52
+ERMS_ScriptAuthor=Sir Four
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=v1-6;v234;v247;v360-370;v729-730;z1-4;z480-494
+ERMS_ScriptUsedFlags=1-2
+ERMS_ScriptUsedFunctions=20520-20523
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**  Mirror of the Home-Way Script Version 1.1 created by Sir Four
+**  Requires WoG version 3.57 or later using ERM version 2.6 or later.
+**  WoGify Name: script52.erm
+
+** Updated September 15, 2004 by Timothy to change y variables in local
+** trigger sections to y- variables, October 16, 2004 by Timothy to correct a
+** minor bug.
+
+** Special thanks to Timothy E. Pulver for the Summoning Stones Script
+** which the Mirror of the Home-Way Script was based on
+
+** Mirror of the Home-Way building works as 'Town Portal' spell for 1000 coins.
+** i.e. this script lets a hero travel to any town the player owns
+** by visiting the Mirror of the Home-Way and spending 1000 coins.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 500 or later to avoid the ERM script
+** popping up as if it were a regular event message. The title of the event
+** is unimportant, but I would suggest something like "Mirror of the Home-Way".
+** And of course, you'll also need to put one or more "Mirrors of the Home-Way" on
+** your map for the heroes to visit. Happy traveling! :-)
+
+Variables: v1-6, v234, v247, v360-370, v729-730, z1-4, z480-z492
+All variables may be reused except z729 which stores the hint text.
+Flags: 1,2
+Functions: 20521-20523
+Timers: none
+Local Variables: x1-3, x16, y1-8
+
+----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v234/?v247;
+!#IF&v234<357:V1/1;
+!#IF&v247<270:V1/1;
+!#IF&1:M1/z152001;
+
+----------------------------------------------------------------------------------------
+
+!#UN:P52/?v1; [Check if Mirror of the Home-Way is enabled in WoGify Options]
+!#VRz729&v1=1:Sz152000;
+!#HT63/66&v1=1:T729;  Rename all Mirrors of the Home-Way
+
+----------------------------------------------------------------------------------------
+
+ [Mirror of the Home-Way object is trigger]
+!?OB63/66;
+!!UN:P52/?v1; [Check if Mirror of the Home-Way is enabled in WoGify Options]
+!!FU&v1=0:E;
+
+ [Check current player - store in v1]
+!!OW:C?v1;
+
+ [Count number of towns - store in v2 - count number owned by player - store in v3]
+!!UN:U98/-1/?v2;
+!!VRv3:S0;
+!!DO20520/1/v2/1&v2>0:Pv1;
+
+ [If no towns owned, display message]
+!!IF&1000/v3=0:M1/z152002;
+!!FU&1000/v3=0:E;
+
+ [If one or more towns owned, ask this]
+!!IF&1000/v3>0:Q2/6/1000/2/z152003;
+
+ [If AI, randomly set Flag 2 with 25% chance to set]
+!!VRy-1&-1000/v3>0:S1 R3;
+!!IF&-1000/v3>0:V2/0;
+!!IF&-1000/v3>0/y-1=1:V2/1;
+
+[If Flag 2 isn't set then exit]
+!!FU&-2:E;
+
+!!HE-1:O?y-1;
+!!OW:Ry-1/6/?y-2;
+!!IF&1000/y-2<1000:M1/z152015;
+!!FU&y-2<1000:E;
+
+ [If player wishes to go, call Function 20521]
+!!VRv730:S0;
+!!FU20521:Pv1/v2/v3;
+
+---------------------------------------------------------------------------------
+
+ [Display List of Towns]
+ [x1=current player, x2=number of towns, x3=number of towns owned by current player]
+!?FU20521;
+
+ [If x3 is more than 11, set it to 11]
+!!VRx3&x3>11:S11;
+
+ [Set up initial town variables - v360-v370 with values of 0]
+!!VRv360:C0/0/0/0/0/0/0/0/0/0/0;
+
+ [Set up and Display Dialogue Box List of Towns - store town number in v4]
+!!DO20522/1/x2/1:Px1/x2;
+
+---------------------------------------------------------------------------------
+
+ [Check number of towns owned by player - store in v3]
+ [x1 = current player]
+!?FU20520;
+
+ [Store coordinates of town at x16 in v4/v5/v6]
+!!UN:U98/-1/x16/4;
+
+ [Store owner of town in y1]
+!!CA4:O?y1;
+
+ [Add 1 to v3 if town is owned by current player]
+!!VRv3&x1=y1:+1;
+
+---------------------------------------------------------------------------------
+
+ [Set up v and z variables for List of Towns - x1=current player]
+!?FU20522;
+
+ [Store coordinates of town at x16 in v4/v5/v6]
+!!UN:U98/-1/x16/4;
+
+ [Store name of town in z1, owner in y1, type in y2, hero visiting in y6]
+!!CA4:N?z1 O?y1 T?y2 H1/?y6;
+ [process only if no hero visiting town]
+ [Store type string in z2]
+!!VRz2&y2=0:Sz152004;
+!!VRz2&y2=1:Sz152005;
+!!VRz2&y2=2:Sz152006;
+!!VRz2&y2=3:Sz152007;
+!!VRz2&y2=4:Sz152008;
+!!VRz2&y2=5:Sz152009;
+!!VRz2&y2=6:Sz152010;
+!!VRz2&y2=7:Sz152011;
+!!VRz2&y2=8:Sz152012;
+
+ [v variable index (v360-v370) for z variables (z480-z490) - store in y2]
+ [and set v variable to z variable index number - store in y3]
+!!VRv730&x1=y1/y6=-1:+1;
+
+!!VRy2&y6=-1:S359 +v730;
+!!VRy3&y6=-1:Sy2 +120;
+!!VRvy2&x1=y1/y6=-1:Sy3; [Only store number if current player owns town]
+
+ [For each town player owns, store town x16 in v730+10 variable, indexed by y5]
+
+!!VRy5&x1=y1/y6=-1:Sv730 +10;
+!!VRyy5&x1=y1/y6=-1:Sx16;
+
+ [Store Town name and Type for dialogue box in z variable (at vy1 index)]
+ [Only store if current player owns town]
+!!VRzy3&x1=y1/y6=-1:S^%Z1 (%Z2)^;
+
+------------------------------------
+
+ [Do this section when done loop - x16=x2]
+!!FU&x16<>x2:E;
+
+ [Set z variables and display town dialogue box - player's choice is stored in v4]
+!!VRz491:Sz152013;
+!!VRz492:Sz152014;
+!!IF&1000:G1/4/0/491/v360/v361/v362/v363/v364/v365/v366/v367/v368/v369/v370/492;
+
+ [Determine which box was checked - store result in y6]
+!!VRy6&v4=1:S1;
+!!VRy6&v4=2:S2;
+!!VRy6&v4=4:S3;
+!!VRy6&v4=8:S4;
+!!VRy6&v4=16:S5;
+!!VRy6&v4=32:S6;
+!!VRy6&v4=64:S7;
+!!VRy6&v4=128:S8;
+!!VRy6&v4=256:S9;
+!!VRy6&v4=512:S10;
+!!VRy6&v4=1024:S11;
+!!VRy6&v4=2048:S12;
+
+ [If AI, randomly choose a town - store in y6]
+!!FU&v730=0:E;
+!!VRy8:Sv730 -1;
+!!VRy6&-1000/x16=x2:S1 Ry8;
+
+ [Store town vector in y7 - if choice is "no thanks", exit]
+!!VRy7:Sy6 +10;
+!!FU&y6=12:E;
+
+ [Store town id in y6]
+!!VRy6:Syy7;
+!!UN:U98/-1/y6/4;
+
+ [Take 1000 gold & transport hero]
+!!HE-1:O?y1;
+!!OW:Ry1/6/d-1000;
+!!HE-1:Pv4/v5/v6;
+
+ [Get number of Mirrors of the Home-Way on map - store in v1]
+!!UN:U63/66/?v1;
+
+ [Cycle through all Mirrors of the Home-Way and set PO:N to 0 - Function 20523]
+!!DO20523/1/v1/1&v1>0:P;
+
+---------------------------------------------------------------------------------
+
+ [Set PO:N to 0 for each Mirror of the Home-Way]
+!?FU20523;
+
+ [Get location of Stone Ring at x16 - store in v2/v3/v4]
+!!UN:U63/66/x16/2;
+
+ [Set PO:N to 0 for this Mirror of the Home-Way]
+!!PO2:N0;
+
+ [Reset Mirror of the Home-Way to tell AI it can visit]
+!!PM2:V1;
+

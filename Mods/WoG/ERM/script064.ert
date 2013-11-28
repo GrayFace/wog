@@ -1,0 +1,129 @@
+#	Text resource for "script64.erm" document		
+164000	You approach the strange hut and observe a witch
+inside studying an ancient tome on %Z-1. As
+you approach, she turns and focuses her one glass
+eye on you. "HA!" she screeches, "I would not
+presume to try to teach new tricks to someone so
+clearly as wise as you." You leave, but can't quite
+shake the feeling that you have just been insulted.	<!!M>	01.08.2004
+164001	The witch knows no more than you,
+but she won't admit and gets angry
+as you try to escape her lecturing.
+"{Ignore me and you will forget.}"
+You sense this is no empty threat.
+
+Do you listen more carefully?	<!!Q>	01.08.2004
+164002	The witch goes on, but you feel
+sleepy and cannot suppress a yawn.
+The angry witch glares at you.
+"{So be it, fall asleep then.}"
+
+When you wake up, you have the
+passing feeling that you just
+lost something...	<!!M>	01.08.2004
+164003	An ancient witch living in a strange hut welcomes you and tries to teach you for her own inscrutable purposes. Do you listen to the lectures about %Z-1?	<!!Q>	01.08.2004
+164004	The ancient witch tells you that for 3000 gold she could teach you advanced knowledge about %Z-1.	<!!Q>	01.08.2004
+164005	The ancient witch will give you advanced lessons for 3000 Gold. Do you agree and listen to the lectures about %Z-1?	<!!Q>	01.08.2004
+164006	Transfer mode inactive.
+
+SHIFT+left-click on any
+owned flagged object
+still initiates a transfer.	<!!S>	01.08.2004
+164007	Transfer mode {active}.
+
+Right-click on chat bar to
+deactivate transfer mode.	<!!S>	01.08.2004
+164008	Your flag does not wave here.
+
+(Transfer mode still {active},
+right-click on chat bar to change)	<!!Q>	01.08.2004
+164009	Renounce ownership?	<!!Q>	01.08.2004
+164010	One of below resources needed to transfer this mine to another color.	<!!Q>	01.08.2004
+164011	 {ally}	<!!S>	01.08.2004
+164012	For a price, transfer mine to%Z-1	<!!Q>	01.08.2004
+164013	Transfer ownership to%Z-1	<!!Q>	01.08.2004
+164014	 Choosing
+Mithril depends on hero's current luck (unlucky gives weekday resource).
+Reaching Expert Estates and lvl10+ will automatically select Mithril.	<!!S>	01.08.2004
+164015	{Expert Estates}
+Each lvl 10+ hero with Estates will provide weekday-specific resources:
+ 1 Wood+Ore each monday (day 1),   1 Mercury each tuesday (day 2),
+ 1 Sulfur each wednesday (day 3),     1 Crystal each thursday (day 4),
+ 1 Gem each friday (day 5),              350 Gold each saturday (day 6),
+ 1 Mithril each sunday (day 7) if Mithril active, else 350 Gold.          
+Left-click {Expert} Estates icon (in hero screen) to choose a daily resource.
+Return to automatic resource cycling by rejecting all offers there.%Z-1	<!!Q>	01.08.2004
+164016	monday	<!!S>	01.08.2004
+164017	tuesday	<!!S>	01.08.2004
+164018	wednesday	<!!S>	01.08.2004
+164019	thursday	<!!S>	01.08.2004
+164020	friday	<!!S>	01.08.2004
+164021	saturday	<!!S>	01.08.2004
+164022	sunday	<!!S>	01.08.2004
+164023	and additional resources each monday:	<!!S>	01.08.2004
+164024	and additional resources on
+the first %Y3 days each week:	<!!S>	01.08.2004
+164025	and additional daily resources:	<!!S>	01.08.2004
+164026	and different resources each weekday.
+Expert Estates will let you choose
+the resource type. Each %Z-3 yields:	<!!S>	01.08.2004
+164027	and different resources each weekday.
+Keep cycling? Each %Z-3 yields:	<!!S>	01.08.2004
+164028	and a different resource each weekday.
+Unless you left-click Estates icon,
+each %Z-3 yields:	<!!S>	01.08.2004
+164029	Keep the same daily resource?	<!!S>	01.08.2004
+164030	and the chosen daily resource.
+Unless you left-click Estates icon,
+each day yields:	<!!S>	01.08.2004
+164031	and has a %Y4%% chance per day
+(current luck: %Y-17) to give Mithril
+instead of the weekday resource.
+Keep going for Mithril? Today you got:	<!!S>	01.08.2004
+164032	and has a %Y4%% chance per day
+(current luck: %Y-17) to give Mithril
+instead of the weekday resource.
+Change with left-click. Today you got:	<!!S>	01.08.2004
+164033	Basic	<!!S>	01.08.2004
+164034	Advanced	<!!S>	01.08.2004
+164035	Expert	<!!S>	01.08.2004
+164036	
++ %Y17 per level)             	<!!S>	01.08.2004
+164037	{%Z-2 Estates}
+
+With %Z-2 Estates, this hero
+provides {%Y5 gold} per day
+(%Y7 + %Y22 for %Y23,000 experience%Z-4
+%Z-1	<!!Q>	01.08.2004
+164038	{Expert Estates}
+
+Hero shall provide daily	<!!Q>	01.08.2004
+164039	Warfare (Bal.)	<!!S>	01.08.2004
+164040	Warfare (Art.)	<!!S>	01.08.2004
+164041	Warfare (F.A.)	<!!S>	01.08.2004
+164042	{Warfare (Bal.)}	<!!S>	01.08.2004
+164043	{Warfare (Art.)}	<!!S>	01.08.2004
+164044	{Warfare (F.A)}	<!!S>	01.08.2004
+164045	{Warfare}
+
+{»} Artillery + Ballistics + First Aid
+{»} standard control of all war machines
+{»} wogify enhancements may also apply
+{»} click icon for individual description	<!!S>	01.08.2004
+164046	{Warfare}
+
+Warfare combines the three skills shown below
+and lets you control all three war machines.
+Wogify enhanced skills have {yellow} names.
+Right-click skill icons to see descriptions.
+You may also choose which skill is displayed
+in the single skill slot used. The other two
+skills are hidden (click experience icon).
+All three skills will have the same expertise.	<!!S>	01.08.2004
+164047	Your flag does not wave here.	<!!Q>	01.08.2005
+164048	Sorry, town transfer not
+possible on mondays.	<!!Q>	01.08.2005
+164049	You are not allowed to pass
+ this godly dwelling over to
+any other than a true {ally}.	<!!Q>	01.08.2005
+164050	text	<!!Q>	01.08.2005

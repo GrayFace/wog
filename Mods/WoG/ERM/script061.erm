@@ -1,0 +1,115 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+[script: Enhanced Protection From the Elements ver.2.11]
+[author: Petyo P. Georgiev (petronius)]
+[WoG version: 3.58]
+[last changed: 07 october 2004]
+[Disabled in network battles by Fnord August 25, 2004]
+
+*** NOTE: The previous version of the script uses different way of simulating resistance -
+*** transforms the units to dwarf/battle dwarf prior the spell casting and then changes
+*** them back. This is a completely new version of the script.
+
+**This script enhances the spells "protection from...", so they provide protection
+**against non-damage spells also. The protection depends on the skill of the hero
+**in the coresponding element - none - 20%, basic - 33%, advanced and expert - 50%.
+**the reduction for damage spells built in the game is similar - only there the no skill
+**and basic values are equall - 37%. I decided to give some realism and reduced
+**the no skill resistance to 20%, and slightly reduced the basic resistance (with 4% -
+**1/3 seems more logical to me, while 37 is a strage percentage value).
+
+
+***flags used: 41-43
+***v vars used:v15-17(shared with "forgotten shrine"), v2400-2408
+***z vars used: NONE
+***std vars used: NONE
+***w vars used: NONE
+***fu used: FU1872-1876
+***tm used: NONE
+***dialogue used: NONE
+
+!#UN:P61/?v2408;
+
+!?BA0&v2408=1/-998;
+!!TRv998/v999/v1000:G?v17;
+!!BA:H0/?v15;             attacker
+!!BA:H1/?v16;             defender
+!!FU1875|v15=20/v16=20:P;
+!!FU1876&v15>-1:Pv15/0;
+!!FU1876&v16>-1:Pv16/1;
+-------------------------------------BA50---------------------------------------
+!?BA50&v2408=1/-998;
+!!TRv998/v999/v1000:G?v17;
+!!BA:H0/?v15;             attacker
+!!BA:H1/?v16;             defender
+!!FU1875|v15=20/v16=20:P;
+!!FU1876&v15>-1:Pv15/0;
+!!FU1876&v16>-1:Pv16/1;
+--------------------------------------------------------------------------------
+!?BG0&v2408=1/-998;
+!!IF:V41/0; !!IF:V42/0;
+!!BG:A?v2400; hero casts - 1, monster casts - 10
+!!BG|v2400=1/v2400=10:S?v2401; get cast spell num
+!!IF|v2401=42/v2401=45/v2401=47/v2401=50/v2401=52/v2401=54/v2401=59/v2401=60/v2401=61/v2401=62:V41/1;
+!!IF|v2400=1/v2400=10:V42/1;
+
+!?BG0&41/42/v2408=1/-998;
+!!FU1872:Pv2401; determine if group (no target) spell at expert level (adv for berserk&forgetfulness)
+!!BG&-43:D?y-1; get destination position
+!!BU&-43/y-1>-1/y-1<187:Ey-1/?v2403; get stack number at target position
+!!FU1874:Pv2401; get spell prot needed
+
+!?MR2&41/42/-43/v2408=1/-998;
+!!BMv2403&v2403>-1:Gv2402/?y-1/?y-2;
+!!VRy-3&y-1>0/y-2=0:S20; no skill
+!!VRy-3&y-1>0/y-2=1:S33; basic
+!!VRy-3&y-1>0/y-2>1:S50; adv/exp
+!!MR&y-1>0:Fdy-3; increase resistance with the percentage corresponding to the skill level
+======================================FUs=======================================
+!?FU1872;
+!!VRy1:S0;
+!!VRy1|x1=42/x1=52/x1=59:S14; fire
+*** no group air spells
+!!VRy1|x1=45/x1=61:S16; water
+!!VRy1|x1=50/x1=54:S17; earth
+!!BG:Q?y5;
+!!FU1873:Py1/x1/y5;
+
+!?FU1873;
+!!IF:V43/0;            init "no target" flag
+!!HEv15&x3=0/v15>-1:Sx1/?y1;        get lvl of skill
+!!HEv16&x3=1/v16>-1:Sx1/?y1;        get lvl of skill
+!!VRy1&x2=61/y1=2:S3;  advanced forgetfulness is a "no target" spell
+!!IF&y1=3:V43/1;       set "no target" flag
+
+!?FU1874; check school of cast spell and set v2402 to  the corresponding prot. spell num
+!!VRv2402|x1=47/x1=60:S30; air
+!!VRv2402|x1=42/x1=52/x1=59/x1=62:S31; fire
+!!VRv2402|x1=45/x1=61:S32; water
+!!VRv2402|x1=50/x1=54:S33; earth
+
+!?FU1875; calculation of Thorgrim's bonus to mr
+!!VRv2404:S0;
+!!HE20:Ed/?y1;
+!!VRv2404&x1=1:Sy1:4;
+!!VRv2404&x1=2:Sy1:2;
+!!VRv2404&x1=3:Sy1;
+
+!?FU1876; calculation of artifact&skill mr
+!!VRv2405:S0; !!VRv2406:S0;
+!!HEx1&x1>-1:A2/57/d/?y1A2/58/d/?y2A2/59/d/?y3S26/?y4; check defender's art's&skill
+!!VRv2405&x2=0/y1>0:+5;   attacker's mods
+!!VRv2405&x2=0/y2>0:+10;
+!!VRv2405&x2=0/y3>0:+15;
+!!VRv2405&x2=0/y4=1:+5;
+!!VRv2405&x2=0/y4=2:+10;
+!!VRv2405&x2=0/y1=3:+20;
+!!VRv2406&x2=1/y1>0:+5;  defender's mods
+!!VRv2406&x2=1/y2>0:+10;
+!!VRv2406&x2=1/y3>0:+15;
+!!VRv2406&x2=1/y4=1:+5;
+!!VRv2406&x2=1/y4=2:+10;
+!!VRv2406&x2=1/y4=3:+20;
+

@@ -1,0 +1,68 @@
+101000	Fliers don't fly, but aren't retaliated against.	String type = <!#S>	07.06.2003
+101001	Fast creatures are slow, slow ones fast.	String type = <!#S>	07.06.2003
+101002	Creatures are half-price on day 7 each week.	String type = <!#S>	07.06.2003
+101003	Heroes create Magic Plains each day.	String type = <!#S>	07.06.2003
+101004	Creatures attack twice.	String type = <!#S>	07.06.2003
+101005	Creatures in armies grow by 4 percent each day.	String type = <!#S>	07.06.2003
+101006	Creature dwellings also sell Boars.	String type = <!#S>	07.06.2003
+101007	Heroes start at 5th Level.	String type = <!#S>	07.06.2003
+101008	Artifacts on the map are found in pairs.	String type = <!#S>	07.06.2003
+101009	Perpetual darkness.	String type = <!#S>	07.06.2003
+101010	Heroes move twice as far.	String type = <!#S>	07.06.2003
+101011	Mines change resources each week.	String type = <!#S>	07.06.2003
+101012	Teaching objects can be revisited each month.	String type = <!#S>	07.06.2003
+101013	Heroes can have 10 Skills.	String type = <!#S>	07.06.2003
+101014	7th level creatures upgrade to 8th Level.	String type = <!#S>	07.06.2003
+101015	Heroes are given an artifact each level.	String type = <!#S>	07.06.2003
+101016	Rogues ambush the unwary.	String type = <!#S>	07.06.2003
+101017	Creatures have breath weapons.	String type = <!#S>	07.06.2003
+101018	Shooters don't shoot, but have more hit points.	String type = <!#S>	07.06.2003
+101019	Each town has a Grail.	String type = <!#S>	07.06.2003
+101020	Mark any map rules that you want in this game (page 1 of 2).	String type = <!!S>	07.06.2003
+101021	Mark any map rules that you want in this game (page 2 of 2).	String type = <!!S>	07.06.2003
+101022	In this strange land, 	String type = <!!S>	07.06.2003
+101023	Also, 	String type = <!!S>	07.06.2003
+101024	%Z1 no creatures can fly, and creatures that once flew cannot be retaliated against.	String type = <!!M>	07.06.2003
+101025	%Z1 creatures that are normally slow are fast, and the fast ones slow.	String type = <!!M>	07.06.2003
+101026	%Z1 creatures cost half as much on the 7th day of the week.	String type = <!!M>	07.06.2003
+101027	%Z1 the presence of a hero warps the land with magic.	String type = <!!M>	07.06.2003
+101028	%Z1 all creatures attack twice.	String type = <!!M>	07.06.2003
+101029	%Z1 creatures in a hero's army attract an additional 4%% of their own kind each day, to a maximum of 10000 creatures.	String type = <!!M>	07.06.2003
+101030	%Z1 most dwellings also produce Boars.	String type = <!!M>	07.06.2003
+101031	%Z1 heroes start at 5th level.	String type = <!!M>	07.06.2003
+101032	%Z1 artifacts tend to come in pairs.	String type = <!!M>	07.06.2003
+101033	%Z1 there is perpetual darkness.	String type = <!!M>	07.06.2003
+101034	%Z1 heroes have double movement.	String type = <!!M>	07.06.2003
+101035	%Z1 mines produce different resources from week to week.	String type = <!!M>	07.06.2003
+101036	%Z1 places that a hero could normally only visit once may be revisited each month.	String type = <!!M>	07.06.2003
+101037	%Z1 heroes may learn 2 secret skills in addition to the 8 normal ones.	String type = <!!M>	07.06.2003
+101038	%Z1 upgraded 7th level creatures in a hero's army automatically upgrade to 8th level.	String type = <!!M>	07.06.2003
+101039	%Z1 heroes gain an artifact with each level.	String type = <!!M>	07.06.2003
+101040	%Z1 bands of Rogues roam the countryside, ready to ambush heroes.	String type = <!!M>	07.06.2003
+101041	%Z1 all creatures attack as with a breath weapon (when not shooting).	String type = <!!M>	07.06.2003
+101042	%Z1 no creatures shoot, and creatures that once shot have +50%% hit points.	String type = <!!M>	07.06.2003
+101043	%Z1 all towns have a grail structure built in them.	String type = <!!M>	07.06.2003
+101044	You find another %Z-1 near this one.	String type = <!!M>	07.06.2003
+101045	he	String type = <!!S>	07.06.2003
+101046	she	String type = <!!S>	07.06.2003
+101047	%Z352 may learn a secret skill, %Z353. Does %Z354 wish to learn this?	String type = <!!Q>	07.06.2003
+101048	For achieving so much, %Z2 is granted an artifact.	String type = <!!Q>	07.06.2003
+101049	%Z1 is ambushed by a band of Rogues!	String type = <!!M>	07.06.2003
+101050	The Rogues had treasures!	String type = <!!Q>	07.06.2003
+101051	Each town has a Warlord's Banners in front of it.		
+101052	%Z1each town has a Warlord's Banner in front of it, and Banners in front of neutral towns are guarded.		
+101053	The Warlord's Banner is guarded by a %Z-1!
+
+Will you fight it for the prize?		
+101054	The Warlord's Banner is guarded by a %Z-1!
+
+Will you fight it for the prize?		
+101055	The Warlord's Banner is guarded by %Y1 %Z-1!
+
+Will you fight them for the prize?		
+101056	Suddenly, the water around %Z1's ship becomes alive!
+
+%Z1 is ambushed by a band of Water Elementals!		
+101057	The Water Elementals had treasures!	String type = <!!Q>	04.07.2006
+101058	The following map rules are currently active: 
+		05.07.2006

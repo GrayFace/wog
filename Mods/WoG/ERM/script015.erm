@@ -1,0 +1,214 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Mysterious Creature Dwelling 2.1 - by Dieter Averbeck
+** Changes Version 2.1 by Thomas Franz (samot)
+** This Script gives any visiting Hero once 7 random
+** creatures in addition to the heroe's.
+** WoGify Name: script15.erm
+** Updated: 17.09.2004
+
+** Changes Version 2.0
+** 1. Conflux Heroes are added
+** 2. New filling system for a better balance. Creature Level
+**    depends on var, which counts up every week and decreases
+**    after each players visit
+** 3. AI gets creatures, too
+** 4. Text Changes
+
+** Changes Version 2.1 by Thomas Franz (samot)
+** 1. Modified Filling system - didn't depend on week but on hero level
+**    in version 2.0 it was possible to enter the MCD with an L1 hero and get L7
+**    Creatures, now you will need at least an L18 hero for L7 creatures but you will
+**    get (with a little bit luck) three more
+** 2. rewritten (shortened and optimized) give function
+
+** Changes Version 2.2 by Thomas Franz (samot)
+** 1. The Filling System is based at level or time. You may visit the MCD with your L18
+**    hero in week 1 and get L7 or you wait until Week 18 and vistit it with a L1 hero
+**    and have the same chances to get L7-Units
+
+** Variables Used: v141-v143, z141-z143, w14
+** Flags Used: 140,141
+** Functions Used: FU141-FU145, FU148
+** Variables z142, z143 and w14 must not be modified by other programs!
+
+!#UN:P15/?v1; [Check if script is enabled: v1]
+
+!#VRv141&v1=1:S2; ** first random value
+!#VRz142&v1=1:Sz115000;
+!#VRz143&v1=1:Sz115001;
+!#HT63/3&v1=1:W14/0/142;
+!#HT63/3&v1=1:W14/1/143;
+
+
+***********  mysterious creature dwelling  ********************
+!?OB63/3&1000;
+!!UN:P15/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1;
+
+!!HE-1:B0/?z141;   ** w14=1 already visited
+!!IF&1000/w14=1:M1/z115002;
+
+!!FU142&w14=0:P;  ** call function if not visited
+
+
+
+!?FU142;
+** y1 = town type
+** y2 = max level
+** y3 = current level (random 0..y2)
+** y4 = upgraded or not
+** y5 = current week
+** y8 = reminder of division, used to give only non upgr. creatures if level / week is to less
+** y9 = hero level or week
+!!HE-1:B2/?y1; // get heroes class
+!!VRy1::2; // divide by 2 to get the towntype
+
+!!HE-1:Ed/?y2; // get heroes level to y2
+!!VRy2::3; // divide level by 3 and so that you will only with a L18 (18:3=6) hero get L7 creatures;
+!!VRy8:Sy2 %3; // reminder of division
+
+!!VRy5:Sc; !!VRy5::7 :2; // get current week (from start, not the week in month) divided by 2 -> to get maxLevel (Week 1/2 = L1, Week 2/3 = L2 ... week 13/14 = L7)
+!!VRy8&y2<y5:Sc :7 %2; // reminder of division
+!!VRy2&y2<y5:Sy5; // set y2 to week-level if it is < as the max level depending on the Hero's level
+
+
+!!VRy2&y2>6:S6; // reduce level to a max value of 6(if Level is higher as 20  / week higher 14)
+!!VRy2&y2<0:S0; // set min Level
+
+** 1st creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel / week and herolevel / week is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y10; // set y1x to the Monster of town y1 with Level y3 and upgraded (y4=1) or not
+!!VRy20:Sy3-7 *-2 -y4 +3;  ** calculate amount (level 1=16, level 1u=15, .... L7u =3 )
+** 2nd creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y11;
+!!VRy21:Sy3-7 *-2 -y4 +3;
+** 3rd creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y12;
+!!VRy22:Sy3-7 *-2 -y4 +3;
+** 4th creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y13;
+!!VRy23:Sy3-7 *-2 -y4 +3;
+** 5th creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y14;
+!!VRy24:Sy3-7 *-2 -y4 +3;
+** 6th creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y15;
+!!VRy25:Sy3-7 *-2 -y4 +3;
+** 7th creature
+!!VRy3:S0 Ry2; // set y3 to random number (Creature Level)
+!!VRy4:S0 R1; // random upgraded (1) or not (0)
+!!VRy4&y3=y2/y8=0:S0; // disable upgraded (y4) if Lvl (y3) is highest aviable for this herolevel and herolevel is one of 3/6/9/12/15
+!!UN:Ty1/y3/y4/?y16;
+!!VRy26:Sy3-7 *-2 -y4 +3;
+
+** Calculate the cost of all monsters together
+
+!!MA:Cy10/6/?y5;  ** get single price
+!!VRy5:*y20;      ** multiply with calculated amount
+!!VRy4:Sy5;       ** add to complete cost (y4)
+
+!!MA:Cy11/6/?y5;
+!!VRy5:*y21;
+!!VRy4:+y5;
+
+!!MA:Cy12/6/?y5;
+!!VRy5:*y22;
+!!VRy4:+y5;
+
+!!MA:Cy13/6/?y5;
+!!VRy5:*y23;
+!!VRy4:+y5;
+
+!!MA:Cy14/6/?y5;
+!!VRy5:*y24;
+!!VRy4:+y5;
+
+!!MA:Cy15/6/?y5;
+!!VRy5:*y25;
+!!VRy4:+y5;
+
+!!MA:Cy16/6/?y5;
+!!VRy5:*y26;
+!!VRy4:+y5;
+
+
+!!IF:Q140/6/y4/2/z115003;
+
+!!IF&-140:M1/z115004;
+
+!!OW:R-1/6/?y6;
+!!IF&140/y6<y4:Q141/6/y4/1/z115005;
+!!IF&y6<y4:V140/0;
+
+!!HE-1&140:Cy10/y20/y11/y21/y12/y22/y13/y23/y14/y24/y15/y25/y16/y26;
+
+!!VRy6&140:-y4;
+!!OW&140:R-1/6/y6;
+
+!!VRw14&140:S1;       ** set hero to visited mcd
+!!VRv141&v141>=2::2;  ** set random var to half amount
+
+
+** object for AI
+!?OB63/3&-1000;
+!!UN:P15/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1;
+!!FU143:P;             ** calculate creatures & amount
+!!DO144/0/6/1&w14=0:P; ** add creatures to AI hero
+!!FU145&w14=0:P;       ** calculate cost
+!!VRw14:S1;
+
+!?FU143:
+!!HE-1:C0/5/?v142/?y1;   ** get creature type in 6th slot
+!!VRv142&v142=-1:S0 R14; ** set WoG creature if 6th slot is free
+!!VRv142&v142=-1:+159;
+!!MA:Pv142/?y2;           ** get HP of creature
+!!VRy3:Sv141;             ** calculate max HP
+!!VRy3:*150;
+!!VRv143:Sy3;             ** calculate creature amount
+!!VRv143::y2;
+!!VRv143&v142>159/v142<164:S1;  ** set 1 if emessary
+!!VRv143&v143=0:S1;             ** set 1 if 0
+
+!?FU144;
+!!HE-1:C0/x1/?y2/?y3;
+!!HE-1&y2=-1/x2=0:C0/x1/v142/v143;
+!!VRx2&y2=-1:S1;
+!!VRx1:+1;
+!!HE-1&x1=6/x2=0:C0/5/?y4/?y5;    ** add creatures to 6th slot if every slot is full
+!!VRy5&x1=6/x2=0:+v143;
+!!HE-1&x1=6/x2=0:C0/5/v142/?y5;
+!!VRx2&x1=6/x2=0:S1;
+
+!?FU145;
+!!OW:R-1/6/?y1;
+!!MA:Cv142/6/?y2;
+!!VRy2:*v143;
+!!VRy1:-y2;
+!!VRy1&y1<0:S0;
+!!OW:R-1/6/y1;
+

@@ -1,0 +1,1141 @@
+ZVSE
+ERMS_ScriptName=script99 Starting Artifact selection
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=23.8(August).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** last update 23.8(August).2006 - fixed minor bug in Magog Protection, added DracoLich and MR-Trigger
+** last update 1.8(August).2006 - fixed ERM-Error in the downgrade creatures (at hill)
+** last update 18.7(July).2006
+** prev. update 6.7(July).2006
+
+** CHOOSE STARTING ARTIFACT
+**
+** Option 94  by Thomas Franz (alias samot) script94
+**
+** Allows to change an artifact of the treasure class into anotherone at day 1.
+** It will work (on day 1 again) for Commander Artifacts, what could be usefull,
+** if you play with the option Starting Heroes have Commander Artifacts.
+** You will not get an artifact, that is disabled for the map.
+**
+** To convert an artifact you have to hold down the CTRL-key and click on it in
+** the hero screen. Commander Aritfacts has to been in the backpack.
+**
+** After day 1 you can throw away an artifact, if you have it in your backpack and
+** do again an Ctrl-Leftclick on it.
+**
+** Caution: in a few cases this script may tweak a campaign (if you change an
+** artifact, overtoken from the map before to a key-artifact for the next map)
+**
+** Usage: v10 - not exclusive
+**        v600 - ca. v640 - not exclusive (depending on the number of artifacts of the treasure class, 38 in a standard game without other scripts, max 170 :-)
+**        z480 - z492 - not exclusive
+**        FU6137-6139
+**        Wog-Option 94
+
+********************************************************************************
+** ALTAR OF SACRIFICE FOR ALL
+** Option 250  by Thomas Franz (alias samot) script94
+**
+** Each hero - regardless which type / class / behavior can sacrify creatures AND
+** artifacts on a Altar of Sacrifice.
+**
+** Original heroes from good towns (Castle, Rampart, Tower) could sacrify only
+** artifacts, evil heros (Inferno, Dungeon, Necro) could only sacrify creatures.
+** Only the three neutral heroes (Stronghold, Fortress and Conflux)
+** might choose, what they want to sacrify.
+**
+** Usage: Wog-Option 250
+**        v1258, EXCLUSIVE
+**
+********************************************************************************
+
+********************************************************************************
+** AI CAN NOT FLEE
+** Option 251 by Thomas Franz (alias samot) script94
+**
+** Prevents, that the AI flees from a fight (you by yourself may flee of course).
+**
+** Usage: Wog-Option 251
+**
+********************************************************************************
+
+********************************************************************************
+** HOMM4-MAGEGUILD-SCRIPT
+**
+** Written by Thomas Franz (alias samot)
+** Wog-Option: 257
+
+** The mage guildes give each visiting hero 20% per mage guild level of his
+** max. spell points back
+
+** No Vars or Functions used by this script
+********************************************************************************
+
+********************************************************************************
+** SHOW ACTIVE SPELLS / BATTLE STATISTICS
+** option 258 by Thomas Franz (alias samot) - script94
+**
+** Shows a list with all active spells and some other battle statistics, if you
+** do an Alt-Leftclick on a creature (or war machine) on the battle screen
+
+** Usage:
+** WOG-Option 258
+** z1, z2 - not exclusive
+** FU6141 / 6142
+********************************************************************************
+
+********************************************************************************
+** MAGOG-PROTECTION
+** option 259 by Thomas Franz (alias samot) - script94
+**
+** if this option is active, your own units will get no damage from your own
+** Magogs, Liches, Powerliches or Faerie Dragons (Fireball / Inferno-Spell
+
+** Usage:
+** WOG-Option 260
+** v1259 EXCLUSIVE
+********************************************************************************
+
+********************************************************************************
+** TOWN-PORTAL-REDUCTION
+** option 260 by Thomas Franz (alias samot) - script94
+**
+** Town Portal may be casted maximal twice per day, because you loose the half of
+** your initial movement points after the usage of this spell.
+
+** Usage:
+** WOG-Option 260
+** v143 not exclusive
+********************************************************************************
+
+********************************************************************************
+** HEROE-BATTLE-EXPERIENCE
+** option 261 by Thomas Franz (alias samot) - script94
+**
+** if you beat a hero, you will get 500 additional experience points per
+** level of the beated hero
+
+** Usage:
+** WOG-Option 261
+********************************************************************************
+
+********************************************************************************
+** UNLIMITED SKILLS
+** option 262 by Thomas Franz (alias samot) - script94
+**
+** You may choose, how much skills you want to learn (theoretical all skills).
+** To set up the number of allowed skills (will be remembered, even if you start
+** another game), you have to do a Ctrl-Leftclick on the Exp.-Icon of any hero
+** AT DAY ONE (the same click is used to reorder your skills).
+**
+** If the Warfare-Rule is enabled, First Aid, Ballistic and Artillery counts
+** as a single skill. If the Magic Ban (script99) is enabled, you wouldn't get magic
+** skills, even if you enable all skill.
+**
+** For mapmakers: if you wan't to be asked, just set the var v1119 to the number
+** of total skills in a time event at day 600 (or later). Just write
+**
+** ZVSE
+** ! #VRv1119:S12;
+**
+** (without the blank between the ! and the #) in the event, while 12 is the number of wanted skills
+**
+** Usage:
+** WOG-Option 262
+** FU6140, FU6155
+** Dialog 1 (not exclusive)
+** v1215, v1119 - EXCLUSIVE (v1215 is used in FU710 / script01)
+**
+** uses the FU710 in script01 (9th/10th-skill-rule) as "working code" to give the additional skills
+** calls FU6153 / FU6154 from script99, if the Magic Ban is enabled
+********************************************************************************
+
+********************************************************************************
+** CHOOSE CREATURE'S BATTLE ABILITIES
+** option 263 by Thomas Franz (alias samot) - script94
+**
+** Allows to enable / disable the battle abilities: fly, shot, and no retaliation
+** (this can make sense, if the enemy has fireshield and you do not like roasted
+** Royal Griffins). To do this, rightclick on the Defend-Button in the battle screen.
+**
+** Furthermore, you can choose, if your commanders starts a battle with enabled or
+** disabled shooting / flying ability (if he has this skills). To set this up,
+** rightclick on the commander-symbol in the hero-screen. This options makes sense,
+** if your commander has skills as attack all around (disable shooting) or Champions
+** Distance Bonus (disable flying) too. Of course, you can reenable this skills in
+** a battle manual by rightclicking on the Defend-Button.
+**
+** Usage
+** v1130 - v1171 EXCLUSIVE
+** w46 - bit 10 ( 512) for the commanders shooting ability   EXCLUSIVE
+**     - bit 11 (1024) for the commanders flying ability     EXCLUSIVE
+** FU6156
+********************************************************************************
+
+********************************************************************************
+** DOWNGRADE CREATURES
+** option 264 by Thomas Franz (alias samot) - script94
+**
+** Allows to downgrade your creatures in a Hill Fort. With a few exceptions, you
+** will get back the half of the upgrade costs (please remember, that you pay lesser
+** upgrade prices for L2-L4 in a hill fort as inside a town).
+**
+** If the Rule "Monsters are half price at day 7" is enabled, you will get only
+** a quarter of the usual upgrade cost (at normal days) back.
+**
+** The exceptions are all creatures, that can be upgraded for free somewhere:
+** - L1-creatures (free upgrade in Hill Fort and with Master of Life)
+** - Champions (upgrade in Stables)
+** - if the Artifact Boost is enabled: all Low-Level-Shooters and Iron Golems
+** - if Enhanced Artifacts are enabled: Centaurs, Dwarves, Dendroids, Unicorns,
+**   Skeletons, Zombies, Vampires (they'll all upgraded for free by some artifacts)
+**
+** Furthermore you may downgrade creatures in the heroscreen, if you do an Ctrl-Alt-
+** Leftclick onto the creature slot. This allows you to downgrade f.e. joining
+** creatures, if your army is full (do a doubleclick onto the hero's picture in the
+** joining-dialog to open the usual heroscreen, where you can downgrade the units)
+**
+** Usage
+** v600-v635 (not exclusive)
+** FU6157
+********************************************************************************
+*!UN:P94/1; // Artifact change
+*!UN:P250/1; // ALTAR OF SACRIFICE FOR ALL - dummy while not included in Wog
+*!UN:P251/1; // AI can't flee - dummy while not included in Wog
+*!UN:P257/1; // HOMM4-MAGEGUILDS - dummy while it is not included in Wog-Option-Menu
+*!UN:P258/1; // Show active spells / battle statistics - dummy while not included in Wog
+*!UN:P259/1; // MAGOG-PROTECTION - dummy while not included in Wog
+*!UN:P260/0; // TOWN-PORTAL-REDUCTION - dummy while not included in Wog
+*!UN:P261/1; // HEROE-BATTLE-EXPERIENCE - dummy while not included in Wog
+*!UN:P262/0; // UNLIMITED SKILLS - dummy while not included in Wog
+*!UN:P263/1; // CHOOSE CREATURE'S BATTLE ABILITIES - dummy while not included in Wog
+*!UN:P264/1; // DOWNGRADE CREATURES - dummy while not included in Wog
+
+
+
+*******************************************
+** Start CHOOSE STARTING ARTIFACT script **
+*******************************************
+
+!?CM2&$day$=1/1000; // click on an artifact slot at day 1 (not for AI)
+!!UN:P94/?y-1; !!FU&y-1=0:E; // check if script is active
+!!CM:I?y-1 F?y-2; // get the field you clicked and the flag value
+!!VRy-2:&4; // check if bit for Ctrl+Left is set
+!!FU&y-2<>4|y-1>44:E; // exit if not or not an aritfact slot (body or backpack)
+!!VRy-2:Sy-1 -2; // get artifact pos (Format AP)
+!!VRy-7:S0; // init
+   !!VRy-7&y-1>39/y-2<45:Sy-1 -21; // correction of artifact pos (Format AP) for backpack
+
+
+!!HE-1&y-7=0:A1/?y-3/y-2; // get artifact at body position
+   !!HE-1&y-7>0:A1/?y-3/y-7; // get artifact at backpack position
+!!FU&y-3<7:E; // exit if no artifact (or only spell scroll etc.) there
+
+
+  !!IF:V2/0; !!IF&y-3>145/y-3<155:V2/1; // set flag 2, if it is a Commander Artifact
+!!UN:Ay-3/3/?y-4 N0/-1/y-3; // get artifact type (treasure, minor ...) to y-4 and name to z-1
+!!FU&y-4<>2/-2:E; // exit if it is not a treasure-artifact
+!!CM:R0; // disable standard reaction
+!!VRv600:S600; // initialize
+!!DO6137/7/170/1&-2:P2/7; // loop through all artifacts, get list of all enabled artifacts to v601 ff (number in v600)
+   !!IF&2/y-7=0:M^%Z194033^; // text "may not be equipped"
+   !!FU&2/y-7=0:E; // commander artifacts have to be in backback (because their bonus would not be removed otherwise)
+
+   !!VRv601&2:C146/147/148/149/150/151/152/153/154; // List of Commander Artifacts (except Slava's Ring of Power)
+   !!VRv600&2:+9; // number of Comm. Art.
+!!VRz1:S^%Z194001^; // set to "Convert the {%Z-1} into:"
+!!VRz492:S^%Z194002^; // set to "next page"
+!!VRy-1:Sv600 -601; // number of treasure artifacts
+!!VRy-2:Sy-1 :10; // get number of necessary dialogs
+!!VRv10:S0; // initialize
+!!DO6138/0/y-2/1:Py-1; // ask for new artifact
+!!FU&v10=0:E; // exit if no new artifact is choosen
+!!HE-1:A3/y-3/1/1; // remove old artifact
+!!HE-1&y-7<1:A4/v10; // equip new artifact (if the old one was equipped)
+!!HE-1&y-7>0:Av10; // else store it in the backpack
+!!UN:R3/-1; // redraw screen
+
+*** end CM2 ***
+
+
+!?CM2&$day$>1/1000; // click on an artifact slot after day 1 (destroy artifact)
+!!UN:P94/?y-1; !!FU&y-1=0:E; // check if script is active
+!!CM:I?y-1 F?y-2; // get the field you clicked and the flag value
+!!FU|y-1<40/y-1>44:E; // exit if not clicked in the backpack
+!!VRy-2:&4; // check if bit for Ctrl+Left is set
+!!FU&y-2<>4:E; // exit if not
+!!VRy-2:Sy-1 -21; // get artifact pos (Format AP)
+!!HE-1:A1/?y-3/y-2; // get artifact at this position
+!!FU&y-3<0:E; // exit if no artifact there
+
+!!IF:Q1/8/y-3/2^%Z194004^; // ask to destroy the artifact
+!!FU&-1:E; // exit if no choosen
+!!CM:R0; // disable standard reaction
+!!HE-1:A3/y-3/1/0; // remove artifact
+!!UN:R3/-1; // redraw screen
+
+
+
+!?FU6137; // loop through all artifacts, set all artifacts of type x1 to v601-v6xx
+** call this function by using DO6137/<first artifact>/<last artifact>/1:P<type/<first artifact again>
+** use VRy1:Sv600 -601 to set y1 to the number of found artifacts
+** x1 = wanted type (treasure .. relict)
+** x2 = starting value of the loop (needed to initializer v600 (to a value of 600)
+
+!!VRv600&x16=x2:S600; // initialize in first loop
+!!FU&x1=16/x16>140/x16<156:E; // find no commander artifacts, magic wand, monster power and golden tower arrow as relict-artifact
+!!UN:Ax16/3/?y1 Ax16/?y2; // get artifact type (treasure, minor ...) and check if it is enabled
+!!FU|y1<>x1/y2=1:E; // exit if the wrong type or is disabled
+!!VRv600:+1; // increase counter
+!!VRvv600:Sx16; // set artifact number to v601-v6xx
+
+*** end function FU1637 ***
+
+
+!?FU6138; // shown next artifact selection page
+!!FU&v10>0:E;
+!!VRy1:Sx16 *10 + 601; // set start vVar
+!!VRy2:Sx16 *10 -x1 *-1; // get remaining artifacts
+!!DO6139/0/10/1:Py1/y2; // set zvars to artifact names
+!!IF:G1/10/2048/1/481/482/483/484/485/486/487/488/489/490/491/492; // ask for new artifact (answer in v10)
+!!VRv10&v10=2048:S0; // reset to 0 if next page is choosen
+!!FU&v10=2048:E; // exit if next page is choosen
+!!VRy3:S0;
+!!VRy3&v10=1:S1; !!VRy3&v10=2:S2; !!VRy3&v10=4:S3; !!VRy3&v10=8:S4; !!VRy3&v10=16:S5; !!VRy3&v10=32:S6;
+!!VRy3&v10=64:S7; !!VRy3&v10=128:S8; !!VRy3&v10=256:S9; !!VRy3&v10=512:S10; !!VRy3&v10=1024:S11; // get the choosen artifact
+!!VRy3&y3>0:+y1 -1; // add the start vVar
+!!VRv10&y3>0:Svy3; // v10 set to the real artifact number
+
+*** end function FU1638 ***
+
+
+!?FU6139; // set z481 - z491 to the artifact names
+** x1  = start vVar (x16 will be added), if x16=2 x1 must be 610 to access v612
+** x2  = number of remaining artifacts
+** x16 = loop number 0-10
+
+!!VRy1:Sx16 +481; // calc index for ZVar
+!!VRzy1:S^^; // clear zVar
+!!FU&x16>x2:E; // exit if no remaining artifacts
+!!VRy2:Sx1 + x16; // index for vVar
+!!VRy99:Svy2;
+!IF:M^zvar: %Y1 vVar %Y2 art %Y99
+%V600 %V601 %V602 %V603 %V604 %V605 %V606 %V607 %V608 %V609 %V610 %V611 %V612^;
+!!UN:N0/y1/vy2; // name lookup
+!!VRz492&x16=x2:S^%Z194003^; // "do not change the artifact"
+*** end function FU1639 ***
+
+
+
+
+**************************************
+** Start ALTAR OF SACRIFICE FOR ALL **
+**************************************
+!#UN:P250/?v1; // check if script is active
+!#VRv1258&v1=1:S-1; // initialize
+
+!?OB2; // visit of an Altar of Sacrifice
+!!UN:P250/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!HE-1:B2/?v1258; // get heroes class
+!!VRy-1:Sv1258 :2 *2; // get the might class of the same castle
+!!VRy-2:S13; // set to Battle Mage
+!!VRy-2&v1258=y-1:S12; // if hero = might set to barbar
+!!HE-1:B2/y-2; // set new class
+
+!$OB2; // post-visit of an Altar of Sacrifice
+!!UN:P250/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!HE-1:B2/v1258; // restore hero's original class
+!!VRv1258:S-1; // set back to -1
+
+!?HL&v1258>-1; // hero levels up
+!!UN:P250/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!HE-1:B2/v1258; // restore hero's original class (to get the correct skills for his class)
+
+
+
+***************************
+** Start AI CAN NOT FLEE **
+***************************
+
+!?BR; // each battle round
+!!VRv76:S0; // reset AI-Flight-Counter
+
+!?BG0; // triggers before action
+!!UN:P251/?y-1; !!FU&y-1=0:E; // exit if script is not active
+!!BG:A?y-1 Q?y-2; // get type of action and active side
+!!FU&y-1<>4:E; // exit if it is no flight
+!!BA:Hy-2/?y-3; // get the hero that tries to flee
+!!FU&y-3<0:E; // exit if no hero (should never occur, but so is it saver)
+!!HEy-3:O?y-4; // get hero's owner
+!!OW:Iy-4/?y-5; // check if it is the AI (1) or human (0);
+!!FU&y-5=0:E; // exit, if human
+!!BG:A0; // cancel flight-action for AI
+!!VRv76:+1; // increase counter
+!!BG&v76>=20:A3; // if AI tries to flee to often: set stack to defend
+!!VRv76&v76>=20:S0; // and reset counter
+
+
+
+
+**********************************
+** Start HoMM4-Mageguild-Script **
+**********************************
+
+!?OB98;
+** vars used:
+** y-1 = percentage of max SP that may be given by the level of mage guild build in town (1-5)
+** y-2 = town type
+** y-3 = heros current spell points
+** y-4 = knowledge
+** y-5 = his intelligence level
+** y-6 = bonus by intelligence
+** y-7 = his max spell points
+** y-8 = current percentage (current SP = x percent of max SP)
+
+!!UN:P257/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!CA998:O?y-1; !!OW:C=y-1; !!FU&-1:E; // exit, if Town Owner <> current player
+
+!!VRy-1:S0;
+!!CA998:B3/0; !!VRy-1&1:S20; // check town for mage guild 1
+!!CA998:B3/1; !!VRy-1&1:S40; // check town for mage guild 2
+!!CA998:B3/2; !!VRy-1&1:S60; // check town for mage guild 3
+!!CA998:B3/3; !!VRy-1&1:S80; // check town for mage guild 4
+!!CA998:B3/4; !!VRy-1&1:S100; // check town for mage guild 5
+!!HE-1:I?y-3; // get his current spellpoints
+!!HE-1:Fd/d/d/?y-4; // get his knowledge
+
+!!HE-1:S24/?y-5; // get his intelligence level
+!!VRy-6&y-5=0:S100; !!VRy-6&y-5=1:S125; !!VRy-6&y-5=2:S150; !!VRy-6&y-5=3:S200; // set intelligence bonus
+!!VRy-7:Sy-4 *10 *y-6 :100; // calc max SP (divide by 100 because y-6 is in percents)
+!!VRy-7&y-7=0:S1; // security check to prevent division by zero (if knowlege = 0)
+!!VRy-8:Sy-3 *100 :y-7; // calc the percents from current SP to max SP
+!!VRy-3&y-1>y-8:Sy-7 *y-1 :100; // if percentage by mageguild > as current percentage then set the current SP to the mageguild percentage of the maxSP
+!!HE-1:Iy-3; // write the SPs back to the hero
+
+*** end function OB98 ***
+
+
+
+
+**************************************************
+** Start Show active spells / battle statistics **
+**************************************************
+
+!?CM4;
+** y-1 - the field you clicked
+** y-2 - hex-grid-field
+** y-3 - Flag for the click (to check if Alt was pressed)
+** y-4 - Stack number on the field
+** y-5 - remaining retaliations
+** y-6 - current number of creatures
+** y-7 - original number of creatures
+** y-8 - remaining spells to cast
+** y-9 - type of spell that may be casted
+** y-10 - Monster Flags
+** y-11 - remaining Shoots
+** y-12 - henchman (disguise-spell is active)
+** y-15 - type of creature
+
+** z1 - List of active Spells
+** z2 - List of Monsterflags
+** z-2 - Spells that can be casted (if there are any)
+** z-9 - type of creature
+
+!!UN:P258/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!CM:I?y-1 D?y-2 F?y-3; // get clicked field, hex-grid and Flag;
+!!FU|y-1>1/y-2<0/y-2>186/y-3<>32:E; // exit if not Alt+Leftclick on a Hex-Field
+
+!!CM:R0; // disable standard reaction (to prevent, that your unit attacks / walks)
+!!BU:Ey-2/?y-4; // get stack number at the field
+!!FU&y-4=-1:E; // exit if there is no stack
+
+!!BMy-4:T?y-15; // get type of creature
+!!UN:N3/-9/y-15/1; // name lookup for creature -> store in z-9
+
+!!VRy-100:S0; // initialize counter
+!!VRz1:Sz194101; // Spells active on the %z-9
+!!DO6141/27/34/1:Py-4; // Shield .. Antimagic
+!!DO6141/36/36/1:Py-4; // Magic Mirror
+!!DO6141/41/56/1:Py-4; // Bless .. Frency
+!!DO6141/58/62/1:Py-4; // Counterstrike .. Blind
+!!DO6141/70/75/1:Py-4; // stats by monsters (Stoned .. Aged)
+!!VRz1&y-100=0:Sz194102; // no spells active
+!!BMy-4:R?y-5         N?y-6 B?y-7       E?y-8             U4/?y-9    F?y-10 U3/?y-11         G4/?y-12/d; // get stack parameters
+**      retaliations  curr./act.number  remaining spells  spelltype  flags  remaining shoots  henchman
+!!UN&y-9>0:N1/-1/y-9; // name lookup for spell, if creature may cast a spell -> z-1
+!!VRz-2:S^^;
+!!VRz-2&y-9>0:Sz194105; // may cast %Z-1 another %Y-8 times
+!!VRz2:S^^;
+!!FU6142:Py-10; // call function to get the flags to z2
+
+** brittle creatures (take double damage from catapults (script73, War Machines III)
+!!IF:V1/0; // disable Flag 1
+!!IF&y-15>29/y-15<34:V1/1; // enable for gargoyles and stone / iron golems
+!!IF|y-15=56/y-15=57/y-15=64/y-15=65/y-15=68/y-15=113/y-15=116/y-15=117/y-15=123/y-15=125:V1/1; // skeletons, liches, bone dragons, earth, ice and magma elementals,
+!!IF|y-15=132/y-15=133/y-15=151/y-15=165/y-15=196/y-15=124/y-15=145/y-15=146/y-15=148:V1/1; // gold and diamond golem, azure / crystal / diamond dragons, earth messengers, draco liches, other war machines (except tent)
+!!UN:P73/?y-99; // check for WM III
+!!IF&y-99=0:V1/0; // if not active: disable flag 1 again
+!!VRz-3:S^^; !!VRz-3&1:Sz194129;
+
+!!IF:M^%Z1
+
+%Z194103
+%Z194104
+%Z-2
+%Z-3
+%Z2^; // show active spells (Z1) / number of retaliations (Z194103) / number of creatures (Z194104) / spells that may be cast (z-2) / Flags (z2)
+
+*********** end CM4 ***********
+
+
+!?FU6141; // check for active spells
+!!BMx1:Gx16/?y1/?y2; // check if spell x16 is applied to the monster
+!!FU&y1=0:E; // exit if not
+!!UN:N1/-1/x16; // name lookup for the spell
+!!VRz-2&y2=0:Sz194125; // unskilled
+!!VRz-2&y2=1:Sz194126; // basic
+!!VRz-2&y2=2:Sz194127; // advanced
+!!VRz-2&y2>2:Sz194128; // expert
+!!VRz1:+z194123; // add Spell to the active-spell-list (name, duration, power)
+!!VRy-100:+1; // increase counter
+
+*********** end FU6141 ***********
+
+
+!?FU6142; // monster flags; return in z2; x1=Flag-Var
+!!VRy1:Sx1 &67108864;  // check if monster is done acting for this round
+!!VRz2&y1=67108864:Sz194108; // if yes set text
+!!VRy1:Sx1 &33554432;  // check if monster is waiting
+!!VRz2&y1=33554432:Sz194106; // if yes set text
+!!VRy1:Sx1 &134217728;  // check if monster is defending
+!!VRz2&y1=134217728:Sz194107; // if yes set text
+
+!!VRz2&y-12>0:+z194124; // is henchman (y-12 is set in the CM4-trigger)
+!!VRy1:Sx1 &4194304;  // check if monster is summoned
+!!VRz2&y1=4194304:+z194109; // if yes set text
+!!VRy1:Sx1 &16;  // check if monster is alive
+!!VRz2&y1=16:+z194110; // if yes set text
+!!VRy1:Sx1 &262144;  // check if monster is undead
+!!VRz2&y1=262144:+z194111; // if yes set text
+!!VRy1:Sx1 &64;  // check if monster is a war machine
+!!VRz2&y1=64:+z194112; // if yes set text
+!!VRy1:Sx1 &4;  // check if monster is shooter
+!!VRz2&y1=4:+z194113; // if yes set text
+!!VRy1:Sx1 &2;  // check if monster can fly
+!!VRz2&y1=2:+z194114; // if yes set text
+!!VRy1:Sx1 &8 ;  // check if monster has breath weapon
+!!VRz2&y1=8:+z194115; // if yes set text
+!!VRy1:Sx1 &4096;  // check if monster has no penalty in close combat
+!!VRz2&y1=4096:+z194116; // if yes set text
+!!VRy1:Sx1 &32768;  // check if monster shoots twice
+!!VRz2&y1=32768:+z194117; // if yes set text
+!!VRy1:Sx1 &65536 ;  // check if monster has no enemy retaliation
+!!VRz2&y1=65536:+z194118; // if yes set text
+!!VRy1:Sx1 &131072;  // check if monster has no moral
+!!VRz2&y1=131072:+z194119; // if yes set text
+!!VRy1:Sx1 &524288 ;  // check if monster attacks all enemies around
+!!VRz2&y1=524288:+z194120; // if yes set text
+!!VRy1:Sx1 &16384;  // check if monster is immun to fire spells
+!!VRz2&y1=16384:+z194121; // if yes set text
+!!VRy1:Sx1 &1024;  // check if monster is immun to mind spells
+!!VRz2&y1=1024:+z194122; // if yes set text
+
+*********** end FU6142 ***********
+
+
+
+****************************
+** Start MAGOG-PROTECTION **
+****************************
+
+!#UN:P259/?v1; // check if script is active
+!#VRv1259&v1=1:S-1; // if yes: initialize
+
+!?BG0; // battle action
+!!UN:P259/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!BG:A?y-1 N?y-2 Q?y-3; // get type of action, active stack number and current side
+!!FU&y-1<>7/y-1<>10:E; // exit if no shooting or casting (fireball in rank system) action
+!!FU|y-2<0/y-2>41:E; // exit, if no valid stack number
+!!BMy-2:T?y-4; // get type of monsters
+!!VRv1259|y-4=45/y-4=64/y-4=65/y-4=134/y-4=196:Sy-3; // set var, if it is a Magog, Lich, Power Lich, Faerie Dragon or Dracolich
+
+*********** end BG0 ***********
+
+
+!?MF1&v1259>-1; // monster take damage and was attacked by a Magog, Lich or Power Lich
+** v1259 holds the attacking side
+!!UN:P259/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!MF:N?y-1; // get stack, that takes the damage
+!!MF&v1259=0/y-1<21:E0; // disable damage, if attacker and hurted stack are on the same side (attacker)
+!!MF&v1259=1/y-1>20:E0; // disable damage, if attacker and hurted stack are on the same side (defender)
+
+*********** end MF1 ***********
+
+!?MR0&v1259>-1/1000; // spellcasting by Magog or Fairy dragon
+** v1259 holds the attacking side
+!!UN:P259/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!MR:N?y-1; // get stack, that takes the damage
+!!MR&v1259=0/y-1>-1/y-1<21:F0; // disable damage, if attacker and hurted stack are on the same side (attacker)
+!!MR&v1259=1/y-1>20/y-1<42:F0; // disable damage, if attacker and hurted stack are on the same side (defender)
+
+*********** end MF1 ***********
+
+
+
+
+!?BG1&v1259>-1; // after battle action
+!!UN:P259/?y-1; // check if script is active
+!!VRv1259&y-1=1:S-1; // if yes, set controll var back
+
+*********** end BG1 ***********
+
+
+
+*********************************
+** Start TOWN-PORTAL-REDUCTION **
+*********************************
+
+!?MG0;
+!!UN:P260/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!OW:A-1/?y-4; // get active hero
+!!HEy-4:W?v143; // get hero's movement points
+
+*********** end MG0 ***********
+
+
+!?MG1&v997=9; // after casting a spell on the adventure map
+!!UN:P260/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!OW:A-1/?y-4; // get active hero
+!!HEy-4:G?y-2 W?y-1; // get hero's original and actual movement points
+!!VRy-3:Sy-2 :-2; // malus for using TP (half of your original movement points); set to negative number
+!!VRy-3:+v143; // add the movement points before the TP (saved in MG0)
+!!VRy-3&y-3<0:S0; // set to 0 if negative
+!!HEy-4&v143>y-1:Wy-3; // set hero's movement points to the reduced, if he has really casted a town portal (not canceled),
+*                      // checks the old / new  movement points for this (TP always uses some points)
+!!UN:R1; // redraw screen
+
+*********** end MG1 ***********
+
+
+***********************************
+** Start HEROE-BATTLE-EXPERIENCE **
+***********************************
+
+!?BA53;
+!!UN:P261/?y-1; !!FU&y-1=0:E; // check if script is active, exit if not
+!!BA:H0/?y-1 H1/?y-2; // get heroes in the battle
+!!FU|y-1<0/y-2<0:E; // exit, if it was no hero vs. hero battle
+!!HEy-1:O?y-3 Ed/?y-4; // get attacking hero's owner and level
+!!HEy-2:O?y-5 Ed/?y-6; // get defending hero's owner and level
+!!VRv1&y-3=-1:Sy-4 *500; // exp-bonus (500 per level) if attacker has lost
+!!VRv1&y-5=-1:Sy-6 *500; // exp-bonus (500 per level) if defender has lost
+
+!!OW&y-3>-1:Iy-3/?y-8; // check, if attacker was AI and he wins
+!!OW&y-5>-1:Iy-5/?y-8; // check, if defender was AI and he wins
+!!HEy-1&y-3<0:B0/?z-1; // get name of the losing hero
+!!HEy-2&y-5<0:B0/?z-1; // get name of the losing hero
+
+!!VRy-9&y-5<0:Sy-3 +1; // Add 1 to the winning player's number
+!!VRy-9&y-3<0:Sy-5 +1; // Add 1 to the winning player's number
+!!FU$bit$:Py-9; [Convert to bit number: y-100]
+!!VRy-10:Sv3327 &y-100; // set y-10 to v3327 (var used in script25 for Disable messages)
+*                       // and check, if it is disabled for the winner
+
+!!IF&y-8=0/y-10<>y-100:Q1/17/v1/1^%Z194005^; // show message about additional exp. if message is enabled and Winner = Human
+!!HEy-1&y-1>-1/y-5<0:Edv1; // give exp. to the attacker (if he wins)
+!!HEy-2&y-2>-1/y-3<0:Edv1; // give exp. to the defender (if he wins)
+
+
+****************************
+** Start UNLIMITED SKILLS **
+****************************
+
+!?PI; // post instruction: load the number from ini-file
+!!UN:P262/?y-1; !!FU&y-1=0:E; // check if script is active
+!!VRv1215&v1119>8/v1119<29:Sv1119; // number of skills predone by the mapmaker
+!!FU&v1119>8/v1119<29:E; // exit, if already set by the mapmaker
+
+!!VRy-1:S28; // default: max 28 skills
+!!UN:P193/=1; // check if Warfare-Script is on
+!!VRy-1&1:-2; // if yes: decrease max. by 2 (because First Aid, Ballistic and Artillery uses one skill)
+!!UN:P99/=1; // check if Magic Ban is on
+!!VRy-1&1:-10; // if yes: decrease max. by 10 (10 magic skills)
+
+!!UN:N6/2/1215; // read default value from wog.ini to z2
+!!VRv1215:Vz2; // convert string to integer
+
+!!VRv1215&v1215>y-1:Sy-1; // reduce v1215 to the max. number of aviable skills (depending on Magic Ban and Warfare)
+!!UN:P124/=1; !!VRv1215&1/v1215<8:S10; // if no valid value and 9th/10th-Skill rule (script01) is on: init value = 10
+!!VRv1215&v1215<8:S8; // else default 8 skills
+*********** end PI ***********
+
+
+!?CM2&$day$=1; // Ctrl-Click on Exp-Icon in hero screen - ask how much skills you want to learn
+!!UN:P262/?y-1; !!FU&y-1=0:E; // check if script is active
+!!CM:I?y-1 F?y-2; // get clicked field and flag
+!!FU|y-1<>119/y-2<>4:E; // exit, if not Ctrl-Click on Exp-Icon
+
+!!VRv1215&v1119>8/v1119<29:Sv1119; // number of skills predefined by the mapmaker
+!!FU&v1119>8/v1119<29:E; // exit, if already set by the mapmaker
+
+!!IF:Q1/20/68/2/z194006; // ask, if the default is ok (yes), or if you want to modify
+!!FU&1:E; // exit, if the default is ok
+!!FU6140:Py-1; // else call FU6140 to get the new number of skills to v1215
+!!VRz2:S^%V1215^; // convert integer to string
+!!UN:N5/2/1215; // write the new value back
+
+*********** end CM2 ***********
+
+
+!?FU6140; // input dialog for new number of skills
+!!VRz-1:Sz194007;
+!!VRz-2:Sz194008;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+
+!!VRy1:Vz1; // convert string to integer
+!!IF:V2/1; // init
+!!IF|y1<8/y1>x1:Q2/z194009; // if entered number to small / to large (or not a number): ask, if you want to work with the old value
+!!FU6140&-2:Px1; // if not: ask again
+!!VRv1215&2:Sy1; // else set the new value to v1215
+
+*********** end FU6140 ***********
+
+
+!?HL-1; // level up trigger
+!!UN:P262/=1; !!FU&-1:E; // check if script is active
+!!UN:P124/=1; // check for 9th/10th-Skill rule (script01);
+!!FU710&-1/v1215>8:P; // if not enabled call FU710 from script01 (otherwise it would be automatic called from script01)
+*********** end HL-1 ***********
+
+
+!?OB113; // visiting Witch-Hut
+!!UN:P262/=1; !!FU&-1:E; // check if script is active
+!!UN:P99/?y-3;  // check if Magic Ban (script99) is active
+!!FU6853&y-3=1:P; // call function from script99 if yes (replace Magic Skills by Might Skills)
+
+!!WHv998/v999/v1000:S?y-1; // get offered skill
+!!HE-1:Sy-1/>0; // check, if hero has the skill
+!!FU&1:E; // exit, if yes
+
+!!VRv1:S0; // init
+!!DO6181/0/27/1:P; // count the skills, return in 1; FU6181 comes from script01
+!!FU|v1<8/v1>=v1215:E; // exit, if hero has all of his allowed skills (or not 8 skills)
+
+!!OBv998/v999/v1000:M-1/1/0; disable next std msg of this Witch Hut
+!!HE-1:Sy-1/1; // give the skill
+!!UN:P194/?y-3; // check if advanced Witch hut (script64) is active
+
+!!VRv2329&y-3=1:S0; // set var for the script
+!!FU&y-3=1:E; // exit, if Advanced Witch Hut is active
+
+!!UN:N4/-1/y-1; // name lookup for skill
+!!VRy-2:S3 *y-1 +3; // get picture for skill (Format SQ)
+!!IF&1000:Q1/20/y-2/1/z194010; // Show Message about given skill
+
+*********** OB113  ***********
+
+
+!?OB104;
+!!UN:P262/=1; !!FU&-1:E; // check if script is active
+!!UN:P99/?y-3;  // check if Magic Ban (script99) is active
+!!FU6154&y-3=1:P; // call function from script99 if yes (replace Magic Skills by Might Skills)
+
+!!URv998/v999/v1000:S?y-1/?y-2/?y-3/?y-4; // get aviable skills
+!!DO6155/1/4/1:Py-1/y-2/y-3/y-4; // loop through the skills
+
+*********** OB113  ***********
+
+
+!?FU6155; // give skills in university, even, if the hero has all 8 skills in use
+!!VRy1:Sxx16; // set y1 to the skill (indirect depending of the loop-nr.)
+!!HE-1:Sy1/>0; // check, if hero has the skill
+!!FU&1:E; // exit, if yes
+
+!!VRv1:S0; // init
+!!DO6181/0/27/1:P; // count the skills, return in 1; FU6181 comes from script01
+!!FU|v1<8/v1>=v1215:E; // exit, if hero has all of his allowed skills (or not 8 skills)
+
+!!OBv998/v999/v1000:M-1/1/0; disable next std msg of this University
+!!UN:N4/-1/y1; // name lookup for skill
+
+!!VRy2:S3 *y1 +3; // get picture for skill (Format SQ)
+!!IF:V1/1; // AI always learn
+!!IF&1000:Q1/20/y2/36/-102000/2/z194011; // ask, if you want to learn the skill
+!!FU&-1:E; // exit, if no chosen
+
+!!OW:R-1/6/?y3; // get players gold
+!!IF&y3<2000/1000:Q1/36/2000/1/z194012; // msg: not enough gold
+!!FU&y3<2000:E; // exit
+
+!!OW:R-1/6/d-2000; // get gold
+!!HE-1:Sy1/1; // give the skill
+
+*********** FU6155  ***********
+
+
+**********************************************
+** Start CHOOSE CREATURE'S BATTLE ABILITIES **
+**********************************************
+
+!?CM2; // click in hero screen (set default for enabeling / disabeling commander shot and fly)
+!!UN:P263/=1; !!FU&-1:E; // check if script is active
+!!CM:A?y-1/?y-2 F?y-3; // get absolute coordinates and flag
+!!FU&y-3<>512:E; // exit, if no rightclick
+!!IF:V1/0; // disable flag 1
+!!IF&y-1>389/y-1<461/y-2>24/y-2<61:V1/1; // set flag, if click on the commander-button
+!!FU&-1:E; // exit, if not
+!!CM:R0; // disable standard reaction
+
+!!IF:W-1; // enables hero's w-vars
+!!VRy-4:Sw46 &512; // old value of disabeling shoot (bit 10)
+!!VRy-5:Sw46 &1024; // old value of disabeling fly (bit 11)
+!!VRy-6&y-4=512:S1; !!VRy-6&y-5=1024:+2; // calculate initial state for IF:G
+
+!!IF:G0/1/y-6/z194019/z194020/z194021; // show dialog, return chosen values in v1
+
+!!VRy-7:Sv1 &1; !!VRy-8:Sv1 &2; // get new states of the abilities
+!!VRw46&y-7=1:|512; !!VRw46&y-7<>1:&-513; // write status of shooting back
+!!VRw46&y-8=2:|1024; !!VRw46&y-8<>2:&-1025; // write status of flying back
+*********** CM2 ***********
+
+
+!?CM4; // click on battle field
+** y-1 - clicked field
+** y-2 - flags of the click
+** y-3 - active stack
+** y-4 - its flags
+** y-5 - script-flag for this stack (to remember which options are set)
+**       bit 1  (1) - removed shooting
+**       bit 2  (2) - removed flying
+**       bit 3  (4) - removed strike and return  (disabled at the moment)
+**       bit 4  (8) - removed no retaliation
+**       bit 5 (16) - creature does not retaliate
+** y-98/ y-99 - temp. vars
+
+
+!!UN:P263/=1; !!FU&-1:E; // check if script is active
+
+!!CM:I?y-1 F?y-2; // get field and flag
+!!FU|y-1<>2010/y-2<>512:E; // exit, if no rightclick on defend button
+
+*!CM:R0; // disable standard behavior   ** disabled until I can include the strike and return **
+!!BG:N?y-3; !!BMy-3:F?y-4; // get active stack and its Flags
+!!VRy-99:Sy-3 + 1130; // get correct v-index
+!!VRy-5:Svy-99; // get the script-flag for this stack
+!!VRz-1:S^^; !!VRz-2:S^^; !!VRz-3:S^^; !!VRz-4:S^^; // init
+
+!!VRy-98:Sy-4 &4; // check, if stack has shoting ability
+!!VRy-99:Sy-5 &1; // check, if it is disabled;
+!!VRz-1|y-98=4/y-99=1:Sz194013; // set text
+!!CM|y-98=4/y-99=1:R0; // and disable standard reaction (which ask again for shot or meele) ** Dummy, until strike-and-return is included
+
+!!VRy-98:Sy-4 &2; // check, if stack has flying ability
+!!VRy-99:Sy-5 &2; // check, if it is disabled;
+!!VRz-2|y-98=2/y-99=2:Sz194014; // set text
+
+*!VRy-98:Sy-4 &4; // check, if stack has strike-and-return ability
+*!VRy-99:Sy-5 &4; // check, if it is disabled;
+*!VRz-3|y-98=4/y-99=1:Sz194015; // set text
+
+!!VRy-98:Sy-4 &65536; // check, if stack has no enemy retaliation ability
+!!VRy-99:Sy-5 &8; // check, if it is disabled;
+!!VRz-4|y-98=65536/y-99=8:Sz194016; // set text
+
+!!VRz-5:Sz194017; // set text (disable retaliations)
+
+!!VRv1:Sy-5;
+!!IF&1000:G0/1/y-5/194018/z-1/z-2/z-3/z-4/z-5; // show Combobox, return in v1
+!!FU&v1=y-5:E; // exit, if nothing changed
+
+!!VRy-99:Sv1 &1; // check, if shoting is disabled
+!!VRy-98:Sy-5 &1; // check, if it was disabled by this script before
+!!VRy-4&y-99=1:&-5; // if it is now disabled: remove ability
+!!VRy-4&y-99<>1/y-98=1:|4; // if it was disabled and should be re-enabled: enable it again
+
+!!VRy-99:Sv1 &2; // check, if flying is disabled
+!!VRy-98:Sy-5 &2; // check, if it was disabled by this script before
+!!VRy-4&y-99=2:&-3; // if it is now disabled: remove ability
+!!VRy-4&y-99<>2/y-98=2:|2; // if it was disabled and should be re-enabled: enable it again
+
+*!VRy-99:Sv1 &4; // check, if strike-and-return is disabled
+*!VRy-98:Sy-5 &4; // check, if it was disabled by this script before
+*!VRy-4&y-99=1:&-5; // if it is now disabled: remove ability
+*!VRy-4&y-99<>4/y-98=4:|4; // if it was disabled and should be re-enabled: enable it again
+
+!!VRy-99:Sv1 &8; // check, if no enemy retaliation is disabled
+!!VRy-98:Sy-5 &8; // check, if it was disabled by this script before
+!!VRy-4&y-99=8:&-65537; // if it is now disabled: remove ability
+!!VRy-4&y-99<>8/y-98=8:|65536; // if it was disabled and should be re-enabled: enable it again
+
+!!VRy-99:Sv1 &16; // check, retaliation is disabled
+!!BMy-3&y-99=16:R0; // if yes remove all retaliations
+
+!!BMy-3:Fy-4; // set the new flags to stack
+!!VRy-99:Sy-3 + 1130; // get correct v-index
+!!VRvy-99:Sy-4; // save the modified flags in the script's flag-var
+
+*********** CM4  ***********
+
+
+!?BA52; // start of every battle: reset script-flags (v1130-v1171)
+!!UN:P263/=1; !!FU&-1:E; // check if script is active
+!!VRv1130:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0;
+!!VRv1146:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0;
+!!VRv1162:C0/0/0/0/0/0/0/0/0/0;
+*********** BA52 ***********
+
+
+!?BR;
+!!UN:P263/=1; !!FU&-1:E; // check if script is active
+!!DO6156/0/41/1:P; // loop through all stacks and disable retaliation
+*********** BR  ***********
+
+
+!?FU6156; // disable retaliation and remove commanders shot and fly (if chosen)
+!!VRy1:Sx16 + 1130; // get correct v-index
+!!VRy2:Svy1 &16; // get the script-flag for this stack and check, if rataliations are disabled
+!!BMx16&y2=16:R0; // if yes remove all retaliations
+!!FU&v997>0:E; // exit, if it is not the first battle round
+
+!!BMx16:T?y3; // get type of monster
+!!FU|y3<174/y3>191:E; // exit, if it is no commander
+!!BA&x16<21:H0/?y4; !!BA&x16>20:H1/?y4; // get commanders hero to y4
+!!FU&y4<0:E; // exit, if no hero (f.e. in some creature banks)
+
+!!IF:Wy4; // activate his w-vars
+!!VRy5:Sw46 &512; // check for 10th bit (commander does not shot)
+!!VRy6:Sw46 &1024; // check for 11th bit (commander does not fly)
+!!BMx16:F?y7; // get commanders flags
+!!VRy8:Sy7 &4; // check, if the commander can shot
+!!VRy9:Sy7 &2; // check, if the commander can fly
+
+!!VRy2:Svy1; // get the script internal flag-var
+!!VRy7&y5=512:&-5; // remove shooting-ability
+!!VRy2&y5=512/y8=4:|1; // and mark it in the script-internal flagvar as disabled (if the commander had the ability)
+!!VRy7&y6=1024:&-3; // remove flying-ability
+!!VRy2&y6=1024/y9=2:|2; // and mark it in the script-internal flagvar as disabled (if the commander had the ability)
+
+!!BMx16:Fy7; // write commanders flags back
+!!VRvy1:Sy2; // write the script internal flag-var back
+
+*********** FU6156  ***********
+
+
+
+*******************************
+** Start DOWNGRADE CREATURES **
+*******************************
+
+!?OB35&1000; // visit a Hill Fort (AI will never use this script)
+!!UN:P264/=1; !!FU&-1:E; // check if script is active
+
+!!OB998:R; // enable object again
+!!VRz1:S^downgrade^; !!VRz2:S^upgrade^;
+!!UN:G1/139/1/1 G1/132/1/2; // change creature names for peasant / azuredragon to z1 / z2
+!!IF:Q1/21/139/21/132/10/z194022; // ask to upgrade or to downgrade the creatures
+!!UN:G1/139/1/0 G1/132/1/0; // restore original creature names
+!!FU&v1=2:E; // exit, if upgrade is chosen (uses standard behavior of the Hill Fort)
+
+!!OB998:S; // disable standard behavior
+!!FU&v1=0:E; // exit, if cancel was pressed (no standard behavior in this case)
+
+!!IF:V2/0; // init flag
+!!VRz1:S^^; !!VRz2:S^^; !!VRz3:S^^; !!VRz4:S^^;  !!VRz5:S^^; !!VRz6:S^^; !!VRz7:S^^;// init
+!!VRv600:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1; !!VRv616:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1; !!VRv632:C-1/-1/-1; // init
+!!DO6157/0/6/1:P; // loop through stacks, set z1-z7 to the creatures and the earned resources
+*                 // v600-v635 contains stack nr., new type, resource type, total gold and total resource for every stack
+
+!!IF&-2:M1/z194030; // msg: hero has no downgradable creature
+!!FU&-2:E; // exit in this case
+
+!!IF:G1/1/128/194028/1/2/3/4/5/6/7/194029; // show radio box to choose the creature to downgrade
+!!FU&v1=128:E; // exit, if no change is chosen
+
+!!VRy-1&v1=1:S600; !!VRy-1&v1=2:S605; !!VRy-1&v1=4:S610; !!VRy-1&v1=8:S615;
+!!VRy-1&v1=16:S620; !!VRy-1&v1=32:S625; !!VRy-1&v1=64:S630; // get index of the vvar, that contains the return values from FU6157
+
+
+!!VRy-2:Svy-1; // get stack nr. (f.e. in v600)
+!!VRy-1:+1; !!VRy-3:Svy-1; // get new creature type (v601)
+!!VRy-1:+1; !!VRy-4:Svy-1; // get type of resource (v602)
+!!OW:R-1/6/?y-5 R-1/y-4/?y-6; // get players gold / resources
+!!VRy-1:+1; !!VRy-5:+vy-1; // give additional gold (v603)
+!!VRy-1:+1; !!VRy-6:+vy-1; // give additional res. (v605)
+
+!!EX-1/y-2:E?y-7; // get experience of the stack
+!!VRy-7:*4 :3; // add again the 25 % token while upgrading the creature (*75% :100%)
+!!HE-1:C0/y-2/y-3/d; // change creatures
+!!EX-1/y-2:Ey-7; // set the new experience of the stack
+!!OW:R-1/6/y-5 R-1/y-4/y-6; // give gold + resource to the player
+
+*********** OB35 ***********
+
+
+!$OB35; // after visiting the Hill Fort
+!!UN:P264/=1; !!FU&-1:E; // check if script is active
+!!OB998:R; // enable object again
+*********** post OB35 ***********
+
+
+!?CM2; // click in hero screen
+!!UN:P264/=1; !!FU&-1:E; // check if script is active
+!!CM:I?y-1 F?y-2; // get clicked field and flag
+!!FU|y-1<68/y-1>74/y-2<>36:E; // exit, if no Ctrl-Alt-Leftclick on a creature Slot
+
+!!OW:C?y-99; // get current player
+!!HE-1:O=y-99; // check, if hero is owned by current player
+!!FU&-1:E; // exit, if not
+
+!!VRy-1:-68; // convert clicked field in creature slot number
+!!HE-1:C0/y-1/?y-3/?y-4; // get type and number of creatures
+!!FU&y-3<0:E; // exit if empty field
+
+!!FU6158:Py-3/?y-5/?y-6/?y-7/?y-8; // get downgr. creature, differences in gold / resource prices / type of res.
+!!IF&y-5<0/1000:M1/z194032; // msg: already basic creature
+!!FU&y-5<0:E; // exit, if no downgradable creature aviable
+
+!!UN:N3/-1/y-3/y-4 N3/-2/y-5/y-4; // namelookup monsters to z-1 / z-2
+!!IF:Q1/21/y-3/21/y-5/2/z194031; // ask to downgrade
+!!FU&-1:E; // exit, if no is chosen
+
+!!EX-1/y-1:E?y-9; // get experience of the stack
+!!VRy-9:*4 :3; // add again the 25 % token while upgrading the creature (*75% :100%)
+!!HE-1:C0/y-1/y-5/d; // change creatures
+!!EX-1/y-1:Ey-9; // set the new experience of the stack
+
+!!CM:R0; // disable standard behavior of the click
+
+*********** CM2 ***********
+
+
+!?FU6157;
+** x16 = slot
+** y1 = old creature
+** y2 = number
+** y4 = new creature (downgraded)
+** y6 = difference between prices gold
+** y8 = difference between prices res.
+** y9 = type of the resource
+** y10 = total gold
+** y11 = total resource
+
+!!HE-1:C0/x16/?y1/?y2; // get creature in this slot
+!!FU&y1<0:E; // exit, if empty slot
+
+!!FU6158:Py1/?y4/?y6/?y8/?y9; // get downgr. creature, differences in gold / resource prices / type of res.
+!!FU&y4<0:E; // exit, if no downgrade is possible
+
+!!VRy11:Sy8 *y2; // calc total resources
+
+!!MA:Ly4/?y99; // get level of the basic creature
+!!VRy12:S500; // usual deduction factor in promille (you get only the half of the gold back)
+!!VRy12&y99=1:S125; // only 1/8, because you pay only 25% of the usual costs to upgrade L2-Creatures at a Hillfort
+!!VRy12&y99=2:S250; // only 1/4, because you pay only 50% of the usual costs to upgrade L3-Creatures at a Hillfort
+!!VRy12&y99=3:S375; // only 3/8, because you pay only 75% of the usual costs to upgrade L4-Creatures at a Hillfort
+!!UN:P113/=1; // check for map rule "Monsters are half price at day 7"
+!!VRy12&1/$weekday$<>$sunday$::2; // half again, if rule is on and it is not sunday (sundays it is already halfed)
+!!VRy10:Sy6 *y2 *y12 :1000; // total gold to give back (gold per creature *number *promille-factor :1000)
+
+!!MA:Ly1/?y12; // get level of upgraded creature
+!!VRy10|y12=0/y1=11:S0; // no gold for L1-creatures or champions (will be upgraded for free in Stables)
+!!UN:P102/=1; // check for map rule "Artifact boost"
+!!VRy10&1/y1=3|y1=19/y1=29/y1=33/y1=45/y1=75/y1=89/y1=101/y1=127:S0; // no gold for Low-Level-Shooters, if rule is on, because "Pendant Of Second Sight upgrades lowly shooters"
+!!UN:P71/=1; // check for map rule "Enhanced Artifacts"
+!!VRy10&1/y1=15|y1=17/y1=23/y1=25/y1=57/y1=59/y1=63:S0; // no gold for Centaurs, Dwarves, Dendroids, Unicorns, Sekeletons, Zombies and Vampires, because there are artifacts, that upgrades them for free
+
+!!UN:N3/-1/y1/1 N3/-2/y4/1; // namelookup monsters to z-1 / z-2
+!!VRy12:Sx16 +1; // get index of indirect z-var
+!!VRzy12:Sz194027; // set text
+!!VRzy12&y11>0/y9=1:+z194023; // mercury
+!!VRzy12&y11>0/y9=3:+z194024; // Sulfur
+!!VRzy12&y11>0/y9=4:+z194025; // Crystal
+!!VRzy12&y11>0/y9=5:+z194026; // Gems
+
+!!VRy12:Sx16*5 +600; // get index of return-var (v600-v630)
+!!VRvy12:Sx16; // set stack number
+!!VRy12:+1; !!VRvy12:Sy4; // set new creature
+!!VRy12:+1; !!VRvy12:Sy9; // set type or resource
+!!VRy12:+1; !!VRvy12:Sy10; // set total gold
+!!VRy12:+1; !!VRvy12:Sy11; // set total resource
+!!IF:V2/1; // set flag 2, to mark, that there is at least one downgradable creature
+
+********** FU6157 ***********
+
+!?FU6158; // get downgraded creature, gold and resource difference; return in x2 - x5
+** x1 = old creature
+** x2 = new (downgraded creature), -1 if there is no
+** x3 = gold difference
+** x4 = resource difference
+** x5 = resource type
+
+** y3 = if 0 = downgraded; if 1 = upgraded
+** y5 = old price gold (upgr.)
+** y6 = new price gold (downgr.)
+** y7 = old price res. (upgr.)
+** y8 = new price res. (downgr.)
+
+!!VRx2:S-1; // init
+!!FU&x1<0:E; // exit, if no valid creature
+
+!!FU&x1>173/x1<191:E; // commander
+!!FU&x1>158/x1<166:E; // Emissaries, Messenger except Air
+!!FU&x1>131/x1<135:E; // Azure, Crystal and Faerie Dragon
+!!FU|x1=159/x1=192:E; // Ghosts and Sylvan Centaurs
+
+!!VRy3:Sx1 %2; // get modulo, will be 1 for upgraded, 0 for non upgraded
+!!VRy3|x1=113/x1=115/x1=139/x1=195:S0; // correct some creatures to downgraded
+!!VRy3|x1=116/x1=136/x1=142/x1=166/x1=170/x1=172/x1=196:S1; // correct some creatures to upgraded
+!!FU&y3=0:E; // exit fo all downgraded
+
+!!VRx2:S-1; // init
+!!VRx2|x1<112/x1=117/x1=119/x1=121/x1=131/x1=171:Sx1 -1; // get usual downgrades (<chaos hydra, D-Golem, Sprite, Magic-Elemental, Phoenix, Lava Sharpshooter)
+!!VRx2&x1=116:S33; // gold golem
+!!VRx2&x1=123:S115; // Ice Elemental
+!!VRx2&x1=125:S113; // Magma
+!!VRx2&x1=127:S112; // Storm
+!!VRx2&x1=129:S114; // Energy
+!!VRx2&x1=135:S168; // Rust Dragon -> Gorynych
+!!VRx2&x1=136:S193; // Enchanter -> Sorceress
+!!VRx2&x1=137:S3; // Sharpshooter -> Marksmen
+!!VRx2&x1=141:S59; // Mummy -> Zombi
+!!VRx2&x1=142:S140; // Nomad -> Boar
+!!VRx2&x1=143:S138; // Rogue -> Halfling
+!!VRx2&x1=144:S194; // Troll -> Werewolf
+!!VRx2&x1=150:S13; // L8 -> upgr. L7
+!!VRx2&x1=151:S27;
+!!VRx2&x1=152:S41;
+!!VRx2&x1=153:S55;
+!!VRx2&x1=154:S69;
+!!VRx2&x1=155:S83;
+!!VRx2&x1=156:S97;
+!!VRx2&x1=157:S111;
+!!VRx2&x1=158:S131;
+!!VRx2&x1=166:S164; // Air->Fire Messenger
+!!VRx2&x1=169:S9; // War Zealot -> Zealot
+!!VRx2&x1=170:S137; // Arctic Sharpshooter -> Sharpshooter
+!!VRx2&x1=172:S195; // Nightmare -> Hell Steed
+!!VRx2&x1=173:S29; // Santa Gremlin -> Master Gremlin
+!!VRx2&x1=193:S35; // Sorceress -> Arch Mage
+!!VRx2&x1=196:S68; // Draco Lich -> Bone Dragon
+
+!!MA:Cx1/6/?y5 Cx2/6/?y6; // get gold costs of creatures
+!!MA:Cx1/1/?y7 Cx2/1/?y8; !!VRx5&y7>0:S1; // Mercury
+!!MA&y7=0:Cx1/3/?y7 Cx2/3/?y8; !!VRx5&y7>0/x5=0:S3; // Sulfur
+!!MA&y7=0:Cx1/4/?y7 Cx2/4/?y8; !!VRx5&y7>0/x5=0:S4; // Crystal
+!!MA&y7=0:Cx1/5/?y7 Cx2/5/?y8; !!VRx5&y7>0/x5=0:S5; // Gems
+
+!!VRx3:Sy5 - y6; // return difference gold
+!!VRx5:Sy7-y8; // return diff. resources
+
+************ end FU6158 ************
+

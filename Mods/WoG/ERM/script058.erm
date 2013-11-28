@@ -1,0 +1,740 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+[script: Espionage (ver.1.25)]
+[author: Petyo P. Georgiev (petronius)]
+[version: WoG 3.58]
+[last changed: 22 August 2004]
+
+**    I have been asked several times how does the espionage script work. So I decided
+**    to make a description, I hope it will help those who are interested
+
+** 1. The Espionage ability lets the heroes with the Scouting sec skill to train spies
+**    and send them on different missions. Hero who does not have a spy gains one when leveling up.
+** 2. The Espionage menu is opened by right-clicking on the scouting skill icon in the hero screen.
+** 3. The initial commands are for enemy town infiltration (this includes all towns, which you do
+**    not own) and counter-espionage - spy assigned to a own town. The spy is sent to a certain town by
+**    typing in its name (so for you to be able to infiltrate a town, its entrance must be visible to
+**    you at the moment of sending the spy. If the town owner changes the name of the town after that,
+**    this does not affect the operation).
+
+** 4. The different operations available depend on the mastery of scouting.
+** 4.1. Basic scouting - gives you the withdraw spy, enemy status report, theft operations.
+** 4.1.1. Withdraw spy - this is not exactly an operation. You order your spy to leave the infiltrated town.
+** 4.1.2. Status report - the most bvasic operation, with the highest base chance
+**        of success. You get information abot the resources that player has, the buildings in the
+**        town; if there is a hero - visiting or garrisoned - you get info about his level, primary
+**        and secondary skills, artifacts. Info about the number of creatures (in army, garrison or dwellings) is not given.
+**        Also you get info about tha available spells in the town's mage guild, if one is built.
+** 4.1.3. Theft - you can steal resorces (incl. mithril) or spells. Spells are stolen by entering the name
+**        of the spell you desire. If the operation is successful, the hero gains a scroll with that spell.
+** 4.2. Advanced scouting - gives you access to the sabotage mission. When order given, there is a chance
+**      a random building to be demolished. There are buildings that cannot be demolished.
+** 4.3. Expert scouting enables the counter-espionage and the assassinations.
+** 4.3.1. Assassinate creatures in garrison - a chance to kill a certain ammount of creatures in a random
+**        slot off the garrison. There is always one creature left from the group, no matter how strong is the spy.
+** 4.3.2. Assassinate creatures in dwellings - a chance to assassinate creatures in a chosen (by level) dwelling.
+** 4.3.3. Counter-espionage - gives a better protection against enemy spies; this option has a meaning
+**        only in human vs human (for now; I plan adding AI support for the script, but this may not
+**        happen earlier then the release of 3.59).
+
+** 5. The success of the operations:
+** 5.1. Factors, helping the spy:
+** 5.1.1. His proficiency (number of successful operations).
+** 5.1.2. If the alignment of the sending hero is the same as the targeted town.
+** 5.2. Factors, obstructing the spy:
+** 5.2.1. Number of operations per day - every next operation made in one day, has a lower chance of success.
+** 5.2.2. Fortifications (fort, citadel, castle).
+
+
+** what's new:
+**ver1.25:
+**            1)changed the random number generator.
+
+**ver.1.24:
+**            1)status report no longer counts to the successful number of operations;
+**            2)stolen spell scroll is now automatically equipped if possible;
+**            3)fixed some errors with the sabotage and assassination missions and a missing message is restored.
+
+**ver.1.23:
+**            1)changed some functions and variables: fu263-281 now are fu463-481; z570-586 now are z770-786; z101 changed to z200;
+** new v variable used - v2135.
+**ver.1.22:
+**            1)some additional fixes.
+**ver.1.21:
+**            1) fixed some bugs, and made some changes to texts;
+**            2) changed the way the dialogue for espionage/counter-espionage choise is shown;
+**            3) a change in the spell stealing: now the higher the level of the target spell, the more difficult it is to steal it
+** (base chances for success: 80% for level 1, 70% for level 2, 60% for level 3, 50 % for level 4, 40% for level 5);
+**            4) increased the base chances for success for the different operations, because of the dayly mission counter;
+**            5) one more v var used (v2134).
+
+
+**ver.1.2:
+**            1) new assignment for the spy - counter-spy (makes enemy missions 30% harder to pass) - if you cancel to send spy
+** to enemy town and are expert in scouting the  corresponding dialogue will appear;
+**            2) new submission to thefts: steal spells. Also the "status report" now gives info about the available spells
+** in the infiltrated town's mage guild;
+**            3) added a restriction of the possible operations dayly. The "status report" does not add to count.
+** Now each next operation for the day becomes 16% harder to pass (bonuses still count; so a spy with 4-5 successful
+** operations theoretically can do max. 5 operations for the day, while a spy with 25 successful operations can do 7).
+**            4) the infiltrated town's name appears now in some more dialogue boxes for the players' convinience;
+**            5) the script now uses three more string vars (z782-784), one more quick var (q), one more hero var (w50),
+** six more functions (fu263-465, fu479-481), 21 more normal vars (v2113-2133), one more flag (36).
+
+**ver.1.11:
+**            1) changed the trigger activating the spy after arriving in town - it is not nessesary the hero to move.
+** Also the right-click on the button while the spy is "travelling" now shows info how many days are left until arrival.
+**            2) fixed a problem with the sabotage missions;
+**            3) added some pictures to the dialogue boxes;
+**            4) the script now uses two more string vars (z780-781) and two more normal vars (v2108-2109).
+
+** ver.1.1:
+**            1) changed the z vars (z270-279 -> z770-779) conflicting with those in Secondary Skill Boost (script03.erm).
+** Also, now the script is using one more flag - 34.
+**            2) now the right-click is on the dismiss hero BUTTON, not text;
+**            3) added some new text:
+**               3.1) explanation how you can train spies, when right-click on the button;
+**               3.2) now after entering a wrong town name, or the name of undiscovered town (entrance not visible), you get a message;
+**            4) you can't infiltrate your own towns anymore;
+**            5) when infiltrating neutral town, you can't perform thefts anymore (actually stealing from yourself).
+** Also, your own resource status is no longer displayed when you choose "status report". All is zero instead;
+
+** ver.1.01:
+**            1) changed the w vars (w52-54 -> w57-59) conflicting with those in chest2.erm (31);
+**            2) added "withdraw spy" option.
+
+
+
+***To install the script in a map, paste it into a timed event. Copy the entire code.
+***Make sure that you disable ALL colours from receiving the event
+***or change the event day to something like 500 or later to avoid the ERM script
+***popping up as if it were a regular event message.
+
+**This script gives the heroes with the scouting skill ability to send spies in enemy
+**towns, where they can be given different orders. Every hero gets his spy one level up
+**AFTER gaining the scouting skill. Only one spy per hero is allowed. If the spy is exposed
+**during his operation, he is killed and the hero will have another spy with his next level up.
+**By RIGHT-CLICK IN HERO SCREEN ON THE DISSMISS HERO BUTTON you access the orders. If you have no spy
+**at the moment the corresponding message appears. If you have a spy and he is not on operation,
+**a question is asked about sending the spy on mission. You are asked to type in the name
+**of the target town. The town entrance has to be revealed at the moment you send the spy.
+**Once the spy is off it will be three days before he becomes available for orders.
+
+**Basic scouting enables "status report" and "theft" missions.
+**"status report" - status of visiting/garrison hero in the infiltrated town (primary, secondary skills, artifacts equipped).
+**Also gives the built buildings in the town, and the enemy kingdom resources.
+**"theft" - allows your spy to steal resources and spells from the enemy.
+**Advanced scouting enables "sabotage" mission.
+**"sabotage" - lets your spy demolish randomly chosen enemy building.
+**Expert scouting enables "assassination" mission and gives the ability "counter-spy".
+**"assasination" mission enables your spy to murder creatures "at garrison" or "in dwellings".
+**There is always 10% (for "sabotage" +20% failure, without the spy being exposed, for "status report" - 5%) chance the spy to be exposed. The level of fortification increases this chance by 5%,10%,15%.
+**Each next mission for the day is 15% harder to pass. If the hero sending the spy is of the same alignment as the target town the chance of success is increased by 10%.
+**With each successful mission, your spy gains a level. Each level increases the
+**chance of success by 2%. Also, the higher the level, the better job the spy does (steals more resources, kills more
+**creatures).
+**"counter-spy" allows you to send your spy to your own town. In each town there can be only one counter-spy. This increases the chance of exposure by 30%.
+**The presence of a counter-spy makes the enemy spy easier to be exposed.
+**You also have the option to "withdraw" your spy from the infiltrated town whenever you want.
+
+
+
+****v vars used:v2100-2135,v2200-2207
+****z vars used:(z1-z7),(z200),z250-265,z770-786
+****w vars used:w50-51,w55-59
+****quick vars used:f-q
+****flags used:32-36
+****fu used:FU463-481
+****tm used:NONE
+****dialogue used:11
+****PO:N for the square over the town entrance (red square)
+
+!#VRv2103:S-1;
+!#VRz250:Sz158000;
+!#VRz251:Sz158001;        16
+!#VRz252:Sz158002;   2
+!#VRz253:Sz158003;                 4
+!#VRz777:Sz158004;     8
+!#VRz254:Sz158005;          1
+--------------------------------------------------------------------------------
+!#VRz255:Sz158006;
+!#VRz256:Sz158007;
+!#VRz257:Sz158008;
+!#VRz258:Sz158009;
+!#VRz259:Sz158010;
+!#VRz260:Sz158011;
+!#VRz261:Sz158012;
+!#VRz262:Sz158013;
+!#VRz263:Sz158014;
+!#VRz264:Sz158015;
+!#VRz265:Sz158016;
+!#VRz776:Sz158017;
+!#VRz778:Sz158018;
+!#VRz779:Sz158019;
+!#VRz770:Sz158020;
+!#VRz771:Sz158021;
+!#VRz772:Sz158022;
+!#VRz773:Sz158023;
+!#VRz774:Sz158024;
+!#VRz775:S^^;
+!#VRz1:S^^;
+!#VRz780:Sz158025;
+!#VRz782:Sz158026;
+!#VRz783:Sz158027;
+!#VRz784:Sz158028;
+!#VRz785:Sz158029;
+!#VRz786:Sz158030;
+
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+<>     <>       <>       <>       <>       <>       <>       <>       <>       <>
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!#UN:P58/?v2135; check if script enabled
+
+!?HL-1;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF&g>0:Wn;
+!!VRw51&g>0/w51=0:S2; train new spy (if not present)
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&v2135=1;
+!!IF:V33/0;
+!!VRi:S-1;
+!!VRf:S-1;
+!!UN:U98/-1/?v2101; get number of towns on this map in v2101
+
+!!CM:I?y-1 S?f;     [Get click location]
+!!FU|y-1<79/y-1>86:E;     [Exit if not on skill icon]
+
+!!VRy-1&y-1=79:S1;     [Translate r-click location to skill number]
+!!VRy-1&y-1=80:S2;
+!!VRy-1&y-1=81:S3;
+!!VRy-1&y-1=82:S4;
+!!VRy-1&y-1=83:S5;
+!!VRy-1&y-1=84:S6;
+!!VRy-1&y-1=85:S7;
+!!VRy-1&y-1=86:S8;
+
+!!HE-1:Sy-1/?y-2/1;     [Ask what skill occupies this slot]
+!!VRi&y-2=3:S129;
+
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&v2135=1/w51=3/i=129/f=14;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+!!VRv2107:Sc;   get current day
+!!VRv2107:-w56;  subtract the day when the spy was sent
+--------------------------------------------------------------------------------
+!!VRp:Sv2107;
+!!VRp:*-1;
+!!VRp:+3;
+!!CAw57/w58/w59:N?z200;
+!!IF&v2107<3:M1/z158031;
+--------------------------------------------------------------------------------
+!!VRw55&w51=3/v2107>2:S0; set new spy lvl to 0
+!!VRw51&w51=3/v2107>2:S1; spy arrived
+!!CM:R0;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&v2135=1/w51=5/i=129/f=14;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+!!VRv2107:Sc;
+!!VRv2107:-w56;
+!!VRw51&v2107>0:S4;
+!!IF&v2107=0:M1/z158032;
+!!CM:R0;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&v2135=1/w51=0/i=129/f=14;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+!!UN:G1/143/1/780; change rogue name
+!!IF:Q100/20/12/17/-1/21/143/1/z158033;
+!!UN:G1/143/1/0;   restore rogue name
+!!CM:R0;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&v2135=1/w51=2/i=129/f=14;
+!!VRo:S-10;
+!!VRp:S-20;
+!!IF:V33/0V34/0V35/0V36/0;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+
+!!IF:G1/2134/0/250/785/786/0/0/0/0/0/0/0/0/0/0;
+!!IF&v2134=1:D11/255/256////////////; dialogue for enemy
+!!VRz1:S^^; !!VRv2102:S0;
+!!IF&v2134=1:E444/11; type in the target town for infiltration
+!!VRz1:H35;       chk for empty string
+!!DO466/1/v2101/1&v2134=1/35:P1;        repeat fu466 v286 times (enemy)
+!!TRv2110/v2111/v2112&v2134=1/v2102=1:V?h;    check visibility of town entrance in h
+!!CAv2110/v2111/v2112&v2134=1/v2102=1:O?o;    chk target town owner
+!!HEn:O?p;                               chk spy sender's owner
+!!IF&o=p/v2134=1:M1/z158034;
+!!VRv2102&v2134=1/o=p:S2;      set v2102, so infiltration not to continue
+!!IF|h<1/v2102<>1:V34/1; set34 to true if town entrance not visible or own town infiltration
+!!IF&v2134=1/34/35/o<>p:M1/z158035;
+!!UN:G1/143/1/780; change rogue name
+!!IF&h<>0/i=129/f=14/v2134=1/v2102=1:Q100/21/143/1/z158036;
+!!UN:G1/143/1/0; restore rogue name
+!!VRw57&v2134=1/v2102=1/h<>0:Sv2110;\
+!!VRw58&v2134=1/v2102=1/h<>0:Sv2111;- store the coordinates of the infiltrated town
+!!VRw59&v2134=1/v2102=1/h<>0:Sv2112;/
+!!VRw51&v2134=1/v2102=1/h<>0:S3; spy sent (3)
+!!VRw56&v2134=1/v2102=1/h<>0:Sc; date of sendng
+*****************************counter-spy part***********************************
+!!IF&v2134=2/g<3:M1/z158037;
+!!VRv2134&v2134=2/g<3:S0;
+!!IF&g=3/v2134=2:D11/255/783////////////; dialogue for own
+!!VRz1:S^^; !!VRv2102:S0;
+!!IF&v2134=2/g=3:E444/11; type in the name of the target town for counter-spy
+!!VRz1&v2134=2/g=3:H35;                        chk for empty string
+!!DO466/1/v2101/1&v2134=2/35:P1;        repeat fu466 v286 times (own)
+!!CAv2110/v2111/v2112&v2134=2/35/v2102=1:O?o;    chk target town owner
+!!HEn&v2134=2/35:O?p;                               chk spy sender's owner
+!!IF&v2134=2/o<>p/35:M1/z158038;
+!!VRv2102&v2134=2/35/o<>p:S2;      set v2102, so infiltration not to continue
+!!VRw57&v2102=1/v2134=2/35:Sv2110;\
+!!VRw58&v2102=1/v2134=2/35:Sv2111;- store the coordinates of the infiltrated town
+!!VRw59&v2102=1/v2134=2/35:Sv2112;/
+!!VRo&v2102=1/v2134=2/35:Sw58-1; set y coordinate of the red square
+!!POw57/o/w59&v2102=1/v2134=2/35:N?n;
+!!UN:G1/143/1/780; change rogue name
+!!IF&v2102=1/v2134=2/35/n=10:Q100/21/143/1/z158039;
+!!IF&v2102=1/v2134=2/35/n<>10:Q100/21/143/1/z158040;
+!!UN:G1/143/1/0; restore rogue name
+!!POw57/o/w59&v2102=1/v2134=2/35/n<>10:N10;
+!!VRw51&v2102=1/v2134=2/35/n<>10:S5;
+!!VRw56&v2102=1/v2134=2/35/n<>10:Sc;
+!!CM:R0;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&w51=4/i=129/f=14;
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+!!CAw57/w58/w59:N?z200;
+!!IF:Q35/z158041;
+!!VRo:Sw58-1;
+!!VRw51&35:S2;
+!!POw57/o/w59&35:N0;
+!!CM:R0;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?CM2&w51=1/i=129/f=14;
+---
+!!VRv2107:Sc; chk current day
+!!VRw50&v2107<>w56:S0; if a new day, reset counter for operations
+!!VRw56:Sc; store current day
+---
+!!VRv2106:S0; nullify chance of success
+!!HE-1:N?n;
+!!HEn:S3/?g;
+!!IF:Wn;
+
+!!CAw57/w58/w59:O?oN?z200;
+!!HE-1:O?p;
+!!UN:G1/143/1/780;
+!!IF&o=p:Q100/10/o/21/143/1/z158042;
+!!UN:G1/143/1/0;
+!!VRw51&o=p:S2;
+
+!!VRz781:Sz158043;
+!!UN:G1/143/1/781;
+!!IF&w51=1:Q33/21/143/2/z158044;
+!!UN:G1/143/1/0;
+!!IF&33/g=1/w51=1:G1/2100/0/250/254/252/253/0/0/0/0/0/0/0/0/0;
+!!IF&33/g=2/w51=1:G1/2100/0/250/254/252/253/777/0/0/0/0/0/0/0/0;
+!!IF&33/g=3/w51=1:G1/2100/0/250/254/252/253/777/251/0/0/0/0/0/0/0;
+!!VRw50&v2100>2:+1; if not withdrawal or status report, add 1 to mission counter
+
+!!UN&v2100>0:G1/143/1/780;
+!!IF&w51=1/v2100=1:Q100/21/143/1/z158045;
+!!VRw51&w51=1/v2100=1:S2; withdraw
+
+
+!!CAw57/w58/w59&33/v2100>0:O?oT?m; get owner of infiltrated town
+!!VRm:+22;
+!!IF&33/v2100=4/o=-1:Q100/21/143/m/10/1/z158046;
+!!UN:G1/143/1/0;
+!!VRw50&33/v2100=4/o=-1:-1; restore mission counter to previous state (mission not attempted)
+
+!!FU463&33/v2100=4/o<>-1:P; thieving
+!!FU464&33/v2100=16:P; assasinations
+!!VRv2109&v2100=8:S0;
+!!FU470&33/v2100=8:P; sabotage
+!!FU465&33/v2100=2:P;
+!!FU472&33/v2100=2/v2106<96:P; status report
+!!IF&v2100=2/v2106>95:M1/z158047;
+!!VRw51&v2100=2/v2106>95:S0; kill spy
+!!VRw50&v2100=2/v2106>95:S0; reset mission counter
+!!CM:R0;
+======================================fus=======================================
+!?FU463;     theft init       nb->fu clear
+!!IF:G1/2103/0/250/257/258/259/260/261/262/263/264/782/0/0/0;
+!!VRv2103&v2103=1:S0;    wood
+!!VRv2103&v2103=2:S1;    mercury
+!!VRv2103&v2103=4:S2;    ore
+!!VRv2103&v2103=8:S3;    sulfur
+!!VRv2103&v2103=16:S4;   crystal
+!!VRv2103&v2103=32:S5;   gems
+!!VRv2103&v2103=64:S6;   gold
+!!VRv2103&v2103=128:S7;  mithril
+!!FU465&v2103>-1:P; operation success?
+!!FU467&v2106<91/v2103<256:Pv2103; theft operation call
+!!IF&v2106>90/v2103<256:M1/z158048;
+!!VRw51&v2106>90/v2103<256:S0; kill spy
+!!VRw50&v2106>90/v2103<256:S0; reset mission counter
+!!IF:V1/0; !!VRy3:S0;
+!!CAw57/w58/w59:G?y1T?y2;
+!!CAw57/w58/w59&y2=2:B3/22;
+!!VRy1:-1;
+!!VRy3&1:S1;
+!!FU480&v2103=256:Py1/y3; steal spells operation call
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU464; assassination init             nb->fu clear
+!!IF:G1/2104/0/250/265/776/0/0/0/0/0/0/0/0/0/0;
+!!FU465&v2104=1:P; call chance
+!!IF&v2106>90/v2104=1:M1/z158049;
+!!VRw51&v2106>90/v2104=1:S0; kill spy
+!!VRw50&v2106>90/v2104=1:S0; reset mission counter
+!!VRv2105&v2104=1:S0R6;
+!!FU469&v2104=1/v2106<91:Pv2105; garrison assasinations call
+!!IF&v2104=2:G1/2108/0/250/778/779/770/771/772/773/774/0/0/0/0/0;
+!!FU465&v2108>0:P;
+!!IF&v2106>90/v2108>0:M1/z158050;
+!!VRw51&v2106>90/v2108>0:S0; kill spy
+!!VRw50&v2106>90/v2108>0:S0; reset mission counter
+!!VRv2108&v2108=1:S0;
+!!VRv2108&v2108=2:S1;
+!!VRv2108&v2108=4:S2;
+!!VRv2108&v2108=8:S3;
+!!VRv2108&v2108=16:S4;
+!!VRv2108&v2108=32:S5;
+!!VRv2108&v2108=64:S6;
+!!FU468&v2104=2/v2106<91:Pv2108; dwelling assassination call
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU465; chance of operation success     (n is hero number)
+!!VRy5:S0; !!VRy7:S0; !!VRy8:S0; !!VRv2106:S-1;
+!!VRy5:Sw55*2;
+--------------------------------------------------------------------------------
+!!VRy25:S1R20;
+!!VRy26:S1R20;
+!!VRy27:S1T20;
+!!VRy28:S1R20;
+!!VRy29:S1R20;
+!!VRy6:Sy25+y26+y27+y28+y29;             new random generator
+--------------------------------------------------------------------------------
+!!VRy6:-y5; each lvl of spy - 2% better chance
+!!CAw57/w58/w59:B3/9T?y8;
+!!VRy7&1:S15;
+!!CAw57/w58/w59&-1:B3/8;
+!!VRy7&1:S10;
+!!CAw57/w58/w59&-1:B3/7;
+!!VRy7&1:S5;
+!!VRy6:+y7; lvl of fortification decreases chance by 5,10,15%
+!!VRy8&y8=0/n>-1/n<16:S10;
+!!VRy8&y8=1/n>15/n<32:S10;
+!!VRy8&y8=2/n>31/n<48:S10;
+!!VRy8&y8=3/n>47/n<64:S10;
+!!VRy8&y8=4/n>63/n<80:S10;
+!!VRy8&y8=5/n>79/n<96:S10;
+!!VRy8&y8=6/n>95/n<112:S10;
+!!VRy8&y8=7/n>111/n<128:S10;
+!!VRy8&y8=8/n>127/n<144:S10;
+!!VRy6:-y8; if spy of the same allignment as town - 10% better chance
+!!VRy1:Sw58-1;
+!!POw57/y1/w59:N?y2;
+!!VRy6&y2=10:+30; add counter-spy measures - 30% better chance of exposure
+!!VRy3:Sw50-1;
+!!VRy3&y3<0:S0;
+!!VRy3:*16;
+!!VRy6:+y3; add mission counter 16% each mission
+!!VRy6&y6<1:S1;
+!!VRy6&y6>100:S100;
+!!VRv2106:Sy6; chance of success in v2106
+*****************vrv2106:S0;******************* probe line
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU466;         cycle through the towns and get their names (in z200)
+!!VRz200:S^^;
+!!VRv2102:S0;
+!!UN:U98/-1/x1/2110;
+!!CAv2110/v2111/v2112:N?z200;
+!!VRv2102&z200=z1:S1;         if town name match v2102=1
+!!VRx1&v2101>x1/v2102<>1:+1;      if no match, check next town
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU467; theft operation (called from fu463)
+!!IF:V32/0;
+!!CAw57/w58/w59:O?y1; get owner of town infiltrated by current hero's spy  (in o)
+!!OW:Ry1/x1/?y2;
+!!VRy10:Sy2;
+!!IF&y2=0:V32/1; if none of the resource set 32 true
+!!VRy3:Sy2;
+!!VRy3::10; 10% of all quantity
+!!VRy4:Sw55;
+!!VRy4&x1=6:*100;   lvl of thief *100 for gold
+!!VRy3:+y4; add spy lvl modifier
+!!VRy3::2;
+!!VRy3&y3>y2:Sy2;
+!!VRy2:-y3; subtract stolen recource from total
+!!OW:R-1/x1/dy3; get the stolen recource
+!!OW:Ro/x1/y2;
+!!IF&y3=0/-32:M1/z158051;
+!!IF&y3=0/32:M1/z158052;
+!!VRw55&y3>0:+1;  spy lvl up (mission success)
+!!IF&y3>0:Q100/x1/y3/1/z158053;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU468; dwelling assasinations
+!!CAw57/w58/w59:M1/x1/?y1/?y2;
+!!VRy6:Sy1;
+!!VRy7:Sy2;
+!!VRy4:Sx1;
+!!VRy4:+1;
+!!VRy3:Sw55;
+!!VRy3:-3;
+!!VRy3&y3<0:S0;
+!!VRy3::y4;
+!!VRy2&y2>0:-y3;
+!!VRy2&y2<0:S0;
+!!VRy1&y1>0:-y3;
+!!VRy1&y1<0:S0;
+!!VRy5|y6>0/y7>0:S10;
+!!CAw57/w58/w59&y5=10:M1/x1/y1/y2;
+!!VRw55&y5=10/y3>0:+1;  spy lvl up (mission success)
+!!IF&y5=10/y3>0:M1/z158054;
+!!IF&y6=0/y7=0:M1/z158055;
+!!IF&y5=10/y3<1:M1/z158056;
+    <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU469; garrison assasinations
+!!CAw57/w58/w59:M2/x1/?y1/?y3;
+!!VRy15&y1>-1:Sy1; keep chosen monster type for message
+!!VRy1&y1=0|y1=1/y1=14/y1=15/y1=28/y1=29/y1=42/y1=43/y1=56/y1=57/y1=70/y1=71/y1=84/y1=85/y1=98/y1=99:S1;
+!!VRy1&y1=118|y1=119/y1=138/y1=139/y1=143:S1;
+!!VRy1&y1=2|y1=3/y1=16/y1=17/y1=30/y1=31/y1=44/y1=45/y1=58/y1=59/y1=72/y1=73/y1=86/y1=87/y1=100/y1=101:S2;
+!!VRy1&y1=112|y1=127/y1=140/y1=141/y1=142:S2;
+!!VRy1&y1=4|y1=5/y1=18/y1=19/y1=32/y1=33/y1=46/y1=47/y1=60/y1=61/y1=74/y1=75/y1=88/y1=89/y1=104/y1=105:S3;
+!!VRy1&y1=115|y1=123/y1=173:S3;
+!!VRy1&y1=6|y1=7/y1=20/y1=21/y1=34/y1=35/y1=48/y1=49/y1=62/y1=63/y1=76/y1=77/y1=90/y1=92/y1=106/y1=107:S4;
+!!VRy1&y1=114|y1=129/y1=137/y1=144/y1=170/y1=171:S4;
+!!VRy1&y1=8|y1=9/y1=22/y1=23/y1=36/y1=37/y1=50/y1=51/y1=64/y1=65/y1=78/y1=79/y1=92/y1=93/y1=102/y1=103:S5;
+!!VRy1&y1=113|y1=125/y1=136/y1=169:S5;
+!!VRy1&y1=10|y1=11/y1=24/y1=25/y1=38/y1=39/y1=52/y1=53/y1=66/y1=67/y1=80/y1=81/y1=94/y1=95/y1=108/y1=109:S6;
+!!VRy1&y1=120|y1=121/y1=172:S6;
+!!VRy1&y1=12|y1=13/y1=26/y1=27/y1=40/y1=41/y1=54/y1=55/y1=68/y1=69/y1=82/y1=83/y1=96/y1=97/y1=110/y1=111:S7;
+!!VRy1&y1=130|y1=131/y1=168:S7;
+!!VRy2:Sw55-4;
+!!VRy2&y2<0:S0;
+!!VRy2::y1;
+!!VRy3&y2>0:-y2;
+!!VRy3&y3<1:S1; always leaves one creature alive
+!!CAw57/w58/w59&k>-1:M2/x1/d0/y3;
+!!VRw55&k>-1/y2>0:+1;  spy lvl up (mission success)
+!!IF&y1>-1/y2>0:Q100/21/y15/1/z158057;
+!!IF&y1<0/y2<1:M1/z158058;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU470; sabotage init
+!!VRv2109:+1;
+!!VRv2105:S0R32;
+!!VRv2105&v2105=7:+4;
+!!VRv2105&v2105=8:+4;
+!!VRv2105&v2105=9:+4;
+!!VRv2105&v2105=5:+1;
+!!VRv2105&v2105=10:+1;
+!!VRv2105&v2105=20:+1;
+!!VRv2105&v2105=26:+4;
+!!VRv2105&v2105=27:+4;
+!!VRv2105&v2105=28:+4;
+!!VRv2105&v2105=29:+4;
+!!FU465:P;
+!!IF&v2106>90:M1/z158059;
+!!VRw51&v2106>90:S0; kill spy
+!!VRw50&v2106>90:S0; reset mission counter
+!!FU471&v2106<61:Pv2105; sabotage mission call  (60% for sabotage)
+!!IF&v2106>60/v2106<91:M1/z158060;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU471; sabotage mission
+!!CAw57/w58/w59:B3/x1T?y1;
+!!VRw55&1:+1;  spy lvl up (mission success)
+!!VRy1&1:+22;
+!!CAw57/w58/w59&1:B2/x1;
+!!IF&1:Q100/y1/x1/1/z158061;
+----
+!!CAw57/w58/w59&x1=22/y1=24/1:G4/1;\
+!!CAw57/w58/w59&x1=22/y1=24/1:G3/2;\
+!!CAw57/w58/w59&x1=22/y1=24/1:G2/3;- disable extra spells if library destroyed
+!!CAw57/w58/w59&x1=22/y1=24/1:G1/4;/
+!!CAw57/w58/w59&x1=22/y1=24/1:G0/5;/
+----
+!!CAw57/w58/w59&x1=4/1:G4/0;\
+!!CAw57/w58/w59&x1=3/1:G3/0;\
+!!CAw57/w58/w59&x1=2/1:G2/0;- disable spells if the corresponding lvl mage guild is destroyed
+!!CAw57/w58/w59&x1=1/1:G1/0;/
+!!CAw57/w58/w59&x1=0/1:G0/0;/
+!!IF&-1/v2109>20:M1/z158062;
+!!FU470&-1/v2109<21:P;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU472;  status report
+!!VRy3:S0;
+!!CAw57/w58/w59:O?oN?z775;
+!!VRv2200&o=-1:C0/0/0/0/0/0/0/0;
+!!DO473/0/7/1&v2106<81/o<>-1:P2200;
+!!IF:M1/z158063;
+!!IF:M1/z158064;
+!!DO478/0/43/1:P;
+!!VRy1:S0; !!VRy2:S0; !!VRy3:S0;
+!!IF:V1/0;
+!!CAw57/w58/w59:G?y1T?y2;
+!!CAw57/w58/w59&y2=2:B3/22;
+!!VRy1:-1;
+!!VRy3&1:S1;
+!!IF&y1>-1:M1/z158065;
+!!FU479&y1>-1:Py1/y3;
+!!FU474:P;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU473; resource status;
+!!OW:Ro/x16/?j;
+!!VRvx1:Sj;
+!!VRx1:+1;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU474; visiting/garrison hero status
+!!CAw57/w58/w59:H0/?jH1/?k;
+!!FU475&j>-1:Pj;
+!!IF&j>-1:M1/z158066;
+!!IF&j>-1:M1/z158067;
+!!DO476/0/27/1&j>-1:Pj;
+!!IF&j>-1:M1/z158068;
+!!DO477/0/143/1&j>-1:Pj;
+
+!!FU475&k>-1:Pk;
+!!IF&k>-1:M1/z158069;
+!!IF&k>-1:M1/z158070;
+!!DO476/0/27/1&k>-1:Pk;
+!!IF&k>-1:M1/z158071;
+!!DO477/0/143/1&k>-1:Pk;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU475; hero status
+!!HEx1:B0/?z775;
+!!HEx1:Ed0/?lF?m/?n/?o/?p; exp.,pr.skills chk
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU476; hero sec.skills chk
+!!HEx1:Sx16/?l;
+!!UN&l>0:N4/775/x16;
+!!IF&l=1:M1/z158072;
+!!IF&l=2:M1/z158073;
+!!IF&l=3:M1/z158074;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU477; artifacts equipped
+!!HEx1:A2/x16/d0/?l;
+!!IF&l>0:Q100/8/x16/1^^;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU478; town buildings
+!!CAw57/w58/w59&x16<>20/x16<>27/x16<>28/x16<>29:B3/x16T?j;
+!!VRj:+22;
+!!IF&1/x16<>20/x16<>27/x16<>28/x16<>29:Q100/j/x16/1M^^;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU479;
+!!CAw57/w58/w59&x1>-1:G0/0/?y1;
+!!CAw57/w58/w59&x1>-1:G0/1/?y2;
+!!CAw57/w58/w59&x1>-1:G0/2/?y3;
+!!CAw57/w58/w59&x1>-1:G0/3/?y4;
+!!CAw57/w58/w59&x1>-1:G0/4/?y5;
+!!CAw57/w58/w59&x1>-1/x2=1:G0/5/?y6;
+!!UN&y1>-1:N1/z2/y1; !!UN&y2>-1:N1/z3/y2; !!UN&y3>-1:N1/z4/y3; !!UN&y4>-1:N1/z5/y4;
+!!UN&y5>-1:N1/z6/y5; !!UN&y6>-1/x2=1:N1/z7/y6;
+!!IF&x1>-1/x2<>1:M1/z158075;
+!!IF&x1>-1/x2=1:M1/z158076;
+
+!!CAw57/w58/w59&x1>0:G1/0/?y7;
+!!CAw57/w58/w59&x1>0:G1/1/?y8;
+!!CAw57/w58/w59&x1>0:G1/2/?y9;
+!!CAw57/w58/w59&x1>0:G1/3/?y10;
+!!CAw57/w58/w59&x1>0/x2=1:G1/4/?y11;
+!!UN&y7>-1:N1/z2/y7; !!UN&y8>-1:N1/z3/y8; !!UN&y9>-1:N1/z4/y9; !!UN&y10>-1:N1/z5/y10;
+!!UN&y11>-1/x2=1:N1/z6/y11;
+!!IF&x1>0/x2<>1:M1/z158077;
+!!IF&x1>0/x2=1:M1/z158078;
+
+!!CAw57/w58/w59&x1>1:G2/0/?y12;
+!!CAw57/w58/w59&x1>1:G2/1/?y13;
+!!CAw57/w58/w59&x1>1:G2/2/?y14;
+!!CAw57/w58/w59&x1>1/x2=1:G2/3/?y15;
+!!UN&y12>-1:N1/z2/y12; !!UN&y13>-1:N1/z3/y13; !!UN&y14>-1:N1/z4/y14; !!UN&y15>-1/x2=1:N1/z5/y15;
+!!IF&x1>1/x2<>1:M1/z158079;
+!!IF&x1>1/x2=1:M1/z158080;
+
+!!CAw57/w58/w59&x1>2:G3/0/?y16;
+!!CAw57/w58/w59&x1>2:G3/1/?y17;
+!!CAw57/w58/w59&x1>2/x2=1:G3/2/?y18;
+!!UN&y16>-1:N1/z2/y16; !!UN&y17>-1:N1/z3/y17; !!UN&y18>-1/x2=1:N1/z4/y18;
+!!IF&x1>2/x2<>1:M1/z158081;
+!!IF&x1>2/x2=1:M1/z158082;
+
+!!CAw57/w58/w59&x1>3:G4/0/?y19;
+!!CAw57/w58/w59&x1>3/x2=1:G4/1/?y20;
+!!UN&y19>-1:N1/z2/y19; !!UN&y20>-1/x2=1:N1/z3/y20;
+!!IF&x1>3/x2<>1:M1/z158083;
+!!IF&x1>3/x2=1:M1/z158084;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU480; spells
+!!CAw57/w58/w59&x1>-1:G0/0/?v2114;
+!!CAw57/w58/w59&x1>-1:G0/1/?v2115;
+!!CAw57/w58/w59&x1>-1:G0/2/?v2116;
+!!CAw57/w58/w59&x1>-1:G0/3/?v2117;
+!!CAw57/w58/w59&x1>-1:G0/4/?v2118;
+!!CAw57/w58/w59&x1>-1/x2=1:G0/5/?v2119;
+!!CAw57/w58/w59&x1>0:G1/0/?v2120;
+!!CAw57/w58/w59&x1>0:G1/1/?v2121;
+!!CAw57/w58/w59&x1>0:G1/2/?v2122;
+!!CAw57/w58/w59&x1>0:G1/3/?v2123;
+!!CAw57/w58/w59&x1>0/x2=1:G1/4/?v2124;
+!!CAw57/w58/w59&x1>1:G2/0/?v2125;
+!!CAw57/w58/w59&x1>1:G2/1/?v2126;
+!!CAw57/w58/w59&x1>1:G2/2/?v2127;
+!!CAw57/w58/w59&x1>1/x2=1:G2/3/?v2128;
+!!CAw57/w58/w59&x1>2:G3/0/?v2129;
+!!CAw57/w58/w59&x1>2:G3/1/?v2130;
+!!CAw57/w58/w59&x1>2/x2=1:G3/2/?v2131;
+!!CAw57/w58/w59&x1>3:G4/0/?v2132;
+!!CAw57/w58/w59&x1>3/x2=1:G4/1/?v2133;
+!!IF:D11/782/784////////////; setup dialogue for spell-steal
+!!IF:E444/11; show dialogue
+!!VRz1:H35; chk for empty string
+!!FU481&35:P2114/x2;
+   <>       <>       <>       <>       <>       <>       <>       <>       <>
+!?FU481;
+!!IF:V36/0;
+!!VRy5:S0;
+!!VRy6:S0;
+!!VRx1&x1=2119/x2<>1:+1; !!VRx1&x1=2124/x2<>1:+1; !!VRx1&x1=2128/x2<>1:+1;
+!!VRx1&x1=2131/x2<>1:+1; !!VRx1&x1=2133/x2<>1:+1;
+!!UN&vx1>-1:N1/z2/vx1;
+!!IF&z1=z2:V36/1;
+!!VRy5|vx1=0/vx1=3/vx1=5/vx1=15/vx1=27/vx1=31/vx1=32/vx1=35/vx1=37/vx1=41/vx1=42/vx1=43/vx1=46/vx1=53/vx1=54:S1;
+!!VRy5|vx1=1/vx1=2/vx1=4/vx1=10/vx1=16/vx1=17/vx1=24/vx1=30/vx1=44/vx1=45/vx1=47/vx1=51/vx1=62/vx1=64:S2;
+!!VRy5|vx1=11/vx1=12/vx1=13/vx1=14/vx1=20/vx1=21/vx1=25/vx1=28/vx1=33/vx1=34/vx1=39/vx1=49/vx1=52/vx1=60/vx1=61/vx1=63:S3;
+!!VRy5|vx1=7/vx1=9/vx1=19/vx1=22/vx1=23/vx1=26/vx1=29/vx1=38/vx1=40/vx1=48/vx1=50/vx1=55/vx1=56/vx1=58/vx1=59/vx1=65:S4;
+!!VRy5|vx1=6/vx1=8/vx1=18/vx1=36/vx1=66/vx1=67/vx1=68/vx1=69:S5;
+!!VRy5&-36:S0;
+!!VRx1&-36/x1<2133:+1;
+!!IF&-36/x1>2133:M1/z158085;
+!!FU465&36:P;
+!!VRy6&y5=1/v2106<81:S1;
+!!VRy6&y5=2/v2106<71:S1;
+!!VRy6&y5=3/v2106<61:S1;
+!!VRy6&y5=4/v2106<51:S1;
+!!VRy6&y5=5/v2106<41:S1;
+!!IF&36/y6<>1:M1/z158086;
+!!VRw51&36/y6<>1:S0; kill spy
+!!VRw50&36/y6<>1:S0; reset mission counter
+!!VRy2&36/y6=1:Svx1+1001;
+!!HE-1&36/y6=1:A4/y2;
+!!IF&36/y6=1:Q100/8/1/9/vx1/1/z158087;
+!!UN&36:R3/-1;
+!!VRw55&36/y6=1:+1; add successful mission
+!!FU481&-36/x1<2134:Px1/x2;
+

@@ -1,0 +1,832 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Garrisons Script Version 1.1 Created by Timothy Pulver
+** Requires WoG version 3.58 or later using ERM version 2.7 or later.
+** WoGify Name: script42.erm
+** Updated: October 21, 2004
+
+** This script adds neutral garrisons to maps at appropriate choke points.
+** Garrisons may be horizontal or vertical, standard or anti-magic.
+** All garrisons are initially guarded by shooters, based on terrain type.
+** Some terrain types have several possible troop combinations.
+
+** Each garrison has rocks or tree stumps that provide some protection
+** for the troops there (the initial neutral troops or later, a player's
+** troops) plus mines are also placed at the end. An army with at least
+** one native creature is unaffected by mines. Sand and Swamp garrisons
+** also have a belt of hidden quicksand. An army with at least one native
+** creature can see the quicksand. Lava garrisons will also conjure a
+** belt of fire walls every other round while Dirt, Grass, Rough and
+** Subterranean garrisons will put up force fields. Snow garrisons
+** will have frost rings instead.
+
+** After defeating the neutral creatures in a garrison, the hero will
+** find some random treasure consisting of a small amount of gold and
+** some resources with the possibility of an artifact too.
+
+Variables: v1236-v1239, v1253-v1254, (v1255 used by script06.erm)
+Temporary: v1-v9, z1-z6
+Functions: FU10850-FU10868
+Timers: TM19 (shared with WoGify), TM48
+Dialogues: 88
+
+--------------------------------------------------------------------------
+
+ [Garrison is trigger]
+
+!?OB33&v1253=1;
+!!TR998:T?v1254/d/d/d/d/d/d/d; [Check terrain: v1254]
+!!VRv2:S-1;
+!!GR998&v2<0:G0/?v2/d; [Check slot 0]
+!!GR998&v2<0:G1/?v2/d; [Check slot 1]
+!!GR998&v2<0:G2/?v2/d; [Check slot 2]
+!!GR998&v2<0:G3/?v2/d; [Check slot 3]
+!!GR998&v2<0:G4/?v2/d; [Check slot 4]
+!!GR998&v2<0:G5/?v2/d; [Check slot 5]
+!!GR998&v2<0:G6/?v2/d; [Check slot 6]
+
+!!HE-1:O?v3; [Check owner of hero]
+!!GR998:O?v4; [Check owner of garrison]
+
+!!HE-1:R4/0/0; [Disable Tactics]
+
+ [Set v1237 to 1 if any creatures in enemy/neutral garrison when attacked]
+!!VRv1237&v2>=0/v3<>v4:S1;
+
+--------------------------------------------------------------------------
+
+ [Start of garrison battle trigger]
+
+!?BA52&v1253=1/v1237=1;
+!!BA:E?y-1; [State of battle: y1]
+
+!!VRv1237&y-1<>0:S2; [Set v1237 to 2 to disable combat ERM for human vs. human or remote battle]
+
+--------------------------------------------------------------------------
+
+ [Cast Quicksand, Land Mine, Frost Ring, Force Field, Forgetfulness and Fire Wall]
+ [v1237=1 if a neutral garrison has been attacked, v1254=terrain type]
+
+!?BR&v1253=1/v1237=1/1000/-998;
+!!VRv2:S0;
+!!VRv2|v1254=1/v1254=4:S99; [Sand or Swamp]
+!!VRv2|v1254=0/v1254=2/v1254=5/v1254=6:S88; [Dirt, Grass, Rough, or Subterranean]
+!!FU10857&v997>=1/v2=99:P; [Place Quicksand if Sand or Swamp (every turn)]
+!!FU10860&v997=0:P; [Place Land Mines]
+!!VRv3:Sv997 %2; [Check remainder of division by 2]
+!!FU10858&v997>=1/v3=1/v1254=7:P; [Place Fire Walls if Lava (every other turn)]
+!!FU10866&v997>=1/v3=1/v2=88:P; [Place Force Fields (every other turn) for: Dirt, Grass, Rough, and Subterranean]
+!!FU10867&v997>=1/v3=1/v1254=3:P; [Cast Frost Ring if Snow (every other turn)]
+!!FU10868&v997>=1:P; [Attempt to cast Basic Forgetfulness on one attacker each turn]
+
+--------------------------------------------------------------------------
+
+ [Garrisons - outer loop]
+
+!?FU10850;
+ [x1=level, x16=y coordinate]
+!!VRv3:S0; !!VRv4:S0; [Set v3 and v4 to 0]
+!!DO10851/2/v1/1:Px16/x1;
+
+--------------------------------------------------------------------------
+
+ [Garrisons - inner loop]
+
+!?FU10851;
+ [x1=y coordinate, x16=x coordinate, x2=level]
+
+!!TRx16/x1/x2:T?y1/d/d/d/d/d/d/d; [Check for water or rock]
+!!OBx16/x1/x2:T?y2; [Check for clear spot]
+
+!!FU10852&y1<8/y2=0:Px1/x2;
+
+--------------------------------------------------------------------------
+
+ [Horizontal Garrisons]
+
+!?FU10852;
+ [x1=y coordinate, x16=x coordinate, x2=level]
+
+ [Initialize y2-y5]
+!!VRy2:S-1;
+!!VRy3:S-1;
+!!VRy4:S-1;
+!!VRy5:S-1;
+
+ [Check for a valid place to put garrisons]
+!!VRy1:Sx16 -2;
+!!TRy1/x1/x2:P?y2; [Check for red square: y2=0 if red]
+
+!!VRy1&y2=0:Sx16 +2;
+!!TRy1/x1/x2&y2=0:P?y2; [Check for red square: y2=0 if red]
+
+!!VRy1&y2=0:Sx16 -1;
+!!TRy1/x1/x2&y2=0:P?y3 T?y10/d/d/d/d/d/d/d; [Check for red square: y3=0 if red, y10=9 if rock]
+!!OBy1/x1/x2&y2=0/y10<9:T?y3; [Check for object: y3=0 if empty]
+
+!!VRy1&y2=0/y10<9:Sx16 +1;
+!!TRy1/x1/x2&y3=0/y10<8:P?y4 T?y10/d/d/d/d/d/d/d; [Check for red square: y4=0 if red, y10=9 if rock]
+!!OBy1/x1/x2&y3=0/y10<8:T?y4; [Check for object: y4=0 if empty]
+
+!!VRy1&y2=0/y10<8:Sx16 +1;
+!!TRy1/x1/x2&y4=0/y10<8:P?y5 T?y10/d/d/d/d/d/d/d; [Check for red square: y5=0 if red, y10=9 if rock]
+!!OBy1/x1/x2&y4=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRy6&y5=0:Sx1 -1;
+!!TRx16/y6/x2&y5=0:T?y10/d/d/d/d/d/d/d; [Check terrain: y10=9 if rock]
+!!OBx16/y6/x2&y5=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRy6&y5=0:Sx1 +1;
+!!TRx16/y6/x2&y5=0/y10<8:T?y10/d/d/d/d/d/d/d; [Check terrain: y10=9 if rock]
+!!OBx16/y6/x2&y5=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRv3&v3>1:-1; [Subtract 1 from v3]
+
+!!FU10854&y5=0/y10<8/v3=0:Py1/x1/x2/0; [Place a horizontal garrison if a valid space is found]
+
+!!VRv3&y5=0/y10<8/v3=0:S3; [Note that a horizontal garrison was placed]
+
+!!FU10853&v3<>3:Px1/x2; [Call vertical garrison function if no horizontal garrison]
+
+--------------------------------------------------------------------------
+
+ [Vertical Garrisons]
+
+!?FU10853;
+ [x1=y coordinate, x16=x coordinate, x2=level]
+
+ [Initialize y2-y5]
+!!VRy2:S-1;
+!!VRy3:S-1;
+!!VRy4:S-1;
+!!VRy5:S-1;
+
+ [Check for a valid place to put garrisons]
+!!VRy1:Sx1 -2;
+!!TRx16/y1/x2:P?y2; [Check for red square: y2=0 if red]
+
+!!VRy1&y2=0:Sx1 +2;
+!!TRx16/y1/x2&y2=0:P?y2; [Check for red square: y2=0 if red]
+
+!!VRy1&y2=0:Sx1 -1;
+!!TRx16/y1/x2&y2=0:P?y3 T?y10/d/d/d/d/d/d/d; [Check for red square: y3=0 if red, y10=9 if rock]
+!!OBx16/y1/x2&y2=0/y10<8:T?y3; [Check for object: y3=0 if empty]
+
+!!VRy1&y2=0/y10<8:Sx1 +1;
+!!TRx16/y1/x2&y3=0/y10<8:P?y4 T?y10/d/d/d/d/d/d/d; [Check for red square: y4=0 if red, y10=9 if rock]
+!!OBx16/y1/x2&y3=0/y10<8:T?y4; [Check for object: y4=0 if empty]
+
+!!VRy1&y2=0/y10<8:Sx1 +1;
+!!TRx16/y1/x2&y4=0/y10<8:P?y5 T?y10/d/d/d/d/d/d/d; [Check for red square: y5=0 if red, y10=9 if rock]
+!!OBx16/y1/x2&y4=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRy6&y5=0:Sx16 -1;
+!!TRy6/x1/x2&y5=0:T?y10/d/d/d/d/d/d/d; [Check terrain: y10=9 if rock]
+!!OBy6/x1/x2&y5=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRy6&y5=0:Sx16 +1;
+!!TRy6/x1/x2&y5=0/y10<8:T?y10/d/d/d/d/d/d/d; [Check terrain: y10=9 if rock]
+!!OBy6/x1/x2&y5=0/y10<8:T?y5; [Check for object: y5=0 if empty]
+
+!!VRv4&v4>1:-1; [Subtract 1 from v4]
+
+!!FU10854&y5=0/y10<8/v4=0:Px16/y1/x2/2; [Place a vertical garrison if a valid space is found]
+
+!!VRv4&y5=0/y10<8/v4=0:S3; [Note that a vertical garrison was placed]
+
+--------------------------------------------------------------------------
+
+ [Place a garrison]
+
+!?FU10854;
+
+!!VRv5:+1; [Add one to v5 frequency counter]
+
+!!VRy1:S0 R2; [y1=0 to 2]
+!!VRy2&y1<2:S0; [Standard Garrison]
+!!VRy2&y1=2:S1; [Anti-magic Garrison]
+!!VRy3&y1<2:Sx4; [Standard Garrison]
+!!VRy3&y1=2:Sx4 +1; [Anti-magic Garrison]
+
+ [Place garrison if a valid space is found and depending]
+ [on v6 frequency variable: a higher value=less frequent (1=always place)]
+!!UN&v5>=v6:Ix1/x2/x3/33/y2/33/y3/-1/0;
+
+!!VRv5&v5=v8:S0; [Reset frequency counter]
+
+--------------------------------------------------------------------------
+
+ [Fill Garrisons with shooters if not already done]
+
+ [Day 1 Timer only]
+!?TM19&v3340<>99;
+!!UN:P42/?y-1; [y-1=1 if Garrison Script is enabled]
+!!FU&y-1<>1:E; [Exit if Garrison script isn't enabled]
+
+!!FU10855&v1236=0:P;
+!!VRv1236:S1; [Set to 1 so that garrison troop setting is only done once]
+
+--------------------------------------------------------------------------
+
+ [Fill Garrison with shooters: part 1]
+
+!?FU10855;
+
+!!UN:U33/-1/?y1; [Number of garrisons in y1]
+
+!!VRv1253&y1=0:S0; [If no garrisons, set v1253 to 0 to disable garrison script]
+
+!!VRv1:S-1; [Initialize v1 to -1 to work correctly with faster UN:U syntax]
+!!DO10856/1/y1/1&y1>0:P; [Loop through all Garrisons and fill them with shooters]
+
+--------------------------------------------------------------------------
+
+ [Fill Garrison with shooters: part 2]
+
+!?FU10856;
+
+!!UN:U33/-1/-1/1; [Get coordinates of garrison: v1/v2/v3]
+
+!!VRy8:S0; [Initialize y8 to 0]
+!!VRy9:S0; [Initialize y9 to 0]
+
+!!GRv1/v2/v3:G0/d/?y8; [Check if any creatures are in garrison slot 0: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G1/d/?y8; [Check if any creatures are in garrison slot 1: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G2/d/?y8; [Check if any creatures are in garrison slot 2: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G3/d/?y8; [Check if any creatures are in garrison slot 3: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G4/d/?y8; [Check if any creatures are in garrison slot 4: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G5/d/?y8; [Check if any creatures are in garrison slot 5: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+!!GRv1/v2/v3:G6/d/?y8; [Check if any creatures are in garrison slot 6: y8]
+!!VRy9&y8>0:S1; [Set y9 to 1 if any creatures in garrison: y9]
+
+!!FU&y9=1:E; [Exit if there are creature already in this garrison]
+
+!!TRv1/v2/v3:T?y1/d/d/d/d/d/d/d; [Check terrain type: y1]
+
+ [Dirt=0]
+!!VRy6:S1 R4; [1-5]
+!!VRy2&y1=0/y6=1:S65; [Power Liches]
+!!VRy3&y1=0/y6=1:S1;  [1 to start with]
+!!VRy4&y1=0/y6=1:S64; [Liches]
+!!VRy5&y1=0/y6=1:S2;  [2 to start with]
+
+!!VRy2&y1=0/y6=2:S61; [Wraiths]
+!!VRy3&y1=0/y6=2:S6;  [6 to start with]
+!!VRy4&y1=0/y6=2:S64; [Liches]
+!!VRy5&y1=0/y6=2:S2;  [2 to start with]
+
+!!VRy2&y1=0/y6=3:S63; [Vampire Lords]
+!!VRy3&y1=0/y6=3:S2;  [2 to start with]
+!!VRy4&y1=0/y6=3:S64; [Liches]
+!!VRy5&y1=0/y6=3:S2;  [2 to start with]
+
+!!VRy2&y1=0/y6=4:S65; [Power Liches]
+!!VRy3&y1=0/y6=4:S1;  [1 to start with]
+!!VRy4&y1=0/y6=4:S57; [Skeleton Warriors]
+!!VRy5&y1=0/y6=4:S13; [13 to start with]
+
+!!VRy2&y1=0/y6=5:S159; [Ghosts]
+!!VRy3&y1=0/y6=5:S13;  [13 to start with]
+!!VRy4&y1=0/y6=5:S141; [Mummies]
+!!VRy5&y1=0/y6=5:S6;   [6 to start with]
+
+
+ [Sand=1]
+!!VRy6:S1 R2; [1-3]
+!!VRy2&y1=1/y6=1:S136; [Enchanters]
+!!VRy3&y1=1/y6=1:S1;   [1 to start with]
+!!VRy4&y1=1/y6=1:S193; [Sorceresses]
+!!VRy5&y1=1/y6=1:S1;   [1 to start with]
+
+!!VRy2&y1=1/y6=2:S136; [Enchanters]
+!!VRy3&y1=1/y6=2:S1;   [1 to start with]
+!!VRy4&y1=1/y6=2:S142; [Nomads]
+!!VRy5&y1=1/y6=2:S8;   [8 to start with]
+
+!!VRy2&y1=1/y6=3:S193; [Sorceresses]
+!!VRy3&y1=1/y6=3:S1;   [1 to start with]
+!!VRy4&y1=1/y6=3:S195; [Hell Steeds]
+!!VRy5&y1=1/y6=3:S1;   [1 to start with]
+
+
+ [Grass=2]
+!!VRy6:S1 R8; [1-9]
+!!VRy2&y1=2/y6=1:S3; [Marksmen]
+!!VRy3&y1=2/y6=1:S4; [4 to start with]
+!!VRy4&y1=2/y6=1:S2; [Archers]
+!!VRy5&y1=2/y6=1:S9; [9 to start with]
+
+!!VRy2&y1=2/y6=2:S9; [Zealots]
+!!VRy3&y1=2/y6=2:S1; [1 to start with]
+!!VRy4&y1=2/y6=2:S8; [Monks]
+!!VRy5&y1=2/y6=2:S3; [3 to start with]
+
+!!VRy2&y1=2/y6=3:S19; [Grand Elves]
+!!VRy3&y1=2/y6=3:S3; [3 to start with]
+!!VRy4&y1=2/y6=3:S18; [Wood Elves]
+!!VRy5&y1=2/y6=3:S6; [6 to start with]
+
+!!VRy2&y1=2/y6=4:S137; [Sharpshooters]
+!!VRy3&y1=2/y6=4:S3; [3 to start with]
+!!VRy4&y1=2/y6=4:S137; [Sharpshooters]
+!!VRy5&y1=2/y6=4:S5; [2 to start with]
+
+!!VRy2&y1=2/y6=5:S169; [War Zealots]
+!!VRy3&y1=2/y6=5:S1; [1 to start with]
+!!VRy4&y1=2/y6=5:S169; [War Zealots]
+!!VRy5&y1=2/y6=5:S1; [1 to start with]
+
+!!VRy2&y1=2/y6=6:S21; [Silver Pegasi]
+!!VRy3&y1=2/y6=6:S3; [2 to start with]
+!!VRy4&y1=2/y6=6:S18; [Wood Elves]
+!!VRy5&y1=2/y6=6:S6; [6 to start with]
+
+!!VRy2&y1=2/y6=7:S5; [Royal Griffins]
+!!VRy3&y1=2/y6=7:S3; [3 to start with]
+!!VRy4&y1=2/y6=7:S2; [Archers]
+!!VRy5&y1=2/y6=7:S9; [9 to start with]
+
+!!VRy2&y1=2/y6=8:S9; [Zealots]
+!!VRy3&y1=2/y6=8:S3; [3 to start with]
+!!VRy4&y1=2/y6=8:S7; [Crusaders]
+!!VRy5&y1=2/y6=8:S3; [3 to start with]
+
+!!VRy2&y1=2/y6=9:S192; [Sylvan Centaurs]
+!!VRy3&y1=2/y6=9:S3; [3 to start with]
+!!VRy4&y1=2/y6=9:S15; [Centaur Captains]
+!!VRy5&y1=2/y6=9:S12; [12 to start with]
+
+
+ [Snow=3]
+!!VRy6:S1 R6; [1-7]
+!!VRy2&y1=3/y6=1:S173; [Santa Gremlins]
+!!VRy3&y1=3/y6=1:S5; [5 to start with]
+!!VRy4&y1=3/y6=1:S29; [Master Gremlins]
+!!VRy5&y1=3/y6=1:S6; [6 to start with]
+
+!!VRy2&y1=3/y6=2:S35; [Arch Magi]
+!!VRy3&y1=3/y6=2:S2; [2 to start with]
+!!VRy4&y1=3/y6=2:S34; [Magi]
+!!VRy5&y1=3/y6=2:S3; [3 to start with]
+
+!!VRy2&y1=3/y6=3:S170; [Arctic Sharpshooters]
+!!VRy3&y1=3/y6=3:S2; [2 to start with]
+!!VRy4&y1=3/y6=3:S170; [Arctic Sharpshooters]
+!!VRy5&y1=3/y6=3:S2; [2 to start with]
+
+!!VRy2&y1=3/y6=4:S127; [Storm Elementals]
+!!VRy3&y1=3/y6=4:S3; [3 to start with]
+!!VRy4&y1=3/y6=4:S123; [Ice Elementals]
+!!VRy5&y1=3/y6=4:S5; [5 to start with]
+
+!!VRy2&y1=3/y6=5:S31; [Obsidian Gargoyles]
+!!VRy3&y1=3/y6=5:S12; [12 to start with]
+!!VRy4&y1=3/y6=5:S35; [Arch Magi]
+!!VRy5&y1=3/y6=5:S1; [1 to start with]
+
+!!VRy2&y1=3/y6=6:S38; [Nagas]
+!!VRy3&y1=3/y6=6:S1; [1 to start with]
+!!VRy4&y1=3/y6=6:S29; [Master Gremlins]
+!!VRy5&y1=3/y6=6:S6; [6 to start with]
+
+!!VRy2&y1=3/y6=7:S37; [Master Genies]
+!!VRy3&y1=3/y6=7:S1; [1 to start with]
+!!VRy4&y1=3/y6=7:S29; [Master Gremlins]
+!!VRy5&y1=3/y6=7:S6; [6 to start with]
+
+
+ [Swamp=4]
+!!VRy6:S1 R3; [1-4]
+!!VRy2&y1=4/y6=1:S101; [Lizard Warriors]
+!!VRy3&y1=4/y6=1:S5; [5 to start with]
+!!VRy4&y1=4/y6=1:S100; [Lizardmen]
+!!VRy5&y1=4/y6=1:S8; [8 to start with]
+
+!!VRy2&y1=4/y6=2:S105; [Dragon Flies]
+!!VRy3&y1=4/y6=2:S6; [6 to start with]
+!!VRy4&y1=4/y6=2:S101; [Lizard Warriors]
+!!VRy5&y1=4/y6=2:S5; [5 to start with]
+
+!!VRy2&y1=4/y6=3:S108; [Wyverns]
+!!VRy3&y1=4/y6=3:S1; [1 to start with]
+!!VRy4&y1=4/y6=3:S100; [Lizardmen]
+!!VRy5&y1=4/y6=3:S7; [7 to start with]
+
+!!VRy2&y1=4/y6=4:S101; [Lizard Warriors]
+!!VRy3&y1=4/y6=4:S6; [6 to start with]
+!!VRy4&y1=4/y6=4:S103; [Mighty Gorgons]
+!!VRy5&y1=4/y6=4:S1; [1 to start with]
+
+
+ [Rough=5]
+!!VRy6:S1 R4; [1-5]
+!!VRy2&y1=5/y6=1:S89; [Orc Chieftains]
+!!VRy3&y1=5/y6=1:S4; [4 to start with]
+!!VRy4&y1=5/y6=1:S88; [Orcs]
+!!VRy5&y1=5/y6=1:S6; [6 to start with]
+
+!!VRy2&y1=5/y6=2:S-1; [Nothing]
+!!VRy3&y1=5/y6=2:S0; [0 to start with]
+!!VRy4&y1=5/y6=2:S95; [Cyclops Kings]
+!!VRy5&y1=5/y6=2:S1; [1 to start with]
+
+!!VRy2&y1=5/y6=3:S89; [Orc Chieftains]
+!!VRy3&y1=5/y6=3:S4; [4 to start with]
+!!VRy4&y1=5/y6=3:S94; [Cyclops]
+!!VRy5&y1=5/y6=3:S1; [1 to start with]
+
+!!VRy2&y1=5/y6=4:S92; [Rocs]
+!!VRy3&y1=5/y6=4:S1; [1 to start with]
+!!VRy4&y1=5/y6=4:S89; [Orc Chieftains]
+!!VRy5&y1=5/y6=4:S5; [5 to start with]
+
+!!VRy2&y1=5/y6=5:S88; [Orcs]
+!!VRy3&y1=5/y6=5:S7; [7 to start with]
+!!VRy4&y1=5/y6=5:S91; [Ogre Magi]
+!!VRy5&y1=5/y6=5:S1; [1 to start with]
+
+
+ [Subterranean=6]
+!!VRy6:S1 R5; [1-6]
+!!VRy2&y1=6/y6=1:S75; [Evil Eyes]
+!!VRy3&y1=6/y6=1:S3; [3 to start with]
+!!VRy4&y1=6/y6=1:S74; [Beholders]
+!!VRy5&y1=6/y6=1:S5; [5 to start with]
+
+!!VRy2&y1=6/y6=2:S77; [Medusa Queens]
+!!VRy3&y1=6/y6=2:S2; [2 to start with]
+!!VRy4&y1=6/y6=2:S76; [Medusas]
+!!VRy5&y1=6/y6=2:S3; [3 to start with]
+
+!!VRy2&y1=6/y6=3:S77; [Medusa Queens]
+!!VRy3&y1=6/y6=3:S2; [2 to start with]
+!!VRy4&y1=6/y6=3:S75; [Evil Eyes]
+!!VRy5&y1=6/y6=3:S3; [3 to start with]
+
+!!VRy2&y1=6/y6=4:S73; [Harpy Hags]
+!!VRy3&y1=6/y6=4:S5; [5 to start with]
+!!VRy4&y1=6/y6=4:S75; [Evil Eyes]
+!!VRy5&y1=6/y6=4:S3; [3 to start with]
+
+!!VRy2&y1=6/y6=5:S76; [Medusas]
+!!VRy3&y1=6/y6=5:S3; [3 to start with]
+!!VRy4&y1=6/y6=5:S78; [Minotaurs]
+!!VRy5&y1=6/y6=5:S1; [1 to start with]
+
+!!VRy2&y1=6/y6=6:S75; [Evil Eyes]
+!!VRy3&y1=6/y6=6:S3; [3 to start with]
+!!VRy4&y1=6/y6=6:S71; [Infernal Trogs]
+!!VRy5&y1=6/y6=6:S14; [14 to start with]
+
+
+ [Lava=7]
+!!VRy6:S1 R3; [1-4]
+!!VRy2&y1=7/y6=1:S45; [Magogs]
+!!VRy3&y1=7/y6=1:S4; [4 to start with]
+!!VRy4&y1=7/y6=1:S44; [Gogs]
+!!VRy5&y1=7/y6=1:S6; [6 to start with]
+
+!!VRy2&y1=7/y6=2:S171; [Lava Sharpshooters]
+!!VRy3&y1=7/y6=2:S2; [2 to start with]
+!!VRy4&y1=7/y6=2:S171; [Lava Sharpshooters]
+!!VRy5&y1=7/y6=2:S2; [2 to start with]
+
+!!VRy2&y1=7/y6=3:S53; [Efreet Sultans]
+!!VRy3&y1=7/y6=3:S1; [1 to start with]
+!!VRy4&y1=7/y6=3:S45; [Magogs]
+!!VRy5&y1=7/y6=3:S3; [3 to start with]
+
+!!VRy2&y1=7/y6=4:S49; [Horned Demons]
+!!VRy3&y1=7/y6=4:S5; [5 to start with]
+!!VRy4&y1=7/y6=4:S44; [Gogs]
+!!VRy5&y1=7/y6=4:S7; [7 to start with]
+
+ [Set Garrison to "not defeated"]
+!!POv1/v2/v3:N1;
+
+ [Fill Garrison slots]
+!!GRv1/v2/v3:G0/y2/y3;
+!!GRv1/v2/v3:G1/y4/y5;
+!!GRv1/v2/v3:G2/y4/y5;
+!!GRv1/v2/v3:G3/y4/y5;
+!!GRv1/v2/v3:G4/y4/y5;
+!!GRv1/v2/v3:G5/y4/y5;
+!!GRv1/v2/v3:G6/y2/y3;
+
+--------------------------------------------------------------------------
+
+ [Set up Quicksand]
+
+!?FU10857;
+
+!!VRv1238:S0; [Reset v1238]
+!!DO10859/21/39/1:P; [Find a living monster to cast Quick Sand spell: v1238]
+!!BMv1238&v1238>20:C10/32/3/3/0; [Place random quick sand]
+
+--------------------------------------------------------------------------
+
+ [Set up Fire Walls]
+
+!?FU10858;
+
+!!VRv1238:S0; [Reset v1238]
+!!DO10859/21/39/1:P; [Find a living monster to cast Fire Wall spell: v1238]
+!!BMv1238&v1238>20:C13/45/3/3/0 C13/46/3/3/0 C13/79/1/3/0;
+!!BMv1238&v1238>20:C13/97/3/3/0 C13/98/1/3/0 C13/113/1/3/0;
+!!BMv1238&v1238>20:C13/147/3/3/0 C13/148/3/3/0;
+!!BMv1238&v1238>20:C13/181/1/3/0 C13/182/1/3/0;
+
+--------------------------------------------------------------------------
+
+ [Find a living monster to cast Fire Wall, Force Field or Frost Ring spell: v1238]
+
+!?FU10859;
+
+!!BMx16:N?y1; [Check number of monsters in stack]
+!!VRv1238&y1>0:Sx16; [If stack has monsters remaining, use it as casting stack]
+!!VRx16&y1>0:S99; [Exit loop if valid stack found]
+
+--------------------------------------------------------------------------
+
+ [Set up Land Mines]
+
+!?FU10860;
+
+!!BM21:Q1/14/0 Q1/15/0;
+!!BM21:Q1/31/0 Q1/32/0;
+!!BM21:Q1/48/0 Q1/49/0;
+!!BM21:Q1/65/0 Q1/66/0;
+!!BM21:Q1/82/0 Q1/83/0;
+!!BM21:Q1/99/0 Q1/100/0;
+!!BM21:Q1/116/0 Q1/117/0;
+!!BM21:Q1/133/0 Q1/134/0;
+!!BM21:Q1/150/0 Q1/151/0;
+!!BM21:Q1/167/0 Q1/168/0;
+!!BM21:Q1/184/0 Q1/185/0;
+
+--------------------------------------------------------------------------
+
+ [Setup Battlefield]
+
+!?BF&v1253=1/v1237=1/1000/-998;
+!!BF:C;
+
+!!TR998:T?v1/d/d/d/d/d/d/d; [Check terrain: v1]
+!!VRv2&v1=0:S84; [Dirt]
+!!VRv2&v1=1:S75; [Sand]
+!!VRv2&v1=2:S21; [Grass]
+!!VRv2&v1=3:S75; [Snow]
+!!VRv2&v1=4:S66; [Swamp]
+!!VRv2&v1=5:S75; [Rough]
+!!VRv2&v1=6:S84; [Subterranean]
+!!VRv2&v1=7:S79; [Lava]
+
+ [Place rocks or similar 1 hex obstacles]
+!!DO10861/3/12/1:Pv1/v2/10/13/30/44/47/61/64/78/81/95;
+!!DO10861/3/11/1:Pv1/v2/112/115/129/132/146/149/166/180/183;
+
+--------------------------------------------------------------------------
+
+ [Place rocks or similar 1 hex obstacles]
+ [x1=terrain type, x2=obstacle type]
+
+!?FU10861;
+
+!!VRy1:Sxx16;
+!!BF:Ox2/y1;
+
+--------------------------------------------------------------------------
+
+ [Garrison post-visit trigger]
+
+!$OB33&v1253=1/v1237>0;
+!!VRv1237:S0; [Clear v1237]
+!!PO998:N?v1; [Check if treasure already taken]
+!!HE-1:O?v2;  [Check if hero won the battle]
+!!FU10862&v1=1/v2>=0:P; [Give treasure]
+!!HE-1:R4/-1/0; [Enable Tactics]
+
+--------------------------------------------------------------------------
+
+ [Give treasure if neutral garrison troops are defeated]
+
+!?FU10862;
+
+ [50% chance of 1 resource/25% of 2 resources/25% chance of resource and an artifact]
+!!VRy1:S1 R4; [Random number 1-4: y1]
+
+ [1st resource: y2=type, y3=amount]
+!!VRy2:S0 R6; [y2 = random resource number from 0-6]
+!!VRy2&y2=6:S7; [If it's gold, change it to Mithril]
+!!VRy3:S2 R2; [Resource amount: 2-4 (y3)]
+!!VRy3&y2=0:S5 R3; [Adjust y3 for ore amount: 5-8]
+!!VRy3&y2=2:S5 R3; [Adjust y3 for wood amount: 5-8]
+
+ [If y1<3, double the single resource amount *or* the gold amount]
+!!VRy7:S0 R1;        [y7 = random number 0-1]
+!!VRy3&y1<3/y7=0:*2; [Double resource amount if y7=0]
+
+ [If y1=3, 2nd resource: y4=type, y5=amount]
+!!VRy4:S-1; !!VRy5:S-1;
+!!VRy4&y1=3:S0 R6; [y4 = random resource number from 0-6]
+!!VRy4&y1=3/y4=6:S7; [If it's gold, change it to Mithril]
+!!VRy5&y1=3:S2 R2; [Resource amount: 2-4 (y5)]
+!!VRy5&y1=3/y4=0:S3 R4; [Adjust y5 for ore amount: 3-7]
+!!VRy5&y1=3/y4=2:S3 R4; [Adjust y5 for wood amount: 3-7]
+
+ [Generate gold amount: y6=amount]
+!!VRy6:S625 R625;    [y6 = 625-1250 gold]
+!!VRy6&y1<3/y7=1:*2; [Double the gold amount if only 1 resource and y7=1]
+
+ [If y1=4, artifact: y4=8, y5=artifact type]
+!!VRy4&y1=4:S8; [Artifact]
+!!VRy7:S1 R15; [16 possible artifacts: y7 = 1 to 16]
+!!VRy5&y1=4/y7=1:S7; [Centaur's Axe]
+!!VRy5&y1=4/y7=2:S8; [Blackshard of the Dead Knight]
+!!VRy5&y1=4/y7=3:S13; [Shield of the Dwarven Lords]
+!!VRy5&y1=4/y7=4:S14; [Shield of the Yawning Dead]
+!!VRy5&y1=4/y7=5:S19; [Helm of the Alabaster Unicorn]
+!!VRy5&y1=4/y7=6:S20; [Skull Helmet]
+!!VRy5&y1=4/y7=7:S25; [Breatplate of Petried Wood]
+!!VRy5&y1=4/y7=8:S26; [Rib Cage]
+!!VRy5&y1=4/y7=9:S56; [Dead Man's Boots]
+!!VRy5&y1=4/y7=10:S60; [Bow of Elven Cherrywood]
+!!VRy5&y1=4/y7=11:S61; [Bowstring of the Unicorn's Mane]
+!!VRy5&y1=4/y7=12:S64; [Stoic Watchman]
+!!VRy5&y1=4/y7=13:S49; [Badge of Courage]
+!!VRy5&y1=4/y7=14:S69; [Ring of the Wayfarer]
+!!VRy5&y1=4/y7=15:S94; [Ring of Vitality]
+!!VRy5&y1=4/y7=16:S95; [Ring of Life]
+
+!!IF&1000:Q2/6/y6/y2/y3/y4/y5/1/z142000;
+!!OW:R-1/y2/dy3; [Give resource 1]
+!!OW&y1=3:R-1/y4/dy5; [Give resource 2 if set]
+!!OW:R-1/6/dy6;  [Give gold]
+!!HE-1&y1=4:A4/y5; [Equip artifact if set]
+
+!!PO998:N15; [Set treasure indicator to 15 (already taken)]
+
+--------------------------------------------------------------------------
+
+ [Grow troops in neutral garrisons each week by 5% per stack, minimum growth of 1]
+
+!?TM48&v1253=1;
+
+!!VRv1:Sc; [Set v1 to current date]
+!!FU10863&v1<>v1239:P;
+!!VRv1239:Sc; [Set v1239 to current date so that garrison troop setting is only done once]
+
+--------------------------------------------------------------------------
+
+ [Grow neutral garrison troops each week: part 1]
+
+!?FU10863;
+
+!!UN:U33/-1/?y1; [Number of garrisons in y1]
+!!VRv1:S-1; [Initialize v1 to -1 to work correctly with faster UN:U syntax]
+!!DO10864/1/y1/1&y1>0:P;
+
+--------------------------------------------------------------------------
+
+ [Grow neutral garrison troops each week: part 2]
+
+!?FU10864;
+
+!!UN:U33/-1/-1/1; [Get coordinates of garrison into v1/v2/v3]
+
+!!POv1/v2/v3:N?v4; [Check if garrison already wiped out: v4=1 if not wiped out]
+
+!!DO10865/0/6/1&v4=1:P; [Grow each stack by 5% (minimum 1)]
+
+--------------------------------------------------------------------------
+
+ [Grow neutral garrison troops each week: part 3]
+
+!?FU10865;
+
+!!GRv1/v2/v3:Gx16/d/?y1; [Check number of troops in this slot]
+!!VRy2&y1>0:Sy1 :20; [Divide number by 20: y2 is 5% of y1]
+!!VRy3&y1>0/y2>0:Sy1 +y2; [If 5% is at least 1, add it to number: y3]
+!!VRy3&y1>0/y2=0:Sy1 +1;  [If 5% is less than 1, add 1]
+!!GRv1/v2/v3&y1>0:Gx16/d/y3; [New number of troops after growth]
+
+--------------------------------------------------------------------------
+
+ [Set up Force Fields]
+
+!?FU10866;
+
+!!VRv1238:S0; [Reset v1238]
+!!DO10859/21/39/1:P; [Find a living monster to cast Force Field spell: v1238]
+
+ [Check for a monster: -1 if no living monster]
+!!BU:E43/?y1; !!BU:E27/?y2; !!BU:E9/?y3;
+
+ [Place force field #1 if no living monster]
+!!BMv1238&v1238>20/y1=-1/y2=-1/y3=-1:C12/43/3/3/0;
+
+ [Check for a monster: -1 if no living monster]
+!!BU:E179/?y1; !!BU:E163/?y2; !!BU:E145/?y3;
+
+ [Place force field #2 if no living monster]
+!!BMv1238&v1238>20/y1=-1/y2=-1/y3=-1:C12/179/3/3/0;
+
+ [Check for a monster: -1 if no living monster]
+!!BU:E114/?y1; !!BU:E98/?y2; !!BU:E80/?y3;
+
+ [Place force field #3 if no living monster]
+!!BMv1238&v1238>20/y1=-1/y2=-1/y3=-1:C12/114/3/3/0;
+
+--------------------------------------------------------------------------
+
+ [Cast Frost Rings]
+
+!?FU10867;
+
+!!VRv1238:S0; [Reset v1238]
+!!DO10859/21/39/1:P; [Find a living monster to cast Frost Ring spell: v1238]
+!!BMv1238&v1238>20:C20/29/3/3/0 C20/79/3/3/0 C20/131/1/3/0 C20/181/1/3/0;
+
+--------------------------------------------------------------------------
+
+ [Attempt to Cast Basic Forgetfulness on one Attacker each turn]
+
+!?FU10868;
+
+!!VRv1238:S0; [Reset v1238]
+!!DO10859/21/39/1:P; [Find a living monster to cast Forgetfulness spell: v1238]
+!!VRy1:S0 R10; [Random stack number from 0 to 10: y1]
+!!BMy1:P?y2;   [Stack's position: y2]
+!!BU&y2>0/y2<186:Ey2/?y3;  [Check if stack is alive: y3>=0 if alive]
+!!BMy1&y2>0/y2<186:F?y4;   [Check stack's attribute flags: y4]
+!!VRy5:Sy4;                [Set y5 to the same value as y4]
+!!VRy6:Sy4;                [Set y6 to the same value as y4]
+!!VRy4:&4;     [Check if stack is a shooter: y4=4 if a shooter]
+!!VRy5:&1024;  [Check if stack is immune to mind spells: y5=1024 if immune]
+!!VRy6:&64;    [Check if stack is a siege weapon]
+
+ [Cast Basic Forgetfulness on stack at y2 if it's alive, at a valid posiition,]
+ [a shooter, not a siege weapon, and not immune to mind spells]
+!!BMv1238&v1238>20/y3>=0/y2>0/y2<186/y4=4/y5<>1024/y6<>64:C61/y2/1/3/0;
+
+--------------------------------------------------------------------------
+
+ [Place new Garrisons as map loads]
+
+!#VRv9:S0; [Initialize v9 to 0]
+!#VRv1253:S0; [Initialize v1253 to 0]
+!#UN:P42/?v9; [Check if Garrisons script is active: v9=1 if yes]
+!#VRv1253&v9=1:S1; [Set v1253 to 1 if Garrison script is active]
+
+~~TM19:S1/1/1/255; [Set up timer 19 - shared with WoGify]
+!#VRv1236:S0; [Check that garrison troop setting is only done once]
+!#UN:X?v1/?v2; [Get size of map]
+
+!#VRv1239:S0; [Set growth check variable to 0]
+!#TM48&v9=1:S8/999/7/255; [Set up timer 48 for weekly nuetral garrison troop growth]
+
+ [Dialogue box to ask player how many garrison to place]
+!#VRz1:Sz142001;
+!#VRz2:Sz142002;
+!#VRz3:Sz142003;
+!#VRz4:Sz142004;
+!#VRz5:Sz142005;
+!#VRz6:Sz142006;
+!#IF:D88/1/0/2/0/0/0/0/0/0/0/0/3/4/5/6; [Set up dialogue 88]
+!#IF:F88/3/4/5/6/0; [Setup button hint text and disable cancel button]
+!#IF&v9=1:E7/88; [Display dialogue and store choice in v7]
+
+ [Set v6 frequency]
+!#VRv6&v7=2:S6; [Few garrisons]
+!#VRv6&v7=3:S3; [Some garrisons]
+!#VRv6&v7=4:S1; [Tons of garrisons]
+
+ [Adjust v6 for map size]
+!#VRv6&v1=36:+0; [Small map]
+!#VRv6&v1=72:+1; [Medium map]
+!#VRv6&v1=108:+2; [Large map]
+!#VRv6&v1=144:+3; [Extra Large map]
+
+ [Always set maximum for "tons"]
+!#VRv6&v7=4:S1; [Tons of garrisons]
+
+ [Set v8 (frequency modifier) for map size]
+!#VRv8&v1=36:S6; [Small map]
+!#VRv8&v1=72:S7; [Medium map]
+!#VRv8&v1=108:S8; [Large map]
+!#VRv8&v1=144:S9; [Extra Large map]
+
+!#VRv1:-3; [Subtract 3 from v1 to get highest map coordinate we'll use]
+!#VRv5:S0; [Set v5 to 0]
+!#DO10850/2/v1/1&v9=1/v7>1:P0;      [Do surface]
+!#DO10850/2/v1/1&v2=1/v9=1/v7>1:P1; [Do underground if it has one]
+

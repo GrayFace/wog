@@ -1,0 +1,2925 @@
+ZVSE
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_ScriptName=Wog Balance
+ERMS_ScriptAuthor=Alexandru Balahura
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=22.11(November).2013
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+
+
+** Wog Balance v1.0 by Alexandru Balahura
+** WoGify Name: script082.erm
+** Wog Option: 82
+** Last Updated: September 16, 2007
+** Previously Updated: July 24, 2007
+
+
+** VERSION 1.0:
+
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+*Functions Used:
+*Timers Used: none
+*Normal Variables Used: none (was reserved v152-v153)
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+
+!#UN:P82/=1; !#FU&-1:E; [Check if Wog Balance is enabled in WoGify Options]
+
+
+// The green info is the original stats of all creatures that will help me in the future to balance more //
+
+
+*** CASTLE ***
+
+!#MA:C0/6/60; Pikeman cost 60 Gold
+!#MA:A0/4;    Pikeman has 4 attack
+!#MA:D0/5;    Pikeman has 4 defence
+!#MA:P0/10;   Pikeman has 10 health
+!#MA:S0/4;    Pikeman has 4 speed
+!#MA:M0/1;    Pikeman has minimum damage 1
+!#MA:E0/3;    Pikeman has maximum damage 3
+!#MA:G0/14;   Pikeman has a grow rate of 14
+!#MA:R0/0;    Pikeman has no additional grow rate
+!#MA:I0/80;   Pikeman has 80 AI value
+!#MA:F0/100;  Pikeman has 100 Fight Value
+!#MA:L0/0;    Pikeman is a level 1 monster
+!#MA:O0/0;    Pikeman belongs to Castle
+!#MA:X0/16;   Pikeman flag is alive
+
+
+!#MA:C1/6/75; Halberdier cost 75 Gold
+!#MA:A1/6;    Halberdier has 6 attack
+!#MA:D1/5;    Halberdier has 5 defence
+!#MA:P1/10;   Halberdier has 10 health
+!#MA:S1/5;    Halberdier has 5 speed
+!#MA:M1/2;    Halberdier has minimum damage 2
+!#MA:E1/3;    Halberdier has maximum damage 3
+!#MA:G1/14;   Halberdier has a grow rate of 14
+!#MA:R1/0;    Halberdier has no additional grow rate
+!#MA:I1/115;  Halberdier has 115 AI value
+!#MA:F1/115;  Halberdier has 115 Fight Value
+!#MA:L1/0;    Halberdier is a level 1 monster
+!#MA:O1/0;    Halberdier belongs to Castle
+!#MA:X1/16;   Halberdier flag is alive
+
+
+!#MA:C2/6/100; Archer cost 100 Gold
+!#MA:A2/6;     Archer has 6 attack
+!#MA:D2/3;     Archer has 3 defence
+!#MA:P2/10;    Archer has 10 health
+!#MA:S2/4;     Archer has 4 speed
+!#MA:M2/2;     Archer has minimum damage 2
+!#MA:E2/3;     Archer has maximum damage 3
+!#MA:N2/12;    Archer has 12 shots
+!#MA:G2/9;     Archer has a grow rate of 9
+!#MA:R2/0;     Archer has no additional grow rate
+!#MA:I2/126;   Archer has 126 AI value
+!#MA:F2/115;   Archer has 115 Fight Value
+!#MA:L2/1;     Archer is a level 2 monster
+!#MA:O2/0;     Archer belongs to Castle
+!#MA:X2/20;    Archer flag is shooter and alive
+
+
+!#MA:C3/6/150; Marksman cost 150 Gold
+!#MA:A3/6;     Marksman has 6 attack
+!#MA:D3/3;     Marksman has 3 defence
+!#MA:P3/10;    Marksman has 10 health
+!#MA:S3/6;     Marksman has 6 speed
+!#MA:M3/2;     Marksman has minimum damage 2
+!#MA:E3/3;     Marksman has maximum damage 3
+!#MA:N3/24;    Marksman has 24 shots
+!#MA:G3/9;     Marksman has a grow rate of 9
+!#MA:R3/0;     Marksman has no additional grow rate
+!#MA:I3/184;   Marksman has 184 AI value
+!#MA:F3/115;   Marksman has 115 Fight Value
+!#MA:L3/1;     Marksman is a level 2 monster
+!#MA:O3/0;     Marksman belongs to Castle
+!#MA:X3/32788; Marksman flag is shooter,alive and shoot twice
+
+
+!#MA:C4/6/200; Griffin cost 200 Gold
+!#MA:A4/8;     Griffin has 8 attack
+!#MA:D4/8;     Griffin has 8 defence
+!#MA:P4/25;    Griffin has 25 health
+!#MA:S4/6;     Griffin has 6 speed
+!#MA:M4/3;     Griffin has minimum damage 3
+!#MA:E4/6;     Griffin has maximum damage 6
+!#MA:G4/7;     Griffin has a grow rate of 7
+!#MA:R4/3;     Griffin has 3 additional grow rate
+!#MA:I4/351;   Griffin has 351 AI value
+!#MA:F4/324;   Griffin has 324 Fight Value
+!#MA:L4/2;     Griffin is a level 3 monster
+!#MA:O4/0;     Griffin belongs to Castle
+!#MA:X4/19;    Griffin flag is double wide,fly and alive
+
+
+!#MA:C5/6/240; Royal Griffin cost 240 Gold
+!#MA:A5/9;     Royal Griffin has 9 attack
+!#MA:D5/9;     Royal Griffin has 9 defence
+!#MA:P5/25;    Royal Griffin has 25 health
+!#MA:S5/9;     Royal Griffin has 9 speed
+!#MA:M5/3;     Royal Griffin has minimum damage 3
+!#MA:E5/6;     Royal Griffin has maximum damage 6
+!#MA:G5/7;     Royal Griffin has a grow rate of 7
+!#MA:R5/3;     Royal Griffin has 3 additional grow rate
+!#MA:I5/448;   Royal Griffin has 448 AI value
+!#MA:F5/364;   Royal Griffin has 364 Fight Value
+!#MA:L5/2;     Royal Griffin is a level 3 monster
+!#MA:O5/0;     Royal Griffin belongs to Castle
+!#MA:X5/19;    Royal Griffin flag is double wide,fly and alive
+
+
+!#MA:C6/6/300; Swordsman cost 300 Gold
+!#MA:A6/10;    Swordsman has 10 attack
+!#MA:D6/12;    Swordsman has 12 defence
+!#MA:P6/35;    Swordsman has 35 health
+!#MA:S6/5;     Swordsman has 5 speed
+!#MA:M6/6;     Swordsman has minimum damage 6
+!#MA:E6/9;     Swordsman has maximum damage 9
+!#MA:G6/4;     Swordsman has a grow rate of 4
+!#MA:R6/0;     Swordsman has no additional grow rate
+!#MA:I6/445;   Swordsman has 445 AI value
+!#MA:F6/445;   Swordsman has 445 Fight Value
+!#MA:L6/3;     Swordsman is a level 4 monster
+!#MA:O6/0;     Swordsman belongs to Castle
+!#MA:X6/16;    Swordsman flag is alive
+
+
+!#MA:C7/6/400; Crusader cost 400 Gold
+!#MA:A7/12;    Crusader has 12 attack
+!#MA:D7/12;    Crusader has 12 defence
+!#MA:P7/35;    Crusader has 35 health
+!#MA:S7/6;     Crusader has 6 speed
+!#MA:M7/7;     Crusader has minimum damage 7
+!#MA:E7/10;    Crusader has maximum damage 10
+!#MA:G7/4;     Crusader has a grow rate of 4
+!#MA:R7/0;     Crusader has no additional grow rate
+!#MA:I7/588;   Crusader has 588 AI value
+!#MA:F7/588;   Crusader has 588 Fight Value
+!#MA:L7/3;     Crusader is a level 4 monster
+!#MA:O7/0;     Crusader belongs to Castle
+!#MA:X7/32784; Crusader flag is alive and strike twice
+
+
+!#MA:C8/6/400; Monk cost 400 Gold
+!#MA:A8/12;    Monk has 12 attack
+!#MA:D8/7;     Monk has 7 defence
+!#MA:P8/30;    Monk has 30 health
+!#MA:S8/5;     Monk has 5 speed
+!#MA:M8/10;    Monk has minimum damage 10
+!#MA:E8/12;    Monk has maximum damage 12
+!#MA:N8/12;    Monk has 12 shots
+!#MA:G8/3;     Monk has a grow rate of 3
+!#MA:R8/0;     Monk has no additional grow rate
+!#MA:I8/485;   Monk has 485 AI value
+!#MA:F8/485;   Monk has 485 Fight Value
+!#MA:L8/4;     Monk is a level 5 monster
+!#MA:O8/0;     Monk belongs to Castle
+!#MA:X8/20;    Monk flag is shooter and alive
+
+
+!#MA:C9/6/450; Zealot cost 450 Gold
+!#MA:A9/12;    Zealot has 12 attack
+!#MA:D9/10;    Zealot has 10 defence
+!#MA:P9/30;    Zealot has 30 health
+!#MA:S9/7;     Zealot has 7 speed
+!#MA:M9/10;    Zealot has minimum damage 10
+!#MA:E9/12;    Zealot has maximum damage 12
+!#MA:N9/24;    Zealot has 24 shots
+!#MA:G9/3;     Zealot has a grow rate of 3
+!#MA:R9/0;     Zealot has no additional grow rate
+!#MA:I9/750;   Zealot has 750 AI value
+!#MA:F9/500;   Zealot has 500 Fight Value
+!#MA:L9/4;     Zealot is a level 5 monster
+!#MA:O9/0;     Zealot belongs to Castle
+!#MA:X9/4116;  Zealot flag is shooter,alive and has no penalty in close combat
+
+
+!#MA:C10/6/1000; Cavalier cost 1000 Gold
+!#MA:A10/15;     Cavalier has 15 attack
+!#MA:D10/15;     Cavalier has 15 defence
+!#MA:P10/100;    Cavalier has 100 health
+!#MA:S10/7;      Cavalier has 7 speed
+!#MA:M10/15;     Cavalier has minimum damage 15
+!#MA:E10/25;     Cavalier has maximum damage 25
+!#MA:G10/2;      Cavalier has a grow rate of 2
+!#MA:R10/0;      Cavalier has no additional grow rate
+!#MA:I10/1946;   Cavalier has 1946 AI value
+!#MA:F10/1668;   Cavalier has 1668 Fight Value
+!#MA:L10/5;      Cavalier is a level 6 monster
+!#MA:O10/0;      Cavalier belongs to Castle
+!#MA:X10/17;     Cavalier flag is double wide and alive
+
+
+!#MA:C11/6/1200; Champion cost 1000 Gold
+!#MA:A11/16;     Champion has 15 attack
+!#MA:D11/16;     Champion has 15 defence
+!#MA:P11/100;    Champion has 100 health
+!#MA:S11/9;      Champion has 7 speed
+!#MA:M11/20;     Champion has minimum damage 15
+!#MA:E11/25;     Champion has maximum damage 25
+!#MA:G11/2;      Champion has a grow rate of 2
+!#MA:R11/0;      Champion has no additional grow rate
+!#MA:I11/2100;   Champion has 1946 AI value
+!#MA:F11/1800;   Champion has 1668 Fight Value
+!#MA:L11/5;      Champion is a level 6 monster
+!#MA:O11/0;      Champion belongs to Castle
+!#MA:X11/17;     Champion flag is double wide and alive
+
+
+!#MA:C12/6/3000 C12/5/1; Angel cost 3000 Gold and 1 gem
+!#MA:A12/20;     Angel has 20 attack
+!#MA:D12/20;     Angel has 20 defence
+!#MA:P12/200;    Angel has 200 health
+!#MA:S12/12;     Angel has 12 speed
+!#MA:M12/50;     Angel has minimum damage 50
+!#MA:E12/50;     Angel has maximum damage 50
+!#MA:G12/1;      Angel has a grow rate of 1
+!#MA:R12/0;      Angel has no additional grow rate
+!#MA:I12/5019;   Angel has 5019 AI value
+!#MA:F12/3585;   Angel has 3585 Fight Value
+!#MA:L12/6;      Angel is a level 7 monster
+!#MA:O12/0;      Angel belongs to Castle
+!#MA:X12/274;    Angel flag is alive and King 2(advanced level of slayer spell)
+
+
+!#MA:C13/6/5000 C12/5/3; Archangel cost 5000 Gold and 3 gems
+!#MA:A13/30;     Archangel has 30 attack
+!#MA:D13/30;     Archangel has 30 defence
+!#MA:P13/250;    Archangel has 250 health
+!#MA:S13/18;     Archangel has 18 speed
+!#MA:M13/50;     Archangel has minimum damage 50
+!#MA:E13/50;     Archangel has maximum damage 50
+!#MA:G13/1;      Archangel has a grow rate of 1
+!#MA:B13/1;      Archangel has 1 cast
+!#MA:R13/0;      Archangel has no additional grow rate
+!#MA:I13/8776;   Archangel has 8776 AI value
+!#MA:F13/6033;   Archangel has 6033 Fight Value
+!#MA:L13/6;      Archangel is a level 7 monster
+!#MA:O13/0;      Archangel belongs to Castle
+!#MA:X13/275;    Archangel flag is double wide,alive and King 2(advanced level of slayer spell)
+
+------------------------------------------------------------------------------------------------------------------------
+
+*** RAMPART ***
+
+!#MA:C14/6/70; Centaur cost 70 Gold
+!#MA:A14/5;    Centaur has 5 attack
+!#MA:D14/3;    Centaur has 3 defence
+!#MA:P14/8;    Centaur has 8 health
+!#MA:S14/6;    Centaur has 6 speed
+!#MA:M14/2;    Centaur has minimum damage 2
+!#MA:E14/3;    Centaur has maximum damage 3
+!#MA:G14/14;   Centaur has a grow rate of 14
+!#MA:R14/0;    Centaur has no additional grow rate
+!#MA:I14/100;  Centaur has 100 AI value
+!#MA:F14/100;  Centaur has 100 Fight Value
+!#MA:L14/0;    Centaur is a level 1 monster
+!#MA:O14/1;    Centaur belongs to Rampart
+!#MA:X14/17;   Centaur flag is double wide and alive
+
+
+!#MA:C15/6/90; Centaur Captain cost 90 Gold
+!#MA:A15/6;    Centaur Captain has 6 attack
+!#MA:D15/3;    Centaur Captain has 3 defence
+!#MA:P15/10;   Centaur Captain has 10 health
+!#MA:S15/8;    Centaur Captain has 8 speed
+!#MA:M15/2;    Centaur Captain has minimum damage 2
+!#MA:E15/3;    Centaur Captain has maximum damage 3
+!#MA:G15/14;   Centaur Captain has a grow rate of 14
+!#MA:R15/0;    Centaur Captain has no additional grow rate
+!#MA:I15/138;  Centaur Captain has 138 AI value
+!#MA:F15/115;  Centaur Captain has 115 Fight Value
+!#MA:L15/0;    Centaur Captain is a level 1 monster
+!#MA:O15/1;    Centaur Captain belongs to Rampart
+!#MA:X15/17;   Centaur Captain flag is double wide and alive
+
+
+!#MA:C16/6/120; Dwarf cost 120 Gold
+!#MA:A16/6;     Dwarf has 6 attack
+!#MA:D16/7;     Dwarf has 7 defence
+!#MA:P16/20;    Dwarf has 20 health
+!#MA:S16/3;     Dwarf has 3 speed
+!#MA:M16/2;     Dwarf has minimum damage 2
+!#MA:E16/4;     Dwarf has maximum damage 4
+!#MA:G16/8;     Dwarf has a grow rate of 8
+!#MA:R16/4;     Dwarf has 4 additional grow rate
+!#MA:I16/138;   Dwarf has 138 AI value
+!#MA:F16/194;   Dwarf has 194 Fight Value
+!#MA:L16/1;     Dwarf is a level 2 monster
+!#MA:O16/1;     Dwarf belongs to Rampart
+!#MA:X16/16;    Dwarf flag is alive
+
+
+!#MA:C17/6/150; Battle Dwarf cost 150 Gold
+!#MA:A17/7;     Battle Dwarf has 7 attack
+!#MA:D17/7;     Battle Dwarf has 7 defence
+!#MA:P17/20;    Battle Dwarf has 20 health
+!#MA:S17/5;     Battle Dwarf has 5 speed
+!#MA:M17/2;     Battle Dwarf has minimum damage 2
+!#MA:E17/4;     Battle Dwarf has maximum damage 4
+!#MA:G17/8;     Battle Dwarf has a grow rate of 8
+!#MA:R17/4;     Battle Dwarf has 4 additional grow rate
+!#MA:I17/209;   Battle Dwarf has 209 AI value
+!#MA:F17/209;   Battle Dwarf has 209 Fight Value
+!#MA:L17/1;     Battle Dwarf is a level 2 monster
+!#MA:O17/1;     Battle Dwarf belongs to Rampart
+!#MA:X17/16;    Battle Dwarf flag is alive
+
+
+!#MA:C18/6/200; Wood Elf cost 200 Gold
+!#MA:A18/9;     Wood Elf has 9 attack
+!#MA:D18/5;     Wood Elf has 5 defence
+!#MA:P18/15;    Wood Elf has 15 health
+!#MA:S18/6;     Wood Elf has 6 speed
+!#MA:M18/3;     Wood Elf has minimum damage 3
+!#MA:E18/5;     Wood Elf has maximum damage 5
+!#MA:N18/24;    Wood Elf has 24 shots
+!#MA:G18/7;     Wood Elf has a grow rate of 7
+!#MA:R18/0;     Wood Elf has no additional grow rate
+!#MA:I18/234;   Wood Elf has 234 AI value
+!#MA:F18/195;   Wood Elf has 195 Fight Value
+!#MA:L18/2;     Wood Elf is a level 3 monster
+!#MA:O18/1;     Wood Elf belongs to Rampart
+!#MA:X18/20;    Wood Elf flag is shooter and alive
+
+
+!#MA:C19/6/225; Grand Elf cost 200 Gold
+!#MA:A19/9;     Grand Elf has 9 attack
+!#MA:D19/5;     Grand Elf has 5 defence
+!#MA:P19/15;    Grand Elf has 15 health
+!#MA:S19/7;     Grand Elf has 6 speed
+!#MA:M19/3;     Grand Elf has minimum damage 3
+!#MA:E19/5;     Grand Elf has maximum damage 5
+!#MA:N19/24;    Grand Elf has 24 shots
+!#MA:G19/7;     Grand Elf has a grow rate of 7
+!#MA:R19/0;     Grand Elf has no additional grow rate
+!#MA:I19/331;   Grand Elf has 234 AI value
+!#MA:F19/195;   Grand Elf has 195 Fight Value
+!#MA:L19/2;     Grand Elf is a level 3 monster
+!#MA:O19/1;     Grand Elf belongs to Rampart
+!#MA:X19/32788; Grand Elf flag is shooter,alive and shoots twice
+
+
+!#MA:C20/6/250; Pegasus cost 250 Gold
+!#MA:A20/9;     Pegasus has 9 attack
+!#MA:D20/8;     Pegasus has 8 defence
+!#MA:P20/30;    Pegasus has 30 health
+!#MA:S20/8;     Pegasus has 8 speed
+!#MA:M20/5;     Pegasus has minimum damage 5
+!#MA:E20/9;     Pegasus has maximum damage 9
+!#MA:G20/5;     Pegasus has a grow rate of 5
+!#MA:R20/0;     Pegasus has no additional grow rate
+!#MA:I20/518;   Pegasus has 518 AI value
+!#MA:F20/407;   Pegasus has 407 Fight Value
+!#MA:L20/3;     Pegasus is a level 4 monster
+!#MA:O20/1;     Pegasus belongs to Rampart
+!#MA:X20/19;    Pegasus flag is double wide,fly and alive
+
+
+!#MA:C21/6/275; Silver Pegasus cost 275 Gold
+!#MA:A21/9;     Silver Pegasus has 9 attack
+!#MA:D21/10;    Silver Pegasus has 10 defence
+!#MA:P21/30;    Silver Pegasus has 30 health
+!#MA:S21/12;    Silver Pegasus has 12 speed
+!#MA:M21/5;     Silver Pegasus has minimum damage 5
+!#MA:E21/9;     Silver Pegasus has maximum damage 9
+!#MA:G21/5;     Silver Pegasus has a grow rate of 5
+!#MA:R21/0;     Silver Pegasus has no additional grow rate
+!#MA:I21/532;   Silver Pegasus has 532 AI value
+!#MA:F21/418;   Silver Pegasus has 448 Fight Value
+!#MA:L21/3;     Silver Pegasus is a level 4 monster
+!#MA:O21/1;     Silver Pegasus belongs to Rampart
+!#MA:X21/19;    Silver Pegasus flag is double wide,fly and alive
+
+
+!#MA:C22/6/350; Dendroid Guard cost 350 Gold
+!#MA:A22/9;     Dendroid Guard has 9 attack
+!#MA:D22/12;    Dendroid Guard has 12 defence
+!#MA:P22/55;    Dendroid Guard has 55 health
+!#MA:S22/3;     Dendroid Guard has 3 speed
+!#MA:M22/10;    Dendroid Guard has minimum damage 10
+!#MA:E22/14;    Dendroid Guard has maximum damage 14
+!#MA:G22/3;     Dendroid Guard has a grow rate of 3
+!#MA:R22/2;     Dendroid Guard has 2 additional grow rate
+!#MA:I22/517;   Dendroid Guard has 517 AI value
+!#MA:F22/690;   Dendroid Guard has 690 Fight Value
+!#MA:L22/4;     Dendroid Guard is a level 5 monster
+!#MA:O22/1;     Dendroid Guard belongs to Rampart
+!#MA:X22/16;    Dendroid Guard flag is alive
+
+
+!#MA:C23/6/425; Dendroid Soldier cost 425 Gold
+!#MA:A23/9;     Dendroid Soldier has 9 attack
+!#MA:D23/12;    Dendroid Soldier has 12 defence
+!#MA:P23/65;    Dendroid Soldier has 65 health
+!#MA:S23/4;     Dendroid Soldier has 4 speed
+!#MA:M23/10;    Dendroid Soldier has minimum damage 10
+!#MA:E23/14;    Dendroid Soldier has maximum damage 14
+!#MA:G23/3;     Dendroid Soldier has a grow rate of 3
+!#MA:R23/2;     Dendroid Soldier has 2 additional grow rate
+!#MA:I23/803;   Dendroid Soldier has 803 AI value
+!#MA:F23/765;   Dendroid Soldier has 765 Fight Value
+!#MA:L23/4;     Dendroid Soldier is a level 5 monster
+!#MA:O23/1;     Dendroid Soldier belongs to Rampart
+!#MA:X23/16;    Dendroid Soldier flag is alive
+
+
+!#MA:C24/6/850; Unicorn cost 850 Gold
+!#MA:A24/15;    Unicorn has 15 attack
+!#MA:D24/14;    Unicorn has 14 defence
+!#MA:P24/90;    Unicorn has 90 health
+!#MA:S24/7;     Unicorn has 7 speed
+!#MA:M24/18;    Unicorn has minimum damage 18
+!#MA:E24/22;    Unicorn has maximum damage 22
+!#MA:G24/2;     Unicorn has a grow rate of 2
+!#MA:R24/0;     Unicorn has no additional grow rate
+!#MA:I24/1806;  Unicorn has 1806 AI value
+!#MA:F24/1548;  Unicorn has 1548 Fight Value
+!#MA:L24/5;     Unicorn is a level 6 monster
+!#MA:O24/1;     Unicorn belongs to Rampart
+!#MA:X24/17;    Unicorn flag is double wide and alive
+
+
+!#MA:C25/6/950; War Unicorn cost 950 Gold
+!#MA:A25/15;    War Unicorn has 15 attack
+!#MA:D25/14;    War Unicorn has 14 defence
+!#MA:P25/110;   War Unicorn has 110 health
+!#MA:S25/9;     War Unicorn has 9 speed
+!#MA:M25/18;    War Unicorn has minimum damage 18
+!#MA:E25/22;    War Unicorn has maximum damage 22
+!#MA:G25/2;     War Unicorn has a grow rate of 2
+!#MA:R25/0;     War Unicorn has no additional grow rate
+!#MA:I25/2030;  War Unicorn has 2030 AI value
+!#MA:F25/1740;  War Unicorn has 1740 Fight Value
+!#MA:L25/5;     War Unicorn is a level 6 monster
+!#MA:O25/1;     War Unicorn belongs to Rampart
+!#MA:X25/17;    War Unicorn flag is double wide and alive
+
+
+!#MA:C26/6/2400 C26/4/1; Green Dragon cost 2400 Gold and 1 Crystal
+!#MA:A26/18;    Green Dragon has 18 attack
+!#MA:D26/18;    Green Dragon has 18 defence
+!#MA:P26/180;   Green Dragon has 180 health
+!#MA:S26/10;    Green Dragon has 10 speed
+!#MA:M26/40;    Green Dragon has minimum damage 40
+!#MA:E26/50;    Green Dragon has maximum damage 50
+!#MA:G26/1;     Green Dragon has a grow rate of 1
+!#MA:R26/0;     Green Dragon has no additional grow rate
+!#MA:I26/4872;  Green Dragon has 4872 AI value
+!#MA:F26/3654;  Green Dragon has 3654 Fight Value
+!#MA:L26/6;     Green Dragon is a level 7 monster
+!#MA:O26/1;     Green Dragon belongs to Rampart
+!#MA:X26/155;   Green Dragon flag is double wide,fly,extended radius attack,alive and King 1
+
+
+!#MA:C27/6/4000 C26/4/2; Gold Dragon cost 4000 Gold and 2 Crystals
+!#MA:A27/27;    Gold Dragon has 27 attack
+!#MA:D27/27;    Gold Dragon has 27 defence
+!#MA:P27/250;   Gold Dragon has 250 health
+!#MA:S27/16;    Gold Dragon has 16 speed
+!#MA:M27/40;    Gold Dragon has minimum damage 40
+!#MA:E27/50;    Gold Dragon has maximum damage 50
+!#MA:G27/1;     Gold Dragon has a grow rate of 1
+!#MA:R27/0;     Gold Dragon has no additional grow rate
+!#MA:I27/8613;  Gold Dragon has 8613 AI value
+!#MA:F27/6220;  Gold Dragon has 6220 Fight Value
+!#MA:L27/6;     Gold Dragon is a level 6 monster
+!#MA:O27/1;     Gold Dragon belongs to Rampart
+!#MA:X25/155;   Gold Dragon flag is double wide,fly,extended radius attack,alive and King 1
+
+------------------------------------------------------------------------------------------------------------------------
+
+*** TOWER ***
+
+!#MA:C28/6/30; Gremlin cost 30 Gold
+!#MA:A28/3;    Gremlin has 3 attack
+!#MA:D28/3;    Gremlin has 3 defence
+!#MA:P28/4;    Gremlin has 4 health
+!#MA:S28/4;    Gremlin has 4 speed
+!#MA:M28/1;    Gremlin has minimum damage 1
+!#MA:E28/2;    Gremlin has maximum damage 2
+!#MA:G28/16;   Gremlin has a grow rate of 16
+!#MA:R28/0;    Gremlin has no additional grow rate
+!#MA:I28/44;   Gremlin has 44 AI value
+!#MA:F28/55;   Gremlin has 55 Fight Value
+!#MA:L28/0;    Gremlin is a level 1 monster
+!#MA:O28/2;    Gremlin belongs to Tower
+!#MA:X28/16;   Gremlin flag is alive
+
+
+!#MA:C29/6/40; Master Gremlin cost 40 Gold
+!#MA:A29/4;    Master Gremlin has 4 attack
+!#MA:D29/4;    Master Gremlin has 4 defence
+!#MA:P29/4;    Master Gremlin has 4 health
+!#MA:S29/5;    Master Gremlin has 5 speed
+!#MA:M29/1;    Master Gremlin has minimum damage 1
+!#MA:E29/2;    Master Gremlin has maximum damage 2
+!#MA:N29/8;    Master Gremlin has 8 shots
+!#MA:G29/16;   Master Gremlin has a grow rate of 16
+!#MA:R29/0;    Master Gremlin has no additional grow rate
+!#MA:I29/66;   Master Gremlin has 66 AI value
+!#MA:F29/55;   Master Gremlin has 55 Fight Value
+!#MA:L29/0;    Master Gremlin is a level 1 monster
+!#MA:O29/2;    Master Gremlin belongs to Tower
+!#MA:X29/20;   Master Gremlin flag is shooter and alive
+
+
+!#MA:C30/6/130; Stone Gargoyle cost 130 Gold
+!#MA:A30/6;     Stone Gargoyle has 6 attack
+!#MA:D30/6;     Stone Gargoyle has 6 defence
+!#MA:P30/16;    Stone Gargoyle has 16 health
+!#MA:S30/6;     Stone Gargoyle has 6 speed
+!#MA:M30/2;     Stone Gargoyle has minimum damage 2
+!#MA:E30/3;     Stone Gargoyle has maximum damage 3
+!#MA:G30/9;     Stone Gargoyle has a grow rate of 9
+!#MA:R30/4;     Stone Gargoyle has 4 additional grow rate
+!#MA:I30/165;   Stone Gargoyle has 165 AI value
+!#MA:F30/150;   Stone Gargoyle has 150 Fight Value
+!#MA:L30/1;     Stone Gargoyle is a level 2 monster
+!#MA:O30/2;     Stone Gargoyle belongs to Tower
+!#MA:X30/2;     Stone Gargoyle flag is fly
+
+
+!#MA:C31/6/160; Obsidian Gargoyle cost 160 Gold
+!#MA:A31/7;     Obsidian Gargoyle has 7 attack
+!#MA:D31/7;     Obsidian Gargoyle has 7 defence
+!#MA:P31/16;    Obsidian Gargoyle has 16 health
+!#MA:S31/9;     Obsidian Gargoyle has 9 speed
+!#MA:M31/2;     Obsidian Gargoyle has minimum damage 2
+!#MA:E31/3;     Obsidian Gargoyle has maximum damage 3
+!#MA:G31/9;     Obsidian Gargoyle has a grow rate of 9
+!#MA:R31/4;     Obsidian Gargoyle has 4 additional grow rate
+!#MA:I31/201;   Obsidian Gargoyle has 201 AI value
+!#MA:F31/155;   Obsidian Gargoyle has 150 Fight Value
+!#MA:L31/1;     Obsidian Gargoyle is a level 2 monster
+!#MA:O31/2;     Obsidian Gargoyle belongs to Tower
+!#MA:X31/2;     Obsidian Gargoyle flag is fly
+
+
+!#MA:C32/6/150; Stone Golem cost 150 Gold
+!#MA:A32/7;     Stone Golem has 7 attack
+!#MA:D32/10;    Stone Golem has 10 defence
+!#MA:P32/30;    Stone Golem has 30 health
+!#MA:S32/3;     Stone Golem has 3 speed
+!#MA:M32/4;     Stone Golem has minimum damage 4
+!#MA:E32/5;     Stone Golem has maximum damage 5
+!#MA:G32/6;     Stone Golem has a grow rate of 6
+!#MA:R32/0;     Stone Golem has no additional grow rate
+!#MA:I32/250;   Stone Golem has 250 AI value
+!#MA:F32/339;   Stone Golem has 339 Fight Value
+!#MA:L32/2;     Stone Golem is a level 3 monster
+!#MA:O32/2;     Stone Golem belongs to Tower
+!#MA:X32/516;   Stone Golem flag is shooter and King 3(expert level of Slayer spell)
+
+
+!#MA:C33/6/200; Iron Golem cost 200 Gold
+!#MA:A33/9;     Iron Golem has 9 attack
+!#MA:D33/10;    Iron Golem has 10 defence
+!#MA:P33/35;    Iron Golem has 35 health
+!#MA:S33/5;     Iron Golem has 5 speed
+!#MA:M33/4;     Iron Golem has minimum damage 4
+!#MA:E33/5;     Iron Golem has maximum damage 5
+!#MA:G33/6;     Iron Golem has a grow rate of 6
+!#MA:R33/0;     Iron Golem has no additional grow rate
+!#MA:I33/412;   Iron Golem has 412 AI value
+!#MA:F33/412;   Iron Golem has 412 Fight Value
+!#MA:L33/2;     Iron Golem is a level 3 monster
+!#MA:O33/2;     Iron Golem belongs to Tower
+!#MA:X33/516;   Iron Golem flag is shooter and King 3(expert level of Slayer spell)
+
+
+!#MA:C34/6/350; Mage cost 350 Gold
+!#MA:A34/11;    Mage has 11 attack
+!#MA:D34/8;     Mage has 8 defence
+!#MA:P34/25;    Mage has 25 health
+!#MA:S34/5;     Mage has 5 speed
+!#MA:M34/7;     Mage has minimum damage 7
+!#MA:E34/9;     Mage has maximum damage 9
+!#MA:N34/24;    Mage has 24 shots
+!#MA:G34/4;     Mage has a grow rate of 4
+!#MA:R34/0;     Mage has no additional grow rate
+!#MA:I34/570;   Mage has 570 AI value
+!#MA:F34/418;   Mage has 418 Fight Value
+!#MA:L34/3;     Mage is a level 4 monster
+!#MA:O34/2;     Mage belongs to Tower
+!#MA:X34/4116;  Mage flag is shooter,alive and no penalty in close combat
+
+
+!#MA:C35/6/450; Archmage cost 450 Gold
+!#MA:A35/12;    Archmage has 12 attack
+!#MA:D35/9;     Archmage has 9 defence
+!#MA:P35/30;    Archmage has 30 health
+!#MA:S35/7;     Archmage has 7 speed
+!#MA:M35/7;     Archmage has minimum damage 7
+!#MA:E35/9;     Archmage has maximum damage 9
+!#MA:N35/24;    Archmage has 24 shots
+!#MA:G35/4;     Archmage has a grow rate of 4
+!#MA:R35/0;     Archmage has no additional grow rate
+!#MA:I35/680;   Archmage has 680 AI value
+!#MA:F35/467;   Archmage has 467 Fight Value
+!#MA:L35/3;     Archmage is a level 4 monster
+!#MA:O35/2;     Archmage belongs to Tower
+!#MA:X35/6164;  Archmage flag is shooter,alive,monster(35,74,75) and no penalty in close combat
+
+
+!#MA:C36/6/550; Genie cost 550 Gold
+!#MA:A36/12;    Genie has 12 attack
+!#MA:D36/12;    Genie has 12 defence
+!#MA:P36/40;    Genie has 40 health
+!#MA:S36/7;     Genie has 7 speed
+!#MA:M36/13;    Genie has minimum damage 13
+!#MA:E36/16;    Genie has maximum damage 16
+!#MA:G36/3;     Genie has a grow rate of 3
+!#MA:R36/0;     Genie has no additional grow rate
+!#MA:I36/884;   Genie has 884 AI value
+!#MA:F36/680;   Genie has 680 Fight Value
+!#MA:L36/4;     Genie is a level 5 monster
+!#MA:O36/2;     Genie belongs to Tower
+!#MA:X36/18;    Genie flag is fly,alive
+
+
+!#MA:C37/6/600; Master Genie cost 600 Gold
+!#MA:A37/12;    Master Genie has 12 attack
+!#MA:D37/12;    Master Genie has 12 defence
+!#MA:P37/40;    Master Genie has 40 health
+!#MA:S37/11;    Master Genie has 11 speed
+!#MA:M37/13;    Master Genie has minimum damage 13
+!#MA:E37/16;    Master Genie has maximum damage 16
+!#MA:G37/3;     Master Genie has a grow rate of 3
+!#MA:B37/3;     Master Genie has 3 casts
+!#MA:R37/0;     Master Genie has no additional grow rate
+!#MA:I37/942;   Master Genie has 942 AI value
+!#MA:F37/748;   Master Genie has 748 Fight Value
+!#MA:L37/4;     Master Genie is a level 5 monster
+!#MA:O37/2;     Master Genie belongs to Tower
+!#MA:X37/18;    Master Genie flag is fly,alive
+
+
+!#MA:C38/6/1100; Naga cost 1100 Gold
+!#MA:A38/16;     Naga has 16 attack
+!#MA:D38/13;     Naga has 13 defence
+!#MA:P38/110;    Naga has 110 health
+!#MA:S38/5;      Naga has 5 speed
+!#MA:M38/20;     Naga has minimum damage 20
+!#MA:E38/20;     Naga has maximum damage 20
+!#MA:G38/2;      Naga has a grow rate of 2
+!#MA:R38/0;      Naga has no additional grow rate
+!#MA:I38/2016;   Naga has 2016 AI value
+!#MA:F38/2016;   Naga has 2016 Fight Value
+!#MA:L38/5;      Naga is a level 6 monster
+!#MA:O38/2;      Naga belongs to Tower
+!#MA:X38/65553;  Naga flag is double wide,alive and no enemy retaliation
+
+
+!#MA:C39/6/1600; Naga Queen cost 1600 Gold
+!#MA:A39/16;     Naga Queen has 16 attack
+!#MA:D39/13;     Naga Queen has 13 defence
+!#MA:P39/110;    Naga Queen has 110 health
+!#MA:S39/7;      Naga Queen has 7 speed
+!#MA:M39/30;     Naga Queen has minimum damage 30
+!#MA:E39/30;     Naga Queen has maximum damage 30
+!#MA:G39/2;      Naga Queen has a grow rate of 2
+!#MA:R39/0;      Naga Queen has no additional grow rate
+!#MA:I39/2840;   Naga Queen has 2840 AI value
+!#MA:F39/2840;   Naga Queen has 2840 Fight Value
+!#MA:L39/5;      Naga Queen is a level 6 monster
+!#MA:O39/2;      Naga Queen belongs to Tower
+!#MA:X39/65553;  Naga Queen flag is double wide,alive and no enemy retaliation
+
+
+!#MA:C40/6/2000 C40/5/1; Giant cost 2000 Gold and 1 gem
+!#MA:A40/19;     Giant has 19 attack
+!#MA:D40/16;     Giant has 16 defence
+!#MA:P40/150;    Giant has 150 health
+!#MA:S40/7;      Giant has 7 speed
+!#MA:M40/40;     Giant has minimum damage 40
+!#MA:E40/60;     Giant has maximum damage 60
+!#MA:G40/1;      Giant has a grow rate of 1
+!#MA:R40/0;      Giant has no additional grow rate
+!#MA:I40/3718;   Giant has 3718 AI value
+!#MA:F40/3146;   Giant has 3146 Fight Value
+!#MA:L40/6;      Giant is a level 7 monster
+!#MA:O40/2;      Giant belongs to Tower
+!#MA:X40/1552;   Giant flag is alive,King 3 and immune to mind spell
+
+
+!#MA:C41/6/5000 C40/5/2; Titan cost 5000 Gold and 2 gems
+!#MA:A41/24;     Titan has 24 attack
+!#MA:D41/24;     Titan has 24 defence
+!#MA:P41/300;    Titan has 300 health
+!#MA:S41/11;     Titan has 11 speed
+!#MA:M41/40;     Titan has minimum damage 40
+!#MA:E41/60;     Titan has maximum damage 60
+!#MA:N41/24;     Titan has 24 shots
+!#MA:G41/1;      Titan has a grow rate of 1
+!#MA:R41/0;      Titan has no additional grow rate
+!#MA:I41/7500;   Titan has 7500 AI value
+!#MA:F41/5000;   Titan has 5000 Fight Value
+!#MA:L41/6;      Titan is a level 7 monster
+!#MA:O41/2;      Titan belongs to Tower
+!#MA:X41/5652;   Titan flag is shooter,alive,King 3,immune to mind spell and no penalty in close combat
+
+------------------------------------------------------------------------------------------------------------------------
+
+*** INFERNO ***
+
+!#MA:C42/6/50; Imp cost 50 Gold
+!#MA:A42/2;    Imp has 2 attack
+!#MA:D42/3;    Imp has 3 defence
+!#MA:P42/4;    Imp has 4 health
+!#MA:S42/5;    Imp has 5 speed
+!#MA:M42/1;    Imp has minimum damage 1
+!#MA:E42/2;    Imp has maximum damage 2
+!#MA:G42/15;   Imp has a grow rate of 15
+!#MA:R42/8;    Imp has 8 additional grow rate
+!#MA:I42/50;   Imp has 50 AI value
+!#MA:F42/50;   Imp has 50 Fight Value
+!#MA:L42/0;    Imp is a level 1 monster
+!#MA:O42/3;    Imp belongs to Inferno
+!#MA:X42/16;   Imp flag is alive
+
+
+!#MA:C43/6/60; Familiar cost 60 Gold
+!#MA:A43/4;    Familiar has 4 attack
+!#MA:D43/4;    Familiar has 4 defence
+!#MA:P43/4;    Familiar has 4 health
+!#MA:S43/7;    Familiar has 7 speed
+!#MA:M43/1;    Familiar has minimum damage 1
+!#MA:E43/2;    Familiar has maximum damage 2
+!#MA:G43/15;   Familiar has a grow rate of 15
+!#MA:R43/8;    Familiar has 8 additional grow rate
+!#MA:I43/60;   Familiar has 60 AI value
+!#MA:F43/60;   Familiar has 60 Fight Value
+!#MA:L43/0;    Familiar is a level 1 monster
+!#MA:O43/3;    Familiar belongs to Inferno
+!#MA:X43/16;   Familiar flag is alive
+
+
+!#MA:C44/6/125; Gog cost 125 Gold
+!#MA:A44/6;     Gog has 6 attack
+!#MA:D44/4;     Gog has 4 defence
+!#MA:P44/13;    Gog has 13 health
+!#MA:S44/4;     Gog has 4 speed
+!#MA:M44/2;     Gog has minimum damage 2
+!#MA:E44/4;     Gog has maximum damage 4
+!#MA:N44/12;    Gog has 12 shots
+!#MA:G44/8;     Gog has a grow rate of 8
+!#MA:R44/0;     Gog has no additional grow rate
+!#MA:I44/159;   Gog has 159 AI value
+!#MA:F44/145;   Gog has 145 Fight Value
+!#MA:L44/1;     Gog is a level 2 monster
+!#MA:O44/3;     Gog belongs to Inferno
+!#MA:X44/20;    Gog flag is shooter and alive
+
+
+!#MA:C45/6/175; Magog cost 175 Gold
+!#MA:A45/7;     Magog has 7 attack
+!#MA:D45/4;     Magog has 4 defence
+!#MA:P45/13;    Magog has 13 health
+!#MA:S45/6;     Magog has 6 speed
+!#MA:M45/2;     Magog has minimum damage 2
+!#MA:E45/4;     Magog has maximum damage 4
+!#MA:N45/24;    Magog has 24 shots
+!#MA:G45/8;     Magog has a grow rate of 8
+!#MA:R45/0;     Magog has no additional grow rate
+!#MA:I45/240;   Magog has 240 AI value
+!#MA:F45/210;   Magog has 210 Fight Value
+!#MA:L45/1;     Magog is a level 2 monster
+!#MA:O45/3;     Magog belongs to Inferno
+!#MA:X45/1048596;  Magog flag is shooter,alive and extended radius of shooters
+
+
+!#MA:C46/6/200; Hell Hound cost 200 Gold
+!#MA:A46/10;    Hell Hound has 10 attack
+!#MA:D46/6;     Hell Hound has 6 defence
+!#MA:P46/25;    Hell Hound has 25 health
+!#MA:S46/7;     Hell Hound has 7 speed
+!#MA:M46/2;     Hell Hound has minimum damage 2
+!#MA:E46/7;     Hell Hound has maximum damage 7
+!#MA:G46/5;     Hell Hound has a grow rate of 5
+!#MA:R46/3;     Hell Hound has 3 additional grow rate
+!#MA:I46/357;   Hell Hound has 357 AI value
+!#MA:F46/275;   Hell Hound has 275 Fight Value
+!#MA:L46/2;     Hell Hound is a level 3 monster
+!#MA:O46/3;     Hell Hound belongs to Inferno
+!#MA:X46/17;    Hell Hound flag is double wide and alive
+
+
+!#MA:C47/6/250;  Cerberus cost 250 Gold
+!#MA:A47/10;     Cerberus has 10 attack
+!#MA:D47/8;      Cerberus has 8 defence
+!#MA:P47/25;     Cerberus has 25 health
+!#MA:S47/8;      Cerberus has 8 speed
+!#MA:M47/2;      Cerberus has minimum damage 2
+!#MA:E47/7;      Cerberus has maximum damage 7
+!#MA:G47/5;      Cerberus has a grow rate of 5
+!#MA:R47/3;      Cerberus has 3 additional grow rate
+!#MA:I47/392;    Cerberus has 392 AI value
+!#MA:F47/308;    Cerberus has 308 Fight Value
+!#MA:L47/2;      Cerberus is a level 3 monster
+!#MA:O47/3;      Cerberus belongs to Inferno
+!#MA:X47/589841; Cerberus flag is double wide,alive,no enemy retaliation,attack all enemies around
+
+
+!#MA:C48/6/250; Demon cost 250 Gold
+!#MA:A48/10;    Demon has 10 attack
+!#MA:D48/10;    Demon has 10 defence
+!#MA:P48/35;    Demon has 35 health
+!#MA:S48/5;     Demon has 5 speed
+!#MA:M48/7;     Demon has minimum damage 7
+!#MA:E48/9;     Demon has maximum damage 9
+!#MA:G48/4;     Demon has a grow rate of 4
+!#MA:R48/0;     Demon has no additional grow rate
+!#MA:I48/445;   Demon has 445 AI value
+!#MA:F48/445;   Demon has 445 Fight Value
+!#MA:L48/3;     Demon is a level 4 monster
+!#MA:O48/3;     Demon belongs to Inferno
+!#MA:X48/16;    Demon flag is alive
+
+
+!#MA:C49/6/270; Horned Demon cost 270 Gold
+!#MA:A49/10;    Horned Demon has 10 attack
+!#MA:D49/10;    Horned Demon has 10 defence
+!#MA:P49/40;    Horned Demon has 40 health
+!#MA:S49/6;     Horned Demon has 6 speed
+!#MA:M49/7;     Horned Demon has minimum damage 7
+!#MA:E49/9;     Horned Demon has maximum damage 9
+!#MA:G49/4;     Horned Demon has a grow rate of 4
+!#MA:R49/0;     Horned Demon has no additional grow rate
+!#MA:I49/480;   Horned Demon has 480 AI value
+!#MA:F49/480;   Horned Demon has 480 Fight Value
+!#MA:L49/3;     Horned Demon is a level 4 monster
+!#MA:O49/3;     Horned Demon belongs to Inferno
+!#MA:X49/16;    Horned Demon flag is alive
+
+
+!#MA:C50/6/500; Pit Fiend cost 500 Gold
+!#MA:A50/13;    Pit Fiend has 13 attack
+!#MA:D50/13;    Pit Fiend has 13 defence
+!#MA:P50/45;    Pit Fiend has 45 health
+!#MA:S50/6;     Pit Fiend has 6 speed
+!#MA:M50/13;    Pit Fiend has minimum damage 13
+!#MA:E50/17;    Pit Fiend has maximum damage 17
+!#MA:G50/3;     Pit Fiend has a grow rate of 3
+!#MA:R50/0;     Pit Fiend has no additional grow rate
+!#MA:I50/765;   Pit Fiend has 765 AI value
+!#MA:F50/765;   Pit Fiend has 765 Fight Value
+!#MA:L50/4;     Pit Fiend is a level 5 monster
+!#MA:O50/3;     Pit Fiend belongs to Inferno
+!#MA:X50/16;    Pit Fiend flag is alive
+
+
+!#MA:C51/6/700; Pit Lord cost 700 Gold
+!#MA:A51/13;    Pit Lord has 13 attack
+!#MA:D51/13;    Pit Lord has 13 defence
+!#MA:P51/45;    Pit Lord has 45 health
+!#MA:S51/7;     Pit Lord has 7 speed
+!#MA:M51/13;    Pit Lord has minimum damage 13
+!#MA:E51/17;    Pit Lord has maximum damage 17
+!#MA:G51/3;     Pit Lord has a grow rate of 3
+!#MA:R51/0;     Pit Lord has no additional grow rate
+!#MA:I51/1224;  Pit Lord has 1224 AI value
+!#MA:F51/1071;  Pit Lord has 1071 Fight Value
+!#MA:L51/4;     Pit Lord is a level 5 monster
+!#MA:O51/3;     Pit Lord belongs to Inferno
+!#MA:X51/16;    Pit Lord flag is alive
+
+
+!#MA:C52/6/900; Efreet cost 900 Gold
+!#MA:A52/16;    Efreet has 16 attack
+!#MA:D52/12;    Efreet has 12 defence
+!#MA:P52/90;    Efreet has 90 health
+!#MA:S52/9;     Efreet has 9 speed
+!#MA:M52/16;    Efreet has minimum damage 16
+!#MA:E52/24;    Efreet has maximum damage 24
+!#MA:G52/2;     Efreet has a grow rate of 2
+!#MA:R52/0;     Efreet has no additional grow rate
+!#MA:I52/1670;  Efreet has 1670 AI value
+!#MA:F52/1413;  Efreet has 1413 Fight Value
+!#MA:L52/5;     Efreet is a level 6 monster
+!#MA:O52/3;     Efreet belongs to Inferno
+!#MA:X52/16402; Efreet flag is fly,alive and immune to fire spells
+
+
+!#MA:C53/6/1100; Efreet Sultan cost 1110 Gold
+!#MA:A53/16;     Efreet Sultan has 16 attack
+!#MA:D53/14;     Efreet Sultan has 14 defence
+!#MA:P53/90;     Efreet Sultan has 90 health
+!#MA:S53/13;     Efreet Sultan has 13 speed
+!#MA:M53/16;     Efreet Sultan has minimum damage 16
+!#MA:E53/24;     Efreet Sultan has maximum damage 24
+!#MA:G53/2;      Efreet Sultan has a grow rate of 2
+!#MA:R53/0;      Efreet Sultan has no additional grow rate
+!#MA:I53/1848;   Efreet Sultan has 1848 AI value
+!#MA:F53/1584;   Efreet Sultan has 1584 Fight Value
+!#MA:L53/5;      Efreet Sultan is a level 6 monster
+!#MA:O53/3;      Efreet Sultan belongs to Inferno
+!#MA:X53/16402;  Efreet Sultan flag is fly,alive and immune to fire spells
+
+
+!#MA:C54/6/2700 C54/1/1; Devil cost 2700 Gold and 1 mercury
+!#MA:A54/19;     Devil has 19 attack
+!#MA:D54/21;     Devil has 21 defence
+!#MA:P54/160;    Devil has 160 health
+!#MA:S54/11;     Devil has 11 speed
+!#MA:M54/30;     Devil has minimum damage 30
+!#MA:E54/40;     Devil has maximum damage 40
+!#MA:G54/1;      Devil has a grow rate of 1
+!#MA:R54/0;      Devil has no additional grow rate
+!#MA:I54/5101;   Devil has 5101 AI value
+!#MA:F54/3759;   Devil has 3759 Fight Value
+!#MA:L54/6;      Devil is a level 7 monster
+!#MA:O54/3;      Devil belongs to Inferno
+!#MA:X54/65808;  Devil flag is alive,King 2 and no enemy retaliation
+
+
+!#MA:C55/6/4500 C54/1/2; Archdevil cost 4500 Gold and 2 mercury
+!#MA:A55/26;     Archdevil has 26 attack
+!#MA:D55/28;     Archdevil has 28 defence
+!#MA:P55/200;    Archdevil has 200 health
+!#MA:S55/17;     Archdevil has 17 speed
+!#MA:M55/30;     Archdevil has minimum damage 30
+!#MA:E55/40;     Archdevil has maximum damage 40
+!#MA:G55/1;      Archdevil has a grow rate of 1
+!#MA:R55/0;      Archdevil has no additional grow rate
+!#MA:I55/7115;   Archdevil has 7115 AI value
+!#MA:F55/5243;   Archdevil has 5243 Fight Value
+!#MA:L55/6;      Archdevil is a level 7 monster
+!#MA:O55/3;      Archdevil belongs to Inferno
+!#MA:X55/65808;  Archdevil flag is alive,King 2 and no enemy retaliation
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** NECROPOLIS ***
+
+!#MA:C56/6/60; Skeleton cost 60 Gold
+!#MA:A56/5;    Skeleton has 5 attack
+!#MA:D56/4;    Skeleton has 4 defence
+!#MA:P56/6;    Skeleton has 6 health
+!#MA:S56/4;    Skeleton has 4 speed
+!#MA:M56/1;    Skeleton has minimum damage 1
+!#MA:E56/3;    Skeleton has maximum damage 3
+!#MA:G56/12;   Skeleton has a grow rate of 12
+!#MA:R56/6;    Skeleton has 6 additional grow rate
+!#MA:I56/60;   Skeleton has 60 AI value
+!#MA:F56/75;   Skeleton has 75 Fight Value
+!#MA:L56/0;    Skeleton is a level 1 monster
+!#MA:O56/4;    Skeleton belongs to Necropolis
+!#MA:X56/394240;  Skeleton flag is immune to mind spells,no moral penalty and undead
+
+
+!#MA:C57/6/70; Skeleton Warrior cost 70 Gold
+!#MA:A57/6;    Skeleton Warrior has 6 attack
+!#MA:D57/6;    Skeleton Warrior has 6 defence
+!#MA:P57/6;    Skeleton Warrior has 6 health
+!#MA:S57/5;    Skeleton Warrior has 5 speed
+!#MA:M57/1;    Skeleton Warrior has minimum damage 1
+!#MA:E57/3;    Skeleton Warrior has maximum damage 3
+!#MA:G57/12;   Skeleton Warrior has a grow rate of 12
+!#MA:R57/6;    Skeleton Warrior has 6 additional grow rate
+!#MA:I57/85;   Skeleton Warrior has 85 AI value
+!#MA:F57/85;   Skeleton Warrior has 85 Fight Value
+!#MA:L57/0;    Skeleton Warrior is a level 1 monster
+!#MA:O57/4;    Skeleton Warrior belongs to Necropolis
+!#MA:X57/394240;  Skeleton Warrior flag is immune to mind spells,no moral penalty and undead
+
+
+!#MA:C58/6/100; Walking Dead cost 100 Gold
+!#MA:A58/5;     Walking Dead has 5 attack
+!#MA:D58/5;     Walking Dead has 5 defence
+!#MA:P58/15;    Walking Dead has 15 health
+!#MA:S58/3;     Walking Dead has 3 speed
+!#MA:M58/2;     Walking Dead has minimum damage 2
+!#MA:E58/3;     Walking Dead has maximum damage 3
+!#MA:G58/8;     Walking Dead has a grow rate of 8
+!#MA:R58/0;     Walking Dead has no additional grow rate
+!#MA:I58/98;    Walking Dead has 98 AI value
+!#MA:F58/140;   Walking Dead has 140 Fight Value
+!#MA:L58/1;     Walking Dead is a level 2 monster
+!#MA:O58/4;     Walking Dead belongs to Necropolis
+!#MA:X58/394240; Walking Dead flag is immune to mind spells,no moral penalty and undead
+
+
+!#MA:C59/6/125; Zombie cost 125 Gold
+!#MA:A59/5;     Zombie has 5 attack
+!#MA:D59/5;     Zombie has 5 defence
+!#MA:P59/20;    Zombie has 20 health
+!#MA:S59/4;     Zombie has 4 speed
+!#MA:M59/2;     Zombie has minimum damage 2
+!#MA:E59/3;     Zombie has maximum damage 3
+!#MA:G59/8;     Zombie has a grow rate of 8
+!#MA:R59/0;     Zombie has no additional grow rate
+!#MA:I59/128;   Zombie has 128 AI value
+!#MA:F59/160;   Zombie has 160 Fight Value
+!#MA:L59/1;     Zombie is a level 2 monster
+!#MA:O59/4;     Zombie belongs to Necropolis
+!#MA:X59/394240; Zombie flag is immune to mind spells,no moral penalty and undead
+
+
+!#MA:C60/6/200; Wight cost 200 Gold
+!#MA:A60/7;     Wight has 7 attack
+!#MA:D60/7;     Wight has 7 defence
+!#MA:P60/18;    Wight has 18 health
+!#MA:S60/5;     Wight has 5 speed
+!#MA:M60/3;     Wight has minimum damage 3
+!#MA:E60/5;     Wight has maximum damage 5
+!#MA:G60/7;     Wight has a grow rate of 7
+!#MA:R60/0;     Wight has no additional grow rate
+!#MA:I60/252;   Wight has 252 AI value
+!#MA:F60/231;   Wight has 231 Fight Value
+!#MA:L60/2;     Wight is a level 3 monster
+!#MA:O60/4;     Wight belongs to Necropolis
+!#MA:X60/1540;  Wight flag is shooter,King 3,immune to mind spells
+
+
+!#MA:C61/6/230; Wraith cost 230 Gold
+!#MA:A61/7;     Wraith has 7 attack
+!#MA:D61/7;     Wraith has 7 defence
+!#MA:P61/18;    Wraith has 18 health
+!#MA:S61/7;     Wraith has 7 speed
+!#MA:M61/3;     Wraith has minimum damage 3
+!#MA:E61/5;     Wraith has maximum damage 5
+!#MA:G61/7;     Wraith has a grow rate of 7
+!#MA:R61/0;     Wraith has no additional grow rate
+!#MA:I61/315;   Wraith has 315 AI value
+!#MA:F61/252;   Wraith has 252 Fight Value
+!#MA:L61/2;     Wraith is a level 3 monster
+!#MA:O61/4;     Wraith belongs to Necropolis
+!#MA:X61/1540;  Wraith flag is shooter,King 3,immune to mind spells
+
+
+!#MA:C62/6/360;  Vampire cost 360 Gold
+!#MA:A62/10;     Vampire has 10 attack
+!#MA:D62/9;      Vampire has 9 defence
+!#MA:P62/30;     Vampire has 30 health
+!#MA:S62/6;      Vampire has 6 speed
+!#MA:M62/5;      Vampire has minimum damage 5
+!#MA:E62/8;      Vampire has maximum damage 8
+!#MA:G62/4;      Vampire has a grow rate of 4
+!#MA:R62/0;      Vampire has no additional grow rate
+!#MA:I62/555;    Vampire has 555 AI value
+!#MA:F62/518;    Vampire has 518 Fight Value
+!#MA:L62/3;      Vampire is a level 4 monster
+!#MA:O62/4;      Vampire belongs to Necropolis
+!#MA:X62/394242; Vampire flag is fly,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C63/6/500;  Vampire Lord cost 500 Gold
+!#MA:A63/10;     Vampire Lord has 10 attack
+!#MA:D63/10;     Vampire Lord has 10 defence
+!#MA:P63/40;     Vampire Lord has 40 health
+!#MA:S63/9;      Vampire Lord has 9 speed
+!#MA:M63/5;      Vampire Lord has minimum damage 5
+!#MA:E63/8;      Vampire Lord has maximum damage 8
+!#MA:G63/4;      Vampire Lord has a grow rate of 4
+!#MA:R63/0;      Vampire Lord has no additional grow rate
+!#MA:I63/783;    Vampire Lord has 783 AI value
+!#MA:F63/652;    Vampire Lord has 652 Fight Value
+!#MA:L63/3;      Vampire Lord is a level 4 monster
+!#MA:O63/4;      Vampire Lord belongs to Necropolis
+!#MA:X63/394242; Vampire Lord flag is fly,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C64/6/550;   Lich cost 550 Gold
+!#MA:A64/13;      Lich has 13 attack
+!#MA:D64/10;      Lich has 10 defence
+!#MA:P64/30;      Lich has 30 health
+!#MA:S64/6;       Lich has 6 speed
+!#MA:M64/11;      Lich has minimum damage 11
+!#MA:E64/13;      Lich has maximum damage 13
+!#MA:N64/12;      Lich has 12 shots
+!#MA:G64/3;       Lich has a grow rate of 3
+!#MA:R64/0;       Lich has no additional grow rate
+!#MA:I64/848;     Lich has 848 AI value
+!#MA:F64/742;     Lich has 742 Fight Value
+!#MA:L64/4;       Lich is a level 5 monster
+!#MA:O64/4;       Lich belongs to Necropolis
+!#MA:X64/1442820; Lich flag is shooter,immune to mind spells,no moral penalty,undead,extended radius of shooters
+
+
+!#MA:C65/6/600;   Power Lich cost 600 Gold
+!#MA:A65/13;      Power Lich has 13 attack
+!#MA:D65/10;      Power Lich has 10 defence
+!#MA:P65/40;      Power Lich has 40 health
+!#MA:S65/7;       Power Lich has 7 speed
+!#MA:M65/11;      Power Lich has minimum damage 11
+!#MA:E65/15;      Power Lich has maximum damage 15
+!#MA:N65/24;      Power Lich has 24 shots
+!#MA:G65/3;       Power Lich has a grow rate of 3
+!#MA:R65/0;       Power Lich has no additional grow rate
+!#MA:I65/1079;    Power Lich has 1079 AI value
+!#MA:F65/889;     Power Lich has 889 Fight Value
+!#MA:L65/4;       Power Lich is a level 5 monster
+!#MA:O65/4;       Power Lich belongs to Necropolis
+!#MA:X65/1442820; Power Lich flag is shooter,immune to mind spells,no moral penalty,undead,extended radius of shooters
+
+
+!#MA:C66/6/1200; Black Knight cost 1200 Gold
+!#MA:A66/16;     Black Knight has 16 attack
+!#MA:D66/16;     Black Knight has 16 defence
+!#MA:P66/120;    Black Knight has 120 health
+!#MA:S66/7;      Black Knight has 7 speed
+!#MA:M66/15;     Black Knight has minimum damage 15
+!#MA:E66/30;     Black Knight has maximum damage 30
+!#MA:G66/2;      Black Knight has a grow rate of 2
+!#MA:R66/0;      Black Knight has no additional grow rate
+!#MA:I66/2087;   Black Knight has 2087 AI value
+!#MA:F66/1753;   Black Knight has 1753 Fight Value
+!#MA:L66/5;      Black Knight is a level 6 monster
+!#MA:O66/4;      Black Knight belongs to Necropolis
+!#MA:X66/394241; Black Knight flag is double wide,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C67/6/1500; Dread Knight cost 1500 Gold
+!#MA:A67/18;     Dread Knight has 18 attack
+!#MA:D67/18;     Dread Knight has 18 defence
+!#MA:P67/120;    Dread Knight has 120 health
+!#MA:S67/9;      Dread Knight has 9 speed
+!#MA:M67/15;     Dread Knight has minimum damage 15
+!#MA:E67/30;     Dread Knight has maximum damage 30
+!#MA:G67/2;      Dread Knight has a grow rate of 2
+!#MA:R67/0;      Dread Knight has no additional grow rate
+!#MA:I67/2382;   Dread Knight has 2382 AI value
+!#MA:F67/2029;   Dread Knight has 2029 Fight Value
+!#MA:L67/5;      Dread Knight is a level 6 monster
+!#MA:O67/4;      Dread Knight belongs to Necropolis
+!#MA:X67/394241; Dread Knight flag is double wide,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C68/6/1800; Bone Dragon cost 1800 Gold
+!#MA:A68/17;     Bone Dragon has 17 attack
+!#MA:D68/15;     Bone Dragon has 15 defence
+!#MA:P68/150;    Bone Dragon has 150 health
+!#MA:S68/9;      Bone Dragon has 9 speed
+!#MA:M68/25;     Bone Dragon has minimum damage 25
+!#MA:E68/50;     Bone Dragon has maximum damage 50
+!#MA:G68/1;      Bone Dragon has a grow rate of 1
+!#MA:R68/0;      Bone Dragon has no additional grow rate
+!#MA:I68/3388;   Bone Dragon has 3388 AI value
+!#MA:F68/2420;   Bone Dragon has 2420 Fight Value
+!#MA:L68/6;      Bone Dragon is a level 7 monster
+!#MA:O68/4;      Bone Dragon belongs to Necropolis
+!#MA:X68/394371; Bone Dragon flag is double wide,fly,King 1,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C69/6/3000 C69/1/1; Ghost Dragon cost 3000 Gold and 1 mercury
+!#MA:A69/19;     Ghost Dragon has 19 attack
+!#MA:D69/17;     Ghost Dragon has 17 defence
+!#MA:P69/200;    Ghost Dragon has 200 health
+!#MA:S69/14;     Ghost Dragon has 14 speed
+!#MA:M69/25;     Ghost Dragon has minimum damage 25
+!#MA:E69/50;     Ghost Dragon has maximum damage 50
+!#MA:G69/1;      Ghost Dragon has a grow rate of 1
+!#MA:R69/0;      Ghost Dragon has no additional grow rate
+!#MA:I69/4696;   Ghost Dragon has 4696 AI value
+!#MA:F69/3228;   Ghost Dragon has 3228 Fight Value
+!#MA:L69/6;      Ghost Dragon is a level 7 monster
+!#MA:O69/4;      Ghost Dragon belongs to Necropolis
+!#MA:X69/394371; Ghost Dragon flag is double wide,fly,King 1,immune to mind spells,no moral penalty,undead
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** DUNGEON ***
+
+!#MA:C70/6/50; Troglodyte cost 50 Gold
+!#MA:A70/4;    Troglodyte has 4 attack
+!#MA:D70/3;    Troglodyte has 3 defence
+!#MA:P70/5;    Troglodyte has 5 health
+!#MA:S70/4;    Troglodyte has 4 speed
+!#MA:M70/1;    Troglodyte has minimum damage 1
+!#MA:E70/3;    Troglodyte has maximum damage 3
+!#MA:G70/14;   Troglodyte has a grow rate of 14
+!#MA:R70/7;    Troglodyte has 7 additional grow rate
+!#MA:I70/59;   Troglodyte has 59 AI value
+!#MA:F70/73;   Troglodyte has 73 Fight Value
+!#MA:L70/0;    Troglodyte is a level 1 monster
+!#MA:O70/5;    Troglodyte belongs to Dungeon
+!#MA:X70/16;   Troglodyte flag is alive
+
+
+!#MA:C71/6/65; Infernal Troglodyte cost 65 Gold
+!#MA:A71/5;    Infernal Troglodyte has 5 attack
+!#MA:D71/4;    Infernal Troglodyte has 4 defence
+!#MA:P71/6;    Infernal Troglodyte has 6 health
+!#MA:S71/5;    Infernal Troglodyte has 5 speed
+!#MA:M71/1;    Infernal Troglodyte has minimum damage 1
+!#MA:E71/3;    Infernal Troglodyte has maximum damage 3
+!#MA:G71/14;   Infernal Troglodyte has a grow rate of 14
+!#MA:R71/7;    Infernal Troglodyte has 7 additional grow rate
+!#MA:I71/84;   Infernal Troglodyte has 84 AI value
+!#MA:F71/84;   Infernal Troglodyte has 84 Fight Value
+!#MA:L71/0;    Infernal Troglodyte is a level 1 monster
+!#MA:O71/5;    Infernal Troglodyte belongs to Dungeon
+!#MA:X71/16;   Infernal Troglodyte flag is alive
+
+
+!#MA:C72/6/130; Harpy cost 130 Gold
+!#MA:A72/6;     Harpy has 6 attack
+!#MA:D72/5;     Harpy has 5 defence
+!#MA:P72/14;    Harpy has 14 health
+!#MA:S72/6;     Harpy has 6 speed
+!#MA:M72/1;     Harpy has minimum damage 1
+!#MA:E72/4;     Harpy has maximum damage 4
+!#MA:G72/8;     Harpy has a grow rate of 8
+!#MA:R72/0;     Harpy has no additional grow rate
+!#MA:I72/154;   Harpy has 154 AI value
+!#MA:F72/140;   Harpy has 140 Fight Value
+!#MA:L72/1;     Harpy is a level 2 monster
+!#MA:O72/5;     Harpy belongs to Dungeon
+!#MA:X72/18;    Harpy flag is fly,alive
+
+
+!#MA:C73/6/170; Harpy Hag cost 170 Gold
+!#MA:A73/6;     Harpy Hag has 6 attack
+!#MA:D73/6;     Harpy Hag has 6 defence
+!#MA:P73/14;    Harpy Hag has 14 health
+!#MA:S73/9;     Harpy Hag has 9 speed
+!#MA:M73/1;     Harpy Hag has minimum damage 1
+!#MA:E73/4;     Harpy Hag has maximum damage 4
+!#MA:G73/8;     Harpy Hag has a grow rate of 8
+!#MA:R73/0;     Harpy Hag has no additional grow rate
+!#MA:I73/238;   Harpy Hag has 238 AI value
+!#MA:F73/196;   Harpy Hag has 196 Fight Value
+!#MA:L73/1;     Harpy Hag is a level 2 monster
+!#MA:O73/5;     Harpy Hag belongs to Dungeon
+!#MA:X73/65554; Harpy Hag flag is fly,alive,no enemie retaliation
+
+
+!#MA:C74/6/250; Beholder cost 250 Gold
+!#MA:A74/9;     Beholder has 9 attack
+!#MA:D74/7;     Beholder has 7 defence
+!#MA:P74/22;    Beholder has 22 health
+!#MA:S74/5;     Beholder has 5 speed
+!#MA:M74/3;     Beholder has minimum damage 3
+!#MA:E74/5;     Beholder has maximum damage 5
+!#MA:N74/12;    Beholder has 12 shots
+!#MA:G74/7;     Beholder has a grow rate of 7
+!#MA:R74/0;     Beholder has no additional grow rate
+!#MA:I74/336;   Beholder has 336 AI value
+!#MA:F74/240;   Beholder has 240 Fight Value
+!#MA:L74/2;     Beholder is a level 3 monster
+!#MA:O74/5;     Beholder belongs to Dungeon
+!#MA:X74/6164;  Beholder flag is shooter,alive,monster(35,74,75),no penalty in close combat
+
+
+!#MA:C75/6/280; Evil Eye cost 280 Gold
+!#MA:A75/10;    Evil Eye has 10 attack
+!#MA:D75/8;     Evil Eye has 8 defence
+!#MA:P75/22;    Evil Eye has 22 health
+!#MA:S75/7;     Evil Eye has 7 speed
+!#MA:M75/3;     Evil Eye has minimum damage 3
+!#MA:E75/5;     Evil Eye has maximum damage 5
+!#MA:N75/24;    Evil Eye has 24 shots
+!#MA:G75/7;     Evil Eye has a grow rate of 7
+!#MA:R75/0;     Evil Eye has no additional grow rate
+!#MA:I75/367;   Evil Eye has 367 AI value
+!#MA:F75/245;   Evil Eye has 245 Fight Value
+!#MA:L75/2;     Evil Eye is a level 3 monster
+!#MA:O75/5;     Evil Eye belongs to Dungeon
+!#MA:X75/6164;  Evil Eye flag is shooter,alive,monster(35,74,75),no penalty in close combat
+
+
+!#MA:C76/6/300; Medusa cost 300 Gold
+!#MA:A76/9;     Medusa has 9 attack
+!#MA:D76/9;     Medusa has 9 defence
+!#MA:P76/25;    Medusa has 25 health
+!#MA:S76/5;     Medusa has 5 speed
+!#MA:M76/6;     Medusa has minimum damage 6
+!#MA:E76/8;     Medusa has maximum damage 8
+!#MA:N76/4;     Medusa has 4 shots
+!#MA:G76/4;     Medusa has a grow rate of 4
+!#MA:R76/0;     Medusa has no additional grow rate
+!#MA:I76/517;   Medusa has 517 AI value
+!#MA:F76/379;   Medusa has 379 Fight Value
+!#MA:L76/3;     Medusa is a level 4 monster
+!#MA:O76/5;     Medusa belongs to Dungeon
+!#MA:X76/4117;  Medusa flag is double wide,shooter,alive,no penalty in close combat
+
+
+!#MA:C77/6/330; Medusa Queen cost 330 Gold
+!#MA:A77/10;    Medusa Queen has 10 attack
+!#MA:D77/10;    Medusa Queen has 10 defence
+!#MA:P77/30;    Medusa Queen has 30 health
+!#MA:S77/6;     Medusa Queen has 6 speed
+!#MA:M77/6;     Medusa Queen has minimum damage 6
+!#MA:E77/8;     Medusa Queen has maximum damage 8
+!#MA:N77/8;     Medusa Queen has 8 shots
+!#MA:G77/4;     Medusa Queen has a grow rate of 4
+!#MA:R77/0;     Medusa Queen has no additional grow rate
+!#MA:I77/577;   Medusa Queen has 577 AI value
+!#MA:F77/423;   Medusa Queen has 423 Fight Value
+!#MA:L77/3;     Medusa Queen is a level 4 monster
+!#MA:O77/5;     Medusa Queen belongs to Dungeon
+!#MA:X77/4117;  Medusa Queen flag is double wide,shooter,alive,no penalty in close combat
+
+
+!#MA:C78/6/500; Minotaur cost 500 Gold
+!#MA:A78/14;    Minotaur has 14 attack
+!#MA:D78/12;    Minotaur has 12 defence
+!#MA:P78/50;    Minotaur has 50 health
+!#MA:S78/6;     Minotaur has 6 speed
+!#MA:M78/12;    Minotaur has minimum damage 12
+!#MA:E78/20;    Minotaur has maximum damage 20
+!#MA:G78/3;     Minotaur has a grow rate of 3
+!#MA:R78/0;     Minotaur has no additional grow rate
+!#MA:I78/835;   Minotaur has 835 AI value
+!#MA:F78/835;   Minotaur has 835 Fight Value
+!#MA:L78/4;     Minotaur is a level 5 monster
+!#MA:O78/5;     Minotaur belongs to Dungeon
+!#MA:X78/16;    Minotaur flag is alive
+
+
+!#MA:C79/6/575; Minotaur King cost 575 Gold
+!#MA:A79/15;    Minotaur King has 15 attack
+!#MA:D79/15;    Minotaur King has 15 defence
+!#MA:P79/50;    Minotaur King has 50 health
+!#MA:S79/8;     Minotaur King has 8 speed
+!#MA:M79/12;    Minotaur King has minimum damage 12
+!#MA:E79/20;    Minotaur King has maximum damage 20
+!#MA:G79/3;     Minotaur King has a grow rate of 3
+!#MA:R79/0;     Minotaur King has no additional grow rate
+!#MA:I79/1068;  Minotaur King has 1068 AI value
+!#MA:F79/890;   Minotaur King has 890 Fight Value
+!#MA:L79/4;     Minotaur King is a level 5 monster
+!#MA:O79/5;     Minotaur King belongs to Dungeon
+!#MA:X79/16;    Minotaur King flag is alive
+
+
+!#MA:C80/6/850; Manticore cost 850 Gold
+!#MA:A80/15;    Manticore has 15 attack
+!#MA:D80/13;    Manticore has 13 defence
+!#MA:P80/80;    Manticore has 80 health
+!#MA:S80/7;     Manticore has 7 speed
+!#MA:M80/14;    Manticore has minimum damage 14
+!#MA:E80/20;    Manticore has maximum damage 20
+!#MA:G80/2;     Manticore has a grow rate of 2
+!#MA:R80/0;     Manticore has no additional grow rate
+!#MA:I80/1547;  Manticore has 1547 AI value
+!#MA:F80/1215;  Manticore has 1215 Fight Value
+!#MA:L80/5;     Manticore is a level 6 monster
+!#MA:O80/5;     Manticore belongs to Dungeon
+!#MA:X80/19;    Manticore flag is double wide,fly,alive
+
+
+!#MA:C81/6/1050; Scorpicore cost 1050 Gold
+!#MA:A81/16;     Scorpicore has 16 attack
+!#MA:D81/14;     Scorpicore has 14 defence
+!#MA:P81/80;     Scorpicore has 80 health
+!#MA:S81/11;     Scorpicore has 11 speed
+!#MA:M81/14;     Scorpicore has minimum damage 14
+!#MA:E81/20;     Scorpicore has maximum damage 20
+!#MA:G81/2;      Scorpicore has a grow rate of 2
+!#MA:R81/0;      Scorpicore has no additional grow rate
+!#MA:I81/1589;   Scorpicore has 1589 AI value
+!#MA:F81/1248;   Scorpicore has 1248 Fight Value
+!#MA:L81/5;      Scorpicore is a level 6 monster
+!#MA:O81/5;      Scorpicore belongs to Dungeon
+!#MA:X81/19;     Scorpicore flag is double wide,fly,alive
+
+
+!#MA:C82/6/2500 C82/3/1; Red Dragon cost 2500 Gold and 1 sulfur
+!#MA:A82/19;     Red Dragon has 19 attack
+!#MA:D82/19;     Red Dragon has 19 defence
+!#MA:P82/180;    Red Dragon has 180 health
+!#MA:S82/11;     Red Dragon has 11 speed
+!#MA:M82/40;     Red Dragon has minimum damage 40
+!#MA:E82/50;     Red Dragon has maximum damage 50
+!#MA:G82/1;      Red Dragon has a grow rate of 1
+!#MA:R82/0;      Red Dragon has no additional grow rate
+!#MA:I82/4702;   Red Dragon has 4702 AI value
+!#MA:F82/3762;   Red Dragon has 3762 Fight Value
+!#MA:L82/6;      Red Dragon is a level 7 monster
+!#MA:O82/5;      Red Dragon belongs to Dungeon
+!#MA:X82/155;    Red Dragon flag is double wide,fly,extended radius attack,alive,King 1
+
+
+!#MA:C83/6/4000 C82/3/2; Black Dragon cost 2500 Gold and 1 sulfur
+!#MA:A83/25;   Black Dragon has 25 attack
+!#MA:D83/25;   Black Dragon has 25 defence
+!#MA:P83/300;  Black Dragon has 300 health
+!#MA:S83/15;   Black Dragon has 15 speed
+!#MA:M83/40;   Black Dragon has minimum damage 40
+!#MA:E83/50;   Black Dragon has maximum damage 50
+!#MA:G83/1;    Black Dragon has a grow rate of 1
+!#MA:R83/0;    Black Dragon has no additional grow rate
+!#MA:I83/8721; Black Dragon has 8721 AI value
+!#MA:F83/6783; Black Dragon has 6783 Fight Value
+!#MA:L83/6;    Black Dragon is a level 7 monster
+!#MA:O83/5;    Black Dragon belongs to Dungeon
+!#MA:X83/1179; Black Dragon flag is double wide,fly,extended radius attack,alive,King 1,immune to mind spells
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** STRONGHOLD ***
+
+!#MA:C84/6/40; Goblin cost 40 Gold
+!#MA:A84/4;    Goblin has 4 attack
+!#MA:D84/2;    Goblin has 2 defence
+!#MA:P84/5;    Goblin has 5 health
+!#MA:S84/5;    Goblin has 5 speed
+!#MA:M84/1;    Goblin has minimum damage 1
+!#MA:E84/2;    Goblin has maximum damage 2
+!#MA:G84/15;   Goblin has a grow rate of 15
+!#MA:R84/8;    Goblin has 8 additional grow rate
+!#MA:I84/60;   Goblin has 60 AI value
+!#MA:F84/60;   Goblin has 60 Fight Value
+!#MA:L84/0;    Goblin is a level 1 monster
+!#MA:O84/6;    Goblin belongs to Stronghold
+!#MA:X84/16;   Goblin flag is alive
+
+
+!#MA:C85/6/50; Hobgoblin cost 50 Gold
+!#MA:A85/5;    Hobgoblin has 5 attack
+!#MA:D85/3;    Hobgoblin has 3 defence
+!#MA:P85/5;    Hobgoblin has 5 health
+!#MA:S85/7;    Hobgoblin has 7 speed
+!#MA:M85/1;    Hobgoblin has minimum damage 1
+!#MA:E85/2;    Hobgoblin has maximum damage 2
+!#MA:G85/15;   Hobgoblin has a grow rate of 15
+!#MA:R85/8;    Hobgoblin has 8 additional grow rate
+!#MA:I85/78;   Hobgoblin has 78 AI value
+!#MA:F85/65;   Hobgoblin has 65 Fight Value
+!#MA:L85/0;    Hobgoblin is a level 1 monster
+!#MA:O85/6;    Hobgoblin belongs to Stronghold
+!#MA:X85/16;   Hobgoblin flag is alive
+
+
+!#MA:C86/6/100; Wolf Rider cost 100 Gold
+!#MA:A86/7;     Wolf Rider has 7 attack
+!#MA:D86/5;     Wolf Rider has 5 defence
+!#MA:P86/10;    Wolf Rider has 10 health
+!#MA:S86/6;     Wolf Rider has 6 speed
+!#MA:M86/2;     Wolf Rider has minimum damage 2
+!#MA:E86/4;     Wolf Rider has maximum damage 4
+!#MA:G86/9;     Wolf Rider has a grow rate of 9
+!#MA:R86/0;     Wolf Rider has no additional grow rate
+!#MA:I86/130;   Wolf Rider has 130 AI value
+!#MA:F86/130;   Wolf Rider has 130 Fight Value
+!#MA:L86/1;     Wolf Rider is a level 2 monster
+!#MA:O86/6;     Wolf Rider belongs to Stronghold
+!#MA:X86/17;    Wolf Rider flag is double wide,alive
+
+
+!#MA:C87/6/140; Wolf Raider cost 140 Gold
+!#MA:A87/8;     Wolf Raider has 8 attack
+!#MA:D87/5;     Wolf Raider has 5 defence
+!#MA:P87/10;    Wolf Raider has 10 health
+!#MA:S87/8;     Wolf Raider has 8 speed
+!#MA:M87/3;     Wolf Raider has minimum damage 3
+!#MA:E87/4;     Wolf Raider has maximum damage 4
+!#MA:G87/9;     Wolf Raider has a grow rate of 9
+!#MA:R87/0;     Wolf Raider has no additional grow rate
+!#MA:I87/203;   Wolf Raider has 203 AI value
+!#MA:F87/174;   Wolf Raider has 174 Fight Value
+!#MA:L87/1;     Wolf Raider is a level 2 monster
+!#MA:O87/6;     Wolf Raider belongs to Stronghold
+!#MA:X87/32785; Wolf Raider flag is double wide,alive,strike twice
+
+
+!#MA:C88/6/150; Orc cost 150 Gold
+!#MA:A88/8;     Orc has 8 attack
+!#MA:D88/4;     Orc has 4 defence
+!#MA:P88/15;    Orc has 15 health
+!#MA:S88/4;     Orc has 4 speed
+!#MA:M88/2;     Orc has minimum damage 2
+!#MA:E88/5;     Orc has maximum damage 5
+!#MA:N88/12;    Orc has 12 shots
+!#MA:G88/7;     Orc has a grow rate of 7
+!#MA:R88/0;     Orc has no additional grow rate
+!#MA:I88/192;   Orc has 192 AI value
+!#MA:F88/175;   Orc has 175 Fight Value
+!#MA:L88/2;     Orc is a level 3 monster
+!#MA:O88/6;     Orc belongs to Stronghold
+!#MA:X88/20;    Orc flag is shooter,alive
+
+
+!#MA:C89/6/165; Orc Chieftain cost 165 Gold
+!#MA:A89/8;     Orc Chieftain has 8 attack
+!#MA:D89/4;     Orc Chieftain has 4 defence
+!#MA:P89/20;    Orc Chieftain has 20 health
+!#MA:S89/5;     Orc Chieftain has 5 speed
+!#MA:M89/2;     Orc Chieftain has minimum damage 2
+!#MA:E89/5;     Orc Chieftain has maximum damage 5
+!#MA:N89/24;    Orc Chieftain has 24 shots
+!#MA:G89/7;     Orc Chieftain has a grow rate of 7
+!#MA:R89/0;     Orc Chieftain has no additional grow rate
+!#MA:I89/240;   Orc Chieftain has 240 AI value
+!#MA:F89/200;   Orc Chieftain has 200 Fight Value
+!#MA:L89/2;     Orc Chieftain is a level 3 monster
+!#MA:O89/6;     Orc Chieftain belongs to Stronghold
+!#MA:X89/20;    Orc Chieftain flag is shooter,alive
+
+
+!#MA:C90/6/300; Ogre cost 300 Gold
+!#MA:A90/13;    Ogre has 13 attack
+!#MA:D90/7;     Ogre has 7 defence
+!#MA:P90/40;    Ogre has 40 health
+!#MA:S90/4;     Ogre has 4 speed
+!#MA:M90/6;     Ogre has minimum damage 6
+!#MA:E90/12;    Ogre has maximum damage 12
+!#MA:G90/4;     Ogre has a grow rate of 4
+!#MA:R90/0;     Ogre has no additional grow rate
+!#MA:I90/416;   Ogre has 416 AI value
+!#MA:F90/520;   Ogre has 520 Fight Value
+!#MA:L90/3;     Ogre is a level 4 monster
+!#MA:O90/6;     Ogre belongs to Stronghold
+!#MA:X90/16;    Ogre flag is alive
+
+
+!#MA:C91/6/400; Ogre Mage cost 400 Gold
+!#MA:A91/13;    Ogre Mage has 13 attack
+!#MA:D91/7;     Ogre Mage has 7 defence
+!#MA:P91/60;    Ogre Mage has 60 health
+!#MA:S91/5;     Ogre Mage has 5 speed
+!#MA:M91/6;     Ogre Mage has minimum damage 6
+!#MA:E91/12;    Ogre Mage has maximum damage 12
+!#MA:G91/4;     Ogre Mage has a grow rate of 4
+!#MA:B91/3;     Ogre Mage has 3 casts
+!#MA:R91/0;     Ogre Mage has no additional grow rate
+!#MA:I91/672;   Ogre Mage has 672 AI value
+!#MA:F91/672;   Ogre Mage has 672 Fight Value
+!#MA:L91/3;     Ogre Mage is a level 4 monster
+!#MA:O91/6;     Ogre Mage belongs to Stronghold
+!#MA:X91/16;    Ogre Mage flag is alive
+
+
+!#MA:C92/6/600; Roc cost 600 Gold
+!#MA:A92/13;    Roc has 13 attack
+!#MA:D92/11;    Roc has 11 defence
+!#MA:P92/60;    Roc has 60 health
+!#MA:S92/7;     Roc has 7 speed
+!#MA:M92/11;    Roc has minimum damage 11
+!#MA:E92/15;    Roc has maximum damage 15
+!#MA:G92/3;     Roc has a grow rate of 3
+!#MA:R92/0;     Roc has no additional grow rate
+!#MA:I92/1027;  Roc has 1027 AI value
+!#MA:F92/790;   Roc has 790 Fight Value
+!#MA:L92/4;     Roc is a level 5 monster
+!#MA:O92/6;     Roc belongs to Stronghold
+!#MA:X92/19;    Roc flag is double wide,fly,alive
+
+
+!#MA:C93/6/700; Thunderbird cost 700 Gold
+!#MA:A93/13;    Thunderbird has 13 attack
+!#MA:D93/11;    Thunderbird has 11 defence
+!#MA:P93/60;    Thunderbird has 60 health
+!#MA:S93/11;    Thunderbird has 11 speed
+!#MA:M93/11;    Thunderbird has minimum damage 11
+!#MA:E93/15;    Thunderbird has maximum damage 15
+!#MA:G93/3;     Thunderbird has a grow rate of 3
+!#MA:R93/0;     Thunderbird has no additional grow rate
+!#MA:I93/1106;  Thunderbird has 1106 AI value
+!#MA:F93/869;   Thunderbird has 869 Fight Value
+!#MA:L93/4;     Thunderbird is a level 5 monster
+!#MA:O93/6;     Thunderbird belongs to Stronghold
+!#MA:X93/19;    Thunderbird flag is double wide,fly,alive
+
+
+!#MA:C94/6/750; Cyclops cost 750 Gold
+!#MA:A94/15;    Cyclops has 15 attack
+!#MA:D94/12;    Cyclops has 12 defence
+!#MA:P94/70;    Cyclops has 70 health
+!#MA:S94/6;     Cyclops has 6 speed
+!#MA:M94/16;    Cyclops has minimum damage 16
+!#MA:E94/20;    Cyclops has maximum damage 20
+!#MA:N94/16;    Cyclops has 16 shots
+!#MA:G94/2;     Cyclops has a grow rate of 2
+!#MA:R94/0;     Cyclops has no additional grow rate
+!#MA:I94/1266;  Cyclops has 1266 AI value
+!#MA:F94/1055;  Cyclops has 1055 Fight Value
+!#MA:L94/5;     Cyclops is a level 6 monster
+!#MA:O94/6;     Cyclops belongs to Stronghold
+!#MA:X94/52;    Cyclops flag is shooter,alive,catapult(can attack walls)
+
+
+!#MA:C95/6/1100; Cyclops King cost 1100 Gold
+!#MA:A95/17;     Cyclops King has 17 attack
+!#MA:D95/13;     Cyclops King has 13 defence
+!#MA:P95/70;     Cyclops King has 70 health
+!#MA:S95/8;      Cyclops King has 8 speed
+!#MA:M95/16;     Cyclops King has minimum damage 16
+!#MA:E95/20;     Cyclops King has maximum damage 20
+!#MA:N95/24;     Cyclops King has 24 shots
+!#MA:G95/2;      Cyclops King has a grow rate of 2
+!#MA:R95/0;      Cyclops King has no additional grow rate
+!#MA:I95/1443;   Cyclops King has 1443 AI value
+!#MA:F95/1110;   Cyclops King has 1110 Fight Value
+!#MA:L95/5;      Cyclops King is a level 6 monster
+!#MA:O95/6;      Cyclops King belongs to Stronghold
+!#MA:X95/52;     Cyclops King flag is shooter,alive,catapult(can attack walls)
+
+
+!#MA:C96/6/1500; Behemoth cost 1500 Gold
+!#MA:A96/17;     Behemoth has 17 attack
+!#MA:D96/17;     Behemoth has 17 defence
+!#MA:P96/160;    Behemoth has 160 health
+!#MA:S96/6;      Behemoth has 6 speed
+!#MA:M96/30;     Behemoth has minimum damage 30
+!#MA:E96/50;     Behemoth has maximum damage 50
+!#MA:G96/1;      Behemoth has a grow rate of 1
+!#MA:R96/0;      Behemoth has no additional grow rate
+!#MA:I96/3162;   Behemoth has 3162 AI value
+!#MA:F96/3162;   Behemoth has 3162 Fight Value
+!#MA:L96/6;      Behemoth is a level 7 monster
+!#MA:O96/6;      Behemoth belongs to Stronghold
+!#MA:X96/145;    Behemoth flag is double wide,alive,King 1
+
+
+!#MA:C97/6/3000 C97/4/1; Ancient Behemoth cost 3000 Gold and 1 crystal
+!#MA:A97/19;     Ancient Behemoth has 19 attack
+!#MA:D97/19;     Ancient Behemoth has 19 defence
+!#MA:P97/300;    Ancient Behemoth has 300 health
+!#MA:S97/9;      Ancient Behemoth has 9 speed
+!#MA:M97/30;     Ancient Behemoth has minimum damage 30
+!#MA:E97/50;     Ancient Behemoth has maximum damage 50
+!#MA:G97/1;      Ancient Behemoth has a grow rate of 1
+!#MA:R97/0;      Ancient Behemoth has no additional grow rate
+!#MA:I97/6168;   Ancient Behemoth has 6168 AI value
+!#MA:F97/5397;   Ancient Behemoth has 5397 Fight Value
+!#MA:L97/6;      Ancient Behemoth is a level 7 monster
+!#MA:O97/6;      Ancient Behemoth belongs to Stronghold
+!#MA:X97/145;    Ancient Behemoth flag is double wide,alive,King 1
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** FORTRESS ***
+
+!#MA:C98/6/50; Gnoll cost 50 Gold
+!#MA:A98/3;    Gnoll has 3 attack
+!#MA:D98/5;    Gnoll has 5 defence
+!#MA:P98/6;    Gnoll has 6 health
+!#MA:S98/4;    Gnoll has 4 speed
+!#MA:M98/2;    Gnoll has minimum damage 2
+!#MA:E98/3;    Gnoll has maximum damage 3
+!#MA:G98/12;   Gnoll has a grow rate of 12
+!#MA:R98/6;    Gnoll has 6 additional grow rate
+!#MA:I98/56;   Gnoll has 56 AI value
+!#MA:F98/70;   Gnoll has 70 Fight Value
+!#MA:L98/0;    Gnoll is a level 1 monster
+!#MA:O98/7;    Gnoll belongs to Fortress
+!#MA:X98/16;   Gnoll flag is alive
+
+
+!#MA:C99/6/70; Gnoll Marauder cost 70 Gold
+!#MA:A99/4;    Gnoll Marauder has 4 attack
+!#MA:D99/6;    Gnoll Marauder has 6 defence
+!#MA:P99/6;    Gnoll Marauder has 6 health
+!#MA:S99/5;    Gnoll Marauder has 5 speed
+!#MA:M99/2;    Gnoll Marauder has minimum damage 2
+!#MA:E99/3;    Gnoll Marauder has maximum damage 3
+!#MA:G99/12;   Gnoll Marauder has a grow rate of 12
+!#MA:R99/6;    Gnoll Marauder has 6 additional grow rate
+!#MA:I99/90;   Gnoll Marauder has 90 AI value
+!#MA:F99/90;   Gnoll Marauder has 90 Fight Value
+!#MA:L99/0;    Gnoll Marauder is a level 1 monster
+!#MA:O99/7;    Gnoll Marauder belongs to Fortress
+!#MA:X99/16;   Gnoll Marauder flag is alive
+
+
+!#MA:C100/6/110; Lizardman cost 110 Gold
+!#MA:A100/5;     Lizardman has 5 attack
+!#MA:D100/6;     Lizardman has 6 defence
+!#MA:P100/14;    Lizardman has 14 health
+!#MA:S100/4;     Lizardman has 4 speed
+!#MA:M100/2;     Lizardman has minimum damage 2
+!#MA:E100/3;     Lizardman has maximum damage 3
+!#MA:N100/12;    Lizardman has 12 shots
+!#MA:G100/9;     Lizardman has a grow rate of 9
+!#MA:R100/0;     Lizardman has no additional grow rate
+!#MA:I100/126;   Lizardman has 126 AI value
+!#MA:F100/115;   Lizardman has 115 Fight Value
+!#MA:L100/1;     Lizardman is a level 2 monster
+!#MA:O100/7;     Lizardman belongs to Fortress
+!#MA:X100/20;    Lizardman flag is shooter,alive
+
+
+!#MA:C101/6/140; Lizard Warrior cost 140 Gold
+!#MA:A101/6;     Lizard Warrior has 6 attack
+!#MA:D101/8;     Lizard Warrior has 8 defence
+!#MA:P101/15;    Lizard Warrior has 15 health
+!#MA:S101/5;     Lizard Warrior has 5 speed
+!#MA:M101/2;     Lizard Warrior has minimum damage 2
+!#MA:E101/5;     Lizard Warrior has maximum damage 5
+!#MA:N101/24;    Lizard Warrior has 24 shots
+!#MA:G101/9;     Lizard Warrior has a grow rate of 9
+!#MA:R101/0;     Lizard Warrior has no additional grow rate
+!#MA:I101/156;   Lizard Warrior has 156 AI value
+!#MA:F101/130;   Lizard Warrior has 130 Fight Value
+!#MA:L101/1;     Lizard Warrior is a level 2 monster
+!#MA:O101/7;     Lizard Warrior belongs to Fortress
+!#MA:X101/20;    Lizard Warrior flag is shooter,alive
+
+
+!#MA:C104/6/220; Serpent Fly cost 220 Gold
+!#MA:A104/7;     Serpent Fly has 7 attack
+!#MA:D104/9;     Serpent Fly has 9 defence
+!#MA:P104/20;    Serpent Fly has 20 health
+!#MA:S104/9;     Serpent Fly has 9 speed
+!#MA:M104/2;     Serpent Fly has minimum damage 2
+!#MA:E104/5;     Serpent Fly has maximum damage 5
+!#MA:G104/8;     Serpent Fly has a grow rate of 8
+!#MA:R104/0;     Serpent Fly has no additional grow rate
+!#MA:I104/268;   Serpent Fly has 268 AI value
+!#MA:F104/215;   Serpent Fly has 215 Fight Value
+!#MA:L104/2;     Serpent Fly is a level 3 monster
+!#MA:O104/7;     Serpent Fly belongs to Fortress
+!#MA:X104/18;    Serpent Fly flag is fly,alive
+
+
+!#MA:C105/6/240; Dragon Fly cost 240 Gold
+!#MA:A105/8;     Dragon Fly has 8 attack
+!#MA:D105/10;    Dragon Fly has 10 defence
+!#MA:P105/20;    Dragon Fly has 20 health
+!#MA:S105/13;    Dragon Fly has 13 speed
+!#MA:M105/2;     Dragon Fly has minimum damage 2
+!#MA:E105/5;     Dragon Fly has maximum damage 5
+!#MA:G105/8;     Dragon Fly has a grow rate of 8
+!#MA:R105/0;     Dragon Fly has no additional grow rate
+!#MA:I105/312;   Dragon Fly has 312 AI value
+!#MA:F105/250;   Dragon Fly has 250 Fight Value
+!#MA:L105/2;     Dragon Fly is a level 3 monster
+!#MA:O105/7;     Dragon Fly belongs to Fortress
+!#MA:X105/18;    Dragon Fly flag is fly,alive
+
+
+!#MA:C106/6/325; Basilisk cost 325 Gold
+!#MA:A106/11;    Basilisk has 11 attack
+!#MA:D106/11;    Basilisk has 11 defence
+!#MA:P106/35;    Basilisk has 35 health
+!#MA:S106/5;     Basilisk has 5 speed
+!#MA:M106/6;     Basilisk has minimum damage 6
+!#MA:E106/10;    Basilisk has maximum damage 10
+!#MA:G106/4;     Basilisk has a grow rate of 4
+!#MA:R106/0;     Basilisk has no additional grow rate
+!#MA:I106/552;   Basilisk has 552 AI value
+!#MA:F106/506;   Basilisk has 506 Fight Value
+!#MA:L106/3;     Basilisk is a level 4 monster
+!#MA:O106/7;     Basilisk belongs to Fortress
+!#MA:X106/17;    Basilisk flag is double wide,alive
+
+
+!#MA:C107/6/400; Greater Basilisk cost 400 Gold
+!#MA:A107/12;    Greater Basilisk has 12 attack
+!#MA:D107/12;    Greater Basilisk has 12 defence
+!#MA:P107/40;    Greater Basilisk has 40 health
+!#MA:S107/7;     Greater Basilisk has 7 speed
+!#MA:M107/6;     Greater Basilisk has minimum damage 6
+!#MA:E107/10;    Greater Basilisk has maximum damage 10
+!#MA:G107/4;     Greater Basilisk has a grow rate of 4
+!#MA:R107/0;     Greater Basilisk has no additional grow rate
+!#MA:I107/714;   Greater Basilisk has 714 AI value
+!#MA:F107/561;   Greater Basilisk has 561 Fight Value
+!#MA:L107/3;     Greater Basilisk is a level 4 monster
+!#MA:O107/7;     Greater Basilisk belongs to Fortress
+!#MA:X107/17;    Greater Basilisk flag is double wide,alive
+
+
+!#MA:C102/6/525; Gorgon cost 525 Gold
+!#MA:A102/10;    Gorgon has 10 attack
+!#MA:D102/14;    Gorgon has 14 defence
+!#MA:P102/70;    Gorgon has 70 health
+!#MA:S102/5;     Gorgon has 5 speed
+!#MA:M102/12;    Gorgon has minimum damage 12
+!#MA:E102/16;    Gorgon has maximum damage 16
+!#MA:G102/3;     Gorgon has a grow rate of 3
+!#MA:R102/0;     Gorgon has no additional grow rate
+!#MA:I102/890;   Gorgon has 890 AI value
+!#MA:F102/890;   Gorgon has 890 Fight Value
+!#MA:L102/4;     Gorgon is a level 5 monster
+!#MA:O102/7;     Gorgon belongs to Fortress
+!#MA:X102/17;    Gorgon flag is double wide,alive
+
+
+!#MA:C103/6/600; Mighty Gorgon cost 600 Gold
+!#MA:A103/11;    Mighty Gorgon has 11 attack
+!#MA:D103/16;    Mighty Gorgon has 16 defence
+!#MA:P103/70;    Mighty Gorgon has 70 health
+!#MA:S103/6;     Mighty Gorgon has 6 speed
+!#MA:M103/12;    Mighty Gorgon has minimum damage 12
+!#MA:E103/16;    Mighty Gorgon has maximum damage 16
+!#MA:G103/3;     Mighty Gorgon has a grow rate of 3
+!#MA:R103/0;     Mighty Gorgon has no additional grow rate
+!#MA:I103/1028;  Mighty Gorgon has 1028 AI value
+!#MA:F103/1028;  Mighty Gorgon has 1028 Fight Value
+!#MA:L103/4;     Mighty Gorgon is a level 5 monster
+!#MA:O103/7;     Mighty Gorgon belongs to Fortress
+!#MA:X103/17;    Mighty Gorgon flag is double wide,alive
+
+
+!#MA:C108/6/800; Wyvern cost 800 Gold
+!#MA:A108/14;    Wyvern has 14 attack
+!#MA:D108/14;    Wyvern has 14 defence
+!#MA:P108/70;    Wyvern has 70 health
+!#MA:S108/7;     Wyvern has 7 speed
+!#MA:M108/14;    Wyvern has minimum damage 14
+!#MA:E108/18;    Wyvern has maximum damage 18
+!#MA:G108/2;     Wyvern has a grow rate of 2
+!#MA:R108/0;     Wyvern has no additional grow rate
+!#MA:I108/1350;  Wyvern has 1350 AI value
+!#MA:F108/1050;  Wyvern has 1050 Fight Value
+!#MA:L108/5;     Wyvern is a level 6 monster
+!#MA:O108/7;     Wyvern belongs to Fortress
+!#MA:X108/19;    Wyvern flag is double wide,fly,alive
+
+
+!#MA:C109/6/1100; Wyvern Monarch cost 1110 Gold
+!#MA:A109/14;     Wyvern Monarch has 14 attack
+!#MA:D109/14;     Wyvern Monarch has 14 defence
+!#MA:P109/70;     Wyvern Monarch has 70 health
+!#MA:S109/11;     Wyvern Monarch has 11 speed
+!#MA:M109/18;     Wyvern Monarch has minimum damage 18
+!#MA:E109/22;     Wyvern Monarch has maximum damage 22
+!#MA:G109/2;      Wyvern Monarch has a grow rate of 2
+!#MA:R109/0;      Wyvern Monarch has no additional grow rate
+!#MA:I109/1518;   Wyvern Monarch has 1518 AI value
+!#MA:F109/1181;   Wyvern Monarch has 1181 Fight Value
+!#MA:L109/5;      Wyvern Monarch is a level 6 monster
+!#MA:O109/7;      Wyvern Monarch belongs to Fortress
+!#MA:X109/19;     Wyvern Monarch flag is double wide,fly,alive
+
+
+!#MA:C110/6/2200; Hydra cost 2200 Gold
+!#MA:A110/16;     Hydra has 16 attack
+!#MA:D110/18;     Hydra has 18 defence
+!#MA:P110/175;    Hydra has 175 health
+!#MA:S110/5;      Hydra has 5 speed
+!#MA:M110/25;     Hydra has minimum damage 25
+!#MA:E110/45;     Hydra has maximum damage 45
+!#MA:G110/1;      Hydra has a grow rate of 1
+!#MA:R110/0;      Hydra has no additional grow rate
+!#MA:I110/4120;   Hydra has 4120 AI value
+!#MA:F110/4120;   Hydra has 4120 Fight Value
+!#MA:L110/6;      Hydra is a level 7 monster
+!#MA:O110/7;      Hydra belongs to Fortress
+!#MA:X110/589969; Hydra flag is double wide,alive,King 1,no enemy retaliation,attack all enemies around
+
+
+!#MA:C111/6/3500 C111/3/1; Chaos Hydra cost 3500 Gold and 1 sulfur
+!#MA:A111/18;     Chaos Hydra has 18 attack
+!#MA:D111/20;     Chaos Hydra has 20 defence
+!#MA:P111/250;    Chaos Hydra has 250 health
+!#MA:S111/7;      Chaos Hydra has 7 speed
+!#MA:M111/25;     Chaos Hydra has minimum damage 25
+!#MA:E111/45;     Chaos Hydra has maximum damage 45
+!#MA:G111/1;      Chaos Hydra has a grow rate of 1
+!#MA:R111/0;      Chaos Hydra has no additional grow rate
+!#MA:I111/5931;   Chaos Hydra has 5931 AI value
+!#MA:F111/5272;   Chaos Hydra has 5272 Fight Value
+!#MA:L111/6;      Chaos Hydra is a level 7 monster
+!#MA:O111/7;      Chaos Hydra belongs to Fortress
+!#MA:X111/589969; Chaos Hydra flag is double wide,alive,King 1,no enemy retaliation,attack all enemies around
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** CONFLUX ***
+
+!#MA:C118/6/25; Pixie cost 25 Gold
+!#MA:A118/2;    Pixie has 2 attack
+!#MA:D118/2;    Pixie has 2 defence
+!#MA:P118/3;    Pixie has 3 health
+!#MA:S118/7;    Pixie has 7 speed
+!#MA:M118/1;    Pixie has minimum damage 1
+!#MA:E118/2;    Pixie has maximum damage 2
+!#MA:G118/20;   Pixie has a grow rate of 20
+!#MA:R118/10;   Pixie has 10 additional grow rate
+!#MA:I118/55;   Pixie has 55 AI value
+!#MA:F118/40;   Pixie has 40 Fight Value
+!#MA:L118/0;    Pixie is a level 1 monster
+!#MA:O118/8;    Pixie belongs to Conflux
+!#MA:X118/18;   Pixie flag is fly,alive
+
+
+!#MA:C119/6/30;  Sprite cost 30 Gold
+!#MA:A119/2;     Sprite has 2 attack
+!#MA:D119/2;     Sprite has 2 defence
+!#MA:P119/3;     Sprite has 3 health
+!#MA:S119/9;     Sprite has 9 speed
+!#MA:M119/1;     Sprite has minimum damage 1
+!#MA:E119/3;     Sprite has maximum damage 3
+!#MA:G119/20;    Sprite has a grow rate of 20
+!#MA:R119/10;    Sprite has 10 additional grow rate
+!#MA:I119/95;    Sprite has 95 AI value
+!#MA:F119/70;    Sprite has 70 Fight Value
+!#MA:L119/0;     Sprite is a level 1 monster
+!#MA:O119/8;     Sprite belongs to Conflux
+!#MA:X119/65554; Sprite flag is fly,alive,no enemy retaliation
+
+
+!#MA:C112/6/250;  Air Elemental cost 250 Gold
+!#MA:A112/9;      Air Elemental has 9 attack
+!#MA:D112/9;      Air Elemental has 9 defence
+!#MA:P112/25;     Air Elemental has 25 health
+!#MA:S112/7;      Air Elemental has 7 speed
+!#MA:M112/2;      Air Elemental has minimum damage 2
+!#MA:E112/8;      Air Elemental has maximum damage 8
+!#MA:G112/6;      Air Elemental has a grow rate of 6
+!#MA:R112/0;      Air Elemental has no additional grow rate
+!#MA:I112/356;    Air Elemental has 356 AI value
+!#MA:F112/324;    Air Elemental has 324 Fight Value
+!#MA:L112/1;      Air Elemental is a level 2 monster
+!#MA:O112/8;      Air Elemental belongs to Conflux
+!#MA:X112/132096; Air Elemental flag is immune to mind spells,no moral penalty
+
+
+!#MA:C127/6/275;  Storm Elemental cost 275 Gold
+!#MA:A127/9;      Storm Elemental has 9 attack
+!#MA:D127/9;      Storm Elemental has 9 defence
+!#MA:P127/25;     Storm Elemental has 25 health
+!#MA:S127/8;      Storm Elemental has 8 speed
+!#MA:M127/2;      Storm Elemental has minimum damage 2
+!#MA:E127/8;      Storm Elemental has maximum damage 8
+!#MA:N127/24;     Storm Elemental has 24 shots
+!#MA:G127/6;      Storm Elemental has a grow rate of 6
+!#MA:B127/3;      Storm Elemental has 3 casts
+!#MA:R127/0;      Storm Elemental has no additional grow rate
+!#MA:I127/486;    Storm Elemental has 486 AI value
+!#MA:F127/324;    Storm Elemental has 324 Fight Value
+!#MA:L127/1;      Storm Elemental is a level 2 monster
+!#MA:O127/8;      Storm Elemental belongs to Conflux
+!#MA:X127/132100; Storm Elemental flag is shooter,immune to mind spells,no moral penalty
+
+
+!#MA:C115/6/300;  Water Elemental cost 300 Gold
+!#MA:A115/8;      Water Elemental has 8 attack
+!#MA:D115/10;     Water Elemental has 10 defence
+!#MA:P115/30;     Water Elemental has 30 health
+!#MA:S115/5;      Water Elemental has 5 speed
+!#MA:M115/3;      Water Elemental has minimum damage 3
+!#MA:E115/7;      Water Elemental has maximum damage 7
+!#MA:G115/6;      Water Elemental has a grow rate of 6
+!#MA:R115/0;      Water Elemental has no additional grow rate
+!#MA:I115/315;    Water Elemental has 315 AI value
+!#MA:F115/315;    Water Elemental has 315 Fight Value
+!#MA:L115/2;      Water Elemental is a level 3 monster
+!#MA:O115/8;      Water Elemental belongs to Conflux
+!#MA:X115/132097; Water Elemental flag is double wide,immune to mind spells,no moral penalty
+
+
+!#MA:C123/6/375;  Ice Elemental cost 375 Gold
+!#MA:A123/8;      Ice Elemental has 8 attack
+!#MA:D123/10;     Ice Elemental has 10 defence
+!#MA:P123/30;     Ice Elemental has 30 health
+!#MA:S123/6;      Ice Elemental has 6 speed
+!#MA:M123/3;      Ice Elemental has minimum damage 3
+!#MA:E123/7;      Ice Elemental has maximum damage 7
+!#MA:N123/24;     Ice Elemental has 24 shots
+!#MA:G123/6;      Ice Elemental has a grow rate of 6
+!#MA:B123/3;      Ice Elemental has 3 casts
+!#MA:R123/0;      Ice Elemental has no additional grow rate
+!#MA:I123/380;    Ice Elemental has 380 AI value
+!#MA:F123/315;    Ice Elemental has 315 Fight Value
+!#MA:L123/2;      Ice Elemental is a level 3 monster
+!#MA:O123/8;      Ice Elemental belongs to Conflux
+!#MA:X123/132101; Ice Elemental flag is double wide,shooter,immune to mind spells,no moral penalty
+
+
+!#MA:C114/6/350;  Fire Elemental cost 350 Gold
+!#MA:A114/10;     Fire Elemental has 10 attack
+!#MA:D114/8;      Fire Elemental has 8 defence
+!#MA:P114/35;     Fire Elemental has 35 health
+!#MA:S114/6;      Fire Elemental has 6 speed
+!#MA:M114/4;      Fire Elemental has minimum damage 4
+!#MA:E114/6;      Fire Elemental has maximum damage 6
+!#MA:G114/5;      Fire Elemental has a grow rate of 5
+!#MA:R114/0;      Fire Elemental has no additional grow rate
+!#MA:I114/345;    Fire Elemental has 345 AI value
+!#MA:F114/345;    Fire Elemental has 345 Fight Value
+!#MA:L114/3;      Fire Elemental is a level 4 monster
+!#MA:O114/8;      Fire Elemental belongs to Conflux
+!#MA:X114/132096; Fire Elemental flag is immune to mind spells,no moral penalty
+
+
+!#MA:C129/6/400;  Energy Elemental cost 400 Gold
+!#MA:A129/12;     Energy Elemental has 12 attack
+!#MA:D129/8;      Energy Elemental has 8 defence
+!#MA:P129/35;     Energy Elemental has 35 health
+!#MA:S129/8;      Energy Elemental has 8 speed
+!#MA:M129/4;      Energy Elemental has minimum damage 4
+!#MA:E129/6;      Energy Elemental has maximum damage 6
+!#MA:G129/5;      Energy Elemental has a grow rate of 5
+!#MA:B129/3;      Energy Elemental has 3 casts
+!#MA:R129/0;      Energy Elemental has no additional grow rate
+!#MA:I129/470;    Energy Elemental has 470 AI value
+!#MA:F129/360;    Energy Elemental has 360 Fight Value
+!#MA:L129/3;      Energy Elemental is a level 4 monster
+!#MA:O129/8;      Energy Elemental belongs to Conflux
+!#MA:X129/148484; Energy Elemental flag is shooter,immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C113/6/400;  Earth Elemental cost 400 Gold
+!#MA:A113/10;     Earth Elemental has 10 attack
+!#MA:D113/10;     Earth Elemental has 10 defence
+!#MA:P113/40;     Earth Elemental has 40 health
+!#MA:S113/4;      Earth Elemental has 4 speed
+!#MA:M113/4;      Earth Elemental has minimum damage 4
+!#MA:E113/8;      Earth Elemental has maximum damage 8
+!#MA:G113/4;      Earth Elemental has a grow rate of 4
+!#MA:R113/0;      Earth Elemental has no additional grow rate
+!#MA:I113/330;    Earth Elemental has 330 AI value
+!#MA:F113/415;    Earth Elemental has 415 Fight Value
+!#MA:L113/4;      Earth Elemental is a level 5 monster
+!#MA:O113/8;      Earth Elemental belongs to Conflux
+!#MA:X113/132096; Earth Elemental flag is immune to mind spells,no moral penalty
+
+
+!#MA:C125/6/500;  Magma Elemental cost 500 Gold
+!#MA:A125/11;     Magma Elemental has 11 attack
+!#MA:D125/11;     Magma Elemental has 11 defence
+!#MA:P125/40;     Magma Elemental has 40 health
+!#MA:S125/6;      Magma Elemental has 6 speed
+!#MA:M125/6;      Magma Elemental has minimum damage 6
+!#MA:E125/10;     Magma Elemental has maximum damage 10
+!#MA:G125/4;      Magma Elemental has a grow rate of 4
+!#MA:B125/3;      Magma Elemental has 3 casts
+!#MA:R125/0;      Magma Elemental has no additional grow rate
+!#MA:I125/490;    Magma Elemental has 490 AI value
+!#MA:F125/490;    Magma Elemental has 490 Fight Value
+!#MA:L125/4;      Magma Elemental is a level 5 monster
+!#MA:O125/8;      Magma Elemental belongs to Conflux
+!#MA:X125/132096; Magma Elemental flag is immune to mind spells,no moral penalty
+
+
+!#MA:C120/6/750;  Physical Elemental cost 750 Gold
+!#MA:A120/15;     Physical Elemental has 15 attack
+!#MA:D120/13;     Physical Elemental has 13 defence
+!#MA:P120/75;     Physical Elemental has 75 health
+!#MA:S120/7;      Physical Elemental has 7 speed
+!#MA:M120/10;     Physical Elemental has minimum damage 10
+!#MA:E120/20;     Physical Elemental has maximum damage 20
+!#MA:G120/2;      Physical Elemental has a grow rate of 2
+!#MA:R120/0;      Physical Elemental has no additional grow rate
+!#MA:I120/1669;   Physical Elemental has 1669 AI value
+!#MA:F120/1431;   Physical Elemental has 1431 Fight Value
+!#MA:L120/5;      Physical Elemental is a level 6 monster
+!#MA:O120/8;      Physical Elemental belongs to Conflux
+!#MA:X120/721920; Physical Elemental flag is immune to mind spells,no enemy retaliation,no moral penalty,attack all enemies around
+
+
+!#MA:C121/6/800;  Magic Elemental cost 750 Gold
+!#MA:A121/15;     Magic Elemental has 15 attack
+!#MA:D121/13;     Magic Elemental has 13 defence
+!#MA:P121/80;     Magic Elemental has 75 health
+!#MA:S121/9;      Magic Elemental has 7 speed
+!#MA:M121/15;     Magic Elemental has minimum damage 10
+!#MA:E121/25;     Magic Elemental has maximum damage 20
+!#MA:G121/2;      Magic Elemental has a grow rate of 2
+!#MA:R121/0;      Magic Elemental has no additional grow rate
+!#MA:I121/2012;   Magic Elemental has 1669 AI value
+!#MA:F121/1724;   Magic Elemental has 1431 Fight Value
+!#MA:L121/5;      Magic Elemental is a level 6 monster
+!#MA:O121/8;      Magic Elemental belongs to Conflux
+!#MA:X121/721920; Magic Elemental flag is immune to mind spells,no enemy retaliation,no moral penalty,attack all enemies around
+
+
+!#MA:C130/6/1500; Firebird cost 1500 Gold
+!#MA:A130/18;     Firebird has 18 attack
+!#MA:D130/18;     Firebird has 18 defence
+!#MA:P130/150;    Firebird has 150 health
+!#MA:S130/15;     Firebird has 15 speed
+!#MA:M130/30;     Firebird has minimum damage 30
+!#MA:E130/40;     Firebird has maximum damage 40
+!#MA:G130/2;      Firebird has a grow rate of 2
+!#MA:R130/0;      Firebird has no additional grow rate
+!#MA:I130/4547;   Firebird has 4547 AI value
+!#MA:F130/3248;   Firebird has 3248 Fight Value
+!#MA:L130/6;      Firebird is a level 7 monster
+!#MA:O130/8;      Firebird belongs to Conflux
+!#MA:X130/16539;  Firebird flag is double wide,fly,extended attack radius,alive,King 1,immune to fire spells
+
+
+!#MA:C131/6/2000 C131/1/1; Phoenix cost 2000 Gold and 1 mercury
+!#MA:A131/21;     Phoenix has 21 attack
+!#MA:D131/18;     Phoenix has 18 defence
+!#MA:P131/200;    Phoenix has 200 health
+!#MA:S131/21;     Phoenix has 21 speed
+!#MA:M131/30;     Phoenix has minimum damage 30
+!#MA:E131/40;     Phoenix has maximum damage 40
+!#MA:G131/2;      Phoenix has a grow rate of 2
+!#MA:B131/1;      Phoenix has 1 cast
+!#MA:R131/0;      Phoenix has no additional grow rate
+!#MA:I131/6721;   Phoenix has 6721 AI value
+!#MA:F131/4929;   Phoenix has 4929 Fight Value
+!#MA:L131/6;      Phoenix is a level 7 monster
+!#MA:O131/8;      Phoenix belongs to Conflux
+!#MA:X131/16539;  Phoenix flag is double wide,fly,extended attack radius,alive,King 1,immune to fire spells
+
+-----------------------------------------------------------------------------------------------------------------------
+
+*** NEUTRALS ***
+
+!#MA:C116/6/500;  Gold Golem cost 500 Gold
+!#MA:A116/11;     Gold Golem has 11 attack
+!#MA:D116/12;     Gold Golem has 12 defence
+!#MA:P116/50;     Gold Golem has 50 health
+!#MA:S116/5;      Gold Golem has 5 speed
+!#MA:M116/8;      Gold Golem has minimum damage 8
+!#MA:E116/10;     Gold Golem has maximum damage 10
+!#MA:G116/3;      Gold Golem has a grow rate of 3
+!#MA:R116/0;      Gold Golem has no additional grow rate
+!#MA:I116/600;    Gold Golem has 600 AI value
+!#MA:F116/600;    Gold Golem has 600 Fight Value
+!#MA:L116/4;      Gold Golem is a level 5 monster
+!#MA:O116/9;      Gold Golem belongs to ???
+!#MA:X116/132096; Gold Golem flag is immune to mind spells,no moral penalty
+
+
+!#MA:C117/6/750;  Diamond Golem cost 750 Gold
+!#MA:A117/13;     Diamond Golem has 13 attack
+!#MA:D117/12;     Diamond Golem has 12 defence
+!#MA:P117/60;     Diamond Golem has 60 health
+!#MA:S117/5;      Diamond Golem has 5 speed
+!#MA:M117/10;     Diamond Golem has minimum damage 10
+!#MA:E117/14;     Diamond Golem has maximum damage 14
+!#MA:G117/2;      Diamond Golem has a grow rate of 2
+!#MA:R117/0;      Diamond Golem has no additional grow rate
+!#MA:I117/775;    Diamond Golem has 775 AI value
+!#MA:F117/775;    Diamond Golem has 775 Fight Value
+!#MA:L117/5;      Diamond Golem is a level 6 monster
+!#MA:O117/9;      Diamond Golem belongs to ???
+!#MA:X117/132096; Diamond Golem flag is immune to mind spells,no moral penalty
+
+
+!#MA:C132/6/30000 C132/1/20; Azure Dragon cost 30000 Gold and 20 mercury
+!#MA:A132/50;     Azure Dragon has 50 attack
+!#MA:D132/50;     Azure Dragon has 50 defence
+!#MA:P132/1000;   Azure Dragon has 1000 health
+!#MA:S132/19;     Azure Dragon has 19 speed
+!#MA:M132/70;     Azure Dragon has minimum damage 70
+!#MA:E132/80;     Azure Dragon has maximum damage 80
+!#MA:G132/1;      Azure Dragon has a grow rate of 1
+!#MA:R132/0;      Azure Dragon has no additional grow rate
+!#MA:I132/78845;  Azure Dragon has 78845 AI value
+!#MA:F132/56315;  Azure Dragon has 56315 Fight Value
+!#MA:L132/9;      Azure Dragon is a level 8 monster
+!#MA:O132/9;      Azure Dragon belongs to ???
+!#MA:X132/155;    Azure Dragon flag is double wide,fly,extended radius attack,alive,King 1
+
+
+!#MA:C133/6/20000 C133/4/10; Crystal Dragon cost 20000 Gold and 10 crystals
+!#MA:A133/40;     Crystal Dragon has 40 attack
+!#MA:D133/40;     Crystal Dragon has 40 defence
+!#MA:P133/800;    Crystal Dragon has 800 health
+!#MA:S133/16;     Crystal Dragon has 16 speed
+!#MA:M133/60;     Crystal Dragon has minimum damage 60
+!#MA:E133/75;     Crystal Dragon has maximum damage 75
+!#MA:G133/1;      Crystal Dragon has a grow rate of 1
+!#MA:R133/0;      Crystal Dragon has no additional grow rate
+!#MA:I133/39338;  Crystal Dragon has 39338 AI value
+!#MA:F133/30260;  Crystal Dragon has 30260 Fight Value
+!#MA:L133/9;      Crystal Dragon is a level 8 monster
+!#MA:O133/9;      Crystal Dragon belongs to ???
+!#MA:X133/145;    Crystal Dragon flag is double wide,alive,King 1
+
+
+
+!#MA:C134/6/10000 C134/5/8; Faerie Dragon cost 10000 Gold and 8 gems
+!#MA:A134/20;     Faerie Dragon has 20 attack
+!#MA:D134/20;     Faerie Dragon has 20 defence
+!#MA:P134/500;    Faerie Dragon has 500 health
+!#MA:S134/15;     Faerie Dragon has 15 speed
+!#MA:M134/20;     Faerie Dragon has minimum damage 20
+!#MA:E134/30;     Faerie Dragon has maximum damage 30
+!#MA:G134/1;      Faerie Dragon has a grow rate of 1
+!#MA:B134/5;      Faerie Dragon has 5 casts
+!#MA:R134/0;      Faerie Dragon has no additional grow rate
+!#MA:I134/19580;  Faerie Dragon has 19580 AI value
+!#MA:F134/16317;  Faerie Dragon has 16617 Fight Value
+!#MA:L134/9;      Faerie Dragon is a level 8 monster
+!#MA:O134/9;      Faerie Dragon belongs to ???
+!#MA:X134/147;    Faerie Dragon flag is double wide,fly,alive,King 1
+
+
+!#MA:C135/3/15000 C135/3/14; Rust Dragon cost 15000 Gold and 14 sulfur
+!#MA:A135/30;     Rust Dragon has 30 attack
+!#MA:D135/30;     Rust Dragon has 30 defence
+!#MA:P135/750;    Rust Dragon has 750 health
+!#MA:S135/17;     Rust Dragon has 17 speed
+!#MA:M135/50;     Rust Dragon has minimum damage 50
+!#MA:E135/50;     Rust Dragon has maximum damage 50
+!#MA:G135/1;      Rust Dragon has a grow rate of 1
+!#MA:R135/0;      Rust Dragon has no additional grow rate
+!#MA:I135/26433;  Rust Dragon has 26433 AI value
+!#MA:F135/24030;  Rust Dragon has 24030 Fight Value
+!#MA:L135/9;      Rust Dragon is a level 8 monster
+!#MA:O135/9;      Rust Dragon belongs to ???
+!#MA:X135/155;    Rust Dragon flag is double wide,fly,extended radius attack,alive,King 1
+
+
+!#MA:C136/6/750;  Enchanter cost 750 Gold
+!#MA:A136/17;     Enchanter has 17 attack
+!#MA:D136/12;     Enchanter has 12 defence
+!#MA:P136/30;     Enchanter has 30 health
+!#MA:S136/9;      Enchanter has 9 speed
+!#MA:M136/14;     Enchanter has minimum damage 14
+!#MA:E136/14;     Enchanter has maximum damage 14
+!#MA:N136/32;     Enchanter has 32 shots
+!#MA:G136/2;      Enchanter has a grow rate of 2
+!#MA:R136/0;      Enchanter has no additional grow rate
+!#MA:I136/1210;   Enchanter has 1210 AI value
+!#MA:F136/805;    Enchanter has 805 Fight Value
+!#MA:L136/5;      Enchanter is a level 6 monster
+!#MA:O136/9;      Enchanter belongs to ???
+!#MA:X136/4116;   Enchanter flag is shooter,alive,no penalty in close combat
+
+
+!#MA:C137/6/400; Sharpshooter cost 400 Gold
+!#MA:A137/12;    Sharpshooter has 12 attack
+!#MA:D137/10;    Sharpshooter has 10 defence
+!#MA:P137/15;    Sharpshooter has 15 health
+!#MA:S137/9;     Sharpshooter has 9 speed
+!#MA:M137/8;     Sharpshooter has minimum damage 8
+!#MA:E137/10;    Sharpshooter has maximum damage 10
+!#MA:N137/32;    Sharpshooter has 32 shots
+!#MA:G137/4;     Sharpshooter has a grow rate of 4
+!#MA:R137/0;     Sharpshooter has no additional grow rate
+!#MA:I137/585;   Sharpshooter has 585 AI value
+!#MA:F137/415;   Sharpshooter has 415 Fight Value
+!#MA:L137/3;     Sharpshooter is a level 4 monster
+!#MA:O137/9;     Sharpshooter belongs to ???
+!#MA:X137/20;    Sharpshooter flag is shooter,alive
+
+
+!#MA:C138/6/40; Halfling cost 40 Gold
+!#MA:A138/4;    Halfling has 4 attack
+!#MA:D138/2;    Halfling has 2 defence
+!#MA:P138/4;    Halfling has 4 health
+!#MA:S138/5;    Halfling has 5 speed
+!#MA:M138/1;    Halfling has minimum damage 1
+!#MA:E138/3;    Halfling has maximum damage 3
+!#MA:N138/24;   Halfling has 24 shots
+!#MA:G138/15;   Halfling has a grow rate of 15
+!#MA:R138/0;    Halfling has no additional grow rate
+!#MA:I138/75;   Halfling has 75 AI value
+!#MA:F138/60;   Halfling has 60 Fight Value
+!#MA:L138/0;    Halfling is a level 1 monster
+!#MA:O138/9;    Halfling belongs to ???
+!#MA:X138/20;   Halfling flag is shooter,alive
+
+
+!#MA:C139/6/10; Peasant cost 10 Gold
+!#MA:A139/1;    Peasant has 1 attack
+!#MA:D139/1;    Peasant has 1 defence
+!#MA:P139/1;    Peasant has 1 health
+!#MA:S139/3;    Peasant has 3 speed
+!#MA:M139/1;    Peasant has minimum damage 1
+!#MA:E139/1;    Peasant has maximum damage 1
+!#MA:G139/25;   Peasant has a grow rate of 25
+!#MA:R139/0;    Peasant has no additional grow rate
+!#MA:I139/15;   Peasant has 15 AI value
+!#MA:F139/15;   Peasant has 15 Fight Value
+!#MA:L139/0;    Peasant is a level 1 monster
+!#MA:O139/9;    Peasant belongs to ???
+!#MA:X139/16;   Peasant flag is alive
+
+
+!#MA:C140/6/150; Boar cost 150 Gold
+!#MA:A140/6;     Boar has 6 attack
+!#MA:D140/5;     Boar has 5 defence
+!#MA:P140/15;    Boar has 15 health
+!#MA:S140/6;     Boar has 6 speed
+!#MA:M140/2;     Boar has minimum damage 2
+!#MA:E140/3;     Boar has maximum damage 3
+!#MA:G140/8;     Boar has a grow rate of 8
+!#MA:R140/0;     Boar has no additional grow rate
+!#MA:I140/145;   Boar has 145 AI value
+!#MA:F140/145;   Boar has 145 Fight Value
+!#MA:L140/1;     Boar is a level 2 monster
+!#MA:O140/9;     Boar belongs to ???
+!#MA:X140/17;    Boar flag is double wide,alive
+
+
+!#MA:C141/6/300;  Mummy cost 300 Gold
+!#MA:A141/7;      Mummy has 7 attack
+!#MA:D141/7;      Mummy has 7 defence
+!#MA:P141/30;     Mummy has 30 health
+!#MA:S141/5;      Mummy has 5 speed
+!#MA:M141/3;      Mummy has minimum damage 3
+!#MA:E141/5;      Mummy has maximum damage 5
+!#MA:G141/7;      Mummy has a grow rate of 7
+!#MA:R141/0;      Mummy has no additional grow rate
+!#MA:I141/270;    Mummy has 270 AI value
+!#MA:F141/270;    Mummy has 270 Fight Value
+!#MA:L141/2;      Mummy is a level 3 monster
+!#MA:O141/9;      Mummy belongs to ???
+!#MA:X141/394240; Mummy flag is immune to mind spells,no moral penalty,undead
+
+
+!#MA:C142/6/200; Nomad cost 200 Gold
+!#MA:A142/9;     Nomad has 9 attack
+!#MA:D142/8;     Nomad has 8 defence
+!#MA:P142/30;    Nomad has 30 health
+!#MA:S142/7;     Nomad has 7 speed
+!#MA:M142/2;     Nomad has minimum damage 2
+!#MA:E142/6;     Nomad has maximum damage 6
+!#MA:G142/7;     Nomad has a grow rate of 7
+!#MA:R142/0;     Nomad has no additional grow rate
+!#MA:I142/345;   Nomad has 345 AI value
+!#MA:F142/285;   Nomad has 285 Fight Value
+!#MA:L142/2;     Nomad is a level 3 monster
+!#MA:O142/9;     Nomad belongs to ???
+!#MA:X142/17;    Nomad flag is double wide,alive
+
+
+!#MA:C143/6/100; Rogue cost 100 Gold
+!#MA:A143/8;     Rogue has 8 attack
+!#MA:D143/3;     Rogue has 3 defence
+!#MA:P143/10;    Rogue has 10 health
+!#MA:S143/6;     Rogue has 6 speed
+!#MA:M143/2;     Rogue has minimum damage 2
+!#MA:E143/4;     Rogue has maximum damage 4
+!#MA:G143/8;     Rogue has a grow rate of 8
+!#MA:R143/0;     Rogue has no additional grow rate
+!#MA:I143/135;   Rogue has 135 AI value
+!#MA:F143/135;   Rogue has 135 Fight Value
+!#MA:L143/0;     Rogue is a level 1 monster
+!#MA:O143/9;     Rogue belongs to ???
+!#MA:X143/16;    Rogue flag is alive
+
+
+!#MA:C144/6/500; Troll cost 500 Gold
+!#MA:A144/14;    Troll has 14 attack
+!#MA:D144/7;     Troll has 7 defence
+!#MA:P144/40;    Troll has 40 health
+!#MA:S144/7;     Troll has 7 speed
+!#MA:M144/10;    Troll has minimum damage 10
+!#MA:E144/15;    Troll has maximum damage 15
+!#MA:G144/3;     Troll has a grow rate of 3
+!#MA:R144/0;     Troll has no additional grow rate
+!#MA:I144/1024;  Troll has 1024 AI value
+!#MA:F144/1024;  Troll has 1024 Fight Value
+!#MA:L144/4;     Troll is a level 5 monster
+!#MA:O144/9;     Troll belongs to ???
+!#MA:X144/16;    Troll flag is alive
+
+
+!#MA:C145/6/1;    Catapult cost 1 Gold
+!#MA:A145/10;     Catapult has 10 attack
+!#MA:D145/10;     Catapult has 10 defence
+!#MA:P145/1000;   Catapult has 1000 health
+!#MA:S145/0;      Catapult has 0 speed
+!#MA:M145/0;      Catapult has minimum damage 0
+!#MA:E145/0;      Catapult has maximum damage 0
+!#MA:N145/24;     Catapult has 24 shots
+!#MA:G145/0;      Catapult has a grow rate of 0
+!#MA:R145/0;      Catapult has no additional grow rate
+!#MA:I145/500;    Catapult has 500 AI value
+!#MA:F145/10;     Catapult has 10 Fight Value
+!#MA:L145/9;      Catapult is a level ??? monster
+!#MA:O145/9;      Catapult belongs to ???
+!#MA:X145/132197; Catapult flag is double wide,shooter,catapult,siege weapon,immune to mind spells,no moral penalty
+
+
+!#MA:C146/6/2500;  Ballista cost 2500 Gold
+!#MA:A146/10;      Ballista has 10 attack
+!#MA:D146/10;      Ballista has 10 defence
+!#MA:P146/250;     Ballista has 250 health
+!#MA:S146/0;       Ballista has 0 speed
+!#MA:M146/2;       Ballista has minimum damage 2
+!#MA:E146/3;       Ballista has maximum damage 3
+!#MA:N146/24;      Ballista has 24 shots
+!#MA:G146/0;       Ballista has a grow rate of 0
+!#MA:R146/0;       Ballista has no additional grow rate
+!#MA:I146/600;     Ballista has 600 AI value
+!#MA:F146/650;     Ballista has 650 Fight Value
+!#MA:L146/9;       Ballista is a level ??? monster
+!#MA:O146/9;       Ballista belongs to ???
+!#MA:X146/201797;  Ballista flag is double wide,shooter,siege weapon,immune to mind spells,no penalty in close combat,no enemy retaliation,no moral penalty
+
+
+!#MA:C147/6/750;  First Aid cost 750 Gold
+!#MA:A147/0;      First Aid has 0 attack
+!#MA:D147/0;      First Aid has 0 defence
+!#MA:P147/75;     First Aid has 75 health
+!#MA:S147/0;      First Aid has 0 speed
+!#MA:M147/0;      First Aid has minimum damage 0
+!#MA:E147/0;      First Aid has maximum damage 0
+!#MA:G147/0;      First Aid has a grow rate of 0
+!#MA:R147/0;      First Aid has no additional grow rate
+!#MA:I147/300;    First Aid has 300 AI value
+!#MA:F147/10;     First Aid has 10 Fight Value
+!#MA:L147/9;      First Aid is a level ??? monster
+!#MA:O147/9;      First Aid belongs to ???
+!#MA:X147/132161; First Aid flag is double wide,siege weapon,immune to mind spells,no moral penalty
+
+
+!#MA:C148/6/1000;  Ammo Cart cost 1000 Gold
+!#MA:A148/0;       Ammo Cart has 0 attack
+!#MA:D148/5;       Ammo Cart has 5 defence
+!#MA:P148/100;     Ammo Cart has 100 health
+!#MA:S148/0;       Ammo Cart has 0 speed
+!#MA:M148/0;       Ammo Cart has minimum damage 0
+!#MA:E148/0;       Ammo Cart has maximum damage 0
+!#MA:G148/0;       Ammo Cart has a grow rate of 0
+!#MA:R148/0;       Ammo Cart has no additional grow rate
+!#MA:I148/400;     Ammo Cart has 400 AI value
+!#MA:F148/5;       Ammo Cart has 5 Fight Value
+!#MA:L148/9;       Ammo Cart is a level ??? monster
+!#MA:O148/9;       Ammo Cart belongs to ???
+!#MA:X148/132160;  Ammo Cart flag is siege weapon,immune to mind spells,no moral penalty
+
+
+!#MA:C149/6/1000;  Arrow Tower cost 1000 Gold
+!#MA:A149/10;      Arrow Tower has 10 attack
+!#MA:D149/5;       Arrow Tower has 5 defence
+!#MA:P149/100;     Arrow Tower has 100 health
+!#MA:S149/0;       Arrow Tower has 0 speed
+!#MA:M149/2;       Arrow Tower has minimum damage 2
+!#MA:E149/4;       Arrow Tower has maximum damage 4
+!#MA:N149/99;      Arrow Tower has 99 shots
+!#MA:G149/0;       Arrow Tower has a grow rate of 0
+!#MA:R149/0;       Arrow Tower has no additional grow rate
+!#MA:I149/400;     Arrow Tower has 400 AI value
+!#MA:F149/5;       Arrow Tower has 5 Fight Value
+!#MA:L149/9;       Arrow Tower is a level ??? monster
+!#MA:O149/9;       Arrow Tower belongs to ???
+!#MA:X149/132164;  Arrow Tower flag is shooter,siege weapon,immune to mind spells,no moral penalty
+
+
+!#MA:C150/6/10000 C150/5/4; Supreme Archangel cost 10000 Gold and 4 gems
+!#MA:A150/40;     Supreme Archangel has 40 attack
+!#MA:D150/40;     Supreme Archangel has 40 defence
+!#MA:P150/500;    Supreme Archangel has 500 health
+!#MA:S150/18;     Supreme Archangel has 18 speed
+!#MA:M150/75;     Supreme Archangel has minimum damage 75
+!#MA:E150/75;     Supreme Archangel has maximum damage 75
+!#MA:G150/1;      Supreme Archangel has a grow rate of 1
+!#MA:B150/2;      Supreme Archangel has 2 casts
+!#MA:R150/0;      Supreme Archangel has no additional grow rate
+!#MA:I150/26300;  Supreme Archangel has 26300 AI value
+!#MA:F150/18250;  Supreme Archangel has 18250 Fight Value
+!#MA:L150/9;      Supreme Archangel is a level 8 monster
+!#MA:O150/0;      Supreme Archangel belongs to Castle
+!#MA:X150/65811;  Supreme Archangel flag is double wide,fly,alive,King 2,no enemy retaliation
+
+
+!#MA:C151/6/8000 C151/4/3; Diamond Dragon cost 8000 Gold and 3 crystals
+!#MA:A151/36;     Diamond Dragon has 36 attack
+!#MA:D151/36;     Diamond Dragon has 36 defence
+!#MA:P151/500;    Diamond Dragon has 500 health
+!#MA:S151/16;     Diamond Dragon has 16 speed
+!#MA:M151/60;     Diamond Dragon has minimum damage 60
+!#MA:E151/75;     Diamond Dragon has maximum damage 75
+!#MA:G151/1;      Diamond Dragon has a grow rate of 1
+!#MA:R151/0;      Diamond Dragon has no additional grow rate
+!#MA:I151/25500;  Diamond Dragon has 25500 AI value
+!#MA:F151/18750;  Diamond Dragon has 18750 Fight Value
+!#MA:L151/9;      Diamond Dragon is a level 8 monster
+!#MA:O151/1;      Diamond Dragon belongs to Rampart
+!#MA:X151/155;    Diamond Dragon flag is double wide,fly,extended attack radius,alive,King 1
+
+
+!#MA:C152/6/10000 C152/5/3; Lord of Thunder cost 10000 Gold and 3 gems
+!#MA:A152/32;     Lord of Thunder has 32 attack
+!#MA:D152/32;     Lord of Thunder has 32 defence
+!#MA:P152/600;    Lord of Thunder has 600 health
+!#MA:S152/12;     Lord of Thunder has 12 speed
+!#MA:M152/60;     Lord of Thunder has minimum damage 60
+!#MA:E152/75;     Lord of Thunder has maximum damage 75
+!#MA:N152/24;     Lord of Thunder has 24 shots
+!#MA:G152/1;      Lord of Thunder has a grow rate of 1
+!#MA:B152/24;     Lord of Thunder has 24 casts
+!#MA:R152/0;      Lord of Thunder has no additional grow rate
+!#MA:I152/22500;  Lord of Thunder has 22500 AI value
+!#MA:F152/15000;  Lord of Thunder has 15000 Fight Value
+!#MA:L152/9;      Lord of Thunder is a level 8 monster
+!#MA:O152/2;      Lord of Thunder belongs to Tower
+!#MA:X152/38420;  Lord of Thunder flag is shooter,alive,King 3,immune to mind spells,no penalty in close combat,shoot twice
+
+
+!#MA:C153/6/9000 C153/1/3; Antichrist cost 9000 Gold and 3 mercury
+!#MA:A153/35;     Antichrist has 35 attack
+!#MA:D153/37;     Antichrist has 37 defence
+!#MA:P153/400;    Antichrist has 400 health
+!#MA:S153/17;     Antichrist has 17 speed
+!#MA:M153/45;     Antichrist has minimum damage 45
+!#MA:E153/60;     Antichrist has maximum damage 60
+!#MA:G153/1;      Antichrist has a grow rate of 1
+!#MA:R153/0;      Antichrist has no additional grow rate
+!#MA:I153/25700;  Antichrist has 25700 AI value
+!#MA:F153/19250;  Antichrist has 19250 Fight Value
+!#MA:L153/9;      Antichrist is a level 8 monster
+!#MA:O153/3;      Antichrist belongs to Inferno
+!#MA:X153/65808;  Antichrist flag is alive,King 2,no enemy retaliation
+
+
+!#MA:C154/6/6000 C154/1/2; Blood Dragon cost 6000 Gold and 2 mercury
+!#MA:A154/25;     Blood Dragon has 25 attack
+!#MA:D154/23;     Blood Dragon has 23 defence
+!#MA:P154/400;    Blood Dragon has 400 health
+!#MA:S154/14;     Blood Dragon has 14 speed
+!#MA:M154/38;     Blood Dragon has minimum damage 38
+!#MA:E154/75;     Blood Dragon has maximum damage 75
+!#MA:G154/1;      Blood Dragon has a grow rate of 1
+!#MA:R154/0;      Blood Dragon has no additional grow rate
+!#MA:I154/15000;  Blood Dragon has 15000 AI value
+!#MA:F154/12000;  Blood Dragon has 12000 Fight Value
+!#MA:L154/9;      Blood Dragon is a level 8 monster
+!#MA:O154/4;      Blood Dragon belongs to Necropolis
+!#MA:X154/394371; Blood Dragon flag is double wide,fly,King 1,immune to mind spells,no moral penalty,undead
+
+
+!#MA:C155/6/8000 C155/3/3; Darkness Dragon cost 8000 Gold and 3 sulfur
+!#MA:A155/33;     Darkness Dragon has 33 attack
+!#MA:D155/33;     Darkness Dragon has 33 defence
+!#MA:P155/600;    Darkness Dragon has 600 health
+!#MA:S155/15;     Darkness Dragon has 15 speed
+!#MA:M155/60;     Darkness Dragon has minimum damage 60
+!#MA:E155/75;     Darkness Dragon has maximum damage 75
+!#MA:G155/1;      Darkness Dragon has a grow rate of 1
+!#MA:R155/0;      Darkness Dragon has no additional grow rate
+!#MA:I155/26000;  Darkness Dragon has 26000 AI value
+!#MA:F155/20000;  Darkness Dragon has 20000 Fight Value
+!#MA:L155/9;      Darkness Dragon is a level 8 monster
+!#MA:O155/5;      Darkness Dragon belongs to Dungeon
+!#MA:X155/1179;   Darkness Dragon flag is double wide,fly,extended attack radius,alive,King 1,immune to mind spells
+
+
+!#MA:C156/6/6000 C156/4/2; Ghost Behemoth cost 6000 Gold and 2 crystals
+!#MA:A156/25;     Ghost Behemoth has 25 attack
+!#MA:D156/25;     Ghost Behemoth has 25 defence
+!#MA:P156/600;    Ghost Behemoth has 600 health
+!#MA:S156/11;     Ghost Behemoth has 11 speed
+!#MA:M156/45;     Ghost Behemoth has minimum damage 45
+!#MA:E156/75;     Ghost Behemoth has maximum damage 75
+!#MA:G156/1;      Ghost Behemoth has a grow rate of 1
+!#MA:R156/0;      Ghost Behemoth has no additional grow rate
+!#MA:I156/18250;  Ghost Behemoth has 18250 AI value
+!#MA:F156/16250;  Ghost Behemoth has 16250 Fight Value
+!#MA:L156/9;      Ghost Behemoth is a level 8 monster
+!#MA:O156/6;      Ghost Behemoth belongs to Stronghold
+!#MA:X156/145;    Ghost Behemoth flag is double wide,fly,alive,King 1
+
+
+!#MA:C157/6/7000 C157/3/2; Hell Hydra cost 7000 Gold and 2 sulfur
+!#MA:A157/25;     Hell Hydra has 25 attack
+!#MA:D157/27;     Hell Hydra has 27 defence
+!#MA:P157/500;    Hell Hydra has 500 health
+!#MA:S157/11;     Hell Hydra has 11 speed
+!#MA:M157/38;     Hell Hydra has minimum damage 38
+!#MA:E157/68;     Hell Hydra has maximum damage 68
+!#MA:G157/1;      Hell Hydra has a grow rate of 1
+!#MA:R157/0;      Hell Hydra has no additional grow rate
+!#MA:I157/17750;  Hell Hydra has 17750 AI value
+!#MA:F157/15750;  Hell Hydra has 15750 Fight Value
+!#MA:L157/9;      Hell Hydra is a level 8 monster
+!#MA:O157/7;      Hell Hydra belongs to Fortress
+!#MA:X157/589969; Hell Hydra flag is double wide,alive,King 1,no enemy retaliation,attack all enemies around
+
+
+!#MA:C158/6/5000 C158/1/3; Sacred Phoenix cost 5000 Gold and 3 mercury
+!#MA:A158/28;     Sacred Phoenix has 28 attack
+!#MA:D158/28;     Sacred Phoenix has 28 defence
+!#MA:P158/400;    Sacred Phoenix has 400 health
+!#MA:S158/21;     Sacred Phoenix has 21 speed
+!#MA:M158/45;     Sacred Phoenix has minimum damage 45
+!#MA:E158/60;     Sacred Phoenix has maximum damage 60
+!#MA:G158/1;      Sacred Phoenix has a grow rate of 1
+!#MA:B158/1;      Sacred Phoenix has 1 cast
+!#MA:R158/0;      Sacred Phoenix has no additional grow rate
+!#MA:I158/23000;  Sacred Phoenix has 23000 AI value
+!#MA:F158/17750;  Sacred Phoenix has 17750 Fight Value
+!#MA:L158/9;      Sacred Phoenix is a level 8 monster
+!#MA:O158/8;      Sacred Phoenix belongs to Conflux
+!#MA:X158/16539;  Sacred Phoenix flag is double wide,fly,extended attack radius,alive,King 1,immune to fire spells
+
+
+!#MA:C159/6/500;  Ghost cost 500 Gold
+!#MA:A159/11;     Ghost has 11 attack
+!#MA:D159/8;      Ghost has 8 defence
+!#MA:P159/5;      Ghost has 5 health
+!#MA:S159/8;      Ghost has 8 speed
+!#MA:M159/1;      Ghost has minimum damage 1
+!#MA:E159/2;      Ghost has maximum damage 2
+!#MA:G159/8;      Ghost has a grow rate of 8
+!#MA:R159/0;      Ghost has no additional grow rate
+!#MA:I159/250;    Ghost has 250 AI value
+!#MA:F159/150;    Ghost has 150 Fight Value
+!#MA:L159/1;      Ghost is a level 2 monster
+!#MA:O159/9;      Ghost belongs to ???
+!#MA:X159/148482; Ghost flag is fly,immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C160/6/30000;  Emissary of War cost 30000 Gold
+!#MA:A160/0;        Emissary of War has 0 attack
+!#MA:D160/10;       Emissary of War has 10 defence
+!#MA:P160/2000;     Emissary of War has 2000 health
+!#MA:S160/4;        Emissary of War has 4 speed
+!#MA:M160/0;        Emissary of War has minimum damage 0
+!#MA:E160/0;        Emissary of War has maximum damage 0
+!#MA:G160/0;        Emissary of War has a grow rate of 0
+!#MA:R160/0;        Emissary of War has no additional grow rate
+!#MA:I160/20000;    Emissary of War has 20000 AI value
+!#MA:F160/10;       Emissary of War has 10 Fight Value
+!#MA:L160/9;        Emissary of War is a level ??? monster
+!#MA:O160/9;        Emissary of War belongs to ???
+!#MA:X160/148480;   Emissary of War flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C161/6/30000;  Emissary of Peace cost 30000 Gold
+!#MA:A161/0;        Emissary of Peace has 0 attack
+!#MA:D161/10;       Emissary of Peace has 10 defence
+!#MA:P161/2000;     Emissary of Peace has 2000 health
+!#MA:S161/4;        Emissary of Peace has 4 speed
+!#MA:M161/0;        Emissary of Peace has minimum damage 0
+!#MA:E161/0;        Emissary of Peace has maximum damage 0
+!#MA:G161/0;        Emissary of Peace has a grow rate of 0
+!#MA:R161/0;        Emissary of Peace has no additional grow rate
+!#MA:I161/20000;    Emissary of Peace has 20000 AI value
+!#MA:F161/10;       Emissary of Peace has 10 Fight Value
+!#MA:L161/9;        Emissary of Peace is a level ??? monster
+!#MA:O161/9;        Emissary of Peace belongs to ???
+!#MA:X161/148480;   Emissary of Peace flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C162/6/30000;  Emissary of Mana cost 30000 Gold
+!#MA:A162/0;        Emissary of Mana has 0 attack
+!#MA:D162/10;       Emissary of Mana has 10 defence
+!#MA:P162/2000;     Emissary of Mana has 2000 health
+!#MA:S162/4;        Emissary of Mana has 4 speed
+!#MA:M162/0;        Emissary of Mana has minimum damage 0
+!#MA:E162/0;        Emissary of Mana has maximum damage 0
+!#MA:G162/0;        Emissary of Mana has a grow rate of 0
+!#MA:R162/0;        Emissary of Mana has no additional grow rate
+!#MA:I162/20000;    Emissary of Mana has 20000 AI value
+!#MA:F162/10;       Emissary of Mana has 10 Fight Value
+!#MA:L162/9;        Emissary of Mana is a level ??? monster
+!#MA:O162/9;        Emissary of Mana belongs to ???
+!#MA:X162/148480;   Emissary of Mana flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C163/6/30000;  Emissary of Lore cost 30000 Gold
+!#MA:A163/0;        Emissary of Lore has 0 attack
+!#MA:D163/10;       Emissary of Lore has 10 defence
+!#MA:P163/2000;     Emissary of Lore has 2000 health
+!#MA:S163/4;        Emissary of Lore has 4 speed
+!#MA:M163/0;        Emissary of Lore has minimum damage 0
+!#MA:E163/0;        Emissary of Lore has maximum damage 0
+!#MA:G163/0;        Emissary of Lore has a grow rate of 0
+!#MA:R163/0;        Emissary of Lore has no additional grow rate
+!#MA:I163/20000;    Emissary of Lore has 20000 AI value
+!#MA:F163/10;       Emissary of Lore has 10 Fight Value
+!#MA:L163/9;        Emissary of Lore is a level ??? monster
+!#MA:O163/9;        Emissary of Lore belongs to ???
+!#MA:X163/148480;   Emissary of Lore flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C164/6/750;  Fire Messenger cost 750 Gold
+!#MA:A164/14;     Fire Messenger has 14 attack
+!#MA:D164/12;     Fire Messenger has 12 defence
+!#MA:P164/70;     Fire Messenger has 70 health
+!#MA:S164/5;      Fire Messenger has 5 speed
+!#MA:M164/13;     Fire Messenger has minimum damage 13
+!#MA:E164/18;     Fire Messenger has maximum damage 18
+!#MA:G164/2;      Fire Messenger has a grow rate of 2
+!#MA:R164/0;      Fire Messenger has no additional grow rate
+!#MA:I164/775;    Fire Messenger has 775 AI value
+!#MA:F164/775;    Fire Messenger has 775 Fight Value
+!#MA:L164/5;      Fire Messenger is a level 6 monster
+!#MA:O164/9;      Fire Messenger belongs to ???
+!#MA:X164/148480; Fire Messenger flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C165/6/750;  Earth Messenger cost 750 Gold
+!#MA:A165/13;     Earth Messenger has 13 attack
+!#MA:D165/14;     Earth Messenger has 14 defence
+!#MA:P165/70;     Earth Messenger has 70 health
+!#MA:S165/5;      Earth Messenger has 5 speed
+!#MA:M165/10;     Earth Messenger has minimum damage 10
+!#MA:E165/14;     Earth Messenger has maximum damage 14
+!#MA:G165/2;      Earth Messenger has a grow rate of 2
+!#MA:R165/0;      Earth Messenger has no additional grow rate
+!#MA:I165/775;    Earth Messenger has 775 AI value
+!#MA:F165/775;    Earth Messenger has 775 Fight Value
+!#MA:L165/5;      Earth Messenger is a level 6 monster
+!#MA:O165/9;      Earth Messenger belongs to ???
+!#MA:X165/148480; Earth Messenger flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C166/6/750;  Air Messenger cost 750 Gold
+!#MA:A166/13;     Air Messenger has 13 attack
+!#MA:D166/12;     Air Messenger has 12 defence
+!#MA:P166/70;     Air Messenger has 70 health
+!#MA:S166/6;      Air Messenger has 6 speed
+!#MA:M166/10;     Air Messenger has minimum damage 10
+!#MA:E166/14;     Air Messenger has maximum damage 14
+!#MA:G166/2;      Air Messenger has a grow rate of 2
+!#MA:R166/0;      Air Messenger has no additional grow rate
+!#MA:I166/775;    Air Messenger has 775 AI value
+!#MA:F166/775;    Air Messenger has 775 Fight Value
+!#MA:L166/5;      Air Messenger is a level 6 monster
+!#MA:O166/9;      Air Messenger belongs to ???
+!#MA:X166/148480; Air Messenger flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C167/6/750;  Water Messenger cost 750 Gold
+!#MA:A167/13;     Water Messenger has 13 attack
+!#MA:D167/12;     Water Messenger has 12 defence
+!#MA:P167/80;     Water Messenger has 80 health
+!#MA:S167/5;      Water Messenger has 5 speed
+!#MA:M167/10;     Water Messenger has minimum damage 10
+!#MA:E167/14;     Water Messenger has maximum damage 14
+!#MA:G167/2;      Water Messenger has a grow rate of 2
+!#MA:R167/0;      Water Messenger has no additional grow rate
+!#MA:I167/775;    Water Messenger has 775 AI value
+!#MA:F167/775;    Water Messenger has 775 Fight Value
+!#MA:L167/5;      Water Messenger is a level 6 monster
+!#MA:O167/9;      Water Messenger belongs to ???
+!#MA:X167/148480; Water Messenger flag is immune to mind spells,immune to fire spells,no moral penalty
+
+
+!#MA:C168/6/3500; Gorynych cost 3500 Gold
+!#MA:A168/20;     Gorynych has 20 attack
+!#MA:D168/20;     Gorynych has 20 defence
+!#MA:P168/250;    Gorynych has 250 health
+!#MA:S168/8;      Gorynych has 8 speed
+!#MA:M168/25;     Gorynych has minimum damage 24
+!#MA:E168/45;     Gorynych has maximum damage 45
+!#MA:G168/1;      Gorynych has a grow rate of 1
+!#MA:R168/0;      Gorynych has no additional grow rate
+!#MA:I168/5931;   Gorynych has 5931 AI value
+!#MA:F168/5272;   Gorynych has 5272 Fight Value
+!#MA:L168/6;      Gorynych is a level 7 monster
+!#MA:O168/9;      Gorynych belongs to ???
+!#MA:X168/721931; Gorynych flag is double wide,fly,extended attack radius,immune to mind spells,no enemy retaliation,,no moral penalty,attack all enemies around
+
+
+!#MA:C169/6/600; War Zealot cost 600 Gold
+!#MA:A169/14;    War Zealot has 14 attack
+!#MA:D169/10;    War Zealot has 10 defence
+!#MA:P169/40;    War Zealot has 40 health
+!#MA:S169/8;     War Zealot has 8 speed
+!#MA:M169/10;    War Zealot has minimum damage 10
+!#MA:E169/12;    War Zealot has maximum damage 12
+!#MA:N169/24;    War Zealot has 24 shots
+!#MA:G169/3;     War Zealot has a grow rate of 3
+!#MA:R169/0;     War Zealot has no additional grow rate
+!#MA:I169/1000;  War Zealot has 1000 AI value
+!#MA:F169/700;   War Zealot has 700 Fight Value
+!#MA:L169/4;     War Zealot is a level 5 monster
+!#MA:O169/0;     War Zealot belongs to Castle
+!#MA:X169/4116;  War Zealot flag is shooter,alive,no penalty in close combat
+
+
+!#MA:C170/6/500;   Arctic Sharpshooter cost 500 Gold
+!#MA:A170/13;      Arctic Sharpshooter has 13 attack
+!#MA:D170/10;      Arctic Sharpshooter has 10 defence
+!#MA:P170/15;      Arctic Sharpshooter has 15 health
+!#MA:S170/9;       Arctic Sharpshooter has 9 speed
+!#MA:M170/8;       Arctic Sharpshooter has minimum damage 8
+!#MA:E170/10;      Arctic Sharpshooter has maximum damage 10
+!#MA:N170/32;      Arctic Sharpshooter has 32 shots
+!#MA:G170/4;       Arctic Sharpshooter has a grow rate of 4
+!#MA:R170/0;       Arctic Sharpshooter has no additional grow rate
+!#MA:I170/700;     Arctic Sharpshooter has 700 AI value
+!#MA:F170/500;     Arctic Sharpshooter has 500 Fight Value
+!#MA:L170/3;       Arctic Sharpshooter is a level 4 monster
+!#MA:O170/9;       Arctic Sharpshooter belongs to ???
+!#MA:X170/1048596; Arctic Sharpshooter flag is shooter,alive,extended radius of shooters
+
+
+!#MA:C171/6/500;   Lava Sharpshooter cost 500 Gold
+!#MA:A171/12;      Lava Sharpshooter has 12 attack
+!#MA:D171/11;      Lava Sharpshooter has 11 defence
+!#MA:P171/15;      Lava Sharpshooter has 15 health
+!#MA:S171/9;       Lava Sharpshooter has 9 speed
+!#MA:M171/8;       Lava Sharpshooter has minimum damage 8
+!#MA:E171/10;      Lava Sharpshooter has maximum damage 10
+!#MA:N171/32;      Lava Sharpshooter has 32 shots
+!#MA:G171/4;       Lava Sharpshooter has a grow rate of 4
+!#MA:R171/0;       Lava Sharpshooter has no additional grow rate
+!#MA:I171/700;     Lava Sharpshooter has 700 AI value
+!#MA:F171/500;     Lava Sharpshooter has 500 Fight Value
+!#MA:L171/3;       Lava Sharpshooter is a level 4 monster
+!#MA:O171/9;       Lava Sharpshooter belongs to ???
+!#MA:X171/1048596; Lava Sharpshooter flag is shooter,alive,extended radius of shooters
+
+
+!#MA:C172/6/1500;  Nightmare cost 1500 Gold
+!#MA:A172/15;      Nightmare has 15 attack
+!#MA:D172/14;      Nightmare has 14 defence
+!#MA:P172/110;     Nightmare has 110 health
+!#MA:S172/9;       Nightmare has 9 speed
+!#MA:M172/18;      Nightmare has minimum damage 18
+!#MA:E172/22;      Nightmare has maximum damage 22
+!#MA:G172/2;       Nightmare has a grow rate of 2
+!#MA:R172/0;       Nightmare has no additional grow rate
+!#MA:I172/2030;    Nightmare has 2030 AI value
+!#MA:F172/1740;    Nightmare has 1740 Fight Value
+!#MA:L172/5;       Nightmare is a level 6 monster
+!#MA:O172/9;       Nightmare belongs to ???
+!#MA:X172/132105;  Nightmare flag is double wide,extended attack radius,immune to mind spells,no moral penalty
+
+
+!#MA:C173/6/200;  Santa Gremlin cost 200 Gold
+!#MA:A173/5;      Santa Gremlin has 5 attack
+!#MA:D173/5;      Santa Gremlin has 5 defence
+!#MA:P173/5;      Santa Gremlin has 5 health
+!#MA:S173/5;      Santa Gremlin has 5 speed
+!#MA:M173/2;      Santa Gremlin has minimum damage 2
+!#MA:E173/3;      Santa Gremlin has maximum damage 3
+!#MA:G173/5;      Santa Gremlin has a grow rate of 5
+!#MA:B173/1000;   Santa Gremlin has 1000 casts
+!#MA:R173/0;      Santa Gremlin has no additional grow rate
+!#MA:I173/200;    Santa Gremlin has 200 AI value
+!#MA:F173/500;    Santa Gremlin has 500 Fight Value
+!#MA:L173/0;      Santa Gremlin is a level 1 monster
+!#MA:O173/9;      Santa Gremlin belongs to ???
+!#MA:X173/16;     Santa Gremlin flag is alive
+
+
+!#MA:C192/6/250;  Sylvan Centaur cost 250 Gold
+!#MA:A192/10;     Sylvan Centaur has 10 attack
+!#MA:D192/5;      Sylvan Centaur has 5 defence
+!#MA:P192/15;     Sylvan Centaur has 15 health
+!#MA:S192/8;      Sylvan Centaur has 8 speed
+!#MA:M192/4;      Sylvan Centaur has minimum damage 4
+!#MA:E192/6;      Sylvan Centaur has maximum damage 6
+!#MA:N192/24;     Sylvan Centaur has 24 shots
+!#MA:G192/7;      Sylvan Centaur has a grow rate of 7
+!#MA:R192/0;      Sylvan Centaur has no additional grow rate
+!#MA:I192/250;    Sylvan Centaur has 200 AI value
+!#MA:F192/400;    Sylvan Centaur has 500 Fight Value
+!#MA:L192/2;      Sylvan Centaur is a level 3 monster
+!#MA:O192/9;      Sylvan Centaur belongs to ???
+*#MA:X192/???;    Sylvan Centaur flag is ???
+
+
+!#MA:C193/6/600;  Sorceress cost 600 Gold
+!#MA:A193/15;     Sorceress has 15 attack
+!#MA:D193/13;     Sorceress has 13 defence
+!#MA:P193/35;     Sorceress has 35 health
+!#MA:S193/8;      Sorceress has 8 speed
+!#MA:M193/10;     Sorceress has minimum damage 10
+!#MA:E193/13;     Sorceress has maximum damage 13
+!#MA:N193/24;     Sorceress has 24 shots
+!#MA:G193/2;      Sorceress has a grow rate of 2
+!#MA:R193/0;      Sorceress has no additional grow rate
+!#MA:I193/200;    Sorceress has 200 AI value
+!#MA:F193/1150;   Sorceress has 1150 Fight Value
+!#MA:L193/5;      Sorceress is a level 6 monster
+!#MA:O193/9;      Sorceress belongs to ???
+*#MA:X193/???;    Sorceress flag is ???
+
+
+!#MA:C194/6/300;  Werewolf cost 300 Gold
+!#MA:A194/10;     Werewolf has 10 attack
+!#MA:D194/12;     Werewolf has 12 defence
+!#MA:P194/35;     Werewolf has 35 health
+!#MA:S194/7;      Werewolf has 7 speed
+!#MA:M194/6;      Werewolf has minimum damage 6
+!#MA:E194/9;      Werewolf has maximum damage 9
+!#MA:G194/4;      Werewolf has a grow rate of 4
+!#MA:R194/0;      Werewolf has no additional grow rate
+!#MA:I194/460;    Werewolf has 460 AI value
+!#MA:F194/460;    Werewolf has 460 Fight Value
+!#MA:L194/3;      Werewolf is a level 4 monster
+!#MA:O194/9;      Werewolf belongs to ???
+*#MA:X193/???;    Werewolf flag is ???
+
+
+!#MA:C195/6/1100; Hell Steed cost 1100 Gold
+!#MA:A195/15;     Hell Steed has 15 attack
+!#MA:D195/15;     Hell Steed has 15 defence
+!#MA:P195/100;    Hell Steed has 100 health
+!#MA:S195/8;      Hell Steed has 8 speed
+!#MA:M195/18;     Hell Steed has minimum damage 18
+!#MA:E195/24;     Hell Steed has maximum damage 24
+!#MA:G195/2;      Hell Steed has a grow rate of 2
+!#MA:R195/0;      Hell Steed has no additional grow rate
+!#MA:I195/1850;   Hell Steed has 1850 AI value
+!#MA:F195/2150;   Hell Steed has 2150 Fight Value
+!#MA:L195/5;      Hell Steed is a level 6 monster
+!#MA:O195/9;      Hell Steed belongs to ???
+*#MA:X195/???;    Hell Steed flag is ???
+
+
+!#MA:C196/6/1100 C196/1/15; Dracolich cost 25000 Gold and 15 Mercury
+!#MA:A196/45;     Dracolich has 45 attack
+!#MA:D196/45;     Dracolich has 45 defence
+!#MA:P196/100;    Dracolich has 100 health
+!#MA:S196/16;     Dracolich has 16 speed
+!#MA:M196/50;     Dracolich has minimum damage 50
+!#MA:E196/80;     Dracolich has maximum damage 80
+!#MA:N196/5;      Dracolich has 5 shots
+!#MA:G196/1;      Dracolich has a grow rate of 1
+!#MA:R196/0;      Dracolich has no additional grow rate
+!#MA:I196/40000;  Dracolich has 40000 AI value
+!#MA:F196/55000;  Dracolich has 55000 Fight Value
+!#MA:L196/9;      Dracolich is a level 8 monster
+!#MA:O196/9;      Dracolich belongs to ???
+*#MA:X196/???;    Dracolich flag is ???
+
+================================================================================
+
+
+SPECIAL ABILITIES
+=================
+
+ // Havent yet started \\
+
+?PI;
+!EAcreature&v116=1:B7//////////////;
+

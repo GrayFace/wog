@@ -1,0 +1,43 @@
+#	Text resource for "script74.erm" document		
+174000	he	<!!S>	01.08.2004
+174001	she	<!!S>	01.08.2004
+174002	{Summon Elemental}
+
+%Z1 must learn a Summon Elemental spell before %Z2 can summon them on the adventure map.	<!!S>	01.08.2004
+174003	{Summon Elemental}
+
+%Z1 is too tired to cast another summon elemental spell this day.	<!!S>	01.08.2004
+174004	Summon Elemental	<!!S>	01.08.2004
+174005	Summon fire elemental	<!!S>	01.08.2004
+174006	Summon earth elemental	<!!S>	01.08.2004
+174007	Summon water elemental	<!!S>	01.08.2004
+174008	Summon air elemental	<!!S>	01.08.2004
+174009	Don't summon elementals	<!!S>	01.08.2004
+174010	{Summon Elemental}
+
+%Z1 must have {%Vr} spell points to summon elementals on the adventure map.	<!!M>	01.08.2004
+174011	{Summon Elemental}
+
+%Z1 has no empty hero slot.
+Spellcast failed.	<!!M>	01.08.2004
+174012	{Summon Elemental}
+
+%Z1 must have {%Vr} spell points to summon elementals on the adventure map.	<!!M>	01.08.2004
+174013	{Summon Elemental}
+
+%Z1 has no empty hero slot.
+Spellcast failed	<!!M>	01.08.2004
+174014	{Summon Elemental}
+
+%Z1 must have {%Vr} spell points to summon elementals on the adventure map.	<!!M>	01.08.2004
+174015	{Summon Elemental}
+
+%Z1 has no empty hero slot.
+Spellcast failed	<!!M>	01.08.2004
+174016	{Summon Elemental}
+
+%Z1 must have {%Vr} spell points to summon elementals on the adventure map.	<!!M>	01.08.2004
+174017	{Summon Elemental}
+
+%Z1 has no empty hero slot.
+Spellcast failed	<!!M>	01.08.2004

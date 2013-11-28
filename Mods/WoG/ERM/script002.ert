@@ -1,0 +1,64 @@
+102019	he	String type = <!!S>	07.06.2003
+102020	she	String type = <!!S>	07.06.2003
+102021	his	String type = <!!S>	07.06.2003
+102022	her	String type = <!!S>	07.06.2003
+102023	%Z326's Surcoat Of Counterpoise grows warm, then cold, then warm again. It's unclear what it's doing, but it seems to be doing something.	String type = <!!M>	07.06.2003
+102024	Impressed by %Z326's interest in Birds, some Royal Griffins join %Z328 army.	String type = <!!M>	07.06.2003
+102025	Joyful at %Z326's interest in Life and its Pendants, some Sprites join %Z328 army.	String type = <!!M>	07.06.2003
+102026	Mindful of %Z326's devotion to Death and its Pendants, some Zombies join %Z328 army.	String type = <!!M>	07.06.2003
+102027	Pleased with %Z326's ability to cast spells on magic resistant creatures, an Archmage joins %Z328 army.	String type = <!!M>	07.06.2003
+102028	Pleased with %Z326's ability to cast spells on magic resistant creatures, some Archmages join %Z328 army.	String type = <!!M>	07.06.2003
+102029	Pleased with %Z326's ability to cast spells on magic resistant creatures, and impressed by %Z328 devotion to Wisdom, some Archmages join %Z328 army.	String type = <!!M>	07.06.2003
+102030	Heartened by %Z326's protection from Dispel, a Mighty Gorgon joins %Z328 army.	String type = <!!M>	07.06.2003
+102031	Heartened by %Z326's protection from Dispel, some Mighty Gorgons join %Z328 army.	String type = <!!M>	07.06.2003
+102032	Heartened by %Z326's protection from Dispel, and impressed by %Z328 devotion to Defense, some Mighty Gorgons join %Z328 army.	String type = <!!M>	07.06.2003
+102033	Eventually, everyone dies... %Z326 has been tramping around so long in the Dead's Man's Boots, %Z327 can't tell them apart from %Z328 other shoes...	String type = <!!Q>	07.06.2003
+102034	With %Z328 handy Pendant, %Z326 is remembering all sorts of useful things... some %Z327 never knew in the first place!	String type = <!!Q>	07.06.2003
+102035	With %Z328 Emblem Of Cognizance, %Z326 would surely notice if any of %Z328 troops kept any loot for themselves. That's what they think at least. They cough up %Vj gold per troop per Emblem (but no more then %Y5 gold per Emblem).	String type = <!!Q>	07.06.2003
+102036	Through the magic of the Stoic Watchman, a large area around %Z326 is revealed.	String type = <!!M>	07.06.2003
+102037	By studying with %Z326's Pendant Of Second Sight, %Z328 low-level shooting troops (if any) improve themselves.	String type = <!!M>	07.06.2003
+102038	By communing with the Pendant of Holiness, %Z326 would have learned a holy spell... but %Z327 has no spell book.	String type = <!!Q>	07.06.2003
+102039	By communing with the Pendant Of Holiness, %Z326 learns a holy spell.	String type = <!!Q>	07.06.2003
+102040	%Z326's troops are eager to cover ground. %Z326 could probably go a lot further today, but it would wear out %Z328 Boots Of Polarity. Is that worth it to you?	String type = <!!Q>	07.06.2003
+102041	%Z326's troops grumble, but resign themselves to a long slow journey.	String type = <!!M>	07.06.2003
+102042	%Z326 gets ready for a long journey.	String type = <!!M>	07.06.2003
+102043	An irritated wizard appears before %Z326 and says: "There's been some Interference mucking up my experiments, and... I think it's coming from your Garniture. I'll teach you %Z329 if you give me the thing. Deal?"	String type = <!!Q>	07.06.2003
+102044	The wizard frowns, then disappears without saying a word.	String type = <!!M>	07.06.2003
+102045	The wizard says, "Sadly, you are already an expert in %Z329. I couldn't cheat you out of your cursed Garniture." He vanishes.	String type = <!!M>	07.06.2003
+102046	The wizard smiles politely. "Thanks. Now I can get on with my work." He vanishes.	String type = <!!Q>	07.06.2003
+102047	With Dispassion comes calm... with calm comes Knowledge. %Z326 learns.	String type = <!!Q>	07.06.2003
+102048	The Pendant Of Free Will works its mischievous magic on %Z326's mindless Golems and weak-willed Peasants (if any)!	String type = <!!M>	07.06.2003
+102049	Some of %Z326's troops think that %Z327 should make a donation to a local charity. A Diplomat's Ring would do nicely. Does %Z326 make this generous donation?	String type = <!!Q>	07.06.2003
+102050	%Z326's troops are impressed by %Z328 generosity... %Z328 ranks swell with new recruits!	String type = <!!M>	07.06.2003
+102051	%Z326's troops grumble, but resign themselves to serving a stingy hero.	String type = <!!M>	07.06.2003
+102052	attack twice	String type = <!!S>	07.06.2003
+102053	not be retaliated against	String type = <!!S>	07.06.2003
+102054	Peering deep inside %Z328 Orb Of Inhibition, %Z326 can see a djinn trapped within. The djinn pleads to be freed. 
+ 
+"I see you are a lover of %Z330," it says. "If you set me free, I will make it so that, from this day forth, all %Z330 will %Z331 in battle!" 
+ 
+Does %Z326 shatter the Orb, to free the djinn?	String type = <!!Q>	07.06.2003
+102055	The grateful djinn fulfills his promise!	String type = <!!M>	07.06.2003
+102056	The djinn retreats sadly back into the mists inside the Orb.	String type = <!!M>	07.06.2003
+102057	The Rampaging Ogre wants his Targ back! His minions attack %Z326!!	String type = <!!M>	07.06.2003
+102058	You could give your Statesman's Medal to this town. The citizens might be pleased enough to build something in your honor. Do you give the town your Medal?	String type = <!!Q>	07.06.2003
+102059	They probably wouldn't have built anything for you anyway.	String type = <!!M>	07.06.2003
+102060	The citizens of your town are ecstatic! They build the %Z326, %Z327, and %Z328 in your honor!	String type = <!!M>	07.06.2003
+102061	The citizens of your town are overjoyed! They build the %Z326 and %Z327 in your honor!	String type = <!!M>	07.06.2003
+102062	The citizens of your town are overjoyed! They build the %Z326 and %Z328 in your honor!	String type = <!!M>	07.06.2003
+102063	The citizens of your town are overjoyed! They build the %Z327 and %Z328 in your honor!		
+102064	The citizens of your town are pleased. They build the %Z326 in your honor.		
+102065	The citizens of your town are pleased. They build the %Z327 in your honor.		
+102066	The citizens of your town are pleased. They build the %Z328 in your honor.		
+102067	The citizens of your town are sadly unimpressed. After a short look onto the Medal, they give it back with a shrug of the shoulders.		
+102068	{enabled}		
+102069	{disabled}		
+102070	%Z-1
+
+Weekly creature status: %Z-2
+
+Do you wish to change the status to %Z-3?		
+102071	%Z-1 already has knowledge of all spells available with %Z-2 {Pendant} {of} {Holiness}. Maybe another Hero needs some lessons...		
+102072	By communing with the Pendant of Holiness, %Z-1 would have learned Destroy Undead... but %Z-1 has no Wisdom!		
+102073	By communing with the Pendant of Holiness, %Z-1 would have learned Resurrection... but %Z-1 has not the required Wisdom level!		
+102074	By communing with the Pendant of Holiness, %Z-1 would have learned Prayer... but %Z-1 has not the required Wisdom level!		

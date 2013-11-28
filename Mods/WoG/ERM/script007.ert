@@ -1,0 +1,155 @@
+107000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Fishing Well version 1.4 script.} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+107001	Do you stop to fish in the well?	String type = <!!Q>	07.06.2003
+107002	You're too exhausted to fish right now. Try in the morning.	String type = <!!M>	07.06.2003
+107003	After several hours you discover there's nothing but	String type = <!!S>	07.06.2003
+107004	at the bottom of this well	String type = <!!S>	07.06.2003
+107005	%Z301
+water and a soggy cheese sandwich %Z302.	String type = <!!M>	07.06.2003
+107006	%Z301
+water and an old smelly boot %Z302.	String type = <!!M>	07.06.2003
+107007	%Z301
+water and an old rusty sword %Z302.	String type = <!!M>	07.06.2003
+107008	%Z301
+water and a half-eaten lambchop %Z302.	String type = <!!M>	07.06.2003
+107009	%Z301
+smelly water and slimy mud %Z302.	String type = <!!M>	07.06.2003
+107010	%Z301
+sparkling water and lots of mossy rocks
+%Z302.	String type = <!!M>	07.06.2003
+107011	After several hours you reel in a large furry trout
+and decide to cook it for supper.	String type = <!!M>	07.06.2003
+107012	You start to fish in the old well and end up mesmerised
+by the deep dark hole. Several hours later you snap out
+of it with a start!	String type = <!!M>	07.06.2003
+107013	After a long day's fishing you catch a miniature mermaid.
+She sings to you until you fall asleep and when you awake 
+she's gone.	String type = <!!M>	07.06.2003
+107014	You fish and fish and fish and fish and fish and fish and fish
+and fish and fish and fish. In the end you're totally sick of fishing.	String type = <!!M>	07.06.2003
+107015	You fish for a very long time and finally you give up,
+but not before you've used every single worm you could find.	String type = <!!M>	07.06.2003
+107016	While fishing in the well, you amuse yourself by yelling into it
+and hearing the echoes return. This is great fun until the echoes 
+start occurring by themselves... 
+ 
+~~SpOoKy~~	String type = <!!M>	07.06.2003
+107017	You spend an enjoyable time fishing in the well and telling
+tales of scaly heroes, brave dragons and silly little warlocks.	String type = <!!M>	07.06.2003
+107018	It's such a hot day that you decide to cool off in the well.
+Luckily for you, the undertow isn't too strong and you manage 
+to keep your footing down there.	String type = <!!M>	07.06.2003
+107019	While fishing around in the well for valuable things, you 
+discover an old and very heavy anchor. Now who would 
+have thought a sailing ship could even FIT down there?	String type = <!!M>	07.06.2003
+107020	Casting a fishing line down in the well quickly grows
+boring so you and your second in command take turns
+dunking the troops instead!	String type = <!!M>	07.06.2003
+107021	After fishing for awhile in the well without any luck
+you decide to play a game and bob for apples.	String type = <!!M>	07.06.2003
+107022	You fish for awhile in the well and end up landing an
+electric eel. It's a shocking experience that you're not
+eager to repeat!
+	String type = <!!M>	07.06.2003
+107023	You fish in the well for a long time until the blackflies finally drive you back to your tents.	String type = <!!Q>	07.06.2003
+107024	After many hours you manage to catch a beautiful
+rainbow fish that tastes delightful fried with onions.
+
+Eating the meal boosts your entire army's spirits!	String type = <!!Q>	07.06.2003
+107025	After several hours of fishing you're amazed to discover that you've reeled in The Grail!	String type = <!!Q>	07.06.2003
+107026	But it turns out you were just hallucinating and luckily your army is able to bring you back to your senses!	String type = <!!M>	07.06.2003
+107027	You fish for a long time without incident, pausing now and then to toss in a coin and make a wish. By the end of the day you realize that you've tossed {%Y2} {gold} {coins} into the boring old well.	String type = <!!Q>	07.06.2003
+107028	After several hours fishing in the well, a storm rolls in
+and your whole army gets drenched to the bone.
+Everyone goes to bed cold, wet and miserable.	String type = <!!Q>	07.06.2003
+107029	While fishing in the well, you're surprised by a troop of friendly dwarves that emerge singing 
+ 
+"{Hi ho, Hi ho, it's} 
+{home again we go.}"	String type = <!!Q>	07.06.2003
+107030	You fish all day long and are just about to give up when a sexy water spirit appears and teaches you the mystic words to a magic spell. 
+"{Use} {this} {%Z301} {spell} {to} {annoy} {your} {enemies}," 
+giggles the spirit before vanishing back down the well from where she came.	String type = <!!Q>	07.06.2003
+107031	You fish for hours with no luck and just as you're starting to feel that you've wasted the day, a hunchback old gnome pulls up in a covered wagon and offers you %Y7 gold in exchange for your 
+%Y4 %Z2. 
+ 
+Do you agree to the deal?	String type = <!!Q>	07.06.2003
+107032	You fish for hours with no luck and just as you're starting to
+feel that you've wasted the day, a hunchback old gnome pulls
+up in a covered wagon. He looks over your army, wrinkles his
+nose and rides off into the sunset.	String type = <!!M>	07.06.2003
+107033	You inform your %Z2 of their new owner and quickly make the exchange. The hunchback gnome mutters darkly as he loads your troops on the wagon and rides off into the sunset.	String type = <!!Q>	07.06.2003
+107034	You absolutely refuse to sell your loyal %Z2
+into slavery to the first hunchback gnome that
+happens to ride by, even if he is offering a fantastic deal! 
+ 
+The gnome shakes his head sadly and rides off into the sunset.	String type = <!!M>	07.06.2003
+107035	While fishing in the well, you hear a cry for help! 
+ 
+Lowering a strong rope enables you to pull up a %Z301 that fell down and got trapped in this dark watery hole. 
+ 
+The %Z301 is grateful to be rescued!	String type = <!!Q>	07.06.2003
+107036	Fishing in the well takes several hours but you finally manage to dredge up some loose coins.	String type = <!!Q>	07.06.2003
+107037	You spend all day fishing in the well and
+eventually you haul up a rusty old chest.	String type = <!!Q>	07.06.2003
+107038	You toss the unopened chest back down the well where it lands with an incredibly loud {*SPLASH*} at the bottom!	String type = <!!M>	07.06.2003
+107039	The chest is filled with a strange pink gas that causes %Z303's %Z2 to {INCREASE} in number.	String type = <!!Q>	07.06.2003
+107040	Inside the chest you find 
+ 
+{%Y7 Gold Coins!}	String type = <!!Q>	07.06.2003
+107041	Inside the chest you find valuable resources!}	String type = <!!Q>	07.06.2003
+107042	Inside the chest you're elated to discover a magical artifact!	String type = <!!Q>	07.06.2003
+107043	Much to everyone's disappointment, the chest turns out to be empty.	String type = <!!M>	07.06.2003
+107044	The chest is filled with a strange purple gas that causes %Z303's %Z2 to change into %Z1.	String type = <!!Q>	07.06.2003
+107045	It's a TRAP! Deadly magic darts fly out, but luckily they all miss and nobody is injured.	String type = <!!M>	07.06.2003
+107046	It's a TRAP! Deadly magic darts fly out and instantly kill %Y3 of %Z303's loyal %Z2!	String type = <!!Q>	07.06.2003
+107047	spell scroll	String type = <!!S>	07.06.2003
+107048	Living Scroll	String type = <!!S>	07.06.2003
+107049	Inside the chest is a tightly sealed scroll case. Opening the case you discover a magical %Z2 of %Z301 which you eagerly anticipate using.	String type = <!!Q>	07.06.2003
+107050	After spending several lazy hours fishing in the well, you're totally unprepared for what suddenly emerges!	String type = <!!Q>	07.06.2003
+107051	While fishing, you discover a long, dark passageway located halfway down the well. 
+ 
+Do you take your army and carefully explore the tunnel?	String type = <!!Q>	07.06.2003
+107052	After many hours following long, dark twisty passages, you finally see daylight and emerge through another Magic Well.	String type = <!!M>	07.06.2003
+107053	Oh well, perhaps another day when you're feeling more adventurous.	String type = <!!M>	07.06.2003
+107054	After many hours following long, dark twisty passages, you find yourself in a large cave with no other way to go except back the way you came. 
+ 
+Suddenly, from the back of the cave comes a fearsome beast, intent on killing you. Your torches catch sight of a glimmering hoard of treasure that the beast is guarding. 
+ 
+Are you brave enough to stay and fight?	String type = <!!Q>	07.06.2003
+107055	Having beaten the %Z301, you discover treasure!	String type = <!!Q>	07.06.2003
+107056	With the %Z301 dead and your treasure loaded, you follow the tunnel back to the surface.	String type = <!!M>	07.06.2003
+107057	You rapidly flee from the fearsome %Z301, back through the tunnels to the surface!	String type = <!!M>	07.06.2003
+107058	Alas! You were beaten by the %Z301! What a sad sad fate for a brave hero...	String type = <!!M>	07.06.2003
+107059	You spend all day fishing in the well and eventually you haul up a rusty old chest.
+
+Do you open it?		
+107060	Do you open it?		
+107061	Rusty old chest		
+107062	Cheese sandwich		
+107063	Old boot		
+107064	Rusty sword		
+107065	Lambchop		
+107066	Slimy mud		
+107067	Mossy rocks		
+107068	Trout		
+107069	Dark hole		
+107070	Mermaid		
+107071	Fishing		
+107072	Worms		
+107073	Spookies		
+107074	Scaly hero		
+107075	Brave dragon		
+107076	Silly warlock		
+107077	Hot sun		
+107078	Anchor		
+107079	Well dunking!		
+107080	Bob with an apple		
+107081	Electric eel		
+107082	Rainbow fish		
+107083	Storm		
+107084	Gnome trader		

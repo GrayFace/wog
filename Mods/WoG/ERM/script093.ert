@@ -1,0 +1,26 @@
+193000	You found the grail but this town already receives the benefits of another grail. For this reason you leave the grail in front of the town gates.	String type = <!!M>	20.10.2004
+193001	Finally you have found the grail and reached one of your Conflux towns. Before you can step through the town gates, the Conflux Mayor rushes to you.
+
+"Stop!" he cries, "You must not enter this Conflux with the Grail - it will cause an overflow of magic in our nice town and destroy all balance in this region.
+You have two options: You may leave the Grail in front of our town gates and pick it up if you leave, or our mage can use the power of the Grail to create a magical area around the town, which will also attract more creatures to their dwellings and will boost the economy in this city so that we can pay you 5000 gold more than usual. Also this magical area will restore the mana for you and your friends every day."
+
+Will you hire our mage (yes) or will you leave the Grail in front of the towns doors (no)?	String type = <!!M>	20.10.2004
+193002	This town is yours, and so the {Grail} that was used to magically enchant the town is too.
+
+However, you have also heard of an old dark wizard who knows a spell that could make undone the enchantment and dismantle the Grail, but his price is very high.
+
+Do you want to hire him?	Get grail back	02.08.2005
+193003	This town is yours, and so the {Grail} that was used to magically enchant the town is too.
+
+However, you have heard about an old dark wizard who knows a spell that could make undone the enchantment and dismantle the Grail, but his price is very high.
+
+Unfortunately you cant pay him.	not enough gold	02.08.2005
+193004	As you approach your Tower town you first hear a very high sound followed by a huge explosion.
+
+An irritated gnome stumbles out of the dust, and with much apologizing, he tells you that those smoking ruins used to be the town's air shipyard. It would take years to reconstruct it and it will not be possible to build any craft in the meantime.
+
+Just as you start to think about another destination for your Grail, the oldest wizard you ever saw offers to plant a magical garden around the town and use the Grail to focus the magical energies from the universe to benefit every hero inside the town with a great amount of knowledge.
+
+Of course, such a garden would attract many people and would increase your daily income by 5000 gold.
+
+Do you accept the offer (otherwise the homeless Grail would be stored in front of the town's gates)?		21.11.2006

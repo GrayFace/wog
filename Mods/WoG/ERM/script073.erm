@@ -1,0 +1,1360 @@
+ZVSE
+ERMS_ScriptDate=21.11(November).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Enhanced War Machines III by Bonizag
+** Wogify Name: script73.erm
+** Updated: 21.11(November).2006 - only standard catapult for the attacker in a siege battle, #
+**                                 max. chance for critical hits (catapult) reduced to 33 %
+** last Updated: 26.7(July).2006 - rewritten buying-routines (lets shop faster :-)
+** prev. Updated: 19.7(July).2006 - fixed Stack Overflow, if AI has LOTS of money and visits a town, that was longer not visited
+
+** rewritten by Thomas Franz (samot):
+** - general optimizations and bugfixings of the code
+** - rewritten Health-Routine for the First Aid Tent
+** - Ammo Carts increase now the Damage of your Shooters istead of giving Spellpoints back
+** - Catapults added
+
+** Description:
+** ------------
+** Every hero can carry more than one war machine. War machines can be obtained
+** from towns and war machine factories.
+**
+** With the first aid tent the player can resurrect creatures if their stack on
+** the battlefield is not completely killed.
+**
+** Each Ammo Cart increases the Damage of each shooting stack (including Ballistas
+** and Arrow towers) by 10-20 Damagepoints, but does maximal double their original
+** damage (if the original damage was 20 and you have 4 carts, the new damage will
+** be 40 (20 bonus) and not 60-100 (40-80 bonus)
+**
+** Catapults may shot similar to the Ballistas, but have a chance to do a Critical
+** Hit, which will kill 1-4 creatures (depending on Ballistic Skill) at once. If there
+** are more than 100 creatures in the stack, the Catapult kills 1-4% of them.
+** Each catapult increases the chance for a Critical Hit by 1% (max. 33% chance, against
+** Commanders, Emissaries and Henchmens only 15%). Furthermore they get no penalities
+** from distance or obstacles and ignores 50% of the targets defense.
+
+** Creatures, that consists of stone, metal, ice, crystalls, wood (only War Machines)
+** or bones are defined as frigil and takes double damage from Catapults. Furthermore
+** there is a chance of double damage depending on the Ballistic skill. With Expert
+** Ballistic and against frigil creatures, the catapults does fourfold damage.
+** If you want to know, why Iron Golems are fragil try to hit a toy car hard
+** with a hammer and play with it after that - you will realize, that it will
+** be deformed and its doors, wheels etc. will seize.
+
+** If you are attacking a town, your will have only one standard catapult and can't
+** use it to attack creatures (you will need other ammunition for hitting the walls :-)).
+
+** If there are Tents or Ballistas summoned by your Commander and some Tents / Ballistas are destroyed
+** in the battle, the number of your own WM's that are destroyed is equivalend to the percentage
+** of your WM's to the total WMs (if you have 8 tents, your commander summons 4 tents (= 33% of 12 total) and
+** 6 tents are destroyed, your amount of tents after the battle is 4, because 4 of your original 8 and
+** 2 (=33 %) of the commanders 4 tents are destroyed
+
+
+
+** variables used:        v847, v850-v852 EXCLUSIVE
+**                        v1-v10 temporary
+
+** string variables used: z1-z5, z480-z492 all temporary
+
+** flags used:            783 EXCLUSIVE; checks 786 from script72 (Random Hero)
+**                        1-4, 9 temporary
+
+** functions used:        FU94-FU95, FU7795, FU7799-FU7809
+
+** hero variables used:   w81-w83, w120
+
+** Wog Option:            73
+
+** PO-Numbers: H, T and V1 for Towns (Object 98)
+**             V0-V3 for War machine factories (Object 106)
+
+** w81 = number of First Aid Tents
+** w82 = number of Ballistas
+** w83 = number of Ammo Carts
+** w120 = number of Catapults
+
+
+!#UN:P73/?v847; //check if option is enabled
+
+!?PI&v847=1; // post instruction
+!!MA:C147/6/750 C146/6/750 C148/6/750 C145/6/750; //all war machines cost 750 gold
+!!VRz790:Sz155000;
+!!VRz791:Sz155001;
+** set up dummy catapults:
+!!UN:G1/124/0/790 G1/124/1/791; // set monster name for single and plural
+!!MA:X124/203877 X145/203877;  // set flags (shooter, catapult, siege weapon, immune to mind spells, no obstacle penalty, no penalty in close combat,  no enemy retaliation, no moral penalty
+!!MA:M145/650 A145/10 D145/10 P145/250 N145/24 M145/4 E145/6; // catapults Fight Value 650, Attack/Defense 10, HP 250, Shots 24, 4-6 Dam
+!!MA:M124/650 A124/10 D124/10 P124/250 N124/24 M124/4 E124/6; // dummy catapults: Fight Value 650, Attack/Defense 10, HP 250, Shots 24, 4-6 Dam
+!!EA124:F105/?y-5 By-5/1/105/61/1/1/1/1/1/1/1/1/1/1/1; // stack exp.: get next free bonus line and set no range penality ability (all ranks)
+!!EA124:F98/?y-6 By-6/1/98/61/50/50/50/50/50/50/50/50/50/50/50; // ignore 50% defense (all ranks)
+!!EA124:F111/?y-7 By-7/1/111/61/1/1/1/1/1/1/1/1/1/1/1; // no obstacle (all ranks)
+!!EA124:F102/115/?y-8 By-8/1/102/115/1/1/1/1/1/1/1/1/1/1/1; // Shoot when Adjacent (all ranks)
+
+*****************************
+
+
+!?TM2&$weekday$=1/$once$=1/v847=1;
+!!DO7804/0/155/1&$day$=1:P; //iterate through all heroes and set correct w vars
+!!UN:U98/-1/?f; //get the number of towns
+!!DO7803/1/f/1:P98; //iterate through towns and fill them up
+!!UN:U106/-1/?f; //get the number of war machine factories
+!!DO7803/1/f/1:P106; //iterate through war machine factories and fill them up
+*****************************
+
+!?TM2&v847=1/-1000; // every day, only for AI
+!!VRy-1:S0 R3; // random 0-4
+!!OW&y-1=0:W-1/?y-2; // get number of towns of current player to y-2
+!!VRy-2:-1; // correct town number for FU7795
+!!DO7795/0/y-2/1&y-1=0:P; // buy machines for AI heroes if heroes stand in a town (25 % chance)
+*****************************
+
+
+!?CM0&v847=1; //see number of war machines owned by selected hero - rightclick on the Questlog-button
+!!OW:G-1/?t A-1/?g; // check, if my own hero is active (muliplayer check) and which hero is active
+!!FU|t<>1/g<0:E; // exit, if not me or no hero is active
+
+!!CM:I?f S?g; //vf: where we clicked; g: type of action
+!!FU|f<>5/g<>14:E; // exit if no rightclick on the questlog
+
+!!OW:A-1/?y-10; // get actual hero
+!!HEy-10:B0/?z5; //get hero name
+!!IF:Wy-10; //use hero's w# variables
+!!CM:R0; //don't show quest log standard info when right clicked on it
+!!VRz1:S^%W81^; //get machine numbers
+!!VRz2:S^%W82^;
+!!VRz3:S^%W83^;
+!!VRz4:S^%W120^;
+!!UN:A6/9/1 A4/9/2 A5/9/3 A3/9/4; // the name of the war machines is changed to numbers
+!!IF:N8/4/8/5/8/6/8/3; //show number
+!!IF:N^%Z173000^; // show the message
+!!UN:A6/9/0 A4/9/0 A5/9/0 A3/9/0; //restore original names
+*****************************
+
+
+!?CM0&v847=1; //when we right-click on war machine factory
+!!CM:I?f S?g; /vf: where we clicked; g: type of action
+!!OW:G-1/?t; //muliplayer check
+!!FU|f<>37/g<>14/t=0:E; // exit if no rightclick on the adventure map or I'm not the current player
+
+!!CM:P?g/?h/?i; // get coordinates
+!!OBg/h/i:T?j; //get type of clicked object
+!!FU&j<>106:E; // exit, if no warmachine factory
+
+!!CM:R0; // disable standard reaction
+
+!!TRg/h/i:E=0; // check, if it is an entrace
+!!VRg&-1:-1; // if not move one field to left (clicked on the non-entrace-part of the factory)
+!!POg/h/i:V1/?y-1 V1/?y-2 V2/?y-3 V3/?y-4; //get numbers of available war machines
+!!VRz1:S^%Y-1^; //get machine numbers
+!!VRz2:S^%Y-2^;
+!!VRz3:S^%Y-3^;
+!!VRz4:S^%Y-4^;
+!!UN:A4/9/1 A5/9/2 A6/9/3 A3/9/4; //the name is changed to numbers
+!!IF:N8/4/8/5/8/6/8/3; //show number
+!!IF:N^%Z173001^; // show the message
+!!UN:A6/9/0 A4/9/0 A5/9/0 A3/9/0; //restore original names
+*****************************
+
+
+!?CM2&v847=1; //see number of hero's war machines - hero screen
+!!CM:I?f S?g; /vf: where we clicked; g: type of action
+!!FU&g<>14:E; !!FU|f<15/f>18:E; // exit if no rightclick on a warmachine
+!!CM:R0; //disable standard reaction
+
+!!HE-1:B0/?z1; //get hero's name
+!!IF:W-1; //use hero's w# variables
+!!VRy-1:S-11 +f; // get Artifact number of the clicked slot
+!!VRy-1&y-1=7:S3; // correction for Catapult
+!!UN:N0/3/y-1; // name lookup for war machines (-> z3)
+
+!!VRy-2&f=15:Sw82; // set the number of owned ballistas
+!!VRy-2&f=16:Sw83; // set the number of owned carts
+!!VRy-2&f=17:Sw81; // set the number of owned Tents
+!!VRy-2&f=18:Sw120; // set the number of owned catapults
+!!VRz3&y-2>1:S^%Z3s^; // plural, if there is more then one
+
+!!IF:Q1/8/y-1/-1/-1/-1/-1/4/z173008; // show message
+*****************************
+
+
+!$OB5/4&v847=1; // post-visit of ballista
+!!HE-1:O?y-1; // get hero's owner
+!!FU&y-1=-1:E; // exit, if artifact was guarded and hero loose the battle
+!!IF:W-1; // activate hero's w-variables
+!!VRw82:+1; // add ballista to hero's w-var
+!!HE-1:N?y-1; // get hero's number
+!!FU7801:Py-1; // refresh artifact slots
+*****************************
+
+
+!$OB5/5&v847=1; // post-visit of Ammo Cart
+!!HE-1:O?y-1; // get hero's owner
+!!FU&y-1=-1:E; // exit, if artifact was guarded and hero loose the battle
+!!IF:W-1; // activate hero's w-variables
+!!VRw83:+1; // add Ammo Cart to hero's w-var
+!!HE-1:N?y-1; // get hero's number
+!!FU7801:Py-1; // refresh artifact slots
+*****************************
+
+
+!$OB5/6&v847=1; // post-visit of First Aid Tent
+!!HE-1:O?y-1; // get hero's owner
+!!FU&y-1=-1:E; // exit, if artifact was guarded and hero loose the battle
+!!IF:W-1; // activate hero's w-variables
+!!VRw81:+1; // add First Aid Tent to hero's w-var
+!!HE-1:N?y-1; // get hero's number
+!!FU7801:Py-1; // refresh artifact slots
+*****************************
+
+
+!$OB5/3&v847=1; // post-visit of Catapult
+!!HE-1:O?y-1; // get hero's owner
+!!FU&y-1=-1:E; // exit, if artifact was guarded and hero loose the battle
+!!IF:W-1; // activate hero's w-variables
+!!VRw120:+1; // add Catapult to hero's w-var
+!!HE-1:N?y-1; // get hero's number
+!!FU7801:Py-1; // refresh artifact slots
+*****************************
+
+
+!?OB106&v847=1; //hero is at war machine factory
+** v1 - available ballistas
+** v2 - available Ammo carts
+** v3 - available First Aid Tents
+** v4 - available Catapults
+** y-1 - current hero
+!!OB998:M-1/1/0; // disable standard reaction of object for all human players
+!!POv998/v999/v1000:V1/?v1 V1/?v2 V2/?v3 V3/?v4; //get available machines
+!!VRv5:S512; // default answer for dialog (changed mind)
+!!HE-1:N?y-1; // current hero
+!!DO94/1/100/1&1000:Py-1;  // buy for Human Players
+!!DO95/1/100/1&-1000:Py-1; // buy for AI
+
+!!PO998&v2<256:V0/v1 V1/v2 V2/v3 V3/v4; // write the new values back
+!!FU7801:Pv10; // refresh artifact slots
+
+*****************************
+
+
+!?FU94; // human buy's WM
+** v1 / y1 - available ballistas
+** v2 / y2 - available Ammo carts
+** v3 / y3 - available First Aid Tents
+** v4 / y4 - available Catapults
+** v5  - selection from dialog;  if 1 you want Ballistas, if 2 = Carts, 4 = Tents ...
+** x1 - current hero
+** x16 - loop number (1..100), only used to simulate recursive calls; will increased by 100 to exit the loop
+
+** y5 - total number of available WMs
+** y6 - max number you can buy (by gold and aviability)
+** y7 - the number you buy
+** y8 - Players gold
+** y9 - total price
+** y11 - y15 gold costs to buy the WM
+** v1 - total price
+
+!!VRy5:Sv1 +v2 +v3 +v4; // total number of available WMs
+!!IF&y5=0:M1/z173140; // no machines available
+!!VRx16&y5=0:+100; !!FU&y5=0:E; // exit, if there are no
+
+!!OW:R-1/6/?y8; // get players gold
+!!IF&y8<750:Q1/36/750/1/z173141; // no gold-message
+!!VRx16&y8<750:+100; !!FU&y8<750:E; // exit, if not enough gold
+
+!!VRy1:Sv1; !!VRy2:Sv2; !!VRy3:Sv3; !!VRy4:Sv4; // copy vVars to yVars
+!!VRy6:Sy8 :750; // max. number to buy by gold
+!!VRy1&y6<v1:Sy6; // reduce max. available ballistas to the number you can pay for
+!!VRy2&y6<v2:Sy6; // reduce max. available carts
+!!VRy3&y6<v3:Sy6; // reduce max. available tents
+!!VRy4&y6<v4:Sy6; // reduce max. catapults
+
+!!VRz-1:S^^; !!VRz-2:S^^; !!VRz-3:S^^; !!VRz-4:S^^; // initialize
+!!UN&y1>0:N0/-1/4; !!UN&y2>0:N0/-2/5; !!UN&y3>0:N0/-3/6; !!UN&y4>0:N0/-4/3; // name lookup for war machines (if there is any)
+!!VRz-1&y1>1:+^s^; !!VRz-2&y2>1:+^s^; !!VRz-3&y3>1:+^s^; !!VRz-4&y4>1:+^s^; // get plural of the WMs
+
+!!VRy11:Sy1 *750; !!VRy12:Sy2 *750; !!VRy13:Sy3 *750; !!VRy14:Sy4 *750; !!VRy15:Sy5 *750; // calc the prices for all WMs
+!!VRz480:S^^; !!VRz481:S^^; !!VRz482:S^^; !!VRz483:S^^; !!VRz484:S^^; !!VRz485:S^^; !!VRz486:S^^; !!VRz487:S^^; !!VRz488:S^^; !!VRz489:S^^; !!VRz490:S^^; !!VRz491:S^^; !!VRz492:S^^;
+!!VRz481&y1>0:S^%Z173161^; !!VRz482&y2>0:S^%Z173162^; !!VRz483&y3>0:S^%Z173163^; !!VRz484&y4>0:S^%Z173164^; // buy 1 WM
+!!VRz485&y1>1:S^%Z173165^; !!VRz486&y2>1:S^%Z173166^; !!VRz487&y3>1:S^%Z173167^; !!VRz488&y4>1:S^%Z173168^; // buy all of a type
+!!VRz489&y5>0/y6>=y5:S^%Z173169^; // buy all available WMs (every type)
+
+!!VRv5&v5>8:S512; // default = nothing, if you not had choosen "buy one" just before
+!!IF:G1/5/v5/173138/481/482/483/484/485/486/487/488/489/173139; // ask for the wanted WM; return in v5
+!!VRx16&v5=512:+100; !!FU&v5=512:E; // exit, if you changed your mind
+
+!!VRy7&v5<9:S1; // buy only one
+!!VRy7&v5=16:Sy1; !!VRy7&v5=32:Sy2; !!VRy7&v5=64:Sy3; !!VRy7&v5=128:Sy4; // number to buy of the choosen type
+!!VRy7&v5=256:Sy5; // number of ALL available (any type)
+!!VRy9:Sy7 *750; // total price
+
+!!VRy8:-y9; !!OW&1000:R-1/6/y8; /// reduce players gold
+!!IF:Wx1; // activate hero's W-Vars
+!!VRw81|v5=4/v5=64:+y7;   // add tents to hero
+!!VRw82|v5=1/v5=16:+y7;   // add ballistas
+!!VRw83|v5=2/v5=32:+y7;   // add carts
+!!VRw120|v5=8/v5=128:+y7; // add catapults
+
+!!VRw81&v5=256:+y3; !!VRw82&v5=256:+y1; !!VRw83&v5=256:+y2; !!VRw120&v5=256:+y4; // add all available WMs
+
+!!VRv1|v5=1/v5=16:-y7; // remove ballistas
+!!VRv2|v5=2/v5=32:-y7; // remove carts
+!!VRv3|v5=4/v5=64:-y7; // remove tents
+!!VRv4|v5=8/v5=128:-y7; // remove catapults
+!!VRv1&v5=256:S0; !!VRv2&v5=256:S0; !!VRv3&v5=256:S0; !!VRv4&v5=256:S0; // remove ALL WMs
+
+!!VRx16&v5=256:+100; // exit loop, if you bought all
+****************************
+
+
+!?FU95; // AI buy's WM
+** v1 - available ballistas
+** v2 - available Ammo carts
+** v3 - available First Aid Tents
+** v4 - available Catapults
+** x1 - current hero
+** x16 - loop number (1..100), only used to simulate recursive calls; will increased by 100 to exit the loop
+
+** y1-y4 number of the WMs the hero has already (used temp. to sort them)
+** y5 - total number of available WMs
+** y8 - Players gold
+** y21 - y24 - sorted range of currently owned WMs (y21 the one with the lowest number, y24 with the highest number)
+** y25 - the WM with the lowest number, that can be bought at this time
+** y26 - the w-Var, where y25's number is stored
+
+!!VRy5:Sv1 +v2 +v3 +v4; // total number of available WMs
+!!VRx16&y5=0:+100; !!FU&y5=0:E; // exit, if there are no more available
+
+!!OW:R-1/6/?y8; // get players gold
+!!VRx16&y8<2750:+100; !!FU&y8<2750:E; // exit, if not enough gold (AI saves at least 2000 gold)
+
+!!IF:Wx1; // activate hero's W-vars
+
+!!VRy1:Sw82; !!VRy2:Sw83; !!VRy3:Sw81; !!VRy4:S120; // get current number of ballistas, carts, tents and catapults
+** sort the number of the WMs, the hero has already (y21 = min .. y24 = max)
+!!VRy21&y1<=y2/y1<=y3/y1<=y4:S1; !!VRy21&y2<=y1/y2<=y3/y2<=y4:S2; !!VRy21&y3<=y1/y3<=y1/y3<=y4:S3; !!VRy21&y4<=y1/y4<=y2/y4<=y3:S4; !!VRy21&y21=0:S3; // get the WM from which the hero has the smalles number (default tent)
+!!VRyy21:+9999; // increase its number in y-var (to prevent to be found for the further checks)
+!!VRy22&y1<=y2/y1<=y3/y1<=y4:S1; !!VRy22&y2<=y1/y2<=y3/y2<=y4:S2; !!VRy22&y3<=y1/y3<=y1/y3<=y4:S3; !!VRy22&y4<=y1/y4<=y2/y4<=y3:S4; !!VRy22&y22=0:S1; // get the WM from which the hero has the second smalles number (default ballista)
+!!VRyy22:+9999; // increase number in y-var
+!!VRy23&y1<=y2/y1<=y3/y1<=y4:S1; !!VRy23&y2<=y1/y2<=y3/y2<=y4:S2; !!VRy23&y3<=y1/y3<=y1/y3<=y4:S3; !!VRy23&y4<=y1/y4<=y2/y4<=y3:S4; !!VRy23&y23=0:S4; // get the WM from which the hero has the smalles number (default catapult)
+!!VRyy23:+9999; // increase its number in y-var (to prevent to be found for the further checks)
+!!VRy24&y1<=y2/y1<=y3/y1<=y4:S1; !!VRy24&y2<=y1/y2<=y3/y2<=y4:S2; !!VRy24&y3<=y1/y3<=y1/y3<=y4:S3; !!VRy24&y4<=y1/y4<=y2/y4<=y3:S4; !!VRy24&y24=0:S2; // get the WM from which the hero has the highes number (default cart)
+!!VRyy24:+9999; // increase its number in y-var (to prevent to be found for the further checks)
+
+!!VRy25:S3; // default tent
+!!VRy25&vy24>0:Sy24; !!VRy25&vy23>0:Sy23; !!VRy25&vy22>0:Sy22; !!VRy25&vy21>0:Sy21; // set y25 to the WM of which the hero has the smallest number and that is really aviabel
+
+!!VRy26&y25=1:S82; !!VRy26&y25=2:S83; !!VRy26&y25=3:S81; !!VRy26&y25=4:S120; // the w-Var regarding to the WM in y25
+!!VRwy26:+1; // add 1 WM to hero
+!!VRvy25:-1; // remove 1 WM from available WMs
+!!VRy8:-750; !!OW:R-1/6/y8; // remove gold
+*****************************
+
+
+
+!$OB98&-1000/v847=1; // AI buys war machine at town
+!!OW:C?y-1 A-1/?i; // get current player and active hero
+!!CA998:O=y-1; // check if owner = current player
+!!FU|-1/i<0:E; // exit if not (siege battle or allied town) or if there is no active hero
+
+!!FU7800:Pi; //correct w vars if necessary
+!!FU7802:Pi/v998/v999/v1000; // call buying function
+
+!!CA998:B3/22 T?j; //look if ballista yard is built, get subtype
+!!DO7796/1/5/1&1/j=6:Pi/v998/v999/v1000/1; //AI buys up to 5 ballistas in Stronghold if ballista yard is built
+!!CA998:B3/16; //look if blacksmith is built
+!!DO7796/1/5/1&1:Pi/v998/v999/v1000/0; //AI buys up to 5 town-specific war machine if blacksmith is built
+!!DO7796/1/5/1&1:Pi/v998/v999/v1000/2; //AI buys up to 5 catapults
+!!FU7801:Px1; //correct equipment
+*****************************
+
+
+!?CM1&v847=1; //trigger for click inside town
+!!CA-1:B3/10; //check if village hall is built
+!!CA-1&-1:B3/11; // if not check if town hall is built
+!!CA-1&-1:B3/12; // if not check if city hall is built
+!!CA-1&-1:B3/13; //if not check if capitol is built
+!!FU&-1:E; // exit if nothing build -> town is destroyed
+
+!!CA-1:B3/16; // check, if Blacksmith is built
+!!FU&-1:E; // exit if not
+
+!!CM:F?f I?g; //get click flag and building
+!!CA-1:T?t H1/?h; // vt= type of town, vh visiting hero
+!!FU|h<0/f>0:E; // exit, if there is no visiting hero or not a leftclick
+!!FU&g<>16/g<>22:E; // exit, if not clicked on the blacksmith (or ballista yard)
+
+!!CM:R0; //disable standard reaction
+
+!!OW:C?l; //get current player
+!!CA-1:O?o P?i/?j/?k; // get towns owner and position
+!!IF&l<>o:Q1/10/o/1/z173144; // message Only the town's owner may buy here!
+!!FU&l<>o:E; // exit, if owner <> current player (f.e. allied)
+
+!!FU7800:Ph; //correct w vars if needed at visiting hero
+!!CA-1:P?y-1/?y-2/?y-3; // get town pos.
+!!FU7802:Ph/y-1/y-2/y-3; // call buying function for visiting hero
+****************
+
+!?TH0&v847=1; //entering a town hall
+!!IF:V9/0; // init flag 9
+!!CA-1:B3/16; // check, if Blacksmith is build
+!!IF&-1:V9/1; // set flag, if not
+****************
+
+!?TH1&v847=1/9; //leaving a town hall, if there was no blacksmith in the town before
+!!CA-1:B3/16 P?y-1/?y-2/?y-3; // check, if Blacksmith is built, get coordinates
+!!POy-1/y-2/y-3&1:Hd1 Td1 V1/d1; // if there was a Smith now: add one WM of each type to the town
+****************
+
+--------------------------- B E F O R E     B A T T L E ---------------------
+
+
+!?BA52&v847=1; //before battle begins
+!!BA:H0/?y-1 H1/?y-2; //attacker in vf, defender to vg
+!!FU|y-1<0/y-2<0:E; // exit, if it is no battle between two heroes
+!!FU7801:Py-1; !!FU7801:Py-2; // correct hero's equipped WMs
+!!IP:V847/851 F783/783; // synchronize v-vars and Flags
+!!IP:Wy-1/81/83 Wy-1/120/120; !!IP:Wy-2/81/83 Wy-2/120/120; // syncronize W-Vars
+****************
+
+
+-------------------------- B A T T L E   I N I T I A L I S A T I O N ---------------------
+** summon battle machines
+
+!?BF&v847=1; // Battle field is created first battle round (before tactic phase)
+** f = attacker
+** g = defender
+** y-1 = added Tents
+** y-2 = added Ballistas
+** y-3 = added Carts
+** y-4 = added Catapults
+** y-5 = hero's attack
+** y-6 = hero's defense
+** y-7 = sum of attacking heroes war machines (used for random hero part)
+
+!!UN:P900/?v850 P900/1; // save status of stack exp. to v850; enable it (needed for the catapults (no obstacle, shoot when Adjacent ...)
+!!IF:V783/0; // disable flag used to detect, if battle machines was added (checked after the battle)
+!!BU:E2/?y-99; !!BMy-99&y-99>-1:I?y-100; !!FU&y-100=1:E; // check, if there is a monster at pos 2, exit if yes and it is a defender (Creature Bank)
+
+!!UN:P30/?y-100; // Check for Adventure Cave - WoG option (script30)
+!!FU&v518>0/y-100=1:E; // exit if Cave is enabled and battle was in a Cave (var was set in FU832 / script30), because it removes all war machines before the battle
+
+!!IF:V783/1; // enable flag used to detect, if battle machines was added (checked after the battle)
+
+!!BA:H0/?f H1/?g; //attacker in vf, defender in vg
+
+!!IF:V3/0; !!IF&f>-1:V3/1; // set flag 3, if there is an attacking hero
+!!IF&3:Wf; //use attacker hero's w# variable
+!!VRs:S0; !!VRn:S0; !!VRt:S-1; //init vs, vn, vt
+!!COf&3:E?n; //look if commander is enabled
+!!COf&n=1:D?m; //if enabled look if alive
+!!COf&n=1/m=0:X2/?s T?t; //if enabled and alive get commander's level and its type
+
+!!VRv851:S0; // init
+!!VRy-1&t=1:Ss :4 +1; // y-1 number of added war machines (hierophant); level divided by 4
+!!VRy-2&t=6:Ss :4 +1; // y-2 number of added war machines (ogre leader); level divided by 4
+!!VRv851&t=1:Sy-1; // save number of added tents (attacker)
+!!VRv851&t=6:-y-1; // save number of added ballistas (attacker) - negative value in v851
+
+!!VRy-1&3:+w81; !!VRy-2&3:+w82; !!VRy-3&3:+w83; !!VRy-4&3:Sw120; // add number of owned WMs
+!!VRy-7&3:S0 +w81 +w82 +w83 +w120; // get sum of all of the attacker's WMs (used for random hero part)
+
+!!BU:E153/?k; //get stack num in vk  ** Tents
+!!BMk&k<>-1/y-1>0:Ny-1 By-1; //set number of tents in the stack
+
+!!BU:E51/?k; //get stack num in vk  ** Ballistas
+!!BMk&k<>-1/y-2>0:Ny-2 By-2; //set number of Ballistas in the stack
+
+!!BU:E18/?k; //get stack num in vk   ** Carts
+!!BMk&k<>-1/y-3>0:Ny-3 By-3; //set number of Carts in the stack
+
+** Catapults Attacker
+!!BA:S?y-7; // get subtype of battle (0=ordinary, >0 = siege battle)
+!!HEf&3:F?y-5/?y-6/d/d; // get attack / defense
+!!VRy-5:+10; !!VRy-6:+10; // add 10 (basic value of the catapult) to the attack / defense
+
+!!BU:E119/?k; //get stack num in vk ** Catapult
+!!BMk&k>-1/y-4>0/y-7=0:Ny-4 By-4; // set number of Catapults in the stack if there is already a catapult (siege battle)
+!!BU&k<0/y-4>0/y-7=0:S145/y-4/119/0/-1/0; // else summon the Catapults
+!!BU:E119/?k; //get again the stack number of catapults (if summoned)
+!!BMk&k>-1/y-4>0/y-7=0:T124 U1/4 U2/6 U3/24 H250 Ay-5 Dy-6; // change their type to dummy catapult, set min/max-Dam, number of shots, health, attack and defense
+
+*!BMk&k>-1/y-4>0/y-7>0:S50; // set speed to max, if it is a siege battle
+!!FU&g<0:E; // exit, if there is no defending hero
+
+** defender
+!!VRf:Sg; // copy defender to f
+
+!!IF:Wf; //use defending hero's w# variable
+!!VRs:S0; !!VRn:S0; !!VRt:S-1; !!VRy-1:S0; !!VRy-2:S0; !!VRy-3:S0; !!VRy-4:S0; //init vs and vn, y-1 - y-4
+!!COf:E?n; //look if commander is enabled
+!!COf&n=1:D?m; //if enabled look if alive
+!!COf&n=1/m=0:X2/?s T?t; //if enabled and alive get commander's level and its type
+
+!!VRv852:S0; // init
+!!VRy-1&t=1:Ss :4 +1; // y-1 number of added war machines (hierophant); level divided by 4
+!!VRy-2&t=6:Ss :4 +1; // y-2 number of added war machines (ogre leader); level divided by 4
+!!VRv852&t=1:Sy-1; // save number of added tents (defender)
+!!VRv852&t=6:-y-1; // save number of added ballistas (defender) - negative value in v852
+
+!!VRy-1:+w81; !!VRy-2:+w82; !!VRy-3:+w83; !!VRy-4:Sw120; // add number of owned WMs
+
+** part to work with the Random Hero (script72) - increase his war machines
+  !!UN:P72/?y-1; // check, if script Random Hero (script72) is active
+  !!IF&y-1=0:V786/0; // disable flag 786, if not
+**                   // flag 786 will be set in script72, if you fight against neutral monsters and a random hero occurs
+  !!VRy-100&786:S0; // init
+  !!HEf:Ed/?y-97; // attacking heroes level
+  !!VRy-97::2; // half
+  !!DO7799/21/41/1&786:P; // get the sum of monsters' hp to y-100
+  !!VRy-99&786:Sy-100 :250; // corrected value to get the number of war machines
+  !!VRy-99&y-97<y-99:Sy-97; // available number of WMs = max. the level of own attacking hero
+  !!VRy-99&y-7<y-99:Sy-7;   // available number of WMs = max. the sum of WM's of the attacking hero
+  !!VRy-99&y-99<2:S2; // but at least 2 WMs
+
+  !!VRy-98&786:S0 Ry-99; // random value between 0 and y-99
+  !!VRy-1&786:+y-98; // add to tents
+  !!VRy-99&786:-y-98; // remove the added WM from total available number
+  !!VRy-98&786:S0 Ry-99; // random value between 0 and y-99
+  !!VRy-2&786:+y-98; // add to Ballistas
+  !!VRy-99&786:-y-98; // remove the added WM from available number
+  !!VRy-98&786:S0 Ry-99; // random value between 0 and y-99
+  !!VRy-3&786:+y-98; // add to Carts
+  !!VRy-99&786:-y-98; // remove the added WM from available number
+
+  !!VRy-4&786:+y-99; // add remaining WMs to the catapults
+** end part for the Random Hero (script72)
+
+!!BU:E169/?k; //get stack num in vk  ** Tents
+!!BMk&k>-1/y-1>0:Ny-1 By-1; //set number of tents in the stack
+!!BU&k<0/y-1>0:S147/y-1/169/1/-1/0; //  summon the Ballistas, if there are non
+
+!!BU:E67/?k; //get stack num in vk  ** Ballistas
+!!BMk&k>-1/y-2>0/-3:Ny-2 By-2; //set number of Ballistas in the stack, if it is no siege battle
+!!BU&k<0/y-2>0/-3:S146/y-2/67/1/-1/0; //  summon the Ballistas, if there are non and it is no siege battle
+
+!!BU:E32/?k; //get stack num in vk   ** Carts
+!!BMk&k>-1/y-3>0:Ny-3 By-3; //set number of Carts in the stack
+!!BU&k<0/y-3>0:S148/y-3/32/1/-1/0; //  summon the carts, if there are non
+
+** Catapults Defender
+!!FU&y-4<1/y-7>0:E; // exit, if defender has no catapults or it is a siege batte)
+
+!!HEf:F?y-5/?y-6/d/d; // get attack / defense
+!!VRy-5:+10; !!VRy-6:+10; // add 10 (basic value of the catapult) to the attack / defense
+
+!!BU:S145/y-4/135/1/-1/0; // summon the Catapults
+!!BU:E135/?k; //get the stack number of the summoned catapults
+!!BMk&k>-1:T124 U1/4 U2/6 U3/24 H250 Ay-5 Dy-6; // change their type to dummy catapult, set min/max-Dam, number of shots, health, attack and defense
+
+****************
+
+
+--------------------------  T E N T S   A C T I O N S ---------------------
+
+!?BG0&v847=1;  // First Aid Tent heals a creature
+** y-1 - current stack number
+** y-2 - type of action
+** y-3 - destination monster stack
+** y-4 - acting creature (should be Tent = 147)
+** y-5 - side index
+** y-6 - number of first aid tents
+** y-7 - hero number
+** y-8 - first aid skill
+
+** y-10 - destinations HP
+** y-11 - lost HP (first creature in the stack)
+** y-12 - original number
+** y-13 - current number
+** y-14 - max number that can be resurrected  / resurrected creatures
+** y-15 - killed creatures
+** y-16 - new number of creatures (after resurrection)
+** y-17 - healed HPs
+** y-18 - new lost HPs (after healing)
+** y-19 - max. HPs in the stack (org. number * HP)
+** y-20 - HPs in the stack after the healing
+
+** y-97  - y-99 - temporary used values
+** y-100 - cure value
+
+!!BG:N?y-1 A?y-2 E?y-3; //get stack number attack type and destination monster stack
+!!BMy-1:T?y-4 I?y-5; //get type of monster and side index
+!!FU&y-4<>147:E; // exit, if no tent is acting
+
+!!FU&y-2<>11:E; // exit, if no tent-health-action (f.e. Tent is waiting or defending)
+!!BHy-5:N?y-7; //get hero number
+!!FU&y-7<0/y-3<0:E; // exit, if there is no hero or no destination stack (should not happens, but it's better to get sure)
+
+!!BMy-1:N?y-6; // y-6 number of first aid tents
+!!HEy-7:S27/?y-8; //store hero's first aid skill in y-8
+
+!!HEy-7:O?y-99; //get hero color
+!!OW:Iy-99/=1; //check, if the owner is AI
+!!BA&-1:Q=1; // if not, check, if Quick Combat is activated
+
+!!VRy-97:Sy-5 *21; // get first stack number of the current side
+!!VRy-98:Sy-97 +20; // get last stack number
+!!VRy-99:S0; !!VRy-9:S-1; // init
+!!DO7806/y-97/y-98/1&1/y-8>0:P; // if Owner is AI or Quick Combat is activated and hero has Skill, get best destination (the one with the most lost HPs) to y-9
+!!BG&y-9>-1:Ey-9; // set new destination, if a new one was chosen in FU7806
+
+!!BG:A12; // cancel the original healing-action (set to No-Action)
+
+!!VRy-100:S0; // init
+!!DO7807/1/y-6/1:Py-8/y-5; // get a random cure value, return in y-100
+
+!!BMy-3:H?y-10 L?y-11 B?y-12 N?y-13; // get destinations HP, lost HP, original and actual number
+
+!!VRy-15:Sy-12 -y-13; // killed creatures
+!!VRy-19:Sy-12 *y-10; // max HPs in this stack (at battle start)
+
+!!VRy-20:Sy-13 *y-10 -y-11; // total HPs in this stack (currently)
+!!VRy-20:+y-100; // add the heal-value of the tents
+!!VRy-20&y-20>y-19:Sy-19; // reduce new Health to the max. health at battle start
+
+!!VRy-16:Sy-20 :y-10 +1; // new number of creatures (total HP divided by HP per creature)
+
+!!VRy-17:Sy-20 %y-10; // HPs that have the stack after the healing (reminder of division total HP by individual HP)
+!!VRy-16&y-17=0:-1; // correction of creatures, if reminder is 0 (stack complete healed)
+!!VRy-17&y-17=0:Sy-10; // correction of HPs, if reminder is 0 (stack complete healed)
+
+!!VRy-14:Sy-16 -y-13; // number of resurrected creatures
+!!VRy-18:Sy-10 -y-17; // new lost HPs
+
+!!VRy-18&y-16<y-12/y-18=0:S1; // at least one lost HP, if the stack is not resurrected complete (otherwise it could not be resurrected later)
+!!BMy-3:Ny-16 Ly-18 V50; // set new stack number / lost HP, show Heal-Animation
+!!VRz-1&y-14>0:Sz173146; // text with resurrection
+!!VRy-98:Sy-11 - y-18; // get healed HPs (original lost - current lost)
+!!VRz-1&y-14=0:Sz173149; // text without resurrection (only healing)
+!!BU:Mz-1; // show battle message (how much creatures are resurrected / healed)
+
+*****************************
+
+
+!?BG1&v847=1; // after every action
+!!BG:A?y-1 Q?y-5; //get acting side and action
+!!VRy-1&y-5=0:S153; !!VRy-1&y-5=1:S169; // set the map-pos of the tents
+!!BU:Ey-1/?y-2; // check, if there is at least one "alive" tent (if yes, y-2 will get it's stack number)
+!!FU&y-2<0:E; // exit, if there is no tent
+
+!!VRy-97:Sy-5 *21; // get first stack number of the current side
+!!VRy-98:Sy-97 +20; // get last stack number
+!!DO7805/y-97/y-98/1:P; // iterate though the stacks, decrease health of each full healed
+*                       // stack with not all orginal creatures by one to allow further healings
+****************
+
+
+-------------------------- C A R T S   A C T I O N S ---------------------
+
+!?MF1&v847=1; // monster getting damage
+!!BG:A?y-1 E?y-4; // get action and the destination of the attack
+!!FU&y-1<>7:E; // exit, if no injured by shot
+
+!!MF:N?y-2; // get the stack number of the attacked (hurted) stack
+!!FU&y-2<>y-4:E; // exit, if the attacked stack (original destination) and the hurted are not the same (Magog / Lich-attack)
+!!VRy-3&y-2>20:S18; // use attackers carts (map pos.)
+!!VRy-3&y-2<21:S32; // use defenders carts (map pos.)
+!!BU:Ey-3/?y-5; // get the stack number of the carts
+!!FU&y-5<0:E; // exit, if there are not (or they are all killed)
+
+!!BMy-5:T=148; // check, if there are ammo carts at the field (no other creature)
+!!FU&-1:E; // exit, if not
+!!BMy-5:N?y-6 G41/?y-7/d G42/?y-12/d; // get number of remaining carts and check, if they are blessed or cursed
+!!VRy-8:S10 R10; // get random value of 10-20
+!!VRy-8&y-7>0:S20; // set to 20, if the carts are blessed
+!!VRy-8&y-12>0:S10; // set to 10, if the carts are cursed
+!!VRy-9:Sy-8 *y-6; // get the damage bonus of the carts
+!!MF:D?y-10; // get the original damage
+!!VRy-9&y-9>y-10:Sy-10; // reduce the bonus to the original damage (max. double damage)
+!!VRy-11:Sy-10 +y-9; // get the new damage
+!!MF:Fy-11; // set the new damage
+!!VRz-1:Sz173147;
+!!BU:Mz-1; // add info about the bonus to battle log
+****************
+
+
+!?MM0&v847=1; // mouse move trigger
+!!MM:D?y-1; // get destination of the mouse
+!!FU&y-1<>18/y-1<>32:E; // exit, if not over a ammo cart
+!!BU:Ey-1/?y-2; // get the stack number of the carts
+!!FU&y-2<1:E; // exit, if there are no (alive) carts
+!!BMy-2:N?y-3 T?y-4 G41/?y-5/d G42/?y-6/d; // get their number, type; check, if they are blessed / cursed
+!!FU&y-4<>148:E; // exit, if there are no carts at this pos.
+!!VRy-7:Sy-3 *10; !!VRy-8:Sy-3 *20; // get min / max-Dam
+!!VRy-7&y-5>0:Sy-8; !!VRy-8&y-6>0:Sy-7; // correction by bless / curse
+!!VRz-1:Sz173148;
+!!MM:Sz-1; // show message about damage-increasement
+****************
+
+-------------------------- C A T A P U L T S   A C T I O N S ---------------------
+
+!?BG0&v847=1; // each action
+!!BG:N?y-1 A?y-2 E?y-3 Q?y-4; //get stack number, attack type and destination monster stack
+!!BMy-1:T?y-5 F?y-6; //get type of monster and its flags
+!!FU&y-5<>124:E; // exit, if not a dummy catapult is acting
+!!FU&y-2<>6/y-2<>7/y-2<>9/y-2<>2:E; // exit, if it it does not attack (close combat, shot or siege attack) or walking
+!!BG|y-2=6/y-2=2:A7; // change attack to shot, if it is meele attack or walking (otherwise WoG would crash)
+!!BA:Hy-4/?y-7; // get the acting hero
+!!FU&y-7<0:E; // exit, if there is no hero (should never happen)
+
+!!HEy-7:S10/?y-8; // get hero's ballistic skill
+!!VRy-9&y-8=0:S0; // no ballistic
+!!VRy-9&y-8>0:Sy-8 *25 +25; // chance for double shoot and double damage basic = 50, advanced = 75, expert = 100
+!!VRy-10:S0 R100; // random 0-100
+!!BMy-1&y-9<y-10:F203877;  // set flags (shooter, catapult, siege weapon, immune to mind spells, no obstacle penalty, no penalty in close combat,  no enemy retaliation, no moral penalty
+!!BMy-1&y-9>=y-10:F236645;  // set flags as above + attack twice, if the odds are good
+
+!!FU&y-2<>7:E; // exit, if no shot-action
+
+** increased damage because of skill or frigil creatures
+!!VRy-10:S0 R100; // random 0-100
+!!BMy-3:T?y-15; // get type of attacked monster
+!!VRy-99:S4; !!VRy-100:S6; // usual damage
+!!VRy-99&y-9>=y-10:*2; !!VRy-100&y-9>=y-10:*2; // double min/max damage (if the odds are good)
+!!IF:V1/0; // disable Flag 1
+!!IF&y-15>29/y-15<34:V1/1; // enable for gargoyles and stone / iron golems
+!!IF|y-15=56/y-15=57/y-15=64/y-15=65/y-15=68/y-15=113/y-15=116/y-15=117/y-15=123/y-15=125:V1/1; // skeletons, liches, bone dragons, earth, ice and magma elementals,
+!!IF|y-15=132/y-15=133/y-15=151/y-15=165/y-15=196/y-15=124/y-15=145/y-15=146/y-15=148:V1/1; // gold and diamond golem, azure / crystal / diamond dragons, earth messengers, draco liches, other war machines (except tent)
+!!VRy-99&1:*2; !!VRy-100&1:*2; // again double damage, if it is one of the listed creatures
+!!BMy-1:U1/y-99; !!BMy-1:U2/y-100; // set minDam / maxDam
+
+!!VRz-1&y-9>=y-10/-1:Sz173155; // only ballistic
+!!VRz-1&y-9<y-10/1:Sz173154; // only frigil
+!!VRz-1&y-9>=y-10/1:Sz173156; // both
+!!BU|y-9>=y-10/1:Mz-1; // add message to battle log
+
+
+** critical hit
+!!BMy-1:N?y-11; // get number of catapults
+!!VRy-11&y-11>33:S33; // max. 33 % chance
+!!VRy-10:S0 R100; // random 0-100
+!!BMy-3:N?y-13 T?y-14 G4/?y-16/d; // get number of creatures and type in the target stack, check, if disguise is active (henchmen)
+!!IF:V1/0; !!IF&y-14>173/y-14<191:V1/1; !!IF&y-16>0:V1/1; !!IF&y-14>159/y-14<164:V1/1; // set flag 1 for commanders, henchmen or emissaries
+!!VRy-11&y-11>15/1:S15; // max. 15 % chance against those creatures
+!!FU&y-11<y-10:E; // exit, if the odds are bad
+
+!!VRy-12:S1 Ry-8; // random 1-4 killed creatures (depending on ballistic skill)
+!!VRy-12&y-12>y-13:Sy-13; // limit the killed creatures to the living creatures
+!!VRy-12&y-13>100:*y-13 :100; // 1-4%, if there are more then 100 creatures in the stack
+!!VRy-15:Sy-13 -y-12; // new number of creatures
+!!BMy-3:Ny-15 V82; // set the new stack number and show animation
+!!UN&y-13=1:N3/-2/y-14/0; // name lookup destination creature (singular)
+!!UN&y-13>1:N3/-2/y-14/1; // name lookup destination creature (plural)
+!!VRz-1:Sz173150;  // message about killed creatures
+!!BU:Mz-1; // add to Battle log
+
+****************
+
+
+!?BG1&v847=1; // after each catapult action
+!!BG:N?y-1; //get stack number
+!!BMy-1:T?y-5; //get type of monster
+!!BMy-1&y-5=124:U1/4 U2/6 F203877; // reset standard damage and standard flags after the attack of a dummy catapult
+****************
+
+------------------------ A F T E R   B A T T L E --------------------
+
+!?BG1&v847=1; // after each action
+** y-1 - attacking hero
+** y-2 - defending hero
+** y-3 - stack of Tents
+** y-4 - stack of Ballistas
+** y-5 - stack of Carts
+** y-6 - stack of Catapults
+** y-7 - initial number of War Machines
+** y-8 - actual number of War Machines
+** y-9 - lost WMs
+** y-10- Siege type of the battle (0, if ordinary battle)
+
+!!BU:C=1; !!FU&-1:E; // exit, if battle has not ended this round
+
+!!UN:P900/v850; // set stack exp. to its origignal status (was enabled before the battle)
+!!FU&-783:E; // exit, if no WMs was added to the battle ground (flag 783 wasn't set in the BF-trigger)
+
+!!BA:H0/?y-1 H1/?y-2 S?y-10; // get attacking / defending hero and siege type
+
+!!IF:V3/0; !!IF&y-1>-1:V3/1 Wy-1; // set flag 3, if there was an attacking hero, activate his w-vars
+!!BU&3:E153/?y-3 E51/?y-4 E18/?y-5 E119/?y-6; // get stack numbers of the WMs (attacking hero)
+
+** if there are Tents or Ballistas summoned by your Commander and some Tents / ballistas are destroyed
+** in the battle, the number of your own WM's that are destroyed is equivaltent to the percentage
+** of your WM's to the total WMs (if you have 8 tents, your commander summons 4 tents (= 33%) and
+** 6 tents are destroyed, your amount of tents after the battle is 4, because 4 of your original 8 and
+** 2 (=33 %) of the commanders 4 tents are destroyed
+
+** v851 will be > 0 if there were tents summoned and <0 for summoned ballistas. If 0 there was nothing summoned.
+
+!!VRy-99:S0; // init
+!!BMy-3&3/y-3>-1:B?y-7 N?y-8; // get initial and actual number of the tents
+!!VRy-98:Sy-7 -y-8; // lost tents (initial -actual) - f.e. 6 lost
+!!VRy-99&v851>0/y-7>0:Sv851 *100 :y-7; // percentage of the summoned tents (hierophant) = summoned *100 : total (f.e. 4*100:12=33 % summoned)
+!!VRy-9:S100 -y-99 *y-98 :100; // lost of own tents f.e. 100% - 33% *6 lost :100 = 4 own lost (and 2 of the commanders)
+!!VRw81&3:-y-9; // remove the lost tents
+!!VRw81&3/y-3<0:S0; // remove all tents from w-var, if there is no (more) a stack
+
+!!BMy-4&3/y-4>-1:B?y-7 N?y-8; // get initial and actual number of the ballistas
+!!VRy-98:Sy-7 -y-8; // lost ballistas (initial -actual) - f.e. 6 lost
+!!VRy-99&v851<0/y-7>0:Sv851 *-100 :y-7; // percentage of the summoned ballistas (ogre) = summoned *100 : total (f.e. 4*100:12=33 % summoned)
+!!VRy-9:S100 -y-99 *y-98 :100; // lost of own ballistas f.e. 100% - 33% *6 lost :100 = 4 own lost (and 2 of the commanders)
+!!VRw82&3:-y-9; // remove the lost ballistas
+!!VRw82&3/y-4<0:S0; // remove all ballistas from w-var, if there is no (more) a stack
+
+!!BMy-5&3/y-5>-1:B?y-7 N?y-8 T?y-10; // get initial and actual number + type of the ammo carts
+!!VRy-5&y-10<>148:S-1; // no stack, if there are no ammo carts (because another creature can stand on the original cart-position, if they are destroyed)
+!!VRy-9:Sy-7 -y-8; // lost ammo carts
+!!VRw83&3:-y-9; // remove the lost ammo carts
+!!VRw83&3/y-5<0:S0; // remove all ammo carts from w-var, if there is no (more) a stack
+
+!!BMy-6&y-6>-1:B?y-7 N?y-8 T145; // get initial and actual number of the catapults, convert them back to usual catapults
+!!VRy-9:Sy-7 -y-8; // lost catapults
+!!VRw120&3/y-10=0:-y-9; // remove the lost catapults (not in a siege battle)
+!!VRw120&3/y-6<0/y-10=0:S1; // remove all catapults from w-var, if there is no (more) a stack (one remains always)
+
+!!FU7801:Py-1; // correct hero's equipped artifacts according to the w-vars
+!!FU&y-2<0:E; // exit, if there is no defender
+
+** defender
+!!BU:E169/?y-3 E67/?y-4 E32/?y-5 E135/?y-6; // get stack numbers of the WMs (defending hero)
+!!IF:Wy-2; // activate defenders w-vars
+
+** v852 will be > 0 if there were tents summoned and <0 for summoned ballistas. If 0 there was nothing summoned.
+!!VRy-99:S0; // init
+!!BMy-3&3/y-3>-1:B?y-7 N?y-8; // get initial and actual number of the tents
+!!VRy-98:Sy-7 -y-8; // lost tents (initial -actual) - f.e. 6 lost
+!!VRy-99&v852>0:Sv852 *100 :y-7; // percentage of the summoned tents (hierophant) = summoned *100 : total (f.e. 4*100:12=33 % summoned)
+!!VRy-9:S100 -y-99 *y-98 :100; // lost of own tents f.e. 100% - 33% *6 lost :100 = 4 own lost (and 2 of the commanders)
+!!VRw81&3:-y-9; // remove the lost tents
+!!VRw81&3/y-3<0:S0; // remove all tents from w-var, if there is no (more) a stack
+
+!!BMy-4&3/y-4>-1:B?y-7 N?y-8; // get initial and actual number of the ballistas
+!!VRy-98:Sy-7 -y-8; // lost ballistas (initial -actual) - f.e. 6 lost
+!!VRy-99&v852<0:Sv852 *-100 :y-7; // percentage of the summoned ballistas (ogre) = summoned *100 : total (f.e. -4*-100:12=33 % summoned)
+!!VRy-9:S100 -y-99 *y-98 :100; // lost of own ballistas f.e. 100% - 33% *6 lost :100 = 4 own lost (and 2 of the commanders)
+!!VRw82&3:-y-9; // remove the lost ballistas
+!!VRw82&3/y-4<0:S0; // remove all ballistas from w-var, if there is no (more) a stack
+
+!!BMy-3&y-3>-1:B?y-7 N?y-8; // get initial and actual number of the tents
+!!VRy-9:Sy-7 -y-8 -v852; // lost tents (initial -actual -summoned by hierophant)
+!!VRw81:-y-9; // remove the lost tents
+!!VRw81&y-3<0:S0; // remove all tents from w-var, if there is no (more) a stack
+
+!!BMy-4&y-4>-1:B?y-7 N?y-8; // get initial and actual number of the ballistas
+!!VRy-9:Sy-7 -y-8 +v852; // lost ballistas (initial -actual + negativ value of the summoned by ogre leader)
+!!VRw82&y-10=0:-y-9; // remove the lost ballistas (only, if it was no siege battle)
+!!VRw82&y-4<0/y-10=0:S0; // remove all ballistas from w-var, if there is no (more) a stack (only, if it was no siege battle)
+
+!!BMy-5&y-5>-1:B?y-7 N?y-8 T?y-10; // get initial and actual number + type of the ammo carts
+!!VRy-5&y-10<>148:S-1; // no stack, if there are no ammo carts (because another creature can stand on the original cart-position, if they are destroyed)
+!!VRy-9:Sy-7 -y-8; // lost ammo carts
+!!VRw83:-y-9; // remove the lost ammo carts
+!!VRw83&y-5<0:S0; // remove all ammo carts from w-var, if there is no (more) a stack
+
+!!BMy-6&y-6>-1:B?y-7 N?y-8 T145; // get initial and actual number of the catapults, convert them back to usual catapults
+!!VRy-9:Sy-7 -y-8; // lost catapults
+!!VRw120&y-10=0:-y-9; // remove the lost catapults (only, if it was no siege battle)
+!!VRw120&y-6<0/y-10=0:S1; // remove all catapults from w-var, if there is no (more) a stack (only, if it was no siege battle)
+
+!!FU7801:Py-2; // correct hero's equipped artifacts according to the w-vars
+
+****************
+
+!?BA53&v847=1; // end of battle (if someone has surrended / retreated)
+!!FU&$battleloser$<0:E; // exit, if no fight between heroes (no battleloser)
+!!IF:W$battleloser$; // activate losers w-vars
+!!VRw81:S0; !!VRw82:S0; !!VRw83:S0; !!VRw120:S0; // remove his war machines
+!!FU7801:P$battleloser$; // correct hero's equipped artifacts according to the w-vars
+
+
+------------------------         F U N C T I O N S       --------------------
+
+!?FU7795;
+** every day: calls buying function for AI, if there is a hero inside (25% chance to be triggered)
+** x16: town is the x16th town of the current player
+
+!!OW:W-1/x16/?y1; // get next town of the current player to y1
+
+!!CA0/y1:H1/?i H0/?j; // get visiting and garrison hero
+!!FU&i<0/j<0:E; // exit if there is no
+!!VRi&i<0:Sj; // set hero to garrison hero, if there is no visiting hero
+
+!!CA0/y1:P?y7/?y8/?y9; // get towns position
+
+!!FU7802:Pi/y7/y8/y9; // call buying routine
+****************
+
+!?FU7799;
+** calculates sum of hp of defending monsters on the battlefield,
+** only for neutral monsters with an random hero (script72)
+** y-100 = return value
+** x16 stack num
+
+!!BMx16:H?y1 B?y2 F?y5; //get ceature number, hp and type
+!!VRy2:*y1; //calculate hp of stack
+!!VRy5:&64; // check for bit 7 (war machine)
+!!VRy-100&y5<>64:+y2; //add hp to y-100 if it is not a war machine
+************************
+
+
+!?FU7800;
+** corrects hero's w vars according to war machine equipment
+** x1: hero number
+
+!!IF:Wx1; // use hero's w variables
+!!HEx1:A2/6/?y1/?y2; //y2: nr of equipped first aid tents
+!!VRw81&y2=0/w81<>0:S0;
+!!VRw81&y2=1/w81=0:S1;
+
+!!HEx1:A2/4/?y1/?y2; //y2: nr of equipped ballistas
+!!VRw82&y2=0/w82<>0:S0;
+!!VRw82&y2=1/w82=0:S1;
+
+!!HEx1:A2/5/?y1/?y2; //y2: nr of equipped ammo carts
+!!VRw83&y2=0/w83<>0:S0;
+!!VRw83&y2=1/w83=0:S1;
+
+!!VRw120&w120<0:S1; // at least one remaining catapult
+****************
+
+
+!?FU7801;
+** corrects hero's war machine eqipment according to hero's w vars
+** x1: hero number
+
+!!IF:Wx1; //use hero w variables
+!!HEx1:A2/6/?y1/?y2; //y2: nr of equipped tents
+!!HEx1&w81>0/y2=0:A1/6/15; //equip first aid tent if necessary
+!!HEx1&w81=0/y2>0:A3/6/1/1; //remove first aid tent if necessary
+
+!!HEx1:A2/4/?y1/?y2; //y2: nr of equipped ballistas
+!!HEx1&w82>0/y2=0:A1/4/13; //equip ballista if necessary
+!!HEx1&w82=0/y2>0:A3/4/1/1; //remove ballista if necessary
+
+!!HEx1:A2/5/?y1/?y2; //y2: nr of equipped ammo carts
+!!HEx1&w83>0/y2=0:A1/5/14; //equip ammo cart if necessary
+!!HEx1&w83=0/y2>0:A3/5/1/1; //remove ammo cart if necessary
+
+!!VRw120&w120<1:S1; // at least one remaining catapult
+!!HEx1:A2/5/?y1/?y2; //y2: nr of equipped catapults
+!!HEx1&y2=0:A1/3/16; //equip catapult if necessary
+****************
+
+
+!?FU7802; // buying WMs inside a town
+** x1 hero number
+** x2 - x4 position of object that stores number of available machines
+
+** v1 - available ballistas
+** v2 - available Ammo carts
+** v3 - available First Aid Tents
+** v4 - available Catapults
+
+** y5 = number of usual WMs
+** y6 = number of Ballistas in Ballista Yard (Stronghold only)
+** y7 = number of Catapults in this town
+** y8 = subtype of town
+
+!!POx2/x3/x4:H?y5 T?y6 V1/?y7; //get number of available WMs in the town
+!!OBx2/x3/x4:U?y8; //get town subtype
+
+!!VRv1:C0/0/0/0; // init v1-v4
+!!VRv1|y8=0/y8=5/y8=8:Sy5; !!VRv2|y8=2/y8=3/y8=6:Sy5; !!VRv3|y8=1/y8=4/y8=7:Sy5; // set correct WM depending on the town type
+!!VRv1&y8=6:Sy6; // set number of Ballistas in Ballista Yard (Stronghold only)
+!!VRv4:Sy7; // number of Catapults
+
+!!DO94/1/100/1&1000:Px1;  // buy for Human Players
+!!DO95/1/100/1&-1000:Px1; // buy for AI
+
+!!VRy5:S0; !!VRy6:S0; !!VRy7:S0; // init
+!!VRy5|y8=0/y8=5/y8=8:Sv1; !!VRy5|y8=2/y8=3/y8=6:Sv2; !!VRy5|y8=1/y8=4/y8=7:Sv3; // set correct WM depending on the town type
+!!VRy6&y8=6:Sv1; // set number of Ballistas in Ballista Yard (Stronghold only)
+!!VRy7:Sv4; // number of Catapults
+
+!!POx2/x3/x4:Hy5 Ty6 V1/y7; // write the new values back
+!!FU7801:Px1; // refresh artifact slots
+***********************
+
+
+!?FU7803; // increase the  number of available machines at towns and war machine factory every week
+** x1  : object type
+** x16 : loop number
+
+!!VRv1&x16=1:S-1; // initialize in first loop
+!!UN:Ux1/-1/-1/1; //v1 v2 v3 coordinates
+
+//war machine factory
+!!POv1/v2/v3&x1=106:V0/?y1; !!POv1/v2/v3&x1=106/y1<10:V0/d1; // increase number of available machines by 1 (up to 10 WMs)
+!!POv1/v2/v3&x1=106:V1/?y1; !!POv1/v2/v3&x1=106/y1<10:V1/d1; // increase number of available machines by 1 (up to 10 WMs)
+!!POv1/v2/v3&x1=106:V2/?y1; !!POv1/v2/v3&x1=106/y1<10:V2/d1; // increase number of available machines by 1 (up to 10 WMs)
+!!POv1/v2/v3&x1=106:V3/?y1; !!POv1/v2/v3&x1=106/y1<10:V3/d1; // increase number of available machines by 1 (up to 10 WMs)
+!!FU&x1=106:E; // exit, if WM-factory
+
+// towns
+!!CAv1/v2/v3:B3/10; //check if village hall is built
+!!CAv1/v2/v3&-1:B3/11; // if not check if town hall is built
+!!CAv1/v2/v3&-1:B3/12; //if not check if city hall is built
+!!CAv1/v2/v3&-1:B3/13; //if not check if capitol is built
+!!POv1/v2/v3&-1:H0 T0 V1/0; // if not (demolished town), remove all available war machines
+!!FU&-1:E; // exit, if not (demolished town)
+
+!!POv1/v2/v3&$day$=1:H0 T0 V1/0; //init H, T and V1 attributes on first day
+!!POv1/v2/v3:H?y3 T?y4 V1/?y5; //get H, T and V1 values in towns
+
+!!CAv1/v2/v3:B3/16 O?y1; //check if blacksmith is built, get owner
+!!POv1/v2/v3&-1:H0 T0 V1/0; // if not remove all available war machines
+!!FU&-1:E; // and exit
+
+!!OBv1/v2/v3:U?y2; //get town subtype
+!!VRy4:S2; // default number of  additional machines
+!!VRy4&y1<0:S1; // only one, if it is a unowned town
+
+!!POv1/v2/v3&y3<9:Hdy4; // add 2 usual war machines (max 10)
+!!POv1/v2/v3&y5<9:V1/dy4; // add 2 catapults (max 150)
+!!CAv1/v2/v3&y2=6:B3/22; // Ballista Yard in Stronghold? (flag 1)
+!!POv1/v2/v3&y4<9/y2=6/1:Tdy4; // add 2 ballistas to stronghold (max 10)
+***********************
+
+
+!?FU7804;
+//set correct w vars for heroes at the beginning of the game
+//x16: hero number
+
+!!HEx16:Ed/?y3; // get hero's level
+!!VRy3::4 +1; // one additional war machine all 4 levels
+!!IF:Wx16; //use hero's w# variable
+!!HEx16:A2/6/?y1/?y2; //y2: nr of equipped first aid tents
+!!VRw81&y2=0:S0;
+!!VRw81&y2=1:Sy3;
+
+!!HEx16:A2/4/?y1/?y2; //y2: nr of equipped ballistas
+!!VRw82&y2=0:S0;
+!!VRw82&y2=1:Sy3;
+
+!!HEx16:A2/5/?y1/?y2; //y2: nr of equipped ammo carts
+!!VRw83&y2=0:S0;
+!!VRw83&y2=1:Sy3;
+
+!!VRw120:Sy3; // catapult
+***********************
+
+
+!?FU7805;
+** remove one hit point from every full healed stack that have lost at least one creature
+** (not full resurrected yet)
+!!IF:V1/0; // init
+!!BMx16:H?y1 L?y2 B?y3 N?y4; //y1 hp y2 lost y3 original number y4 actual number
+!!FU&y4<1:E; // exit, if the stack is dead
+!!BMx16&y1>1/y2=0/y3>y4:L1; // set the lost HP to 1, if the stack has lost some creatures before, but has full health (at least 1)
+***********************
+
+
+!?FU7806;
+//gets the stack with the most lost HPs (used by the AI as healing destination)
+//x16: stack number
+//y-9 will get the found stack number
+//y-99 will store the highest lost HPs
+
+!!BMx16:H?y1 L?y2 B?y3 N?y4; //y1 hp y2 lost y3 original number y4 actual number
+!!FU&y4<1:E; // exit, if the stack is dead
+!!VRy5:Sy1 *y3; // max. number of HPs (at the start of the battle)
+!!VRy6:Sy1 *y4 -y2; // current number of HPs
+!!VRy7:Sy5 -y6; // the lost HPs
+!!FU&y7<y-99:E; // exit, if not the stack with the most lost HPs
+!!VRy-99:Sy7; !!VRy-9:Sx16; // else set new max. lost HP and new stack number
+***********************
+
+
+!?FU7807;
+//calculates random heal value (first aid skill and specialists are taken into count)
+//x1: first skill level
+//x2: side index
+** y-100 - return value
+
+!!VRy1:S25 *x1 +25 -1; //y1 max limit for random heal
+!!VRy2:S0 Ry1 +1; //y2 1-25/1-50/1-75/1-100 random heal value
+
+!!BHx2:N?y5; //get hero number in y5
+!!HEy5:X?y6/?y7/d/d/d/d/d Ed/?y4; // get heroe's specialisation and level
+!!VRy4&y6=0/y7=27:*5 +100; // if he/she is specialist of first aid skill, get the Skill-Bonus in % (5% per level)
+!!VRy2&y6=0/y7=27:*y4 :100; //calculate increased heal value, if FA-specialist
+
+!!VRy-100:+y2; //add to y-100
+*******************************
+
+
+!?FU7808; //called when two AI heroes meets
+** x1 - hero that triggered meeting
+** x2 - other hero
+** y1 - x1's owner
+** y2 - x2's owner
+** y3 - source hero
+** y4 - destination hero
+!!HEx1:O?y1; !!HEx2:O?y2; //get the owners
+!!FU&y1<>y2:E; // exit, if not the same owner (=allied or battle)
+
+!!VRv1:C0/0; // init v1 and v2
+!!DO7809/0/6/1:Px1/1; // get the sum of first hero's creatures to v1
+!!DO7809/0/6/1:Px2/2; // get the sum of the second hero's creatures to v2
+
+!!VRy3&v1=>v2:Sx2; !!VRy4&v1=>v2:Sx1; // set source and destination hero
+!!VRy3&v1<v2:Sx1; !!VRy4&v1<v2:Sx2; // set source and destination hero
+!!IF:Wy3; // activate w-vars of the source hero
+!!FU&w81<1/w82<1/w83<1/w120<2:E; // exit, if the hero has no machines to transfer
+
+!!VRy5:Sw81; !!VRy6:Sw82; !!VRy7:Sw83; !!VRy8:Sw120; // save w-vars to y5-y8
+!!VRw81:S0; !!VRw82:S0; !!VRw83:S0; !!VRw120:S1; // remove all war machines
+!!FU7801:Py3; // correct equipped WMs for the source hero
+
+!!IF:Wy4; // activate w-vars of the destination hero
+!!VRw81:+y5; !!VRw82:+y6; !!VRw83:+y7; !!VRw120:+y8; // add the WMs to the destination hero
+!!FU7801:Py3; // correct his equipped WMs
+************************
+
+
+!?FU7809; // calculate the sum of the HPs of x1 creatures; return in vx2; x16=slot nr.
+!!HEx1:C0/x16/?y1/?y2; // get type and number
+!!FU&y1<0:E; // exit, if there are no creatures in this slot
+!!MA:Py1/?y3; // get their HPs
+!!VRy4:Sy3*y2; // sum of the HPs
+!!VRvx2:+y4; // add to the total
+************************
+
+--------------- T R I G G E R S  F O R  H E R O  M E E T I N G --------------
+
+!?CM3&v847=1; //transfer window
+** y-1 - the clicked field
+** y-2 - owner left hero
+** y-3 - owner right hero
+** y-4 - source hero (the one, who gives the WMs)
+** y-5 - destination hero (the one, who gets the WMs)
+** y-6  - index of the w-var, depending on the clicked field
+** y-7 - number of available WMs
+** y-8 - temp. counter
+** y-9 - choosen number to be transfered
+
+** z-1 - name of the War machine
+** z-2 - name of the source hero
+** z-3 - name of the destination hero
+** z-4 - how many z-1s to transfer from z-2 to z-3
+
+!!CM:F?s; // get flag of the click
+!!CM:H?f/?g; //get the left and right hero
+!!CM:I?y-1; //get the slot number
+!!IF:V2/0;
+!!IF&y-1>39/y-1<44:V2/1; // WM-slots for left hero
+!!IF&y-1>58/y-1<63:V2/1; // WM-slots for right hero
+!!FU|s<>0/-2:E; // exit, if no leftclick or not on a WM-field
+
+!!CM:R0; // disable standard mouse action
+!!HEf:O?y-2;  !!HEg:O?y-3; //get the owner of left and right hero
+!!IF&y-2<>y-3:M1/z173151; // no-transfer-between-allies-message
+!!FU&y-2<>y-3:E; // exit, if not the same owner (f.e. allied)
+
+!!VRy-4&y-1<59:Sf; !!VRy-5&y-1<59:Sg; // set y-4 to the source-hero, y-5 to the destination hero
+!!VRy-4&y-1>58:Sg; !!VRy-5&y-1>58:Sf;
+!!HEy-4:B0/?z-2; !!HEy-5:B0/?z-3; // get name of the source and destination hero
+
+!!VRy-6|y-1=42/y-1=61:S81; !!UN|y-1=42/y-1=61:N0/-1/6; // w-var and name lookup for Tents
+!!VRy-6|y-1=40/y-1=59:S82; !!UN|y-1=40/y-1=59:N0/-1/4; // w-var and name lookup for Ballistas
+!!VRy-6|y-1=41/y-1=60:S83; !!UN|y-1=41/y-1=60:N0/-1/5; // w-var and name lookup for Carts
+!!VRy-6|y-1=43/y-1=62:S120; !!UN|y-1=43/y-1=62:N0/-1/3; // w-var and name lookup for Catapults
+
+!!IF:Wy-4; // activate w-vars for the source hero
+!!VRy-7:Swy-6; // get number of available war machines (indirect reference)
+!!VRy-7&y-6=120:-1; // for catapults: decrease transferable number by one (at least one catapult remains at the hero)
+!!VRz-1&y-7<>1:S^%Z-1s^; // get plural form of the name of the WM
+
+!!IF&y-7<1/y-6<120:M1/z173152; // show messages: no WMs to be transfered
+!!IF&y-7<1/y-6=120:M1/z173153; // show messages: no catapult to be transfered (1 must stay)
+!!FU&y-7<1:E; // and exit
+
+** init z-vars z480-z490
+!!VRz480:S^^; !!VRz481:S^^; !!VRz482:S^^; !!VRz483:S^^; !!VRz484:S^^; !!VRz485:S^^; !!VRz486:S^^; !!VRz487:S^^; !!VRz488:S^^; !!VRz489:S^^; !!VRz490:S^^;
+!!VRz490:Sz173038; // transfer all
+!!VRz491:Sz173039; // don't transfer
+!!VRz-4:Sz173028; // how many z-1s to transfer from z-2 to z-3
+** 1-10 to transfer
+!!VRy-8:S0; // init
+!!VRy-8:+1; !!VRz480&y-7>=y-8:Sz173037; !!VRy-8:+1; !!VRz481&y-7>=y-8:Sz173037;
+!!VRy-8:+1; !!VRz482&y-7>=y-8:Sz173037; !!VRy-8:+1; !!VRz483&y-7>=y-8:Sz173037;
+!!VRy-8:+1; !!VRz484&y-7>=y-8:Sz173037; !!VRy-8:+1; !!VRz485&y-7>=y-8:Sz173037;
+!!VRy-8:+1; !!VRz486&y-7>=y-8:Sz173037; !!VRy-8:+1; !!VRz487&y-7>=y-8:Sz173037;
+!!VRy-8:+1; !!VRz488&y-7>=y-8:Sz173037; !!VRy-8:+1; !!VRz489&y-7>=y-8:Sz173037;
+
+!!IF:G1/1/1024/-4/480/481/482/483/484/485/486/487/488/489/490/491; // ask how many should be transfered, return in v1, initial=transfer all
+!!FU|v1=2048/v1=0:E; // exit, if no transfer is choosen or canceled
+
+** set y-9 to the choosen number
+!!VRy-9&v1=1:S1; !!VRy-9&v1=2:S2; !!VRy-9&v1=4:S3; !!VRy-9&v1=8:S4; !!VRy-9&v1=16:S5; !!VRy-9&v1=32:S6; !!VRy-9&v1=64:S7; !!VRy-9&v1=128:S8; !!VRy-9&v1=256:S9; !!VRy-9&v1=512:S10;
+!!VRy-9&v1=1024:Sy-7; // transfer all
+
+!!VRwy-6:-y-9; // remove the WMs
+!!IF:Wy-5; // activate w-vars for the destination hero
+!!VRwy-6:+y-9; // add the WMs
+
+!!FU7801:Py-4; !!FU7801:Py-5; // correct equipped WMs according to the w-vars for the hero
+
+
+**************************************
+** triggers for meeting heroes (AI) **
+**************************************
+!?HE0&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P0/y-1;
+!?HE1&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P1/y-1;
+!?HE2&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P2/y-1;
+!?HE3&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P3/y-1;
+!?HE4&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P4/y-1;
+!?HE5&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P5/y-1;
+!?HE6&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P6/y-1;
+!?HE7&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P7/y-1;
+!?HE8&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P8/y-1;
+!?HE9&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P9/y-1;
+!?HE10&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P10/y-1;
+!?HE11&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P11/y-1;
+!?HE12&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P12/y-1;
+!?HE13&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P13/y-1;
+!?HE14&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P14/y-1;
+!?HE15&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P15/y-1;
+!?HE16&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P16/y-1;
+!?HE17&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P17/y-1;
+!?HE18&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P18/y-1;
+!?HE19&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P19/y-1;
+!?HE20&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P20/y-1;
+!?HE21&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P21/y-1;
+!?HE22&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P22/y-1;
+!?HE23&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P23/y-1;
+!?HE24&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P24/y-1;
+!?HE25&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P25/y-1;
+!?HE26&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P26/y-1;
+!?HE27&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P27/y-1;
+!?HE28&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P28/y-1;
+!?HE29&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P29/y-1;
+!?HE30&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P30/y-1;
+!?HE31&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P31/y-1;
+!?HE32&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P32/y-1;
+!?HE33&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P33/y-1;
+!?HE34&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P34/y-1;
+!?HE35&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P35/y-1;
+!?HE36&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P36/y-1;
+!?HE37&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P37/y-1;
+!?HE38&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P38/y-1;
+!?HE39&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P39/y-1;
+!?HE40&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P40/y-1;
+!?HE41&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P41/y-1;
+!?HE42&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P42/y-1;
+!?HE43&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P43/y-1;
+!?HE44&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P44/y-1;
+!?HE45&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P45/y-1;
+!?HE46&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P46/y-1;
+!?HE47&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P47/y-1;
+!?HE48&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P48/y-1;
+!?HE49&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P49/y-1;
+!?HE50&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P50/y-1;
+!?HE51&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P51/y-1;
+!?HE52&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P52/y-1;
+!?HE53&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P53/y-1;
+!?HE54&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P54/y-1;
+!?HE55&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P55/y-1;
+!?HE56&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P56/y-1;
+!?HE57&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P57/y-1;
+!?HE58&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P58/y-1;
+!?HE59&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P59/y-1;
+!?HE60&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P60/y-1;
+!?HE61&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P61/y-1;
+!?HE62&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P62/y-1;
+!?HE63&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P63/y-1;
+!?HE64&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P64/y-1;
+!?HE65&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P65/y-1;
+!?HE66&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P66/y-1;
+!?HE67&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P67/y-1;
+!?HE68&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P68/y-1;
+!?HE69&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P69/y-1;
+!?HE70&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P70/y-1;
+!?HE71&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P71/y-1;
+!?HE72&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P72/y-1;
+!?HE73&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P73/y-1;
+!?HE74&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P74/y-1;
+!?HE75&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P75/y-1;
+!?HE76&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P76/y-1;
+!?HE77&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P77/y-1;
+!?HE78&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P78/y-1;
+!?HE79&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P79/y-1;
+!?HE80&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P80/y-1;
+!?HE81&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P81/y-1;
+!?HE82&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P82/y-1;
+!?HE83&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P83/y-1;
+!?HE84&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P84/y-1;
+!?HE85&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P85/y-1;
+!?HE86&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P86/y-1;
+!?HE87&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P87/y-1;
+!?HE88&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P88/y-1;
+!?HE89&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P89/y-1;
+!?HE90&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P90/y-1;
+!?HE91&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P91/y-1;
+!?HE92&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P92/y-1;
+!?HE93&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P93/y-1;
+!?HE94&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P94/y-1;
+!?HE95&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P95/y-1;
+!?HE96&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P96/y-1;
+!?HE97&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P97/y-1;
+!?HE98&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P98/y-1;
+!?HE99&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P99/y-1;
+!?HE100&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P100/y-1;
+!?HE101&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P101/y-1;
+!?HE102&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P102/y-1;
+!?HE103&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P103/y-1;
+!?HE104&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P104/y-1;
+!?HE105&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P105/y-1;
+!?HE106&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P106/y-1;
+!?HE107&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P107/y-1;
+!?HE108&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P108/y-1;
+!?HE109&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P109/y-1;
+!?HE110&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P110/y-1;
+!?HE111&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P111/y-1;
+!?HE112&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P112/y-1;
+!?HE113&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P113/y-1;
+!?HE114&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P114/y-1;
+!?HE115&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P115/y-1;
+!?HE116&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P116/y-1;
+!?HE117&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P117/y-1;
+!?HE118&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P118/y-1;
+!?HE119&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P119/y-1;
+!?HE120&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P120/y-1;
+!?HE121&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P121/y-1;
+!?HE122&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P122/y-1;
+!?HE123&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P123/y-1;
+!?HE124&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P124/y-1;
+!?HE125&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P125/y-1;
+!?HE126&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P126/y-1;
+!?HE127&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P127/y-1;
+!?HE128&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P128/y-1;
+!?HE129&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P129/y-1;
+!?HE130&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P130/y-1;
+!?HE131&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P131/y-1;
+!?HE132&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P132/y-1;
+!?HE133&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P133/y-1;
+!?HE134&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P134/y-1;
+!?HE135&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P135/y-1;
+!?HE136&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P136/y-1;
+!?HE137&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P137/y-1;
+!?HE138&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P138/y-1;
+!?HE139&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P139/y-1;
+!?HE140&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P140/y-1;
+!?HE141&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P141/y-1;
+!?HE142&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P142/y-1;
+!?HE143&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P143/y-1;
+!?HE144&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P144/y-1;
+!?HE145&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P145/y-1;
+!?HE146&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P146/y-1;
+!?HE147&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P147/y-1;
+!?HE148&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P148/y-1;
+!?HE149&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P149/y-1;
+!?HE150&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P150/y-1;
+!?HE151&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P151/y-1;
+!?HE152&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P152/y-1;
+!?HE153&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P153/y-1;
+!?HE154&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P154/y-1;
+!?HE155&v847=1/-1000; !!HE-1:N?y-1; !!FU7808:P155/y-1;
+

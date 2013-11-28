@@ -1,0 +1,19 @@
+#	Text resource for "script60.erm" document		
+160000	Forgotten Shrine
+
+(Not visited)	<!#S>	01.08.2004
+160001	Forgotten Shrine
+
+(Visited)	<!#S>	01.08.2004
+160002	An ancient spirit has granted you a blessing for your next battle.	<!!M>	01.08.2004
+160003	You have reached a shrine, abandoned by its servants long ago.	<!!S>	01.08.2004
+160004	Forgotten Shrine	<!!S>	01.08.2004
+160005	The spirits inhabiting this place are still strong. Will you enter the shrine and pray?	<!!Q>	01.08.2004
+160006	You enter the shrine and pray at the altar for success in your battles. The spirits are benevolent and grant your troops a blessing for the next battle.	<!!M>	01.08.2004
+160007	You already have the blessing of an ancient spirit upon your army. A prayer at the altar right now will not result in anything... beneficial.	<!!M>	01.08.2004
+160008	The prayer requires a good amount of spiritual and physical power. You will need rest before praying.	<!!M>	01.08.2004
+160009	You decide to leave this place and its spirits undisturbed.	<!!M>	01.08.2004
+160010	Another one lays %Z3 on %Z-2's troops.	<!!S>	01.08.2004
+160011	An ancient spirit lays %Z2 on %Z-1's troops.	<!!Q>	01.08.2004
+160012	An ancient spirit lays %Z2 on %Z-1's troops. %Z-3	<!!Q>	01.08.2004
+160013	An ancient spirit lays %Z3 on %Z-2's troops.	<!!Q>	01.08.2004

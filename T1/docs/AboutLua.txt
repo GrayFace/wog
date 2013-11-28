@@ -1,0 +1,616 @@
+
+Here you can find description of Lua: http://www.lua.org/manual/5.1/
+I'll describe the syntax shortly. If you need more informatin, read Chapter 2 there.
+Standard Lua functions are described in Chapter 5. I won't describe them here.
+Here is also a book about Lua: http://www.lua.org/pil/ (note that this edition aims Lua 5.0, and WoG uses Lua 5.1.4, so some information there may be out of date)
+
+--------------- Advantages of Lua ---------------
+
+1) There's no need to reserve variables and function numbers. New towns, new commanders etc. can be scripted right in Lua.
+2) Easy and flexible syntax
+3) It can be the base of many other things. For example, new custom dialogs are based on Lua instead of old patterns.
+4) We can also make wrappers for some ERM stuff with human-readable names.
+
+--------------- Placement ---------------
+
+Lua scripts should be placed in one of the following folders:
+Mods\Wog\Wogify\ - Wogify scripts
+Mods\Wog\Scripts\ - library scripts
+Mods\Wog\Map\ - scripts that are loaded before map scripts, even if "no wogification" is set in WoG Options
+Mods\Wog\Global\ - scripts that run when the game is started
+
+In global events of the map, place "ZVSL." at the beginning of event name. E.g. "ZVSL.Give Army".
+
+--------------- Lua Syntax ---------------
+
+Lua syntax follows standards common for programming languages.
+To give you the idea of what it is, let's start with an example. Here is bitwise OR operation written in Lua (you won't need to write such things as there are hard-coded functions for bitwise opreations in WoG):
+
+ local maxnum = 4294967295
+ local overnum = maxnum + 1
+
+ function Or(x, y)
+	if x < 0 then  x = x + overnum  end
+	if y < 0 then  y = y + overnum  end
+	if x < y then  x, y = y, x  end          -- make x bigger than y
+	local b = 1                              -- current bit
+	local d = 2                              -- current divider
+	while y >= b do
+		if (x % d < b) and (y % d >= b) then   -- x had a '0', y had a '1'
+			x = x + b                            -- add bit
+		end
+		b = d
+		d = d*2
+	end
+	return x
+ end
+
+
+=== Syntax ===
+
+Single line comments are written after '--'. Multyline comments start with '--[[' and end with ']]'. You can also put any number of '=' symbols between two brackets of multyline comment: '--[==[' ... ']==]'. Only closing brackets with the same number of '=' symbols would close such comment.
+You can use ';' at the end of statements, but you can omit it. You can write statements on multiple lines without problems.
+
+
+=== Variables, Assignment ===
+
+Local variables:
+ local a = 5
+They are visible in the block they are declared in and in all embedded blocks (e.g. functions declared after the local variable). They aren't saved in savegame.
+
+Assignment:
+ a = 5   -- set a to 5
+
+Multiple assignment is supported:
+ x, y, z = 1, 2, 3
+
+Each script has its own set of variables (it's called environment). Variables stored in '_G' (e.g. _G.MyFunction) can be read by all scripts. Variables stored in 'global' (e.g. global.MyFunction) can be read by all scripts, but they aren't bound to the game you play. So, they aren't saved in a savegame, but persist when you start another map.
+Scripts themselves are also saved in savegame and are run each time the game is loaded. This doesn't apply to scripts in "Global" folder, which behave somewhat similar to 'global' variables.
+When the script is run the first time (that is, on map start), the 'start' variable is set to true. Thus, you should initialize variables like this:
+ if start then
+	SomeNumber = 0
+	SomeString = ""
+ end
+Note that functions aren't saved to savegame, so you wouldn't normally create functions inside "if start then" block.
+
+
+=== Types ===
+
+There are 6 main types of variables in Lua: number(floating-point), string, boolean(true/false), nil(a special value meaning 'not assigned'), table and function. There are also coroutines which are neat, but you probably won't need them.
+In Lua any variable may hold value of any type.
+
+Strings are put in double quotes ("Hello"), single quotes ('Hello') or in double brackets ([[Hello]]). You can also put any number of '=' characters between the two brackets ([=[Hello]=])
+Note that '\' character is used in escape sequences, so you should write it twice if you want it to appear in the string enclised in single or double quotes. Strings enclosed in brackets interpret "\" as is. I suggest using '/' insted of '\' in file paths.
+
+Table is a set of key-value pairs. You can use any value as key. To create a table use following syntax:
+ a = {value1, value2, value3}   -- a[1] = value1, a[2] = value2, a[3] = value3
+ a = {value1, value2, key3 = value3, key4 = value4}   -- a[1] = value1, a[2] = value2, a["key3"] = value3, a["key4"] = value4
+ a = {[1] = value1, [2] = value2, ["key3"] = vakue3, ["key4"] = value4}   -- same as above
+Instead of ',' you can use ';' - it would work completely the same.
+You can also refer to table elements as a.key which is the same as a["key"]
+
+Functions are as well kept in variables:
+ function Func1(param1, param2)
+ end
+
+is the same as
+ Func1 = function(param1, param2)
+ end
+
+So, Func1 is assigned the function. You can as well add 'local' word before function declaration to declare a local vairable:
+ local function Func1(param1, param2)
+ end
+
+this translates to
+ local Func1
+ Func1 = function(param1, param2)
+ end
+
+Functions can take and return variable number of parameters:
+ function Sum(x, ...)
+	if x then
+		return x + Sum(...)
+	else
+		return 0
+	end
+ end
+ 
+ function MultiParamTwoRet(...)
+	local params = {...}  -- pack all parameters into a table
+	return params[1], params[#params]  -- return the first and the last parameter passed to the function
+ end
+
+A function may return variable number of values by creating a table with the values and using unpack() on it.
+ function MultipleReturn(value, repeats)
+	local ret = {}
+	for i = 1, repeats do
+		ret[i] = value
+	end
+	return unpack(ret)
+ end
+
+A function can return all results of another function or leave just some of them.
+ return f(x)   -- return all results of f
+ return (f(x))   -- results adjusted to 1 (all other results are discarded, except the first)
+ return 2 * f(x)   -- results adjusted to 1 (and multiplied by 2)
+ return x, f(x)   -- return x and all results of f
+ f(x); return   -- results discarded
+
+
+=== Operations ===
+
+Numerical operators: +, -, *, /, %(devision reminder), ^(power).
+ i = (i + 3)*2
+ i = 2^0.5   -- i = 1,4142135623731
+Note that / is a floating-point devision. For integer division you should use Div or math.floor function:
+ i = i:div(2)
+ i = math.floor(i/2)  -- the same as above
+And % works with negative numbers in a way unusual for programming languages - it's always positive, like in math.
+The equation "A:div(B)*B + A%B == A" always holds.
+Strings are automatically converted to numbers when used in numerical operations:
+ i = 5 + "3"   -- i = 8
+ i = 5 + "hello"   -- an error will be shown saying that the string isn't convertable to number
+
+Strings concatination: ..
+ s = "Hello, ".."world!"   -- s = "Hello, world!"
+You can use numbers in cancatination. They are automatically converted to string:
+ s = "Babilon "..5   -- s = "Babilon 5"
+
+Comparsion operators: ==, ~=(this is 'not equal'), <=, >=, <, >
+ b = (5 ~= 3)   -- b = true
+
+Operators 'not', 'and', 'or'.
+You can use any types as arguments. When you pass a non-boolean, only nil is considered false. Any other value, including number 0, is taken for true.
+'not' always returns a boolean. 'not not' will convert a type to boolean:
+ i = not false      -- i = true
+ i = not true       -- i = false
+ i = not not nil    -- i = false
+ i = not not "Hi!"  -- i = true
+ i = not not 0      -- i = true
+'or' works this way: it returns the first argument if it's not false and not nil, otherwise it returns the second.
+This allows you to use it in an interesting way. Let's say there is a function 'f' that returnes some number or 'nil' in case it fails. If you want to use default value in case of 'nil' you can do it in compact way:
+ i = f() or 5   -- here the default value is 5. If f returns a number, it would be used. In case of 'nil' the second operand would be used which is the default value.
+'and' works this way: it returns the first argument if it's false or nil, otherwise it returns the second.
+It can also be used in interesting ways. For example, if you want to call function 'f', but it may be undefined, you can use the following:
+ i = f and f()  -- if f is not defined i would be 'nil', otherwise f would be called.
+As usual, 'and' has a higher priority than 'or'. We can put two examples together:
+ i = f and f() or 5  -- if f is undefined or if it returns 'nil', the default value 5 would be used.
+You can do a conditional expression this way:
+ i = condition and vIfTrue or vIfFalse  -- same as (condition ? vIfTrue : vIfFalse) in C, but only in case vIfTrue can't be false or nil.
+If vIfTrue isn't false or nil, this is the same as the following:
+ if condition then
+	i = vIfTrue
+ else
+	i = vIfFalse
+ end
+
+For example, you can convert a boolean value to number (1 or 0) this way:
+ i = b and 1 or 0  -- where 'b' is boolean. If 'b' is true, 'i' will be 1. If 'b' is false, 'i' would be 0.
+
+Length operator: #
+For a string it returns number of characters.
+ i = #"Hello"   -- i = 5
+For tables it returns number of integer keys starting with 1 and going without gaps:
+ i = #{"a", "b", "c", d = 5, e = 6}  -- i = 3, cause "a", "b", "c" are at indexes 1,2,3 and "d" and "e" aren't numerical.
+ i = #{"a", "b", "c", nil, "d"}  -- i may be 3 or 5. In case there are gaps (nil's) the result is undefined.
+
+
+=== if ===
+
+If follows the same definition of truth as 'not', 'and, and 'or'.
+ if <condition> then
+	<do something>
+ end
+
+ if <condition> then
+	<do something>
+ else
+	<do something else>
+ end
+
+There is also 'elseif' keyword.
+ if <condition> then
+	<do something>
+ elseif <condition 2> then
+	<do something 2>
+ elseif <condition 3> then
+	<do something 3>
+ ..... -- any number of elseif's
+ else  -- (there can be no else, just elseif's)
+	<do something>
+ end
+
+For example, let's choose American president by his index:
+ i = 3
+ if i == 0 then
+	president = "Bush"
+ elseif i == 1 then
+	president = "Obama"
+ elseif i == 2 then
+	president = "McCain"
+ elseif i == 3 then
+	president = "Pacman"
+ else
+	president = "Chtulhu"
+ end
+ -- as a result for i = 3, president = "Pacman"
+
+
+=== while ===
+
+ while <condition> do
+	<do something>
+ end
+
+
+=== for ===
+
+The first form:
+ for <variable> = <start value>,<stop value> do
+	<do something>
+ end
+Example:
+ s = ""
+ for i = 1,7 do
+	s = s..i
+ end
+ -- s = "1234567"
+Here 'i' is loop variable, '1' is starting value, '7' is stop value.
+
+You can also specify increment:
+ for <variable> = <start value>,<stop value>,<increment> do
+	<do something>
+ end
+Example:
+ s = ""
+ for i = 1,7,2 do
+	s = s..i
+ end
+ -- s = "1357"
+Here 'i' is loop variable, '1' is starting value, '7' is stop value, '2' is increment.
+
+The second form:
+ for <1 or more variables> in <iterator> do
+	<do something>
+ end
+Iterator is a special function that returns the values that the variable will take.
+Example:
+ for k, v in pairs{a = 5, b = 7} do  -- pairs iterates over a table and returns <key>,<value> pairs in random order
+	print(k, v)
+ end
+ -- Result will be found in LuaLog.txt:
+ -- a	5
+ -- b	7
+ --  *OR*
+ -- b	7
+ -- a	5
+ 
+ for f in path.find("Mods/Wog/Wogify/*.lua") do  -- path.find will find all files that math the given mask.
+	print(f)  -- print script path
+ end
+
+
+--------------- ERM Commands ---------------
+
+All ERM commands can be accessed from Lua (exception: VR cannot be used for floating-point numbers).
+Let's start with
+ IF:M("Hello world!")  -- !!IF:M^Hello world!^
+As you see, there are no "!#" or "!!" and we simply put the parameters in parentheses.
+
+Note that we still must use parentheses after the command letter, even if the command doesn't have any parameters:
+ FU:E()  -- !!FU:E;
+
+Now, this is what we do if the reciever need parameters itself:
+ FU(555):P(1,2)  -- !!FU555:P1/2;
+
+A convinience feature: you can put the first numerical parameter right after the command letter:
+ CA(4,5,0):M2(0, 1, 10)  -- !!CA4/5/0:M2/0/1/10;
+As you can see, "M1" and "M2" are written in this menner in Help too: M2/$1/$2/$3; So, it's natural to write such commands this way. However, use this feature only where it fits. ( e.g. here's one of the worst ways to use it: FU(555):P1(2) )
+
+Now here is some get syntax:
+ local t, st = CA(4,5,0):M2(0, ?v, ?v)  -- !!CA4/5/0:M2/0/?y1/?y2;
+ local name = UN:A(2, 9, ?z)  -- !!UN:A2/9/?z-1;
+ "?v" means that it's a get syntax for an integer. "?z" is a get syntax for string variables. Instead of being written to some variable, the value is returned from the function.
+I used "t","st" insted of "y1","y2" just to make an example simplier, cause' they are all local variables after all. In fact the two strings in the example do different things. The y-variables can be accessed as ERM.y1 and ERM.y2 from Lua. So, they would do the same only if we write "ERM.v1, ERM.v2 = CA(4,5,0):M2(0, ?v, ?v)".
+
+Add syntax:
+ CA(4,5,0):M2(0, nil, {5})  -- !!CA4/5/0:M2/0/d/d5;
+Here you can see "{5}" as equivalent of "d5" in ERM and "nil" is interpretated as "d0" in ERM calls, so the value is kept unchanged.
+
+?ptr:
+There's also ?ptr to get address of an integer value the reciever operates on. This is for use with UN:C. 0 is returned if the reciever doesn't sypport ?ptr.
+ ptr = MA:P(13, ?ptr)
+
+Special cases:
+1) Sometimes commands require index of z variable. You can simply pass the string itself or ?z in all or almost all such cases.
+2) The VR reciever still can be used. You must pass a number or a string to VR(). The action would be preformed on it and it will be returned as the first result.
+ x = VR(4):R(4)  -- means that random value up to 4 is added to 4 and the result is stored in x
+ token0 = VR(""):M2("A string.of ,,tokens\nand some more tokens", 0)  -- get the first token of the string
+If you use get syntax, the get results would be returned after the VR() operand, even if the command doesn't change the operand:
+ local _,i = VR("  sting"):M5(?v)  -- I used the variable '_' as a dummy to keep the first returned valuse witch is the string "  string" itself.
+3) Also note that ERM strings are limited with 511 characters. All arguments to recievers and returned values are truncated if they take more than 511 characters. In Lua itself strings length isn't limited.
+4) FU:E cannot be used to exit Lua function, you should use 'return' for that. The goto itself works, but happens after the Lua code has done it's job. So, to go to another reciever immediately use code like this:
+ do
+	return FU:E(-2)  -- for example we want to get to previous reciever
+ end
+5) MC:S should be used tihs way:
+ MC("macro"):Sv(555)  -- note that it is reversed and there should be no $ or @ signs around macro name
+ MC("macro"):S(555)  -- set macro for number
+When setting a macro for number, MC:S returns the number. So, you can set a macro right in the function declaration:
+ FU(MC("hex2xy"):S(10)).? = function()
+ end
+
+--------------- ERM Triggers ---------------
+
+Here is how you create triggers:
+
+ OB(4, 5, 0).? = function()   -- !?OB4/5/0;
+ end
+
+ OB(4, 5, 0).$ = function()   -- !$OB4/5/0 post trigger
+ end
+
+You can also insert triggers in the beginning of triggers list. For example, this is useful in situation with scripts that temporary change spell points for one battle. If pre-battle triggers that store current spell points are inserted in the end of triggers list and post-battle scripts that restore spell points are inserted in the beginning, there would be no conflicts.
+
+ OB(4, 5, 0).first? = function()   -- inserted before all other !?OB4/5/0 triggers
+ end
+
+ OB(4, 5, 0).first$ = function()   -- inserted before all other !$OB4/5/0 post triggers
+ end
+
+--------------- ERM Variables ---------------
+
+You can access all ERM variables from Lua. However, you should avoid using local variables as they aren't guaranteed to be local in case of Lua.
+Here's how you do it:
+ ERM.v15 = 5  -- set v15
+ ERM.v[15] = 5  -- another way to set v15, the number can be a variable here
+ i = ERM.v15  -- of caurse you can also get value of v15
+The same thing with z,y,e:
+ ERM.z5 = "my string"  -- set z5
+ ERM.flags[1] = true  -- set flag 1
+ ERM.flags[1] = false  -- reset flag 1
+Similar way you can work with simple variables and 'c':
+ day = ERM.c  -- get current day
+ ERM.c = ERM.c + 1  -- you can set current day from Lua, but be careful with that. I haven't tested this much. Maybe this won't work in multiplayer, maybe it will cause bugs in some scripts. Dunno if it can cause game bugs some way.
+ ERM.i = 5  -- set i
+Macros:
+ ERM.$macro$ = 5  -- set macro variable $macro$ to 5
+ ERM.$macro$ = "Hi"  -- set macro variable $macro$ to "Hi" (for z-var macros)
+
+You can also get a range of variables:
+ x,y,z = ERM.v(998, 1000) -- get v998 - v1000
+
+--------------- Performance ---------------
+
+The general performance advices are to use local variables and to use Lua analogs of ERM functions if they exist.
+In pieces of code critical to performance (like complex loops) it's good to put recievers and ?v, ?z into local variables.
+Example:
+ TM1.? = function()
+	local ?v, ?z, OB, TR, FU, UN = ?v, ?z, OB, TR, FU, UN
+	-- now calls to these recievers would be faster
+ end
+You don't have to declare the local variables inside each function, you can declare them for whole script before starting functions declarations.
+Lua calls ERM commands about 1.4 (when using local variables) or 1.7 (otherwise) times slower than ERM, but operations with variables are faster in Lua. Loops are faster too, especially compared to DO reciever loops.
+
+--------------- Scripts Organization ---------------
+
+Lua scripts should be placed in one of the following folders:
+Mods\Wog\Wogify\ - Wogify scripts
+Mods\Wog\Scripts\ - library scripts
+Mods\Wog\Map\ - scripts that are loaded before map scripts, even if "no wogification" is set in WoG Options
+Mods\Wog\Global\ - scripts that run when the game is started
+
+In global events of the map, place "ZVSL." at the beginning of event name. E.g. "ZVSL.Give Army".
+
+Check out "Scripts\BattlePos.lua" and "Wogify\BattlePos_ERM.lua" library scripts. BattlePos_ERM.lua provides the ERM interface for BattlePos.lua. It's neccesary for it to be a separate script, because BattlePos.lua can be loaded even if a map isn't WoGified.
+
+
+=== require ===
+
+The scripts in "Scripts" folder aren't loaded on startup, but must be loaded with use of "require" function instead.
+
+Example:
+ local BP = require("BattlePos")
+
+This will load "BattlePos" script and assign its environment (that is, the set of variables the script operates on) to BP variable. That is, you can access "hex2xy" function declared in BattlePos as "BP.hex2xy".
+Note: "require" isn't limited to scripts from "Scripts" folder, you can load Wogify scripts this way too.
+
+
+You can access loaded scripts via "scripts" table.
+ local BP = scripts["BattlePos"]
+If "BattlePos" was already loaded BP will be assigned its environment, otherwise it will be "nil".
+There is also a table called "scriptvars", but I won't go into detail about it here.
+
+
+=== Instead of ERT ===
+
+Instead of ERT file you can make a separate .lua file with a table of strings and use "require" to load it. "Scripts\text_ChooseRMGTemplate.lua" is an example of this, it's loaded by "Global\ChooseRMGTemplate.lua" script.
+
+
+--------------- Lua Functions (added in WoG) ---------------
+
+=== Message ===
+
+There is Message function for Lua instead of IF:M and IF:Q. It's easier to use and should work quicker.
+ Message("Hello world!")   -- this is preferable way of HelloWorlding
+You can use it in one of following ways:
+ Message("msg", mode)
+ Message("msg", mode, t1, st1)
+ Message("msg", mode, t1, st1, t2, st2)
+ Message("msg", mode, t1, st1, t2, st2, t3, st3)
+ Message("msg", mode, t1, st1, t2, st2, t3, st3, x, y)
+ Message("msg", mode, t1, st1, t2, st2, t3, st3, x, y, timeout)
+ "msg"   = text of message. It doesn't have to be a srting. Variable of any kind would be converted to text. I.e. Message(5) is appropriete.
+ mode    = type of message(1 - message, 2 - request, 4 - right click message, 7 - choose one picture, 10 - choose one picture with Cancel)
+ t1, st1 = type and subtype of 1st picture
+ t2, st2 = type and subtype of 2nd picture
+ t3, st3 = type and subtype of 3rd picture
+ x, y    = coordinates of message
+ timeout = it works only in multiplayer mode. The message will be automatically closed after the time passes.
+
+If you can use braces instead of parentheses you can also use symbolic names of parameters:
+ Message{Text = "msg", mode = 4, t1 = 8, st1 = 9, x = 50}
+Here is the full set of arguments:
+Number	Name	Meaning
+1   	text	Message text
+2   	mode	Type of message
+3   	t1  	picture 1 type
+4   	st1		picture 1 subtype
+5   	t2  	picture 2 type
+6   	st2		picture 2 subtype
+7   	t3		picture 3 type
+8   	st3		picture 3 subtype
+9   	x		x coordinate
+10  	y		y coordinate
+11    	timeout	Time to show the message in multiplayer mode
+12  	caption	Not used now. In future there would be scripts that load before the game is shown and this would be caption of message box.
+
+You can also combine passing parameters by order and by name:
+ Message{"msg", 2, x = 50, y = 50)  -- message = "msg", mode = 2, x = 50, y = 50
+
+The Message returns result similar to IF:Q(with one exception):
+ if Message("msg", 2) then  -- the player clicked Ok
+The exception is mode 10. In mode 10 it returns '1' for picture 1, '2' for picture 2 and 'false' for Cancel.
+
+
+=== MessageEx ===
+
+MessageEx function can display a message with up to 8 customizable pictures and support all modes of Message (and IF:Q).
+Usage:
+MessageEx("msg",  {picture 1}, {picture 2}, ...)
+MessageEx("msg", mode,  {picture 1}, {picture 2}, ...)
+MessageEx("msg", mode, x, y,  {picture 1}, {picture 2}, ...)
+MessageEx("msg", mode, x, y, timeout,  {picture 1}, {picture 2}, ...)
+
+Named arguments are also supported, like in Message:
+MessageEx{"Hello world!", mode = 4}
+
+The result is similar to Message:
+false - Cancel
+1 - first pic or Ok in simple question
+2 - second pic
+
+Pictures:
+Pictures are either standard pictures:
+ {type, subtype}
+Or custom pictures:
+ {def, cadre, text, hint}
+
+def   = name of def file
+cadre = cadre of the def
+text  = text under the picture
+hint  = right-click hint (alternatively, this can be a function that gets be called on right click on the picture)
+
+Example:
+MessageEx("Hi", 7, {"artifact.def", 1, "Big Red Book", "This book is big"}, {8, 2}, {8, 3}, {8, 4})
+Here the mode is 7 (choose between two pictures), first picture is custom, while other 3 pictures are standard artifacts.
+
+
+=== debug.Message ===
+
+Use debug.Message while debugging a script to display values of some variables or just display a message that shows that the execution reached some point.
+The message will contain line number from which the debug.Message function was called.
+You can specify any number of parameters. Each of them would be displayed on a separate line.
+It's also a good idea to have a local variable with a shorter name for it while you are debugging your script.
+Example:
+
+ local msg = debug.Message  -- for convenience
+ msg()  -- shows "Debug Message on line 4"
+ msg(4, false, "Hi!")
+--[[ the last one shows:
+Debug Message on line 5
+4
+false
+Hi!
+--]]
+
+
+=== ManyPicsMessage ===
+
+ManyPicsMessage(msg, t1, st1, t2, st2, ...) is Lua analog of IF:N. It displays a dialog with any number of pictures on the screen.
+You can also add 'x' and 'y' parameters when using braces.
+Examples:
+ ManyPicsMessageManyPicsMessage{"First 5 artifacts:";  8,0; 8,1; 8,2; 8,3; 8,4;  x = 10, y = 10}  -- display a dialog with pictures of first 5 artifacts at point (10,10).
+Note that ';' in table declaration is the same as ','. I used both ';' and ',' to make the call more readable.
+
+
+=== pcall2 ===
+
+pcall (f, arg1, ···)
+Calls function f with the given arguments in protected mode. If an error occurs in the called function, it is shown on screen, but the calling function continues execution.
+Its first result is the status code (a boolean), which is true if the call succeeds without errors. In such case, pcall also returns all results from the call, after this first result. In case of any error, pcall returns false plus the error message.
+
+
+=== ErrorMessage ===
+
+If for some reason you had to use pcall instead of pcall2, you should use ErrorMessage to display the error.
+
+
+=== Bitwise operations ===
+
+You can use hexadecimal numbers. You should write '0x' before them:
+ i = 0xFF   -- i = 255
+
+ bit.Or(x, y)      -- VR:|  (x | y in C)
+ bit.And(x, y)     -- VR:&  (x & y in C)
+ bit.Xor(x, y)     -- VR:^  (x ^ y in C)
+ bit.Not(x)        -- (~x in C)
+ bit.AndNot(x, y)  -- (x & ~y in C)
+
+Probably, you wouldn't need Xor.
+Use bit.And(x, y) to check presense of flag y in x
+Use bit.Or(x, y) to add flag y to x.
+Use bit.AndNot(x, y) to remove flag y from x.
+
+You can use shorter form:
+x:Or(y), x:And(y), x:Not() and so on.
+
+Example 1:
+ i = MA:X(0, ?v)  -- get Pikeman flags
+ if i:And(0x10000) ~= 0 then  -- check for "no enemy retaliation" bit presense
+	Message("No retaliation")
+ end
+or simply
+ if MA:X(0, ?v):And(0x10000) ~= 0 then
+	Message("No retaliation")
+ end
+
+Example 2:
+ i = MA:X(0, ?v)  -- get Pikeman flags
+ i = i:Or(0x10000)  -- give Pikeman "no enemy retaliation" ability
+ MA:X(0, i)  -- set Pikeman flags
+or simply
+ MA:X(0, MA:X(0, ?v):Or(0x10000))
+
+Example 3:
+ i = MA:X(63, ?v)  -- get Vampire Lord flags
+ i = i:AndNot(0x10000)  -- remove "no enemy retaliation" ability
+ MA:X(63, i)  -- set Vampire Lord flags
+or simply
+ MA:X(63, MA:X(63, ?v):AndNot(0x10000))
+
+
+=== math.round ===
+
+math.round(number) returns the nearest integer. You can also write number:round().
+Example:
+math.round(3.14) = 3
+math.round(3.5) = 4
+
+
+=== path.find ===
+
+path.find(mask, dir) iterates through all files that match the given mask. If 'dir' is false or nil, it returns all files that match the mask. If 'dir' is true, it returns directories. The mask is relative to the game directory. You should use it in for statement.
+Examples:
+ for f in path.find("Mods/Standard/Wogify/*.lua") do  -- find all .lua files in Mods\Standard\Wogify directory.
+	dofile(f)  -- run Lua script (you shouldn't do this!)
+ end
+ 
+ for mod in path.find("Mods/*", true)  -- find all directories in the Mods folder
+	for f in path.find(mod.."/Wogify/*.lua")  -- find all files in the Wogify folder of the mod
+		dofile(f)  -- run Lua script (you shouldn't do this!)
+	end
+ end
+
+Note: dofile doesn't create script environment, so you can't load scripts with code like this. Currently all scripts loaded with "dofile", "loadstring" and other such functions share the same environment.
+As you see, I use '/' instead of '\', bacause '\' must be written twice in strings ('\\')

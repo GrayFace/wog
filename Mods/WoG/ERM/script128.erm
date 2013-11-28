@@ -1,0 +1,115 @@
+ZVSE
+Updated for ERM Option Clash, 28 January 2007
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptName=script128
+ERMS_ScriptAuthor=Doom3d
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=28.1(January).2007
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English or Magyar (native)
+ERMS_ScriptUsedVariables=none
+ERMS_AdditionalFiles=none
+ERMS_ScriptUsedFlags=none
+ERMS_ScriptUsedTimers=TM1
+ERMS_ScriptUsedFunctions=FU642(shared)
+ERMS_ScriptUsedMacroNames=none
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS temporary variables:v34(FU multiplexing), v24-30, v600-656
+ERMS option numbers: 328,289
+ERMS FU multiplexing v34:"3"  for AI Power Boost
+
+----------------------------------
+ AI Boost section
+----------------------------------
+* AI Resource boost v2.1 Doom3d
+
+; ------- Main Entry ()
+!?TM1&v2394=1; starts if AI (test with human, AI=1, Human=0) WoG3.58/3.59 compatible
+!!UN:P328/?y-1; checks if option is enabled
+!!FU&y-1=0:E; exit if not
+
+; bonus table
+!!VRv24:C1/2/3/5/8;    Fibonacchi numbers.. v24-28
+
+; general bonus for actual gameplay level  - V31
+!!UN:J2/?v29; check player difficulty level (0-4)
+!!VRv30:S24 +v29; var. pointer, v29 free
+!!OW:W-1/?v29;  check number of Towns for this Color
+!!VRv31:Svv30 *v29;  bonus * town, v29-30 free
+
+; gold
+!!VRv29:S300 *v31;
+!!OW:R-1/6/dv29;   v29 free
+
+; Wood and Ore
+!!VRv29:Sv2392 %2 *2;
+!!OW:R-1/v29/dv31; Means Wood on Even, and Ore on Odd days  ,v29 free
+
+; Mercury1-Sulfur3, Cristal4-Gem5  resource nr.
+!!VRv29:Sv2392 %4 +2; resource on current day-> mod 4 +2, only one type of resource per day
+!!VRv29&v29=2:Sd-1; correction for Mercury 2->1
+!!OW:R-1/v29/dv31; Resource type v29, quantity v31, v29-30 free
+*-------- End of Main()
+
+ ****************
+
+* AI Speed+Mana Boost, aka AI Power Boost v1.0 Doom3d
+
+; ------- Main Entry()
+!?TM2&v2394=1; starts if AI (test with human, AI=1, Human=0)
+; Bonuses after calculating things in tm1, for exemple mana taken by Shamanic Running
+!!UN:P289/?y-1; checks if option is enabled
+!!FU&y-1=0:E; exit if not
+
+; bonus table
+!!VRv24:C1/2/3/5/8;    Fibonacchi numbers.. v24-28
+
+; general bonus for gameplay level
+* Movement bonus - V31
+!!UN:J2/?v29; check player difficulty level (0-4)
+!!VRv30:S24 +v29; var. pointer  v29 free
+!!VRv31:Svv30 *50;  means +50..400 Movement Points for AI :)   v30 used later
+* Mana Boost percentage -V32
+!!VRv32:Svv30 *5;  5-40% mana boost per turn, v29-30 free
+
+!!OW:H-1/600; //get heroes list
+* max.48 towns+8 adventure heroes= 56, so v600-v656 are used.
+!!FU &v600=0:E; exit if this player actually don`t have any hero.
+; V34 FU name multiplex
+!!VRv34:S3;   "3" for AI Power boost
+!!DO642/1/v600/1:P; //iterate through heroes
+*--------- End of Main()
+
+* Function Library
+
+!?FU642&v34=3; actual hero setup  FUxxx1   x16 rel. pointer to hero ID adress
+; v34=1 for AI Speed boost, do not modify inside DO loop
+* Movement Boost
+
+!!VRy1:S600 +x16; set Hero ID pointer
+!!VRg:Svy1; hero ID
+
+!!HEg:Wdv31;  add MP
+
+;mana boost
+
+!!HEg:Fd0/d0/d0/?y2 S24/?y3 I/y4;
+
+!!VRy5:Sy3 +4; intelligence correction for none, basic, advanced. simplified by 25. (4,5,6,8)
+!!VRy5&y3=3: +1; correction for expert    y3 free
+!!VRy3:S10 *y2 *y5 :4; calculated Max. mana without intelligence spec. correction, y2+y5 free
+
+!!VRy2:Sy3 *v32 :100; Calculated Mana boost
+!!VRy5&y4<y3:S0; boost active flag if NOT above calc. max.
+!!VRy6:Sy4 +y2; increase mana (if NOT above calc. max.)
+!!VRy6&y6>y3:Sy3; limit mana if it was increased above calc. max.
+!!VRy4&y5=0:Sy6; SET new value for mana only IF it was increased
+* I was just going around magic spring/ Mana Vortex/ Other script boost problem..
+* am too lazy to calculate int. spec. again.
+
+!!HEg:Iy4; set Mana Boost, finally
+
+!!FU:E;
+* END of AI Boost Section
+-------------------------------------------------------
+

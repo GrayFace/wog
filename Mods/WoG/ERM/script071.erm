@@ -1,0 +1,669 @@
+ZVSE
+ERMS_ScriptDate=17.7(July).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** ENHANCED ARTIFACTS  -  ERM script 71
+
+** By Arstahd
+** Last updated 11.7(July).2006 by Thomas Franz - rewrote behavior of the Enhanced Commander Artifacts
+** Version 1.23   updated August 28 2005 by Tobyn (previously updated November 2 2004 by Arstahd)
+** Updated August 23, 2004 by Fnord to disable in MP network battles and
+** September 16, 2004 to correct some y variables that should have been y- variables.
+** Special thanks to Fnord for help with bug fixing and script maintenance
+** Artifact descriptions transferred to script75 on Jul. 18. 2004 by Hermann the Weird
+
+** Variables Used: i
+** V variables:    v998, v7178, v7182,  v7057-v7079,  v7130-v7134
+** Z variables:    z1-z4
+** Y Variables:    y1-y10
+** Flags Used:     76
+** Functions Used: 7030-7040
+** Timers Used: 51
+
+
+** Improves many weak artifacts
+** Some artifacts have changed class.
+** Any spells cast are at Basic level unless otherwise noted.
+
+** Pendant Of Life gives living troops health based on their level squared  {Major}
+** Pendant Of Death gives undead +5 Att, +5 Def, +1 Spd                     {Major}
+** Pendant Of Total Recall casts mass Basic Precision                       {Minor}
+** Pendant Of Second Sight casts mass Basic Air Shield                      {Minor}
+** Pendant Of Holiness casts mass Basic Bless                               {Major}
+** Pendant Of Dispassion casts mass Basic Bloodlust                         {Minor}
+** Pendant Of Free Will casts mass Basic Stoneskin                          {Minor}
+** Orb Of Vulnerability casts mass Disease
+** Orb Of the Firmament casts mass Basic Prot. from Air
+** Orb Of Silt casts mass Basic Prot. from Earth
+** Orb Of Tempestuous Fire casts Basic mass Prot. from Fire
+** Orb Of Driving Rain casts mass Basic Prot. from Water
+** Collar of Conjuring increases spell damage by 5%
+** Ring of Conjuring increases spell damage by 10%
+** Cape of Conjuring increases spell damage by 15%
+** Ring of the Magi increases spell damage by 20% (total of 50%)
+** Sphere Of Permanence adds 10 health to hero's non-living non-undead troops
+** Dead Man's Boots upgrade Skeletons
+** Vampire's Cowl upgrades Vampires
+** Amulet of the Undertaker upgrades Walking Dead
+** Centaur's Axe upgrades Centaurs
+** Shield of the Dwarven Lords upgrades Dwarves
+** Breastplate of Petrified Wood upgrades Dendroid Guards
+** Helm of the Alabaster Unicorn upgrades Unicorns
+** New combination artifact (above 4 artifacts)
+**    Garb of the Forest Lord: gives 1 War Unicorn, 2 Dendroid Soldiers, 4 Battle Dwarves, 8 Centaur Captains each week
+** Commander artifacts can be worn by heroes granting two random abilities (as well as functioning normally)
+**    +1 to +5 Primary Stat bonus (1, 2, or all 4 stats)
+**    add one rank to a random secondary skill
+** Statesman's Medal reduces monster aggression by 1                       {Treasure}
+** Ring of the Diplomat reduces monster aggression by 1                    {Treasure}
+** Ambassador's Sash reduces monster aggression by 1                       {Treasure}
+** New combination artifact (above 3 artifacts)
+**     The Vestments of Authority: monster aggression is further reduced by 1
+** Ring of Life                                                            {Treasure}
+** Vial of Lifeblood                                                       {Treasure}
+
+
+
+** All artifacts function for the AI if worn.
+
+
+** Initialization Code
+
+!#UN:P71/?v7182;  [Check if Enhanced Artifacts is enabled in WoGify Options]
+!#UN:P219/?v7178; [Check if Enhanced Commander Artifacts is enabled in WoGify Options]
+*#VRv7182:S1;                  [enable for stand-alone use]
+*#VRv7178:S1;                  [enable for stand-alone use]
+
+!#TM51&v7182=1:S8/999/7/255;                         [timer once/week for all players - starts on day 8]
+*#TM51&v7182=1:S2/999/1/255;          ****test timer once/day****
+
+!#UN&v7178=1:A146/2/4;                                [set axe of smashing - right hand]
+!#UN&v7178=1:A147/2/6;                                [set mithril mail - torso]
+!#UN&v7178=1:A148/2/4;                                [set sword of sharpness - right hand]
+!#UN&v7178=1:A149/2/1;                                [set helm of immortality - head]
+!#UN&v7178=1:A150/2/3;                                [set pendant of sorcery - neck]
+!#UN&v7178=1:A151/2/8;                                [set boots of haste - feet]
+!#UN&v7178=1:A152/2/5;                                [set bow of seeking - left hand]
+!#UN&v7178=1:A153/2/7;                                [set dragon eye ring - ring]
+!#UN&v7178=1:A154/2/5;                                [set hardened shield - left hand]
+!#UN&v7178=1:A155/2/7;                                [set slava's ring of power - ring]
+
+!#VRv7060&v7178=1:S1 R4;                                      [random primary skill value 1-5]
+!#VRv7061&v7178=1:S0 R27;                                     [random secondary skill 0-27]
+!#VRv7062&v7178=1:S1 R4;
+!#VRv7063&v7178=1:S0 R27;
+!#VRv7064&v7178=1:S1 R4;
+!#VRv7065&v7178=1:S0 R27;
+!#VRv7066&v7178=1:S1 R4;
+!#VRv7067&v7178=1:S0 R27;
+!#VRv7068&v7178=1:S1 R4;
+!#VRv7069&v7178=1:S0 R27;
+!#VRv7070&v7178=1:S1 R4;
+!#VRv7071&v7178=1:S0 R27;
+!#VRv7072&v7178=1:S1 R4;
+!#VRv7073&v7178=1:S0 R27;
+!#VRv7074&v7178=1:S1 R4;
+!#VRv7075&v7178=1:S0 R27;
+!#VRv7076&v7178=1:S1 R4;
+!#VRv7077&v7178=1:S0 R27;
+!#VRv7078&v7178=1:S1 R4;
+!#VRv7079&v7178=1:S0 R27;
+
+!#UN&v7178=1:N4/960/v7061;                          [store skill name]
+!#UN&v7178=1:N4/961/v7063;
+!#UN&v7178=1:N4/962/v7065;
+!#UN&v7178=1:N4/963/v7067;
+!#UN&v7178=1:N4/964/v7069;
+!#UN&v7178=1:N4/965/v7071;
+!#UN&v7178=1:N4/966/v7073;
+!#UN&v7178=1:N4/967/v7075;
+!#UN&v7178=1:N4/968/v7077;
+!#UN&v7178=1:N4/969/v7079;
+
+
+
+!#VRz970&v7178=1:Sz171000;
+!#VRz971&v7178=1:Sz171001;
+!#UN&v7178=1:A146/10/970;
+!#UN&v7178=1:A146/9/971;
+***
+!#VRz972&v7178=1:Sz171002;
+!#VRz973&v7178=1:Sz171003;
+!#UN&v7178=1:A147/10/972;
+!#UN&v7178=1:A147/9/973;
+***
+!#VRz974&v7178=1:Sz171004;
+!#VRz975&v7178=1:Sz171005;
+!#UN&v7178=1:A148/10/974;
+!#UN&v7178=1:A148/9/975;
+***
+!#VRz976&v7178=1:Sz171006;
+!#VRz977&v7178=1:Sz171007;
+!#UN&v7178=1:A149/10/976;
+!#UN&v7178=1:A149/9/977;
+***
+!#VRz978&v7178=1:Sz171008;
+!#VRz979&v7178=1:Sz171009;
+!#UN&v7178=1:A150/10/978;
+!#UN&v7178=1:A150/9/979;
+***
+!#VRz980&v7178=1:Sz171010;
+!#VRz981&v7178=1:Sz171011;
+!#UN&v7178=1:A151/10/980;
+!#UN&v7178=1:A151/9/981;
+***
+!#VRz982&v7178=1:Sz171012;
+!#VRz983&v7178=1:Sz171013;
+!#UN&v7178=1:A152/10/982;
+!#UN&v7178=1:A152/9/983;
+***
+!#VRz984&v7178=1:Sz171014;
+!#VRz985&v7178=1:Sz171015;
+!#UN&v7178=1:A153/10/984;
+!#UN&v7178=1:A153/9/985;
+***
+!#VRz986&v7178=1:Sz171016;
+!#VRz987&v7178=1:Sz171017;
+!#UN&v7178=1:A154/10/986;
+!#UN&v7178=1:A154/9/987;
+***
+!#VRz988&v7178=1:Sz171018;
+!#VRz989&v7178=1:Sz171019;
+!#UN&v7178=1:A155/10/988;
+!#UN&v7178=1:A155/9/989;
+
+
+
+
+
+!#UN&v7182=1:A66/3/2;                                 [set class to treasure - statesman's medal]
+!#UN&v7182=1:A67/3/2;                                 [set class to treasure - diplomat's ring]
+!#UN&v7182=1:A68/3/2;                                 [set class to treasure - ambassador's sash]
+!#UN&v7182=1:A95/3/2;                                 [set class to treasure - ring of life]
+!#UN&v7182=1:A96/3/4;                                 [set class to minor - vial of lifeblood]
+
+*****
+!#UN&v7182=1:A103/3/8;                                [set class to major - pendant of life]
+!#UN&v7182=1:A103/1/5000;                             [set cost]
+*****
+!#UN&v7182=1:A104/3/8;                                [set class to major - pendant of death]
+!#UN&v7182=1:A104/1/4000;                             [set cost]
+*****
+!#UN&v7182=1:A107/3/4;                                [set class to minor - pendant of true aim (total recall)]
+*****
+!#UN&v7182=1:A101/3/4;                                [set class to minor - pendant of second sight]
+*****
+!#UN&v7182=1:A102/3/8;                                [set class to major - pendant of holiness]
+*****
+!#UN&v7182=1:A100/3/4;                                [set class to minor - pendant of focused rage (dispassion)]
+*****
+!#UN&v7182=1:A105/3/4;                                [set class to minor - pendant of resolve (free will)]
+*****
+
+** end of Initialization Code
+
+
+** Timer routine
+!?TM51&v7182=1; [Continue trigger if script is enabled]
+
+!!OW:C?y-1;                              [get current player]
+!!VRv7057:S0;                            [start with hero #0]
+!!DO7030/0/155/1:Py-1;                   [iterate through all heroes]
+
+** end of timer routine
+
+
+** Mouse-click in hero screen            [added by Fnord]
+!?CM2&v7182=1/v7178=1;                   [hero mouse-click trigger if Enhanced Commander Artifacts enabled]
+!!CM:S?y-1 I?y-2;                        [type of click: y-1, position of click: y-2]
+!!FU|y-1=14/y-2<2/y-2>44:E;              [exit if it's a right-click or not an artifact area]
+!!UN:R3/-1;                              [redraw Hero screen to update added skills]
+
+** end of mouse-click in hero screen
+
+
+** function to iterate through current player's heroes
+!?FU7030;             x1=current player
+
+!!HEv7057:O?y1;                          [get owner of iterated hero]
+!!FU7031&y1>=0/x1=y1:P;                  [if hero in use and it's that hero's owner's turn, continue in function 7031]
+!!VRv7057:+1;                            [inc hero #]
+
+** end of function
+
+
+** function to check one hero for creature artifacts
+!?FU7031;
+
+!!HEv7057:A2/56/?y10/?y1;                   [check for Dead Man's Boots]
+!!HEv7057:A2/55/?y10/?y2;                   [check for Vampire's Cowl]
+!!HEv7057:A2/54/?y10/?y3;                   [check for Amulet of the Undertaker]
+!!HEv7057:A2/130/?y10/?y4;                  [check for Cloak of the Undead King]
+!!FU7032|y1>0/y4>0:P56/56;                  [handle Dead Man's Boots if found]
+!!FU7032|y2>0/y4>0:P55/62;                  [handle Vampire's Cowl if found]
+!!FU7032|y3>0/y4>0:P54/58;                  [handle Amulet of the Undertaker if found]
+!!HEv7057:A2/7/?y10/?y5;                    [check for Centaur's Axe]
+!!FU7032&y5>0:P7/14;                        [handle Centaur's Axe if found]
+!!HEv7057:A2/13/?y10/?y6;                   [check for Shield of the Dwarven Lords]
+!!FU7032&y6>0:P13/16;                       [handle Shield of the Dwarven Lords if found]
+!!HEv7057:A2/25/?y10/?y7;                   [check for Breastplate of Petrified Wood]
+!!FU7032&y7>0:P25/22;                       [handle Breastplate of Petrified Wood if found]
+!!HEv7057:A2/19/?y10/?y8;                   [check for Helm of the Alabaster Unicorn]
+!!FU7032&y8>0:P19/24;                       [handle Helm of the Alabaster Unicorn if found]
+
+!!IF&1000/y5>0/y6>0/y7>0/y8>0:M1/z171020;
+!!HEv7057&1000/y5>0/y6>0/y7>0/y8>0:C25/1/23/2/17/4/15/8/-1/0/-1/0/-1/0; [give 1 war unicorn, 2 dendroid soldiers, 4 battle dwarves, 8 centaur captains]
+!!HEv7057&-1000/y5>0/y6>0/y7>0/y8>0:C2/25/1/0; [offer AI war unicorn]
+!!HEv7057&-1000/y5>0/y6>0/y7>0/y8>0:C2/23/2/0; [offer AI dendroid soldiers]
+!!HEv7057&-1000/y5>0/y6>0/y7>0/y8>0:C2/17/4/0; [offer AI battle dwarves]
+!!HEv7057&-1000/y5>0/y6>0/y7>0/y8>0:C2/15/8/0; [offer AI centaur captains]
+
+!!UN&1000:R1;                            [redraw screen to show upgraded creatures]
+
+
+** end of function
+
+** function to handle creature artifacts for a hero who has one
+!?FU7032;                          x1=artifact number  x2=creature type
+
+!!VRv7058:S0 -1;                             [reset v7058]
+!!DO7033/0/6/1:Px2;                          [check for slot with same creature type]
+!!HEv7057&1000/v7058>-1:B0/?z1;              [get hero name]
+!!HEv7057&1000/v7058>-1:R2/?y1;              [get hero sex]
+!!VRz2&y1=0/1000/v7058>-1:Sz171021;
+!!VRz2&y1=1/1000/v7058>-1:Sz171022;
+!!UN&1000/v7058>-1:N0/3/x1;                  [get artifact name]
+!!UN&1000/v7058>-1:N3/4/x2/1;                [get creature name - plural]
+!!IF&1000/v7058>-1:Q1/8/x1/1/z171023;
+!!VRy2&v7058>-1:Sx2 +1;                      [set for upgrade]
+!!HEv7057&v7058>-1:C1/x2/y2/d/0/3;           [upgrade creatures without changing stack exp.]
+** end of function
+
+** function to check a slot for a creature type
+!?FU7033;                 x1=creature type
+
+!!HEv7057:C0/x16/?y1/?y2;                     [get creature type in slot]
+!!VRv7058&v7058=-1/y1=x1:Sx16;                [it's our type]
+
+** end of function
+
+** start of pre-battle trigger **
+!?BA0&v7182=1/-998;
+!!OB7130:T?y-1;                         [check for monster stack at position]
+!!MO7130&76/y-1=54:G?y-2;               [check for monsters at position]
+!!MO7130&76/y-2>0:Rv7059/1;             [reset monster aggression level if flag 76 is set (for diplo arts)]
+!!IF:V76/0;                                          [reset flag 76]
+
+!!BA:H0/?y-3;                                  [get attacking hero #]
+!!HEy-3&y-3>-1:A2/76/?y-4/?y-5 A2/77/?y-4/?y-6 A2/78/?y-4/?y-7 A2/139/?y-4/?y-8;  [see if attacker has Conjuring items or Ring of the Magi]
+!!VRv7133:S100;                                [set for 100%]
+!!VRv7133&y-3>-1/y-5>0:+5;                     [add 5% for Collar of Conjuring]
+!!VRv7133&y-3>-1/y-6>0:+10;                    [add 10% for Ring of Conjuring]
+!!VRv7133&y-3>-1/y-7>0:+15;                    [add 15% for Cape of Conjuring]
+!!VRv7133&y-3>-1/y-8>0:+50;                    [add 50% for Ring of the Magi]
+
+!!BA:H1/?y-3;                                  [get defending hero #]
+!!HEy-3&y-3>-1:A2/76/?y-4/?y-5 A2/77/?y-4/?y-6 A2/78/?y-4/?y-7 A2/139/?y-4/?y-8;  [see if defender has Conjuring items or Ring of the Magi]
+!!VRv7134:S100;                                [set for 100%]
+!!VRv7134&y-3>-1/y-5>0:+5;                     [add 5% for Collar of Conjuring]
+!!VRv7134&y-3>-1/y-6>0:+10;                    [add 10% for Ring of Conjuring]
+!!VRv7134&y-3>-1/y-7>0:+15;                    [add 15% for Cape of Conjuring]
+!!VRv7134&y-3>-1/y-8>0:+50;                    [add 50% for Ring of the Magi]
+
+** end of pre-battle trigger **
+
+** start of battlefield start trigger
+!?BF&v7182=1/-998;
+
+!!BA:H0/?v7057;                                       [get attacking hero #]
+!!FU7034&v7057>-1:P-1/20;
+!!BA:H1/?v7057;                                       [get defending hero #]
+!!FU7034&v7057>-1:P20/-1;
+** end of battlefield start trigger
+
+** start of magic resist trigger
+!?MR0&-998;
+
+!!BG:N?y-1 A?y-3;                                   [get active stack #, action type]
+!!MR:D?y-2;                                         [get spell damage]
+
+!!VRy-2&y-3=1/y-1<21/v7133>100:*v7133 :100;         [calculate new damage - attacker cast]
+!!MR&y-3=1/y-1<21/v7133>100:Dy-2;                   [set new damage - attacker cast]
+
+!!VRy-2&y-3=1/y-1>20/v7134>100:*v7134 :100;         [calculate new damage - defender cast]
+!!MR&y-4=1/3-1>20/v7134>100:Dy-2;                   [set new damage - defender cast]
+
+
+** end of magic resist trigger
+
+
+** function to check for battle artifacts     (Parameters: x1=base hero stack, x2=base enemy stack)
+!?FU7034;
+!!VRy1:Sx1;                                 [hero's base stack number]
+!!VRy2:Sx2;                                 [enemy's base stack number]
+!!HEv7057:A2/100/?y7/?y8;                   [see if hero has a Pendant of Focused Rage (Dispassion)]
+!!DO7035/0/20/1&y8>0:Py1/43/50/0;           [prepare to bloodlust hero's troops]
+!!HEv7057:A2/101/?y7/?y8;                   [see if hero has a Pendant of Second Sight]
+!!DO7035/0/20/1&y8>0:Py1/28/50/0;           [prepare to air shield hero's troops]
+!!HEv7057:A2/102/?y7/?y8;                   [see if hero has a Pendant of Holiness]
+!!DO7035/0/20/1&y8>0:Py1/41/50/0;           [prepare to bless hero's troops]
+!!HEv7057:A2/103/?y7/?y8;                   [see if hero has a Pendant of Life]
+!!DO7036/0/20/1&y8>0:Py1/1/1;               [prepare to add hit points to hero's living troops]
+!!HEv7057:A2/104/?y7/?y8;                   [see if hero has a Pendant of Death]
+!!DO7036/0/20/1&y8>0:Py1/5/2;               [prepare to add attack to hero's undead troops]
+!!DO7036/0/20/1&y8>0:Py1/5/3;               [prepare to add defense to hero's undead troops]
+!!DO7036/0/20/1&y8>0:Py1/1/4;               [prepare to add speed to hero's undead troops]
+!!HEv7057:A2/105/?y7/?y8;                   [see if hero has a Pendant of Resolve (Free Will)]
+!!DO7035/0/20/1&y8>0:Py1/46/50/0;           [prepare to stoneskin hero's troops]
+!!HEv7057:A2/107/?y7/?y8;                   [see if hero has a Pendant of True Aim (Total Recall)]
+!!DO7035/0/20/1&y8>0:Py1/44/50/0;           [prepare to precision hero's troops]
+!!HEv7057:A2/92/?y7/?y8;                    [see if hero has a Sphere of Permanence]
+!!DO7036/0/20/1&y8>0:Py1/10/6;              [prepare to add 10 health to hero's non-living non-undead troops]
+!!HEv7057:A2/93/?y7/?y8;                    [see if hero has an Orb of Vulnerability]
+!!DO7035/0/20/1&y8>0:Py2/73/50/0;           [prepare to disease opponent's troops]
+!!HEv7057:A2/79/?y7/?y8;                    [see if hero has an Orb of the Firmament]
+!!DO7035/0/20/1&y8>0:Py1/30/50/0;           [prepare to prot air hero's troops]
+!!HEv7057:A2/80/?y7/?y8;                    [see if hero has an Orb of Silt ]
+!!DO7035/0/20/1&y8>0:Py1/33/50/0;           [prepare to prot earth hero's troops]
+!!HEv7057:A2/81/?y7/?y8;                    [see if hero has an Orb of Tempestuous Fire]
+!!DO7035/0/20/1&y8>0:Py1/31/50/0;           [prepare to prot fire hero's troops]
+!!HEv7057:A2/82/?y7/?y8;                    [see if hero has an Orb of Driving Rain]
+!!DO7035/0/20/1&y8>0:Py1/32/50/0;           [prepare to prot water hero's troops]
+*!HEv7057:A2/76/?y7/?y8;                    [see if hero has a Collar of Conjuring]
+*!DO7036/0/20/1&y8>0:Py1/1/5;               [prepare to add to spells remaining of hero's troops]
+*!HEv7057:A2/77/?y7/?y8;                    [see if hero has a Ring of Conjuring]
+*!DO7036/0/20/1&y8>0:Py1/2/5;               [prepare to add to spells remaining of hero's troops]
+*!HEv7057:A2/78/?y7/?y8;                    [see if hero has a Cape of Conjuring]
+*!DO7036/0/20/1&y8>0:Py1/3/5;               [prepare to add to spells remaining of hero's troops]
+*!HEv7057:A2/139/?y7/?y8;                   [see if hero has a Ring of the Magi]
+*!DO7036/0/20/1&y8>0:Py1/56/5;              [prepare to add to spells remaining of hero's troops]
+
+** end of function
+
+** function to spell troops         (Parameters: x1=stack, x2=spell, x3=rounds, x4=level)
+!?FU7035;
+!!VRx1:+1;                                  [increment stack number]
+!!BMx1:F?y1;                                [read stack flags: y1]
+!!VRy1&x2=44:&4;                            [if spell is Precision check if stack is a shooter]
+!!FU&x2=44/y1<>4:E;                         [exit if Precision and non-shooter]
+!!BMx1:Mx2/x3/x4;                           [cast spell on stack]
+** end of function
+
+** function to edit monster stats   (Parameters: x1=stack, x2=stat bonus, x3=filter)
+!?FU7036;
+
+!!VRx1:+1;                                           [increment stack number]
+!!VRi:S1;                                            [set i to 1]
+!!BMx1&x3>0:F?i;                                     [read flags if P3 is set]
+!!VRi&x3=1:&16;                                      [just look at alive bit]
+!!VRi|x3=2/x3=3/x3=4:&262144;                        [just look at undead bit]
+!!VRi&x3=6:&262160;                                  [just look at alive & undead bits]
+!!BMx1&i>0/x3=1:T?y2;                                [get monster type]
+!!MA&i>0/x3=1/y2>-1:Ly2/?y3;                         [get monster level]
+!!VRx2&i>0/x3=1/y2>-1/y3=0:S1;                       [level 1 = 1]
+!!VRx2&i>0/x3=1/y2>-1/y3=1:S3;                       [level 2 = 3]
+!!VRx2&i>0/x3=1/y2>-1/y3=2:S6;                       [level 3 = 6]
+!!VRx2&i>0/x3=1/y2>-1/y3=3:S10;                      [level 4 = 10]
+!!VRx2&i>0/x3=1/y2>-1/y3=4:S15;                      [level 5 = 15]
+!!VRx2&i>0/x3=1/y2>-1/y3=5:S25;                      [level 6 = 25]
+!!VRx2&i>0/x3=1/y2>-1/y3=6:S50;                      [level 7 = 50]
+
+!!BMx1&i>0/x3=1:Hdx2;                                [set hit points]
+!!BMx1&i>0/x3=2:Adx2;                                [set attack]
+!!BMx1&i>0/x3=3:Ddx2;                                [set defense]
+!!BMx1&i>0/x3=4:Sdx2;                                [set speed]
+!!BMx1&i>0/x3=5:Edx2;                                [set spells remaining]
+!!BMx1&i=0/x3=6:Hdx2;                                [set hit points]
+
+** end of function
+
+** start of object trigger - monsters
+
+!?OB54&v7182=1;                                      [object trigger - monsters]
+!!IF:V76/0;                                          [reset flag 76]
+!!VRv7130:Cv998/v999/v1000;                          [copy position to v7130/v7131/v7132]
+!!MO7130:R?v7059/1;                                  [get aggression level]
+!!VRy-1:Sv7059;                                      [copy to y-1]
+!!HE-1:A2/66/?y-3/?y-4;                              [see if hero has a Statesman's Medal]
+!!VRy-1&y-1>0/y-1<10/y-4>0:-1;                       [reduce by 1 if not compliant or savage]
+!!HE-1:A2/67/?y-3/?y-5;                              [see if hero has a Diplomat's Ring]
+!!VRy-1&y-1>0/y-1<10/y-5>0:-1;                       [reduce by 1 if not compliant or savage]
+!!HE-1:A2/68/?y-3/?y-6;                              [see if hero has an Ambassador's Sash]
+!!VRy-1&y-1>0/y-1<10/y-6>0:-1;                       [reduce by 1 if not compliant or savage]
+!!VRy-1&y-1>0/y-1<10/y-4>0/y-5>0/y-6>0:-1;           [if hero has all 3 reduce by 1 if not compliant or savage]
+!!MO7130|y-4>0/y-5>0/y-6>0:Ry-1/1;                   [set new aggression level]
+!!IF&v7059<>y-1:V76/1;                               [set flag 76 to true - aggression changed]
+** end of object trigger - monsters
+
+**  object trigger - post visit - Centaur's Axe
+!$OB5/7&v7182=1;
+!!FU7039:P1/13/25/19;
+**  object trigger - post visit - Shield of the Dwarven Lords
+!$OB5/13&v7182=1;
+!!FU7039:P1/7/25/19;
+**  object trigger - post visit - Breastplate of Petrified Wood
+!$OB5/25&v7182=1;
+!!FU7039:P1/7/13/19;
+**  object trigger - post visit - Helm of the Alabaster Unicorn
+!$OB5/19&v7182=1;
+!!FU7039:P1/7/13/25;
+
+**  object trigger - post visit - Statesman's Medal
+!$OB5/66&v7182=1;
+!!FU7039:P2;
+**  object trigger - post visit - Diplomat's Ring
+!$OB5/67&v7182=1;
+!!FU7039:P2;
+**  object trigger - post visit - Ambassador's Sash
+!$OB5/68&v7182=1;
+!!FU7039:P2;
+
+
+** function to check for combo artifacts
+!?FU7039;   x1= switch
+
+!!HE-1&x1=1:A2/7/?y1/?y2 A2/13/?y1/?y3 A2/25/?y1/?y4 A2/19/?y1/?y5;  [see if hero has Centaur's Axe, Shield of the Dwarven Lords, Breastplate of Petrified Wood, Helm of the Alabaster Unicorn]
+!!HE-1&x1=2:A2/66/?y1/?y2 A2/67/?y1/?y3 A2/68/?y1/?y4;  [see if hero has Statesman's Medal, Diplomat's Ring, Ambassador's Sash]
+
+!!IF&1000/x1=1/y2>0/y3>0/y4>0/y5>0:N8/7/8/13/8/19/8/25; [TOBYN mod: check for all four artifacts]
+!!IF&1000/x1=1/y2>0/y3>0/y4>0/y5>0:N^%Z171024^;         [TOBYN mod, text now should be displayed correctly]
+!!IF&1000/x1=2/y2>0/y3>0/y4>0:Q2/8/66/8/67/8/68/1/z171025;
+
+
+
+* ----------------------------------
+*  Enhanced Commander Artifacts
+* ----------------------------------
+
+**
+!?AE1&v7178=1/v998>145/v998<156; put on commander artifact trigger
+!!HE-1:N?y-1; // get hero number
+!!FU7037:Py-1/v998; // call function with hero and artifact number
+**
+
+**
+!?AE0&v7178=1/v998>145/v998<156; take off commander artifact trigger
+!!HE-1:N?y-1; // get hero number
+!!FU7038:Py-1/v998; // call function with hero and artifact number
+**
+
+
+!?FU7037;  // give commander artifact bonuses
+** function to check when artifacts are put on
+** x1 = hero number
+** x2 or x16 = (commander) artifact number (146 - 155)
+!!VRy20:Sx2; !!VRy20&x16>0:Sx16; !!FU|y20<146/y20>155:E; // set y20 to the artifact number, exit, if not a commander artifact
+
+!!IF:Wx1; // enable hero's vvars
+!!VRy4:Sy20 -145; // get the bit number (01 - 10) in w24 - artifact is worn
+!!VRy5:Sy20 -135; // get the bit number (11 - 20) in w24 - secondary skill bonus was added
+!!VRy6:Sy20 -125; // get the bit number (21 - 30) in w24 - more than one artifact of this type was equipped (possible for the both rings)
+!!FU$bit$:Py4/?y7; !!FU$bit$:Py5/?y8; !!FU$bit$:Py6/?y9; // get flags from the bits
+
+!!VRy10:Sw24 &y7; // check, if flag for worn is set -> artifact is already equipped
+!!VRw24&y10>0:|y9; // set flag for "more than one worn"
+!!FU&y10>0:E; // exit, if hero has this artifact (ring) already equipped
+
+!!VRw24:|y7; // set artifact as worn
+
+!!HEx1&y20=146:Fdv7060/d/d/d;                               [set axe of smashing]
+!!VRy2&y20=146:Sv7061;                                      [copy axe's secondary skill to y2]
+!!HEx1&y20=147:Fd/dv7062/d/d;                               [set mithril mail]
+!!VRy2&y20=147:Sv7063;                                      [copy to y2]
+!!HEx1&y20=148:Fdv7064/d/d/d;                               [set sword of sharpness]
+!!VRy2&y20=148:Sv7065;                                      [copy to y2]
+!!HEx1&y20=149:Fd/dv7066/d/d;                               [set helm of immortality]
+!!VRy2&y20=149:Sv7067;                                      [copy to y2]
+!!HEx1&y20=150:Fd/d/dv7068/d;                               [set pendant of sorcery]
+!!VRy2&y20=150:Sv7069;                                      [copy to y2]
+!!HEx1&y20=151:Fd/d/d/dv7070;                               [set boots of haste]
+!!VRy2&y20=151:Sv7071;                                      [copy to y2]
+!!HEx1&y20=152:Fdv7072/d/d/d;                               [set bow of seeking]
+!!VRy2&y20=152:Sv7073;                                      [copy to y2]
+!!HEx1&y20=153:Fd/d/dv7074/dv7074;                          [set dragon eye ring]
+!!VRy2&y20=153:Sv7075;                                      [copy to y2]
+!!HEx1&y20=154:Fd/dv7076/d/d;                               [set hardened shield]
+!!VRy2&y20=154:Sv7077;                                      [copy to y2]
+!!HEx1&y20=155:Fdv7078/dv7078/dv7078/dv7078;                [set slava's ring of power]
+!!VRy2&y20=155:Sv7079;                                      [copy to y2]
+!!HEx1:Sy2/?y3;                                            [get skill level]
+!!HEx1&y3<3:Sy2/d1;                                        [set skill]
+
+!!VRw24&y3<3:|y8; // set flag, that secondary skill was given
+
+** end of function FU7037
+
+
+!?FU7038;  // remove commander artifact bonuses
+** x1 = hero number
+** x2 or x16 = (commander) artifact number (146 - 155)
+
+!!VRy20:Sx2; !!VRy20&x16>0:Sx16; !!FU|y20<146/y20>155:E; // set y20 to the artifact number, exit, if not a commander artifact
+
+!!IF:Wx1; // enable hero's vvars
+!!VRy4:Sy20 -145; // get the bit number (01 - 10) in w24 - artifact is worn
+!!VRy5:Sy20 -135; // get the bit number (11 - 20) in w24 - secondary skill bonus was added
+!!VRy6:Sy20 -125; // get the bit number (21 - 30) in w24 - more than one artifact of this type was equipped (possible for the both rings)
+!!FU$bit$:Py4/?y7; !!FU$bit$:Py5/?y8; !!FU$bit$:Py6/?y9; // get flags from the bits
+!!VRy10:Sy7 +1 *-1; !!VRy11:Sy8 +1 *-1; !!VRy12:Sy9 +1 *-1; // increase flag value and negate it; necessary to remove the bit
+
+!!VRy99:Sw24 &y9; // check, if worn twice (second time without giving bonuses)
+!!VRw24&y99>0:&y12; // if yes, then remove the flag for worn twice
+!!FU&y99>0:E; // and exit the function
+
+!!VRy99:Sw24 &y7; // check, if artifact was worn (y99 will be > 1, if yes)
+!!VRw24&y99>0:&y10; // remove the flag for equipped (and primary skill bonus, if it was worn before)
+
+!!VRy1&y20=146:S0 -v7060;                           [invert value]
+!!HEx1&y99>0/y20=146:Fdy1/d/d/d;                    [reset axe of smashing]
+!!VRy2&y20=146:Sv7061;                              [copy to y2]
+
+!!VRy1&y20=147:S0 -v7062;                           [invert value]
+!!HEx1&y99>0/y20=147:Fd/dy1/d/d;                    [reset mithril mail]
+!!VRy2&y20=147:Sv7063;                              [copy to y2]
+
+!!VRy1&y20=148:S0 -v7064;                           [invert value]
+!!HEx1&y99>0/y20=148:Fdy1/d/d/d;                    [reset sword of sharpness]
+!!VRy2&y20=148:Sv7065;                              [copy to y2]
+
+!!VRy1&y20=149:S0 -v7066;                           [invert value]
+!!HEx1&y99>0/y20=149:Fd/dy1/d/d;                    [reset helm of immortality]
+!!VRy2&y20=149:Sv7067;                              [copy to y2]
+
+!!VRy1&y20=150:S0 -v7068;                           [invert value]
+!!HEx1&y99>0/y20=150:Fd/d/dy1/d;                    [reset pendant of sorcery]
+!!VRy2&y20=150:Sv7069;                              [copy to y2]
+
+!!VRy1&y20=151:S0 -v7070;                           [invert value]
+!!HEx1&y99>0/y20=151:Fd/d/d/dy1;                    [reset boots of haste]
+!!VRy2&y20=151:Sv7071;                              [copy to y2]
+
+!!VRy1&y20=152:S0 -v7072;                           [invert value]
+!!HEx1&y99>0/y20=152:Fdy1/d/d/d;                    [reset bow of seeking]
+!!VRy2&y20=152:Sv7073;                              [copy to y2]
+
+!!VRy1&y20=153:S0 -v7074;                           [invert value]
+!!HEx1&y99>0/y20=153:Fd/d/dy1/dy1;                  [reset dragon eye ring]
+!!VRy2&y20=153:Sv7075;                              [copy to y2]
+
+!!VRy1&y20=154:S0 -v7076;                           [invert value]
+!!HEx1&y99>0/y20=154:Fd/dy1/d/d;                    [reset hardened shield]
+!!VRy2&y20=154:Sv7077;                              [copy to y2]
+
+!!VRy1&y20=155:S0 -v7078;                           [invert value]
+!!HEx1&y99>0/y20=155:Fdy1/dy1/dy1/dy1;              [reset slava's ring of power]
+!!VRy2&y20=155:Sv7079;                              [copy to y2]
+
+!!HEx1:Sy2/?y3;                                    [get skill level]
+!!VRy99:Sw24 &y8;          // check, if secondary skill was given
+!!HEx1&y99>0/y3>0:Sy2/d-1; // reset skill, if it was given (and aviable)
+
+!!VRw24&y99>0/y3>0:&y11;   // remove flag for the given skill in this case
+
+** end of function FU7038
+
+
+!?HL-1&v7178=1; // hero levels up
+!!HE-1:N?y-1; // get hero number
+!!DO7038/146/155/1:Py-1; // remove all bonuses from commander artifacts (FU does not really unequip the art.)
+!!IF:W-1; // activate heroes w-vars1
+!!VRw24:|1073741824; // set the bit 31 (used to force a refresh after clicking inside the hero screen
+
+** end of HL-trigger
+
+
+!?CM2&v7178=1; // click inside the hero screen
+!!IF:W-1; // activate heroes w-vars
+!!VRy-2:Sw24 &1073741824; // check for set 31st bit (means skill refresh for commander artifacts)
+!!HE-1:N?y-1; // get hero number
+!DO7040/146/155/1&y-2>0:Py-1; // refresh bonuses from commander artifacts (if flag is set)
+!!DO7040/146/155/1:Py-1; // refresh bonuses from commander artifacts (if flag is set)
+!!VRw24&y-2>0:&-1073741825; // remove the 31st bit again
+!!CM:I<45; // check, if click onto artifact slot (equipping / unequipping)
+!!UN&1:R3/-1; // if yes, then redraw Hero screen (because of given / removed skills
+
+** end of CM-trigger
+
+
+!?BA0&v7178=1; // before battle
+!!BA:H0/?y-1 H1/?y-2; // get attacking / defending hero
+!!DO7040/146/155/1&y-1>-1:Py-1/0; // check for correct bonuses from commander artifacts (attacker)
+!!DO7040/146/155/1&y-2>-1:Py-2/0; // check for correct bonuses from commander artifacts (defender)
+
+** end of BA0
+
+
+
+!?FU7040; [checks for equipped commander artifacts, remove incorrect bonuses]
+** x1  = hero number
+** x2  = if > 0 it will be used as artifact number (146 .. 155), otherwise
+** x16   will be used for this
+
+** y1  = working var for the artifact number
+** y2  = not used (number of artifact the hero has)
+** y3  = number of equipped artifacts
+
+!!VRy1&x2>0:Sx2; !!VRy1&x2<1:Sx16; // set y1 eighter to x2 or x16
+!!FU|y1<146/y1>155:E; // exit, if invalid artifact number
+!!HEx1:A2/y1/?y2/?y3; // calculate number of artifacts (y3=equipped)
+
+!!IF:Wx1; // enable hero's vvars
+!!VRy4:Sy1 -145; // get the bit number (01 - 10) in w24 - artifact is worn
+!!VRy5:Sy1 -135; // get the bit number (11 - 20) in w24 - secondary skill bonus was added
+!!VRy6:Sy1 -125; // get the bit number (21 - 30) in w24 - more than one artifact of this type was equipped (possible for the both rings)
+!!FU$bit$:Py4/?y7; !!FU$bit$:Py5/?y8; !!FU$bit$:Py6/?y9; // get flags from the bits
+!!VRy10:Sy7 +1 *-1; !!VRy11:Sy8 +1 *-1; !!VRy12:Sy9 +1 *-1; // increase flag value and negate it; necessary to remove the bit
+
+!!VRy99:Sw24 &y9; // check, if it is flagged as worn twice but worn only once (or not)
+!!VRw24&y3<2/y99>0:&y12; // if yes, then remove the worn-twice-flag (don't need to use the FU7038, because the second one gives no bonus)
+
+!!VRy99:Sw24 &y7; // check, if artifact should be equipped at least once, but was not really equipped
+!!FU7038&y3=0/y99>0:Px1/y1; // if yes, then unequip it
+
+!!VRy99:Sw24 &y7; // check, if artifact is marked as equipped (hero has really one equipped)
+!!FU7037&y3>0/y99=0:Px1/y1; // if not, then equip it
+
+!!VRy99:Sw24 &y9; // check, if it is flagged as worn twice (if the hero has really equipped it more than once)
+!!VRw24&y3>1/y99=0:|y9; // if not, then set the worn-twice-flag (don't need to use the FU7037, because the second one gives no bonus)
+** end of FU7040
+

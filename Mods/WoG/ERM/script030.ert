@@ -1,0 +1,397 @@
+130000	Adventure Cave	String type = <!#S>	08.06.2003
+130001	This hero gets double the usual gold from treasure chests.	String type = <!#S>	08.06.2003
+130002	This hero's troops can retaliate multiple times per round.	String type = <!#S>	08.06.2003
+130003	This hero can cast two spells in the first combat round.	String type = <!#S>	08.06.2003
+130004	The melee attacks of this hero's troops remove some enemy abilities.	String type = <!#S>	08.06.2003
+130005	This hero has some rare books.	String type = <!#S>	08.06.2003
+130006	This hero has some mandrake roots.	String type = <!#S>	08.06.2003
+130007	This hero has some tulip bulbs.	String type = <!#S>	08.06.2003
+130008	This hero has some toys.	String type = <!#S>	08.06.2003
+130009	This hero has some wine.	String type = <!#S>	08.06.2003
+130010	This hero has some suits of dog armor.	String type = <!#S>	08.06.2003
+130011	This hero has some three-handed swords.	String type = <!#S>	08.06.2003
+130012	This hero has some wands that don't work.	String type = <!#S>	08.06.2003
+130013	Rogues stole one of your gold mines!	String type = <!!M>	08.06.2003
+130014	You find a tunnel leading down into the mountain... Do you explore it or leave?	String type = <!!S>	08.06.2003
+130015	Explore	String type = <!!S>	08.06.2003
+130016	Leave	String type = <!!S>	08.06.2003
+130017	Wary of confining tunnels, you stay outside, in the pleasant open countryside.	String type = <!!M>	08.06.2003
+130018	Exploring a tunnel in the mountains, you find a small cave. Do you search it or leave?	String type = <!!S>	08.06.2003
+130019	Search	String type = <!!S>	08.06.2003
+130020	Leave	String type = <!!S>	08.06.2003
+130021	Wary of caves, you leave this one for others to explore.	String type = <!!M>	08.06.2003
+130022	There were Troglodytes hiding in the darkness! You are attacked!	String type = <!!M>	08.06.2003
+130023	You find two tunnels leading further down...	String type = <!!S>	08.06.2003
+130024	You have defeated the Troglodytes! Searching the cave, you find no treasure, but two tunnels leading down... 	String type = <!!S>	08.06.2003
+130025	You find two tunnels leading down. You also find a signpost... the left tunnel is marked "%Z360," and the right one, "%Z361."	String type = <!!S>	08.06.2003
+130026	You find two tunnels leading down. You also find a signpost... but both directions are marked "%Z360."	String type = <!!S>	08.06.2003
+130027	You find two tunnels leading down. You also find a signpost, but unfortunately, it has fallen, and it is impossible to tell which way is which. One way is marked "%Z360," the other, "%Z361."	String type = <!!S>	08.06.2003
+130028	You find two tunnels leading down. You also find a signpost. Unfortunately, the signpost has fallen, and it is impossible to tell which way is which. Fortunately, both ways are marked the same: "%Z360."	String type = <!!S>	08.06.2003
+130029	 Do you bravely explore one of the tunnels, or leave?	String type = <!!S>	08.06.2003
+130030	Bravely Explore	String type = <!!S>	08.06.2003
+130031	Leave	String type = <!!S>	08.06.2003
+130032	Wary of such deep tunnels, you make your way back to the friendly light of day.	String type = <!!M>	08.06.2003
+130033	Which tunnel do you take, the left one or right one?	String type = <!!S>	08.06.2003
+130034	Left	String type = <!!S>	08.06.2003
+130035	Left - "	String type = <!!S>	08.06.2003
+130036	Left - 	String type = <!!S>	08.06.2003
+130037	Right	String type = <!!S>	08.06.2003
+130038	Right - "	String type = <!!S>	08.06.2003
+130039	Right - 	String type = <!!S>	08.06.2003
+130040	There is a fork in the tunnel. You can go to the left or the right.	String type = <!!S>	08.06.2003
+130041	Left	String type = <!!S>	08.06.2003
+130042	Right	String type = <!!S>	08.06.2003
+130043	There is a fork in the tunnel. You can go to the left or the right.	String type = <!!S>	08.06.2003
+130044	Left	String type = <!!S>	08.06.2003
+130045	Right	String type = <!!S>	08.06.2003
+130046	Rogue Hide-out	String type = <!!S>	08.06.2003
+130047	Rogue City	String type = <!!S>	08.06.2003
+130048	No Solicitors	String type = <!!S>	08.06.2003
+130049	Rogues With Pets	String type = <!!S>	08.06.2003
+130050	Frenz	String type = <!!S>	08.06.2003
+130051	Wise Man	String type = <!!S>	08.06.2003
+130052	No Solicitors	String type = <!!S>	08.06.2003
+130053	Sage Retreat	String type = <!!S>	08.06.2003
+130054	Beast Master	String type = <!!S>	08.06.2003
+130055	Hermit	String type = <!!S>	08.06.2003
+130056	Monsters	String type = <!!S>	08.06.2003
+130057	Rogues With Pets	String type = <!!S>	08.06.2003
+130058	Beast Master	String type = <!!S>	08.06.2003
+130059	Death	String type = <!!S>	08.06.2003
+130060	Cursed Place	String type = <!!S>	08.06.2003
+130061	Dead-End	String type = <!!S>	08.06.2003
+130062	Frenz	String type = <!!S>	08.06.2003
+130063	Hermit	String type = <!!S>	08.06.2003
+130064	Cursed Place	String type = <!!S>	08.06.2003
+130065	Ruins	String type = <!!S>	08.06.2003
+130066	The tunnel opens into a large cavern. From the debris, you can tell this must once have been a Rogue hide-out. There's no-one here now, though, and nothing of value.	String type = <!!M>	08.06.2003
+130067	an inconspicuous little fellow	String type = <!!S>	08.06.2003
+130068	a giant brute	String type = <!!S>	08.06.2003
+130069	a tall blonde man with the bearing of a nobleman	String type = <!!S>	08.06.2003
+130070	a horribly scarred hunchback	String type = <!!S>	08.06.2003
+130071	but especially in the middle of the cavern, standing in a circle around two giant rats, who are fighting it out. From the yells of encouragement and clenched coins, you can only guess that the Rogues have bet on the fight.	String type = <!!S>	08.06.2003
+130072	in groups of a dozen or so, rolling knucklebones and making wagers.	String type = <!!S>	08.06.2003
+130073	gorging themselves on roast... something... and sipping wine.	String type = <!!S>	08.06.2003
+130074	arguing in groups about various devious plans, through from your vantage point you can only clearly make out an occasional "poisoned beer," "unguarded mine," or "while they're sleepin'".	String type = <!!S>	08.06.2003
+130075	dividing up gold and rubies, and just barely not slitting each others' throats.	String type = <!!S>	08.06.2003
+130076	lying in hammocks, sleeping on bundles of rags, and snoring around campfires. No-one seems to be standing guard.	String type = <!!S>	08.06.2003
+130077	The rat fight is abandoned - the rats keep fighting anyway though.	String type = <!!S>	08.06.2003
+130078	The dice are all snatched up and the wagers pocketed in moments.	String type = <!!S>	08.06.2003
+130079	Drumsticks and mugs are hurriedly set down, and one or two chins wiped.	String type = <!!S>	08.06.2003
+130080	There are a few muttered rejoinders, then the cave is quiet.	String type = <!!S>	08.06.2003
+130081	They leave their treasure where it is - every coin's position committed to memory - and cluster in the middle of the cave.	String type = <!!S>	08.06.2003
+130082	rat fights	String type = <!!S>	08.06.2003
+130083	gaming	String type = <!!S>	08.06.2003
+130084	feast	String type = <!!S>	08.06.2003
+130085	scheming	String type = <!!S>	08.06.2003
+130086	loot dividing	String type = <!!S>	08.06.2003
+130087	rat fight	String type = <!!S>	08.06.2003
+130088	dice games	String type = <!!S>	08.06.2003
+130089	food	String type = <!!S>	08.06.2003
+130090	scheming circles	String type = <!!S>	08.06.2003
+130091	treasures	String type = <!!S>	08.06.2003
+130092	The tunnel opens into a large cavern, which can only be a hide-out for some Rogues. There are Rogues everywhere, 	String type = <!!S>	08.06.2003
+130093	 
+ 
+As your party approaches, the Rogues look up. %Z361 The leader of the Rogues - %Z364 - steps foward.	String type = <!!S>	08.06.2003
+130094	This could be your chance for a quick, merciless victory.	String type = <!!S>	08.06.2003
+130095	The leader spits in your face. "How dare you come in here and interrupt our %Z362?" He is furious. It looks like the only way out of a fight is to leave, quickly.	String type = <!!S>	08.06.2003
+130096	The leader smiles - but it isn't a very nice smile. "So. I suppose you came to hire our services?" Saying "no" doesn't seem like an option. You can agree peacefully, or attack the Rogues.	String type = <!!S>	08.06.2003
+130097	The leader is all smiles. "Hey! Nice to see you!" Yet you can't help noticing his hand is on his hilt. You can talk peacefully with the Rogues, or attack them.	String type = <!!S>	08.06.2003
+130098	The leader is all smiles. "Hey! Nice to see you!" It sounds like he means it, but you can't help thinking that this friendliness leaves the Rogues open to a sudden, brutal attack. Do you attack, or are you peaceful?	String type = <!!S>	08.06.2003
+130099	Do you slaughter the Rogues as they sleep?	String type = <!!S>	08.06.2003
+130100	Talk	String type = <!!S>	08.06.2003
+130101	Fight	String type = <!!S>	08.06.2003
+130102	Flee	String type = <!!S>	08.06.2003
+130103	Agree	String type = <!!S>	08.06.2003
+130104	Be nice	String type = <!!S>	08.06.2003
+130105	Brutally slaughter them	String type = <!!S>	08.06.2003
+130106	The Rogues don't chase you, but they laugh loudly as you flee back to the surface. "Better scorned than dead," you tell your troops. Some of them don't agree.	String type = <!!Q>	08.06.2003
+130107	The Rogues all relax, and return to their %Z363. The leader remains with your party, to discuss business.	String type = <!!M>	08.06.2003
+130108	Do you bravely disturb the Rogues, or leave?	String type = <!!S>	08.06.2003
+130109	Bravely disturb them	String type = <!!S>	08.06.2003
+130110	Leave	String type = <!!S>	08.06.2003
+130111	Letting sleeping dogs lie, you and your party return to the surface.	String type = <!!M>	08.06.2003
+130112	You nudge a Rogue awake. He blinks, then nudges a pal, who quickly rouses the rest of the gang. They stare bewilderedly at you, yawning. One of them - %Z364 - steps forward to talk with you. He must be the leader. 
+ 
+"Uh, hey there. Let's get down to business, shall we?"	String type = <!!M>	08.06.2003
+130113	You cleverly slaughter about half of the Rogues before having to fight the rest. Your troops are pleased.	String type = <!!S>	08.06.2003
+130114	You painlessly slaughter about half of the Rogues before having to fight the rest.	String type = <!!S>	08.06.2003
+130115	You mercilessly slaughter about half of the Rogues before having to fight the rest. Your troops are disgusted.	String type = <!!S>	08.06.2003
+130116	You've defeated the Rogues! After the battle, your troops are checking for survivors, when a figure scurries from behind a rock - it's their leader! You grab him and hold your sword to his throat. "Mercy!" he squeaks. "Let me live, and I'll tell you where to find buried treasure!" You consider the proposition.	String type = <!!S>	08.06.2003
+130117	"What's this about treasure?"	String type = <!!S>	08.06.2003
+130118	Slit his throat	String type = <!!S>	08.06.2003
+130119	One quick motion of the wrist does it. The former Rogue falls to the ground, joining his comrades. Your troops smile at this act of cruelty.	String type = <!!S>	08.06.2003
+130120	He was probably lying anyway. You kill him swiftly and cleanly.	String type = <!!S>	08.06.2003
+130121	He was probably lying anyway. You quickly slit his throat, then push his body away from you. Your troops look away, uneasy.	String type = <!!S>	08.06.2003
+130122	Searching the dead leader's body, you find an artifact!	String type = <!!Q>	08.06.2003
+130123	The Rogues' leader is grateful. He tells you of a chest buried at the base of an Obelisk...	String type = <!!M>	08.06.2003
+130124	After memorizing the information, you release the Rogue, and he quickly scampers away down the tunnel.	String type = <!!M>	08.06.2003
+130125	You've defeated the Rogues! After the battle, your troops scoop up all of the Rogues' treasures.	String type = <!!S>	08.06.2003
+130126	Your troops gather up all of the treasure the Rogues had been hoarding.	String type = <!!S>	08.06.2003
+130127	"Our business is being mercenaries," the leader says. "We join armies and help them fight. Regretably, I'm a little short of spare Rogues at the moment. But give us a day or two and come back, I should have more recruits coming in."	String type = <!!M>	08.06.2003
+130128	"We're gold thieves, every one of us," the leader says. "Mostly we deal with gold in mine increments - we steal an entire gold mine at once. It's efficient that way. We'd steal one for you, but... we're kinda busy right now. Come back in a little while, though, we'll work something out."	String type = <!!M>	08.06.2003
+130129	"Let's face it, we're a bunch of baddies," the leader says. "What we like best is leaping out of the bushes to attack an unsuspecting hero. Especially when we're paid to do it. We'd work out a contract with you now, but... we're all booked up right now. Come back in a day or two, we'll talk."	String type = <!!M>	08.06.2003
+130130	"My gang specializes in picking pockets," the leader says. "We can nick a pair of Angel Wings from a 20th level hero, and be gone before he hits the ground. But, uh... we're kinda busy right now. I can't really divulge the details. But come back in a few days, we'll see what we can get for you."	String type = <!!M>	08.06.2003
+130131	At last, the Obelisk the Rogue leader spoke of! Your troops eagerly set to work, digging holes all around the base. 
+ 
+After many hours you give up in disgust, having found nothing. Looks like the Rogue was just lying to save his life!	String type = <!!M>	08.06.2003
+130132	At last, the Obelisk the Rogue leader spoke of! Your troops find a very obvious "X" scratched in the dirt behind the Obelisk, and begin digging there. 
+ 
+After a few hours, they haul up a large treasure chest. It's locked, but you hack off the lid. Inside you find gold and artifacts! The Rogue was telling the truth!	String type = <!!Q>	08.06.2003
+130133	%Z326 is ambushed by Rogues! They cry out, "This is for %Z327!"	String type = <!!M>	08.06.2003
+130134	Rogues stole %Z326's %Z327!	String type = <!!Q>	08.06.2003
+130135	"I've got Rogues for hire," the leader says. "Great guys, every one of them. They fight, they defend, they wait - they do it all. I hire 'em out at a discount rate. %V620 gold for 15 Rogues."	String type = <!!S>	08.06.2003
+130136	I'll take them!	String type = <!!S>	08.06.2003
+130137	No thanks	String type = <!!S>	08.06.2003
+130138	"Well, if you ever have room in your army, there's nothing like a bunch of Rogues."	String type = <!!M>	08.06.2003
+130139	"You got a bargain there. These Rogues will give you 110 percent."	String type = <!!M>	08.06.2003
+130140	"Me and my pals here are gold thieves," the leader says. "We'd love to steal a nice juicy gold mine for you. Unfortunately for you, your enemies in these parts aren't doing too well in the gold department. Give 'em some time - they're sure to strike it rich eventually."	String type = <!!M>	08.06.2003
+130141	"Buddy, this is your lucky day," the leader says. "Me and my gang are gold mine thieves, and we have a target all picked out. It's a beaut - make you a 1000 gold a day easy. Right now it's flying a %Z360 flag, but we could replace that with yours, for the reasonable price of %V625 gold."	String type = <!!S>	08.06.2003
+130142	Deal!	String type = <!!S>	08.06.2003
+130143	No thanks	String type = <!!S>	08.06.2003
+130144	"Well, if you can't afford it or something... You're really missing out on this opportunity though. It's a gold mine!"	String type = <!!M>	08.06.2003
+130145	"Great!" The leader shakes your hand. "We'll have your flag up in no time. Enjoy your new gold mine!" You leave the cave, visions of gold dancing in your head.	String type = <!!M>	08.06.2003
+130146	"My gang is into usury, or, as most people call it, loan sharking," the leader says. "Only without the loans. Just the sharking. We beat people up, in other words. For a fair wage. Only... you don't have any enemies we can get at, at the moment. Come back later - we're sure to find a target eventually."	String type = <!!M>	08.06.2003
+130147	he	String type = <!!S>	08.06.2003
+130148	she	String type = <!!S>	08.06.2003
+130149	him	String type = <!!S>	08.06.2003
+130150	her	String type = <!!S>	08.06.2003
+130151	%Z362's got some troops, but %Z362 doesn't know how to use them.	String type = <!!S>	08.06.2003
+130152	%Z362 thinks %Z362's tough, but we could show %Z363 a thing or two.	String type = <!!S>	08.06.2003
+130153	A puny nothing of a hero, with maybe a week of troops, tops. Not even.	String type = <!!S>	08.06.2003
+130154	Some loser with a few gremlins or something.	String type = <!!S>	08.06.2003
+130155	sissy	String type = <!!S>	08.06.2003
+130156	peasant	String type = <!!S>	08.06.2003
+130157	windmill hero, good for nothing but visiting windmills	String type = <!!S>	08.06.2003
+130158	loathsome worm with no social life	String type = <!!S>	08.06.2003
+130159	"I got a proposition for you," the leader says. "We know this hero. %Z361. %Z364 Waves the %Z360 flag. And, well, we overheard %Z363 calling you a %Z365. Now, maybe you are, that's not for me to say. But I think you should teach %Z363 a lesson. What say me and some of the boys go over and rough %Z363 up for you? It'll cost you just %V623 gold."	String type = <!!S>	08.06.2003
+130160	Do it!	String type = <!!S>	08.06.2003
+130161	No thanks	String type = <!!S>	08.06.2003
+130162	"Oh. Okay. I guess you really are a %Z365. My mistake. Well, no reason to be mad then, right?" The leader wanders off, shaking his head.	String type = <!!M>	08.06.2003
+130163	"We'll beat %Z361 to a pulp for you. You can count on us." You leave the cave, visions of %Z361's bloody corpse dancing through your head.	String type = <!!M>	08.06.2003
+130164	"My guys specialize in pockets", the leader says. "We know everything about them. And what we know right now is, that no-one's got much in theirs. But come back some time soon, I'm sure we'll find something in a pocket somewhere."	String type = <!!M>	08.06.2003
+130165	"Psst. Buddy," the leader says. "I got some hot merchandise here. Borrowed it from some hero named %Z361. Only I may not return it, if you follow me. You look like you could use an artifact or two. This one's a beaut. '%Z360' they call it. It's barely been touched - %Z361 probably won't even miss it. And it's yours for a cool %V622 gold. How about it?"	String type = <!!S>	08.06.2003
+130166	Gimme!	String type = <!!S>	08.06.2003
+130167	No thanks	String type = <!!S>	08.06.2003
+130168	"Oh, short on cash? Well, I'll try to hold on to this for you, but I can't make any promises."	String type = <!!M>	08.06.2003
+130169	The leader fetches the artifact from a sack, and hands it over to you. "Here it is! Best gold you ever spent. This doohickey will work all its tricks for you." You leave the cave, admiring your purchase.	String type = <!!M>	08.06.2003
+130170	red	String type = <!!S>	08.06.2003
+130171	blue	String type = <!!S>	08.06.2003
+130172	tan	String type = <!!S>	08.06.2003
+130173	green	String type = <!!S>	08.06.2003
+130174	orange	String type = <!!S>	08.06.2003
+130175	purple	String type = <!!S>	08.06.2003
+130176	teal	String type = <!!S>	08.06.2003
+130177	pink	String type = <!!S>	08.06.2003
+130178	"Uh, that's not enough gold, pal... What is this, you trying to con me or something? I'm not blind." The leader is not happy. You quickly depart.	String type = <!!M>	08.06.2003
+130179	The tunnel opens into a small, bare cave. From the tidiness and lack of material goods, you can tell that this once must have been the home of a hermit. There is no-one here now though.	String type = <!!M>	08.06.2003
+130180	The tunnel opens into a small, bare cave, the home of an old man - a hermit.	String type = <!!M>	08.06.2003
+130181	wealth	String type = <!!S>	08.06.2003
+130182	combat	String type = <!!S>	08.06.2003
+130183	magic	String type = <!!S>	08.06.2003
+130184	voodoo	String type = <!!S>	08.06.2003
+130185	%Z360 
+ 
+"My specialty is %Z362," the hermit says, "and you already seem to know all about it. It's great, isn't it!" The two of you have a pleasant chat about %Z362. Eventually you remember that you have hero stuff to attend to, and excuse yourself.	String type = <!!M>	08.06.2003
+130186	%Z360 
+ 
+"I'd like to teach you about %Z362," says the hermit, "but you need time, time to sort through things in your mind. Come back tomorrow."	String type = <!!M>	08.06.2003
+130187	%Z360 
+ 
+"My specialty is %Z362," the hermit says. "Would you like me to teach you?"	String type = <!!S>	08.06.2003
+130188	%Z360 
+ 
+"Would you like to continue your lessons in %Z362?" the hermit asks.	String type = <!!S>	08.06.2003
+130189	Yes	String type = <!!S>	08.06.2003
+130190	No	String type = <!!S>	08.06.2003
+130191	"No problem!" the hermit says. "Less work for me. Don't hit your head on the way out."	String type = <!!M>	08.06.2003
+130192	"Well, if that's the way you want it," the hermit says. "But you really should learn a bit more about %Z362."	String type = <!!M>	08.06.2003
+130193	"Wealth is a trick - like stealing someone's nose..."	String type = <!!S>	08.06.2003
+130194	"Combat is all about hitting them before they hit you - with shooters, for instance..."	String type = <!!S>	08.06.2003
+130195	"Magic is elusive - like an antelope, or a young maiden..."	String type = <!!S>	08.06.2003
+130196	"Voodoo is all about playing mind games with people. In fact I - quick, look behind you!"	String type = <!!S>	08.06.2003
+130197	"Money is in the mind - near the back and on the left side..."	String type = <!!S>	08.06.2003
+130198	"You want a big army - the bigger, the better. The other heroes on your side can just walk around with an imp or two..."	String type = <!!S>	08.06.2003
+130199	"Spells are like chocolate - only, inedible, and not as compelling..."	String type = <!!S>	08.06.2003
+130200	"Most monsters don't wear shoes. But for those that do, 'your shoelace is untied' is a decent gambit..."	String type = <!!S>	08.06.2003
+130201	"Most treasure chests have false bottoms. Just hack the thing open with an axe - you'll find more treasure. Usually you can double your take this way."	String type = <!!S>	08.06.2003
+130202	"Whenever they hit you, hit them right back, immediately. None of this waiting for your turn nonsense."	String type = <!!S>	08.06.2003
+130203	"You can cast two spells in a row... just cast the first spell twice as fast. This usually just works for me in the first round of combat."	String type = <!!S>	08.06.2003
+130204	"Voodoo is all in the head - hitting people on the head, that is. Hit them hard enough, they start seeing things, they forget how to shoot or fly - you name it. Just always aim for the head. It's hard with arrows, but easy with a good melee weapon."	String type = <!!S>	08.06.2003
+130205	The hermit paces as he talks. %Z360 
+ 
+He drones on and on. Eventually he yawns and stops. "Well, I think that's as much as you can learn in one day. Come back tomorrow, and I will continue the lesson!"	String type = <!!M>	08.06.2003
+130206	The hermit thinks for a bit, then nods to himself and begins talking. %Z360 
+ 
+He talks for hours. Eventually he sees you nodding off, and stops. "That's enough for today. We're almost there - just one more lesson! Come back tomorrow."	String type = <!!M>	08.06.2003
+130207	The hermit talks for a while. Finally he shares his secret with you. 
+ 
+%Z360 
+ 
+You nod, slowly comprehending. The hermit is right. Armed with this knowledge, you will be a better hero than before. You know it.	String type = <!!M>	08.06.2003
+130208	With the lesson complete, the hermit grins madly. "At last, I have taught a student! Now, I can reclaim my rightful place at the head of the table!" And with that, he snaps his fingers, and vanishes!	String type = <!!M>	08.06.2003
+130209	The hermit is jubilant. "What teaching! I was amazing! This calls for a celebration!" He gets a flask from behind a rock. "I've been saving this for when I really deserved it!" He takes a swig, swishes it around in his mouth, savors it, and swallows. "Mmmmm...." Suddenly, he turns pale. He drops the flask and clutches his throat, gasping. There is nothing you can do to help him - a few seconds later, he is dead. At least his knowledge lives on in you. You take his body outside, and bury it in front of the cave entrance.	String type = <!!M>	08.06.2003
+130210	The hermit is dissatisfied with his teaching. "That was okay... but I think I could do better. What I need is some more lessons myself, from this other hermit I know." He looks around the cave, then smiles. "Nothing to pack! I'm off!" And with that, he pushes past your party, marches up the tunnel, and is gone.	String type = <!!M>	08.06.2003
+130211	The hermit grins. "At last, I have taught a student! The curse will finally be lifted!" And sure enough, moments later, the hermit transforms into a troglodyte! The troglodyte tries to leave the cave, but one of your troops accidentally bashes it dead on its way out.	String type = <!!M>	08.06.2003
+130212	The hermit looks around his cave, nostalgiac. "I loved this cave. But it's time to move on. Teach one student, and soon they'll be a dozen more, knocking your door down. Well, I'll find me a nice quiet cave somewhere - someplace heroes haven't gotten to yet." He pantomimes tipping a hat to you, and leaves the cave.	String type = <!!M>	08.06.2003
+130213	"But wait, there's more!" says the hermit. "Just come back for twelve more lessons, and I can teach you-" He doesn't finish the sentence. Some of your troops had a less than exciting time during the first three days of lessons, and weren't about to sit still for any more. You reprimand them, and make them carry the body outside. Then you search the cave for valuables. There aren't any.	String type = <!!M>	08.06.2003
+130214	sleeping, but wakes immediately when you enter his cave.	String type = <!!S>	08.06.2003
+130215	engrossed in personal mythology, but drags himself back to the real world to deal with you.	String type = <!!S>	08.06.2003
+130216	meditating, but opens one eye to squint at you, then the other eye, then frowns, then smiles and relaxes.	String type = <!!S>	08.06.2003
+130217	making pantomime cat's cradle's in the air, but stops immediately when you enter the cave.	String type = <!!S>	08.06.2003
+130218	singing wordlessly, and not exactly in tune. He stops when you arrive, and coughs, then smiles weakly.	String type = <!!S>	08.06.2003
+130219	doing push-ups. He notices you, but keeps doing push-ups. After a few more he stops, sits up, and catches his breath. He turns to you.	String type = <!!S>	08.06.2003
+130220	The hermit is %Z361 "Hello," he says politely.	String type = <!!S>	08.06.2003
+130221	The hermit is ill, very ill.	String type = <!!S>	08.06.2003
+130222	%Z361 He is in no condition to talk to you, and sadly you have no means of helping him. You leave the cave quietly.	String type = <!!M>	08.06.2003
+130223	%Z361 He is in no condition to talk to you, and, while you know First Aid, you do not have sufficient knowledge to cure him. You leave the cave quietly.	String type = <!!M>	08.06.2003
+130224	%Z361 Fortunately, you are an Expert at First Aid. Do you use your skills to heal the hermit?	String type = <!!S>	08.06.2003
+130225	%Z361 Fortunately, you have a First Aid Tent. Do you use up your Tent to heal the hermit?	String type = <!!S>	08.06.2003
+130226	%Z361 Fortunately, you have a Ring of Vitality. Do you use up the Ring to heal the hermit?	String type = <!!S>	08.06.2003
+130227	%Z361 Fortunately, you have a Ring of Life. Do you use up the Ring to heal the hermit?	String type = <!!S>	08.06.2003
+130228	%Z361 Fortunately, you have a Vial Of Lifeblood. Do you use up the Vial to heal the hermit?	String type = <!!S>	08.06.2003
+130229	Heal him	String type = <!!S>	08.06.2003
+130230	Leave	String type = <!!S>	08.06.2003
+130231	You laugh at the hermit's plight, and leave him to it. Your troops giggle on the way out of the cave.	String type = <!!S>	08.06.2003
+130232	You leave the hermit to suffer. It's nothing to do with you.	String type = <!!S>	08.06.2003
+130233	You abandon the hermit to his fate. Your troops hang their heads in shame.	String type = <!!S>	08.06.2003
+130234	your powers of First Aid	String type = <!!S>	08.06.2003
+130235	the powers of your First Aid Tent	String type = <!!S>	08.06.2003
+130236	the powers of the Ring Of Vitality	String type = <!!S>	08.06.2003
+130237	the powers of the Ring Of Life	String type = <!!S>	08.06.2003
+130238	the powers of the Vial Of Lifeblood	String type = <!!S>	08.06.2003
+130239	You heal the hermit using %Z361. In practically no time, he's fit as can be. "I'm fit as can be!" he says, to prove it. "And I owe it to you. But all I can offer you is knowledge."	String type = <!!S>	08.06.2003
+130240	The hermit is not pleased to see you. He paces. "Don't I have enough troubles?" he says, irritated. "I came to this cave for peace and quiet. "And wouldn't you know it: there%Z361, living in this same complex of caves!" He dismisses you with a wave.	String type = <!!M>	08.06.2003
+130241	The hermit is unhappy to see you. But after a moment, he warms up to you. "Well, I suppose things have been peaceful for a while. Maybe I can deal with a visitor."	String type = <!!S>	08.06.2003
+130242	The hermit looks at you sadly. "If you would learn my teachings, " he says, "you must first abandon material things, as I have." Then he closes his eyes and pretends you aren't there. You eventually take the hint and leave.	String type = <!!M>	08.06.2003
+130243	The hermit is pleased to see you.	String type = <!!S>	08.06.2003
+130244	 are rogues	String type = <!!S>	08.06.2003
+130245	's another hermit	String type = <!!S>	08.06.2003
+130246	 are monsters	String type = <!!S>	08.06.2003
+130247	The tunnel ends in	String type = <!!S>	08.06.2003
+130248	%Z360 a small cave. The scorched rocks suggest a battle was fought here once... there is nothing here now though.	String type = <!!M>	08.06.2003
+130249	%Z360 a long hall filled with bones and statues. There is nothing of value.	String type = <!!M>	08.06.2003
+130250	%Z360 a labyrinth of passages that lead nowhere.	String type = <!!M>	08.06.2003
+130251	%Z360 an ancient graveyard. There is nothing here now, not even ghosts.	String type = <!!M>	08.06.2003
+130252	%Z360 an abandoned mage's workshop. Nothing of value remains.	String type = <!!M>	08.06.2003
+130253	%Z360 a treacherous, swampy cave. You look around briefly, but find nothing.	String type = <!!M>	08.06.2003
+130254	%Z360 a fiery pit. Foul beasts lived here once, but they are long gone.	String type = <!!M>	08.06.2003
+130255	%Z360 rough-hewn barracks rooms. Perhaps some mercenaries lived here once... but they are all gone now, and have left nothing of value behind.	String type = <!!M>	08.06.2003
+130256	The tunnel gets narrower, passing below a high shelf and above a dark ravine.	String type = <!!S>	08.06.2003
+130257	The tunnel widens into a hall, littered with bones and statues.	String type = <!!S>	08.06.2003
+130258	The tunnel twists and turns, with several forks and dead-ends, but only one continuing path.	String type = <!!S>	08.06.2003
+130259	The tunnel descends steeply, and the floor becomes a stone staircase. The stairs end at a broad stone door, etched with unfamiliar writing.	String type = <!!S>	08.06.2003
+130260	After walking a bit, you come to a sign in the middle of the tunnel: "Mage's Laboratory. Keep Out." A short distance beyond, the tunnel ends in a tall, rusted door.	String type = <!!S>	08.06.2003
+130261	The tunnel grows damp and misty, as it continues downwards.	String type = <!!S>	08.06.2003
+130262	The tunnel grows hot and stuffy, as it progresses steeply downwards.	String type = <!!S>	08.06.2003
+130263	The tunnel walls become more regular, shored up with beams and masonry.	String type = <!!S>	08.06.2003
+130264	%Z360 
+ 
+Do you bravely continue?	String type = <!!S>	08.06.2003
+130265	Bravely Continue	String type = <!!S>	08.06.2003
+130266	Leave	String type = <!!S>	08.06.2003
+130267	You wisely return to the surface, abandoning the dangerous tunnel.	String type = <!!M>	08.06.2003
+130268	You continue along the narrow path. Suddenly, Sharpshooters appear both above and below. Without a word, they begin firing on your party! It's a trap!	String type = <!!M>	08.06.2003
+130269	You continue exploring the hall. Suddenly your party is set upon by Basilisks! You're so completely unprepared, your entire party is turned to stone before you can react!	String type = <!!M>	08.06.2003
+130270	You come to an intersection of several tunnels. As you stand there considering them, you hear what can only be approaching monsters. Hmmm... that heavy breathing and snorting... the single sets of hoofbeats... it must be Minotaurs!	String type = <!!M>	08.06.2003
+130271	You cautiously push open the door, and enter a large cave which is obviously a cemetery. There are tombs and gravestones everywhere. Your party explores the cave carefully, looking for any forgotten treasures. Then you here a low wail, like someone crying in the distance. You try to determine what direction it's coming from... only to realize that it's all around you! It is Ghosts, risen from the graves, and they attack!	String type = <!!M>	08.06.2003
+130272	The door creaks open, and you creep inside. The door opens into a huge cavern. There are giant cryptic machines, mounds of crates and barrels, and cages of lifeless golems. There are also many Archmages. It is impossible to tell what they were doing when you arrived, for now they are all facing your party, as if you were expected. They are not happy to see you. "Doesn't anybody read anymore? Or are you all volunteering for us to perform experiments on you?" The question must be a rhetorical one, for the Archmages don't wait for an answer. With a gesture, they animate the golems, and prepare to fight!	String type = <!!M>	08.06.2003
+130273	The tunnel opens into a large boggy cave, where dark weeds grow around murky pools. The cave is filled with a greenish mist that obscures your vision, so you can only barely make out a group of Liches at the other end of the cave. The Liches evidently have no trouble seeing you and your party - they attack immediately!	String type = <!!M>	08.06.2003
+130274	Just when the heat is almost unbearable, the tunnel opens into a brightly lit cave. Looking around, you see that you are at the bottom of a shallow pit, with lava simmering in cracks in the ground around you. Then you notice Magogs peering at you from around rocks - it's a trap! You try to back out, but Familiars spring up through cracks in the rocks and attack!	String type = <!!M>	08.06.2003
+130275	The passage opens into a chamber, where many Crusaders are fighting a mock battle. When they see your party, they smile - but not in a friendly way. "At last, a real fight! We'll fight an even battle, one on one! Or are you too scared?" You seriously consider the question, but your troops answer it for you. They march into the chamber. Each stands opposite a Crusader, ready to defend his honor or die trying. They wait, as if for a signal... then, someone somewhere yells, and the battle begins!	String type = <!!M>	08.06.2003
+130276	After defeating the	String type = <!!S>	08.06.2003
+130277	%Z326 Sharpshooters, you search their cave. You find their stash: 5000 gold and 5 sulfur.	String type = <!!S>	08.06.2003
+130278	%Z326 Basilisks, you search the corpses in the hall and find 7000 gold and 5 mercury.	String type = <!!S>	08.06.2003
+130279	%Z326 Minotaurs, you search the labyrinth and find a chest with 8000 gold and 5 gems.	String type = <!!S>	08.06.2003
+130280	%Z326 Ghosts, you search the cemetery. Eventually you find a cache of treasure: 3000 gold and 5 crystals.	String type = <!!S>	08.06.2003
+130281	%Z326 Golems and their masters, you search the laboratory. You find 9000 gold, plus some old, rare books. You take the books - maybe you can sell them at a Magic Shrine...	String type = <!!S>	08.06.2003
+130282	%Z326 Liches, you search their damp lair. You find 5000 gold, plus some mandrake growing among the rocks. You uproot some plants and take them with you - maybe you can find a witch to sell them to...	String type = <!!S>	08.06.2003
+130283	%Z326 Familiars and Magogs, you search their lair and find 4000 gold, plus some children's toys that the Familiars must have played with. You take the toys with you - maybe you can sell them at a market...	String type = <!!S>	08.06.2003
+130284	%Z326 Crusaders, you search their barracks. You find treasure chests holding 5000 gold. You also find a sack of tulip bulbs - perhaps one of the Crusaders had a gardening hobby. You take the bulbs - maybe you can sell them to somebody...	String type = <!!S>	08.06.2003
+130285	You try to share the treasure with the Crusaders, but they humbly refuse. "You dishonor us!" they say, winking, before marching off to help some other poor innocents.	String type = <!!M>	08.06.2003
+130286	Some crusaders come running down the hall! "We'll save you!"	String type = <!!M>	08.06.2003
+130287	More ghosts rise from the ground!	String type = <!!M>	08.06.2003
+130288	The mist must be poisonous!	String type = <!!M>	08.06.2003
+130289	acolytes	String type = <!!S>	08.06.2003
+130290	friars	String type = <!!S>	08.06.2003
+130291	high priests	String type = <!!S>	08.06.2003
+130292	The %Z361 at the shrine eye your rare books enviously. "We'll give you 	String type = <!!S>	08.06.2003
+130293	 for them," they offer. Do you accept?	String type = <!!S>	08.06.2003
+130294	The %Z361 hand over the gold and snatch up the books.	String type = <!!S>	08.06.2003
+130295	The %Z361 sadly tear themselves away from the books.	String type = <!!S>	08.06.2003
+130296	%Z326%V600 gold%Z327	String type = <!!Q>	08.06.2003
+130297	The keeper of the windmill is interested in your tulip bulbs! "I've always wanted a tulip garden to go with the windmill." He offers you 	String type = <!!S>	08.06.2003
+130298	 for all your tulip bulbs (they're very rare in these parts). Do you accept?	String type = <!!S>	08.06.2003
+130299	The keeper hands over the gold, and cheerfully accepts the bags of tulip bulbs.	String type = <!!S>	08.06.2003
+130300	The keeper is disappointed, but takes a positive outlook. "I'll get my tulips someday."	String type = <!!S>	08.06.2003
+130301	The witch wants all of your mandrake roots. "I'll pay 	String type = <!!S>	08.06.2003
+130302	, and not a whit more." Do you accept?	String type = <!!S>	08.06.2003
+130303	The witch snatches the mandrake roots and stuffs them in a pocket. She hands over a purse with the gold.	String type = <!!S>	08.06.2003
+130304	"Fool!" says the witch.	String type = <!!S>	08.06.2003
+130305	You find you can sell your toys at the town's marketplace, for 	String type = <!!S>	08.06.2003
+130306	. Do you sell them?	String type = <!!S>	08.06.2003
+130307	You hand over the toys, which you'd grown sick of anyway, and pocket the gold.	String type = <!!S>	08.06.2003
+130308	You keep the toys - you may need the entertainment, on the long journey ahead.	String type = <!!S>	08.06.2003
+130309	The barkeep is interested in your wine. "I'll give you 	String type = <!!S>	08.06.2003
+130310	 for the lot." Do you sell him the wine?	String type = <!!S>	08.06.2003
+130311	You give him the wine, and he counts out your gold. "Bring me any more you find," he says, "and I'll give you the same deal."	String type = <!!S>	08.06.2003
+130312	"Keep your gold," you say. Your mother didn't raise you to be a wine-merchant!	String type = <!!S>	08.06.2003
+130313	One of the soldiers is interested in your dog armor. "I'd like to raise me a dog team one day," he says, "but first I'll need armor. I'll give you 	String type = <!!S>	08.06.2003
+130314	 for all your suits of dog armor." Do you accept?	String type = <!!S>	08.06.2003
+130315	You unbundle the suits of dog armor, and the soldier gratefully hands over the gold.	String type = <!!S>	08.06.2003
+130316	"A dog team? Thanks for the idea!" you say. The soldier shrugs, and tries not to look disappointed.	String type = <!!S>	08.06.2003
+130317	One of the mercenaries would like to buy your three-handed swords. "For my Aunt Betty," he explains. "She collects curios, especially weapons. I'll give you... hmmm... how about... 	String type = <!!S>	08.06.2003
+130318	 for all of them. Deal?"	String type = <!!S>	08.06.2003
+130319	The mercenary gleefully pays for the swords. "A few more deals like that, and I can open my own junk shop! I mean, my Aunt Betty can."	String type = <!!S>	08.06.2003
+130320	"Think it over," says the mercenary. "Who else is going to want some three-handed swords?"	String type = <!!S>	08.06.2003
+130321	As you approach the school, a wizard appears before you. "Those are some nice wands you have there," he says. "Could use re-charging, of course. Useless without charges. Just a pointy stick. Hmph." He reflects. "Tell you what. I'll buy them from you. That'll work out for both of us. I'll give you... say... 	String type = <!!S>	08.06.2003
+130322	 for the set of wands." Do you accept?	String type = <!!S>	08.06.2003
+130323	The wizard waves his hand, and the wands float through the air to him. He aims them at a few things, practicing. Then he remembers you. "Oh yes." He hands over the gold, then vanishes.	String type = <!!S>	08.06.2003
+130324	The wizard frowns. "You would be wise to rethink the matter. I think the only sane conclusion is that you should sell me the wands." He looks at you, as if expecting a reply, but then vanishes abruptly.	String type = <!!S>	08.06.2003
+130325	The tunnel opens into a cave with a pool of swirling water, fed by an underground stream. You and your troops drink from the pool	String type = <!!S>	08.06.2003
+130326	%Z326, and feel its magic affect you! For the rest of the week, you have the %Z327 spell on all of your troops.	String type = <!!Q>	08.06.2003
+130327	%Z326... it is refreshing, but nothing special happens.	String type = <!!M>	08.06.2003
+130328	The tunnel opens into a small cave. In the center of the cave, there is a mysterious	String type = <!!S>	08.06.2003
+130329	orb, affixed to a pedestal. Peering into the orb, you see	String type = <!!S>	08.06.2003
+130330	You leave the cave, pondering this vision.	String type = <!!S>	08.06.2003
+130331	%Z326 crystal %Z327 the faces of your enemies. %Z328	String type = <!!M>	08.06.2003
+130332	%Z326 translucent %Z327 the homes of your enemies. %Z328	String type = <!!M>	08.06.2003
+130333	%Z326 smoky %Z327 your friends, shrouded in darkness. %Z328	String type = <!!M>	08.06.2003
+130334	%Z326 milky %Z327 your castles, shrouded in darkness. %Z328	String type = <!!M>	08.06.2003
+130335	The tunnel opens into	String type = <!!S>	08.06.2003
+130336	%Z326 what must once have been someone's wine cellar. It's been thoroughly looted, though - there's nothing of value.	String type = <!!M>	08.06.2003
+130337	%Z326 what must once have been an armory. It has been plundered many times now - there's nothing left worth taking.	String type = <!!M>	08.06.2003
+130338	%Z326 a large cave, which must once have been the site of a huge battle. There are corpses everywhere. The battle must have been years ago, though - you search the skeletons but find nothing of value.	String type = <!!M>	08.06.2003
+130339	%Z326 an old disused storeroom. There are stacks of barrels and crates, but they have been plundered already. You find nothing of value.	String type = <!!M>	08.06.2003
+130340	%Z326 someone's old wine cellar. Amazingly, though it's clearly been abandoned for ages, no-one has plundered it yet. You find a strongbox with 2000 gold. You also take four bottles of wine - maybe you can sell them to somebody.	String type = <!!Q>	08.06.2003
+130341	%Z326 what must once have been an armory. It's already been looted, but searching carefully, you find a hidden stash of 1500 gold. You also find two suits of dog armor that apparently no-one deemed worth taking. You take them - who knows, maybe someone will buy them from you.	String type = <!!Q>	08.06.2003
+130342	%Z326 a large cave, which must once have been the site of a huge battle. There are corpses everywhere. Searching them, you find a pouch with 1000 gold. You also find a couple three-handed swords that are in decent condition. Though you have no use for them, you take them anyway - maybe someone will buy them from you.	String type = <!!Q>	08.06.2003
+130343	%Z326 an old disused storeroom. There are stacks of barrels and crates, but they have been plundered already. However, searching carefully, you find two old magic wands. They have no charges left, and are useless - but you take them with you anyway. Who knows, maybe some wizard will buy them from you.	String type = <!!M>	08.06.2003
+130344	The tunnel opens into a cool, echoey cave. In the middle of the cave is a magical altar. By focusing your magical powers at this altar, you can cast a spell not normally available: 	String type = <!!S>	08.06.2003
+130345	{Venom} - makes all attacks from your troops poisonous.	String type = <!!S>	08.06.2003
+130346	{Fork} - causes your Magic Arrows to strike all enemies	String type = <!!S>	08.06.2003
+130347	{AEgis} - doubles the hit points of your first level troops.	String type = <!!S>	08.06.2003
+130348	{Ferocity} - gives your troops +2 attack, defense, and speed, per elapsed combat round.	String type = <!!S>	08.06.2003
+130349	 This spell costs	String type = <!!S>	08.06.2003
+130350	spell points and lasts until the end of the week.	String type = <!!S>	08.06.2003
+130351	%Z360 
+ 
+%Z361%Z362 
+ 
+Sadly, you do not have enough spell points to cast the spell. After looking around the rest of the cave, you leave.	String type = <!!M>	08.06.2003
+130352	%Z360 
+ 
+%Z361%Z362 
+ 
+This spell is already affecting you from a previous casting. Pleased, you admire the altar, then leave the cave.	String type = <!!M>	08.06.2003
+130353	%Z360 
+ 
+%Z361%Z362 
+ 
+You have	String type = <!!S>	08.06.2003
+130354	spell points. Do you cast the spell, or leave the cave?	String type = <!!S>	08.06.2003
+130355	Cast the spell	String type = <!!S>	08.06.2003
+130356	Just leave	String type = <!!S>	08.06.2003
+130357	Wary of strange magic, you leave the altar alone.	String type = <!!M>	08.06.2003
+130358	You cast the strange spell! Then, eager for battle, you leave the cave.	String type = <!!M>	08.06.2003

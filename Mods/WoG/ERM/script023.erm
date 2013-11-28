@@ -1,0 +1,1147 @@
+ZVSE
+ERMS_ScriptDate=21.8(August).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Sorcery Skill Enhancement Script Version 1.2 created by Timothy Pulver
+**   Requires WoG version 3.58f or later using ERM version 2.81 or later.
+**   WoGify Name: script23.erm
+**   Last Updated: August 12, 2006
+**   Previously Updated: July 6, 2006
+
+** This script enhances the Sorcery secondary skill. With Basic Sorcery,
+** a hero with this skill can learn additional information when right-clicking
+** on certain map objects that give resources, artifacts, teach skills or
+** spells, and so forth. Range is calculated as (Level+(Sorcery Skill*2)+2).
+
+** With Advanced Sorcery, resource piles and standard treasure chests will
+** have their value increased. Resources increase by one-quarter of the
+** hero's level for gold, ore and wood, and by one-sixth the hero's level
+** for the precious resources. Expert Sorcery adds plus one to the total.
+** Treasure chests increase by 500 gold/experience for Advanced Sorcery
+** and 1000 gold/experience for Expert.
+
+** With Expert Sorcery, the Star Axis, Garden of Revelation and Learning
+** Stone may be visited from a distance. Also, resources may be collected at
+** a distance from Windmills, Water Wheels and Mystical Gardens. In all
+** cases, range is the same as the right-click range calculation listed above.
+
+-----------------------------------------------------------------------------------------
+Flags Used in this Script: 1-3,410,872
+Variables Used in this Script: v1-v4,v310-v312,z1-z5
+Functions Used in this Script: 849,5000-5037
+Function Variables Used in this Script: x1-x5,x16,y1-y17
+Timer: 18
+-----------------------------------------------------------------------------------------
+
+ [Check if Sorcery script is enabled: v1=1]
+!#UN:P23/?v1;
+
+ [Set Flags 410 to False]
+!#IF&v1=1:V410/0;
+
+-----------------------------------------------------------------------------------------
+ [Set up Timer 18 for giving AI with Sorcery a bonus to movement as compensation]
+
+!#UN:P23/?v1; [Check if Sorcery script is enabled]
+
+!#TM18&v1=1:S1/999/1/255;
+
+ [Set up table of bit values]
+!#VRv550&v1=1:C1/2/4/8/16/32/64/128/256/512;
+-----------------------------------------------------------------------------------------
+ [Timer 18 - give AI with Basic and Advanced Sorcery +100 movement, Expert +300 movement]
+!?TM18;
+
+ [Check if Sorcery script is enabled]
+!!UN:P23/?v1;
+
+!?TM18&v1=1; [Continue trigger if Sorcery script is enabled]
+
+ [Call Function 5032 - check heroes owned by AI for Sorcery skill]
+!!FU5032:P;
+----------------------------------------------------------------------------------------
+ [Start of Function 5032 - check number of heroes owned by AI and call]
+ [Function 5033 to loop through them, checking Sorcery skill]
+!?FU5032;
+
+ [See if current player is human or AI (y1) - value equals 1 if AI]
+!!OW:I-1/?y1;
+
+ [If player is AI, calculate number of heroes - store in v600-v699 (as necessary)]
+!!OW&y1=1:H-1/600;
+
+ [If player is AI and v312 >0, loop through Function 5033 to check all heroes]
+ [for Sorcery and give them a bonus to movement]
+!!DO5033/1/v600/1&y1=1/v312>0:P;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5033 - add movement bonus to AI heroes with Sorcery skill]
+!?FU5033;
+
+ [Store index number for hero number to be checked in y1]
+!!VRy1:S600 +x16;
+
+ [Store number of current hero number to be checked in y2]
+!!VRy2:Svy1;
+
+ [Check hero's Sorcery skill - store in y3]
+!!HEy2:S25/?y3;
+
+ [If hero has Basic or Advanced Sorcery, add 100 movement points]
+!!HEy2|y3=1/y3=2:Wd100;
+
+ [If hero has Expert Sorcery, add 300 movement points]
+!!HEy2&y3=3:Wd300;
+-----------------------------------------------------------------------------------------
+ [Check version of ERM to see if it's current enough]
+ [Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v310/?v311;
+!#IF&v310<357:V1/1;
+!#IF&v311<260:V1/1;
+!#IF&1:M1/z123004;
+-----------------------------------------------------------------------------------------
+ [Start of CM trigger]
+!?CM;
+
+ [Check if Sorcery script is enabled]
+!!UN:P23/?v1;
+
+!?CM&v1=1; [Continue trigger if Sorcery script is enabled]
+
+ [Check item area clicked]
+!!CM:I?v1;
+
+ [If item area is adventure map, call Function 5000]
+!!FU5000&v1=37:P;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5000 - get coordinates and object type/subtype]
+ [and control word at the right-click location]
+!?FU5000;
+
+ [Get number of currently selected hero - store in y8]
+!!FU$LocalPlayer$:P; [Get current/local player: y-100]
+!!OW:Ay-100/?y8;
+
+ [Get coordinates clicked - store in y1,y2,y3]
+!!CM&y8>=0:P?y1/?y2/?y3;
+
+ [Get object type (y4), subtype (y5) and control word (y6)]
+!!OBy1/y2/y3:T?y4 U?y5 C?y6;
+
+ [Set Flag 3 to false]
+!!IF:V3/0;
+
+ [Get Sorcery skill level of current hero - store in y9]
+!!HEy8&y8>=0:S25/?y9;
+
+!!FU&y9=0:E; [Exit if hero has no Sorcery skill]
+
+ [Get current/local player - store in y10 and add 550]
+ [then store corresponding bit value from vy10]
+!!VRy10:Sy-100; [Copy y-100 to y10]
+!!VRy10:+550;
+!!VRy10:Svy10;
+
+ [Get visibility of square clicked - store in y17]
+!!TRy1/y2/y3:V?y17;
+
+ [Just look at visibility bit for current player - 0=in shroud]
+!!VRy17:&y10;
+
+ [Check if object has customized hint text (y16)]
+!!OBy1/y2/y3:H?y16;
+
+ [If object has hint text, set y17 to 0]
+!!VRy17&y16>0:S0;
+-------------------------------------------
+ [Only continue Function 5000 if hero has Sorcery skill and object isn't in shroud]
+ [and doesn't have standard customized hint text and a Hero is selected (y8>=0)]
+!!FU|y9<=0/y17=0/y8<0:E;
+
+ [Get hero's level and add (Sorcery skill * 2) plus 2, then square it - store in y10]
+ [This is the maximum range for seeing new right-click info]
+!!HEy8:Ed0/?y10;
+!!VRy10:+y9 +y9 +2;
+!!VRy10:*y10;
+
+ [Store hero's coordinates in y11/y12/y13]
+!!HEy8:P?y11/?y12/?y13;
+
+ [Calculate distance to object - store in y15]
+!!VRy14:Sy11 -y1;  [(x1-x2)]
+!!VRy14:*y14;      [* (x1-x2)]
+!!VRy15:Sy12 -y2;  [(y1-y2)]
+!!VRy15:*y15;      [* (y1-y2)]
+!!VRy15:+y14;      [(x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)]
+-------------------------------------------
+ [Only continue Function 5000 if hero has Sorcery skill (y9>0),
+ [is on the same map level as object (y3=y13),]
+ [and is within range of the object (y15<=y10)]
+ [and object is not in shroud (y17<>0) and a Hero is selected (y8>=0)]
+!!FU|y9<=0/y3<>y13/y15>y10/y17=0/y8<0:E;
+
+ [Check if a new chest is standard or custom (ERM) - y7=0 if chest not ERM enabled]
+!!UN&y4=101/y5>0/y5<7:By5/?y7;
+
+ [Disable standard right-click info for this visit if object]
+ [is one for which expanded "hint text" will be displayed]
+!!CM|y4=79/y4=81/y4=12/y4=93/y4=39/y4=105/y4=22/y4=112/y4=91/y4=102:R0;
+!!CM|y4=55/y4=108/y4=5/y4=86/y4=29/y4=82/y4=104/y4=109:R0;
+!!CM&y4=63/y5=0:R0;       [Pyramid]
+!!CM&y4=101/y5=0:R0;      [Standard chest]
+!!CM&y4=101/y5>0/y5<7/y7=0:R0; [New chest, non-ERM enabled]
+
+!!IF:V1/0; [Clear flag 1]
+!!FU849:P; [Flag 1 will be set if Chest script in use]
+
+!!FU5001&y4=79:Py1/y2/y3/y5/y6; [Resource pile]
+!!FU5002&y4=81:Py1/y2/y3/y8; [Scholar]
+!!FU5003&y4=101/y7=0/y5<7:Py1/y2/y3; [Treasure Chest (standard)]
+!!FU5037&y4=101/y5=1/y7=1/1:Py1/y2/y3; [ERM Chest - Display "Trapped/Non-Trapped"]
+!!FU5004&y4=12:Py1/y2/y3; [Campfire]
+!!FU5005&y4=93:Py1/y2/y3; [Scroll]
+!!FU5006&y4=39:Py1/y2/y3; [Lean To]
+!!FU5007&y4=105:Py1/y2/y3; [Wagon]
+!!FU5008&y4=22:Py1/y2/y3; [Skeleton]
+!!FU5009&y4=112:Py1/y2/y3/y9; [View/Visit Windmill]
+!!FU5010|y4=91/y4=59:Py1/y2/y3; [Sign or Bottle]
+!!FU5011&y4=102:Py1/y2/y3/y6; [Tree of Knowledge]
+!!FU5012&y4=55:Py1/y2/y3/y6/y9; [View/Visit Mystical Garden]
+!!FU5013&y4=108:Py1/y2/y3; [Warrior's Tomb]
+!!FU5014|y4=113/y4=88/y4=89/y4=90:Py1/y2/y3/y6; [Witch Hut or Shrine]
+!!FU5015&y4=100/y9=3/999:Py1/y2/y3/y8; [Visit Learning Stone]
+!!FU5016&y4=63/y5=0:Py1/y2/y3; [Pyramid]
+!!FU5017&y4=5:Py1/y2/y3/y5/y6; [Artifact]
+!!FU5019&y4=86:Py1/y2/y3/y6; [Shipwreck Survivor]
+!!FU5021&y4=29:Py1/y2/y3/y6; [Flotsam]
+!!FU5022&y4=82:Py1/y2/y3/y6; [Sea Chest]
+!!FU5023&y4=104:Py1/y2/y3; [University]
+!!FU5029&y4=109:Py1/y2/y3/y9; [View/Visit Water Wheel]
+!!FU5034&y4=61/y9=3/999:Py1/y2/y3/y6/y8; [Visit Star Axis]
+!!FU5035&y4=32/y9=3/999:Py1/y2/y3/y6/y8; [Visit Garden of Revelation]
+-----------------------------------------------------------------------------------------
+ [Start of Function 5001 - Display Resource Pile Amounts]
+!?FU5001;
+
+ [Store amount of resource in y1]
+!!ARx1/x2/x3:V?y1;
+
+ [If resource is gold, multiply amount by 100]
+!!VRy1&x4=6:*100;
+
+ [Set Flag 1 to false and z3 to null]
+!!IF:V1/0; !!VRz3:S^^;
+
+~~ARx1/x2/x3&x5<0:X?y2; [Check if guards are turned on: y2]
+
+ [Check each slot for guards (if resource pile has set-up) - store in z3]
+!!DO5018/0/6/1&x5<0:Px1/x2/x3;
+
+ [Call Function 5020 to set up appropriate hint text]
+!!FU5020:Px4/y1;
+
+ [Add additional hint text if there are guards]
+!!VRz1&1:Sz123005;
+
+ [If not guards, just resource pile information (z1)]
+!!VRz1&-1:Sz2;
+
+ [Display hint text]
+!!IF:Q1/x4/y1/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5002 - Display Scholar details]
+!?FU5002;
+
+ [Check what Scholar teaches (y1): 0=Primary skill, 1=Secondary skill, 2=Spell]
+ [Primary skill # in y2, Secondary skill # in y3, Spell # in y4]
+!!SCx1/x2/x3:T?y1 P?y2 S?y3 L?y4;
+
+ [Type 0 - Primary skill]
+!!VRz2:S^^;
+!!VRy5&y1=0:Sy2 +31;
+!!VRy6&y1=0:S1;
+!!VRz1&y1=0/y2<2:Sz123006;
+!!VRz1&y1=0/y2=2:Sz123007;
+!!VRz1&y1=0/y2=3:Sz123008;
+
+ [Type 1 - Secondary skill]
+
+ [Check hero's level in skill - store in y7]
+!!HEx4&y1=1:Sy3/?y7;
+!!VRy5&y1=1:S20;
+!!VRy6&y1=1:Sy3 *3 +3;
+!!VRy6&y1=1/y7=1:+1;
+!!VRy6&y1=1/y7=2:+2;
+!!VRz1&y1=1:Sz123009;
+
+ [Type 2 - Spell]
+!!VRy5&y1=2:S9;
+!!VRz1&y1=2:Sz123010;
+ [Subtract 1024 to get spell number]
+!!VRy4&y1=2:-1024;
+!!VRy6&y1=2:Sy4;
+
+ [Display hint text]
+!!IF:Q1/y5/y6/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5003 - Display Treasure Chest Contents]
+!?FU5003;
+
+ [Contents - y1 = bonus type (artifact or gold/experience), y2=artifact number,]
+ [y3 = bonus amount (if gold/experience)]
+!!CHx1/x2/x3:S?y1 A?y2 B?y3;
+
+ [Multiply bonus amount by 500 to get gold amount (y5), subtract 500 for experience (y6)]
+!!VRy5&y1=0:Sy3*500;
+!!VRy6&y1=0:Sy5-500;
+
+ [Display hint text for gold/experience]
+!!IF&y1=0:Q1/6/y5/17/y6/4/z123011;
+
+ [Display hint text for artifact]
+!!IF&y1<>0:Q1/8/y2/4/z123012;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5004 - Display Campfire Contents]
+!?FU5004;
+
+ [Store campfire bonus type (y1) and value (y2)]
+!!FRx1/x2/x3:B?y1/?y2;
+
+ [Multiply bonus value by 100 (gold), store in y3]
+!!VRy3:Sy2 *100;
+
+ [Display hint text]
+!!IF:Q1/6/y3/y1/y2/4/z123013;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5005 - Display Scroll Spell]
+!?FU5005;
+
+ [Get scroll spell number (y1)]
+!!ARx1/x2/x3:V?y1;
+
+ [Check scroll's control word to see if it has any setup or not]
+ [Store number in variable i -- a negative number indicates setup]
+!!OBx1/x2/x3:C?i;
+
+ [Set Flag 1 to false and z3 to null]
+!!IF:V1/0; !!VRz3:S^^;
+
+ [Check each slot for guards (if scroll has set up) - store in z3]
+!!DO5018/0/6/1&i<0:Px1/x2/x3;
+
+ [Look up name of spell (z2)]
+!!UN:N1/2/y1;
+
+ [Set y2 to 1 if a Living Scroll]
+!!UN:P33/?y2; [Check if Living Scrolls is enabled: y2=1 if  yes]
+!!VRy2|y1<10/y1=24/y1=25/y1=35/y1=38/y1=39/y1=40/y1=65/y1=66/y1=67/y1=68/y1=69:S0;
+!!VRz-1&y2=1:Sz123104;
+!!VRz-1&y2=0:S^^;
+
+ [Add additional hint text if there are guards]
+!!VRz1&1:Sz123014;
+
+ [If not guards, just scroll spell name (z1)]
+!!VRz1&-1:Sz123015;
+
+ [Display hint text]
+!!IF:Q1/9/y1/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5006 - Display Lean To Contents]
+!?FU5006;
+
+ [If red square is clicked on, add one to x position (x1)]
+!!TRx1/x2/x3:P?y3;
+!!VRx1&y3=0:+1;
+
+ [Get resource type (y1) and value (y2)]
+!!LNx1/x2/x3:B?y1/?y2;
+
+ [Call Function 5020 to set up appropriate hint text]
+!!FU5020:Py1/y2;
+
+ [If Lean To is empty, set z2 to this message]
+!!VRz2&y2<1:Sz123016;
+!!VRy1&y2<1:S-1;
+
+ [Set up new hint text (z1)]
+!!VRz1:Sz123017;
+
+ [Display hint text]
+!!IF:Q1/y1/y2/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5007 - Display Wagon Contents]
+!?FU5007;
+
+ [Check wagon details: y1 (bonus or not), y2 (bonus type: artifact or resource),]
+ [y3 (artifact number), y4 (resource type), y5 (resource amount)]
+!!WGx1/x2/x3:S?y1 B?y2 A?y3 R?y4/?y5;
+
+ [If resource bonus Call Function 5020 to set up appropriate hint text (z2)]
+!!FU5020&y1<>0/y2=0:Py4/y5;
+
+ [Lookup artifact class - z2]
+!!FU5036&y2<>0:Py3;
+
+ [Set up hint text in z1 for resources]
+!!VRz1&y1<>0/y2=0:Sz123018;
+
+ [Set up hint text in z1 for artifact]
+!!VRz1&y1<>0/y2<>0:Sz123019;
+!!VRy4&y1<>0/y2<>0:S8;
+
+ [If wagon is empty, set z1 to "Wagon contains nothing of value."]
+ [and set y4 and y5 to -1]
+!!VRz1&y1=0:Sz123020;
+!!VRy4&y1=0:S-1;
+!!VRy5&y1=0:S-1;
+
+ [Display hint text for resources]
+!!IF&y2=0:Q1/y4/y5/4^%Z1^;
+
+ [Display hint text for artifact]
+!!IF&y2<>0:Q1/y4/y3/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5008 - Display Skeleton Contents]
+!?FU5008;
+
+ [Get skeleton bonus (y1) and artifact type, if any (y2)]
+!!SKx1/x2/x3:S?y1 A?y2;
+
+ [Set y3 to artifact type]
+!!VRy3&y1<>0:S8; [Artifact]
+
+ [If skeleon has nothing, set z1 to "Skeleton has nothing of value."]
+ [Set type (y3) and subtype (y2) to -1]
+!!VRz1&y1=0:Sz123021;
+!!VRy2&y1=0:S-1;
+!!VRy3&y1=0:S-1;
+
+ [Look up class of artifact (z2)]
+!!FU5036&y1<>0:Py2;
+
+ [Set up hint text in z1 for artifact]
+!!VRz1&y1<>0:Sz123022;
+
+ [Display hint text]
+!!IF:Q1/y3/y2/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5009 - Display Windmill Contents]
+!?FU5009;
+
+ [Check type of resource (y1) and amount (y2)]
+!!MLx1/x2/x3:B?y1/?y2;
+
+ [Call Function 5020 to set up appropriate resource hint text]
+!!FU5020:Py1/y2;
+
+ [If resources gone for the week, set z2 to (Visited)]
+!!VRz2&y2<1:Sz123023;
+!!VRy1&y2<1:S-1;
+!!VRy2&y2<1:S-1;
+
+ [Check if Windmill is upgraded by Mithril and if it is (y3=2 or 3), set z3]
+!!POx1/x2/x3:N?y3;
+!!VRy3|y3=2/y3=3:S2; [If y3=2 or 3, set it to 2]
+!!VRz3:S^^;
+!!VRz3&y3=2:Sz123024;
+
+ [Set up hint text in z1]
+!!VRz1:Sz123025;
+
+ [Display hint text]
+!!IF|x4<3/y2<1:Q1/y1/y2/4^%Z1^;
+
+ [If hero has Expert Sorcery, call Function 5027 and player]
+ [is offered the chance to visit the Windmill from a distance]
+!!FU5027&x4=3/y2>0/999:Px1/x2/x3/y1/y2;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5027 - Remotely visit Windmill]
+!?FU5027;
+
+ [Check if Windmill is upgraded by Mithril and if it is (y3=2 or 3), set z3]
+!!POx1/x2/x3:N?y3;
+!!VRz3:S^^;
+!!VRz3|y3=2/y3=3:Sz123026;
+
+ [Ask if player wishes to visit windmill remotely - answer in Flag 2]
+!!IF:Q2/x4/x5/2/z123027;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/x4/x5/1/z123028;
+
+ [Give player mill resources if player visited remotely]
+!!OW&2:R-1/x4/dx5;
+
+ [Set mill resources to 0 and "visited"]
+!!MLx1/x2/x3&2:Bd0/0;
+----------------------------------------------------------------------------------------
+ [Start of Function 5010 - Display Sign Message]
+!?FU5010;
+
+ [Store sign message in z1]
+!!SGx1/x2/x3:M?z1;
+
+ [Check if sign is default or blank - Flag 1 set to false if empty]
+!!VRz1:H1;
+
+ [If sign is default or blank, set z1 to this text]
+!!VRz1&-1:Sz123029;
+
+ [Display hint text]
+!!IF:Q1/-1/-1/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5011 - Display Tree of Knowledge type]
+!?FU5011;
+
+ [Store type in y1 and tree number in y2]
+!!KTx1/x2/x3:S?y1 N?y2;
+
+ [Get active hero number - store in y3]
+!!OW:A-1/?y3;
+
+!!VRz2&y1=0:Sz123030;
+!!VRy5&y1=0:S-1;
+!!VRy6&y1=0:S-1;
+!!VRz2&y1=1:Sz123031;
+!!VRy5&y1=1:S6;
+!!VRy6&y1=1:S2000;
+!!VRz2&y1=2:Sz123032;
+!!VRy5&y1=2:S5;
+!!VRy6&y1=2:S10;
+
+ [Check if hero has visited this tree - y4=1 if visited]
+!!HEy3:V5/y2/?y4;
+
+ [If hero visited tree, set z3 to (already visited), otherwise set it ^^]
+!!VRz3&y4=1:Sz123033;
+!!VRz3&y4=0:S^^;
+
+!!VRz1:Sz123034;
+
+ [Display hint text]
+!!IF:Q1/y5/y6/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5012 - Display Mystical Garden Contents]
+!?FU5012;
+
+ [Check yellow square values for square clicked - store in y5]
+!!TRx1/x2/x3:E?y5;
+
+ [Check Garden's bonus type (y1) and resource type (y2)]
+!!GDx1/x2/x3:T?y1 B?y2;
+
+ [Set resource amounts]
+!!VRy3|y2=5/y2=7:S5;
+!!VRy3&y2=6:S500;
+
+ [Call Function 5020 to set up appropriate hint text if it's a resource]
+!!FU5020&y1<>0:Py2/y3;
+
+ [Check if Garden already visited this week]
+!!VRz2&x4<-1600:Sz123035;
+!!VRy2&x4<-1600:S-1;
+!!VRy3&x4<-1600:S-1;
+
+ [Set z1 to hint text]
+!!VRz1:Sz123036;
+
+ [If a red square is clicked on, set hint text to this instead]
+!!VRz1&y5=1:Sz123037;
+!!VRy2&y5=1:S-1;
+!!VRy3&y5=1:S-1;
+
+ [Display hint text]
+!!IF|x5<3/x4<=-1600/y5=1:Q1/y2/y3/4^%Z1^;
+
+ [If hero has Expert Sorcery, call Function 5028 and player]
+ [is offered the chance to visit the Mystical Garden from a distance]
+ [Only allow remote visit if clicking on yellow square]
+!!FU5028&x5=3/x4>-1600/y5=0/999:Px1/x2/x3/y2/y3;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5028 - Remotely visit Mystical Garden]
+!?FU5028;
+
+ [Ask if player wishes to visit mystical garden remotely - answer in Flag 2]
+!!IF:Q2/x4/x5/2/z123038;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/x4/x5/1/z123039;
+
+ [Give player mystical garden resources if player visited remotely]
+!!OW&2:R-1/x4/dx5;
+
+ [Set mystical garden resources to 0 and "visited"]
+!!OBx1/x2/x3&2:C-1650;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5013 - Display contents of Warrior's Tomb]
+!?FU5013;
+
+ [If red square is clicked on, add one to x position (x1)]
+!!TRx1/x2/x3:P?y3;
+!!VRx1&y3=0:+1;
+
+ [Store artifact/no artifact in y1, artifact number in y2]
+!!WTx1/x2/x3:S?y1 A?y2;
+
+ [Lookup artifact class - z2]
+!!FU5036:Py2;
+
+!!VRy4:S8; [Artifact]
+!!VRz1&y1<>0:Sz123040;
+
+ [If Tomb has nothing, set z1 to "Warrior's Tomb is empty."]
+!!VRz1&y1=0:Sz123041;
+!!VRy2&y1=0:S-1;
+!!VRy4&y1=0:S-1;
+
+ [Display hint text]
+!!IF:Q1/y4/y2/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5014 - Display Witch Hut Skill or Shrine Spell]
+!?FU5014;
+
+ [Get current player - store in y1]
+!!FU$LocalPlayer$:P; [Get current/local player: y-100]
+!!VRy1:Sy-100; [Copy y-100 to y1]
+
+ [Convert player number into bit value for control word (y1)]
+!!VRy1:+550;
+!!VRy1:Svy1;
+!!VRy1:*32;
+
+ [Set control word so that active player has 'visited' witch hut]
+!!VRx4:|y1;
+!!OBx1/x2/x3:Cx4;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5015 - Remotely Visit Learning Stone]
+!?FU5015;
+
+ [Get number of learning stone (y1)]
+!!STx1/x2/x3:N?y1;
+
+ [Check if hero has visited this learning stone (y2)]
+!!HEx4:V0/y1/?y2;
+
+!!FU&y2<>0:E; [Exit if hero has already visited this Learning Stone]
+
+ [Ask if player wishes to visit learning stone remotely - answer in Flag 2]
+!!IF:Q2/17/1000/2/z123042;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/17/1000/1/z123043;
+
+ [Set Learning Stone as visited if player chose to visit remotely]
+!!HEx4&2:V0/y1/1;
+
+ [Give hero 1000 experience (or more if knows Learning) if player chose to visit remotely]
+!!HEx4&2:S21/?y3; [Level of Learning skill known: y3]
+!!HEx4&2/y3=0:Ed1000; [No skill]
+!!HEx4&2/y3=1:Ed1050; [Basic Learning]
+!!HEx4&2/y3=2:Ed1100; [Advanced Learning]
+!!HEx4&2/y3=3:Ed1150; [Expert Learning]
+
+ [Disable right-click for this visit]
+!!CM:R0;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5016 - Display Pyramid Spell]
+!?FU5016;
+
+ [If red square is clicked on, add one to x position (x1)]
+!!TRx1/x2/x3:P?y3;
+!!VRx1&y3=0:+1;
+
+ [Store pyramid spell number in y1 and visited status in y2]
+!!PMx1/x2/x3:S?y1 V?y2;
+
+ [Determine Spell name - store in z2 - store type/subtype in y5 and y6]
+!!UN&y1<>0:N1/2/y1;
+!!VRy5:S9;
+!!VRy6:Sy1;
+
+ [Get active hero number - store in y3]
+!!OW:A-1/?y3;
+
+ [Check if active hero knows this spell already - y4 > 0 if hero knows spell]
+!!HEy3:My1/?y4;
+
+ [Add additional (already learned) text (z2) if hero knows spell (y4 > 0)]
+!!VRz2&y4>0:Sz123044;
+
+ [If Pyramid already visited, set, set z2 to "(visited)"]
+!!VRz2&y2=0:Sz123045;
+
+!!VRz1&y1<>0:Sz123046;
+!!VRy5&y2=0:S-1;
+!!VRy6&y2=0:S-1;
+
+ [Display hint text]
+!!IF:Q1/y5/y6/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5017 - Display Artifact name]
+!?FU5017;
+
+ [Set Flag 1 to false and z3 to null]
+!!IF:V1/0;
+!!VRz3:S^^;
+
+~~ARx1/x2/x3&x5<>0:X?y1; [Check if guards are turned on: y1]
+
+ [Check each slot for guards - store in z3]
+ [Flag 1 is set to true if there are any guards]
+!!DO5018/0/6/1&x5<>0:Px1/x2/x3;
+
+ [Lookup artifact class - z2]
+!!FU5036:Px4;
+
+ [Add additional hint text if there are guards]
+!!VRz1&1:Sz123047;
+
+ [If no guards, just artifact class and picture]
+!!VRz1&-1:S^%Z2^;
+
+ [Display hint text]
+!!IF:Q1/8/x4/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5018 - Display Artifact/Scroll/Resource Guards]
+!?FU5018;
+
+ [Check artifact/scroll/resource guard type (y1) and number (y2) in each slot]
+!!ARx1/x2/x3:Gx16/?y1/?y2;
+
+ [If there's a guard in any slot set Flag 1]
+!!IF&y1<>-1/y2>0:V1/1;
+
+ [If there's a guard in this slot, look up name of monster (z2)]
+!!UN&y1<>-1/y2=1:N3/2/y1/0;
+!!UN&y1<>-1/y2>1:N3/2/y1/1;
+
+ [If there's a guard in this slot, add name and number to z3 variable list]
+!!VRz3&y1<>-1/y2>0:S^%Z3
+%Y2 %Z2^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5019 - Display Shipwreck Survivor Artifact]
+!?FU5019;
+
+ [Lookup artifact class - z2]
+!!FU5036:Px4;
+
+ [Display hint text]
+!!IF:Q1/8/x4/4/z123048;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5020 - Hint text for resources - stored in z2]
+!?FU5020;
+
+ [Set up appropriate hint text]
+!!VRz2:S^{%X2} ^;
+!!VRz2&x1=0/x2=1:+z123049;
+!!VRz2&x1=0/x2>1:+z123050;
+!!VRz2&x1=1/x2=1:+z123051;
+!!VRz2&x1=1/x2>1:+z123052;
+!!VRz2&x1=2/x2=1:+z123053;
+!!VRz2&x1=2/x2>1:+z123054;
+!!VRz2&x1=3/x2=1:+z123055;
+!!VRz2&x1=3/x2>1:+z123056;
+!!VRz2&x1=4/x2=1:+z123057;
+!!VRz2&x1=4/x2>1:+z123058;
+!!VRz2&x1=5/x2=1:+z123059;
+!!VRz2&x1=5/x2>1:+z123060;
+!!VRz2&x1=6/x2=1:+z123061;
+!!VRz2&x1=6/x2>1:+z123062;
+!!VRz2&x1=7/x2=1:+z123063;
+!!VRz2&x1=7/x2>1:+z123064;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5021 - Display Flotsam Type]
+!?FU5021;
+
+!!VRz2&x4=0:Sz123065;
+!!VRy1&x4=0:S-1;
+!!VRy3&x4<2:S-1;
+!!VRz2&x4=1:Sz123066;
+!!VRy1&x4>0:S0;
+!!VRy2&x4>0/x4<3:S5;
+!!VRz2&x4=2:Sz123067;
+!!VRy3&x4>1:S6;
+!!VRy4&x4=2:S200;
+!!VRz2&x4=3:Sz123068;
+!!VRy2&x4=3:S10;
+!!VRy4&x4=3:S500;
+
+ [Set up hint text (z1)]
+!!VRz1:Sz123069;
+
+ [Display hint text]
+!!IF:Q1/y1/y2/y3/y4/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5022 - Sea Chest Type]
+!?FU5022;
+
+ [For chest type, &7 control word - store in y1]
+!!VRy1:Sx4 &7;
+
+ [Determine artifact number - store in y2]
+!!VRy2&y1=2:Sx4 :8 &255 -1;
+
+ [Lookup artifact class - z2]
+!!FU5036&y1=2:Py2;
+
+ [Set up z1 to store "Sea Chest"]
+!!VRz1:Sz123070;
+
+ [Display hint text for empty]
+!!IF&y1=0:Q1/-1/-1/4/z123071;
+
+ [Display hint text for 1500 gold]
+!!IF&y1=1:Q1/6/1500/4/z123072;
+
+ [Display hint text for 1000 gold plus artifact]
+!!IF&y1=2:Q1/36/1000/8/y2/4/z123073;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5023 - Display skills offered by University]
+!?FU5023;
+
+ [Check if square clicked is yellow (0=yellow)]
+!!TRx1/x2/x3:E?y5;
+
+ [Get university details if yellow square clicked]
+!!URx1/x2/x3&y5=0:S?y1/?y2/?y3/?y4;
+!!VRz1:Sz123074;
+!!UN:N4/2/y1;
+!!VRz1:S^%Z1
+{%Z2,}^;
+!!UN:N4/2/y2;
+!!VRz1:S^%Z1 {%Z2}^;
+!!UN:N4/2/y3;
+!!VRz1:S^%Z1
+{%Z2,}^;
+!!UN:N4/2/y4;
+!!VRz1:S^%Z1 {%Z2.}^;
+
+ [If PO:N is 2, and Mithril script active, it's]
+ [an Advanced University (upgraded by Mithril)]
+!!UN:P36/?y6;
+!!POx1/x2/x3:N?y7;
+!!VRz-1:S^^;
+!!VRz-1&y6=1/y7=2:Sz123075+^ ^;
+
+ [Display hint text if yellow square clicked]
+!!IF&y5=0:Q1/-1/-1/4^%Z-1%Z1^;
+
+ [Enable standard right-click hint text if non-yellow square clicked]
+!!CM&y5<>0:R1;
+-----------------------------------------------------------------------------------------
+ [Resource object trigger - Enhance resource piles]
+!?OB79&-875;
+
+ [Check if Sorcery script is enabled]
+!!UN:P23/?v1;
+
+!?OB79&v1=1; [Continue trigger if Sorcery script is enabled]
+
+ [Store hero's Sorcery level in v1]
+!!HE-1:S25/?v1;
+
+ [If hero has Advanced or better Sorcery skill, call Function 5025]
+!!FU5025&v1>1:Pv1;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5025 - Resource pile Enhancement with Advanced Sorcery skill]
+!?FU5025;
+
+ [Get value of resource pile (y1)]
+!!ARv998/v999/v1000:V?y1;
+
+ [Get type of resource - store  in y6]
+!!OB998:U?y6;
+
+ [Check value stored at resource pile position (y5)]
+!!PO998:N?y5;
+
+ [If value is 0, set value at resource pile position to y1]
+!!PO998&y5=0:Ny1;
+
+ [If value at position (y1) isn't 0 and is higher than value of pile (y5),]
+ [set it to value of pile]
+!!VRy1&y1>y5/y5<>0:Sy5;
+
+ [Get hero's level (y2)]
+!!HE-1:Ed0/?y2;
+
+ [Store hero's name in z5]
+!!HE-1:B0/?z5;
+
+ [If resource is wood, ore or gold, divide hero's level (y2) by 4]
+!!VRy2|y6=0/y6=2/y6=6::4;
+
+ [If resource is precious, divide hero's level (y2) by 6]
+!!VRy2|y6=1/y6=3/y6=4/y6=5/y6=7::6;
+
+ [If bonus is less than one, make it one]
+!!VRy2&y2<1:S1;
+
+ [If hero has Expert Sorcery skill, add one]
+!!VRy2&x1=3:+1;
+
+ [Increase value of resource pile (y1) by y2]
+!!VRy1:Sy1 +y2;
+!!ARv998/v999/v1000:Vy1;
+
+ [Set z1 to "Advanced" or "Expert" depending on skill level]
+!!VRz1&x1=2:Sz123075;
+!!VRz1&x1=3:Sz123076;
+
+ [If resource is gold, multiply by 100 (y1 and y3)]
+!!VRy3:Sy2;
+!!VRy3&y6=6:*100;
+!!VRy1&y6=6:*100;
+
+ [Set z2 string according to type and number of resource bonus]
+!!FU5020:Py6/y3;
+
+ [Check if Mithril is being used as Mithril - store in y9]
+!!UN:B0/?y9;
+
+ [If resource is mithril, set Flag 410 to True to let the Mithril script know]
+ [it shouldn't display a picking-up-mithril message]
+!!IF&y6=7/y9=1:V410/1; [Set 410 to True if resource is mithril]
+!!IF&y6<>7:V410/0; [Set 410 to False if resource isn't mithril]
+
+ [For mithril, set "bar" or "bars" in z-1 temporary variable]
+!!VRz-1&410/y3=1:Sz123077;
+!!VRz-1&410/y3>1:Sz123078;
+
+ [Determine player's current mithril and store in y8]
+!!OW:R-1/7/?y7; [Store current player's previous total mithril in y7]
+!!VRy8:Sy7 +y1; [Add new mithril to previous mithril - store in y8]
+
+ [Check if Enhanced Sorcery resource bonus display is disabled]
+!!OW:C?y10; [Current player: y10]
+!!VRy10:+1; [Add 1 to y10]
+!!FU$bit$:Py10; [Convert to bit number: y-100]
+!!VRy11:Sv3320; [Set y11 to v3320]
+!!VRy11:&y-100; [Check if message is disabled for current player: y11]
+!!FU&y11=y-100/-410:E; [Exit Function if message is disabled for current player unless Mithril]
+
+ [Display increase of value message (except Mithril)]
+!!IF&1000/-410:Q1/y6/y3/1/z123079;
+
+ [If resource is mithril, display this instead]
+!!IF&1000/410:Q1/y6/y1/1/z123080;
+-----------------------------------------------------------------------------------------
+ [Treasure Chest object trigger - Enhance gold/experience value]
+!?OB101;
+
+ [Check if Sorcery script is enabled]
+!!UN:P23/?y-1;
+!!FU&y-1<>1:E; [Exit if Sorcery script isn't enabled]
+
+ [Store hero's Sorcery level in v1]
+!!HE-1:S25/?v1;
+
+ [Get chest subtype - v2]
+!!OB998:U?v2; [v2=0 for standard chest, v2>0 for new chest types, v2>6 for Power Stones]
+!!FU&v2>6:E; [Exit if it's a Power Stone]
+
+ [Check if chest is custom or standard]
+!!VRv3:S0;
+!!UN&v2>0:Bv2/?v3; [v3=0 if standard operation, v3=1 if advanced (scripted)]
+
+ [Check if chest has an artifact or not]
+!!CH998&v2>0/v3=0/-875:S?v4;
+!!CH998&v2=0/-875:S?v4;
+
+ [If hero has Advanced or better Sorcery skill and if chest is set as,]
+ [standard type and doesn't contain an artifact, call Function 5026]
+ [Also, must if Hero didn't die from Rogue attack (875 must be false)]
+!!FU5026&v1>1/v3=0/v4=0/-875:Pv1;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5026 - Treasure Chest Enhancement with Advanced Sorcery skill]
+!?FU5026;
+
+ [Get value of treasure chest (y1)]
+!!CHv998/v999/v1000:B?y1;
+
+ [Disable chest object message for human player]
+!!OB998&1000:M-1/1/0;
+
+ [Increase value of chest by 1 for Advanced Sorcery, by 2 for Expert Sorcery]
+!!VRy1&x1=2:+1;
+!!VRy1&x1=3:+2;
+!!VRy4&x1=2:S500;
+!!VRy4&x1=3:S1000;
+
+ [If value of y1 is greater than 15, set it to 15]
+!!VRy1&y1>15:S15;
+
+ [Set new value of chest]
+!!CHv998/v999/v1000:By1;
+
+ [If hero has Adventure Cave "Treasure" skill (w64=3), double y1]
+!!IF:W-1;
+!!VRy1&w64=3:*2;
+
+ [If value of y1 is greater than 15, set it to 15]
+!!VRy1&y1>15:S15;
+
+ [Set y2 to 500 x y1 for gold display purposes]
+!!VRy2:Sy1 *500;
+
+ [Set y3 to y2 - 500 for experience display purposes]
+!!VRy3:Sy2 -500;
+
+ [Set z1 to "Advanced" or "Expert" depending on skill level]
+!!VRz1&x1=2:Sz123081;
+!!VRz1&x1=3:Sz123082;
+
+ [Display chest message with choice of gold or experience]
+ [Don't display if hero belongs to an AI]
+!!IF&1000:Q2/6/y2/17/y3/7/z123083;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5029 - Display Water Wheel details]
+!?FU5029;
+
+ [Check if square is yellow - store value in y1 (0=yellow)]
+!!TRx1/x2/x3:E?y1;
+
+ [Store bonus (gold) value in y2, actual gold value in y3]
+!!WMx1/x2/x3:B?y2;
+!!VRy3:Sy2 *500;
+
+ [Restore normal right-click hint display if not yellow (y1=1) or visited (y2<1)]
+!!CM|y1<>0/y2<1:R1;
+
+ [Check if Water Wheel is upgraded by Mithril and if it is (y4=2 or 3), set z3]
+!!POx1/x2/x3:N?y4;
+!!VRz3:S^^;
+!!VRz3|y4=2/y4=3:Sz123084;
+
+!!VRz1:Sz123085;
+
+ [If hero has Expert Sorcery, call Function 5030 and player]
+ [is offered the chance to visit the Water Wheel from a distance]
+ [y1=0 (yellow square), x4=3 (Expert Sorcery), y2>0 (not visited)]
+!!FU5030&y1=0/x4=3/y2>0/999:Px1/x2/x3/y3;
+
+ [Display hint text if yellow square, not visited and flag 3 is true]
+ [y1=0 (yellow square), x4<>3 (not Expert Sorcery) y2>0 (not visited)]
+!!IF&y1=0/x4<>3/y2>0:Q1/6/y3/4^%Z1^;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5030 - Remotely visit Water Wheel]
+!?FU5030;
+
+ [Check if Water Wheel is upgraded by Mithril and if it is (y4=2 or 3), set z3]
+!!POx1/x2/x3:N?y4;
+!!VRz3:S^^;
+!!VRz3|y4=2/y4=3:Sz123086;
+
+ [Ask if player wishes to visit water wheel remotely - answer in Flag 2]
+!!IF:Q2/6/x4/2/z123087;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/6/x4/1/z123088;
+
+ [Give player water wheel resources if player visited remotely]
+!!OW&2:R-1/6/dx4;
+
+ [Set water wheel resources to 0 and "visited" for current colour]
+!!WMx1/x2/x3&2:B0;
+!!OW&2:C?y1;
+!!VRy2&2/y1=0:S-8160;
+!!VRy2&2/y1=1:S-8128;
+!!VRy2&2/y1=2:S-8000;
+!!VRy2&2/y1=3:S-7872;
+!!VRy2&2/y1=4:S-7680;
+!!VRy2&2/y1=5:S-7168;
+!!VRy2&2/y1=6:S-6144;
+!!VRy2&2/y1=7:S-4096;
+!!OBx1/x2/x3&2:C?y3;
+!!VRy3&2:|y2;
+!!OBx1/x2/x3&2:Cy3;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5034 - Remotely visit Star Axis]
+!?FU5034;
+
+ [Check if hero has visited this star axis (y2) (x4=number of star axis)]
+!!HEx5:V4/x4/?y2;
+-------------------------------------------
+ [Continue Function 5034 only if hero hasn't already visited this Star Axis]
+!?FU5034&y2=0;
+
+ [Ask if player wishes to visit star axis remotely - answer in Flag 2]
+!!IF:Q2/33/1/2/z123089;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/33/1/1/z123090;
+
+ [Give hero +1 power if player chose to visit remotely]
+!!HEx5&2:Fd/d/d1/d;
+
+ [Set Star Axis as visited if player chose to visit remotely]
+!!HEx5&2:V4/x4/1;
+
+ [Redraw screen]
+!!UN:R1;
+
+ [Disable right-click for this visit]
+!!CM:R0;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5035 - Remotely visit Garden of Revelation]
+!?FU5035;
+
+ [Check if hero has visited this garden of revelation(y2) (x4=number of garden)]
+!!HEx5:V2/x4/?y2;
+-------------------------------------------
+ [Continue Function 5035 only if hero hasn't already visited this Garden of Revelation]
+!?FU5035&y2=0;
+
+ [Ask if player wishes to visit garden - answer in Flag 2]
+!!IF:Q2/34/1/2/z123091;
+
+ [If player clicks OK, display message]
+!!IF&2:Q2/34/1/1/z123092;
+
+ [Give hero +1 knowledge if player chose to visit remotely]
+!!HEx5&2:Fd/d/d/d1;
+
+ [Set Garden of Revelation as visited if player chose to visit remotely]
+!!HEx5&2:V2/x4/1;
+
+ [Redraw screen]
+!!UN:R1;
+
+ [Disable right-click for this visit]
+!!CM:R0;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5036 - Look up artifact class]
+!?FU5036;
+
+ [x1=artifact number. Lookup artifact class (y1) and store text in z2]
+!!UN:Ax1/3/?y1;
+!!VRz2:Sz123093;
+!!VRz2&x1=0:Sz123094;
+!!VRz2&x1=2:Sz123095;
+!!VRz2&x1>=3/x1<=6:Sz123096;
+!!VRz2&y1=2:Sz123097;
+!!VRz2&y1=4:Sz123098;
+!!VRz2&y1=8:Sz123099;
+!!VRz2&y1=16:Sz123100;
+!!VRz2&x1>=146/x1<=155:Sz123101;
+-----------------------------------------------------------------------------------------
+ [Start of Function 5037 - ERM Chest -  Display "Trapped/Non-Trapped" message]
+!?FU5037;
+
+ [Check for trap (x mod 4 = 0, y mod 4 = 0]
+!!VRx1:%4;
+!!VRx2:%4;
+
+ [Display message if chest trapped]
+!!IF&x1=0/x2=0:Q1/-1/-1/4/z123102;
+
+ [Display message if chest is not trapped]
+!!IF|x1<>0/x2<>0:Q1/-1/-1/4/z123103;
+
+ [Disable standard right-click Info]
+!!CM:R0;
+
+** End of Script **
+

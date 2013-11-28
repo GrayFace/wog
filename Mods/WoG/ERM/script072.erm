@@ -1,0 +1,387 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=28.6(June).2006
+
+** Random Hero by Bonizag
+** Wogify Name: script72.erm
+** Last Updated: June 28, 2006 (Bug fix by Timothy / Thomas Franz - fixed bug in new spell-giving code)
+** Previously Updated: November 13, 2005
+
+** variables used:        v846, v849, v851, v855-v856, v867, v884-v886, v887-v891 for long term
+
+** string variables used: z1-z3, z78-z90 temporarily
+
+** flags used:            781, 783, 786 for long term
+
+** functions used:        7788-7794, 7797-7798, 7825-7827
+
+** hero variables used:   w81-w83
+
+!#UN:P72/?v846; //check if option is enabled
+
+!#TM41&v846=1:S1/999/1/255; //init timer 41
+!#VRv855:S-2;
+
+!#IF&v846=1:V781/0; //init flag 781
+!#IF&v846=1:V786/0; //786 set false for the first battle
+
+!?TM41&v846=1; //timer trigger
+!!VRv849:Sc0; //get  current day
+
+!?TM41&v849=1/v846=1;
+!!VRh:S0; //see whether there is an unused color
+!!OW:I0/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I1/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I2/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I3/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I4/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I5/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I6/?f/?g;
+!!VRh&g=1:S1;
+!!OW:I7/?f/?g;
+!!VRh&g=1:S1;
+!!VRv846&h=0:S0;
+
+!?OB54&v846=1/1000; //monster trigger
+!!IF:V786/1;
+
+!?BA0&v846=1/1000; //before battle begins
+
+!!IF:V781/0; //assume there is no random hero for battle actions
+!!IF:V783/0; //assume no army camp fight
+
+!?BA0&786/v846=1/1000; //continue if hero fights army camps (wandering monsters excluded)
+//section: hero fights a monster stack
+
+!!BA:H0/?f; //attacker in vf
+!!BA:H1/?g; //defender in vg
+
+!!IF:V783/1; //save flag 786 into 783
+!!VRh&g<0:S1 R99; //make a random value from 1 to 100
+!!VRh&g<0:%3; //33% chance to fight against a hero
+!!VRv855&g<0/h=0:S-2; //init v855
+!!VRi&g<0/h=0:S0 T154; //get a time based random hero number 0-154, 155 excluded because it is reserved for Asmodeus script
+!!VRv856&g<0/h=0:S0; //init v856, counts number of searched heroes
+!!VRv849&g<0/h=0:Si;
+!!DO7798/1/1000/1&g<0/h=0:P; //get the hero who fights the battle, v855 will contain the number of the hero
+
+//this flag state needed after battle
+!!IF:V786/0; //assume hero doesn't fight against monsters' hero
+!!IF:V781/0; //assume hero doesn't fight against monsters' hero
+
+!!FU&g<0/h=0/v855<0:E; //exit if no random hero
+
+!!HEf&g<0/h=0:E?v3/?v1; [exp of attacker stored in v3, level in v1]
+!!HEv855&g<0/h=0:E?v3/?v2; [exp of defender stored in v3, level in v2]
+!!VRv3&g<0/h=0:Sv1;  *6 :5    [increase random hero "level" bei 20% - too strong]
+!!HEv855&g<0/h=0:F?y1/?y2/?y3/?y4; [save primary skills before battle]
+!!VRv884:S-1; [init with -1 (important)]
+!!VRv884&g<0/h=0:+1 +y1 *128;
+!!VRv884&g<0/h=0:+y2 *128;
+!!VRv884&g<0/h=0:+y3 *128;
+!!VRv884&g<0/h=0:+y4; [28 bits for primary skills]
+!!VRv884|y1>127/y2>127/y3>127/y4>127:S-1;
+!!DO7790/v2/v3/1&v884>-1/g<0/h=0/v3>=v2:P;  [increase primary skills for battle]
+
+!!VRv887&g<0/h=0:S0; [skillsum (usually 2-24)]
+!!HEv855&g<0/h=0:S?v5; [number of skills hero already has saved in v5]
+!!VRv6&g<0/h=0:S0; [cycling through skills]
+!!VRv885&g<0/h=0:S0; [first 14 skills]
+!!VRv886&g<0/h=0:S0; [second 14 skills]
+!!DO7791/0/27/1&g<0/h=0:P; [save skills in v885/v886]
+!!VRv1&g<0/h=0:S0;
+!!VRv1&v887<24/g<0/h=0:S24 -v887;
+!!VRy2&g<0/h=0:S0;
+!!VRy2&v2<v3/g<0/h=0:Sv3 -v2;
+!!VRv1&y2<v1/g<0/h=0:Sy2; [store min{max{24-v887;0};max{v3-v2;0}} in v1]
+!!DO7792/1/v1/1&v1>0/g<0/h=0/v3>=v2:P; [give some random skills to hero]
+
+!!HEv855&g<0/h=0:F?y2/?y3/?y4/?y1; [get knowledge]
+!!HEv855&g<0/h=0:S24/?y2; [get intelligence skill]
+!!VRy2&y2=3/g<0/h=0:+1; [expert is 100%]
+!!VRy2&g<0/h=0:+4; [4/5/6/8]
+!!VRy1&g<0/h=0:*10 *y2 :4; [get mana points]
+!!HEv855&g<0/h=0:Iy1; [set mana to max]
+
+!!HEv855&g<0/h=0:S7/?y3;  [get wisdom skill]
+!!VRv3&g<0/h=0:*v3:13;
+!!VRv3&v3>15:S15;         [maximum of 15 spells given]
+!!VRv888:S0;
+!!VRv889:S0;               [initialize memory variables for spells]
+!!VRv890:S0;
+!!DO7788/1/v3/1&g<0/h=0:Py3; [give some random spells, y3=x1=wisdom skill level]
+
+!!BA&g<0/h=0:H1/v855; //give the hero to fight for monsters
+
+!!IF&g<0/h=0/v855>=0:V786/1; //hero fights against monsters' hero
+!!IF&g<0/h=0/v855>=0:V781/1; //hero fights against monsters' hero
+
+!?BR&v846=1/1000; //battle round trigger for placing war machines when battle begins
+
+!!IF&v997=0:V786/0; //if asmodeus sends devils there will be no random hero
+
+!?BG0&781/v846=1/1000; //random hero
+
+!!BH1:N?f; //get random hero's number
+!!BG&f>=0:Q?v851 A?g; //get attacking side index and action
+!!BG&v851=1/f>=0/g=4:A0; //if random hero tries to retreat force him/her to perform an other action
+
+!?BA1&v846=1/1000;
+
+!!VRy4&781:Sv884 %128;
+!!VRv884&781::128;
+!!VRy3&781:Sv884 %128;
+!!VRv884&781::128;
+!!VRy2&781:Sv884 %128;
+!!VRv884&781::128;
+!!VRy1&781:Sv884;
+!!HEv855&v884<>-1/781:Fy1/y2/y3/y4; [load primary skills before battle]
+
+!!DO7794/0/27/1&781:P; [load old secondary skills]
+
+!!HEv855&781:F?y2/?y3/?y4/?y1; [get knowledge]
+!!HEv855&781:S24/?y2; [get intelligence skill]
+!!VRy2&y2=3/781:+1; [expert is 100%]
+!!VRy2&781:+4; [4/5/6/8]
+!!VRy1&781:*10 *y2 :4; [get mana points]
+!!HEv855&781:Iy1; [set mana to max (normal value)]
+
+!!DO7793/1/5/1&781:Pv888; [remove spells stored in v888]
+!!DO7793/1/5/1&781:Pv889; [remove spells stored in v889]
+!!DO7793/1/5/1&781:Pv890; [remove spells stored in v890]
+
+!!IF:V786/0; //set flag 786 false for the next battle
+!!HEv855&781:O-1/1; //set random hero's owner back to -1 after battle
+
+!$OB54&v846=1; //monster trigger
+!!IF:V786/0;
+
+!?FU7797;
+//sees if hero is in prison
+//x1: greatest object number
+//x16: object number (from back)
+//x2: object type
+//x3: hero number
+
+!!VRy1:Sx1 +1 -x16; //run backward
+!!UN:Ux2/-1/y1/1; //v1 v2 v3 coordinates
+!!HEv1/v2/v3:N?y2; //get hero number at prison's position
+!!IF&y2=x3:V786/1; //set flag if the hero is in prison
+
+!?FU7798;
+//gets the hero who fights the battle on the monsters' side
+
+!!IF:V786/0; //init
+
+!!VRy19:Sv849 %155; //to ensure cycling
+!!HEy19:O?y1; //get the owner
+
+!!OW:V0/?y2/?y3; //get the heroes who can be hired in taverns
+!!OW:V1/?y4/?y5;
+!!OW:V2/?y6/?y7;
+!!OW:V3/?y8/?y9;
+!!OW:V4/?y10/?y11;
+!!OW:V5/?y12/?y13;
+!!OW:V6/?y14/?y15;
+!!OW:V7/?y16/?y17;
+
+!!OW:Iy1/?y20/?y21; //get owner info
+!!IF&y1<>-1/y21<>1:V786/1; //if owner of the hero is active call again
+
+!!IF&y19=y2/y2<>-1:V786/1; //if hero can be hired in any tavern call again
+!!IF&y19=y3/y3<>-1:V786/1;
+!!IF&y19=y4/y4<>-1:V786/1;
+!!IF&y19=y5/y5<>-1:V786/1;
+!!IF&y19=y6/y6<>-1:V786/1;
+!!IF&y19=y7/y7<>-1:V786/1;
+!!IF&y19=y8/y8<>-1:V786/1;
+!!IF&y19=y9/y9<>-1:V786/1;
+!!IF&y19=y10/y10<>-1:V786/1;
+!!IF&y19=y11/y11<>-1:V786/1;
+!!IF&y19=y12/y12<>-1:V786/1;
+!!IF&y19=y13/y13<>-1:V786/1;
+!!IF&y19=y14/y14<>-1:V786/1;
+!!IF&y19=y15/y15<>-1:V786/1;
+!!IF&y19=y16/y16<>-1:V786/1;
+!!IF&y19=y17/y17<>-1:V786/1;
+
+!!UN&-786:U62/-1/?y18; //get the number of prisons on the map
+!!DO7797/1/y18/1&-786:Py18/62/y19; //iterate through prison's and see if this hero is in any of them
+
+!!VRv855&-786:Sy19; //save hero number only if we found a valid hero
+
+!?FU7798&-786;
+!!DO7827/0/7/1:P; //get an owner for the random hero - returned in v849
+!!HEv855:Ov849/1;
+
+!?FU7798;
+
+!!VRv849&786:+1;
+!!VRv856:+1;
+
+!!VRx16:S1000;
+!!VRx16&786/v856<154:S1; //continue search if the hero is owned, can be hired in taverns or is prisoned
+
+!?FU7825;
+//dismisses war machines that could be bought originally in heroes3 and gives back gold spent on them
+//x1 hero number
+
+!!HEx1:A2/6/?y1/?y2 A2/4/?y1/?y3 A2/5/?y1/?y4 ; //y2 y3 y4 number of equipped machines
+!!IF:Wx1; //use hero's w vars
+!!HEx1:O?y1; //vf hero owner
+!!HEx1&w81=0/y2=1:A3/6/1/1; //remove first aid tent that was bought right now
+!!OW&w81=0/y2=1:Ry1/6/d750; //give back gold spent on first aid tent
+!!HEx1&w82=0/y3=1:A3/4/1/1; //remove ballista that was bought right now
+!!OW&w82=0/y3=1:Ry1/6/d750; //give back gold spent on ballista
+!!HEx1&w83=0/y4=1:A3/5/1/1; //remove ammo cart that was bought right now
+!!OW&w83=0/y4=1:Ry1/6/d750; //give back gold spent on ammo cart
+
+!?FU7826;
+//corrects hero's w vars according to war machine equipment
+//x1: hero number
+
+!!IF:Wx1; // use hero's w variables
+!!HEx1:A2/6/?y1/?y2; //y2: nr of equipped first aid tents
+!!VRw81&y2=0/w81<>0:S0;
+!!VRw81&y2=1/w81=0:S1;
+
+!!HEx1:A2/4/?y1/?y2; //y2: nr of equipped ballistas
+!!VRw82&y2=0/w82<>0:S0;
+!!VRw82&y2=1/w82=0:S1;
+
+!!HEx1:A2/5/?y1/?y2; //y2: nr of equipped ammo carts
+!!VRw83&y2=0/w83<>0:S0;
+!!VRw83&y2=1/w83=0:S1;
+
+!?FU7827;
+//x16: color for random hero that needs to be tested
+
+!!OW:Ix16/?y1/?y2; //check color status
+!!VRv849&y2=1:Sx16; //v849 gets the color number if the color is unused
+!!VRx16&y2=1:S7; //jump out from do receiver if color is found
+
+!?FU7788; [add some random spells;  x1=wisdom]
+!!VRy1:S2 +x1; [get maximum spell level: 2 + x1]
+!!VRy1&y1>5:S5; // additional check to prevent errors
+!!VRy2:Sy1 *y1 +y1 :2 -1; [get chances: 2/3 for lvl1 with x1=0, 1/2 for lvl1, 1/3 for lvl2 with x1=1, ...]
+!!VRy3:S1 Ty2; [random 1-3, 1-6, 1-10, 1-15]
+!!VRy3&y3=1:S0;  [chance for highest spell level available]
+!!VRy3&y3>=2/y3<=3:S1;
+!!VRy3&y3>=4/y3<=6:S2;
+!!VRy3&y3>=7/y3<=10:S3;
+!!VRy3&y3>=11/y3<=15:S4;
+!!VRy1:-y3; [aimed spell level]
+
+!!UN:U98/-1/?y2; [count number of towns]
+!!VRy2:-1;
+!!VRy3:S1 Ty2; [get random town]
+!!UN:U98/-1/y3/1; [save coordinates of town y3 in v1 v2 v3]
+!!CAv1/v2/v3:G?y2; [get magic guild level]
+!!VRy1&y1>y2:Sy2; [if y1 is greater than y2, set to y2]
+!!VRv891:S0;  [initialize variable for spell storage]
+!!DO7789/0/5/1&y2>0:Py1; [maximum of 6 spells per slot, give along y1=aimed spell level, bounded by y2=guild level; do nothing if y2=0]
+!!VRv891&v891>0:-9; [reduce spell number by 9: from 10-69 to 1-60 => 60<64=6 bit]
+!!VRv888&v891>0/x16>0/x16<6:+v891; [up to 5 spells saved in v888]
+!!VRv888&v891>0/x16>0/x16<5:*64; [add 6 bits]
+!!VRv889&v891>0/x16>5/x16<11:+v891; [up to 5 spells saved in v889]
+!!VRv889&v891>0/x16>5/x16<10:*64; [add 6 bits]
+!!VRv890&v891>0/x16>10/x16<16:+v891; [up to 5 spells saved in v890]
+!!VRv890&v891>0/x16>10/x16<15:*64; [add 6 bits]
+!!VRy9:S0;
+!!VRy9&v891=0:S1 T4; [give a chance of 60% to redo the same cycle with same x16 if no spell was added]
+!!VRx16&y9>2:-1;
+
+!?FU7789; [try to give spell, x1 is aimed spell level]
+!!VRy8:Sx1 -1; [level x1 spells are coded with x1-1 -> mage guild levels range: '0-4']
+!!VRy8&y8>4:S4; // additional check: max. L5-spell
+!!CAv1/v2/v3:Gy8/?y5; [number of available spells of selected town with level x1 saved to y5]
+!!VRx16&x16>5:S5; // additional check (slot)
+!!CAv1/v2/v3:Gy8/x16/?y6; [store spell of slot x16 in y6]
+!!VRy8:S0; [Initialize y8 to 0]
+!!VRy8|y6<0/y6>69:S1; [Set y8 to 1 if spell is out of range]
+!!VRx1&y8=1:-1;
+!!VRx16&y8=1:S0;
+!!VRx16&x1=0/y8=1:S6;
+!!FU&y8=1:E; //exit because of bug
+
+!!HEv855:My6/?y7; [check whether hero already has spell y6]
+** hero misses spell and spell is a combat spell
+!!HEv855&y7=0/y6>=10:My6/1; [give spell to hero]
+!!VRx16&y7=0/y6>=10:S6; [spell found and given, last cycle]
+!!VRv891&y7=0/y6>=10:Sy6; [store spell number in v891 - temporary v-variable]
+** hero already has spell
+!!VRx1&x16=y5/y7=1:-1; [reduce aimed spell level by 1 if all slots have already been tested]
+!!VRx16&x16=y5/y7=1:S0; [reset x16 if aimed spell level has been reduced by 1]
+!!VRx16&x1=0:S6; [if last slot of level 1 spells has been tested, end loop]
+
+
+!?FU7790; [adds primary skills]
+!!VRy5:S0 T3;
+!!HEv855:F?y1/?y2/?y3/?y4;
+!!VRy1&y5=0:+1;
+!!VRy2&y5=1:+1;
+!!VRy3&y5=2:+1;
+!!VRy4&y5=3:+1;
+!!HEv855:Fy1/y2/y3/y4;
+
+!?FU7791; [saves skill status before battle]
+!!HEv855:Sx16/?y1;
+!!VRv885&x16<14:+y1;
+!!VRv885&x16<13:*4;
+!!VRv886&x16>13:+y1;
+!!VRv886&x16>13/x16<27:*4;
+!!VRv887:+y1;
+
+!?FU7792; [adds some secondary skills to hero]
+
+!!VRx16:-1; [make DO-loop a while-loop]
+!!VRy6:Sv1 -x16; [available skill points]
+
+**&v5=0   [if hero mastered all pre-skills expert add new skills, preferably expert]
+
+ !!HEv855&v5=0:S?y7;
+ !!VRx16&v5=0/y7=28:Sv1; //exit if hero reached maximum number of skills
+ !!FU&v5=0/y7=28:E;
+
+ !!VRy5&v5=0:S0;
+ !!VRy5&v5=0:T27;    [get random skill y5]
+ !!HEv855&v5=0:Sy5/?y1;      [check whether hero has that skill (y1>0 => y1=3) or not (y1=0)]
+** /y1=0
+  !!HEv855&v5=0/y1=0/y6>=3:Sy5/3;
+  !!VRx16&v5=0/y1=0/y6>=3:+3;
+  !!HEv855&v5=0/y1=0/y6<3:Sy5/y6;
+  !!VRx16&v5=0/y1=0/y6<3:+y6;
+**&v5>0    [cycle through all skills first, searching for already existing skills, upgrading if necessary/possible]
+ !!HEv855&v5>0:Sv6/?y1;
+** /y1=1
+  !!VRy2&v5>0/y1>0:S3 -y1;   [maximum of points to give]
+  !!HEv855&v5>0/y1>0/y6>=y2:Sv6/3;
+  !!VRx16&v5>0/y1>0/y6>=y2:+y2;
+  !!HEv855&v5>0/y1>0/y6<y2:Sv6/2;     [y6 can not be zero and y2 is smaller than 3 => y6=1, y2=2 => skill is basic]
+  !!VRx16&v5>0/y1>0/y6<y2:+1;   [set to v1 now]
+  !!VRv5&v5>0/y1>0:-1;     [we found one of the hero's existing skills and modified if necessary; decrease v5]
+  !!VRv6&v5>0:+1;        [if there is still one pre-skill existing, increase v6 and keep searching; v6<28: true]
+
+!?FU7793; [load spell status as it was before battle x1=v888-v890]
+!!VRy1:Sx1 %64;   [extract last spell]
+!!VRy1&y1>0:+9;        [add +9 to regain true spell]
+!!HEv855&y1>0:My1/0;   [remove spell]
+!!VRx1: :64;      [remove last 6 bits from x1]
+
+!?FU7794; [load skill status as it was before battle]
+!!VRy1&x16<14:S13 -x16; [reverse: count from 13 to 0]
+!!VRy2&x16<14:Sv885 %4; [get skilllevel of skill 13..0]
+!!HEv855&x16<14:Sy1/y2; [restore old skilllevel]
+!!VRv885&x16<14: :4;
+!!VRy1&x16>13:S41 -x16; [reverse: count from 27 to 14]
+!!VRy2&x16>13:Sv886 %4; [get skilllevel of skill 27..14]
+!!HEv855&x16>13:Sy1/y2; [restore old skilllevel]
+!!VRv886&x16>13: :4;
+

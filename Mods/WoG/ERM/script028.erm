@@ -1,0 +1,500 @@
+ZVSE
+ERMS_ScriptDate=12.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+School of Wizardry script 1.67 by Anders Jonsson
+
+Last Updated: October 12, 2006 - now uses GetBasicPrim function to correct errors from certain artifacts (mostly Enhanced Commander Artifacts)
+Previously Updated: September 24, 2005
+
+This script uses
+Flags: (1-10)
+Variables: (v1-v5), v384-v386, v389,
+(z1-z4), z383, [z128000-z128076]
+w38
+Timers: TM30
+Functions: FU3620-FU3630
+
+---WARNING---
+Newer versions of the script uses a new object. It should not replace an older version in a map, unless all schools
+are replaced as well.
+
+
+To use this script, copy all of it and place it in a timed event that will never happen. You'll also need to place
+one or more Schools on your map(it's the blue tower far below the Conflux in the castle screen.) Of course, you'll also need WoG.
+
+The school of wizardry does many things: it can improve your Spell Power or Knowledge stats, it can improve or
+teach you a new secondary skill for 3000 gold, or for some extra gold teach you a new one if your skill slots are
+full! It can also copy spells from scrolls to your spellbook or teach you a new spell for an amount of gold
+depending of how good the spell is. Both the spells and skills are choosen randomly at the start of each players
+turn, and there's only one of each availible each turn. If the hero is without a spellbook, and wants to get a
+spell, it also supplies those for 250 gold. Each hero can only buy one thing each day.
+
+Caution! This location is fairly powerful, and should have a powerful stack of monsters guarding it. It should not
+be placed anywere close to an arcane tower, as you can get skill points very cheap if you don't have many of them.
+
+!#UN:P28/?v1;
+!#TM30&v1=1:S1/999/1/255; (Timer for drawing skill and spell)
+!#VRz383&v1=1:Sz128076;
+!#HT63/62&v1=1:Tz383;
+
+*** Main Menu ***
+!?OB63/62;
+!!UN:P28/?v1;
+!?OB63/62&v1=1;
+!!IF:W-1; (specify current hero for hero variable checking and setting)
+!!VRv1:Sw38;
+!!VRv1:%3;
+!!IF:V10/0;
+!!IF:V4/0;
+!!IF:V9/0;
+!!IF&v1=0:V10/1;
+!!IF&v1=0:V9/1;
+!!IF&10/1000:M1/z128000;
+!!IF&-10/1000:Q4/z128001;
+!!IF&-4/-9/v1<>0/1000:M1/z128002;
+
+!!VRv2&-1000:S0 T4; (Do a random number to see what AI will pick)
+!!IF&-1000:V4/0; (If AI, don't display message:)
+!!VRv3&4:S79 T3;
+!!VRv4&4/v3=79:S87;
+!!VRv4&4/v3=80:S89;
+!!VRv4&4/v3=81:S86;
+!!VRv4&4/v3=82:S88; (random artifacts used each time)
+
+!!UN&4:Av3/9/?y-1;
+!!UN&4:Av3/10/?y-2;
+!!UN&4:Av4/9/?y-3;
+!!UN&4:Av4/10/?y-4; (Store string Hint text index numbers)
+
+!!VRz1:Sz128003;
+!!VRz2:Sz128004;
+!!VRz3:Sz128005;
+!!VRz4:Sz128006;
+
+!!UN&4:Av3/9/z1;
+!!UN&4:Av3/10/z2;
+!!UN&4:Av4/9/z3;
+!!UN&4:Av4/10/z4; (Setup Hint text)
+
+!!IF&4:Q5/8/v3/8/v4/7/z128007;
+
+!!UN&4:Av3/9/y-1;
+!!UN&4:Av3/10/y-2;
+!!UN&4:Av4/9/y-3;
+!!UN&4:Av4/10/y-4; (Reset Hint text)
+
+!!UN&4/5:G0/7/0/?y-1;
+!!UN&4/5:G0/7/3/?y-2;
+!!UN&4/5:G0/18/0/?y-3;
+!!UN&4/5:G0/18/3/?y-4; (Store hint text index numbers for strings)
+
+!!VRz1:Sz128008;
+!!VRz2:Sz128009;
+!!VRz3:Sz128010;
+!!VRz4:Sz128011;
+
+!!UN&4/5:G0/7/0/z1;
+!!UN&4/5:G0/7/3/z2;
+!!UN&4/5:G0/18/0/z3;
+!!UN&4/5:G0/18/3/z4; (setup name and Hint text)
+
+!!IF&4/5:Q6/20/59/20/26/7/z128012;
+
+!!UN&4/5:G0/7/0/y-1;
+!!UN&4/5:G0/7/3/y-2;
+!!UN&4/5:G0/18/0/y-3;
+!!UN&4/5:G0/18/3/y-4; (Reset name and Hint text)
+
+
+!!UN&4:A0/9/?y-1;
+!!UN&4:A0/10/?y-2;
+!!UN&4:A1/9/?y-3;
+!!UN&4:A1/10/?y-4; (store string Hint text index numbers)
+
+!!VRz1:Sz128013;
+!!VRz2:Sz128014;
+
+!!UN&4:A0/9/z1;
+!!UN&4:A0/10/z1;
+!!UN&4:A1/9/z2;
+!!UN&4:A1/10/z2; (Setup Hint text)
+
+!!IF&4/-5:Q6/8/0/8/1/7/z128015;
+
+!!UN&4:A0/9/y-1;
+!!UN&4:A0/10/y-2;
+!!UN&4:A1/9/y-3;
+!!UN&4:A1/10/y-4; (reset Hint text)
+
+!!FU3626&4/5/6/1000:P1; (Go to Primary Skill chooser)
+!!FU3628&4/5/-6/1000:P1; (Go to Secondary Skill)
+!!FU3627&4/-5/6/1000:P1; (Go to Spell)
+!!FU3620&4/-5/-6/1000:P1; (Go to Scroll)
+
+!!FU3624&-1000/v2=0:P1;
+!!FU3625&-1000/v2=1:P1;
+!!FU3627&-1000/v2=2:P1;
+!!FU3628&-1000/v2=3:P1;
+!!FU3623&-1000/v2=4:P1; (AI script chooser)
+!!IF:A0000000000; (Resets the ten first flags at the end of the script)
+
+*** Primary skill menu ***
+!?FU3626;
+!!IF:Q2/33/1/34/1/7/z128016;
+!!FU3624&2:P1; (Go to Spell Power)
+!!FU3625&-2:P1; (Go to Knowledge)
+
+*** Spells ***
+!?FU3627;
+!!IF:A0000000000; (resets ten first flags)
+!!IF&-1000:A1111110000; (sets flags for AI)
+!!FU3622:Pv386; (Get spell name, description and cost)
+!!VRv5:S0; (v5 will be used to indicate if hero will learn spell or what message to display)
+!!VRv5&-1000:S1;  (AI abort)
+!!IF&v5=0:Q2/z128017;
+!!VRv5&-2:S2;
+!!IF&v5=0:Q3/9/v386/2/z128018;
+!!VRv5&-3/v5=0:S2;
+!!HE-1&v5=0/v385=3:S7/=0; (check if hero is without wisdom if spell is level 4)
+!!VRv5&1/v5=0:S3;
+!!HE-1&v5=0/v385=3:S7/=1; (check if hero has basic wisdom if spell is level 4)
+!!VRv5&1/v5=0:S3;
+!!HE-1&v5=0/v385=2:S7/=0; (check if hero is without wisdom if spell is level 3)
+!!VRv5&1/v5=0:S4;
+
+!!HE-1&v5<2:M=v386/1; (Check if hero already know spell)
+!!VRv5&1/v5<2:S5;
+!!HE-1&v5=0:A=0; (Check for spellbook)
+
+!!VRy30:S250; (Spellbook cost)
+
+!!IF&-1/v5=0:Q4/8/0/6/y30/2/z128019;
+!!IF&-1/-4/v5=0:M1/z128020;
+!!FU3629&4/v5=0:Py30; (check if color has gold)
+!!HE-1&1/v5=0:A1/0/17; (Gives spellbook)
+!!HE-1&v5=0:A=0; (Check for spellbook, to see if it was bought or not)
+!!VRv5&-1/v5=0:S6;
+!!VRv1&v5=0:*5; (multiplies cost with 5)
+
+!!IF&v5=0:Q5/9/v386/6/v1/2/z128021;
+!!VRv5&-5/v5=0:S2;
+!!FU3629&v5<2:Pv1;  (check for gold)
+!!HE-1&1/v5<2:Mv386/1; (give spell)
+!!IF&1/v5=0:Q1/9/v386/1/z128022;
+
+!!IF&v5=3:Q1/20/25/1/z128023;
+
+!!IF&v5=4:Q1/20/24/1/z128023;
+
+!!IF&v5=2:M1/z128002;
+
+!!IF&v5=5/1000:M1/z128024;
+
+!!VRv5:S0;
+!!IF:A0000000000; (reset ten first flags)
+
+*** Secondary skill menu ***
+!?FU3628;
+!!IF:A0000000000; (reset ten first flags)
+!!VRv1:Sv384;
+!!VRv1:+1;
+!!VRv1:*3;
+!!VRv1:+2; (v1 now contain picture of expert level of today's random skill)
+!!VRv2:S0;
+!!DO3623/0/27/1:P; (Check if hero has free slots)
+!!UN:N4/1/v384;  (Set z1 to contain skill name)
+
+!!UN:G0/v384/0/?y1;
+!!UN:G0/v384/3/?y2; (Store strings containing hint text index numbers)
+
+!!VRz9:Sz128025 +z1 +z128077;
+!!VRz8:Sz1 +z128026;
+
+!!UN:G0/v384/0/z8;
+!!UN:G0/v384/3/z9;
+
+!!IF&1000:Q3/20/v1/2/z128027;
+
+!!UN:G0/v384/0/y1;
+!!UN:G0/v384/3/y2; (restore hint text)
+
+!!IF&-3:V9/1;
+!!HE-1:Sv384/?y2; (Check hero's level of skill)
+!!VRv1&y2=1:-1;
+!!VRv1&y2=0:-2; (y1 now contain picture of known level +1 of today's random skill)
+!!IF&-9/1000/y2=3:Q1/20/v1/1/z128028;
+!!IF:V10/0;
+!!IF&y2=3:V10/1;
+!!VRy5:S0;
+!!IF&-9/1000/y2=2:Q4/20/v1/6/3000/2/z128029;
+
+!!IF&-9/1000/y2=1:Q4/20/v1/6/3000/2/z128030;
+!!VRy5&4:S1;
+
+!!IF&-9/1000/y2=0:Q5/20/v1/6/3000/2/z128031;
+!!VRy5&5:S2;
+!!IF&-5:V9/1;
+!!VRy5&y5=2/-9/-10/v2>7:S3;
+!!VRy3&y5=3:S0;
+!!VRy3&y5=3:Sv2;
+!!VRy3&y5=3:-7;
+!!VRy3&y5=3:*5000;
+!!VRy4&y5=3:Sy3;
+!!VRy4&y5=3:+3000;
+!!IF:V6/1;
+!!IF&1000/-9/y5=3:Q6/20/v1/6/y4/2/z128032;
+!!VRy3:+3000;
+!!IF&-6:V9/1;
+!!IF&y5=1:V9/0;
+!!FU3629&-9/-10/y5>0:Py3; (check and take gold)
+!!HE-1&1:Sv384/d1; (Teach Skill)
+!!IF&1/y5>0/y5<3/-9/-10/1000:Q1/6/-103000/20/v1/1/z128033;
+
+!!IF&1/-9/-10/1000/y5=3:Q1/6/y4/20/v1/1/z128033;
+
+!!IF&9/-10/1000:M1/z128002;
+!!IF:A0000000000; (reset ten first flags)
+
+*** Check for number of skill slots filled ***
+!?FU3623;
+!!HE-1:S=x16/?y1; (Check if skill number x16 is present)
+!!VRv2&y1>0:+1; (if it is, add 1 to v2)
+
+*** Spell Power ***
+!?FU3624;
+!!HE-1:N?y6; [Hero number: y6]
+!!FU$GetBasicPrim$:Py6/d/d/?y1/d; (Get spell power skill without artifact bonuses: y1]
+!!IF&1000/y1=1:Q1/33/1/1/z128034;
+!!IF&y1=1:V1/1;
+!!VRy5:S500; (cost for each point)
+!!VRy2:Sy5 *y1 -y5; (sets cost to (y2-1)*y5)
+!!IF&1000/y1<10/y1>1:Q1/33/1/6/y2/2/z128035;
+!!IF&1000/y1<25/y1>9:Q1/33/1/6/y2/2/z128036;
+!!IF&1000/y1>24:Q1/33/1/6/y2/2/z128037;
+!!IF&-1000:V1/1;
+!!IF&-1/1000/y1<>1:M1/z128002;
+!!FU3629&1/1000:Py2; (paytime)
+!!IF&-1000:V1/1; (AI get it for free)
+!!HE-1&1:Fd0/d0/d1/d0; (adds Spell Power)
+!!IF&1/1000/y1<>1:Q1/33/1/1/z128038;
+
+*** Knowledge ***
+!?FU3625;
+!!HE-1:N?y6; [Hero number: y6]
+!!FU$GetBasicPrim$:Py6/d/d/d/?y1; (Get knowledge skill without artifact bonuses: y1]
+!!IF&1000/y1=1:Q1/34/1/1/z128039;
+!!IF&y1=1:V1/1;
+!!VRy5:S500; (Basic cost)
+!!VRy2:Sy5 *y1 -y5; (sets cost to (y2-1)*y5)
+!!IF&1000/y1<10/y1>1:Q1/34/1/6/y2/2/z128040;
+!!IF&1000/y1<25/y1>9:Q1/34/1/6/y2/2/z128041;
+!!IF&1000/y1>24:Q1/34/1/6/y2/2/z128042;
+!!IF&-1000:V1/1;
+!!IF&-1/1000/y1<>1:M1/z128002;
+
+!!FU3629&1/1000:Py2; (Paytime)
+!!IF&-1000:V1/1; (AI get it for free)
+
+!!HE-1&1:Fd0/d0/d0/d1; (adds Knowledge)
+!!IF&1/1000/y1<>1:Q1/34/1/1/z128043;
+
+*** Spell Scrolls ***
+!?FU3620;
+!!HE-1:S7/=3; (check if hero has expert wisdom)
+!!IF&-1/1000:Q1/20/26/1/z128044;
+!!IF:V5/0;
+!!DO3621/0/69/1&1:P; (Check if player has any spell scrolls)
+!!IF&1/-5/1000:Q1/8/1/1/z128045;
+!!HE-1&5:A=0; (Check for spellbook)
+!!IF&5/1/1000:Q1/8/1/1/z128046;
+!!IF:V5/0;  (reset flag 5)
+
+*** Scroll Check ***
+!?FU3621:
+!!IF:V3/0;
+!!IF:V2/0; (resets flag 2 and 3)
+!!VRx16:+1001; (adds 1001 to check spell scrolls(can't do a loop with starting and ending numbers over 999))
+!!HE-1:A=x16; (Check if hero has scroll)
+!!VRy1&1:Sx16 -1001; (Set y1 to spell number)
+!!FU3622&1:Py1; (get spell name, description and cost)
+!!IF&1:V3/1; (Flag 3 to show that hero can learn this spell)
+
+!!HE-1&1:M=y1/1; (Check if hero has spell, if he has, skip to end of script(will check only spells in real spell book, so equipped scrolls doesn't help))
+!!IF&-1/3:V5/1; (set flag flag 5 show if hero had any scrolls))
+!!IF&-1/3/1000:Q2/9/y1/6/v1/2/z128047;
+!!HE-1&2:A=0; (Check for spellbook)
+!!IF&-1000:V4/1;
+!!IF&-1000:V2/1; (AI always agrees)
+
+!!VRy30:S250; (cost of spellbook)
+
+!!IF&-1/2/1000:Q4/8/0/36/y30/2/z128048;
+!!IF&-1/2/-4:M1/z128020;
+!!FU3629&-1/2/4:Py30;
+!!HE-1&1:A1/1000/17; (Gives spellbook)
+!!HE-1&2:A=0; (Check for spellbook)
+!!VRx16&2/-1:+200; (abort script if didn't want to buy one)
+!!FU3629&1/2:Pv1; (check if color has enough gold)
+!!HE-1&1/2:A3/x16/1/0; (removes scrolls)
+!!HE-1&1/2:My1/1; (give spell)
+!!IF&1/1000:Q2/9/y1/1/z128049;
+!!VRx16:-1001; (lower x16 with 1001 to get it back to loop value)
+!!IF:V1/1; (set flag 1 to 1)
+
+*** Draw Random Skill and Spell ***
+
+!?TM30;
+!!VRv1:Sc0;
+!!IF:V10/0;
+
+!?TM30&v1<>v389;
+!!VRv389&v389<>v1:Sc0;
+!!VRv1:S0 T14; (Draws random number, which decides skill)
+!!VRv384&v1=0:S7; (Wisdom)
+!!VRv384&v1=1:S8; (Mysticism)
+!!VRv384&v1=2:S11; (Eagle Eye)
+!!VRv384&v1=3:S14; (Fire Magic)
+!!VRv384&v1=4:S15; (Air Magic)
+!!VRv384&v1=5:S16; (Water Magic)
+!!VRv384&v1=6:S17; (Earth Magic)
+!!VRv384&v1=7:S18; (Scholar)
+!!VRv384&v1=8:S24; (Intelligence)
+!!VRv384&v1=9:S25; (Sorcery)
+!!VRv384&v1=10:S7; (Wisdom)
+!!VRv384&v1=11:S14; (Fire Magic)
+!!VRv384&v1=12:S15; (Air Magic)
+!!VRv384&v1=13:S16; (Water Magic)
+!!VRv384&v1=14:S17; (Earth Magic)
+
+*** Random Spell ***
+!!VRv385:Sv389 *11 :7 %4; (get level, depending on day. The order will be repeated every 44 days, hopefully enough for no-one to notice)
+!!VRy-1:Sv385 +1;
+!!FU$spell$:Py-1/y-1/0/0/1/0; (Get a spell)
+
+!!VRv386:Sy-99;
+!!DO3630/0/155/1:P; (Reset hero variables)
+
+*** Reset variables ***
+!?FU3630;
+!!IF:Wx16;
+!!VRw38&w38=0:S1;
+!!VRy1:Sw38;
+!!VRy1:%3;
+!!VRw38&y1=0::3; (reset if set)
+
+*** Spell check- returns name of spell in z3, description in z1, cost in v387 and spell level description in z3 ***
+!?FU3622;
+!!VRz1&v385=0:Sz128050;
+!!VRz1&v385=1:Sz128051;
+!!VRz1&v385=2:Sz128052;
+!!VRz1&v385=3:Sz128053;
+
+!!UN:N1/z2/x1;  (get name)
+
+!!VRv1&x1=0:S700;
+!!VRv1&x1=1:S300;
+!!VRv1&x1=2:S500;
+!!VRv1&x1=3:S400;
+!!VRv1&x1=4:S100;
+!!VRv1&x1=5:S400;
+!!VRv1&x1=6:S2000;
+!!VRv1&x1=7:S1000;
+!!VRv1&x1=8:S2000;
+!!VRv1&x1=9:S2000;
+!!VRz3&x1<10:Sz128054;
+!!VRv1&x1=10:S300;
+!!VRv1&x1=11:S300;
+!!VRv1&x1=12:S300;
+!!VRv1&x1=13:S200;
+!!VRz3&x1>9/x1<14:Sz128055;
+!!VRv1&x1=14:S600;
+!!VRz3&x1=14:Sz128056;
+!!VRv1&x1=15:S600;
+!!VRv1&x1=16:S800;
+!!VRv1&x1=17:S1000;
+!!VRv1&x1=18:S2000;
+!!VRz3&x1>14/x1<19:Sz128057;
+!!VRv1&x1=19:S1700;
+!!VRv1&x1=20:S700;
+!!VRv1&x1=21:S600;
+!!VRv1&x1=22:S1000;
+!!VRv1&x1=23:S1500;
+!!VRv1&x1=24:S500;
+!!VRv1&x1=25:S400;
+!!VRv1&x1=26:S1700;
+!!VRz3&x1>18/x1<27:Sz128058;
+!!VRv1&x1=27:S500;
+!!VRv1&x1=28:S300;
+!!VRv1&x1=29:S800;
+!!VRv1&x1=30:S100;
+!!VRv1&x1=31:S100;
+!!VRv1&x1=32:S100;
+!!VRv1&x1=33:S100;
+!!VRv1&x1=34:S1000;
+!!VRz3&x1>26/x1<35:Sz128059;
+!!VRv1&x1=35:S600;
+!!VRz3&x1=35:Sz128060;
+!!VRv1&x1=36:S500;
+!!VRz3&x1=36:Sz128061;
+!!VRv1&x1=37:S600;
+!!VRv1&x1=38:S2000;
+!!VRv1&x1=39:S1200;
+!!VRv1&x1=40:S1500;
+!!VRz3&x1>36/x1<41:Sz128062;
+!!VRv1&x1=41:S600;
+!!VRv1&x1=42:S500;
+!!VRv1&x1=43:S500;
+!!VRv1&x1=44:S700;
+!!VRv1&x1=45:S600;
+!!VRv1&x1=46:S400;
+!!VRv1&x1=47:S600;
+!!VRz3&x1>40/x1<48:Sz128063;
+!!VRv1&x1=48:S1700;
+!!VRz3&x1=48:Sz128064;
+!!VRv1&x1=49:S200;
+!!VRv1&x1=50:S500;
+!!VRz3&x1>48/x1<51:Sz128065;
+!!VRv1&x1=51:S200;
+!!VRv1&x1=52:S200;
+!!VRz3&x1>50/x1<53:Sz128066;
+!!VRv1&x1=53:S800;
+!!VRv1&x1=54:S800;
+!!VRz3&x1>52/x1<55:Sz128067;
+!!VRv1&x1=55:S800;
+!!VRv1&x1=56:S500;
+!!VRz3&x1>54/x1<57:Sz128068;
+!!VRv1&x1=57:S1800;
+!!VRz3&x1=57:Sz128057;
+!!VRv1&x1=58:S1300;
+!!VRz3&x1=58:Sz128070;
+!!VRv1&x1=59:S1700;
+!!VRv1&x1=60:S300;
+!!VRv1&x1=61:S800;
+!!VRv1&x1=62:S1000;
+!!VRz3&x1>58/x1<63:Sz128070;
+!!VRv1&x1=63:S800;
+!!VRz3&x1=63:Sz128071;
+!!VRv1&x1=64:S100;
+!!VRz3&x1=64:Sz128072;
+!!VRv1&x1=65:S1500;
+!!VRz3&x1=65:Sz128073;
+!!VRv1&x1=66:S1200;
+!!VRv1&x1=67:S1200;
+!!VRv1&x1=68:S1200;
+!!VRv1&x1=69:S1200;
+!!VRz3&x1>65:Sz128074;
+
+*** Payment ***
+!?FU3629;
+!!IF:V1/0;
+!!OW:R-1/6/?y1; (Checks if color has enough gold)
+!!IF&1000/y1<x1:M1/z128075;
+!!IF&y1=>x1:V1/1; (If color has enough gold, set flag 1 to 1 to show this)
+!!VRx1&1:*-1; (multiply with -1 to take gold)
+!!OW&1:R-1/6/dx1; (Takes gold)
+!!VRy2:Sw38;
+!!VRy2:%3;
+!!VRw38&1:*3; (multiply hero variable with 3 to indicate it has been visited)
+

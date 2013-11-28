@@ -1,0 +1,96 @@
+116000	Battle Academy	String type = <!#S>	09/02/03
+116001	{Battle Academy} 
+ 
+You arrive at a huge fortress, but the gate is closed and there's no one to be seen. You think you'd better try tomorrow instead.	String type = <!!M>	09/02/03
+116002	{Battle Academy} 
+ 
+You come to a huge fortress. Outside it you find a veteran soldier waiting for you. "Welcome to my Battle Academy, hero. Here I have gathered many teachers who can teach you many different skills. I also have an excellent armorsmith who can sell you some battle gear. Do you want to spend some time looking to see if anything interests you?"	String type = <!!Q>	09/02/03
+116003	{Battle Academy} 
+ 
+"Maybe some other day, then."	String type = <!!M>	09/02/03
+116004	Skills	String type = <!!S>	09/02/03
+116005	Artifacts	String type = <!!S>	09/02/03
+116006	Improve your Attack or Defense or learn a secondary skill	String type = <!!S>	09/02/03
+116007	Buy an artifact	String type = <!!S>	09/02/03
+116008	{Battle Academy} 
+ 
+"We can teach you more about combat, or we can sell you a piece of gear that will help you in your battles. Which one do you choose?"	String type = <!!Q>	09/02/03
+116009	primary skill tutoring	String type = <!!S>	09/02/03
+116010	Improve Attack or Defense skill	String type = <!!S>	09/02/03
+116011	secondary skill tutoring	String type = <!!S>	09/02/03
+116012	Learn or improve a secondary skill	String type = <!!S>	09/02/03
+116013	{Battle Academy} 
+ 
+"We can teach you more about basic combat training, or you could take an advanced course. Do you want to learn about Primary or Secondary Skills?"	String type = <!!Q>	09/02/03
+116014	{Battle Academy} 
+ 
+"Do you want us to train you in Attack or Defense?"	String type = <!!Q>	09/02/03
+116015	Learn or improve your 	String type = <!!S>	09/02/03
+116016	 tutoring	String type = <!!S>	09/02/03
+116017	{Battle Academy} 
+ 
+"Today, our tutors can teach you more about %Z1. Are you interested?"	String type = <!!Q>	09/02/03
+116023	{Battle Academy} 
+ 
+"You have already mastered Expert %Z1!"	String type = <!!Q>	09/02/03
+116018	{Battle Academy} 
+ 
+"Our tutors say that you have mastered Advanced %Z1. They can teach you Expert %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+116019	{Battle Academy} 
+ 
+"Our tutors say that you have mastered Basic %Z1. They can teach you Advanced %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+116020	{Battle Academy} 
+ 
+"Our tutors say that you know nothing about %Z1. They can teach you Basic %Z1 for 3000 Gold. Do you wish to learn?"	String type = <!!Q>	09/02/03
+116021	{Battle Academy} 
+ 
+"Your skill slots are filled! To learn Basic %Z1, you'll have to pay %Y3 Gold extra! Are you willing to do that?"	String type = <!!Q>	09/02/03
+116022	{Battle Academy} 
+ 
+You train with the instructors for a long time, and when you're done, you feel that you have learned a lot about %Z1!	String type = <!!M>	09/02/03
+116034	{Battle Academy} 
+ 
+"It makes me sad that you do not want to learn!"	String type = <!!M>	09/02/03
+116024	{Battle Academy} 
+ 
+"So little Attack skill... This one's for free!"	String type = <!!Q>	09/02/03
+116025	{Battle Academy} 
+ 
+"So little Attack skill... Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116026	{Battle Academy} 
+ 
+"Your Attack skill is very good... But it could be better! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116027	{Battle Academy} 
+ 
+"Your Attack skill is very impressive... But it could still be increased! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116028	{Battle Academy} 
+ 
+The instructors are excellent-- you've barely begun practising when you feel your attack skill increasing and they declare that you're finished with your lessons.	String type = <!!Q>	09/02/03
+116029	{Battle Academy} 
+ 
+"So little Defense skill... This one's for free!"	String type = <!!Q>	09/02/03
+116030	{Battle Academy} 
+ 
+"So little Defense skill... Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116031	{Battle Academy} 
+ 
+"Your Defense skill is very good... But it could be better! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116032	{Battle Academy} 
+ 
+"Your Defense skill is very impressive... But it could still be increased! Do you want to increase it for %Y2 gold?"	String type = <!!Q>	09/02/03
+116033	{Battle Academy} 
+ 
+The instructors are excellent-- you've barely begun practising when you feel your defense skill increasing and they declare that you're finished with your lessons.	String type = <!!Q>	09/02/03
+116035	{Battle Academy} 
+ 
+"So you want to buy an artifact, eh? I have one here, actually. It's called the %Z1, and it will be yours for the measly sum of %V383 gold. Do you want it?"	String type = <!!Q>	09/02/03
+116036	{Battle Academy} 
+ 
+The blacksmith hands you the %Z1 and you weigh it in your hands. It seems to be a very well crafted artifact.	String type = <!!Q>	09/02/03
+116037	{Battle Academy}
+
+"You don't have enough gold!"	String type = <!!M>	09/02/03
+116038	 skill		
+116039	{Battle Academy}
+
+You come to a huge fortress. Outside it you find a veteran soldier waiting for you. "Welcome to my Battle Academy, hero. Here I have gathered many teachers who can teach you many different skills. Do you want to spend some time looking to see if anything interests you?"		

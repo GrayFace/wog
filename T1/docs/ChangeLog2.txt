@@ -1,0 +1,250 @@
+--------------------------------------------------------------------------------
+Build 2
+--------------------------------------------------------------------------------
+[+] Reworked Lua.
+[+] New Lua-based custom dialogs engine.
+[+] dialogs.CheckBoxesDialog. IF:G implementation swithed to dialogs.CheckBoxesDialog.
+[+] Lua memory-management functions, hooks, Default metatable for numbers, bit.ToTable, bit.FromTable, Color functions, os.writelog, events support.
+[-] _PlaceObject didn't preserve ebx register.
+[+] !?OB - trigger for any object.
+[-] BM:G was insecure (could be used to change any value in memory).
+[+-] MR:N didn't work when a copy of monster was passed to !?MR. Now it returns -1 in this case and BM-1 changes current (from !?MR or currently active) monseter's properties.
+[+] CA:B3/$/1 - check if the structure is built - works for non-upgraded buildings if upgrade is built.
+[+] !?BA54 - called on both sides(?) after showing battlefield (after showing tactics dialog in case tactics is enabled).
+[*] Hard-coded support for hex numbers (it was there before, I just didn't know about it :) ). 0x instead of $. $ isn't supported anymore.
+[*] ?ptr instead of ?address.
+[-] fixed SOD bug: def compression type 1 didn't work when used for map objects.
+[+] now WoG supports locale in edits.
+[+] CA:S# returns town income.
+[+] !?CI0 trigger - change town income, !?CI1 trigger - change monster growth in town, !!CI reciever.
+[+] CA:M4/level/# returns monster growth per week.
+[+] Lua scripts path is configured in WoG.ini: [Common] LuaScriptsPath.
+[+] UX:Gtown/$ - get/check/set town-specific grail effect state (0 - disabled, 1 - enabled) (for example, UX:G8/0 will disable the Conflux grail effect of learning all spells).
+[+] !#FU:E can be used in instructions.
+[-] Local functions weren't handled correctly in map scripts.
+[-] Local functions weren't callable from instructions.
+[+] CA:B3 - 2 more checks: CA:B3/#/1, CA:B3/#/2.
+[-] SC:L was wrong
+[-] For some unknown reason artifact hints were locked in IF:Q dialogs. Now they are unlocked.
+[+] MessageEx - highly customazable message in Lua
+[+] OB:T$/1, OB:C$/1 - type and control word of object, ignoring hero on top of it (works as usual if there's no hero standing on the object)
+[+] !?FC trigger - change flag color, !!FC reciever
+[+] !?DG trigger - digging for Grail, !!DG reciever
+[+] flawed support for new Bink format
+[+] !$HL post-trigger, getting skills in !?HL trigger
+[-] Using UN:L inside !?OB trigger with enabled standard reaction caused a trade dialog of the hero with himself to occur.
+[+] New HE:Y syntax: HE:Y$1/$2/$3, HE:Y0/0/0/3.
+[-] HE:Y2 was totally broken.
+[+] SoD campaigns are playable again. WoG campaigns have their separate button.
+[+] Allow multiple copies if [Common]AllowMultipleCopies is set to 1 in WoG.ini
+[+] HE:A5/$1/$2/?3/?4 - control artifact locks.
+[+] !?AI - triggered when AI gets weight of a map square
+[-] SoD bug: damage to be inflicted wasn't shown if Creature Info was disabled
+[-] HE:F was redrawing adventure screen ONLY when check syntax is used (now it doesn't redraw screen at all)
+[-] OW:R and some other commands were redrawing parts of adventure screen even if it's not active
+[-] SoD bug: wrong check for free disk space
+[+] New better GOTO. !!la, !!go in trigger.
+[+] Number of if-el-en levels is now unlimited.
+[+] File and line number information for ERM errors.
+[-] SoD bug: rare crash on game start.
+[!] Need to update help: BU:O may return values 0 - 3. 0 means no obstacle, 1 is an obstacle that can be passed through, but can be removed, 2 and 3 are unpassable (thanks to pHOMM).
+[!] For help: IF:Q type 8 (artifact) subtype = <artifact number> + 0x10000*<spell number> (for scrolls)
+[!] For help: change HE:A4 into HE:A4/#
+[!] For help: BM:G description is inaccurate: $2 - Set/check/get level in school of the spell
+[!] For help: OW:H has 2 kinds of syntax - with 2 parameters and with 3. They are mixed together in help. (description of $2 applies to 2-param syntax)
+[!] For help: Additions to "List of all buildings" in CA.
+[!] For help: HE:X: $1=5 means "+2 Speed to all units". No subtype of the speciality exists.
+
+
+
+!?CI0 trigger - change town income, !?CI1 - change monster growth in town, !!CI reciever.
+!?CI0 is triggered when the game calculates castle income.
+!?CI1 is triggered when the game calculates monster growth in a castle.
+!!CI:I$ set/check/get resulting income (or growth)
+!!CI:I$/1 set/check/get base income (or growth) before ERM scripts changed it. ERM scripts shouldn't change this normally.
+!!CI:L$ set/check/get monster level for CI1 (returns -1 for CI0)
+Example:
+!?CI;
+!!CA-1:T?v1; [get town type]
+!!CI&v1=1:Id500; [increase income of all Ramparts by 500]
+
+
+
+CA:B3 - 2 more checks: CA:B3/#/1, CA:B3/#/2.
+CA:B3/#/1 checks if the building is built with respect to upgrades,
+CA:B3/#/2 checks if the building is enabled
+Example:
+!!CA-1:B3/30/1;
+!!IF&1:M^Dwelling 1 is built^;
+This will work even if you build the upgraded dwelling, or horde dwelling.
+
+
+
+!?FC trigger - change flag color, !!FC reciever.
+!?FC is triggered when the game needs flag color. Now any object can have a flag.
+Use !!FC:T$ to get the type of object.
+Use !!FC:U$ to get the subtype of object.
+!!FC:C$ is the color of the flag.
+v998, v999 and v1000 keep coordinates of the object entrance.
+
+
+
+!?DG trigger - digging for Grail, !!DG reciever
+!?DG is triggered when a hero is digging for Grail and the hole has already been placed
+!!DG:P$/$/$ returns coordinates.
+!!DG:G$ is 1 if the hero finds Grail, 0 otherwise.
+!!DG:R$ is 1 to enable standard reaction, 0 to disable (the reaction is giving Grail to hero or showing failure message)
+v998, v999 and v1000 keep coordinates.
+Flag 1000 shows you that the hero belongs to the player sitting at the monitor.
+HE-1 gives you the digging hero.
+Example:
+!?DG;
+!!DG:G?y-1; [found Grail?]
+!!FU&y-1=0:E; [exit if not found]
+!!DG:R0; [no standard reaction]
+!!VRz1:S^UltimateArtifact.wav^;
+!!SN&1000:Pz1; [play Grail sound, if it's the player's hero]
+!!IF&1000:M^Congratulations! After spending many hours digging here, your hero has uncovered A SKELETON!^; [show message]
+!!HE-1:C2/56/1/1; [give 1 skeleton]
+
+
+
+!$HL post-trigger, getting skills in !?HL trigger
+Now you can get actual numbers of secondary skills in HL:S. You can still use value -2, but it will cause a skill to be generated again.
+!$HL triggers after the dialog is closed and skills are enhanced.
+!!HL:R gives you the number of secondary skill player chose in the dialog.
+Example:
+ZVSE
+* this script lets heroes learn all 28 skills
+
+!#VRv100:S0;
+
+!?HL-1;
+!!HE-1:S=8;
+!!VRv100&1:S1;
+!!HE-1&1:S7; [set number of shown skills to 7 to allow new skills]
+!!HL&1:Sd/-2/-2; [generate skills again]
+
+!$HL-1&v100<>0; [if we altered the number of shown skills]
+!!VRv100:S0;
+!!HE-1:S8; [restore the number of shown skills]
+
+
+
+New HE:Y syntax: HE:Y$1/$2/$3, HE:Y0/0/0/3.
+HE:Y now supports all syntax variations, so 4th parameter is usually unneeded.
+Examples:
+!!HE-1:Yv1/v2/v3 - set curse.
+!!HE-1:Yv1/dv2/dv3 - add/sub curse.
+!!HE-1:Yv1/0/0 - delete curse.
+!!HE-1:Yv1/?v2/?v3 - get curse.
+The only case when it's needed is unmentioned in Help:
+HE:Y0/0/0/3 - remove all curses/blessings from the hero.
+
+
+
+HE:Y2 was totally broken.
+Here's how it works now. The syntax in ERM Help is wrong. Slot number is passed as second parameter ("power"). If it's -1, the slot is chosen randomly.
+Here's the list of slot lock indexes (it's not the same as format AP):
+0   head
+1   shoulders
+2   neck
+3   right hand
+4   left hand
+5   torso
+6   rings
+7   feet
+8   misc. slots
+9   ballista (war machine 1)  
+10  ammo cart (war machine 2)  
+11  first aid tent (war machine 3)  
+12  catapult  
+13  spell book  
+
+
+
+HE:A5/$1/$2/?3/?4 - control artifact locks.
+$1 is the lock slot (see "HE:Y2 was totally broken" for list of slots).
+$2 is the number of locks in the locks slot.
+(?3 and ?4 are optional)
+?3 returnes the number of free artifact slots for the lock slot ($2 sholdn't exceed ?3).
+?4 returnes the total number of artifact slots for the lock slot.
+
+
+
+!?AI - triggered when AI gets weight of a map square
+!!AI:W$ is the weight.
+!!AI:W$/1 is the base weight, that was before ERM triggers changed it
+!!AI:M$ is the number of movement points needed to reach the square (modified by in-game function and triggers).
+!!AI:M$/1 is the number of movement points needed to reach the square, not modified by the in-game function.
+v998, v999, v1000 keep coordinates of the square.
+HE-1 is the hero for which the value is calculated.
+
+Example:
+!?AI&v998=42/v999=2/v1000=0; [object at 42/2/0]
+!!AI:M?v1; [get distance to object in movement points]
+!!AI&v1>500:W1000000; [this is the ultimate goal of every AI hero that stands further than 5 squares from it]
+[however, note that the object will be ignored if it's beyond AI thinking radius]
+
+Here are examples of standard weights:
+Stables:
+  If it gives more movement points than the hero spends to get to it, the weight is 10000.
+  Otherwise, the weight is 50 + (importance of cavaliers upgrade).
+Keymaster's Tent:
+  5000, if it's needed.
+Objects that give moral or luck:
+  Weight is 0 if the hero can't reach the square at this turn.
+  Weight is usually proportional to army strength (total AI value of army).
+  For morale - if all stacks are undead, the weight is 0.
+Objects that give a resource:
+  (resource count)*(resource importance for the owner)
+Fountain of Youth (it gives +200 movement and +1 morale):
+  If it's closer than 200 movement points, the weight is 10000.
+  Otherwise, the weight is the usual weight of moral enhancement, AI:M$ is decreased by 200 (so, it doesn't match AI:M$/1 even without any triggers).
+Shipyard:
+  1000, if it's needed.
+Weight of guarded objects depends on bonus and comparsion of hero's army and defending army.
+Mine:
+  (2 or 3)*(resource count per day)*(resource importance for the owner) - (guards penalty to weight)
+  "2 or 3" is 2 if it's a neutral mine and 3 if the mine belongs to other player (even an ally! This is probably a bug).
+  
+
+
+[+] New better GOTO. !!la, !!go in trigger.
+This GOTO is preferrable. There may be 50 labels (0...49).
+Use !!la0:; to !!la49:; to set a label. 
+Use !!go0:; to !!go49:; to go to a label.
+
+Examples:
+1)
+!?FU255;
+!!la0:; [label 0]
+(...)
+!!la1:; [label 1]
+(...)
+!!go0&1:; [go to label 0]
+!!go1&2:; [go to label 1]
+
+2)
+A single 'for' loop:
+!?FU255;
+!!VRy1:S0;
+!!la0:;  [label 0]
+!!if&y1<100:;
+  (...)
+  !!VRy1:+1;
+  !!go0:;  [goto label 0]
+!!en:;
+
+This is equivalent to  while y1<100 do { (...) y1 = y1 + 1; }
+You can also make one loop inside another and anything you could do with regular DO, but much faster and without a need for a free function number.
+
+
+
+[!] For help: Additions to "List of all buildings" in CA.
+20  Shipyard with a ship in it
+22  Also: Decorations, always present (8).
+23  Also: Decorations. For Village hall (1, 4, 8) or always present (0, 7).
+27  Decorations. For Town Hall (1, 4, 8) or always present (6).
+28  Decorations for City Hall (1, 4, 8)
+29  Decorations for Capitol (1, 4, 8)

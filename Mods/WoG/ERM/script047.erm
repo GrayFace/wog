@@ -1,0 +1,237 @@
+ZVSE
+ERMS_ScriptName=Creature relationships
+ERMS_ScriptAuthor=Matthew Charlap
+ERMS_ScriptVersion=1.3.1
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedVariables=v1340-1366
+ERMS_ScriptUsedFlags=130-131
+ERMS_ScriptUsedTimers=tm13
+ERMS_ScriptUsedFunctions=13520-13528
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Note: this script requires a WoG version that supports the "e"(floating point) variables.
+** If one army contains troops that hate each-other, this script creates a chance that
+** each day a fight may break out. The chance is ((14-2D)*M)%, where D is the hero's
+** diplomacy skill (0..3), and M is the hero's level of negative morale, plus 1.
+** Creatures lost is equal to 10% the HP of the opposing faction in the army, reduced
+** by 1% for each level of the hero's luck skill. At least one creature will be lost
+** from each faction, unless a faction has less than 14 hit points total.
+** version 1.2 additions: new hatreds, affinities- if troops that like each-other are
+** in one army, they may improve.
+** version 1.3: explicit messages for lost and upgraded troops added.
+** version 1.3.1: creature experience accounted for in HE:C commands
+!#UN:P47/?v1340; [check for active script]
+!#TM13&v1340=1:S1/999/1/255; [set timer 12 to trigger every day, for all players]
+
+!?TM13&v1340=1; [Each turn check...]
+!!DO13520/0/155/1:P; [For every hero do a check- function 13520]
+
+!?FU13520; [looking for heroes belonging to active player]
+!!VRv1341:Sx16; [store current hero number]
+!!OW:C?y1; [get current player]
+!!HEv1341:O?y2; [get owner of current hero index]
+!!OW:Iy2/?y3; [is owner an AI? don't apply hatred for AIs]
+!!FU13521&y1=y2/y3=0:Pv1341; [if active player owns current hero and is human, look for rival creatures- function 13521]
+** end of 13520- DO loop
+
+!?FU13521; [check each hatred- use 13522, affinity- use 13526]
+** angel vs. devil (+upg.)
+!!FU13522:Px1/12/13/150/-2/-2/-2/-2/54/55/153/-2/-2/-2/-2;
+** titan vs. black dragon (+upg.)
+!!FU13522:Px1/41/152/-2/-2/-2/-2/-2/83/155/-2/-2/-2/-2/-2;
+** genie vs. efreet (+upg.)
+!!FU13522:Px1/36/37/-2/-2/-2/-2/-2/52/53/-2/-2/-2/-2/-2;
+** orc vs. elf (+upg.), includes boar riders (which are orcs) and pegasi (which have elf riders)
+!!FU13522:Px1/88/89/140/-2/-2/-2/-2/18/19/20/21/-2/-2/-2;
+** pixie vs. imp (+upg.)
+!!FU13522:Px1/118/119/-2/-2/-2/-2/-2/42/43/-2/-2/-2/-2/-2;
+** life dragons (rampart) vs. death dragons (necropolis)
+!!FU13522:Px1/26/27/151/-2/-2/-2/-2/68/69/154/-2/-2/-2/-2;
+** Rust dragon vs. gorgon (+upg.)
+!!FU13522:Px1/135/-2/-2/-2/-2/-2/-2/102/103/-2/-2/-2/-2/-2;
+** cavalier vs. black knight (+upg.)
+!!FU13522:Px1/10/11/-2/-2/-2/-2/-2/66/67/-2/-2/-2/-2/-2;
+** end of hatred list. For new hatreds, add more 13522 calls
+** format for 13522: x1=hero #, x2...x8=creature #s for one side of hatred
+**        x9..x15=creature #s for other side of hatred.
+**        Use any number outside the range [-1,173] to indicate no creature. -2 suggested
+** if a creature is in BOTH sides, this will not work properly.
+
+**Free upgrades- FU13526.
+**Mage/Monk-inc. enchanter and war zealot; upgrades mage to archmage, monk to zealot
+!!FU13526:Px1/34/35/136/-2/-2/-2/-2/8/9/169/-2/-2/-2/-2;
+**archer/elf. All sharpshooter types help either side. archer to marksman, elf to grand elf.
+!!FU13526:Px1/2/3/137/170/171/-2/-2/18/19/137/170/171/-2/-2;
+**Griffin/Roc. Firebird and upgrades support both.
+!!FU13526:Px1/4/5/130/131/158/-2/-2/92/93/130/131/158/-2/-2;
+**efreet/fire elemental, fire messenger supports both sides
+!!FU13526:Px1/52/53/164/-2/-2/-2/-2/114/129/164/-2/-2/-2/-2;
+
+**Format for 13526: x1=hero #, upgrade type x2 to x3, supported by x4..x8
+**   upgrade x9 to x10, with support of x11..x15
+** if a creature type is in BOTH sides, it helps to upgrade either type.
+** if the same creature is both x2 and x9, this will not work properly.
+
+!?FU13526; [affinity with upgrades]
+!!VRv1344:C0/0; [clear HP counts]
+!!VRv1358:C0/0; [clear upgradable creature HP count]
+!!DO13523/0/6/1:Px1/x2/x3/x4/x5/x6/x7/x8/x9/x10/x11/x12/x13/x14/x15; [check for both sides]
+!!IF:V132/0; [reset flag 132 from previous iterations]
+!!IF&v1344>0/v1345>0:V132/1; [set flag 132 if both sides present]
+!!FU13527&132:Px1/x2/x3//////x9/x10; [check for upgrades and apply]
+** end of 13526
+
+!?FU13527; [check for upgrade and apply]
+!!VRy3:S0T99; [get random # from 0 to 99]
+!!VRy5:S0;
+!!VRy6:S0;
+!!VRz2:S^^;
+!!VRy1&v1358<>0:Sv1345*5:v1358; [5*ratio of side 2 HP:upgrade 1 HP]
+!!VRy2&v1359<>0:Sv1344*5:v1359; [5*ratio of side 1 HP:upgrade 2 HP]
+!!VRy1&y1<1:S1; [minimum 1% chance]
+!!VRy2&y2<1:S1; [minimum 1% chance]
+!!VRy4:S0R99; [get random # from 0 to 99 by other method]
+!!VRy5&y3<y1/y3<25/v1358>1:S1;
+!!VRy6&y4<y2/y4<25/v1359>1:S1;
+!!HEx1&y3<y1/y3<25/v1358<>0:C1/x2/x3/d/0/3; [max 25% chance, upgrade x2 to x3]
+!!HEx1&y4<y2/y4<25/v1359<>0:C1/x9/x10/d/0/3; [max 25% chance, upgrade x9 to x10]
+!!IF&y3<y1/y3<25/v1358<>0:V132/0; [reset flag if upgrade performed]
+!!IF&y4<y2/y4<25/v1359<>0:V132/0; [reset flag if upgrade performed]
+!!HEx1:B0/?z1; [get hero name]
+!!UN:N3/z3/x2/y5; [get pre and post upgrade names]
+!!UN:N3/z4/x3/y5;
+!!UN:N3/z5/x9/y6;
+!!UN:N3/z6/x10/y6;
+!!VRz7:Sz147000;
+!!VRz8:Sz147001;
+!!VRz7&y5=1:Sz147002;
+!!VRz8&y6=1:Sz147003;
+!!VRz2&y3<y1/y3<25/v1358>1:Sz147004;
+!!VRz2&y4<y2/y4<25/v1359>1:+z147005;
+!!IF&-132:M1/z147006;
+** end of 13527
+
+!?FU13522; [check for presence of both sides in a hatred, and call resolution]
+!!VRv1342:C0/0/0/0; [clear pro/anti counts and HP totals]
+!!DO13523/0/6/1:Px1/x2/x3/x4/x5/x6/x7/x8/x9/x10/x11/x12/x13/x14/x15; [check for both sides in army]
+!!IF:V132/0; [reset flag 132 from previous iterations]
+!!IF&v1342>0/v1343>0:V132/1; [set flag 132 if both sides present]
+!!IF:V131/0; [clear fight flag]
+!!FU13525&132:Px1; [check to see if a fight takes place]
+!!VRv1346:Sv1344*v1357:100; [set v1346 to 10-luck% of total pro HP]
+!!VRv1347:Sv1345*v1357:100; [set v1347 to 10-luck% of total anti HP]
+!!VRv1348:C0/0; [clear excess damage counter for pro/anti]
+!!DO13524/0/6/1&131:Px1; [resolve conflict, if needed]
+!!VRz2:S^^; [erase variable z2]
+!!DO13528/0/6/1&131:Px1; [set up message for losses, if any]
+!!IF&131:M1/z147007; [report losses]
+
+
+** end of 13522- resolution
+
+!?FU13523; [find related stacks and prepare calculation numbers]
+** note: "pro" and "anti" are used, even if not a hatred, to name the two sides.
+!!VRy1:Sx16+1360; [number of secondary indirect variable index]
+!!VRvy1:S0; [clear variable v136?]
+!!VRy1:-10; [change y1 to primary indirect index]
+!!VRvy1:S0; [clear variable v135?]
+!!HEx1:C0/x16/?y2/?y3; [get creature type and quantity of army slot x16]
+!!MA&y2<=173/y2=>0:Py2/?y4; [get HP/creature of type y2 and store in y4]
+!!VRy5:S0; [reset y5]
+!!VRy6:S0; [reset y6]
+!!VRy5&y2=x2|y2=x3/y2=x4/y2=x5/y2=x6/y2=x7/y2=x8:S1; [If stack x16 is pro, set y5 to 1]
+!!VRy6&y2=x9|y2=x10/y2=x11/y2=x12/y2=x13/y2=x14/y2=x15:S1; [If stack x16 is anti, set y6 to 1]
+!!VRvy1&y5=1:Sy3*y4; [If stack x16 is pro, HPs in v135?]
+!!VRvy1&y6=1:Sy3*y4*-1; [If stack x16 is anti, -HPs in v135?]
+!!VRv1344&y5=1:+vy1; [If pro, add HP pro HP total]
+!!VRv1345&y6=1:-vy1; [if anti, add -HP to anti HP total]
+!!VRv1342&y5=1:+1; [If pro, increment pro count]
+!!VRv1343&y6=1/y5=0:+1; [If anti, increment anti count]
+!!VRv1344&y5=1/y6=1:-vy1-vy1; [if on both sides, correct the pro total error]
+!!VRv1358&y2=x2:+vy1; [store HP total of side 1 upgradables]
+!!VRv1359&y2=x9:-vy1; [store HP total of side 2 upgradables]
+**end of 13523- preparation
+
+!?FU13524;
+
+!!VRy5:S0; [reset damage counter]
+!!VRy1:Sx16+1350; [set number for indirect variable reference]
+!!VRy9:Sx16+1360; [set another number for indirect reference]
+!!VRy4:Svy1; [set y4 to HP of stack x16- will be positive if pro, negative if anti, 0 else]
+!!VRe1:Sv1345:v1344*100; [ratio used to simplify calculations]
+!!VRe3:Sv1357*e1:10;   [powers of 10 in e-var calculations to smooth script flow]
+!!VRe4:Sv1357:e1*-1000;
+!!VRy5&y4>0/v1342>1:Sy4*e3:1000; [if on pro side, calculate damage taken]
+!!VRy5&y4>0/v1342=1:Sv1347; [if last pro, take rest of damage]
+!!VRy5&y4<0/v1343>1:Sy4*e4:1000; [if on anti side, calculate damage taken]
+!!VRy5&y4<0/v1343=1:Sv1346; [if last anti, take rest of damage]
+!!IF:V130/0; [initialize flag 130 to false]
+!!IF&y4>0/v1349<=y5:V130/1; [set flag 130 to true if damage to give is greater than previous anti excess]
+!!IF&y4<0/v1348<=y5:V130/1; [set flag 130 to true if damage to give is greater than previous pro excess]
+!!VRy5&130/y4>0:-v1349; [if damage>excess, reduce pro damage by previous anti excess]
+!!VRy5&130/y4<0:-v1348; [if damage>excess, reduce anti damage by previous pro excess]
+!!VRv1349&130/y4>0:S0; [if damage>excess, set anti excess to 0]
+!!VRv1348&130/y4<0:S0; [if damage>excess, set pro excess to 0]
+!!VRv1349&-130/y4>0:-y5; [if excess>damage, reduce anti excess by damage]
+!!VRv1348&-130/y4<0:-y5; [if excess>damage, reduce pro excess by damage]
+!!VRy5&-130:S0; [if excess>damage, set damage to 0]
+!!HEx1:C0/x16/?y2/?y3; [get type and quantity of stack x16]
+!!MA&y2<=173/y2>0:Py2/?y8; [set y8 to HP of type y2]
+!!VRy7:Sy5:y8; [set y7 to number of whole creatures killed]
+!!VRy6:Sy5%y8; [set y6 to partial kill damage]
+!!VRy7&y6>0:+1; [add one to kills if there is a partial kill]
+!!VRy7&y7>y3:Sy3; [if more kills are indicated than the stack has creatures, set kills=creatures.]
+** note that kills can only be larger than creatures in stack if all creatures on that side
+** of the hatred are wiped out.
+!!VRvy9:Sy7; [save kills from current stack]
+!!VRy5:Sy7*y8; [set y5 to total damage done]
+!!VRy7:*-1; [needed for d in next HE command]
+!!HEx1:C0/x16/y2/dy7; [remove killed creatures.]
+!!VRv1347&y4>0:-y5; [remove damage done from remaining anti damage count]
+!!VRv1346&y4<0:-y5; [remove damage done from remaining pro damage count]
+!!VRv1349&y4>0/y6>0:+y8-y6; [set new anti excess by adding partial kill HP]
+!!VRv1348&y4<0/y6>0:+y8-y6; [set new pro excess by adding partial kill HP]
+!!VRv1342&y4>0:-1; [if pro creature, reduce pro stack count]
+!!VRv1343&y4<0:-1; [if anti creature, reduce anti stack count]
+
+** end of 13524
+
+!?FU13525; [check for fight]
+!!VRy1:S14; [set base percentage for a fight- 14%, roughly once per week on average]
+!!HEx1:S4/?y2; [get diplomacy level]
+!!HEx1:R0/?y3; [get current morale]
+!!VRy2:*2; [set diplomacy bonus]
+!!VRy3&y3>0:S0; [no benefit from high morale]
+!!VRy3:*-1+1; [set y3 to magnitude of negative morale, plus 1]
+!!VRy1:-y2; [reduce chance of fight by 2* diplomacy skill]
+!!VRy8:Sy1; [store diplomacy-modified value]
+!!VRy1:*y3; [low morale multiplies chance of a fight]
+!!VRy4:S14*y3; [chance without diplomacy]
+!!VRy5:S1+T99; [get a random number between 1 and 100]
+!!HEx1:B0/?z1; [get hero name]
+!!IF&y5<=y1:V131/1; [set fight flag if a battle occurs]
+!!HEx1:S9/?y9; [get hero's luck skill]
+!!IF&y5<=y4/-131:M1/z147008;
+!!IF&131/y5>y8:M1/z147009;
+!!IF&131/y5<=y8:M1/z147010;
+!!IF&131/y9>0:M1/z147011;
+!!VRv1357:S10-y9;  [set loss percentage to 10-luck]
+
+** end of 13525
+
+!?FU13528;
+!!VRy1:S1360+x16; [set up for indirect reference]
+!!HEx1:C0/x16/?y2/?y3; [get creature type and quantity of army slot x16]
+!!VRy4:S0;
+!!VRy4&vy1>1:S1; [if more than one creature was lost from current stack, set y4 to 1]
+!!UN&y2=>0:N3/z3/y2/y4; [get name of creature type that had losses, and place in z3]
+!!VRy5:Svy1; [put number of losses to stack x16 into y5]
+!!VRz2&y5>0:+^%Y5 %Z3.
+^; [Append losses to z2 text string for display in 13522]
+
+**end of 13528
+
+** end of script
+

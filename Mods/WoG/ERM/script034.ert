@@ -1,0 +1,45 @@
+134001	{Cards of Prophecy}
+When entering battle, a card will emerge from the deck. Each card has a different effect.
+It will also bestow a +1 bonus to the luck of your army.
+Right-click on system options to disable the pre-battle messages that state which card was activated.
+		
+134002	{Inverted} Ace of 		
+134003	Ace of 		
+134004	Page of 		
+134005	Knight of 		
+134006	Queen of 		
+134007	King of 		
+134008	Swords		
+134009	Pentacles		
+134010	Wands		
+134011	Cups		
+134012	attack skill		
+134013	defense skill		
+134014	magic power		
+134015	knowledge		
+134016	increases		
+134017	decreases		
+134018	As battle begins, the %Z2 emerges from the Cards of Prophecy.
+%Z4's %Z3 %Z5 by %X3 for this battle.		
+134019	As battle begins, the Emperor emerges from the Cards of Prophecy. 
+All of %Z1's primary skills change to attack power for this battle.		
+134020	As battle begins, the Empress emerges from the Cards of Prophecy. 
+All of %Z1's primary skills change to defense power for this battle.		
+134021	As battle begins, the Magician emerges from the Cards of Prophecy. 
+All of %Z1's primary skills, except half knowledge, change to spell power for this battle.		
+134022	As battle begins, the Hermit emerges from the Cards of Prophecy. 
+All of %Z1's primary skills, except half power, change to knowledge for this battle.		
+134023	As battle begins, the Hierophant emerges from the Cards of Prophecy. 
+All %Z1's primary skills are balanced for this battle.		
+134024	As battle begins, the {Inverted} Fool emerges from the Cards of Prophecy. 
+All of %Z1's primary skills are lost for this battle.		
+134025	As battle begins, the Fool emerges from the Cards of Prophecy.
+All of %Z1's primary skills are scrambled for this battle.		
+134026	As battle begins, the {inverted}  Emperor emerges from the Cards of Prophecy. 
+All of %Z1's attack power is divided among the other primary skills  for this battle.		
+134027	As battle begins, the {inverted}  Empress emerges from the Cards of Prophecy. 
+All of %Z1's defense power is divided among the other primary skills  for this battle.		
+134028	As battle begins, the {inverted} Magician emerges from the Cards of Prophecy. 
+Half of %Z1's spell power is divided among the other primary skills  for this battle.		
+134029	As battle begins, the {inverted} Hermit emerges from the Cards of Prophecy. 
+Half of %Z1's knowledge is divided among the other primary skills  for this battle.		

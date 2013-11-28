@@ -1,0 +1,248 @@
+ZVSE
+ERMS_ScriptName=script82 - Mills
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=16.6(June).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedFunctions=
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Autocollecting Resources
+**
+** option 95 by Thomas Franz (alias samot) - script95
+**
+** At the first day of each week you'll get automatical all resources of the Windmills, Water Wheels and
+** Mystical Gardens under your control.
+**
+** Those objects are under your control, if you was the last player who has visited it in the week before.
+
+**********************************************************************************
+
+** Accumulating resources for the Windmills, Water Wheels and Mystical Gardens.
+** option 249 by Thomas Franz (alias samot) - script95
+
+** If you visits one of those objects after week 1 you'll get the resources of the weeks before too.
+
+** Examples:
+** You visit a Windmill in week 10 and get f.e. 10 Ore, 8 Gems, 3 Crystal, 20 Mercury and 6 Mithril.
+** You visit a Water Wheel in week 5 and get 2500 gold (5 weeks * 500 gold)
+** You visit a Mystical Garden in Week 3 and get 10 gems and 500 gold.
+
+** You will not get additional resources, if the object was owned by someone else before, f.e.
+** a Windmill is owned by blue, blue is banned in Week 10 and you visit it again in week 15.
+** in this case you'll get the next resources from this mill at monday of week 16.
+
+*********************************************
+
+** Known "bugs"
+** - Hint descriptions does not show the current owner (because OB:H does not work with the z-Vars from ERT-Files
+** - AI visits the Mills / Wheels / Gardens each week (although the AI get the resources automatic too)
+**   is necessary because otherwise the AI wouldn't visit an object owned by someone else or would visit its own
+**   objects infinite.
+
+** Usage:
+** Wog-Options 95 / 249
+** Functions FU6130 and FU6131
+** Vars: v1-v10, v900-v903, v998-v1000, Flags 1/2   -   all not exclusive
+
+
+!?TM2&$weekday$=1;
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-1;  // get current player
+
+** water wheels
+!!UN:U109/-1/?y-2; // get number of water Wheels
+!!VRy-98:S0; !!VRy-99:S0; // init
+!!DO6130/1/y-2/1:P109/y-1; // loop to count them (return in y-98 (total wheels), y-99 (thereof Mithril wheels))
+!!VRy-3:Sy-98 +y-99 *1000; // add total amount of gold (number of wheels + number of enhanced wheels;
+!!IF&1000/y-98>0:Q1/6/y-3/1/z195001; // show message "the wheels send you xxx gold. yyy thereof are from mithril wheels"
+!!OW:Ry-1/6/dy-3; // give gold to current player
+
+** Wind Mills
+!!UN:U112/-1/?y-20; // get number of Windmills
+!!VRy-98:S0; !!VRy-99:S0; // init
+!!DO6130/1/y-20/1:P112/y-1/99; // loop to count them, return number in y-98, Mithril enhanced Mills in y-99
+!!VRv1:C0/0/0/0/0/0;  // initializing (set v1-v6 to 0)
+!!UN:P171/?y-3; // check if script "Windmills and Mystical Gardens contain Mithril" is active
+!!VRy-97:Sy-99; // copy y-99 (because it is counted down in FU6131 but has to be shown in the IF-Command)
+!!DO6131/1/y-98/1&y-98>0:Py-3; // calc amount of resources, return in v1-v6
+!!IF&y-3=0:N1/v1/2/v2/3/v3/4/v4/5/v5; // set the given resources (Mithril script off)
+!!IF&y-3=1:N1/v1/2/v2/3/v3/4/v4/5/v5/7/v6; // set the given resources (Mithril script on)
+!!IF&1000/y-98>0:N^%Z195002^; // The leader of the Wind Millers Guild visits you and presents a bag with the collected ressources.
+!!OW:Ry-1/1/dv1 Ry-1/2/dv1 Ry-1/3/dv3 Ry-1/4/dv4 Ry-1/5/dv5 Ry-1/7/dv6; // give resources to player
+
+
+** Mystical Gardens
+!!UN:U55/-1/?y-21; // get number of mystical gardens
+!!VRy-98:S0; !!VRy-99:S0; // init
+!!DO6130/1/y-21/1:P55/y-1; // loop to count them, return in y-98 / y-99
+!!VRy-3:S0; !!VRy-4:S0; !!VRy-5:S0;
+
+!!UN:P171/=1; // check if "Windmills and Mystical Gardens contain Mithril" is active
+!!VRy-7:S0 R9; // random 0-9
+!!VRy-5&1/y-98=>10:Sy-98 :10; // if script active set Resource with a frequency of 1:10 to Mithril
+!!VRy-6:Sy-98 %10; // reminder of garden numbers divided by 10
+!!VRy-5&1/y-6>0/y-7=8:+1; // if script active increase Mithril numbers in 1 of 10 by one
+!!VRy-98:-y-5; // total gardens reduced by mithril gardens
+
+!!VRy-3:S0 Ry-98; // number of gold gardens (random number 0-max. number)
+!!VRy-4:Sy-98 -y-3 *5; // amount of gems from gardens
+!!VRy-3:*500; !!VRy-5:*5; // amount of gold (500) and mithril (5 per garden)
+
+!!OW:Ry-1/6/dy-3 Ry-1/5/dy-4 Ry-1/7/dy-5; // give gold / gems to player
+!!IF&1000/y-98>0/-1:Q2/6/y-3/5/y-4/1/z195003; // show gardens-message without Mithril-script
+!!IF&1000/y-98>0/1:Q2/6/y-3/5/y-4/7/y-5/1/z195003; // show gardens-message with active Mithril script
+
+********** end TM2 ***********
+
+
+!?FU6130;
+!!VRv900&x16=1:S-1; !!VRy-99&x16=1:S0; !!VRy-98&x16=1:S0;
+!!UN:Ux1/-1/-1/900; // get position of next object to v900-v902
+!!PO900:O?y1 N?y3; // get owner and user defined number (used in Script36 for Mithril Enhancements)
+*!OBv900/v901/v902&x1=109/$day$=1:H195016; // set hint for Water Wheel
+*!OBv900/v901/v902&x1=112/$day$=1:H195025; // set hint for Windmill
+*!OBv900/v901/v902&x1=55/$day$=1:H195034; // set hint for Mystical Garden
+!!FU&y1<>x2:E; // exit if owner is not current player
+!!VRy-98:+1; // incr. number of objects owned by current player
+!!VRy-99&y3>0:+1; // increase if Windmill / Water Wheel is enhanced with Mithril
+
+!!WMv900/v901/v902&x1=109:B0; // set gold in Water Wheel to 0
+!!GDv900/v901/v902&x1=55:B0; // set resources in Mystical Garden to 0
+!!FU&x1<>112:E; // exit if no Windmill
+
+** Windmills
+!!OBv900/v901/v902:C?y-10; // get control word
+!!FU3333:P14; // calc 14th bit to y-1000
+!!VRy-10:|y-1000; // set it
+!!FU3333:P16; // calc 16th bit to y-1000
+!!VRy-10:|y-1000; // set it
+!!VRy-10:&-33; // remove 6th bit
+!!OBv900/v901/v902:Cy-10; // set control word
+
+
+********** end FU6130 ***********
+
+
+!?FU6131; // calc amount of resources (v1-v6) for Wind Mills; mithril mills in y-99; return in v1-v6
+** x1 = script "Windmills and Mystical Gardens contain Mithril" is active or not
+!!VRy1:S1 R4;  // random resource 1-5(no wood, no gold, no mithril)
+!!VRy99:S0 R9; // random 0-9
+!!VRy1&x1=1/y99=4:S6; // if Mithril script is on, set Resource with a frequency of 1:10 to Mithril
+
+!!VRy2:S3 R3; // random amount 3-6
+!!VRvy1:+y2; // increase resource
+!!VRvy1&y-99>0:+y2; // increase second times if mill is Mithril enchanted
+!!VRy-99&y-99>0:-1; // and decrease Mithril-Counter by 1
+
+********** end FU6131 ***********
+
+!?OB109; // visting a Water Wheel
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!OBv998/v999/v1000:C?y-1; // get control word
+!!FU3333:P6; // get 6th bit to y-100
+!!VRy-1:|y-100; // set the the 6th bit in Control Word
+!!VRy-1:&-2; // remove the 2nd bit from Control Word
+!!OBv998/v999/v1000:Cy-1 M-1/1/0; // set control word and Disable next Message (that would give usually the Res.)
+
+!$OB109; // after visting a Water Wheel
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!POv998/v999/v1000:O?y-1; // get owner
+!!PO998&y-1<>y-2:Oy-2; // if not owned by current player set to current player
+!!VRy-3:S195017 +y-2; *!OBv998/v999/v1000:Hy-3; // set hint for object (owner)
+!!IF&1000/y-1<>y-2/y-1>-1:M1/195010; // Message New Owner
+!!IF&1000/y-1=y-2:M1/195013; // message revisit of the owner
+!!FU&y-1<>-1:E; // exit if it has already an owner
+!!VRy-3:Sc -1 :7 +1; // calc actual week (days :7)
+!!UN:P249/?y-10; !!VRy-3&y-10=0:S1; // check if script accumulating resources is enabled; if not set week to 1
+!!VRy-4:Sy-3 *1000 -500; // calc amount of accumulated Gold (week * 1000 -500 because it is only 500 in the first week)
+
+!!IF&1000:Q1/6/y-4/1/z195000;
+!!OW:Ry-2/6/dy-4; // give it to current player
+
+********** end OB 109 (Water Wheels) ***********
+
+
+!?OB112; // visting a Wind Mill
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!OBv998/v999/v1000:C?y-1; // get control word
+!!FU3333:P14; // get 14th bit to y-100
+!!VRy-100:+1 *-1; // negate the bit
+!!VRy-1:&y-100; // remove the bit from Control Word
+!!FU3333:P11; // get 16th bit to y-100
+!!VRy-100:+1 *-1; // negate the bit
+!!VRy-1:&y-100; // remove the bit from Control Word
+!!FU3333:P6; // get 6th bit
+!!VRy-1:|y-100; // set it in the control word
+!!OBv998/v999/v1000:Cy-1 M-1/1/0; // set control word and Disable next Message (that would give usually the Res.)
+
+!$OB112; // after visting a Wind Mill
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!POv998/v999/v1000:O?y-1; // get owner
+!!PO998&y-1<>y-2:Oy-2; // if not owned by current player set to current player
+!!VRy-3:S195026 +y-2;
+*!OBv998/v999/v1000:Hy-3; // set hint for object (owner)
+!!IF&1000/y-1<>y-2/y-1>-1:M1/195011; // Message New Owner
+!!IF&1000/y-1=y-2:M1/195014; // message revisit of the owner
+!!FU&y-1<>-1:E; // exit if it has already an owner
+!!VRy-99:S0;
+!!VRy-98:Sc -1 :7 +1; // calc actual week (days :7)
+!!UN:P249/?y-10; !!VRy-98&y-10=0:S1; // check if script accumulating resources is enabled; set week to 1 if not
+
+!!VRv1:C0/0/0/0/0/0;  // initializing
+!!UN:P171/?y-3; // check if script "Windmills and Mystical Gardens contain Mithril" is active
+!!DO6131/1/y-98/1:Py-3; // calc amount of resources, return in v1-v6
+!!IF&y-3=0:N1/v1/2/v2/3/v3/4/v4/5/v5; // set the given resources (Mithril script off)
+!!IF&y-3=1:N1/v1/2/v2/3/v3/4/v4/5/v5/7/v6; // set the given resources (Mithril script on)
+!!IF&1000/y-98>0:N^%Z195004^; // Message: give resources
+
+!!OW:Ry-1/1/dv1 Ry-1/2/dv1 Ry-1/3/dv3 Ry-1/4/dv4 Ry-1/5/dv5 Ry-1/7/dv6; // give resources to player
+
+********** end OB 112 (Wind Mill) ***********
+
+!?OB55; // visting a Mystical Garden
+
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!OBv998/v999/v1000:C?y-1; // get control word
+!!FU3333:P11; // get 11th bit to y-100
+!!VRy-100:+1 *-1; // negate the bit
+!!VRy-1:&y-100; // remove the bit from Control Word
+!!OBv998/v999/v1000:Cy-1 M-1/1/0; // set control word and Disable next Message (that would give usually the Res.)
+
+!$OB55; // after visting a Mystical Garden
+
+!!UN:P95/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-2; // get current player
+!!POv998/v999/v1000:O?y-1; // get owner
+!!PO998&y-1<>y-2:Oy-2; // if not owned by current player set to current player
+!!VRy-3:S195035 +y-2; *!OBv998/v999/v1000:Hy-3; // set hint for object (owner)
+!!IF&1000/y-1<>y-2/y-1>-1:M1/195012; // Message New Owner
+!!IF&1000/y-1=y-2:M1/195015; // message revisit of the owner
+!!FU&y-1<>-1:E; // exit if it has already an owner
+!!VRy-98:Sc -1 :7 +1; // calc actual week (days :7)
+!!UN:P249/?y-10; !!VRy-98&y-10=0:S1; // check if script accumulating resources is enabled; set week to 1 if not
+
+!!UN:P171/=1; // check if script "Windmills and Mystical Gardens contain Mithril" is active
+!!VRy-5:S0;
+!!VRy-7:S0 R9; // random 0-9
+!!VRy-5&1/y-98=>10:Sy-98 :10; // if script active set Resource with a frequency of 1:10 to Mithril
+!!VRy-6:Sy-98 %10; // reminder of garden numbers divided by 10
+!!VRy-5&1/y-6>0/y-7=9:+1; // if script active increase Mithril numbers in 1 of 10 by one
+!!VRy-98:-y-5; // reduce total gardens by mithril gardens
+
+!!VRy-3:S0 Ry-98; // number of gold gardens (random number 0-max. number)
+!!VRy-4:Sy-98 -y-3 *5; // number of gems from gardens
+!!VRy-3:*500; !!VRy-5:*5; // amount of gold (500) and mithril (5 per garden)
+!!IF&1000/-1:Q2/6/y-3/5/y-4/1^%Z195006^; // show gardens-message without Mithril-script
+!!IF&1000/1:Q2/6/y-3/5/y-4/7/y-5/1^%Z195006^; // show gardens-message with active Mithril script
+!!OW:Ry-1/6/dy-3 Ry-1/5/dy-4 Ry-1/7/dy-5; // give gold / gems to player
+
+********** end OB 55 (Mystical Gardens) ***********
+

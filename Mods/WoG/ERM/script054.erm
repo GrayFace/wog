@@ -1,0 +1,694 @@
+ZVSE
+ERMS_ScriptDate=25.11(November).2013
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+
+** Updated: August 26, 2005 by Perfect0  (removed three "!" corresponding to new erm parser)
+
+** Updated: November 19, 2004 by Timothy to fix a bug preventing recruitment of ghosts
+** (and subsequent town rebuilding) from a demolished town.
+
+** Updated: 06.01.2005 by Thomas Franz (samot): ballistas reduce the speed to minimal the half
+** of the basic speed of the creature. If stack is slowed: minSpeed = 1/3 of the basic speed
+
+*War Machine script 0.9 by Overlord
+*Reserved: TM41, v591, v2000-v2074, FU900-FU927, w81-83
+*Temporary: z1-z4
+*
+*ballista "base on ballista level" upgrades in towns
+*x(#)*damage, target loose speed, att/def bonuses, increases hit
+*
+*ammo cart "base on ammo cart level" upgrades in town
+*spell points every combat turn, def bonuses, increases hit
+*
+*first aid tent "base on first aid level" upgrades in town
+*additional healing with resurrection, increases hit
+*
+*catapult "base on herolevel and ballistics skill"
+*increases hit, with ballistics: shoot ability with 2,4 or 8 shoots
+*
+************************ before action combat screen ***************************
+
+!#UN:P54/?v591; [Check if script is enabled: v591=1 if yes]
+
+!?BG&v591=1; get before action
+!!FU900:P;
+
+!?FU900&v591=1;
+!!BG:N?y1 E?y3 D?y4 H?y5 Q?y6 A?y7;
+!!FU&y1<0|y1>41:E; exit if no stack
+!!BMy1:T?y2 I?y8 N?y9 L?y10 F?y-1; y-1 - moster flags (132165 = catapult if not siege)
+*
+!!FU925&y2=145/y-1=132165:Py6/y1/y7/y8; catapult first stage
+!!FU901&y2=45/y-1=132165/v2059=1:P1/y1/y7/y8/y5/y9; catapult second stage
+*
+!!FU902&y2=146/y7=7:P0/y3; ballista
+* first aid tent actions *
+!!FU919&y2=173/v2056=1:P2/y7/y1; first aid other action
+!!FU922&y2=147/v2056=0/y7=11:P0/y3;
+!!FU903&y2=147/v2056=0/y7<>11:Py8/y5/y1/y7/y3; first aid start
+
+!?FU901&v591=1; catapult action * magog *
+* 1
+!!VRx4&x1=1:+2068;
+!!VRvx4&x1=1/x3=7:-1;
+!!BMx2&x1=1/x3<>7:T145;
+!!VRv2059&x1=1/x3=7:S3;
+!!VRv2054&x1=1/x3=7:Sx2;
+!!FU906&x1=1:P145/x5/x6/x2;
+* 2
+!!BMv2054&x1=2:T145;
+!!VRv2059&x1=2:S0;
+!!UN&x1=2:G1/45/0/0 G1/45/1/0; restore magog
+
+**VRv2059&x1=1/x3=7
+
+!?FU981&v1=55/v591=1; catapult
+* 1
+!!VRx4:+2068;
+!!BMx2&x1=1:T145;
+!!UN&x1=1:G1/173/0/0 G1/173/1/0;
+!!VRv2059&x1=1:S0;
+!!FU906&x1=1:P145/x5/x6/x2;
+!!VRvx4&x1=1/x3=7:-1;
+!!VRv2059&x1=1/x3=7/x7<>-1:S3;
+!!VRv2054&x1=1/x3=7/x7<>-1:Sx7;
+* 2
+!!FU&x1<2:E;
+!!VRv2059:S0;
+!!BMv2054:I?y1;
+*
+!!VRy5&y1=0:Sv2071;
+!!VRy5&y1=1:Sv2070;
+!!BMv2054&y5>0:M71/y10/y10;
+!!BU:R;
+
+
+
+!?FU919&v591=1;
+* 1
+!!BMx4&x1=0:T147;
+!!UN&x1=0:G1/173/0/0 G1/173/1/0;
+!!VRv2056&x1=0:S0;
+!!FU906&x1=0:P147/x2/x3/x4;
+* 2
+!!BMv2057&x1=1:T147;
+!!UN&x1=1:G1/173/0/0 G1/173/1/0;
+!!VRv2056&x1=1:S0;
+* 3
+!!FU&x1<2:E; exit if no x1
+!!FU|x2<4/x2>8/x2=6/x2=7:E; exit if action is not right
+!!BMx3:T147;
+!!VRv2056:S0;
+
+!?FU903&v591=1;
+!!HEx2:S27/?y1;
+!!FU&y1=0:E; exit if no first aid skill
+!!DO904/0/20/1:Px1/1; get if any creature dead
+!!FU&v1=0:E; exit if no creature to resurrect
+!!VRv2056:S1; there is a creature to resurrect
+!!VRz1:Sz154000;
+!!VRz2:Sz154001;
+!!UN:G1/173/0/1 G1/173/1/2;
+!!BMx3:T173; change to santa gremlin
+!!VRv2057:Sx3;
+!!BG:A0;
+
+!?FU904&v591=1;
+!!VRvx2&x16=0:S0;
+!!VRy1:Sx16;
+!!VRy1&x1=1:+21;
+!!BMy1:B?y2 N?y3 T?y4;
+!!VRvx2&y3<y2/y4>-1:+1;
+
+!?FU902&v591=1;
+* 1
+!!VRv2053&x1=0:S2;
+!!BMx2&x1=0:N?v2054 H?y2 L?y3;
+!!VRv2054&x1=0:*y2 -y3; get before life
+!!VRv2055&x1=0:Sx2;
+* 2
+!!FU&x1=0:E; exit if not x1 = 1
+!!VRv2053:S0;
+!!BMv2055:N?y1 H?y2 L?y3 I?y4 S?y13 T?y16 G54/?y18/d; // get Number, Health, Lost HP, Side, Speed, Type and check, if creature is slowed
+!!BH0&y4=1:N?y5;
+!!BH1&y4=0:N?y5; get THE hero number
+!!VRy1:*y2 -y3; get after life
+!!HEy5:S20/?y11;
+!!IF:Wy5;
+!!VRy6:Sw81 +1;
+!!VRy7:Sy11 +y6 *20 -20; artillery + level * 20, +80
+!!FU&y7=0:E; exit if not more damage
+!!VRy8:Sv2054 -y1 *y7 :100;
+!!VRy15:Sy13;
+!!VRy13&y15>0:-y11;
+!!MA:Sy16/?y17; // get the basic speed of the creature
+!!VRy17&y18=0::2; // halve the basic speed
+!!VRy17&y18>0::3; // minimal a third of the basic speed, if creature is slowed
+!!VRy13&y15>0/y13<y17:Sy17; no less than the half / a third of basic speed
+!!BMv2055:Ky8 Sy13; give additional damage and speed loss
+!!BU:R;
+
+!?FU920&v591=1;
+!!BG:H?y1;
+!!FU&y1<>x2:E; exit if different hero
+!!FU&x5=x6:E; exit if maximum creature founded
+!!CM:R0;
+!!VRx5:+1; add +1 creature
+!!BMx7:Lx3 Nx5; set hitpoints to 0
+!!BG:N?y1 Ex7 Dx8; get first aid tent
+!!BMy1:T147;
+!!UN:G1/173/0/0 G1/173/1/0;
+!!VRv2056:S0;
+!!BG:A11; call resurrection
+
+!?FU925&v591=1; check catapults avaiabitity
+!!VRv2074:S0;
+!!VRx4:+2068;
+!!FU&vx4=0:E; exit if no shots
+!!FU926&x1=0:P0/103 P0/121 P0/137;
+!!FU926&x1=1:P1/117 P1/116 P1/133 P1/150 P1/151;
+!!FU&v2074=1:E; exit if enemy found
+!!VRz1:Sz154002;
+!!VRz2:Sz154003;
+!!UN:G1/45/0/1 G1/45/1/2;
+!!BMx2:T45; change to magog
+!!BG:A0; cancel action
+!!VRv2059:S1; set activity to 1
+
+!?FU926&v591=1;
+!!BU:Ex2/?y1;
+!!FU&y1=-1:E;
+!!BMy1:I?y2;
+!!VRv2074&y2<>x1:S1;
+
+************************* after action combat screen ***************************
+
+!?BG1&v591=1; get after action
+!!FU902&v2053=2:P1;
+!!FU901&v2059=3:P2;
+!!FU922&v2056=2:P1;
+
+!?FU922&v591=1;
+* 1
+!!VRv2056&x1=0:S2;
+!!VRv2057&x1=0:Sx2;
+!!BMv2057&x1=0:L?v2058; get before heal
+* 2
+!!FU&x1<1:E; exit
+!!VRv2056:S0;
+!!BMv2057:Lv2058 I?y2; restore old and get index.
+!!BHy2:N?y3; get hero
+!!HEy3:S27/?y11;
+!!IF:Wy3;
+!!VRy6:Sw82 +1;
+!!VRy7:Sy11 +y6 *20 +80; first aid + level * 20, +80
+* set healing points *
+!!VRy1&y11=0:S25; !!VRy1&y11=1:S50; !!VRy1&y11=2:S75; !!VRy1&y11=3:S100;
+!!VRy1:*y7 :100; get quantity to heal
+!!FU923:Pv2057/y1/y11;
+
+!?FU923&v591=1;
+!!BMx1:B?y1 N?y2 H?y3 L?y4 L?y5; get information
+!!VRy4:-x2;
+!!BMx1&y4>-1:Ly4; all or partial healing
+!!FU&y4>-1:E; stop if completed
+!!BMx1&y4<0:L0;
+!!FU&y1=y2:E; stop if maximum creature
+!!FU&x3=0:E; stop if no first aid skills
+!!VRx2:-y5;
+!!VRy2:+1;
+!!BMx1:Ny2 Ly3;
+!!FU923:Pv2057/x2; recuring
+
+************************* MOUSE CLICK combat screen ****************************
+
+!?CM4&v591=1;
+!!CM:D?v2048 F?v2049;
+!!FU905&v2048>-1/v2048<186:Pv2048/v2049;
+
+!?FU905&v591=1;
+!!BU:Ex1/?y1; check monster position
+!!FU&y1=-1:E; exit if no monster
+!!BMy1:T?y2 I?y3 L?y5 H?y6 N?y7 F?y8 B?y9; y2 = monster , y3 = hero side
+!!BHy3:N?y4; get hero number
+
+!!UN&y8<>132165/y2=45:G1/45/0/0 G1/45/1/0; restore magog if mouse click on real magogs
+!!VRz1&y8=132165:Sz154002;
+!!VRz2&y8=132165:Sz154003;
+!!UN&y8=132165:G1/45/0/1 G1/45/1/2;
+
+!!FU901&y2=45/v2059=1/y8=132165:P1/y1/0/y3/y4/y7; catapult view
+!!FU919&y2=173/v2056=1/y8=132161:P0/y4/y7/y1;
+* reset santa gremlin *
+!!UN&y2=173/v2056>0/y8<>132161:G1/173/0/0 G1/173/1/0;
+!!UN&y2=45/v2059>0/y8<>132165:G1/173/0/0 G1/173/1/0; restore magog
+*
+!!FU920&v2056=1/y8<>132161/x2=0:Py2/y4/y6/y5/y7/y9/y1/x1;
+!!FU906&y2>144/y2<149:Py2/y4/y7/y1; stats change if machines
+
+!?FU906&v591=1; x1 = machine , x2 = hero
+!!IF:Wx2; set W var for hero
+!!VRy5:Sx1 -65;
+!!VRy6:Swy5 +1; y6 = level of machine
+!!VRy12&x4<21:Sv2070;
+!!VRy12&x4>20:Sv2071;
+!!VRy13&x4<21:Sv2072;
+!!VRy13&x4>20:Sv2073;
+!!VRz1&x1=146:Sz154004;
+!!VRz1&x1=148:Sz154005;
+!!VRz1&x1=147:Sz154006;
+!!VRz1&x3>1:Sz154007;
+!!VRz1:Sz154008;
+!!VRz1&x1=145:Sz154009;
+!!VRz1&x1=145/x3>1:Sz154010;
+!!VRz1&x1=145/y12=1:Sz154011;
+!!VRz1&x1=145/y12=2:Sz154012;
+!!VRz1&x1=145/y12=3:Sz154013;
+!!VRz1&x1=145/x3>1:Sz154014;
+!!UN:G1/x1/1/1 G1/x1/0/1;
+* hit points
+!!VRy9&x1=145/y12=0:S500;
+!!VRy9&x1=145/y12>0:Sy12 *50 *y12 +550;
+!!VRy10&x1=145:Sy13 *50 +y9 -50;
+!!VRy10&x1=146:Sy6 *50 +200;
+!!VRy10&x1=147:Sy6 *25 + 125;
+!!VRy10&x1=148:Sy6 *10 +90;
+!!BMx4:Hy10 I?y11;
+!!MA:Px1/y10;
+* calculate shots for catapult *
+!!FU&v2052=98:E; exit if siege
+!!VRy12:S2068 +y11;
+!!VRy11:Svy12;
+!!MA&x1=145:N145/y11;
+
+*********************** Pre-Post Combat and ammo cart **************************
+
+!?BA0&v591=1;
+!!BA:H0/?y-1; attacking hero #
+!!IP:Wy-1/81/83; sending w wars
+!!BA:H1/?y-1; defending hero #
+!!IP:Wy-1/81/83; sending w vars
+!!IP:V2000/2074; sending script vars
+
+!?BA52&v591=1;
+!!BA:P?v1/?v2/?v3;
+!!OBv1/v2/v3:T?v2052;
+!!CAv1/v2/v3&v2052=98:U?v7; town number
+ [Count number of towns - store in y-2]
+!!UN&v2052=34:U98/-1/?y-2;
+!!DO927/1/y-2/1&v2052=34/y-2>0:P;  check if attacked hero in any town
+
+!!FU915:P0/0 P1/0; store enabler
+!!FU917:P; change stats
+
+**
+!?FU927&v591=1; check if attacked hero in this town
+!!UN:U98/-1/x16/4;
+!!FU&v1<>v4|v2<>v5/v3<>v6:E;
+ [process only if attacked hero visiting town]
+!!CAv1/v2/v3:U?v7 H0/?y-1; store town number & check if hero in town harrison
+!!VRv2052&y-1=-1:S98; it is a siege if only 1 hero in town
+
+**
+!?FU917&v591=1;
+!!CA0/v7&v2052=98:B3/7; check if town has fort
+!!CA0/v7&v2052=98/-1:B3/8; check if town has citadel
+!!CA0/v7&v2052=98/-1:B3/9; check if town has castle
+!!VRv2052&v2052=98/-1:S0; town without fort
+!!MA&v2052<>98:X145/132165 M145/0 E145/200 N145/8; not town or no fort
+!!MA&v2052=98:X145/132197 M145/0 E145/200 N145/8; town with fort
+!!FU918&v2052<>98:P0 P1;
+
+!?FU918&v591=1;
+!!BA:Hx1/?y1;
+!!FU&y1<0:E;
+!!HEy1:S10/?y2;
+!!VRy3:S2068 +x1;
+!!VRvy3&y2=1:S2;
+!!VRvy3&y2=2:S4;
+!!VRvy3&y2=3:S8;
+
+!?BR&v591=1; set mana for ammo cart
+!!DO907/0/41/1&v997>0:P1;
+
+!?BF&v591=1; set machines attributes
+!!FU924:P; check siege mode AGAIN, if AI don't GET IT!
+!!FU909&v2052<>98:P0/119 P1/135; call if no siege battle
+!!DO908/0/41/1:P;
+
+!?FU924&v591=1;
+!!BU:E119/?x1;
+!!VRv2052&x1>-1:S98; if catapult found its a siege mode, set v2052 = 98
+!!MA&x1>-1:X145/132197 M145/0 E145/0;
+
+!?BA53&v591=1; after battle check & re-set enabler
+!!FU912:P1/0 P1/1;
+!!FU915:P0/1 P1/1;
+!!VRv2048:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0; v2048-v2063
+!!VRv2064:C0/0/0/0/0/0/0/0/0/0; v2064 - v2073
+
+!?FU907&v591=1;
+!!BMx16:T?y1 I?y2;
+!!FU&y1<>148:E; exit
+!!BHy2:N?y3;
+!!IF:Wy3;
+!!VRy6:Sw83 +1; get addition
+!!HEy3:I?y7/1; get current spell points
+!!VRy8:S2066 +y2; get current side index
+!!VRy9:Svy8 *10; get knowledge power * 10
+!!FU&y7=>y9:E; exit if spell already enough
+!!VRy6:+y7; set additioanl spell
+!!VRy6&y6>y9:Sy9; set max if y6 > y9
+!!HEy3:Iy6/1;
+
+!?FU908&v591=1;
+!!BMx16:T?x6 I?x7;
+!!FU|x6<145/x6>148:E; exit
+!!BHx7:N?x5;
+!!FU&x5<0:E; exit if no hero set
+!!IF:Wx5;
+!!VRx4:Sx6 -65;
+!!VRx3:Swx4 +1; get w-var for type, add 1 top skip 0
+*
+!!VRx1:Sv2070 +x7; new method to get sec + skill
+!!VRx2:Sv2072 +x7;
+* change catapult stats
+!!VRx8&x6=145/x1=0:S500;
+!!VRx8&x6=145/x1>0:Sx1 *50 *x1 +550;
+* hit points warmachines
+!!VRx9&x6=145:Sx2 *50 +x8 -50;
+!!VRx9&x6=146:Sx3 *50 +200;
+!!VRx9&x6=147:Sx3 *25 +125;
+!!VRx9&x6=148:Sx3 *10 +90;
+!!BMx16:Hx9;
+
+!?FU909&v591=1;
+* place real catapults *
+!!BA:Hx1/?y1;
+!!FU&y1<0:E; exit if no hero found
+!!HEy1:S10/?y11; get ballistics secondary skills
+!!FU912&y11>0:P6/y2/3/1; [bugfix: guess these should be catapults (3 -> 4 for balistas)]
+!!BU&y11>0/v1=0:S145/1/x2/x1/-1/0;
+
+!?FU915&v591=1;
+!!BA:Hx1/?y1;
+!!FU&y1<0:E;
+!!HEy1&x1=0/x2=0:A2/4/d/?v2060 A2/5/d/?v2061 A2/6/d/?v2062 Fd/d/d/?v2066 S10/?v2070 Ed/?v2072;
+!!HEy1&x1=1/x2=0:A2/4/d/?v2063 A2/5/d/?v2064 A2/6/d/?v2065 Fd/d/d/?v2067 S10/?v2071 Ed/?v2073;
+!!FU912:P6/y1/4/2 P6/y1/5/3 P6/y1/6/4; call enabler
+!!HEy1&v2=1/x2=0:A-4;
+!!HEy1&v3=1/x2=0:A-5;
+!!HEy1&v4=1/x2=0:A-6;
+!!HEy1&v2=1/x1=0/x2=1/v2060=1:A1/4/13;
+!!HEy1&v3=1/x1=0/x2=1/v2061=1:A1/5/14;
+!!HEy1&v4=1/x1=0/x2=1/v2062=1:A1/6/15;
+!!HEy1&v2=1/x1=1/x2=1/v2063=1:A1/4/13;
+!!HEy1&v3=1/x1=1/x2=1/v2064=1:A1/5/14;
+!!HEy1&v4=1/x1=1/x2=1/v2065=1:A1/6/15;
+
+****************************** Adventure Map ***********************************
+
+!#TM41&v591=1:S1/999/1/255;
+
+!?TM41&v591=1;
+!!VRv2000:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0; v2000-v2015
+!!VRv2016:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0; v2016-v2031
+!!VRv2032:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0; v2032-v2047
+
+!?OB98&-1000/v591=1; town - ai check only
+!!HE-1:N?v2048;
+!!FU912:P1/v2048;
+
+!?OB106&v591=1; war machine factory, entrance!
+!!HE-1:N?v2048;
+!!UN:A4/10/0 A4/9/0 A5/10/0 A5/9/0 A6/10/0 A6/9/0; restore desc
+!!FU912:P2/v2048;
+
+!?CM1&v591=1; inside town
+!!CA-1:B3/13; [Check if Capitol is built - Flag 1=True if built]
+!!CA-1&-1:B3/12; [Check if City Hall is built - Flag 1=True if built]
+!!CA-1&-1:B3/11; [Check if Town Hall is built - Flag 1=True if built]
+!!CA-1&-1:B3/10; [Check if Village Hall is built - Flag 1=True if built]
+!!FU&-1:E; [Exit if no Hall is built at all]
+!!CM:R1 F?v2048 I?v2049 A?v2051/?v2050;
+!!FU910&v2048=0/v2050<375:Pv2051/v2050/0/0/v2049/0;
+
+!?CM2&v591=1; inside hero screen
+!!CM:H?v2048/?y-1 F?v2050 I?v2049 A?v2051/?v2052;
+!!FU911&v2049>14/v2049<19/v2052>28/v2052<165/v2051<653/v2051>562:Pv2049/0/v2048/1/v2050/v2051/v2052;
+!!FU914&v2049=19/v2050=512:Pv2048/0;
+
+!?CM3&v591=1; inside trade screen
+!!CM:H?v2049/?v2050 F?v2048 I?v2051;
+!!FU911&v2051>39/v2051<44:Pv2051/0/v2049/v2048/1;
+!!FU911&v2051>58/v2051<63:Pv2051/0/v2050/v2048/1;
+!!FU914&v2051=44:Pv2049/1;
+!!FU914&v2051=63:Pv2050/1;
+
+!?FU910&v591=1;
+!!CA-1:T?x4 H1/?x3 U?x6; get town type
+!!FU916:Px4/x1/x2/x5;
+!!FU&x3<0|v1=-1:E; exit
+!!VRx1:Sv1;
+!!VRx5&x5<>22:S16;
+!!VRx2&x1=4:S146;
+!!VRx2&x1=5:S148;
+!!VRx2&x1=6:S147;
+!!IF:Wx3; set W var for hero
+!!VRy5:Sx2 -65;
+!!VRy6:Swy5 +1; get w-var for type, add 1 top skip 0
+!!HEx3:A2/x1/d/?y1 B0/?z3 Ed/?y9/1 O?y10; hero level y9
+!!VRwy5&y1=0:S0; set w-var to 0
+!!UN&y1=0:G1/x2/0/0 G1/x2/1/0;
+!!UN:Ax1/10/0 Ax1/9/0; restore desc
+!!FU&y1=0:E; stop if found
+!!CM:R0; Disable standard reaction
+!!VRy16:S2000 +x6; get towns number store in v2000 + townnumber
+!!VRy17:Svy16; get number from vy16
+!!OW:Ry10/6/?y11; get gold from player
+!!VRy8:Sy6 +1; next level
+!!UN:N2/1/x4/x5 N3/2/x2/0; get ballista name & object name
+!!FU913:Px2/x1/x3/y8; get stats
+!!VRz5:Sz154015;
+!!VRz6:Sz154016;
+!!UN:Ax1/10/5 Ax1/9/6;
+!!MA:Cx2/6/?y7; y7 = gold cost
+!!VRy7::5 *y8; gold cost is level * machine / 5
+!!VRy15:S2; set to choices
+!!VRz4&y11<y7:Sz154017;
+!!VRz4&y9<y8:Sz154018;
+!!VRz4&y17>0:Sz154019;
+!!VRy15&y11<y7|y9<y8:S4; set to message with no buttons
+!!VRy15&y17>0:S4; also
+!!VRz4&y15=2:S^^;
+!!IF:Q1/8/x1/36/y7/y15/z154020;
+!!FU&y15=4|-1:E; stop function
+!!VRy11:-y7; sub money
+!!OW:Ry10/6/y11; new money
+!!VRwy5:+1; add level to W var for machine
+!!VRvy16:+1; add for use only 1 time/castle/day
+
+* x1 = some monster index, x2 = some artifact index, ??
+!?FU911&v591=1;
+!!VRx1&x1>58:-44; trade right hero fix
+!!VRx1&x1>39:-25; trade left hero fix
+!!VRx1&x1=15:S146;
+!!VRx1&x1=16:S148;
+!!VRx1&x1=17:S147;
+!!VRx1&x1=18:S145;
+!!VRx2&x1=145:S3; !!VRx2&x1=146:S4;
+!!VRx2&x1=147:S6; !!VRx2&x1=148:S5;
+!!HEx3:A2/x2/d/?y1 S10/?y12 B0/?z7 R2/?y19;
+!!VRy1&x5=0/x6<609/x1<>146:S0; no ballista x-
+!!VRy1&x5=0/x1=145/x7<121:S0; catapult y-
+!!VRy1&x5=0/x1=146/x6>606:S0; ballista x+
+!!VRy1&x5=0/x1=146/x7>72:S0; ballista y+
+!!VRy1&x5=0/x1=148/x7>72:S0; ammo cart y+
+!!VRy1&x5=0/x1=147/x7>118:S0; first aid y+
+!!VRy1&x5=0/x1=147/x7<75:S0; first aid y-
+!!FU&y1=0:E; exit if no found
+!!CM:R0;
+!!IF:Wx3; set W var for hero
+!!VRy5:Sx1 -65;
+!!VRy6:Swy5 +1;
+!!FU913&x5>0:Px1/x2/x3/y6; get stats
+*
+!!VRz1&x2=3/y12=0:Sz154021;
+!!VRz1&x2=3/y12=1:Sz154022;
+!!VRz1&x2=3/y12=2:Sz154023;
+!!VRz1&x2=3/y12=3:Sz154024;
+!!VRz1&x2=4:Sz154025;
+!!VRz1&x2=5:Sz154026;
+!!VRz1&x2=6:Sz154027;
+!!VRz6:S^^;
+!!UN:Ax2/9/6;
+!!VRz2&x2=3:Sz154028;
+!!VRz2&x2=4:Sz154029;
+
+!!VRz2&x2=5:Sz154030;
+
+!!VRz2&x2=6:Sz154031;
+!!VRz2&x4=0:Sz154032;
+!!IF&x5>0:Q1/8/x2/4^%Z1
+
+%Z2^;
+
+!!FU912&x5=0:P6/x3/x2/1;
+!!VRz4&x5=0/v1=0:Sz154033;
+!!VRz4&x5=0/v1=1:Sz154034;
+!!VRz5&x5=0/v1=0:Sz154035;
+!!VRz5&x5=0/v1=1:Sz154036;
+!!UN:Ax2/10/0;
+!!VRz8&y19=0:Sz154037;
+!!VRz8&y19=1:Sz154038;
+!!IF&x5=0:Q1/8/x2/2/z154039;
+
+!!FU912&x5=0/1:P7/x3/x2/v1;
+!!FU&x5<>0:E; exit if not x5
+!!FU&-1:E; exit if choosed no
+!!VRz2&x2=3:Sz154040;
+!!VRz2&x2=4:Sz154041;
+!!VRz2&x2=5:Sz154042;
+!!VRz2&x2=6:Sz154043;
+!!VRz4&x5=0/v1=1:Sz154044;
+!!VRz4&x5=0/v1=0:Sz154045;
+!!IF:Q1/8/x2/1/z154046;
+
+!?FU916&v591=1;
+!!VRv1:S0;
+!!VRv2&x1=0:C240/251/364/369; castle
+!!VRv2&x1=1:C627/137/668/186; rampart
+!!VRv2&x1=2:C495/227/613/353; tower
+!!VRv2&x1=3:C684/272/780/367; inferno
+!!VRv2&x1=4:C402/252/471/296; necropolis
+!!VRv2&x1=5:C546/248/618/328; dungeon
+!!VRv2&x1=6:C622/286/765/361; stronghold
+!!VRv2&x1=7:C360/160/454/238; fortress
+!!VRv2&x1=8:C463/200/533/255; conflux
+!!VRv1&x2<v2|x2>v4:S-1;
+!!VRv1&x3<v3|x3>v5:S-1;
+!!FU&v1=-1:E; exit if out of range
+!!VRv1:S-1;
+!!VRv1&x4=16/x1=0:S4; castle
+!!VRv1&x4=16/x1=1:S6; rampart
+!!VRv1&x4=16/x1=2:S5; tower
+!!VRv1&x4=16/x1=3:S5; inferno
+!!VRv1&x4=16/x1=4:S6; necropolis
+!!VRv1&x4=23/x1=4:S6; necropolis
+!!VRv1&x4=16/x1=5:S4; dungeon
+!!VRv1&x4=16/x1=6:S5; stronghold
+!!VRv1&x4=22/x1=6:S4; stronghold
+!!VRv1&x4=16/x1=7:S6; fortress 1
+!!VRv1&x4=14/x1=7:S6; fortress 2
+!!VRv1&x4=13/x1=7:S6; fortress 3
+!!VRv1&x4=14/x1=8:S4; conflux
+!!VRv1&x4=16/x1=8:S4; conflux
+
+********************************* Functions ************************************
+
+[x2 = hero]
+!?FU912&v591=1;
+* Ai get's upgrades - x1 = 1 *
+!!IF&x1>0/x1<4:Wx2;
+!!HEx2&x1>0/x1<4:A2/4/d/?y1 A2/5/d/?y2 A2/6/d/?y3 Ed/?y4/1; y1-Ballista,y2=Ammo Cart,y3=Aid Tent,y4=hero level
+!!VRw81&x1=1/y1>0/w81<y4:+1; add 1 level ballista
+!!VRw82&x1=1/y3>0/w82<y4:+1; add 1 level first aid
+!!VRw83&x1=1/y2>0/w83<y4:+1; add 1 level ammo cart
+* Erase Quantity - x2 = 2 *
+!!VRw81&x1=2/y1=0:S0; zero if no ballista
+!!VRw82&x1=2/y3=0:S0; zero if no ammo
+!!VRw83&x1=2/y2=0:S0; zero if no tent
+* Reset w81-w83 every hero *
+!!IF&x1=3:Wx16;
+!!VRw81&x1=3:S0;
+!!VRw82&x1=3:S0;
+!!VRw83&x1=3:S0;
+* get quantity of spells *
+!!HEx2&x1=4:Mx16/?y1;
+!!VRvx3&x1=4/y1=1:+1;
+* get spells
+!!HEx2&x1=5:Mx16/?y1;
+!!VRvx3&x1=5/y1=1:Sx16;
+!!VRx3&x1=5/y1=1:+1;
+* get enabler [x3 = artifact, x4 = v# for result]
+!!VRy1&x1=6:S2000 +x2;
+!!VRy2&x1=6:Svy1; ** get hero ** y2 = get number
+!!VRy6&x1=6/y2>999:S1;
+!!VRy2&x1=6/y2>999:-1000;
+!!VRy5&x1=6/y2>99:S1;
+!!VRy2&x1=6/y2>99:-100;
+!!VRy4&x1=6/y2>9:S1;
+!!VRy2&x1=6/y2>9:-10;
+!!VRy3&x1=6/y2>0:S1;
+!!VRy2&x1=6:S0;
+!!VRy2&x1=6/yx3=1:S1;
+!!VRvx4&x1=6:Sy2;
+* set enabler [x3 = artifact, x4 = 1 add/0 remove]
+!!VRy1&x1=7:S2000 +x2;
+! !VRy2&x1=7:S30 -vy1; ** get hero ** y2 = get number [TODO: what's this??]
+!!VRy3&x1=7/x3=3:S1;
+!!VRy3&x1=7/x3=4:S10;
+!!VRy3&x1=7/x3=5:S100;
+!!VRy3&x1=7/x3=6:S1000;
+!!VRvy1&x1=7/x4=0:+y3;
+!!VRvy1&x1=7/x4=1:-y3;
+
+!#DO912/0/155/1&v591=1:P3;
+************************** Get Z-var for warmachines ***************************
+
+!?FU913&v591=1;
+!!HEx3:S27/?y10 S20/?y11 S10/?y12 Ed/?y13/1;
+* catapult
+!!VRy9&x2=3/y12=0:S500;
+!!VRy9&x2=3/y12>0:Sy12 *50 *y12 +550;
+!!VRy8&x2=3:Sy13 *50 +y9 -50;
+!!VRy10&x2=3/y12=1:S2;
+!!VRy10&x2=3/y12=2:S4;
+!!VRy10&x2=3/y12=3:S8;
+!!VRz3&x2=3/y12=0:S^^;
+!!VRz3&x2=3/y12>0:Sz154047;
+!!VRz5&x2=3:Sz154048;
+* first aid tent
+!!VRy8&x2=6:Sx4 *25 +125;
+!!VRy7&x2=6:Sy10 +x4 *20 +80; first aid + level * 20, +80
+!!VRz6&x2=6/y10=0:S^^;
+!!VRz6&x2=6/y10>0:Sz154049;
+!!VRz5&x2=6:Sz154050;
+* ammo cart
+!!VRy8&x2=5:Sx4 *10 +90;
+!!VRz4&x2=5/x4=1:S^^;
+!!VRz4&x2=5/x4>1:Sz154051;
+!!VRz5&x2=5:Sz154052;
+* ballista
+!!VRy8&x2=4:Sx4 *50 +200;
+!!VRy7&x2=4:Sy11 +x4 *20 +80; artillery + level * 20, +80
+!!VRz6&x2=4/y11=0:S^^;
+!!VRz6&x2=4/y11>0:Sz154053;
+!!VRz5&x2=4:Sz154054;
+
+******************************** Spell Book ************************************
+
+!?FU914&v591=1;
+!!HEx1:A2/1000/d/?y1 B0/?z3;
+!!FU&y1=0:E;
+!!CM:R0;
+!!VRv1:S0;
+!!DO912/0/69/1:P4/x1/1;
+!!VRz2&v1=0:Sz154055;
+!!VRz2&v1>3:Sz154056;
+!!VRz2&v1=70:Sz154057;
+!!UN:A0/9/2;
+!!VRz1&x2=0:Sz154058;
+!!VRz1&x2=1:Sz154059;
+!!IF&v1=0|v1>3:Q1/8/0/4^%Z1^;
+!!DO912/0/69/1&v1>0/v1<4:P5/x1/2;
+!!VRz2:S^^;
+!!VRz2&v1>1:Sz154060;
+!!VRz1:Sz154061;
+!!IF&v1=1:Q1/9/v2/4^%Z1^;
+!!IF&v1=2:Q1/9/v2/9/v3/4^%Z1^;
+!!IF&v1=3:Q1/9/v2/9/v3/9/v4/4^%Z1^;
+!!UN:A0/9/0 A0/9/10;
+

@@ -1,0 +1,353 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=20.9(September).2006
+
+** Reminders, Town and Hero Notes version 0.2
+** Script131.erm  by Timothy Pulver
+
+** Last Updated: September 20, 2006
+** Previously Updated: September 17, 2006
+
+** Ctrl-click on the hero's portrait or town picture in the Hero/Town
+** Information Square to write a new Note or read an old one.
+
+** Ctrl-click on mini-map opens dialog for setting up Timed Reminder Messages.
+
+** Variables: v84
+
+--------------------------------------------------------------------------------
+
+!#UN:P331/=1; [Check if script enabled: Flag 1=True if yes]
+!#VRv84&1:S10000000 R89999999; [Generate a large random number to use for a unique text file name for this game: v84]
+
+--------------------------------------------------------------------------------
+
+ [Display or Save a Note for a Hero or Town]
+!?CM5; [Left-click Adventure Map trigger]
+!!UN:P331/=1; !!FU&-1:E; [Exit if script disabled]
+!!CM:I?y-1 F?y-2 S?y-3; [Location clicked: y-1, Flags: y-2, Subtype: y-3]
+!!FU|y-1<>2001/y-2<>4/y-3<>12:E; [Exit if not a ctrl-click on Hero/Town info. square hero portrait or town picture]
+
+!!CM:R0; [Cancel standard click action]
+!!FU$LocalPlayer$:P; [Current/Local player in y-100]
+!!VRz-5&y-100=0:S^Red^; [Local player's colour (Red): z-5]
+!!VRz-5&y-100=1:S^Blue^; [Local player's colour (Blue): z-5]
+!!VRz-5&y-100=2:S^Tan^; [Local player's colour (Tan): z-5]
+!!VRz-5&y-100=3:S^Green^; [Local player's colour (Green): z-5]
+!!VRz-5&y-100=4:S^Orange^; [Local player's colour (Orange): z-5]
+!!VRz-5&y-100=5:S^Purple^; [Local player's colour (Purple): z-5]
+!!VRz-5&y-100=6:S^Teal^; [Local player's colour (Teal): z-5]
+!!VRz-5&y-100=7:S^Pink^; [Local player's colour (Pink): z-5]
+!!OW:Ay-100/?y-1 Ny-100/?y-4; [Active hero: y-1, Active town: y-4]
+!!FU&y-1<0/y-4<0:E; [Exit if no hero or town currently selected]
+!!VRz-3&y-1>=0:S^%Z-5 Heroes^; [Subhead for player's heroes: z-3]
+!!VRz-3&y-4>=0:S^%Z-5 Towns^; [Subhead for player's towns: z-3]
+!!UN:J9/4/-2; [Copy WoG Games folder path to z-2]
+!!VRz-4:S^%Z-2Notes_%V84.txt^; [Path plus File name: z-4]
+!!HEy-1&y-1>=0:B0/?z2; [Hero's name: z2]
+!!CA0/y-4&y-4>=0:N?z2; [Town's name: z2]
+!!VRz6:S^^; [Initialize string to null: z6]
+!!UN&y-1>=0:N6/6/y-1/-3/-4; [Hero Note: Read text into (z6) from entry (y-1), section (z-2), file (z-4)]
+!!UN&y-4>=0:N6/6/y-4/-3/-4; [Town Note: Read text into (z6) from entry (y-1), section (z-2), file (z-4)]
+!!VRz6:H2; [Set flag to True if there's text, to False if no text: Flag 2]
+!!IF&2:Q3^{Note for %Z2}
+
+%Z6
+
+{Replace with a new note?}^;
+!!IF&-2:Q3^Enter a note for %Z2?^;
+!!FU&-3:E; [Exit if player doesn't wish to enter a note]
+
+!!VRz3&2:S^Enter a new note for %Z2 or Cancel to keep old note.^;
+!!VRz3&-2:S^Enter a note for %Z2.^;
+!!VRz4:S^You may enter up to 510 characters.^;
+!!VRz5:S^^; [Null string: z5]
+!!VRz1:S^^; [Initialize string to null: z1]
+!!IF:D1/3/4/5/5/5/5/5/5/5/5/5/5/5/5/5; [Set up Input Dialog]
+!!IF:E1/1; [Display dialogue: Player's input in z1]
+!!VRz1:M4/?y-2; [Length in y-2]
+!!IF&y-2>510:M^{WARNING}
+
+Your note has been truncated to 510 characters.^; [Warning if player enters more than 510 characters]
+!!UN&v1>0/y-1>=0:N5/1/y-1/-3/-4; [Write hero note text (z1) to entry (y-1), section (z-2), file (z-4)]
+!!UN&v1>0/y-4>=0:N5/1/y-4/-3/-4; [Write town note text (z1) to entry (y-1), section (z-2), file (z-4)]
+
+--------------------------------------------------------------------------------
+
+ [Set up a Timed Reminder Message]
+!?CM5; [Left-click Adventure Map trigger]
+!!UN:P331/=1; !!FU&-1:E; [Exit if script disabled]
+!!CM:I?y-1 F?y-2 S?y-3; [Location clicked: y-1, Flags: y-2, Subtype: y-3]
+!!FU|y-1<>1/y-2<>4/y-3<>12:E; [Exit if not a ctrl-click on Mini-Map]
+!!CM:R0; [Cancel standard click action]
+!!IF:Q2^Set up a Reminder Message?^; [Ask if player wishes to set up a Timed Reminder Message: Flag 2]
+!!FU&-2:E; [Exit if no]
+
+!!FU$LocalPlayer$:P; [Current/Local player in y-100]
+!!VRz7&y-100=0:S^Red^; [Local player's colour (Red): z7]
+!!VRz7&y-100=1:S^Blue^; [Local player's colour (Blue): z7]
+!!VRz7&y-100=2:S^Tan^; [Local player's colour (Tan): z7]
+!!VRz7&y-100=3:S^Green^; [Local player's colour (Green): z7]
+!!VRz7&y-100=4:S^Orange^; [Local player's colour (Orange): z7]
+!!VRz7&y-100=5:S^Purple^; [Local player's colour (Purple): z7]
+!!VRz7&y-100=6:S^Teal^; [Local player's colour (Teal): z7]
+!!VRz7&y-100=7:S^Pink^; [Local player's colour (Pink): z7]
+!!VRz10:S^%Z7 Timed Reminder Messages^; [Subhead for player's Timed Reminder Messages: z10]
+!!UN:J9/4/9; [Copy WoG Games folder path to z9]
+!!VRz8:S^%Z9Notes_%V84.txt^; [Path plus File name: z8]
+
+!!UN:J8/4/^Notes_%V84.txt^; [Check if Notes file has been created yet: Flag 1=1 if yes]
+
+!!VRz-1:S^Daily^; [Daily: z-1]
+!!VRy-4:S999; [Daily: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/68; [First 68 characters of Daily message text: z4]
+!!VRz-1&1/4/y-5>68:+^   "%Z4..."^; [Add first 68 characters of text to Daily: z-1]
+!!VRz-1&1/4/y-5<=68:+^   "%Z1"^; [Add entire text to Daily: z-1]
+
+!!VRz-2:S^Start of Week (Day 1)^; [Start of Week: z-2]
+!!VRy-4:S10; [Start of Week: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Start of Week message text: z4]
+!!VRz-2&1/4/y-5>47:+^   "%Z4..."^; [Add first 47 characters of text to Start of Week: z-2]
+!!VRz-2&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Start of Week: z-2]
+
+!!VRz-3:S^End of Week (Day 7)^; [End of Week: z-3]
+!!VRy-4:S70; [End of Week: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of End of Week message text: z4]
+!!VRz-3&1/4/y-5>47:+^   "%Z4..."^; [Add first 47 characters of text to End of Week: z-3]
+!!VRz-3&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to End of Week: z-3]
+
+!!VRz-4:S^Start of Month (Week 1, Day 1)^; [Start of Month: z-4]
+!!VRy-4:S100; [Start of Month: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/39; [First 39 characters of Start of Month message text: z4]
+!!VRz-4&1/4/y-5>39:+^   "%Z4..."^; [Add first 39 characters of text to Start of Month: z-4]
+!!VRz-4&1/4/y-5<=39:+^   "%Z1"^; [Add entire text to Start of Month: z-4]
+
+!!VRz-5:S^End of Month (Week 4, Day 7)^; [End of Month: z-5]
+!!VRy-4:S2800; [End of Month: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/39; [First 39 characters of End of Month message text: z4]
+!!VRz-5&1/4/y-5>39:+^   "%Z4..."^; [Add first 39 characters of text to End of Month: z-5]
+!!VRz-5&1/4/y-5<=39:+^   "%Z1"^; [Add entire text to End of Month: z-5]
+
+!!VRz-6:S^Day 1 (one time only)^; [Day 1]
+!!VRy-4:S1; [Day 1: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 1 message text: z4]
+!!VRz-6&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 1: z-6]
+!!VRz-6&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 1: z-6]
+
+!!VRz-7:S^Day 2 (one time only)^; [Day 2]
+!!VRy-4:S2; [Day 2: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 2 message text: z4]
+!!VRz-7&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 2: z-7]
+!!VRz-7&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 2: z-7]
+
+!!VRz-8:S^Day 3 (one time only)^; [Day 3]
+!!VRy-4:S3; [Day 3: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 3 message text: z4]
+!!VRz-8&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 3: z-8]
+!!VRz-8&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 3: z-8]
+
+!!VRz-9:S^Day 4 (one time only)^; [Day 4]
+!!VRy-4:S4; [Day 4: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 4 message text: z4]
+!!VRz-9&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 4: z-9]
+!!VRz-9&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 4: z-9]
+
+!!VRz-10:S^Day 5 (one time only)^; [Day 5]
+!!VRy-4:S5; [Day 5: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 5 message text: z4]
+!!VRz-10&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 5: z-10]
+!!VRz-10&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 5: z-10]
+
+!!VRz2:S^Day 6 (one time only)^; [Day 6]
+!!VRy-4:S6; [Day 6: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 6 message text: z4]
+!!VRz2&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 6: z2]
+!!VRz2&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 6: z2]
+
+!!VRz3:S^Day 7 (one time only)^; [Day 7]
+!!VRy-4:S7; [Day 7: y-4]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!UN&1:N6/1/y-4/10/8; [Timed Reminder Message: Read text into (z1) from entry (y-1), section (z10), file (z8)]
+!!VRz1&1:H4; [Set flag to True if there's text: Flag 4]
+!!VRz1&1:M4/?y-5; [Length in y-5]
+!!VRz4&1/4:M1/1/0/47; [First 47 characters of Day 7 message text: z4]
+!!VRz3&1/4/y-5>47:+^   "%Z4..."^; [Add first 39 characters of text to Day 7: z2]
+!!VRz3&1/4/y-5<=47:+^   "%Z1"^; [Add entire text to Day 7: z2]
+
+!!VRz1:S^Select an option for displaying a Timed Reminder Message^;
+!!IF:G1/1/1/1/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/2/3; [Display Timed Reminder Message setup Dialog Box: result in v1]
+
+ [Set up entry number: y-1]
+!!VRy-1&v1=1:S999; [Daily: y-1]
+!!VRy-1&v1=2:S10; [Start of Week: y-1]
+!!VRy-1&v1=4:S70; [End of Week: y-1]
+!!VRy-1&v1=8:S100; [Start of Month: y-1]
+!!VRy-1&v1=16:S2800; [End of Month: y-1]
+!!VRy-1&v1=32:S1; [Day 1]
+!!VRy-1&v1=64:S2; [Day 2]
+!!VRy-1&v1=128:S3; [Day 3]
+!!VRy-1&v1=256:S4; [Day 4]
+!!VRy-1&v1=512:S5; [Day 5]
+!!VRy-1&v1=1024:S6; [Day 6]
+!!VRy-1&v1=2048:S7; [Day 7]
+
+ [Input Box header: z4]
+!!VRz4&v1=1:S^Enter a Reminder Message to be displayed every day.^;
+!!VRz4&v1=2:S^Enter a Reminder Message to be at the start of every week.^;
+!!VRz4&v1=4:S^Enter a Reminder Message to be displayed at the end of every week.^;
+!!VRz4&v1=8:S^Enter a Reminder Message to be displayed at the start of every month.^;
+!!VRz4&v1=16:S^Enter a Reminder Message to be displayed at the end of every month.^;
+!!VRz4&v1=32:S^Enter a Reminder Message to be displayed on the next Day 1.^;
+!!VRz4&v1=64:S^Enter a Reminder Message to be displayed on the next Day 2.^;
+!!VRz4&v1=128:S^Enter a Reminder Message to be displayed on the next Day 3.^;
+!!VRz4&v1=256:S^Enter a Reminder Message to be displayed on the next Day 4.^;
+!!VRz4&v1=512:S^Enter a Reminder Message to be displayed on the next Day 5.^;
+!!VRz4&v1=1024:S^Enter a Reminder Message to be displayed on the next Day 6.^;
+!!VRz4&v1=2048:S^Enter a Reminder Message to be displayed on the next Day 7.^;
+!!VRz5:S^Enter up to 510 characters or Cancel to keep old message.^;
+!!VRz6:S^^; [Null string: z6]
+!!VRz1:S^^; [Initialize string to null: z1]
+!!IF:D1/4/5/6/6/6/6/6/6/6/6/6/6/6/6/6; [Set up Input Dialog]
+!!IF:E1/1; [Display dialogue: Player's input in z1]
+!!FU&v1<0:E; [Exit if player clicks Cancel]
+
+!!VRz1:M4/?y-2; [Length in y-2]
+!!IF&y-2>510:M^{WARNING}
+
+Your note has been truncated to 510 characters.^; [Warning if player enters more than 510 characters]
+
+!!UN:N5/1/y-1/10/8; [Write Timed Reminder Message text (z1) to entry (y-1), section (z10), file (z8)]
+
+--------------------------------------------------------------------------------
+
+ [Daily Universal Timer for Reminder Message Display]
+!?TM2&1000;
+!!UN:P331/=1; !!FU&-1:E; [Exit if script disabled]
+!!FU$LocalPlayer$:P; [Current/Local player in y-100]
+!!VRz-5&y-100=0:S^Red^; [Local player's colour (Red): z-5]
+!!VRz-5&y-100=1:S^Blue^; [Local player's colour (Blue): z-5]
+!!VRz-5&y-100=2:S^Tan^; [Local player's colour (Tan): z-5]
+!!VRz-5&y-100=3:S^Green^; [Local player's colour (Green): z-5]
+!!VRz-5&y-100=4:S^Orange^; [Local player's colour (Orange): z-5]
+!!VRz-5&y-100=5:S^Purple^; [Local player's colour (Purple): z-5]
+!!VRz-5&y-100=6:S^Teal^; [Local player's colour (Teal): z-5]
+!!VRz-5&y-100=7:S^Pink^; [Local player's colour (Pink): z-5]
+!!UN:J8/4/^Notes_%V84.txt^; [Check if Notes file has been created yet: Flag 1=1 if yes]
+!!FU&-1:E; [Exit if no Notes file yet]
+
+!!VRz-3:S^%Z-5 Timed Reminder Messages^; [Subhead for player's Timed Reminder Messages: z-3]
+!!UN:J9/4/-2; [Copy WoG Games folder path to z-2]
+!!VRz-4:S^%Z-2Notes_%V84.txt^; [Path plus File name: z-4]
+!!VRz1:S^^; [Null string: z1]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S100; [Start of Month: y-1]
+!!UN&$week$=1/$weekday$=1:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4/$week$=1/$weekday$=1:Q5^{Start of Month Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}^;  [Display Start of Month Message if any]
+!!UN&4/-5/$week$=1/$weekday$=1:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S2800; [End of Month: y-1]
+!!UN&$week$=4/$weekday$=7:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4/$week$=4/$weekday$=7:Q5^{End of Month Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}^;  [Display End of Month Message if any]
+!!UN&4/-5/$week$=4/$weekday$=7:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S10; [Start of Week: y-1]
+!!UN&$weekday$=1:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4/$weekday$=1:Q5^{Start of Week Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}^;  [Display Start of Week Message if any]
+!!UN&4/-5/$weekday$=1:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S70; [End of Week: y-1]
+!!UN&$weekday$=7:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4/$weekday$=7:Q5^{End of Week Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}^;  [Display End of Week Message if any]
+!!UN&4/-5/$weekday$=7:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S999; [Daily: y-1]
+!!UN:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4:Q5^{Daily Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}^; [Display Daily Message if any]
+!!UN&4/-5:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+!!VRz2:S^^; [Null string: z2]
+
+!!VRy-1:S$weekday$; [Week day: y-1]
+!!UN:N6/2/y-1/-3/-4; [Timed Reminder Message: Read text into (z2) from entry (y-1), section (z-3), file (z-4)]
+!!VRz2:H4; [Set flag to True if there's text: Flag 4]
+!!IF&4:M^{Day %Y-1 One-Time Reminder}
+
+%Z2^; [Display One-time Week Day Message if any]
+!!UN&4:N5/1/y-1/-3/-4; [Erase Reminder Message: Delete text (z1) entry (y-1), section (z-3), file (z-4)]
+
+--------------------------------------------------------------------------------
+

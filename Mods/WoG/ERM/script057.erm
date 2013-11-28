@@ -1,0 +1,1231 @@
+ZVSE
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+
+** Neutral Units version 2.9 by Alexandru Balahura (Neutral Unit Bonuses, Neutral Stack Size, All Creatures are Savage to join Hero)
+** and Timothy Pulver (Neutral Stack Experience, Neutral Town and Creature Bank Growth)
+** Check for script53 added by Hermann the Weird
+
+** Modified by Thomas Franz (samot)
+** - no monster growth if the No-Growth-Option in the map editor is set (FU5402)
+** - no monster growth if the creatures are friendly (always join) - (FU5402)- this option is disable momentanly
+** - no monster growth if the mapmaker has set custom textes to the monster
+** - speed optimized FU5402 (set new stack size at day one)
+** - abandonded mines are guarded by ghosts (as HoMM 1), at least 7 stacks á 50 ghosts
+**   their number increase daily to 101-103% + 1-3 ghosts (if there are 100 ghosts in
+**   a stack it will growth by 2 (101% of 100 are 1 + 1 random ghost) until 6 ghosts
+**   (103% of 100 = 3 + 3 random ghosts)
+** - if AI visits a abandoned mine it has only to fight against an increased stack of
+**   troglodytes
+** - increase guards of local events and pandora's boxes by 10% per week (at least 1)
+** - no blessed neutral creatures, for the witch Adrienne (and maybe other Fire-Magic-Specialists), if HSB is enabled
+
+ ** script57.erm
+ ** Last Updated: July 9, 2013 by Alexandru Balahura
+
+
+** Function(s) used: FU1000-FU1003, FU5400-FU5413, FU2013, FU2014, FU2015, FU2016, FU2017
+
+** Variables used: v100, v116, v296, z745, v1420, v1421, v1422, v1423 v9009
+
+** WoG Option numbers used: 57, 231, 232, 235
+
+** PO Numbers used: S (for resetting Creature Banks)
+--------------------------------------------------------------------------------
+
+
+*Changes:
+Bless to all living neutral creatures, and expert Precision to all neutral archers after 28 days.
+Extra experience from bonuses.
+Extra gold from bonuses.
+Resources from bonuses. Only gem, mercury, crystal, sulfur.
+
+For instance:
+=============
+Gems can be found from creatures that belong to Castle, Tower.
+
+Additional experience from bonuses with Learning skill.
+Additional experience from bonuses increased by 1,25% per hero's level.
+New formula for movement is based on hero's level.
+Heroes have ballista, ammo cart and first aid tent from start.
+Heroes with spell book have magic arrow from start.
+Town Portal will appear in spell book at level 20.
+Improvements for artifacts using hero's level (only for ring of vitality, ring of life, vial of lifeblood).
+
+For instance:
+=============
+If the hero is level 30 and has equipped ring of vitaly, then the hero's army will have an additional 13 health instead of just 1 health.
+
+
+This script has a check to see if Neutral Unit Bonuses (script 57) and Neutral Stack Size (script 57 with option 232)
+are active or incompatibilities.
+Heroes have double movement (script 01 with option 121 is turned off because of incompatibility).
+If Neutral Unit Bonuses (script 57) is enabled, then will be bonuses for neutral creatures, extra experience from bonuses, extra gold from bonuses and resources, new movement formula based on hero's level and improvements
+for artifacts using hero's level (for now is just a testing purpose only for ring of vitality, ring of life, vial of lifeblood).
+If Neutral Stack Size (script 57 with option 232) is enabled, then growth rate is changed for neutral creatures and all creatures are savage to join hero, only creatures left by hero on the map will join.
+
+Extra experience from bonuses doesn't work for Dragon Utopia, Creature Banks, Crypt, Creature Generators.
+A message on the screen will appear and will show the exact additional experience, gold, resources.
+The message on the screen will appear for the current player.
+Also, the message on the screen will appear if another player has gained more that 50000 extra experience.
+
+ Level 1 creatures: 35% extra experience from bonuses
+ Level 2 creatures: 35% extra experience from bonuses
+ Level 3 creatures: 35% extra experience from bonuses
+ Level 4 creatures: 50% extra experience from bonuses
+ Level 5 creatures: 65% extra experience from bonuses
+ Level 6 creatures: 80% extra experience from bonuses
+ Level 7 creatures: 100% extra experience from bonuses
+ Level 8 creatures: 200% extra experience from bonuses
+
+
+For instance:
+=============
+If the hero is level 30 then can gain 252,5% extra experience from level 8 creatures (15% with expert Learning and 37,5% because is level 30).
+30 Azure Dragons with 1000 additional health from bonuses can give 91500 extra experience.
+
+30 Azure Dragons multiplied by 1000: 30000 experience
+30000 experience multiplied by 15% from expert Learning: 4500 experience
+1,25% from 30000 experience multiplied by 30 (hero's level): 11250 experience
+Total: 30000+4500+11250= 45750 multiplied by 2 (200% extra experience from bonuses): 91500 experience
+
+
+
+ ** Neutral Unit Bonuses **
+
+*Health
+ 1,25% more health per day and up to 35% per month for level 1 and level 2 creatures
+ 1,25% more health per day and up to 35% per month for level 3 creatures
+ 1,78% more health per day and up to 50% per month for level 4 creatures
+ 2,32% more health per day and up to 65% per month for level 5 creatures
+ 2,85% more health per day and up to 80% per month for level 6 creatures
+ 3,57% more health per day and up to 100% per month for level 7 creatures
+ 7,14% more health per day and up to 200% per month for level 8 creatures
+
+*Attack, Defense
+  3 attack and defense per month for level 1 and level 2 creatures
+  3 attack and defense per month for level 3 creatures
+  6 attack and defense per month for level 4 creatures
+  8 attack and defense per month for level 5 creatures
+ 10 attack and defense per month for level 6 creatures
+ 12 attack and defense per month for level 7 and level 8 creatures
+
+*Minimum Damage, Maximum Damage (disabled for now)
+ 1 additional minimum and maximum damage per month for level 1 and level 2 creatures
+ 2 additional minimum and maximum damage per month for level 3 creatures
+ 4 additional minimum and maximum damage per month for level 4 creatures
+ 5 additional minimum and maximum damage month for level 5 creatures
+ 7 additional minimum and maximum damage month for level 6 creatures
+ 7 additional minimum and maximum damage month for level 7 and level 8 creatures
+
+
+Gives Bless to all living neutral creatures, and expert Precision to all neutral archers to make the game more competitive.
+Also units from Dragon Utopia, Creature Banks, Creature Generators, Crypt, Fishing Well, Garrisons, Death Chamber and Adventure Cave receive these bonuses.
+Bonuses are also given to creatures defending neutral towns.
+
+
+ ** Neutral Stack Size **
+
+* Growth Rate
+ Level 1 creatures: 10-25 from start + 30% growth rate per week
+ Level 2 creatures: 10-25 from start + 30% growth rate per week
+ Level 3 creatures: 10-25 from start + 30% growth rate per week
+ Level 4 creatures: 15-30 from start + 25% growth rate per week
+ Level 5 creatures: 15-30 from start + 25% growth rate per week
+ Level 6 creatures: 20-35 from start + 25% growth rate per week
+ Level 7 creatures: 20-35 from start + 20% growth rate per week
+ Level 8 creatures: 5-10 from start + 20% growth rate per week
+
+
+ Mighty Gorgon: 10-15 from start + 25% growth rate per week
+ Behemoth: 10-15  from start + 20% growth rate per week
+ Ancient Behemoth: 10-15 from start + 20% growth rate per week
+ Nightmare: 10-15 from start + 25% growth rate per week
+ Werewolf: 10-15 from start + 25% growth rate per week
+ Efreet: 10-15 from start + 25% growth rate per week
+ Efreet Sultan: 10-15 from start + 25% growth rate per week
+ Fire Elemental: 10-15 from start + 25% growth rate per week
+ Energy Elemental: 10-15 from start + 25% growth rate per week
+ Firebird: 10-15 from start + 20% growth rate per week
+ Phoenix: 10-15 from start + 20% growth rate per week
+ Lava Sharpshooter: 10-15 from start + 25% growth rate per week
+ Hell Steed: 10-15 from start + 25% growth rate per week
+ Santa Gremlin: 10-15 from start + 30% growth rate per week
+
+
+
+** Thanks to Timothy Pulver for help **
+
+
+
+** If the Neutral Stack Size option is enabled, all neutral creature stacks on the
+** adventure map will be adjusted so that they contain more creatures. Starting with
+** more creatures will also effectively result in them growing faster, although the
+** actual weekly rate of growth remains unchanged.
+
+** If the Neutral Stack Experience option is selected, neutral units will be experienced,
+** depending on their level, the game date, and the player difficulty level chosen.
+** Creatures will have 1 rank for every x days (but see notes), as follows:
+
+** Game Difficulty:   Easy   Normal   Hard   Expert   Impossible
+** Level 1 & 2:        14      7        5       4         3
+** Level 3 & 4:        28     14       10       8         6
+** Level 5 & 6:        42     21       15      12         9
+** Level 7:            56     28       20      16        12
+
+** Note 1: One is subtracted from the game day before calculating so that creatures
+**         will gain a rank at the start of each week on Normal difficulty.
+** Note 2: The rank of neutral stacks will never be more than the attacking hero's
+**         level plus the game difficulty level (0..4), so a level 1 hero would never
+**         face higher than a rank 2 stack at Normal difficulty, or a rank 5 stack
+**         at Impossible difficulty.
+
+** If the Neutral Town and Creature Bank Growth option is enabled, the guards
+** will grow by 10% each week per stack (minimum +1), neutral towns will gain
+** new creatures. There's also a 10% chance per stack that a stack will be upgraded.
+** Creature Banks will also have their resources grow at a rate of 10% or +1
+** every 3 weeks if 10% would be less than 1. In addition, creature banks "regenerate"
+** at the start of each month.
+
+
+!#UN:P900/?v296; [Check if Stack Experience is enabled: v296]
+
+
+!?OB54; ALL UNITS ON THE MAP
+!!VRv100:S1;
+
+!$OB54; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB20/1; Golem Factory
+!!VRv100:S1;
+
+!$OB20/1; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB63/0; Pyramid
+!!VRv100:S1;
+
+!$OB63/0; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB24/0; Derelict Ship
+!!VRv100:S2;
+!!UN:P235/?y-1; [Check if Creature Bank script is enabled: y-1]
+!!DO5411/0/6/1&-1000/y-1=1:P; [Reduce extra CB guard numbers for AI if necessary]
+
+!$OB24/0; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB85/0; Shipwreck
+!!VRv100:S2;
+!!UN:P235/?y-1; [Check if Creature Bank script is enabled: y-1]
+!!DO5411/0/6/1&-1000/y-1=1:P; [Reduce extra CB guard numbers for AI if necessary]
+
+!$OB85/0; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB86/0; Shipwreck Survivor
+!!VRv100:S1;
+
+!$OB86/0; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB25; DRAGON UTOPIA
+!!UN:P53/?y-1;     [Check if DOTDM enabled in WoG options]
+!!VRv100:S2;
+!!VRv100&y-1=1:S0;     [If enabled, reset v100]
+!!UN:P235/?y-2; [Check if Creature Bank script is enabled: y-2]
+!!DO5411/0/6/1&-1000/y-2=1/y-1=0:P; [Reduce extra CB guard numbers for AI if necessary]
+
+!$OB25; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB17; CREATURE GENERATORS
+!!VRv100:S1;
+
+!$OB17; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+
+!?OB16; CREATURE BANKS
+!!VRv100:S2;
+!!UN:P235/?y-1; [Check if Creature Bank script is enabled: y-1]
+!!DO5411/0/6/1&-1000/y-1=1:P; [Reduce extra CB guard numbers for AI if necessary]
+
+!$OB16; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB84; CRYPT
+!!VRv100:S2;
+!!UN:P235/?y-1; [Check if Creature Bank script is enabled: y-1]
+!!DO5411/0/6/1&-1000/y-1=1:P; [Reduce extra CB guard numbers for AI if necessary]
+
+!$OB84; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB49; Fishing Well by Timothy E. Pulver
+!!VRv100:S1;
+
+!$OB49; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB33; Garrisons by Timothy E. Pulver
+!!VRv100:S1;
+
+!$OB33; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB63/15; DEATH CHAMBER by Rich Reed a.k.a. "Space8999"
+!!VRv100:S3;
+
+!$OB63/15; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB63/57; ADVENTURE CAVE by Donald X. Vaccarino
+!!VRv100:S1;
+
+!$OB63/57; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB5; GUARDED ARTIFACTS
+!!VRv100:S1;
+
+!$OB5; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB98; TOWNS
+!!CA998:O?y-1; [Check owner of town]
+!!VRv100&y-1<0:S1; [Only apply script to neutral towns]
+
+!$OB98; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB53/7; // abandoned Mines
+!!MNv998/v999/v1000:O?y-1; [Check owner of mine]
+!!VRv100&y-1<>-1:S2; [Only apply script to not taken mines]
+!!VRv1:Sv998; !!VRv2:Sv999; !!VRv3:Sv1000;
+!!DO5413/0/6/1&-1000:P1/53/7; // reset guards to 1 stack troglodytes if AI visits
+
+!$OB53/7; // abandoned Mines
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB6; // Pandora's Box
+!!VRv100:S1;
+
+!$OB6; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+!?OB26; // Local Event
+!!VRv100:S1;
+
+!$OB26; POST-VISIT TRIGGER
+!!VRv100:S0;
+!!UN:P900/v296; [Restore Stack Experience option]
+
+
+ [Battlefield Setup Trigger]
+!?BF&v100>=1;
+!!UN:P231/?v1; [Check if Neutral Stack Experience is enabled: v1]
+
+ [Add experience ranks to neutral stacks but not AI battles or Death Chambers]
+!!FU5400&v1=1/v100<>3/1000/999:P;
+
+
+
+!!VRv100:S0; [Reset v100 to 0]
+
+!!UN:P57/?v2; [Check if Neutral Units script is enabled in WoGify Options: v2]
+!!DO1000/21/41/1&v2=1:P; [Add Att, Def, HP, Bless, and Precision to stacks]
+!!DO1001/21/41/1&v2=1:P; [Give Magic Mirror and Air Shield to some neutral creatures]
+!!DO1002/21/41/1&v2=1:P; [Give Immunity to Mind Spells to some neutral units]
+!!DO1003/21/41/1&v2=1:P; [Give Immunity to Fire Spells to some neutral units]
+
+
+ [Add experience ranks to neutral stacks]
+!?FU5400;
+!!UN&v296<>1:P900/1; [Enable Stack Experience if not enabled]
+!!VRy-1:Sc0; [Current day: y-1]
+!!VRy-1:-1; [Subtract 1 from current day: y-2]
+!!UN:J2/?y-2; [Player chosen difficulty level: y-2]
+!!VRy-3&y-2=0:S14; [Easy interval (14): y-3]
+!!VRy-3&y-2=1:S7; [Normal interval (7): y-3]
+!!VRy-3&y-2=2:S5; [Hard interval (5): y-3]
+!!VRy-3&y-2=3:S4; [Expert interval (4): y-3]
+!!VRy-3&y-2=4:S3; [Impossible interval (3): y-3]
+!!VRy-4:Sy-1 :y-3; [Base rank for this date and difficulty: y-4]
+!!BA:H0/?y-5; [Attacking hero number: y-5]
+!!HEy-5:E?y-7/?y-6/1; [Hero's experience level: y-6 (y7 isn't used but avoids a bug)]
+!!VRy-6:+y-2; [Hero's level +game difficulty: y-6]
+!!DO5401/21/41/1&y-4>0:Py-4/y-6;
+
+
+ [Add ranks to Neutral Stacks if option enabled]
+!?FU5401;
+ [x1=base rank, x2=hero's level+1]
+!!BMx16:T?y1 N?y2; [Creature type (y1), number (y2)]
+!!FU|y1<0/y2<1:E; [Exit if no stack at this number]
+!!FU&y1>=174/y1<=191:E; [Exit if it's a Commander]
+!!MA:Ly1/?y3; [Creature level: y3]
+!!VRy3::2 +1; [Divide by 2 (dropping fractions) and add 1 to get level divisor (1..4): y3]
+!!VRy4:Sx1 :y3; [Divide base rank by level divisor to get final rank: y4]
+!!FU&y4<1:E; [Exit if no ranks added]
+!!VRy5:Sx16 *-1 -1; [Negative stack index: y5]
+!!VRy4&y4>x2:Sx2; [If rank is higher than hero's level+game difficulty, set it to hero's level+game difficulty]
+!!EAy5:Ey4/12/d/d; [Set stack to rank y4]
+
+
+ [Add Attack, Defense, Health, Bless and Precision to stacks]
+!?FU1000;
+!!BMx16:T?y1; [Read Creatures type: y1]
+*!FU|y1=103/y1=97/y1=156/y1=172/y1=194:E; [Exit if it's a Mighty Gorgon,Ancient Behemoth,Ghost Behemoth,Nightmare and Werewolf]
+
+!!BMx16:F?y5; [Read monster Flags: y5]
+!!VRy5:&16; [Check if monster is alive: y5=16 if yes]
+
+!!BA:H0/?y10 H1/?y11; // get attacking / defending hero
+!!HEy11&y11>-1:X?y12/?y13/?y14/?y15/?y16/?y17/?y18; // get heroes specialisation (defender (wandering monsters))
+!!HEy10&y10>-1:X?y12/?y13/?y14/?y15/?y16/?y17/?y18; // get heroes specialisation (attacker)
+!!UN:P39/?y14; // check, if Hero Specialisation Boost is enabled
+!!IF:V1/0; !!IF&y14=1/y12=-1/y13=0:V1/1; // set Flag 1, if HSB is on and Specialisation is Fire Magic (the Witch Adrienne)
+
+!!BMx16&y5=16/-1/$day$>28:M41/100/3; [bless (infinite,expert water)] - not for Fire Specialists, because they'll curse all ennemies (if HSB is enabled)
+
+!!BMx16:F?y5; [Read monster Flags: y5]
+!!VRy5:&4; [Check if monster is a shooter: y5=4 if yes]
+!!BMx16&y5=4/$day$>28:M44/100/3; [precision (infinite, expert air)]
+
+
+!!BMx16:T?y1 N?y2 H?y4;
+!!FU|y1<0/y2<1:E; [Exit if no stack at this number]
+!!MA:Ly1/?y6; [Creature level: y6]
+
+* Health
+!!VRy7&y6>=0/y6<=1:Sc0*y4:80; 1,25% more health per day and up to 35% per month for level 1 creatures and level 2 creatures
+!!VRy7&y6=2:Sc0*y4:80;  1,25% more health per day and up to 35% per month for level 3 creatures
+!!VRy7&y6=3:Sc0*y4:56;  1,78% more health per day and up to 50% per month for level 4 creatures
+!!VRy7&y6=4:Sc0*y4:43;  2,32% more health per day and up to 65% per month for level 5 creatures
+!!VRy7&y6=5:Sc0*y4:35;  2,85% more health per day and up to 80% per month for level 6 creatures
+!!VRy7&y6=6:Sc0*y4:28;  3,57% more health per day and up to 100% per month for level 7 creatures
+!!VRy7&y1>=150/y1<=158:Sc0*y4:14;  7,14% more health per day and up to 200% per month for level 8 creatures
+!!VRy7&y1>=132/y1<=135:Sc0*y4:14;  7,14% more health per day and up to 200% per month for Azure Dragon, Crystal Dragon, Faerie Dragon, Rust Dragon
+!!VRy7&y1>=196:Sc0*y4:14;  7,14% more health per day and up to 200% per month for Dracolich
+
+* Attack, Defense
+!!VRy8&y6>=0/y6<=1:Sc0:4*100:233;  3 attack and defense per month for level 1 creatures and level 2 creatures
+!!VRy8&y6=2:Sc0:4*100:233;  3 attack and defense per month for level 3 creatures
+!!VRy8&y6=3:Sc0:4*100:116;  6 attack and defense per month for level 4 creatures
+!!VRy8&y6=4:Sc0:4*100:87;   8 attack and defense per month for level 5 creatures
+!!VRy8&y6=5:Sc0:4*100:70;  10 attack and defense per month for level 6 creatures
+!!VRy8&y6=6:Sc0:4*100:58;  12 attack and defense per month for level 7 creatures and level 8 creatures
+!!BMx16:Hdy7 Ady8 Ddy8;
+
+* Minimum Damage, Maximum Damage
+*!VRy9&y6=0:Sc0:28;  1 additional minimum and maximum damage per month for level 1 creatures
+*!VRy9&y6=1:Sc0:28;  1 additional minimum and maximum damage per month for level 2 creatures
+*!VRy9&y6=2:Sc0:14;  2 additional minimum and maximum damage per month for level 3 creatures
+*!VRy9&y6=3:Sc0:7;   4 additional minimum and maximum damage per month for level 4 creatures
+*!VRy9&y6=4:Sc0:5;   5 additional minimum and maximum damage per month for level 5 creatures
+*!VRy9&y6=5:Sc0:4;   7 additional minimum and maximum damage per month for level 6 creatures
+*!VRy9&y6=6:Sc0:4;   7 additional minimum and maximum damage per month for level 7 creatures and level 8 creatures
+*!BMx16:U1/dy9 U2/dy9;
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+ ** Extra experience from bonuses **
+*Variable used: v1420, v1421, v1422
+
+!?BA0;
+
+!?BA1;
+*!UN:P307/=1; !FU&-1:E; // exit if script is not enabled
+!!UN:P57/=1; !!FU&-1:E; // exit if script 57 "Neutral Unit Bonuses" is not enabled
+*!UN:P232/=1; !!FU&-1:E; // exit if script 57 with option 232 "Neutral Stack Size" is not enabled
+!!BA:H1/=-2;  !!FU&-1:E; // exit if there is a defending hero
+!!BA:H0/?y-1;  Check attacker    y-1
+!!HEy-1:O?y-2; Check Owner       y-2
+!!FU&y-2<0:E;  Exit if battle is lost
+
+!!UN:P904/1; [Disable ERM error messages]
+!!UN:P905/0;
+
+!!OBv998/v999/v1000:U?y-3 T?y-9;  Type of creature
+
+!!FU&y-9=25:E; Dragon Utopia
+!!FU&y-9=16/y-3>=0/y-3<=20:E; All creature banks from 0-20
+!!FU&y-9=24:E; Derelict Ship
+!!FU&y-9=84:E; Crypt
+!!FU&y-9=85:E; Shipwreck
+!!FU&y-9=53/y-3>=0/y-3<=7:E;
+!!FU&y-9=17:E; Creature Generators
+!!FU&y-9=18:E;
+!!FU&y-9=19:E;
+!!FU&y-9=20:E;
+!!FU&y-9=6:E;  Pandora Box
+!!FU&y-9=5/y-3>=0/y-3<=170:E; Artifacts
+!!FU&y-9=98/y-3>=0/y-3<=8:E; Towns
+!!FU&y-9=38/y-3=1:E;
+!!FU&y-9=41/y-3=1:E;
+!!FU&y-9=95/y-3=1:E;
+!!FU&y-9=100/y-3=1:E;
+!!FU&y-9=101/y-3=1:E;
+!!FU&y-9=102/y-3=1:E;
+!!FU&y-9=103/y-3=1:E;
+!!FU&y-9=113/y-3=1:E;
+!!FU&y-9=63/y-3>=0/y-3<=68:E;
+!!FU&y-9=63/y-3>=69/y-3<=74:E;
+
+!!MOv998/v999/v1000:G?y-4; Number of creatures
+
+!!MA:Py-3/?y-5; Check health of creatures
+!!MA:Ly-3/?y-7; Check level of creatures
+
+!!VRy-6&y-7=0:Sc0*y-5:80; Extra health from bonuses
+!!VRy-6&y-7=1:Sc0*y-5:80; Extra health from bonuses
+!!VRy-6&y-7=2:Sc0*y-5:80; Extra health from bonuses
+
+!!VRy-6&y-7=3:Sc0*y-5:56; Extra health from bonuses
+!!VRy-6&y-7=4:Sc0*y-5:43; Extra health from bonuses
+!!VRy-6&y-7=5:Sc0*y-5:35; Extra health from bonuses
+!!VRy-6&y-7=6:Sc0*y-5:28; Extra health from bonuses
+!!VRy-6&y-3>=150/y-3<=158:Sc0*y-5:14; Extra health from bonuses for level 8 creatures
+!!VRy-6&y-3>=132/y-3<=135:Sc0*y-5:14; Extra health from bonuses for Azure Dragon, Crystal Dragon, Faerie Dragon, Rust Dragon
+!!VRy-6&y-3>=196:Sc0*y-5:14; Extra health from bonuses for Dracolich
+!!VRy-8:Sy-4 *y-6; Number of Creatures * Number of Health
+
+
+!!VRv1420&y-7=0:Sy-8*35:100;  level 1 creatures: 35% extra experience from bonuses
+!!VRv1420&y-7=1:Sy-8*35:100;  level 2 creatures: 35% extra experience from bonuses
+!!VRv1420&y-7=2:Sy-8*35:100;  level 3 creatures: 35% extra experience from bonuses
+
+!!VRv1420&y-7=3:Sy-8*50:100; level 4 creatures: 50% extra experience from bonuses
+!!VRv1420&y-7=4:Sy-8*65:100; level 5 creatures: 65% extra experience from bonuses
+!!VRv1420&y-7=5:Sy-8*80:100; level 6 creatures: 80% extra experience from bonuses
+!!VRv1420&y-7=6:Sy-8; level 7 creatures: 100% extra experience from bonuses  100%
+!!VRv1420&y-3=>150/y-3<=158:Sy-8*2; Level 8 creatures: 200% extra experience from bonuses
+!!VRv1420&y-3=>132/y-3<=135:Sy-8*2; Azure Dragon, Crystal Dragon, Faerie Dragon, Rust Dragon: 200% extra experience from bonuses
+!!VRv1420&y-3=196:Sy-8*2; Dracolich: 200% extra experience from bonuses
+
+!!UN:N3/1/y-3/1; Plural of creatures
+*!UN:N4/3/21;
+!!HE-1:S21/?y-10 Ed/?y-12; [Hero's Learning skill]
+!!VRy-11:Sv1420 :20; [5% extra experience with Basic Learning]
+!!VRy-13:Sv1420*y-12:80; 1,25% extra experience from bonuses per hero's level
+!!VRy-14:Sy-11*y-10; [extra experience with Learning skill: 5%/10%/15%]
+!!VRy-15:Sy-13+y-14;
+!!VRy-16:+y-15;
+!!VRv1420:+y-16;
+
+!!VRv1421:Sv1420*75:100; 75% gold
+!!VRy-20:Sy-12:5;
+!!VRv1422:Sv1420:5000+1+y-20;
+
+!!HE-1:N?y-8; Check number of hero
+!!HEy-8:Edv1420; extra experience
+!!OW:R-1/6/dv1421; extra gold
+
+!!HE-1:B0/?z2;
+!!OW:C?y-18; [check for current player]
+!!OW:Gy-18/?y-19;
+!!FU&y-19=0/v1420<=50000:E;
+
+!!IF&y-7=0/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=1/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=2/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=3/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=4/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=5/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+!!IF&y-7=6/v1420>=1:Q1/17/v1420/21/y-3/6/v1421/1/z157016;
+
+!!MA:Oy-3/?y-17; Check creature belongs
+!!IF&y-17=0/v1420>=1:Q1/5/v1422/1/z157017; Castle
+!!IF&y-17=1/v1420>=1:Q1/4/v1422/1/z157017; Rampart
+!!IF&y-17=2/v1420>=1:Q1/5/v1422/1/z157017; Tower
+!!IF&y-17=3/v1420>=1:Q1/1/v1422/1/z157017; Inferno
+!!IF&y-17=4/v1420>=1:Q1/1/v1422/1/z157017; Necropolis
+!!IF&y-17=5/v1420>=1:Q1/3/v1422/1/z157017; Dungeon
+!!IF&y-17=6/v1420>=1:Q1/4/v1422/1/z157017; Stronghold
+!!IF&y-17=7/v1420>=1:Q1/3/v1422/1/z157017; Fortress
+!!IF&y-17=8/v1420>=1:Q1/1/v1422/1/z157017; Conflux
+
+!!OW&y-17=0:R-1/5/dv1422;
+!!OW&y-17=1:R-1/4/dv1422;
+!!OW&y-17=2:R-1/5/dv1422;
+!!OW&y-17=3:R-1/1/dv1422;
+!!OW&y-17=4:R-1/1/dv1422;
+!!OW&y-17=5:R-1/3/dv1422;
+!!OW&y-17=6:R-1/4/dv1422;
+!!OW&y-17=7:R-1/3/dv1422;
+!!OW&y-17=8:R-1/1/dv1422;
+
+
+--------------------------------------------------------------------------------
+
+
+
+ [Give Magic Mirror and Air Shield to some neutral creatures]
+!?FU1001;
+!!BMx16:T?y1 P?y2 N?y3; [Get type: y1, Position: y2, Number: y3]
+!!BMx16&y1=56/y3>0:M28/100/3;  [Give Skeleton Expert Air Shield]
+!!BMx16&y1=57/y3>0:M28/100/3;  [Give Skeleton Warrior Expert Air Shield]
+!!BMx16&y1=36/y3>0:M36/100/2;  [Give Genie Advanced Magic Mirror]
+!!BMx16&y1=37/y3>0:M36/100/2;  [Give Master Genie Advanced Magic Mirror]
+!!BMx16&y1=52/y3>0:M36/100/2;  [Give Efreet Advanced Magic Mirror]
+!!BMx16&y1=53/y3>0:M36/100/2;  [Give Efreet Sultan Advanced Magic Mirror]
+!!BMx16&y1=91/y3>0:M36/100/2;  [Give Ogre Mage Advanced Magic Mirror]
+!!BMx16&y1=173/y3>0:M36/100/2; [Give Santa Gremlin Advanced Magic Mirror]
+!!BMx16&y1=112/y3>0:M28/100/3; [Give Air Elemental Expert Air Shield]
+!!BMx16&y1=127/y3>0:M28/100/3; [Give Storm Elemental Expert Air Shield]
+!!BMx16&y1=114/y3>0:M29/100/1; [Give Fire Elemental Basic Fire Shield]
+!!BMx16&y1=129/y3>0:M29/100/2; [Give Energy Elemental Advanced Fire Shield]
+!!BMx16&y1=130/y3>0:M29/100/1; [Give Firebird Basic Fire Shield]
+!!BMx16&y1=131/y3>0:M29/100/2; [Give Phoenix Advanced Fire Shield]
+!!BMx16&y1=60/y3>0:M28/100/3;  [Give Wight Expert Air Shield]
+!!BMx16&y1=61/y3>0:M28/100/3;  [Give Wraith Expert Air Shield]
+!!BMx16&y1=159/y3>0:M28/100/3; [Give Ghost Expert Air Shield]
+!!BMx16&y1=68/y3>0:M28/100/3;  [Give Bone Dragon Expert Air Shield]
+!!BMx16&y1=69/y3>0:M28/100/3;  [Give Ghost Dragon Expert Air Shield]
+
+ [Give Immunity to Mind Spells to some neutral creatures]
+!?FU1002;
+!!BMx16:T?y1 F?y2; [Get Type of Creature: y1, Flag of Creature: y2]
+!!BMx16:F?y2; [Check Creature Flag]
+!!VRy2:|1024; Add Mind Spells Immunity
+!!BMx16&y1=12:Fy2;  Neutral Angels are immune to mind spells
+!!BMx16&y1=13:Fy2;  Neutral Archangels are immune to mind spells
+!!BMx16&y1=150:Fy2; Neutral Supreme Archangels are immune to mind spells
+!!BMx16&y1=54:Fy2;  Neutral Devils are immune to mind spells
+!!BMx16&y1=55:Fy2;  Neutral Archdevils are immune to mind spells
+!!BMx16&y1=153:Fy2; Neutral Lords of Hell are immune to mind spells
+!!BMx16&y1=96:Fy2;  Neutral Behemoths are immune to mind spells
+!!BMx16&y1=97:Fy2;  Neutral Ancient Behemoths are immune to mind spells
+!!BMx16&y1=156:Fy2; Neutral Eldest Behemoths are immune to mind spells
+!!BMx16&y1=110:Fy2; Neutral Hydras are immune to mind spells
+!!BMx16&y1=111:Fy2; Neutral Chaos Hydras are immune to mind spells
+!!BMx16&y1=157:Fy2; Neutral Hell Hydras are immune to mind spells
+!!BMx16&y1=130:Fy2; Neutral Firebirds are immune to mind spells
+!!BMx16&y1=131:Fy2; Neutral Phoenixes are immune to mind spells
+!!BMx16&y1=158:Fy2; Neutral Sacred Phoenixes are immune to mind spells
+
+
+[Give Immunity to Fire Spells to some neutral creatures]
+!?FU1003;
+!!BMx16:T?y1 F?y2; [Get Type of Creature: y1, Flag of Creature: y2]
+!!BMx16:F?y2; [Check Creature Flag]
+!!VRy2:|16384; Add Fire Spells Immunity
+!!BMx16&y1=54:Fy2;  Neutral Devils are immune to fire spells
+!!BMx16&y1=55:Fy2;  Neutral Archdevils are immune to fire spells
+!!BMx16&y1=153:Fy2; Neutral Lords of Hell are immune to fire spells
+
+
+
+** Neutral Stack Size **
+
+[Post-Instruction trigger]
+!?PI;
+!!UN:P232/?y-1; [Check if script is enabled: y-1]
+!!UN&y-1=1:U54/-1/?y-2; [Number of creatures on the map: y-2]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5402/1/y-2/1&y-1=1/y-2>0:P; [Cycle through all creatures]
+
+!?FU5402;
+
+!!VRv1&x16=1:S-1;
+!!UN:U54/-1/-1/1; [Store coordinates for next creature in v1/v2/v3]
+!!OBv1/v2/v3:U?y1; [Subtype: y1]
+!!UN:P904/1; // disable ERM-Errors (necessary because of a bug with the MO:M)
+!!VRz1:S^^; // reset var (will because of the bug otherwise not be overwritten)
+!!MOv1/v2/v3:O?y3 R?y4/1 M?z1; // check if creatures is forbidden to grow (if #=1 then the amount of creatures won't grow)
+**                              // get agression to y4 and customized Text to z1
+!!UN:P904/0; // enable ERM-Errors again
+!!VRz1:M4/?y5; // get lenght of z1 to y5
+!!FU|y3=1/y4=0/y5>0:E; // exit if they mustn't grow (option in map editor) or are friendly (always join) or a custom text is set by the mapmaker
+
+!!MOv1/v2/v3:G?y2; [Number in stack: y2]
+!!MA:Ly1/?y6 Ny1/?y8; // get creatures Level to y6, number of shots to y8
+
+
+** LEVEL 1 **
+!!VRy7&y6=0:S20; // 20 for Level 1 creatures
+!!VRy7&y6=0/y8>0:S10; if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 2 **
+!!VRy7&y6=1:S20; // 20 for Level 2 creatures
+!!VRy7&y6=1/y8>0:S10; // if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 3 **
+!!VRy7&y6=2:S20; // 20 for Level 3 creatures
+!!VRy7&y6=2/y8>0:S10; // if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 4 **
+!!VRy7&y6=3:S25; // 30 for Level 4 creatures
+!!VRy7&y6=3/y8>0:S15; // if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 5 **
+!!VRy7&y6=4:S25; // 30 for Level 5 creatures
+!!VRy7&y6=4/y8>0:S15; // if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 6 **
+!!VRy7&y6=5:S30; // 30 for Level 6 creatures
+!!VRy7&y6=5/y8>0:S20; // if the creature is a shooter (has more than 0 shots)
+
+
+** LEVEL 7 **
+!!VRy7&y6=6:S30; // 30 for Level 7 creatures
+!!VRy7&y6=6/y8>0:S20; // if the creature is a shooter (has more than 0 shots)
+
+
+!!VRy7&y1=103:S10;  Mighty Gorgon
+!!VRy7&y1=96:S10;   Behemoth
+!!VRy7&y1=97:S10;   Ancient Behemoth
+*!VRy7&y1=156:S10;  Ghost Behemoth
+!!VRy7&y1=172:S10;  Nightmare
+!!VRy7&y1=52:S10;   Efreet
+!!VRy7&y1=53:S10;   Efreet Sultan
+!!VRy7&y1=114:S10;  Fire Elemental
+!!VRy7&y1=129:S10;  Energy Elemental
+!!VRy7&y1=130:S10;  Firebird
+!!VRy7&y1=131:S10;  Phoenix
+*!VRy7&y1=158:S18;  Sacred Phoenix
+!!VRy7&y1=171:S10;  Lava Sharpshooter
+!!VRy7&y1=195:S10;  Hell Steed
+!!VRy7&y1=173:S10;  Santa Gremlin
+!!VRy7&y1=194:S10;  Werewolf
+
+
+** Level 8 **
+!!VRy7&y1>=150/y1<=158:S5;
+!!VRy7&y1>=132/y1<=135:S5;
+!!VRy7&y1=196:S5;
+
+!!VRy7:R5; [Random additional units: 0..5]
+!!MOv1/v2/v3&y7<>y2:Gy7;// number of creatures
+
+** All creatures are Savage to join Hero, only creatures left by hero on the map will join **
+!!MOv1/v2/v3:R9/1;[Savage]
+
+
+--------------------------------------------------------------------------------
+
+
+ ** Growth rate **
+*Function used: FU2013
+
+!?TM2&$once$=1/$day$>1;
+!!UN:P232/?y-1; [Check if script is enabled: y-12]
+!!FU&y-1<>1:E; [Exit if not enabled]
+!!UN:U54/-1/?y-3; [Number of creatures on the map: y-2]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO2013/1/y-3/1&y-3>0/$weekday$=$monday$:P; [Cycle through all creatures every week]
+
+!?FU2013;
+!!VRv1&x16=1:S-1;  [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!UN:U54/-1/-1/1;  [Store coordinates for next monster in v1/v2/v3]
+!!OBv1/v2/v3:U?y1; [Subtype: y1]
+!!MOv1/v2/v3:G?y2; [Number in stack: y2]
+!!MA:Ly1/?y4;  [Get level of the creature]
+
+!!VRy3&y4>=0/y4<=2:Sy2*20:100; 30% growth rate per week  for level 1 creatures, level 2 creatures and level 3 creatures
+!!VRy3&y4>=3/y4<=5:Sy2*15:100; 25% growth rate per week for level 4 creatures, level 5 creatures and level 6 creatures
+!!VRy3&y4=6:Sy2*10:100;  20% grow rate per week  for level 7 creatures and level 8 creatures
+!!MOv1/v2/v3&y3<>y2:Gdy3;
+
+
+--------------------------------------------------------------------------------
+
+
+ ** New formula for movement is based on hero's level **
+*Function used: FU2014
+*Variable used: v9009
+
+!?TM2&$day$>=0;
+
+!!UN:P57/=1; !!FU&-1:E; // exit if script 57 "Neutral Unit Bonuses" is not enabled
+*!UN:P232/=1; !!FU&-1:E; // exit if script 57 with option 232 "Neutral Stack Size" is not enabled
+!!UN:P121/?y-5;    [Check Heroes have double movement is enabled]
+!!UN&y-5=1:P121/0; Heroes have double movement (script 01 with option 121) is turned off because of incompatibility.
+
+!!OW:H-1/9009/0;
+!!DO2014/1/v9009/1&v9009>0:P; [Movement is based on hero's level]
+
+!?FU2014;
+!!OW:H-1/9009/x16;
+!!HEv9009:W?y1 Ed/?y2 B0/?z2;
+!!VRy3:S100*y2:2; 1 movement at every two levels
+!!VRy1:+y3;
+!!HEv9009:Wy1 Gy1;
+
+
+--------------------------------------------------------------------------------
+
+
+ ** Heroes have ballista, ammo cart and first aid tent from start **
+*Function used: FU2015
+
+!!DO2015/0/155/1:P; [Heroes have ballista, ammo cart and firt aid tent from start]
+
+!?FU2015;
+!!HEx16:A2/0/?y-2/?y-3;
+!!HEx16:Ed/?y-4;
+!!HEx16&y-4>=20:M9/1; Town Portal at level 20
+!!HEx16&y-3=1:M15/1; Heroes with spell book have magic arrow from start
+!!HEx16&y-4>=1/$once$=1/$day$=1:A1/4/13 A1/5/14 A1/6/15; Heroes have ballista, ammo cart and first aid from start
+
+
+--------------------------------------------------------------------------------
+
+ ** Improvements for artifacts using hero's level **
+*Function used: FU2016, FU2017
+*Variable used: v116, v1423
+
+
+!#UN:P57/?v116;
+!!UN:P57/=1; !!FU&-1:E; // exit, if script 57 "Neutral Units" is not enabled
+*!UN:P232/=1; !!FU&-1:E; // exit, if script 57 "Neutral Growth Stack" is not enabled
+
+!?BA0&v116=1/-998;
+!?BF&v116=1/-998;
+
+**Attacker
+
+!!BA:H0/?v1423;
+!!HEv1423&v1423>-1:A2/94/?y7/?y8;   Ring of Vitality
+!!DO2016/0/20/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/95/?y7/?y8;   Ring of Life
+!!DO2016/0/20/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/96/?y7/?y8;   Vial of Lifeblood
+!!DO2016/0/20/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/131/?y7/?y8;  Elixir of Life
+!!DO2016/0/20/1&y8>0:P;
+
+
+
+**Defender
+
+!!BA:H1/?v1423;
+!!HEv1423&v1423>-1:A2/94/?y7/?y8;   Ring of Vitality
+!!DO2017/21/40/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/95/?y7/?y8;   Ring of Life
+!!DO2017/21/40/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/96/?y7/?y8;   Vial of Lifeblood
+!!DO2017/21/40/1&y8>0:P;
+!!HEv1423&v1423>-1:A2/131/?y7/?y8;  Elixir of Life
+!!DO2017/21/40/1&y8>0:P;
+
+
+
+**Attacker
+
+!?FU2016;
+!!BMx16:T?y1 N?y2;
+!!HEv1423&v1423>-1:Ed/?y3;
+!!VRy4:Sy3:5*2;
+!!BMx16&y1>=0:Hdy4;
+
+
+
+**Defender
+
+!?FU2017;
+!!BMx16:T?y1 N?y2;
+!!HEv1423&v1423>-1:Ed/?y3;
+!!VRy4:Sy3:5*2;
+!!BMx16&y1>=0:Hdy4;
+
+--------------------------------------------------------------------------------
+
+
+** Neutral Town and Creature Bank Growth **
+ [Daily Timer, only activates once (for first colour)]
+!?TM2&$once$=1/$day$>1;
+!!UN:P235/?y-12; [Check if script is enabled: y-12]
+!!FU&y-12<>1:E; [Exit if not enabled]
+!!UN:U98/-1/?y-1; [Number of Towns on map: y-1]
+!!VRy-2:Sc0 -1; [Current day -1: y-2]
+!!VRy-2::7 +1; [Current week: y-2]
+!!VRy-9:Sy-2 :3 *3; [Determine every 3rd week: y-9]
+!!VRy-10&y-9=y-2:S1; [Set y-10 to 1 every 3rd week: y-10]
+!!VRy-11:Sy-2 -1; [Current week -1: y-11]
+!!VRy-12:Sy-11 :4 *4; [Determine 1st of every month: y-12]
+!!VRy-13&y-12=y-11:S1; [Set y-13 to 1 on the 1st of every new month: y-13]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5403/1/y-1/1&y-1>0/$weekday$=$monday$:P; [Loop through all Towns weekly]
+!!UN:U16/-1/?y-4; [Number of Creature Banks on map: y-4]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5405/1/y-4/1&y-4>0:P16/y-4; [Loop through all Creature Banks]
+!!UN:U24/-1/?y-5; [Number of Derelict Ships on map: y-5]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5405/1/y-5/1&y-5>0:P24/y-5; [Loop through all Derelict Ships]
+!!UN:U25/-1/?y-6; [Number of Dragon Utopias on map: y-6]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5405/1/y-6/1&y-6>0:P25/y-6; [Loop through all Dragon Utopias]
+!!UN:U84/-1/?y-7; [Number of Crypts on map: y-7]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5405/1/y-7/1&y-7>0:P84/y-7; [Loop through all Crypts]
+!!UN:U85/-1/?y-8; [Number of Shipwrecks on map: y-8]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5405/1/y-8/1&y-8>0:P85/y-8; [Loop through all Shipwrecks]
+
+
+!!UN:U53/7/?y-9; [Number of abandoned mines on map: y-9]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5412/1/y-9/1&y-8>0:P53/7; [Loop through all abandoned mines]
+!!UN:U26/-1/?y-10; [Number of local events on map: y-10]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5412/1/y-10/1&y-8>0/$weekday$=$monday$:P26/-1; [Loop through all local events]
+!!UN:U6/-1/?y-10; [Number of pandora's boxes on map: y-10]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5412/1/y-10/1&y-8>0/$weekday$=$monday$:P6/-1; [Loop through all pandora's boxes]
+
+
+ [Loop through all towns]
+!?FU5403;
+!!UN:U98/-1/-1/1; [Town coordinates in v1/v2/v3]
+!!CAv1/v2/v3:O?y1 T?y2; [Owner of Town: y1, Type of Town: y2]
+!!FU&y1>=0:E; [Skip if town is owned]
+!!CAv1/v2/v3:H0/?y3; [Check if Town has a Garrison Hero: y3]
+!!VRy-3:S0; [Initialize y-3 to 0]
+!!DO5404/0/6/1:Py3/y2; [Loop through garrison slots in town]
+
+ [Loop through garrison slots in neutral town]
+ [x1=hero number (-1=none), x2=town type]
+!?FU5404;
+!!VRy-1:S-1; [Initialize y1 to -1]
+!!CAv1/v2/v3&x1<0:M2/x16/?y1/?y2; [Guards in slot x16, Type=y1, Number=y2]
+!!HEx1&x1>=0:C0/x16/?y1/?y2; [Garrison hero's slot x16, Type=y1, Number=y2]
+!!VRy3&y2>0:Sy2 :10; [10% of the number of guards (rounded down): y3]
+!!VRy3&y2>0/y3<1:S1; [If 10% is less than 1, make it 1: y3]
+!!VRy4&y2<=0/y-3=0:Sx16; [Set y4 to x16 for level of creature to place in empty slot: y4]
+!!VRy4&y2<=0/y4>y-2/y-3=0:Sy-2; [Creature level (0..6) can't exceed week number (2+): y4]
+!!UN&y2<=0/y-3=0:Tx2/y4/0/?y1; [Type of creature (non-upgraded) to place in empty slot: y1]
+!!MA&y2<=0/y-3=0:Gy1/?y3; [Basic town dwelling growth of creature: y3]
+!!VRy3&y2<=0/y-3=0:*3 :2; [Multiply growth by 1.5 (round down): y3]
+!!FU|y1<0/y3<1:E; [Skip slot if no creature there]
+!!VRy8:S1 R9; [Random number 1..10: y8]
+!!MA&y8=10:Ly1/?y5; [Level of creature in slot x16 (0..6): y5]
+!!UN&y8=10:Tx2/y5/0/?y6; [Equivalent non-upgraded creature of this level in town: y6]
+!!UN&y8=10:Tx2/y5/1/?y7; [Equivalent upgraded creature of this level in town: y7]
+!!VRy1&y8=10/y1=y6:Sy7; [10% chance per week of creature being upgraded: y1]
+!!CAv1/v2/v3&x1<0:M2/x16/y1/dy3; [Add extra guards to slot x16]
+!!HEx1&x1>=0:C0/x16/y1/dy3; [Add extra creatures to slot x16]
+!!VRy-3&y2<=0:S99; [Set y-3 to 99 if empty slot found: y-3]
+
+
+ [Loop through all creature banks]
+ [x1=type of bank, x2=number of banks]
+!?FU5405;
+!!UN:Ux1/-1/-1/1; [Creature Bank coordinates in v1/v2/v3]
+!!CBv1/v2/v3:T?y1; [Check if Creature Bank already Taken: y1=1 if Taken]
+!!DO5406/0/6/1&y1=0/$weekday$=$monday$:P-1; [Loop through guard slots and resources in creature bank each week]
+
+!!OBv1/v2/v3&x1=16:U?y2; [Subtype of type 16 creature bank: y2]
+
+!!POv1/v2/v3&y1=1:S?y18; [Read PO:S number for Creature Bank square: y18]
+!!POv1/v2/v3&y1=1/y18<=0:S28; [Set PO:S number for Creature Bank square to 28: y18]
+!!VRy18&y1=1/y18>0:-1; [Subtract one from PO:S number: y18]
+!!POv1/v2/v3&y1=1/y18>0:Sy18; [Write new PO:S number: y18]
+
+!!CBv1/v2/v3&y1=0/$weekday$=$monday$:M?y30/?y31; [Number of Bonus Creatures, Type=y30, Number=y31]
+!!VRy31&y1=0/$weekday$=$monday$/y30>=0/y31>0/y31<127/y-10=1:+1; [Every 3rd week, add 1 bonus creature: y31 (maximum 127)]
+!!CBv1/v2/v3&y1=0/$weekday$=$monday$/y30>=0/y31>0/y31<128/y-10=1/y2<>13/y2<>14/y2<>15/y2<>16:My30/y31; [Set new number of bonus creatures excluding Emissary buildings: y31]
+
+!!FU|y1<>1/y18<>1:E; [Exit if bank not taken or y18<>1]
+
+ [Reset/Restock taken creature banks after 28 days]
+!!POv1/v2/v3:S0; [Reset Creature Bank's PO:S number to 0]
+!!FU&x1=16/y2>=13/y2<=16:E; [Exit if it's an Emissary building]
+
+!!CBv1/v2/v3:T0 V0; [Reset creature bank to "not taken"]
+
+!!UN:J6/4/?y3; [Random Treasure Artifact: y3]
+!!UN:J6/4/?y4; [Random Minor Artifact: y4]
+!!UN:J6/16/?y5 J6/16/?y6 J6/16/?y7 J6/16/?y8; [Random Relics: y5, y6, y7, y8]
+!!CBv1/v2/v3&x1=24:G0/115/12 G1/115/12 G2/115/12 G3/115/12 G4/123/12; [Derelict Ship]
+!!CBv1/v2/v3&x1=24:R6/6000 A2/0/y4; [Derelict Ship: 6000 gold, 1 Minor Artifact]
+!!CBv1/v2/v3&x1=85:G0/60/10 G1/60/10 G2/60/10 G3/61/10 G4/61/10; [Shipwreck]
+!!CBv1/v2/v3&x1=85:R6/5000 A2/0/y4; [Shipwreck: 5000 gold, 1 Minor Artifact]
+!!CBv1/v2/v3&x1=84:G0/57/20 G1/59/20 G2/60/20 G3/62/10 G4/63/6 G5/64/3; [Crypt]
+!!CBv1/v2/v3&x1=84:R6/6000 A2/0/y3 A3/y4; [Crypt: 6000 gold, 1 Treasure Artifact, 1 Minor Artifact]
+!!CBv1/v2/v3&x1=25:G0/134/3 G1/135/2 G2/133/2 G3/132/1; [Dragon Utopia (guards replaced with neutral dragons instead)]
+!!CBv1/v2/v3&x1=25:R6/50000 R4/6 R5/6; [Dragon Utopia: 50000 gold, 6 Crystal, 6 Gems]
+!!CBv1/v2/v3&x1=25:A2/0/y5 A2/1/y6 A2/2/y7 A2/3/y8; [Dragon Utopia: 4 Relics]
+!!UN&x1=25:P3/?y9 P238/?y10 P177/?y14; [Check if Commanders (y9), Commander Artifacts (y10), and Slava's Ring (y14) are enabled]
+!!VRy15&x1=25/y9=0/y10=0/y14=1:S8; [Commander Artifact's minus Slava's Ring: y15]
+!!VRy15&x1=25/y9=0/y10=0/y14=0:S9; [Commander Artifact's including Slava's Ring: y15]
+!!VRy16&x1=25/y9=0/y10=0:S146 Ry15; [Random Commander Artifact 1: y16]
+!!VRy17&x1=25/y9=0/y10=0:S146 Ry15; [Random Commander Artifact 2: y17]
+!!CBv1/v2/v3&x1=25/y9=0/y10=0:A3/y16 A3/y17; [Dragon Utopia: 2 Commander Artifacts]
+!!CBv1/v2/v3&x1=16/y2=0:G0/95/10 G1/95/10 G2/95/10 G3/95/10 G4/95/10; [Cyclops Stockpile]
+!!CBv1/v2/v3&x1=16/y2=0:R0/10 R1/10 R2/10 R3/10 R4/10 R5/10; [Cyclops Stockpile: 10 of each resource]
+!!CBv1/v2/v3&x1=16/y2=1:G0/17/30 G1/17/30 G2/17/30 G3/17/30 G4/17/30; [Dwarven Treasury]
+!!CBv1/v2/v3&x1=16/y2=1:R6/7500 R4/10; [Dwarven Treasury: 7500 Gold, 10 Crystals]
+!!CBv1/v2/v3&x1=16/y2=2:G0/5/20 G1/5/20 G2/5/20 G3/5/20 G4/5/20; [Griffin Conservatory]
+!!CBv1/v2/v3&x1=16/y2=3:G0/43/60 G1/42/60 G2/42/60 G3/43/60 G4/42/60; [Imp Cache]
+!!CBv1/v2/v3&x1=16/y2=3:R6/5000 R1/6; [Imp Cache: 5000 Gold, 6 Mercury]
+!!CBv1/v2/v3&x1=16/y2=4:G0/77/10 G1/77/10 G2/77/10 G3/77/10 G4/77/10; [Medusa Stores]
+!!CBv1/v2/v3&x1=16/y2=4:R6/5000 R3/10; [Medusa Stores: 5000 Gold, 10 Sulfur]
+!!CBv1/v2/v3&x1=16/y2=5:G0/39/6 G1/39/6 G2/39/6 G3/39/6 G4/39/6; [Naga Bank]
+!!CBv1/v2/v3&x1=16/y2=5:R6/12000 R5/24; [Naga Bank: 12000 Gold, 24 Gems]
+!!CBv1/v2/v3&x1=16/y2=6:G0/105/18 G1/105/18 G2/105/18 G3/108/18 G4/108/18; [Dragon Fly Hive]
+!!CBv1/v2/v3&x1=16/y2=11:G0/23/6 G1/19/10 G2/23/6 G3/19/10 G4/23/6; [Hunting Lodge]
+!!CBv1/v2/v3&x1=16/y2=11:R6/1000 R0/40; [Hunting Lodge: 1000 Gold, 40 Wood]
+!!CBv1/v2/v3&x1=16/y2=12:G0/33/8 G1/29/50 G2/33/8 G3/29/50 G4/33/8; [Snow-covered Grotto]
+!!CBv1/v2/v3&x1=16/y2=12:R6/1000 R2/40; [Snow-covered Grotto: 1000 Gold, 40 Ore]
+!!CBv1/v2/v3&x1=16/y2=17:G0/63/6 G1/63/6 G2/63/6 G3/63/6 G4/63/6; [Transylvanian Tavern]
+!!CBv1/v2/v3&x1=16/y2=17:R6/5000; [Transylvanian Tavern: 5000 Gold]
+!!CBv1/v2/v3&x1=16/y2=18:G0/63/6 G1/63/6 G2/63/6 G3/63/6 G4/63/6; [Home of the Bat]
+!!CBv1/v2/v3&x1=16/y2=18:R1/5 R3/5 R4/5 R5/5; [Home of the Bat: 5 Mercury, 5 Sulfur, 5 Crystal, 5 Gems]
+!!CBv1/v2/v3&x1=16/y2=19:G0/37/6 G1/37/6 G2/37/6 G3/37/6 G4/37/6; [Lost Bottle]
+!!CBv1/v2/v3&x1=16/y2=19:R1/5 R3/5 R4/5 R5/5; [Lost Bottle: 5 Mercury, 5 Sulfur, 5 Crystal, 5 Gems]
+!!CBv1/v2/v3&x1=16/y2=20:G0/75/6 G1/73/6 G2/75/6 G3/73/6 G4/75/6; [Grotto]
+!!CBv1/v2/v3&x1=16/y2=20:R6/2000 R2/35; [Grotto: 2000 Gold, 35 Ore]
+
+!!DO5407/0/6/1:Px1; [Grow new creature bank's guards and resources]
+
+
+ [Loop through guard slots to restock taken creature bank]
+ [x1=type of creature bank (16=standard creature bank)]
+!?FU5407;
+!!DO5406/1/y-2/1:Px16/x1; [Add guards with bonuses for each game week]
+
+
+ [Loop through guard slots and resources in creature bank]
+ [x1=-1 for normal growth, x1=guard slot number if restocking new bank]
+ [x2=type of creature bank if restocking]
+!?FU5406;
+!!VRy10&x1<0:Sx16; [Set y10 to guard slot number: y10]
+!!VRy10&x1>=0:Sx1; [Set y10 to guard slot number (restocking taken bank): y10]
+
+!!CBv1/v2/v3:Gy10/?y1/?y2; [Guard slot y10, Type: y1, Number: y2]
+!!CBv1/v2/v3&y2<1:G0/?y6/?y8; [Guard Type in slot 0: y6, Number in y8]
+!!CBv1/v2/v3&y2<1/y8<1:G1/?y6/?y8; [Guard Type in slot 1 if nothing in 0: y6]
+!!FU&y2<1/y8<1:E; [If nothing in slot y10 and nothing in slot 0 or 1, Exit]
+!!FU&y2<1/y6<0:E; [If guard type in slot 0 or 1 is less than 0, Exit]
+
+!!MA&y2<1:Oy6/?y7; [Town number that creature in slot 0 belongs to: y7]
+
+!!VRy1&y10=6/y2<1/y7>=0:S183 +y7; [Set "Commander" in slot 6: y1]
+!!CBv1/v2/v3&y10=6/y2<1/y1>=183/y1<=191/y7>=0:G6/y1/1; [Set 1 Commander in slot 6]
+
+!!VRy1&y10<6/y2<1:Sy6; [Add creatures to extra empty slot (but not slot 6)]
+!!VRy9&y10<6/y2<1:Sy8 :2 +1; [Half of the number of guards in slot 0 or 1 plus one: y9]
+!!CBv1/v2/v3&y10<6/y2<1/y1<174:Gy10/y1/y9; [Set y9 new creatures in empty slot]
+
+!!VRy3&y2>0:Sy2 :10; [10% of the number of guards (rounded down): y3]
+!!VRy3&y2>0/y3<1:S1; [If 10% is less than 1, make it 1: y3]
+!!CBv1/v2/v3&y2>0/y1<174:Gy10/y1/dy3; [Add extra guards to slot y10 but don't increase Commanders]
+
+!!CBv1/v2/v3:Ry10/?y4; [Number of Resource type y10: y4]
+!!VRy5&y4>0:Sy4 :10; [10% of resources: :y5]
+!!VRy5&y4>0/y5=0/y-10=1:S1; [Every 3rd week set resource bonus to 1 if less than 1: y5]
+!!CBv1/v2/v3&y4>0/y5>0:Ry10/dy5; [Add resource bonus]
+
+
+ [If necessary, reduce number of guards in Creature Banks when AI attacks]
+ [x16=guard stack number (0..6)]
+!?FU5411;
+!!CBv998/v999/v1000:Gx16/?y1/?y2; [Guard slot x16, Type: y1, Number: y2]
+!!MA&y1>=0/y2>0:Ly1/?y3; [Level of creatures in stack: y3]
+!!VRy2&y1>=132/y1<=135/y2>1:S1; [If it's a powerful neutral dragon, reduce number to 1]
+!!VRy2&y1>=0/y3=0/y2>50:S50; [Set maximum Level 1 creatures to 50 per stack]
+!!VRy2&y1>=0/y3=1/y2>30:S30; [Set maximum Level 2 creatures to 30 per stack]
+!!VRy2&y1>=0/y3=2/y2>25:S25; [Set maximum Level 3 creatures to 25 per stack]
+!!VRy2&y1>=0/y3=3/y2>15:S15; [Set maximum Level 4 creatures to 15 per stack]
+!!VRy2&y1>=0/y3=4/y2>10:S10; [Set maximum Level 5 creatures to 10 per stack]
+!!VRy2&y1>=0/y3=5/y2>8:S8; [Set maximum Level 6 creatures to 8 per stack]
+!!VRy2&y1>=0/y3=6/y2>6:S6; [Set maximum Level 7 creatures to 6 per stack]
+
+
+ [Start of Battle Trigger for Creature Banks, Crypts,]
+ [Derelict Ships, Shipwrecks, and Dragon Utopias]
+!?BA0&v100=2;
+!!BA:M1/6/?y-1/?y-2; [Check for Commander type (y-1), number (y-2)]
+!!FU|y-1<183/y-1>191/y-2<1:E; [Exit if no Commander monsters defending]
+!!UN:N3/-1/y-1/0; [Commander creature name for setting Commander's screen name: z-1]
+!!VRy-3:Sy-1 -183; [Commander type: 0..9: y-3]
+!!VRy-15:Sy-3 *2; [Owner hero class: y-15]
+!!CO-4:E1 Ty-3 N-1 Hy-3 P1; [Enable Commander, set type, name, owner hero class, custom stat control]
+!!VRy-4:Sc-1 :7 +1; [Calculate current week: y-4]
+!!VRy-5:S2 *y-4 +6; [Attack, Defense: y-5]
+!!VRy-6:S2 *y-4 +9; [Damage (max. damage): y-6]
+!!VRy-7:S50 *y-4 +50; [Health 50 plus 50 HP per week: y-7]
+!!VRy-8:Sy-4 :3; [Every 3 weeks: y-8]
+!!VRy-9:S6 +y-8; [Speed: y-9]
+!!VRy-10:S2 *y-4 +3; [Magic Resistance: y-10]
+!!VRy-11:Sy-6 :2; [Damage Low: y-11]
+!!VRy-12:S2 +y-8; [Magic Power: y-12]
+!!CO-4:P0/y-5 P1/y-5 P2/y-7 P3/y-6 P4/y-12 P5/y-9 P6/y-10; [Set stats in Commander screen]
+!!VRy-12&y-12>6:S6; [Max. castings 6: y-12]
+
+ [Give up to 6 special abilities -- 1 plus 1 for every 3 weeks]
+!!VRy-13:Sy-8 +1; [Add 1 to "every three weeks" number: y-13]
+!!VRy-13&y-13>6:S6; [Maximum value of 6: y-13]
+!!DO5409/1/y-13/1&y-13>0:Py-3/y-1/y-6; [Give Commanders up to 6 special abilities]
+!!VRz745:Sz157000; [Initialize z745]
+!!DO5410/0/14/1&y-13>0:P; [Build ability text for description field: z745]
+!!UN:G1/y-1/2/745; [Set ability text string for Commander]
+
+ [Give Comanders up to 6 special abilities]
+ [x1=Commander Type (0..8), x2=Commander Monster Number (183..191)]
+ [x3=Maximum Damage]
+!?FU5409;
+
+ [Paladin]
+!!CO-4&x1=0/x16=1:B1/13/1; [Champion Distance Bonus]
+!!CO-4&x1=0/x16=2:B1/2/1; [Maximum Damage]
+!!CO-4&x1=0/x16=3:B1/0/1; [Reduce Enemy Defense by 50%]
+!!CO-4&x1=0/x16=4:B1/8/1; [Block Physical Damage]
+!!CO-4&x1=0/x16=5:B1/9/1; [Strike Twice]
+!!CO-4&x1=0/x16=6:B1/4/1; [Shooting]
+
+ [Hierophant]
+!!CO-4&x1=1/x16=1:B1/5/1; [Unlimited Retaliation]
+!!CO-4&x1=1/x16=2:B1/0/1; [Reduce Enemy Defense by 50%]
+!!CO-4&x1=1/x16=3:B1/11/1; [Regenerate 50 HP each Round]
+!!CO-4&x1=1/x16=4:B1/10/1; [Attack may Paralyze]
+!!CO-4&x1=1/x16=5:B1/8/1; [Block Physical Damage]
+!!CO-4&x1=1/x16=6:B1/4/1; [Shooting]
+
+ [Temple Guardian]
+!!CO-4&x1=2/x16=1:B1/5/1; [Unlimited Retaliation]
+!!CO-4&x1=2/x16=2:B1/2/1; [Maximum Damage]
+!!CO-4&x1=2/x16=3:B1/11/1; [Regenerate 50 HP each Round]
+!!CO-4&x1=2/x16=4:B1/9/1; [Strike Twice]
+!!CO-4&x1=2/x16=5:B1/8/1; [Block Physical Damage]
+!!CO-4&x1=2/x16=6:B1/4/1; [Shooting]
+
+ [Succubus]
+!!CO-4&x1=3/x16=1:B1/14/1; [Flying]
+!!CO-4&x1=3/x16=2:B1/5/1; [Unlimited Retaliation]
+!!CO-4&x1=3/x16=3:B1/7/1; [Fire Shield]
+!!CO-4&x1=3/x16=4:B1/0/1; [Reduce Enemy Defense by 50%]
+!!CO-4&x1=3/x16=5:B1/10/1; [Attack my Paralyze]
+!!CO-4&x1=3/x16=6:B1/4/1; [Shooting]
+
+ [Soul Eater]
+!!CO-4&x1=4/x16=1:B1/2/1; [Maximum Damage]
+!!CO-4&x1=4/x16=2:B1/1/1; [Fearsome]
+!!CO-4&x1=4/x16=3:B1/9/1; [Strike Twice]
+!!CO-4&x1=4/x16=4:B1/3/1; [No Enemy Retaliation]
+!!CO-4&x1=4/x16=5:B1/12/1; [Death Stare]
+!!CO-4&x1=4/x16=6:B1/4/1; [Shooting]
+
+ [Brute]
+!!CO-4&x1=5/x16=1:B1/13/1; [Champion Distance Bonus]
+!!CO-4&x1=5/x16=2:B1/0/1; [Reduce Enemy Defense by 50%]
+!!CO-4&x1=5/x16=3:B1/1/1; [Fearsome]
+!!CO-4&x1=5/x16=4:B1/8/1; [Block Physical Damage]
+!!CO-4&x1=5/x16=5:B1/9/1; [Strike Twice]
+!!CO-4&x1=5/x16=6:B1/13/1; [No Enemy Retaliation]
+
+ [Ogre Leader]
+!!CO-4&x1=6/x16=1:B1/2/1; [Maximum Damage]
+!!CO-4&x1=6/x16=2:B1/0/1; [Reduce Enemy Defense by 50%]
+!!CO-4&x1=6/x16=3:B1/1/1; [Fearsome]
+!!CO-4&x1=6/x16=4:B1/9/1; [Strike Twice]
+!!CO-4&x1=6/x16=5:B1/13/1; [No Enemy Retaliation]
+!!CO-4&x1=6/x16=6:B1/4/1; [Shooting]
+
+ [Shaman]
+!!CO-4&x1=7/x16=1:B1/7/1; [Fire Shield]
+!!CO-4&x1=7/x16=2:B1/1/1; [Fearsome]
+!!CO-4&x1=7/x16=3:B1/6/1; [Strike All Enemies Around]
+!!CO-4&x1=7/x16=4:B1/11/1; [Regenerate 50 HP each Round]
+!!CO-4&x1=7/x16=5:B1/10/1; [Attack may Paralyze]
+!!CO-4&x1=7/x16=6:B1/4/1; [Shooting]
+
+ [Astral Spirit]
+!!CO-4&x1=8/x16=1:B1/14/1; [Flying]
+!!CO-4&x1=8/x16=2:B1/5/1; [Unlimited Retaliation]
+!!CO-4&x1=8/x16=3:B1/13/1; [Champion Distance Bonus]
+!!CO-4&x1=8/x16=4:B1/6/1; [Strike All Enemies Around]
+!!CO-4&x1=8/x16=5:B1/11/1; [Regenerate 50 HP each Round]
+!!CO-4&x1=8/x16=6:B1/3/1; [No Enemy Retaliation]
+
+  [Build ability text for description field: z745]
+!?FU5410;
+!!CO-4:B1/x16/?y1; [Check if Commander has bonus: y1=1 if yes]
+!!VRz745&x16=0/y1=1:+z157001; [Reduce Enemy Defense]
+!!VRz745&x16=1/y1=1:+z157002; [Fearsome]
+!!VRz745&x16=2/y1=1:+z157003; [Maximum Damage]
+!!VRz745&x16=3/y1=1:+z157004; [No Enemy Retaliation]
+!!VRz745&x16=4/y1=1:+z157005; [Shooting]
+!!VRz745&x16=5/y1=1:+z157006; [Endless Retaliation]
+!!VRz745&x16=6/y1=1:+z157007; [Strike All Enemies Around]
+!!VRz745&x16=7/y1=1:+z157008; [Fire Shield]
+!!VRz745&x16=8/y1=1:+z157009; [Block Physical Damage]
+!!VRz745&x16=9/y1=1:+z157010; [Strike Twice]
+!!VRz745&x16=10/y1=1:+z157011; [Paralyze]
+!!VRz745&x16=11/y1=1:+z157012; [Regeneration]
+!!VRz745&x16=12/y1=1:+z157013; [Deathstare]
+!!VRz745&x16=13/y1=1:+z157014; [Champion Distance Bonus]
+!!VRz745&x16=14/y1=1:+z157015; [Fly]
+
+
+**************************** end function FU5410 ****************************************
+
+
+** abandoned mines and (on monday) local events / pandoras boxes
+** called by TM2; x1/x2 gives type and subtype
+!?FU5412;
+!!UN:Ux1/x2/-1/1; // get coordinates to v1-v3
+!!MNv1/v2/v3&x1=53:O?y1; // get owner of abandoned mine
+!!VRy1|x1=26/x1=6:S-1; // set y1 to -1 if it is an local event or pandoras box
+!!DO5413/0/6/1&y1=-1:P0/x1/x2; // loop daily through all slots (of the mine only if it has no owner)
+
+**************************** end function FU5412 ****************************************
+
+!?FU5413; // set / increase ghosts in abandoned mines; increase once per week guards in local events
+** x1 = if 1 (AI visits the mine) then set troglodydes as guards
+** x2 = type (53=mine, 6=pandoras boxes, 26=local event)
+
+** abandoned mines
+!!MNv1/v2/v3&x2=53:Mx16/?y1/?y2; // get guards of slot x16 of the abandoned mine
+!!VRy1:S159; // set guard to ghosts in mine
+!!VRy1&x1=1/x16=0:S70; // if x1=1 (AI visits) set stack 1 to Troglodytes
+!!VRy1&x1=1/x16>0:S-1; // and delete all other guards
+!!VRy2&y2<50:S50; // set at least 50 Ghosts per stack
+!!VRy3:S1 R2; // random 1-3
+!!VRy4:S101 R2; // random 101-103
+!!VRy5:Sy2 *y4 :100; // get 100-103% of the old guards
+!!VRy5&y5<=y2:+1; // but at least 1 more as before
+!!VRy2:Sy5 + y3; // Increase guards by 100-103% plus 1-3 random ghosts
+!!VRy2&x1=1/x16>0:S0; // set number to 0 if x1=1 (AI visits the abandoned mine
+!!MNv1/v2/v3&x2=53:Mx16/y1/y2; // set the guards of the abandoned mine
+!!FU&x2=53:E; // exit if abandoned mine
+
+** Local events and pandora's boxes (the LE-receiver works for both)
+!!LEv1/v2/v3:Gx16/?y1/?y2; // get guards of slot x16 of the local event
+!!VRy5:Sy2 *11 :10; // set y5 to 110% of old guards
+!!VRy5&y5<=y2:+1; // but at least 1 more as before
+!!LEv1/v2/v3&y1>-1:Gx16/d/y5; // set guards of slot x16 of the local event
+
+**************************** end function FU5413 ****************************************
+

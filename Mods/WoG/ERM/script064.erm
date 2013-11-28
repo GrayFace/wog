@@ -1,0 +1,989 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=12.9(September).2006
+
+** All My Scripts (2005 Sept 12)                          (for WoG v3.58f script update)
+** by Tobyn
+** with big thanks to Fnord and the team for all their advice
+**
+** Each scriptlet is fully documented and contains a separate variables list.
+** Vars v2361-v2367 are script activity "flags" for my scriptlets here.
+** To enable a script, set respective var to 1 (normally Wogify Options will set them).
+**
+** Some scriptlets use my Universal Timer (which automatically runs with Wogify
+** script00.erm). If you want to use them without wogify, e.g. by copying the code,
+** enable UniTimer by setting v2370 to 1 in the following line (change S0 to S1 there).
+
+!#VRv2370:S0;              disabled Universal Timer setup and calculations (because already done by Wogify script00.erm)
+
+!#UN:P188/?v2366;          check if (Conflux)Rampart Monster Change is enabled in WoGify Options
+!#UN:P189/?v2367;          check if Conflux(Rampart) Monster Change is enabled in WoGify Options
+!#UN:P190/?v2364;          check if First Aid Enhanced is enabled in WoGify Options
+!#UN:P191/?v2363;          check if Estates Enhanced is enabled in WoGify Options
+!#UN:P192/?v2362;          check if Transfer Owner is enabled in WoGify Options
+!#UN:P193/?v2365;          check if Warfare is enabled in WoGify Options
+!#UN:P194/?v2361;          check if Advanced Witch Huts are enabled in WoGify Options
+
+!#UN:P75/?v2360;           check if Short Skill descriptions (script75.erm, Hermann the Weird) are enabled
+!#UN:P203/?v2368;          check if Estates I (script48.erm, Arstahd) is enabled
+!#UN:P36/?v2369;           check if Mithril (script36.erm, Anders) is enabled
+
+**
+** --------> TOBYN'S SCRIPTS (script64.erm)   (2005 Aug 25)
+** Author: Tobyn
+** Scriptlets:
+**  (Universal Timer), Tobyn Library Functions, Advanced Witch Huts, Transfer Owner,
+**  Estates Enhanced, First Aid Enhanced, Warfare, Conflux/Rampart Monster Change
+** ERM WoG Option Numbers: 64, 188-194
+** Flags: 230-239 claimed                               (and 236-239 used)
+** Permanent Variables: w47, w48, v2300-v2399 claimed   (and v2301-v2334, v2360-v2399 used)
+** Temporary Variables: m-t, flag 1, v248
+** Timers: TM1, TM2 (both together with script00.erm form the Universal Timer)
+** Functions: FU2300-FU2399 claimed                     (and FU2332-FU2345 used)
+** Strings: z232-z239 claimed                           (and z237-239 used)
+** Macros: $month$,$weeks$,$week$,$day$,$weekday$,$AI$,$color$,$once$,
+**         $red$,$blue$,$tan$,$green$,$orange$,$purple$,$teal$,$pink$,
+**         $monday$,$tuesday$,$wednesday$,$thursday$,$friday$,$saturday$,$sunday$
+
+******************************************************************************************
+
+** UNIVERSAL TIMER (2004 September 19)                          (for WoG v3.58)
+** by Tobyn
+**
+** This scriptlet gives another, more universal approach on Timers.
+** You now can use predefined timed conditions with triggers,
+** not only have predefined timers.
+** Timer 1 will be used to calculate several often-used conditions.
+** Timer 2 trigger now may use that calculated stuff as conditions.
+**
+** Instead of defining a new timer when you need one, merely use and
+** call timer 2 (TM2) trigger with following conditions (leave out irrelevant ones)
+** v2396 or $month$     current month (cont count like standard HoMM3 itself: month 12,13,...)
+** v2395 or $color$     current player color (0..7, or from $red$ to $pink$)
+** v2394 or $AI$        current player status (=0 if human only, =1 if AI only, ignore if irrelevant)
+** v2393 or $weekday$   current weekday (1..7, or from $monday$ to $sunday$)
+** v2392 or $day$       current day (c is current day, but sometimes direct comparison with c won't work)
+** v2391 or $once$      once-on-that-day flag (irrespective of real color: first active color sets, others reset)
+** v2390                (internal day comparator for once-on-that-day flag v2391)
+** v2389 or $weeks$     current weeks in total  (1,2,3,4,5,6,...)
+** v2388 or $week$      current week in a month (1,2,3,4,1,2,...)
+**
+** Never try to set v2371..96 or "c" var, just get/read them where needed.
+**
+** Then every script can use local TM2 trigger with conditions
+** - e.g. trigger only if color=green, status=human and weekday=tuesday
+** - omit conditions which don't matter (e.g. if color or human/AI irrelevant, or weekday for a daily trigger)
+**
+** If you need other calculations done (e.g. 10-day period starting with the second month)
+** just call TM1 locally and calculate whatever you need for your next TM2 trigger condition
+**
+** uses TM1,2 and Tobyn universal vars v2371..v2395
+** uses macros $day$, $weekday$, $week$, $weeks$, $month$, $AI$, $color$, $once$
+** -- for easy usage of colors and weekdays, further macros are defined and initialized
+** uses macros $red$, $blue$, $tan$, $green$, $orange$, $purple$, $teal$, $pink$
+** uses macros $monday$, $tuesday$, $wednesday$, $thursday$, $friday$, $saturday$, $sunday$
+
+
+  UNIVERSAL TIMER INIT
+
+!#TM1:S1/999/1/255;    triggers every color every day
+!#TM2:S1/999/1/255;    same but triggers only *after* all calculations from TM1 are done
+!#VRv2396:S1;          init v2396 month indicator (starts with month 1)
+!#VRv2390:S1;          init v2390 day comparator (c also starts with day 1 value)
+!#MCv2391:S@once@;     init macros (= other names) for the seven used universal vars
+!#MCv2392:S@day@;
+!#MCv2393:S@weekday@;
+!#MCv2394:S@AI@;
+!#MCv2395:S@color@;
+!#MCv2396:S@month@;
+!#MCv2388:S@week@;     monthly week count    (1,2,3,4,1,2,...), like v2393 is "weekday"
+!#MCv2389:S@weeks@;    continuing week count (1,2,3,4,5,6,...)
+
+!#MCv2371:S@monday@;     !#VR$monday$:S1;    init macros and values for weekdays
+!#MCv2372:S@tuesday@;    !#VR$tuesday$:S2;
+!#MCv2373:S@wednesday@;  !#VR$wednesday$:S3;
+!#MCv2374:S@thursday@;   !#VR$thursday$:S4;
+!#MCv2375:S@friday@;     !#VR$friday$:S5;
+!#MCv2376:S@saturday@;   !#VR$saturday$:S6;
+!#MCv2377:S@sunday@;     !#VR$sunday$:S7;
+!#MCv2380:S@red@;        !#VR$red$:S0;       init macros and values for colors
+!#MCv2381:S@blue@;       !#VR$blue$:S1;
+!#MCv2382:S@tan@;        !#VR$tan$:S2;
+!#MCv2383:S@green@;      !#VR$green$:S3;
+!#MCv2384:S@orange@;     !#VR$orange$:S4;
+!#MCv2385:S@purple@;     !#VR$purple$:S5;
+!#MCv2386:S@teal@;       !#VR$teal$:S6;
+!#MCv2387:S@pink@;       !#VR$pink$:S7;
+
+
+  UNIVERSAL TIMER GLOBAL CALL EVERY DAY
+
+!?TM1&v2370=1;             GLOBAL CALL (careful: only one instance of these calculations allowed, which should normally be done by wogify script00.erm)
+!!OW:C?v2395;                get current player color (0..7)
+!!OW:Iv2395/?v2394;          get current player status (0=human, 1=AI)
+!!VRv2393:Sc %7;             set weekday (mon=1..sat=6,sun=0)
+!!VRv2393&v2393=0:S7;        set sunday=7 instead of sunday=0
+!!VRv2392:Sc;                set current day (comparison with c doesn't work in the next two lines)
+!!VRv2391&v2390=v2392:S1;    set once-on-that-day flag (only first active color)
+!!VRv2391&v2390>v2392:S0;    reset that flag (at second active color each day)
+!!VRv2390&v2391=1:+1;        inc day comparator (needed for flag)
+!!VRv2389&v2391=1:Sc -1 :7 +1; set weeks (cont count)
+!!VRv2388&v2393=1/v2391=1:+1; inc  week counter by 1 for each monday
+!!VRv2396&v2388=5/v2391=1:+1; inc month counter by 1 for each 5th week
+!!VRv2388&v2388=5/v2391=1:S1; reset week counter for each new month
+
+******************************************************************************************
+
+** TOBYN LIBRARY FUNCTIONS (2005 Aug 25)                       (for WoG v3.58f)
+** by Tobyn
+**
+** As with the Universal Timer TM1/2 above, this script64.erm uses
+** some common functions (may also be used from outside with a fct call)
+**
+** USES FU2332,2333,2345
+
+
+  LUCK FUNCTION (get current luck of a hero)
+
+!?FU2333;                            in: x1=hero number, out: x2=current luck
+!!VRx2:S0;                             init output var x2
+!!HEx1:S9/?y1 A2/45/d/?y2 A2/46/d/?y3 A2/47/d/?y4 A2/48/d/?y5 A2/108/d/?y6 R1/?y7 R6/?y8 A2/85/d/?y9 O?y12;
+;       Luck  StillEyeDragon  Clover   Cards       Ladybird    PendCourage  temp   cheat  Hourglass (owner)
+!!VRy6:*3;                             set 3 bonus for Pendant of Courage
+!!VRy8:*33;                            set 33 bonus if "maximum luck cheat" flag is set
+!!OW:Wy12/?y10;                        number of towns for hero's owner
+!!VRy10:-1;                            town check is 0..max-1 (and not 1..max)
+!!DO2332/0/y10/1&y11=0:P?y11/y12;      check for Spirit Guardian (grail) bonus
+!!VRx2&y9=0:+y1 +y2 +y3 +y4 +y5 +y6 +y7 +y8 +y11; current luck (x2) if no Hourglass
+!!VRx2&y9=1:S0;                        Hourglass negates *all* luck (SoD sets 0 battle luck even if cheat active)
+
+!?FU2332;                            check player's towns for a Spirit Guardian
+!!VRx1:S0;                             init return value
+!!OW:Wx2/x16/?y1;                      get town number (the x16th town in player's list)
+!!CA0/y1&y1>-1:T?y2 B3/26;             check if Rampart and Grail built
+!!VRx1&1/y2=1:S2;                      set 2 bonus for Spirit Guardian grail structure
+
+
+  SKILL CLICK FUNCTION (get number of clicked skill in hero screen)
+
+!?FU2345;                            in: x1=click number 79..102, x2=hero number, out: x3=skill number (skill number -1 if no skill clicked), x4=skill area, x5=skill slot
+!!VRy1:S0;                             init vars
+!!VRy2:S0;                             ..
+!!VRy3:S0;                             ..
+!!VRx3:S-1;                            .. init skill output var x3 (= -1 if slot empty or no skill slot clicked)
+!!VRx4:S-1;                            .. init  area output var x4 (= -1 if slot empty or no skill slot clicked)
+!!HEx2:S?y4;                           check number of known skills that are displayed
+!!VRy1&x1>78/x1<87:S1;                 check skill area (1 if icon clicked)
+!!VRy1&x1>86/x1<95:S2;                 ..               (2 if name clicked)
+!!VRy1&x1>94/x1<103:S3;                ..               (3 if expertise clicked)
+!!VRy2&y1=1:Sx1 -78;                   calculate skill slot (if icon)
+!!VRy2&y1=2:Sx1 -86;                   ..                   (if name)
+!!VRy2&y1=3:Sx1 -94;                   ..                   (if expertise)
+!!HEx2&y1>0:Sy2/?y3/1;                 check which skill (y3) in slot y2   [1st bug: if no skill on that slot, it unfortunately returns 0 instead of -1, how to separate from Pathfinding then?]
+!!VRx3&y1>0:Sy3;                       set output var x3 (skill number)
+!!VRx4&y1>0:Sy1;                       set output var x4 (skill area)
+!!VRx5&y1>0:Sy2;                       set output var x5 (skill slot)
+; to counteract two bugs [2nd bug: click number of empty slots still set to respective number if empty icon clicked, whereas empty skill expertise/name is treated as non-functional-area and sets click number to 0]
+!!VRx3&y1>0/y2>y4:S-1;                 set output vars to none (-1) if empty skill slot (i.e. slot higher than known skills)
+!!VRx4&y1>0/y2>y4:S-1;                 ..
+!!VRx5&y1>0/y2>y4:S-1;                 ..
+
+******************************************************************************************
+
+** ADVANCED WITCH HUTS (2004 September 19)                    (for WoG v3.58)
+** by Tobyn
+**
+** This script enhances Witch Huts with an option not to learn the
+** offered skill, get that skill advanced (for 3000 gold) or even
+** forget all about the respective skill.
+**
+** AI always learns advanced skill (if enough gold, only needs 500 gold)
+** or basic skill otherwise (standard object behaviour), but
+** AI never forgets that skill here.
+**
+** Witch Huts won't give their skill if hero already has 8 other skills.
+** careful: to have standard no-more-than-8-skills behaviour, it is
+**   needed to check pre-visit skill expertise, then operate standard
+**   Witch Hut and check post-visit skill expertise. Compare, and if
+**   both are "none", Witch Hut gives out standard msg for full skills.
+**
+** IDEA:
+** - if player has more than 9 Mithril and hero expert skill, let the
+**   witch "offer" to hide that skill for 10 Mithril. If rejected,
+**   either do nothing or call full wrath (= unlearn that skill)
+**
+** USES function FU2335, vars v2328-v2330
+** ONLY ACTIVE if v2361=1 (wogify option 194)
+
+
+!?OB113&v2361=1;           any Witch Hut visited
+!!WHv998/v999/v1000:S?v2328; get Witch Hut skill
+!!HE-1:Sv2328/?v2329;        get hero skill expertise
+!!OBv998/v999/v1000:M-1/1/0; disable next std msg of this Witch Hut
+
+!$OB113&v2361=1;           post-visit trigger for any Witch Hut
+!!UN:N4/z-1/v2328;           using built-in skill name lookup
+!!HE-1:Sv2328/?v2330;        get hero skill expertise after visit
+!!HE-1&v2329=0/v2330>0:Sv2328/0; reset hero skill expertise if different
+!!FU2335&v2330>0:P;          call dialogue function if different
+!!IF&v2330=0/1000:M1/z164000; msg if not given (= no free skill slot)
+
+!?FU2335;                  dialogue function
+!!IF:V1/0;                   init flag 1
+!!WHv998/v999/v1000:S?y1;    get Witch Hut skill
+!!HE-1:Sy1/?y2;              get hero expertise with this skill
+!!OW:R-1/6/?y3;              get owner's gold
+!!VRy4:Sy1*3;                (calculations for display skill pic)
+!!VRy4:+2+y2;                 .
+!!VRy4&y2<2:+1;               .
+!!VRy5|y1=10/y1=20/y1=27:S1; set y5=1 if one of the Warfare skills
+!!VRy5&v2365=0:S0;           set y5=0 if Warfare inactive
+
+!!HE-1&y2=0/y3<500/-1000:Sy1/1; AI gets basic if not enough gold
+!!HE-1&y2<2/y3>499/-1000:Sy1/2; AI gets advanced if enough gold
+!!OW&y3>499/-1000:R-1/6/d-500;  AI pays 500 gold if advanced
+
+!!IF&y2>1/1000:Q1/20/y4/2/z164001;     msg if already adv or expert
+
+!!HE-1&y2>1/-1/1000/y5=0:Sy1/0; remove adv/exp skill at player's choice (AI never forgets) and end function (because y2 gladly not actualized)
+!!HE-1&y2>1/-1/1000/v2365=1/y5=1:S10/0 S20/0 S27/0; unlearn all three Warfare skills if appropriate and end fct
+
+!!IF&y2>1/-1/1000:M1/z164002;          msg if "unlearn"
+
+!!IF&y2=0/1000:Q1/20/y4/2/z164003; std msg if no skill
+!!HE-1&y2=0/1:Sy1/1;         set skill to basic if agreed to learn
+!!VRy4&y2=0/1:+1;            (inc display pic)
+!!VRy2&y2=0/1:S1;            set skill expertise var to basic
+!!IF:V1/0;                   reset flag 1
+
+!!IF&y2=1/y3<3000/1000:Q1/20/y4/6/3000/1/z164004; msg if bas and not enough gold
+!!IF&y2=1/y3>2999/1000:Q1/20/y4/6/3000/2/z164005; msg if bas and enough gold (offer to advance)
+!!OW&y2=1/1:R-1/6/d-3000;    pay 3000 gold if agreed
+!!HE-1&y2=1/1:Sy1/2;         set skill to advanced then
+!!IF:W-1;                    set hero var reference to current hero
+!!VRw48&y2=1/y5=1/v2365=1:Sy1; set hero var w48 (Warfare) to appropriate Warfare skill
+
+******************************************************************************************
+
+** TRANSFER OWNER (2005 Oct 30)                                (for WoG v3.58f)
+** by Tobyn
+**
+** Enables ownership transfer of own heroes, towns, mines, dwellings,
+** lighthouses, shipyards and garrisons to any active color, incl. none.
+** First, activate (toggle) transfer mode by right-click on status/chat line.
+** Second, right-click on any flagged object you own.
+** Third, select new owner (or renounce ownership to set "none"=grey)
+**
+** Notes: - Mine transfer to other color costs one of its resources or Mithril
+**        - You may transfer heroes with right-click while they are not in focus
+**          (i.e. not selected with left-click before)
+**        - Allies are already detected, so you could easily allow transfer mode for
+**          allies *only* (then disable normal transfer in loop fct FU2338 below)
+**
+** THE CODE WORKS AS FOLLOWS:  (also triggers with shift+left_click instead of steps 1 and 2)
+** (1. right-clicked on chat line? Then toggle transfer mode active/inactive (if enough Mithril))
+** (2. right-clicked on adv map thereafter? Only then test if)
+** 3. obj is hero, town, mine, dwelling, lighthouse, shipyard or garrison?
+** 4. obj owned by current color? if not, break
+** 5. ask for transfer to each color still in game
+** 6. if transfer OK, setup desired owner
+**
+** uses temp quick vars (m, n, o, p, q, r, s, t)
+** (Note: quick vars m..t only used each transfer time, may be used outside.
+**  Could have been some x/y vars instead, but letters are better to understand)
+** uses flags 237..239
+** uses function FU2336..2339
+** ONLY ACTIVE if v2362>0 (wogify option 192)
+
+
+  CLICK DETECTED
+
+!?CM&v2362>0;              right-click trigger if script active
+!!CM:I?y-1;                  check click location
+!!UN:P36/?v2369;             =1 if Mithril active
+
+  test if chat-line was clicked
+!!IF&237/-238/y-1=38:V237/0 V238/1 Q1/-1/-1/4/z164006; [10 to 01] if chat bar clicked
+!!IF&-237/-238/y-1=38:V237/1 Q1/-1/-1/4/z164007; [00 to 10] a set flag 237 means transfer mode active
+!!IF&-237/238:V237/0 V238/0; [01 to 00] reset if any transfer condition not met
+!!CM&237/y-1=37:R0;          disable standard reaction for right-click adv map if enough resources
+!!FU2336&237/y-1=37:P;       call Fct 2336 if transfer mode and adv map right-clicked and enough resources
+
+
+  SHIFT+LEFT_CLICK
+
+!?CM5&v2362>0;             adv-map left_click
+!!CM:F?y-7;                  check click type (y-8=1 shift+left_click)
+!!UN:P36/?v2369;             =1 if Mithril active
+!!CM:P?y-1/?y-2/?y-3;        get clicked coordinates - store in y-1,y-2,y-3
+!!OBy-1/y-2/y-3:T?y-4 U?y-5 C?y-6; get type (y-4), subtype (y-5), ctrl number (y-6)
+!!VRy-8|y-4=34/y-4=98/y-4=53/y-4=220/y-4=17/y-4=20/y-4=42/y-4=87/y-4=33/y-4=219:S1;  y-8=1 means flaggable object
+!!FU2336&y-7=1/y-8=1:P;      call if shift+left_click on flaggable adv map object
+
+
+  GET BASIC INFO and START
+
+!?FU2336;
+!!CM:R0;                     disable standard response
+!!CM:P?y1/?y2/?y3;           get clicked coordinates - store in y1,y2,y3
+!!OBy1/y2/y3:T?y4 U?y5 C?y6; get type (y4), subtype (y5), ctrl number (y6)
+!!OW:C?p;                    get current player, store in quick var (p)
+
+  now get object type, store in quick var (t)
+!!VRt:S0;                    0 for none of the 7 flaggable objects
+!!VRt&y4=34:S1;              1 for hero
+!!VRt&y4=98:S2;              2 for town
+!!VRt|y4=53/y4=220:S3;       3 for mine
+!!VRt|y4=17/y4=20:S4;        4 for dwelling
+!!VRt&y4=42:S5;              5 for lighthouse
+!!VRt&y4=87:S6;              6 for shipyard
+!!VRt|y4=33/y4=219:S7;       7 for garrison
+
+  use type (t) to get owner (o) and compare with current player (p)
+!!VRo:S10;    init owner variable with impossible color, because elsewise
+;             FU2337 could be called even if obj has no owner (only case if
+;             player red (0) active, but not owner (0). Would still pass o=p)
+!!HEy1/y2/y3&t=1:O?o;        get owner - hero
+!!CAy1/y2/y3&t=2:O?o;        get owner - town
+!!MNy1/y2/y3&t=3:O?o;        get owner - mine
+!!DWy1/y2/y3&t=4:O?o;        get owner - dwelling
+!!MNy1/y2/y3&t=5:O?o;        get owner - lighthouse
+!!SYy1/y2/y3&t=6:O?o;        get owner - shipyard
+!!GRy1/y2/y3&t=7:O?o;        get owner - garrison
+!!FU2337&o=p:Py1/y2/y3/y4/y5;    call transfer screen (only if current player owns that flaggable obj, else give following msg)
+!!IF&o<>p/237:Q1/-1/-1/4/z164008;  msgbox type 4 (no buttons) if no own flag at click location [for transfer mode via chat bar]
+!!IF&o<>p/-237:Q1/-1/-1/1/z164047; msgbox type 1 (OK button)  if no own flag at click location [for shift-click]
+
+
+  TRANSFER SCREEN and RESOURCE CHECK
+
+!?FU2337;
+!!IF:V239/0;                 init transfer flag to "not set"
+!!VRy1:S2;                   init
+!!UN&x4=17/x5>79/x5<89:P?y1; if lvl8 dwelling then check status (=0 wog type, =1 standard)
+!!IF&t>1/y1>0:Q239/10/p/2/z164009; renounce msgbox displays own flag (not if lvl 8 dwelling wog type or if hero - use standard dismiss there)
+!!VRn&239:S-1;               set new owner to none (grey) if selected
+!!VRq:S0;                    init loop var q (color, range 0..7) to test all 8 possible colors
+*!VRq&$weekday$=1/t=2:S10;   init loop var q if monday AND town (no transfer then due to multiple growth exploit [really? not in hot chair MP, perhaps with real MP])
+*!IF&q=10:Q1/-1/-1/1/z164048; msgbox if tried to transfer a town on monday
+!!DO2338/0/7/1&-239/q<10:Px1/x2/x3/y1; check with 8-time loop, ask only for active colors  [only if NOT (monday AND town) if above two lines enabled]
+!!IF&y-39=1/-239:Q1/-1/-1/1/z164049; y-39=1 means no ally present but tried to transfer a lvl 8 wog type dwelling
+!!FU2339&239/n<>o:Px1/x2/x3; call actual transfer function
+
+
+  LOOP FUNCTION (determine active colors)
+
+!?FU2338;                  prevent own and non-playing colors from being displayed
+!!OW:Iq/d/?r;                test if color q inactive/killed (1) or alive (0)
+!!VRr&q=p:S1;                ignore color if alive but current player
+!!OW&r=0:Tp/?s;              get team (quick var s) of current player
+!!OW&r=0:Tq/?m;              get team (m) of tested color, compare with team of current player
+!!MNx1/x2/x3&t=3:R?y1/1;     check mine's resource type
+!!OW&t=3:R-1/y1/?y2;         check that resource on owner
+!!VRy3&y1<>6/y2>0:S1;        set mine indicator for resources
+!!VRy3&y1=6/y2>999:S1000;    set mine indicator for gold
+!!OW&t=3/v2369=1/y3=0:R-1/7/?y4; check owner's Mithril if enabled and not enough other resources
+!!IF&-239/r=0/t=3/y3=0/y4=0:Q239/y1/0/7/0/1/z164010; call mine transfer notification
+!!VRy1&y4>0:S7;              set Mithril type if enough
+!!VRy3&y4>0:S1;              set Mithril amount =1 if enough
+!!VRz-1:S^^;                 init z-1
+!!VRz-1&m=s:Sz164011;        set z-1 to ally if detected
+!!VRr&m<>s/x4=0:S1;          if not ally and lvl8 dwelling with WoG behavior    [TESTING]
+!!VRy-39&m<>s/x4=0:S1;       set if no ally, needed for possible lvl 8 dwelling msgbox
+!!VRy-39&m=s/x4=0:S0;        reset if ally, needed for possible lvl 8 dwelling msgbox
+!!VRr&t=2/m<>s:S1;           prohibit town transfer to non-ally (to counter unlimited building per day exploit) [renounce still allowed because no prob]
+!!IF&-239/r=0/y3>0:Q239/y1/y3/10/q/2/z164012; call mine transfer dialogue box
+!!IF&-239/r=0/t<>3:Q239/10/q/2/z164013;       call transfer dialogue box
+!!VRn&239:Sq;                store selected color in n
+!!OW&t=3/239/y1<>6:R-1/y1/d-1; remove 1 mine resource if mine transfer initiated
+!!OW&t=3/239/y1=6:R-1/y1/d-1000; remove 1000 gold if gold mine transfer initiated
+!!VRx16&239:S7;              end loop if selected
+!!VRq&-239:+1;               next if not selected
+
+
+  TRANSFER FUNCTION
+
+!?FU2339;                  apply respective "set owner" commands according to n,t vars
+*!HEx1/x2/x3&t=1/n=-1:K;     set owner - hero eliminated (if ownership was renounced)
+!!HEx1/x2/x3&t=1:On G?y1 W?y2/1;  set owner - hero (if transfered to an existing color) and get movement
+!!VRy1&t=1:-y2;              hero - calculate difference between initial and current movement
+!!HEx1/x2/x3&t=1:Y10/?y3/?y4/d; check hero - don't penalize hero transfer if speed curse present
+!!HEx1/x2/x3&t=1/y1>0/y4=0:Y10/y1/0/1; hero - set that difference as movement curse for current day only
+!!CAx1/x2/x3&t=2:On;         set owner - town
+!!MNx1/x2/x3&t=3:On;         set owner - mine
+!!DWx1/x2/x3&t=4:On/1;       set owner - dwelling (new syntax, incl. growth bonus for towns)
+!!MNx1/x2/x3&t=5:On;         set owner - lighthouse
+!!SYx1/x2/x3&t=6:On;         set owner - shipyard
+!!GRx1/x2/x3&t=7:On;         set owner - garrison
+
+******************************************************************************************
+
+** ESTATES ENHANCED (2006 Sep 12)                               (for WoG v3.58f)
+** by Tobyn
+**
+** This script enhances Estates secondary skill with further resources.
+** Each day, Estates will give additional 25/50/100 Gold (Basic/Advanced/Expert)
+** for every 10,000 experience the hero has (adjustable via v2333, will be *0.25/0.5/1)
+** Max +2000 Gold/day (from hero lvl 25 on), but Estates specialists have max +5000
+** Gold/day (lvl 30) in addition to their standard +5% per level (no cap there)
+** Also generates additional resources, depending on hero level and weekday:
+** - For lvl 1 to 9, each hero level gives one resource per week (i.e 1-7
+**   resources per week in total, lvl 7+ will give you one resource each day)
+**   Resource type randomly chosen at first time and always stays the same:
+**   1 (Wood+Ore|Mercury|Sulfur|Crystal|Gem|350 Gold)
+** - For lvl 10+, Bas/Adv Estates changes the resource type every day, cycling
+**   through all types within one week: 1 Wood+Ore (monday), 1 Mercury (tuesday),
+**   1 Sulfur (wednesday), ... 350 Gold (saturday) and 1 Mithril (sunday)
+** - For lvl 10+, Expert Estates may give Mithril with a base chance of 10%
+**   each day, modified by current hero luck.                                   (if Mithril script active at all)
+**   If not lucky, it will provide the respective weekday resource instead,
+**   therefore sundays always yield 1 Mithril (or 350 gold if Mithril script
+**   is not active at all).
+** - Humans may choose a resource by left-clicking Expert Estates icon in heroes
+**   screen if hero is lvl 10+. The hero will provide this resource every day
+**   until player interferes again. Choose Mithril to reactivate the above
+**   daily chance. If Mithril script inactive and you want to reactivate the
+**   weekly cycle, choose none of the offered resources.
+** - Heroes' normal resource specialties are not affected by this script.
+**
+** IDEAS to improve this script
+** - if possible to change skill pic, display last or chosen resource pic there
+** - or once the "choose from many pictures" dialogue is available, use it to
+**   replace the successive msgboxes for resource selection
+**
+** USES Universal Timer TM1/2, hero var w47 (resource choice), var v2369 (Mithril)
+**      FU2342-FU2344
+** calls library fcts FU2333 (luck), FU2345 (skill click)
+** uses flag 236, uses v2333 (modifier for ExpEst gold/day), v2334 (lvl 10 msg status)
+** temp uses vars (v2331,v2332)
+** ONLY ACTIVE if v2363=1 (wogify option 191)
+** minor update: added two init z-1 [line added on 060912]
+
+;  resource (Wood+Ore|Mercury|Sulphur|Crystal|Gem|350 Gold)  Mithril   cycling
+;    w47  =      1       2       3       4     5     6         (7)        8
+;                9      10      11      12    13    14         15        16
+;
+; 0 = nothing, 7 = (Mithril, but unused), 17+ not used
+; 8 = cycling: each weekday gives respective resource, unless chosen manually
+; 9..14 = 1 Wood/Ore .. 1 Gem each day (chosen)
+;    15 = 1 Mithril each day was chosen, but if you get it depends on random factor, modified by hero's current luck
+;    16 = Mithril chosen, but unlucky that day (give weekday resource then if Estates) => always 1 Mithril on sunday
+;
+;  following are statistics about Mithril threshold
+;  r9 means random 0..9 (but 0 luck is treated as 1 luck)
+;
+;  luck    -1    0    1    2    3    4    5    6    7    8    9   10
+;  r9<luck  0   10   10   20   30   40   50   60   70   80   90  100  % each day (10% base, 100% max)
+;  Mithril  1    1    1    1    1    1    1    1    1    1    1    7   worst/week
+;  Mithril  1   1.6  1.6  2.2  2.8  3.4   4   4.6  5.2  5.8  6.4   7   avg/week
+;  Mithril  1    7    7    7    7    7    7    7    7    7    7    7   best/week
+
+!#VRv2333&v2363=1:S100; set daily additional Expert Estates gold per 10,000 experience (adv=half, basic=quarter), may be modified by map maker, e.g. =0 if only resource bonus
+!#VRv2334&v2363=1:S0;   init lvl 10 msg status
+
+  DAILY ADDED RESOURCES FOR ESTATES HEROES (or for heroes with manually ERM set w47)
+
+;   check w47 for resources/day irrespective of Estates,
+;   only take Estates into account when *changing* w47
+
+!?TM2&v2363=1;                       daily timer for every color (if script active)
+!!UN:B0/?v2369;                        check Mithril status (1=active)
+!!OW:H-1/2331/0;                       store current color's number of heroes in v2331
+!!DO2343/1/v2331/1:P;                  loop through every hero a player has
+
+!?FU2343;                            hero loop function for Estates
+!!OW:H-1/2332/x16;                     store x16th hero of that player in v2332
+!!IF:V236/1 Wv2332;                    set w var reference to current hero, set flag 236
+!!HEv2332:S13/?y1 E?y2/?y3/1 X?y14/?y13/d/d/d/d/d; get Estates expertise y1, hero experience y2 and level y3, hero skill spec (y14=0 and y13=13 if Estates)
+!!FU&y1=0/w47=0:E;                     exit if that hero has no Estates and no w47
+
+!!VRy10:S1;                     GOLD   full modifier for Expert Estates and in general to avoid division by zero
+!!VRy10&y1=2:S2;                       half for Advanced Estates
+!!VRy10&y1=1:S4;                       quarter for Basic Estates
+!!VRy4&y1>0:Sy2 :10000 *v2333 :y10;    calculate gold according to expertise and experience
+!!VRy4&y4>2000/y13<>13:S2000;          max of +2000 Gold/day (from lvl 25 on) unless Estates specialist
+!!VRy4&y4>5000:S5000;                  max of +5000 Gold/day (around lvl 30) even if Estates specialist
+!!OW&y1>0:R-1/6/dy4;                   give/remove that gold
+!!OW&y1>0:R-1/6/?y17;                  check current treasure (player's current gold)
+!!OW&y1>0/y17<0:R-1/6/0;               no negative treasure allowed
+
+  change w47 state automatically (init w47 for lvl 1..9 or change w47 for ExpEst lvl 10+ or reset unlucky Mithril)
+ !!VRy11:S0;                           init indicator
+*!VRw47&y1=0:S0;                      (if no Estates then reset w47 because hero may have unlearned Estates)
+!!VRw47&w47=0/y1>0:R5 +1;              lvl 1..9 inits w47 with random 1..6, meaning +1 (Wood+Ore|Mercury|Sulfur|Crystal|Gem|350 Gold)
+*!VRw47&w47<8/y13=13/y14=0:S8;         Estates specialty allows cycling/choosing from the beginning
+!!VRw47&w47<8/y13=13/y14=0/w47>0:+8;   Estates specialty sets random resource to daily (even for low-level), Expert allows choosing as if lvl10+
+!!VRy11&w47<8/y1=3/y3>9:S1;            indicator: no choice yet, Exp Estates, lvl10+
+!!VRw47&y11=1/v2369=0:S8;    [TESTING] init w47 standard cycling if Mithril script inactive and all conditions met
+!!VRw47&y11=1/v2369=1:S15;             init w47 Mithril cycling if Mithril script active and Exp Estates and lvl10+
+!!VRw47&w47=16:S15;                    reset w47 Mithril choice unlucky flag (from the day before)
+
+!!VRy5:S41 +y1;                        set correct Estates pic for msg below
+!!VRy6:S-1;                            init pic to none
+!!VRy6&y1=3/y3>9/v2369=1:S7;           set Mithril pic if Expert Estates and lvl10+ and Mithril active
+!!VRy12:S1 +$color$;                   get color + 1 (CAREFUL: VR:S$color$ +1 would ignore the +1)
+!!FU$bit$:Py12;                        bit conversion, CAREFUL: result is returned in y-100
+!!VRy12:Sv2334 &y-100;                 check appropriate color for msg status
+!!VRz-1:S^^;                           init z-1 [line added on 060912]
+!!VRz-1&v2369=1:Sz164014;              Mithril selection line added to lvl 10 msg if Mithril active
+!!IF&y11=1/y12=0/1000:Q236/20/y5/y6/0/1/z164015; human only msg once hero has reached lvl 10+ and Exp Estates
+*!VRv2334&-236:|y-100;                 that color won't receive the message any more if Cancel was clicked (if type 2 msgbox above)
+!!VRv2334&y11=1/y12=0/1000:|y-100;     that color won't receive the message any more after first display
+
+  prepare resources according to w47 state
+!!VRy7:S0;                             init resource var (y7)
+!!VRy7&w47>0/w47<8/y3>=$weekday$:Sw47; lvl<10, check for weekday if to give resource type w47 at all that day
+!!VRy7&w47=8:S$weekday$;               lvl 10+  cycling, give respective weekday resource
+!!VRy7&w47>8/w47<15:Sw47 -8;           lvl 10+  give chosen resource type (w47 -8)
+!!FU2333&w47=15:Pv2332/?y-1;           Mithril section: check current luck for that hero
+!!VRy8&w47=15:R9;                      .. set daily chance threshold (9)
+!!VRy8&w47=15/y-1=0:-1;                .. treat 0 luck as 1 luck (10% base chance)
+!!VRy9&y8<y-1:S1;                      .. compare, set (y9=1) if lucky
+!!VRy7&w47=15/y9=1:S7;                 .. set y7 to Mithril if successful
+!!VRy7&w47=15/y9=0/y1>0:S$weekday$;    .. set y7 to weekday if unsuccessful but Estates
+!!VRw47&w47=15/y9=0:S16;               .. set w47 to 16 if unsuccessful
+
+  give resources according to above conditions
+!!OW&y7=1:R-1/0/d1 R-1/2/d1;           give 1 Wood and 1 Ore
+!!OW&y7=2:R-1/1/d1;                    give 1 Mercury
+!!OW&y7>2/y7<6:R-1/y7/d1;              give 1 Sulphur, Crystal or Gem
+!!OW&y7=6:R-1/y7/d350;                 give 350 Gold
+!!OW&y7=7/v2369=1:R-1/7/d1;            give 1 Mithril if active
+!!OW&y7=7/v2369=0:R-1/6/d350;          give 350 Gold if Mithril inactive (weekday cycle reached sunday)
+
+    --------------------
+
+  HERO SCREEN CLICK
+
+!?CM2&v2363=1;                       hero screen click (if script active)
+!!CM:I?y-1;                            get right-click number (y-1) (79..102 is skill area)
+!!CM:S?y-2;                            check left/right-click (=12 left click, =14 right click)
+!!FU2345:Py-1/-1/?y-3/?y-4/?y-5;       call skill click function (in: click number and hero number, out: skill (y-3), area (y-4) and slot (y-5))
+!!VRy-6|v2368=1/v2360=1:S1;            set "flag" if Estates I (script48) or short skill descriptions (script75) enabled
+!!CM&y-6=0/y-1>78/y-1<103/y-3=13:R0;   if clicked skill was Estates, disable standard skill click reaction         [NOTE to get std Estates descr on name click: y-1<87 instead of y-1<103]
+!!CM&y-6=1/y-1>78/y-1<87/y-3=13:R0;    same but for Estates I or short skill descr, then only a click on skill icons will trigger the below msgboxes
+!!FU2342&y-6=0/y-3=13:Py-4/y-2;        .. and call enhEstates display function (in: skill area, left/right-click)  [NOTE to get std Estates descr on name click: add /y-1<87]
+!!FU2342&y-6=1/y-3=13/y-4=1:Py-4/y-2;  .. same but for Estates I or short skill descr
+
+
+  ENHANCED ESTATES DISPLAY FUNCTION
+
+!?FU2342;                            display function
+;   x1 = skill area (= 1 if icon, = 2 if name, = 3 if expertise clicked)
+;   x2 = click type (= 12 left click, = 14 right click)
+!!VRy16&x2=12:S2;                      if left-click  then init y16:=2 (OK/Cancel buttons)
+!!VRy16&x2=14:S4;                      if right-click then init y16:=4 (no button)
+!!FU&y16=0:E;      BUG COUNTERMEASURE: clicking non-functional-areas after Estates (with disabled std reaction) erroneously gives another msgbox and nasty side effects
+!!IF:W-1;                              set w var reference to current hero
+!!HE-1:S13/?y1 E?y2/?y3/1 X?y20/?y19/d/d/d/d/d; get Estates expertise (y1), hero experience (y2) and level (y3), skill specialty (y20=0 and y19=13 is Estates)
+!!FU&y1=0:E;                           exit if no Estates present
+
+ init w47
+!!VRw47&w47=0/y3<10:S1 R5;             init w47 with random 1..6 for lvl 1..9 and no init
+*!VRw47&w47<8/y3>9:+8;                 init w47 with cycling (no lvl 10 msg displayed then)
+!!VRw47&w47<8/y1=3/y3>9/v2369=0:S8;    init w47 standard cycling if Mithril script inactive and all conditions met
+!!VRw47&w47<8/y1=3/y3>9/v2369=1:S15;   init w47 Mithril cycling if Mithril script active and Exp Estates and lvl10+
+
+  init weekday names
+!!VRz-3&$weekday$=1:Sz164016;          monday
+!!VRz-3&$weekday$=2:Sz164017;           .
+!!VRz-3&$weekday$=3:Sz164018;           .
+!!VRz-3&$weekday$=4:Sz164019;           .
+!!VRz-3&$weekday$=5:Sz164020;           .
+!!VRz-3&$weekday$=6:Sz164021;           .
+!!VRz-3&$weekday$=7:Sz164022;          sunday
+
+
+  set appropriate z var for messagebox
+
+!!VRz-1:S^^;                             init z-1 [line added on 060912]
+!!VRy16&w47>0/w47<8/x2=12:S1;            lvl 1..9 left-click has OK button only
+!!VRz-1&w47>0/w47<8/y3=1:Sz164023;       lvl 1 text
+!!VRz-1&w47>0/w47<8/y3>1/y3<7:Sz164024;  lvl 2..6 text
+!!VRz-1&w47>0/w47<8/y3>6/y3<10:Sz164025; lvl 7..9 text
+  lvl 10+ and cycling
+!!VRy16&w47=8/x2=12/y1<3:S1;           lvl 10+ cycling left-click Bas/Adv Estates OK button only
+!!VRz-1&w47=8/x2=12/y1<3:Sz164026;     lvl 10+ cycling left-click Bas/Adv Estates
+!!VRz-1&w47=8/x2=12/y1=3:Sz164027;     lvl 10+ cycling left-click Expert Estates
+!!VRz-1&w47=8/x2=14:Sz164028;          lvl 10+ cycling right-click
+!!VRz-1&w47>8/w47<15/x2=12:Sz164029;   lvl 10+ chosen left-click
+!!VRz-1&w47>8/w47<15/x2=14:Sz164030;   lvl 10+ chosen right-click
+  lvl 10+ and Mithril chosen
+!!FU2333&w47>14:P-1/?y-17;             check current luck of current hero
+!!VRy4:Sy-17 *10;                      set daily chance
+!!VRy4&y4>100:S100;                    set daily chance 100% max if luck 10+
+!!VRy4&y4=0:S10;                       set daily chance 10% if zero luck
+!!VRy4&y4<0:S0;                        set daily chance 0% if negative luck
+!!VRz-1&w47>14/x2=12:Sz164031;         lvl 10+ Mithril chosen left-click
+!!VRz-1&w47>14/x2=14:Sz164032;         lvl 10+ Mithril chosen right-click
+
+  calculate correct resource pics
+
+!!VRy12:S20;                           set first pic as skill pic
+!!VRy13:S41 +y1;                       calculate correct Estates pic (according to expertise)
+!!VRy14&w47<8:Sw47;                    set resource display for lvl 1..9
+!!VRy14|w47=8/w47=16:S$weekday$;       if cycling (=8), or unlucky Mithril (=16), set pic to weekday resource
+!!VRy14&w47>8/w47<16:Sw47 -8;          set resource display for lvl 10+ chosen
+!!VRy12&y14=1:S0;                      if Wood/Ore then set first pic to Wood instead of Estates
+!!VRy13&y14=1:S1;                      .. set Wood amount
+!!VRy14&y14=1:S2;                      .. set Ore
+!!VRy14&y14=2/y13>1:S1;                set Mercury resource
+!!VRy14&y14=7/v2369=0:S6;              set gold resource instead of Mithril if Mithril script disabled (needed for weekday=sunday)
+!!VRy15:S1;                            resource amount
+!!VRy15&y14=6:S350;                    gold amount 350 instead of 1
+
+  calculate correct additional amount of gold text (dep on hero experience and Estates Expertise) [%gold, %x and %y]
+
+!!VRy5:Sy2 :10000;                     calculate additional gold bonus for display
+!!VRy6&y1=1:Sv2333 :4;                 set basic bonus factor
+!!VRy7&y1=1:S125;                      set basic standard value
+!!VRz-2&y1=1:Sz164033;                 set basic skill descriptor
+!!VRy6&y1=2:Sv2333 :2;                  .. adv
+!!VRy7&y1=2:S250;                       .. adv
+!!VRz-2&y1=2:Sz164034;                  .. adv
+!!VRy6&y1=3:Sv2333;                     ... exp
+!!VRy7&y1=3:S500;                       ... exp
+!!VRz-2&y1=3:Sz164035;                  ... exp
+!!VRy5:*y6;                            set bonus
+!!VRy5&y5>2000/y19<>13:S2000;          max of +2000 Gold/day (from lvl 25 on) unless Estates specialist
+!!VRy5&y5>5000:S5000;                  max of +5000 Gold/day (around lvl 30) even if Estates specialist
+!!VRy21:Sy7;                           standard gold bonus
+!!VRy7&y19=13/y20=0::20 *y3 +y21;      Estates display incl. specialty +5% per level bonus (y21)
+!!VRy22:Sy5;                           display additional gold (given by this script)
+!!VRy23:Sy2 :10000 *10;                calculate experience step for additional gold
+!!VRy23&y19<>13/y23>200:S200;          display max 200,000 exp step if no Estates specialist
+!!VRy23&y19=13/y23>500:S500;           display max 500,000 exp step if Estates specialist
+!!VRy5:+y7;                            total gold/day (incl. Estates spec, excl. Estates I)
+
+  if Estates I also active
+!!VRy17:S5 *y1;                        check if 5, 10 or 15 gold
+!!VRy18:Sy17 *y3;                      set 5/10/15 gold per level (from Estates I)
+!!VRy5&v2368=1:+y18;                   total if Estates I also active
+!!VRz-4&v2368=0:S^)^;                  if Estates I inactive
+!!VRz-4&v2368=1:Sz164036;              if Estates I active
+
+  finally display msgbox (incl z var, pics and button state from above)
+
+!!VRy11:S6 +v2369;                     init upper resource bound (Gold or Mithril if enabled)
+!!IF:V236/1;                           init flag 236
+!!IF:Q236/y12/y13/y14/y15/y16/z164037; main display
+
+#1: flag
+#2: type pic 1    (=20 for secondary skill)
+#3: subtype pic 1 (=skill incl expertise, here =41+EstatesExpertise)
+#4: type pic 2    (=1..7 for resource, -1 for none)
+#5: subtype pic 2 (=amount resource, 350 if gold (resource=6), else 1)
+#6: type message  (=1 OK button, =2 OK/Cancel buttons, =4 no button)
+
+!!DO2344/1/y11/1&-236/y1=3/y16=2:P;    if Cancel clicked (check flag), loop through resources (1..6 or 1..7 if Mithril allowed)
+!!VRw47&-236/y1=3/y16=2:S8;            set w47=8 (cycling) if final resource also rejected
+!!VRw47&-236/y1=3/y16=2/v2369=1:S15;   set w47=15 (Mithril cycling) if final resource also rejected and Mithril script active
+!!VRz-1&-236/y1=3/y16=2/v2369=0:S^^;   set empty string if no Mithril
+!!VRz-1&-236/y1=3/y16=2/v2369=1:Sz164014; Mithril selection line added to lvl 10 msg if Mithril active
+!!IF&-236/y1=3/y16=2/v2369=1:Q236/20/44/7/0/1/z164015; repeat the human only lvl10+ ExpEstMsgbox then
+
+
+  RESOURCE LOOP FUNCTION
+
+!?FU2344;                            resource change loop function
+!!VRy12:S20;                           init skill pic
+!!VRy13:S44;                           Expert Estates
+!!VRy14:Sx16;                          init resource
+!!VRy15:S1;                            amount
+!!VRy15&x16=6:S350;                    amount of gold
+!!VRy12&x16=1:S0;                      Wood pic instead of skill pic
+!!VRy13&x16=1:S1;                      amount 1 instead of ExpEst pic
+!!VRy14&x16=1:S2;                      Ore pic
+!!VRy14&x16=2:S1;                      Mercury pic
+!!IF:Q236/y12/y13/y14/y15/2/z164038;   selection msgbox for Expert Estates
+!!VRw47&236:Sx16 +8;                   set respective resource indicator if selected
+!!VRx16&236:S10;                       go for exit if selected
+
+******************************************************************************************
+
+** FIRST AID ENHANCED (2005 Aug 25)                            (for WoG v3.58f)
+** by Tobyn
+**
+** This script greatly enhances First Aid skill and hero specialty.
+** - First Aid skill summons and gives control over additional First Aid
+**   Tents (# of tents = hero level).
+**   The one warmachine Tent and Hierophant Commander Tents are added.
+** - Casts a Cure spell each healing, based on First Aid expertise (Expert
+**   First Aid will give Mass Cure) and spellpower equal to number of tents.
+**   Tent Healing Cursor upon two-hex-creatures gives Cure only if the left
+**   hex (position) is targetted, the right hex only gives standard healing.
+** - First Aid Specialty gives 2 Tents per hero level and temporary knowledge
+**   of three spells during that combat (Cure, Animate Dead and Resurrection)
+**   First Aid Specialty will also restore First Aid Tent Warmachine *if*
+**   hero had one before battle began, even if it was destroyed in battle.
+**
+** uses vars v2301..23
+** uses vars v2398..99 (99/98 attacking/defending hero)
+** ONLY ACTIVE if v2364=1 (wogify option 190)
+
+
+  INIT SKILL DESCRIPTION moved to script75.erm (skill descriptions)
+
+  BATTLE AFFAIRS BELOW
+
+  v2301=hero level, v2302=spellpower, v2303=1 if specialty, v2304=First Aid expertise,
+  v2305=1 if Tent warmachine present, v2306 amount of warmachine/Hierophant Tents
+  v2307=Cure, v2308=Resurrection and v2309=Animate Dead (=1 each if known by hero)
+  v2311..v2319 same for defender (if present)
+
+
+  BEFORE BATTLE
+
+!?BA52&v2364=1;                    start combat trigger for both sides (if script active)
+!!BA:H0/?v2399 H1/?v2398;            store attacking/defending hero numbers
+!!VRv2301:C0/0/0/0/0/0/0/0/0/0/0;    init v2301..11
+!!VRv2312:C0/0/0/0/0/0/0/0/0/0/0/0;  init v2312..23
+!!HEv2399:         Ed/?v2301 Fd/d/?v2302/d S27/?v2304 A2/6/?v2305/d M37/?v2307 M38/?v2308 M39/?v2309;
+!!HEv2398&v2398>-1:Ed/?v2311 Fd/d/?v2312/d S27/?v2314 A2/6/?v2315/d M37/?v2317 M38/?v2318 M39/?v2319;
+
+  First Aid Specialty
+!!HEv2399:X?y-1/?y-2/d/d/d/d/d;    get Attacker skill specialty
+!!VRv2303&y-1=0/y-2=27:S1;           set indicator if First Aid spec
+!!HEv2399&v2303=1:M37/1;             hero temp gets Cure spell during battle if specialist (even w/o First Aid skill)
+!!HEv2399&v2303=1/v2304>1:M38/1;     hero temp gets Animate Dead if Advanced or Expert specialist
+!!HEv2399&v2303=1/v2304>2:M39/1;     hero temp gets Resurrection if Expert specialist
+!!VRv2301&v2303=1:*2;                specialty gives 2 Tents per hero level
+!!HEv2398&v2398>-1:X?y-3/?y-4/d/d/d/d/d; get Defender skill specialty
+!!VRv2313&v2398>-1/y-3=0/y-4=27:S1;  set indicator if First Aid spec
+!!HEv2398&v2313=1:M37/1;             temp Cure spell during battle
+!!HEv2398&v2313=1/v2314>1:M38/1;     temp Animate Dead if Advanced or Expert
+!!HEv2398&v2313=1/v2314>2:M39/1;     temp Resurrection if Expert
+!!VRv2311&v2313=1:*2;                specialty gives 2 Tents per hero level
+
+
+  IN BATTLE (summon Tents and apply Cure spell)
+
+!?BF&v2364=1;                      start battlefield trigger (if script active)
+!!BU&v2304>0:E153/?v2306;            check if attacker already has tents
+!!BU&v2314>0:E168/?v2316;            check if defender already has tents
+!!BMv2306&v2304>0/v2306>0:Ndv2301;   add Tents for attacker
+!!BMv2316&v2314>0/v2316>0:Ndv2311;   add Tents for defender
+!!BU&v2304>0/v2306=-1:S147/v2301/153/0/-1/0; summons Tents for attacker
+!!BU&v2314>0/v2316=-1:S147/v2311/168/1/-1/0; summons Tents for defender
+
+!?BG&v2364=1;                      battleground action (useable by both sides) (if script active)
+!!BG:A?v2320;                          get current action (wait for Tent Healing)
+!!BG&v2320=11:N?v2321 D?v2322 Q?v2310; get Tent number, destination position, owner
+!!BMv2321&v2320=11:N?v2323;            get current amount of Tents
+!!BMv2321&v2320=11/v2310=0/v2304>0:C37/v2322/v2304/v2323/1; cast Cure on destination (left side)
+!!BMv2321&v2320=11/v2310=1/v2314>0:C37/v2322/v2314/v2323/1; cast Cure on destination (right side)
+
+
+  AFTER BATTLE (restore values given by First Aid Specialty)
+
+!?BG1&v2364=1;                     post-action trigger, if script active
+!!BU:C?y-1;                          check if combat has ended this turn
+!!FU&y-1=0:E;                        exit if it hasn't
+  attacker
+!!HEv2399&v2303=1/v2305>0:A1/6/15;   restore Tent if given and hero specialty
+!!HEv2399&v2303=1:M37/v2307 M38/v2308 M39/v2309; remove Cure, Res, AnDead spells if only given by Specialty
+  defender
+!!HEv2398&v2313=1/v2315>0:A1/6/15;   restore Tent if given and hero specialty
+!!HEv2398&v2313=1/v2398>-1:M37/v2317 M38/v2318 M39/v2319; remove Cure, Res, AnDead spells if only given by Specialty
+
+******************************************************************************************
+
+** WARFARE (2004 September 19)                                  (for WoG v3.58)
+** by Tobyn
+**
+** This script combines the three war machine skills Artillery, Ballistics
+** and First Aid and treats them as one skill. This new Warfare "skill"
+** gives you control over all three War Machines and standard SoD abilities
+** from all three skills.
+**
+** First Aid Tents get 750 HPs (only if no other First Aid enhancements active).
+**
+** Whenever a hero has one or more of the skills and a battle starts,
+** the hero will get all three skills at the highest expertise available.
+** Similar if clicked on any warfare skill in hero screen, but:
+** - if clicked on icon of any Warfare skill, you get standard skill description
+** - if clicked on text (name or expertise), you get another msgbox instead
+**   (left-click lets you choose, right-click cycles the displayed Warfare skill)
+**
+** Hero might temporarily have diverging expertises in the three Warfare
+** skills while on adventure map (e.g. via Witch Huts or through other ERM),
+** but this and display will adjust with the next click, levelup or battle.
+**
+** NOTE:
+** - side effect with Arstahd's Enhanced Commander Artifacts (give hero skills)
+**   As soon as an artifact with one of the three skills is obtained, player may
+**   get instant Expert Warfare with just a few mouse clicks and without further
+**   need for the Artifact thereafter
+**   (by toggling the Warfare skills while repeatedly equipping the artifact).
+**   Three free Expert skills for just temporarily having one artifact equipped. WOW!
+**   And you can always give it to another hero or to a commander afterwards...
+**
+** uses vars (v248)
+** uses vars v2398..99 (Tobyn universal vars, v2399/v2398 attacking/defending hero)
+** uses fcts FU2340,2341
+** uses strings z237..239 for skill names
+** uses Universal Timer TM1/2 (day1)
+** ONLY ACTIVE if v2365=1 (wogify option 193)
+
+
+  INIT SKILL NAMES (leaves descriptions unchanged)
+
+!?TM2&$day$=1/$once$=1/v2365=1;      triggers for first active color on day 1 only (if script active)
+;                                      (will trigger after script03.erm skill enhancement)
+!!UN:P54/?y-1;                         check if War Machines I is active (Overlord, script54, war machine levels)
+!!UN:P55/?y-2;                         check if War Machines II is active (Arstahd, script55, Tent mid-battle Resurrection)
+!!UN:P204/?y-3;                        check if First Aid I is active (Arstahd, script48, Tent post-battle Resurrection)
+!!UN:P190/?y-4;                        check if First Aid II is active (Tobyn, script64 see above, Tent Cure spell)
+!!UN:P201/?y-5;                        check if Artillery I is active (Arstahd, script48, pre-battle damage)
+
+!!MA&y-1=0/y-2=0/y-3=0/y-4=0:P147/750; all First Aid Tents will have 750 HPs (if neither First Aid skill nor the Tent war machine itself are enhanced)
+
+!!VRz237:Sz164039;                     if no warfare relevant skills were enhanced
+!!VRz238:Sz164040;                      .
+!!VRz239:Sz164041;                      .
+!!VRz237|y-1=1/y-2=1:Sz164042;         if Ballistics enhanced by script 54 or 55
+!!VRz238|y-5=1:Sz164043;               if Artillery enhanced by script 48
+!!VRz239|y-3=1/y-4=1:Sz164044;         if First Aid enhanced by script 48 or 64
+
+!!UN:G0/10/0/237 G0/20/0/238 G0/27/0/239;  set skill names to Warfare
+
+
+  MANUALLY SET WARFARE MAIN SKILL
+
+!?CM2&v2365=1;                       right-clicked at hero screen
+!!CM:I?y-1;                            get right-click number (y-1) (79..102 is skill area)
+!!CM:S?y-2;                            check left/right-click (=12 left click, =14 right click)
+!!FU2345:Py-1/-1/?y-3/?y-4/?y-5;       call skill click function (in: click number and hero number, out: skill (y-3), area (y-4) and slot (y-5))
+!!VRy-6|y-3=10/y-3=20/y-3=27:S1;       y-6 = 1 means either Bal, Art or FA was clicked
+!!CM&y-1>78/y-1<103/y-6=1/y-4>1:R0;    if clicked text area of a Warfare skill, disable standard skill click reaction
+!!FU2340&y-6=1:Py-4/y-2/y-3;           .. and call Warfare display function (in: skill area, left/right-click, skill)
+
+!?FU2340;                            Warfare skill display and determination (x1=skill area, x2=click type, x3=skill)
+!!VRy4&x2=12:S10;                      if left-click  then init y4:=10 (OK/Cancel buttons with three pics, two of them selectable)
+!!VRy4&x2=14:S4;                       if right-click then init y4:=4 (no button)
+!!CM&y4=0:R1;                          enable standard reaction if unidentified click and exit
+!!FU&y4=0:E;       BUG COUNTERMEASURE (clicking non-functional-areas after Estates (with disabled std reaction) erroneously gives another msgbox and nasty side effects)
+!!IF:W-1;                              set w var reference to current hero
+!!VRy5:S0;                             init y5
+!!VRy5&x1>1/x2=14:S1;                  set cycling "flag" y5 if right-clicked on text field (name or expertise)
+!!FU2341:P-1/x3/y5;                    determine and set Warfare expertise (highest of all three skills) on current hero (-1)
+!!HE-1:Sx3/?y6;                        get Warfare expertise
+
+!!VRy1|w48<>10:S32 +y6;                (calculate correct display for type 10 message below...)
+!!VRy1|w48=10:S62 +y6;                 (... which stores result (=1 left, =2 middle, =0 cancel)
+!!VRy2|w48=0/w48=27:S62 +y6;           (... in v var instead of normally used dialogue flag)
+!!VRy2|w48=10/w48=20:S83 +y6;           .
+!!VRy3|w48=0/w48=27:S83 +y6;            .
+!!VRy3|w48=10:S32 +y6;                  .
+!!VRy3|w48=20:S62 +y6;                  .
+!!VRv248:S0;                           init v248
+!!VRz-1&v2360>0:Sz164045;              msgbox text if short skill description (script75) active
+!!VRz-1&v2360=0:Sz164046;              if standard skill description (script75 inactive)
+
+!!IF&x1>1:Q248/20/y1/20/y2/20/y3/y4^%Z-1^;  msg each time Warfare skill text field (name or expertise) is clicked
+
+!!VRy7:S0;
+!!VRy7&v248=1/w48=27:S10;                   v248 |  1   2   0
+!!VRy7&v248=2/w48=27:S20;                 -------+-----------
+!!VRy7&v248=1/w48=20:S10;                 w48=10 | 20  27  10
+!!VRy7&v248=2/w48=20:S27;                     20 | 10  27  20
+!!VRy7&v248=1/w48=10:S20;                     27 | 10  20  27
+!!VRy7&v248=2/w48=10:S27;
+!!FU2341&v248>0:P-1/y7/0;              determine and set Warfare expertise (highest of all three skills) on current hero (-1)
+!!UN:R3/-1;                            redraw hero screen
+
+
+  GET WARFARE MAIN SKILL AND EXPERTISE
+
+!?FU2341;                  set Warfare main skill and expertise (x1=hero, x2= w48 or clicked Warfare skill, x3=if cycling)
+!!FU&x2<>0/x2<>10/x2<>20/x2<>27:E; exit if skill parameter invalid (neither none, Bal, Art nor FA)
+!!IF:Wx1;                    set w var reference to that hero
+!!HEx1:S10/?y1 S20/?y2 S27/?y3; get expertise of all three Warfare skills (y1, y2, y3)
+!!VRy4:Sy1;                  (calculate highest Warfare expertise (y4))
+!!VRy4&y2>y4:Sy2;             .
+!!VRy4&y3>y4:Sy3;             .
+!!HEx1:S10/0 S20/0 S27/0;    remove any Warfare skill (to later guarantee they are the last displayed skills)
+!!VRy6&x2=10/x3=1:S20;       cycle to display next skill (if skill text field (name or expertise) was right-clicked)
+!!VRy6&x2=20/x3=1:S27;        .
+!!VRy6&x2=27/x3=1:S10;        .
+!!VRx2&x2>0/x3=1:Sy6;         .
+!!VRx2&y4>0/x2=0:S10;        set Ballistics default if Warfare but no skill set for display yet
+!!HEx1&y4>0/x2>0:Sx2/y4;     set max expertise to clicked/selected Warfare skill
+!!VRw48&y4>0/x2>0:Sx2;       set hero var w48 to respective Warfare display skill
+!!HEx1:S?y5;                 get number of skills shown (y5)
+!!HEx1:S10/y4 S20/y4 S27/y4; give the other two skills at same expertise, but hide them afterwards
+!!HEx1&x2=10:S0/20/1 S0/27/1; if Bal then hide Art and FA
+!!HEx1&x2=20:S0/10/1 S0/27/1; if Art then hide Bal and FA
+!!HEx1&x2=27:S0/10/1 S0/20/1; if FA  then hide Bal and Art
+!!HEx1:Sy5;                  set back number of skills shown to avoid erroneous display
+
+
+  TRIGGERS TO SET CORRECT EXPERTISE FOR THE OTHER TWO WARFARE SKILLS
+
+!?HL-1&v2365=1;            hero levelup lets hero advance the other warfare skills to pre-levelup expertise [post-levelup trigger would be nice]
+!!IF:W-1;                    set w var reference to current hero
+!!FU2341:P-1/w48;            update Warfare skill levels and displayed skill
+
+!?OB104&v2365=1;           University pre-visit trigger
+!!IF:W-1;                    set w var reference to current hero
+!!FU2341:P-1/w48;            update Warfare skill levels and displayed skill
+
+!$OB104&v2365=1;           University post-visit trigger
+!!IF:W-1;                    set w var reference to current hero
+!!FU2341:P-1/w48;            update Warfare skill levels and displayed skill
+
+**OB63/51&v2365=1;         Market of Time pre/post-visit trigger [NOT RECOMMENDED]
+; pre-visit would still take place after script09 (Market of Time) effects
+; -> problem now adressed and rectified in Market of Time script09
+
+!$OB113&v2365=1;           Witch Hut post-visit trigger [pre-visit trigger might interfere with Advanced Witch Huts]
+!!IF:W-1;                    set w var reference to current hero
+!!FU2341:P-1/w48;            update Warfare skill levels and displayed skill
+
+!?BA52&v2365=1;            battle has started (trigger for both sides)
+!!BA:H0/?v2399 H1/?v2398;    store attacking/defending hero numbers
+!!IF:Wv2399;                 set w var reference to attacking hero
+!!FU2341:Pv2399/w48;         check attacking hero
+!!IF&v2398>-1:Wv2398;          set w var reference to defending hero (if any)
+!!FU2341&v2398>-1:Pv2398/w48;  check defending hero (if any)
+
+******************************************************************************************
+
+** CONFLUX RAMPART MONSTER CHANGE (2004 September 19)           (for WoG v3.58)
+** by Tobyn
+**
+** Rampart gives one Faerie Dragon instead of two Green Dragons per week
+** Rampart gives one Diamond Dragon instead of two Gold Dragons per week
+** Conflux gives 3 Firebirds/Phoenix instead of 4 per week (if Neutral Town script67 inactive)
+**
+** NOTE: Faerie Dragon resource will be *displayed* as Crystal, but it *is* Gems.
+** Can't display different resources for upg and std in same hire dialogue box.
+**
+** BTW: how to change building cost without using \data\building.txt file?
+**
+** USES universal timer TM1/2, functions FU2334, var (v2324..2327), (flag 1)
+** ONLY ACTIVE if v2366=1 or v2367=1 (wogify options 188 and 189)
+
+!#UN&v2366=1:T1/6/0/134 T1/6/1/151;  replace Green->FaerieDrag, Gold->DiaDrag
+!#MA&v2366=1:C151/6/12000 O134/1;    DiaDrag 8000->12000 Gold, FaerieDrag neutral->Rampart
+!#MA&v2366=1:U26/27;                 GreenDrag still upgrades to GoldDrag at Hill Fort
+
+!?TM2&$weekday$=1/$once$=1;          get town coords and change every Rampart/Conflux ONCE every monday
+!!UN&v2367=1:P67/?y-1;                 check if Neutral Town script67 is active
+!!VRv2367&y-1=1:S0;                    if so, disable reduction in Neutral "Conflux" Town
+!!UN|v2366=1/v2367=1:U98/-1/?v2324;    store how many towns there are
+!!VRv2325|v2366=1/v2367=1:S-1;         set index to -1 for new quick UN:U search
+!!DO2334/1/v2324/1|v2366=1/v2367=1:P;  call Rampart/Conflux mod loop
+
+!?FU2334;                            each Rampart/Conflux with Castle gets one lvl 7 creature less
+!!IF:V1/0;                             init flag 1
+!!UN:U98/-1/-1/2325;                   get coordinates (v2325..2327) (uses new quick UN:U index -1 instead of x16)
+!!OBv2325/v2326/v2327:U?y1;            check town type (1=Rampart, 8=Conflux)
+!!CAv2325/v2326/v2327:B3/9;            check if Castle built in that town
+!!VRy1&-1:S-10;                        forget about that town if no Castle
+!!CAv2325/v2326/v2327&y1=1/v2366=1:M1/6/d-1/d-1; subtract one lvl 7 if OK and Rampart options active
+!!CAv2325/v2326/v2327&y1=8/v2367=1:M1/6/d-1/d-1; subtract one lvl 7 if OK and Conflux options active
+
+**================ END OF SCRIPT ==================**
+

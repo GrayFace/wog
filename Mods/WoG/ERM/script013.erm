@@ -1,0 +1,381 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Tavern Card Game ERM Script Version 1.2 created by Timothy E. Pulver
+**   Updated: September 18, 2003
+
+** This script enhances all standalone Taverns on a map by adding a simple
+** gambling game where heroes can gamble away their hard-won gold. It's
+** purely a game of chance with few real decisions, but you can choose to
+** put down a high or low stake which will determine how much you'll end up
+** winning or losing. For example, if there are 3 other players, the low stake
+** will be 300 gold and the high stake will be 3000. A hero's luck bonus plays
+** a role in the equation too. The higher the luck bonus, the more chance of
+** winning. And if the hero knows the Fortune spell (and has enough spell
+** points left), he or she will be given the opportunity to cast it. The grand
+** prize in this game is a magical pendant in addition to a nice return on your
+** gold. However, if a hero gets TOO lucky or wins too often the other card
+** players may accuse the hero of cheating or the tavern owner may bar him
+** or her from playing for awhile. The tavern also continues to function as
+** usual as a place to recruit new heroes.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure that
+** you disable ALL colours from receiving the event and/or change the event
+** day to 500 or later to avoid the ERM script popping up as if it were a
+** regular event message.
+
+** And of course, you'll also need to put one or more Taverns on your map for
+** the heroes to visit. Happy gambling! :-)
+
+** Version 1.2 automatically equips any amulets won, using the new HE:A4 command.
+
+Function #s used in this code: 1, 2
+
+Flags used in this code: 1, 400-408
+1=used for many things - tests etc.
+400=Q value only - flag not changed
+401=true if hero wants to, and is able to play
+402=true if hero has enough movement points left to play
+403=true if player's gold is less than the game's high stake value
+404=true if hero knows fortune spell
+405=true if player still wants to play despite being low on gold
+406=true if player has enough gold for high stake *or* has enough only for low stake and still wishes to play
+407=true if hero casts fortune spell
+408=true if player fights monsters to get winnings back
+
+Variables used in this code: v400-v419, z201-z205, w41-w42
+v400 = current date - "date too many games were won" by hero
+v401 = $players$ = number of card players
+v402 = $luck$ = artifact luck/hero's total luck bonus
+v403 = $mana$ = hero's current spell points
+v404 = $air$ = hero's air magic skill
+v405 = $cost$ = cost of casting fortune
+v406 = $skill$ = hero's luck skill
+v407 = $tluck$ = hero's temporary luck
+v408 = $lstake$ = low gold stake
+v409 = $hstake$ = high gold stake
+v410 = $gold$ = player's current gold
+v411 = $stake$ = stake chosen stake for this game
+v412 = $result$ = outcome of this game
+v413 = $prize$ = artifact pendant prize
+v414 = random monster number
+v415 = x location of hero
+v416 = y location of hero
+v417 = l location of hero
+v418 = random number for choosing name of "winning card combo"
+v419 = new random number for checking for monster "cheating" accusations
+v420 = number of players for message display purposes
+w41 = number of games won by hero
+w42 = date that hero won "too many games"
+z201 = $hname$ = Hero's name
+z202 = $gcards$ = winning hand for $result$ of 95 or higher
+z203 = $you1$ = preface for some game result text
+z204 = $you2$ = preface for some other game result text
+z205 = message text for knowledge of fortune spell
+
+[Set up macro names]
+!#MCv401:S@players@; [v401 can now also be referenced as $players$]
+!#MCv402:S@luck@;  [v402 can now also be referenced as $luck$   - hero's total luck bonus]
+!#MCv403:S@mana@;  [v403 can now also be referenced as $mana$   - hero's current spell points]
+!#MCv404:S@air@;   [v404 can now also be referenced as $air$    - hero's air magic skill]
+!#MCv405:S@cost@;  [v405 can now also be referenced as $cost$   - cost of casting Fortune)]
+!#MCv406:S@skill@;  [v406  can now also be referenced as $skill$  - hero's luck skill)]
+!#MCv407:S@tluck@;  [v407  can now also be referenced as $tluck$
+                                - hero's temporary luck)]
+!#MCv408:S@lstake@; [v408  can now also be referenced as $lstake$
+                                 - low gold stake]
+!#MCv409:S@hstake@; [v409  can now also be referenced as $hstake$
+                                 - high gold stake]
+!#MCv410:S@gold@;   [v410  can now also be referenced as $gold$
+                              - player's current gold]
+!#MCv411:S@stake@;  [v411  can now also be referenced as $stake$
+                                 - stake chosen for this game]
+!#MCv412:S@result@; [v412  can now also be referenced as $result$
+                              - outcome of game]
+!#MCv413:S@prize@;  [v413  can now also be referenced as $prize$
+                               - artifact pendant prize]
+
+!#MCz201:S@hname@;  [z201 can now also be referenced as $hname$
+                            - hero's name]
+!#MCz202:S@gcards@;  [z202  can now also be referenced as $gcards$
+                            - winning hand for $result$ of 95 or higher]
+
+!#MCz203:S@you1@;    [z203  can now also be referenced as $you1$]
+!#MCz204:S@you2@;    [z204  can now also be referenced as $you2$
+
+
+!?OB95;            [Triggers when any tavern is visited]
+
+!!UN:P13/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!OB998:R;       [Enables tavern for all players]
+
+ [Clear flags 1, 400-408]
+!!IF:V1/0 V400/0 V401/0 V402/0 V403/0 V404/0 V405/0 V406/0 V407/0 V408/0;
+
+[Zero variables (just to be sure)]
+!!VR$luck$:S0;   !!VR$mana$:S0;
+!!VR$air$:S0;    !!VR$cost$:S0;
+!!VR$skill$:S0;   !!VR$tluck$:S0;
+!!VR$lstake$:S0;   !!VR$hstake$:S0;
+!!VR$gold$:S0;    !!VR$stake$:S0;
+!!VR$result$:S0;   !!VR$prize$:S0;
+
+!!HE-1:W>=300;  [Check if hero has 300+ movement points remaining this turn]
+!!IF&1:V401/1 V402/1;  [Set flags 401 and 402 to true if hero has enough movement left]
+
+!!VR$players$:S2 R3;  [Set $players$ to random number between 2 and 5 (number of card players)]
+!!IF&401/1000:Q401/z113000;  [If hero has enough movement, ask if he/she wishes to play - store result in flag 401]
+
+[Check if hero has been winning too many games lately]
+!!HE-1:B0/?$hname$;  [Assign hero's name to $hname$ variable]
+!!IF:W-1;            [Set current hero's hero variables to active]
+!!VRv400:S0;      [Clear v400]
+
+[If hero has won too many games recently...]
+!!VRv400&w42>0:Sc0 -w42;  [Set v400 equal to current date minute date  that too many games were won]
+!!VRv400&w42>0::4;  [Divide v400 variable by 4]
+!!VRw41&w42>0/v400>=1:-v400 -1; [Reduce "games won" counter by 1 for every 4 days that have passed since winning too many, plus 1 more]
+!!VRw42&v400>=1/w42>0:Sc0; [Reset w42 to current date]
+!!IF&401/w41>=10/1000:V401/0 Mz113001;
+  [If hero has won too many games recently, set flag 401 to false and display   above message]
+
+!!IF&-402/1000:M1/z113002;
+  [If hero doesn't have enough movement points left, display above message]
+
+[At this point flag 401 will only be true if hero has enough movement AND wishes to play]
+
+!!FU1&401/1000:P;  [If flag 401 is true, call Function 1 with no parameters]
+
+!!IF&1000:Q1/z113003;  [Ask if player wants to enter tavern]
+!!OB998&-1/1000:S;  [If player answers no to tavern query, disables tavern for all players]
+
+---------------------------------------------------------------------------------------
+
+!?FU1;  [Function 1 starts here]
+
+!!IF:V402/0;  [Set flag 402 to false so it can be reused]
+
+[Calculate Hero's current luck bonus from artifacts]
+!!VR$luck$:S0;  [Set luck to 0]
+!!HE-1:A2/45/>0/>0;    [Check if hero has Still Eye of the Dragon]
+!!VR$luck$&1:+1; [Add 1 to luck if hero has above artifact equipped]
+!!HE-1:A2/46/>0/>0;    [Check if hero has Clover of Fortune]
+!!VR$luck$&1:+1; [Add 1 to luck if hero has above artifact equipped]
+!!HE-1:A2/47/>0/>0;    [Check if hero has Cards of Prophecy]
+!!VR$luck$&1:+1; [Add 1 to luck if hero has above artifact equipped]
+!!HE-1:A2/48/>0/>0;    [Check if hero has Ladybird of Luck]
+!!VR$luck$&1:+1; [Add 1 to luck if hero has above artifact equipped]
+!!HE-1:A2/108/>0/>0;   [Check if hero has Pendant of Courage]
+!!VR$luck$&1:+3; [Add 3 to luck if hero has above artifact equipped]
+
+!!HE-1:S9/?$skill$;  [Store hero's luck skill in $skill$ variable]
+!!HE-1:R1/?$tluck$;  [Store hero's current tempory luck in $tluck$ variable]
+
+[Add luck skill plus temporary luck to luck from artifacts]
+!!VR$luck$:+$skill$;
+!!VR$luck$:+$tluck$;
+
+!!HE-1:M=51/1; [Check if hero knows Fortune spell]
+!!IF&1:V404/1;   [Sets flag 404 to true if hero knows Fortune spell]
+
+!!HE-1&-404:A2/1052/>0/>0; [If hero doesn't know spell, check if hero has
+                                                Fortune scroll]
+!!IF&1:V404/1;  [Sets flag 404 to true if hero has Fortune scroll equipped]
+
+!!HE-1:A2/85/>0/>0;  [Check if hero has Hourglass of the Evil Hour]
+!!VR$luck$&1:S0; [Cancel all luck bonuses if above artifact is equipped]
+!!IF&1:V404/0;  [Cancel Fortune spell query if above artifact is equipped]
+
+----------
+
+!!HE-1:I?$mana$;   [Store hero's spell points in $mana$]
+
+!!HE-1&404:S15/?$air$;  [If hero knows Fortune, store level of air magic skill in $air$]
+
+!!VR$cost$&404/$air$=0:S7;  [If hero knows Fortune but not air magic, set spell point cost to 7]
+!!VR$cost$&404/$air$>=1:S5; [If hero knows Fortune and air magic, set spell point cost to 5]
+
+  [Set value of z205 depending on value of $air$ (level of air magic skill)]
+!!VRz205&$air$=0:Sz113004;
+!!VRz205&$air$=1:Sz113005;
+!!VRz205&$air$=2:Sz113006;
+!!VRz205&$air$=3:Sz113007;
+
+!!VR$air$&404/$air$=0:S1; [If hero knows Fortune but not air magic, set $air$ to 1]
+
+  [If hero knows Fortune, and has enough spell points, ask if he/she wishes to cast spell]
+!!IF&404/$mana$>=$cost$:Q407/9/51/2/z113008;
+
+!!VR$cost$:S$cost$ *-1; [Change cost value to a negative number]
+
+  [If hero casts Fortune, display this message]
+!!IF&407:Q400/35/$cost$/1/z113009;
+
+!!HE-1&407:Id$cost$;        [If hero casts Fortune, reduce spell points by $cost$]
+!!VR$luck$&407:+$air$;  [If hero casts Fortune, add Fortune bonus ($air$) to $luck$]
+
+[Depending on level of $luck$, display the following messages]
+!!IF&$luck$=-1:Q400/13/1/1/z113010;
+
+!!IF&$luck$=-2:Q400/13/1/13/1/1/z113011;
+
+!!IF&$luck$=-3:Q400/13/1/13/1/13/1/1/z113012;
+
+!!IF&$luck$<=-4:Q400/13/1/13/1/13/1/1/z113013;
+
+!!IF&$luck$=1:Q400/11/1/1/z113014;
+!!IF&$luck$=2:Q400/11/1/11/1/1/z113015;
+!!IF&$luck$=3:Q400/11/1/11/1/11/1/1/z113016;
+!!IF&$luck$=4:Q400/11/1/11/1/11/1/1/z113017;
+!!IF&$luck$=5:Q400/11/1/11/1/11/1/1/z113018;
+!!IF&$luck$=6:Q400/11/1/11/1/11/1/1/z113019;
+!!IF&$luck$=7:Q400/11/1/11/1/11/1/1/z113020;
+!!IF&$luck$>=8:Q400/11/1/11/1/11/1/1/z113021;
+
+!!VR$luck$:S$luck$ *7;  [Multiply $luck$ by 7 -- percentage bonus added to $result$]
+
+----------
+
+!!VR$lstake$:S100 *$players$;   [Set amount of low stake to 100 x $players$]
+!!VR$hstake$:S$lstake$ *10;     [Set amount of high stake to 10 x $lstake$]
+
+!!OW:R-1/6/?$gold$;  [store player's current amount of gold in $gold$]
+
+!!IF&$gold$<$lstake$:V402/1;  [If $gold$ is less than $lstake$, set flag 402 to true]
+!!IF&$gold$<$hstake$:V403/1;  [If $gold$ is less than $hstake$, set flag 403 to true]
+
+  [If player doesn't have enough gold for the low stake, display this message]
+!!IF&402:M1/z113022;
+
+  [If player only has enough gold for low stake, display this dialogue instead]
+!!IF&-402/403:Q405/36/$lstake$/2/z113023;
+
+!!IF&-402/403/405:V406/1;  [If low on gold and player clicks OK to play, set flag 406 to true]
+
+  [If player has enough gold for high stake, display stake-choice dialogue]
+!!IF&-402/-403:Q405/36/$lstake$/36/$hstake$/7/z113024;
+
+!!VR$stake$&-402/405:S$lstake$;      [If flag 405 is 1, set $stake$ equal to $lstake$]
+!!VR$stake$&-402/-403/-405:S$hstake$;  [If flag 405 is 0, set $stake$ equal to $hstake$]
+
+!!IF&-402/-403:V406/1;  [If player has enough gold for high stake, set flag 406 to true]
+
+!!FU2&406:P0;       [If flag 406 is true, call Function 2 with dummy parameter (0)]
+
+
+----------------------------------------------------------------------------------
+
+!?FU2; [Function 2 starts here]
+
+!!HE-1:R1/0;          [Set hero's temporary luck to 0]
+!!HE-1:Wd-4;          [Reduce hero's remaining movement for the day by 4]
+
+[Set up $you1$ (z203) and $you2$ (z204) with appropriate messages depending on hero's level of luck]
+!!VR$you1$&$luck$<0:Sz113025;
+!!VR$you1$&$luck$>0:Sz113026;
+!!VR$you1$&$luck$=0:Sz113027;
+!!VR$you2$&$luck$>=0:Sz113028;
+!!VR$you2$&$luck$<0:Sz113029;
+
+----------
+
+!!VR$result$:S1 T99;  [Set $result$ to random number from 1-100]
+!!VR$result$:+$luck$; [Add $luck$ to $result$]
+
+[If $result$ is 30 or less display this message]
+!!IF&$result$<=30:Q401/13/1/1/z113030;
+
+!!VR$stake$&$result$<=30:S$stake$ *-1;  [Multiply $stake$ by -1]
+!!OW&$result$<=30:R-1/6/d$stake$;       [Reduce player's gold by $stake$]
+!!VRw41&$result$<=30/w41>1:-2;  [If hero loses game, reduce win/loss count by 2]
+!!VRw41&$result$<=30/w41=1:-1;  [If hero loses game and w41=1, reduce win/loss count by 1]
+
+----------
+
+[If $result$ is between 31 and 60...]
+!!VR$stake$&$result$>30/$result$<=60:S$stake$:2;        [Divide $stake$ by 2]
+
+[...and display this message]
+!!IF&$result$>30/$result$<=60:Q401/13/1/1/z113031;
+
+!!VR$stake$&$result$>30/$result$<=60:S$stake$*-1;  [Multiply $stake$ by -1]
+!!OW&$result$>30/$result$<=60:R-1/6/d$stake$; [Reduce player's gold by $stake$]
+!!VRw41&$result$>30/$result$<=60/w41>0:-1;  [If hero loses game, reduce win/loss count by 1]
+
+----------
+
+[If $result$ is between 61 and 75 display this message]
+!!IF&$result$>60/$result$<=75:Q401/36/0/1/z113032;
+
+----------
+
+[If $result$ is between 76 and 95 display this message]
+!!IF&$result$>75/$result$<=95:Q401/6/$stake$/1/z113033;
+!!VRw41&$result$>75/$result$<=95:+1;  [If hero wins game, increase win/loss count by 1]
+
+----------
+
+!!VR$prize$&$result$>95:S100 R8;    [If $result$ > 95, set $prize$ to random number (100 to 108)]
+!!VR$stake$&$result$>95:S$stake$*2; [If $result$ > 95, double value of $stake$]
+
+[Generate a random number and assign winning card string to $gcards$ (z202) for use if hero get a result of 95 or higher]
+!!VRv418:S0;
+!!VRv418&$result$>95:S1 R5;
+!!VR$gcards$&v418=1:Sz113034;
+!!VR$gcards$&v418=2:Sz113035;
+!!VR$gcards$&v418=3:Sz113036;
+!!VR$gcards$&v418=4:Sz113037;
+!!VR$gcards$&v418=5:Sz113038;
+!!VR$gcards$&v418=6:Sz113039;
+
+  [If $result$ > 95, display this message]
+!!IF&$result$>95:Q401/6/$stake$/8/$prize$/1/z113040;
+
+!!HE-1&$result$>95:A4/$prize$;      [If $result$ > 95, give hero artifact $prize$]
+!!VRw41&$result$>95:+2;  [If hero gets 5 aces, increase win/loss count by 2]
+
+----------
+
+!!OW&$result$>75:R-1/6/d$stake$;  [If $result$ > 75, increase player's gold by $stake$]
+
+----------
+
+!!VRw42&w41>=10:Sc0;  [Place the day that hero "won too many games" into his or her w42 variable]
+
+----------
+
+[If result is greater than 100, generate random monsters as the other card players (all are same type = to number of players) who accuse hero of cheating and will attack if he doesn't give them back the winnings]
+
+[Generate random monster number and assign to v414]
+!!VRv419:S0;
+!!VRv414&$result$>100:S0 T144;
+!!VRv414&v414=122:S0 T121;
+!!VRv414&v414=124:S0 T121;
+!!VRv414&v414=126:S0 T121;
+!!VRv414&v414=128:S0 T121;
+
+!!HE-1:P?v415/?v416/v417;  [Store hero's map coordinates in v415, v416, v417]
+
+[Generate a new random number: 0-50 plus (result minus 100). Assign to v419]
+!!VRv419&$result$>100:S$result$ T50;
+!!VRv419&$result$>100:-100;
+
+[Display "cheating" message and ask if hero will fight or give up winnings]
+!!VRv420&v419>40:S$players$ *65536 +v414;
+!!IF&v419>40:Q408/21/v420/2/z113041;
+
+[Display message that other players take hero's winnings - remove winnings]
+!!IF&v419>40/-408:Q1/36/$stake$/8/$prize$/1/z113042;
+!!VR$stake$:*-1;
+!!OW&v419>40/-408:R-1/6/d$stake$;
+!!HE-1&v419>40/-408:A3/$prize$/1/1;
+
+[Display message that other card players attack hero - initiate attack]
+!!IF&v419>40/408:M1/z113043;
+!!HE-1&v419>40/408:Tv415/v416/v417/v414/$players$;
+

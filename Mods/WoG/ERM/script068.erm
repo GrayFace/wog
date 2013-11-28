@@ -1,0 +1,161 @@
+ZVSE
+ERMS_ScriptName=New Battlefields
+ERMS_ScriptAuthor=Jonas_Gustafsson_and_SergRoj
+ERMS_ScriptVersion=1.2
+ERMS_ScriptDate=10.9(September).2007
+ERMS_ScriptERMVersion=2.80
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=(v1-v9);(z1);v152;v153
+ERMS_ScriptUsedFlags=1
+ERMS_ScriptUsedFunctions=FU62;FU63
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+* Made by SergRoj (sergroj@mail.ru)
+* Original script made by Jonas Gustafsson (jonas@byteware.de)
+* Original battlefields are made by Dutch, Robert Bergerfjäll, Jonas Gustafsson.
+
+*HOW TO USE:
+* Put all ***.pcx files in DATA\s folder.
+* If you make new battlefields, name them as follows:
+* NAME.pcx, NAME1.pcx, NAME2.pcx, NAME3.pcx, ...
+* (NAME.pcx may be skipped)
+* Where NAME is one of:
+* 1) Standard lands:
+*      dirt, sand, grass, snow, swamp, rough, subt, lava, water
+* 2) New lands from SoD:
+*      magic, fiery, rockl, air, lucid, holy, clover, evil, cursed
+* 3) Special lands:
+*      dualship is for fight of two heroes on boats
+*      watertown is for the case if someone wants to put a town on water :)
+* 4) Land for object type:
+*      t#pic
+*      where # is the object type
+*    Example:
+*      Dragon Utopia. type = 25, NAME = t25pic, so picture names chain is
+*      t25pic.pcx, t25pic1.pcx, t25pic2.pcx, t25pic3.pcx, ...
+* 5) Land for particular object:
+*      t#s$pic
+*      where # is the object type
+*            $ is the object subtype
+*    Example:
+*      Dwarven Treasury. type = 16, subtype = 1, so NAME = t16s1pic,
+*      picture names chain is t16s1pic.pcx, t16s1pic1.pcx, t16s1pic2.pcx,...
+*
+* In cases 4 and 5 the standard picture is ignored.
+*
+* The size of pictures must be 800 x 556 and they must be in 256 colors mode.
+
+
+_DECLARATION_Generated code=
+
+!#VRv152:S0;
+
+!?OB5  ; [Artifact]                 !!OB998:T?v152 U?v153; !$OB5; !!VRv152:S0;
+!?OB6  ; [Pandora's Box]            !!OB998:T?v152 U?v153; !$OB6; !!VRv152:S0;
+!?OB16 ; [Creature Bank]            !!OB998:T?v152 U?v153; !$OB16; !!VRv152:S0;
+!?OB17 ; [Creature Generator 1]     !!OB998:T?v152 U?v153; !$OB17; !!VRv152:S0;
+!?OB18 ; [Creature Generator 2]     !!OB998:T?v152 U?v153; !$OB18; !!VRv152:S0;
+!?OB19 ; [Creature Generator 3]     !!OB998:T?v152 U?v153; !$OB19; !!VRv152:S0;
+!?OB20 ; [Creature Generator 4]     !!OB998:T?v152 U?v153; !$OB20; !!VRv152:S0;
+!?OB24 ; [Derelict Ship]            !!OB998:T?v152 U?v153; !$OB24; !!VRv152:S0;
+!?OB25 ; [Dragon Utopia]            !!OB998:T?v152 U?v153; !$OB25; !!VRv152:S0;
+!?OB33 ; [Garrison]                 !!OB998:T?v152 U?v153; !$OB33; !!VRv152:S0;
+!?OB34 ; [Hero]                     !!OB998:T?v152 U?v153; !$OB34; !!VRv152:S0;
+!?OB43 ; [Monolith One Way Entrance]!!OB998:T?v152 U?v153; !$OB43; !!VRv152:S0;
+!?OB45 ; [Monolith Two Way]         !!OB998:T?v152 U?v153; !$OB45; !!VRv152:S0;
+!?OB53 ; [Mine]                     !!OB998:T?v152 U?v153; !$OB53; !!VRv152:S0;
+!?OB54 ; [Monster]                  !!OB998:T?v152 U?v153; !$OB54; !!VRv152:S0;
+!?OB63 ; [Object]                   !!OB998:T?v152 U?v153; !$OB63; !!VRv152:S0;
+!?OB79 ; [Resource]                 !!OB998:T?v152 U?v153; !$OB79; !!VRv152:S0;
+!?OB84 ; [Crypt]                    !!OB998:T?v152 U?v153; !$OB84; !!VRv152:S0;
+!?OB85 ; [Shipwreck]                !!OB998:T?v152 U?v153; !$OB85; !!VRv152:S0;
+!?OB93 ; [Spell Scroll]             !!OB998:T?v152 U?v153; !$OB93; !!VRv152:S0;
+!?OB98 ; [Town]                     !!OB998:T?v152 U?v153; !$OB98; !!VRv152:S0;
+!?OB103; [Subterranean Gate]        !!OB998:T?v152 U?v153; !$OB103; !!VRv152:S0;
+!?OB219; [Garrison]                 !!OB998:T?v152 U?v153; !$OB219; !!VRv152:S0;
+!?OB220; [Mine]                     !!OB998:T?v152 U?v153; !$OB220; !!VRv152:S0;
+
+
+_DECLARATION_Script Body=
+
+!?BA0&1000; [do this code when a battle starts but not for AI-only battles]
+!!FU62:P;
+
+!?BA50&1000; [for defender in MP battle]
+!!FU62:P;
+
+!?FU62;
+!!UN:P68/?y-1; [check if script is enabled]
+!!BA:Q?y-2 A?y-3; [y-2=1 if it's a Quick Combat battle y-3=1 if AI vs AI]
+!!FU|y-1<>1/y-2=1/y-3=1:E; [exit if script isn't enabled or if quick battle]
+!!BA:B-1 H1/?y-4 S?y-7; [enable default battlefield, y-4 = defender hero]
+*                       [y-7=1 if it's a siege battle]
+!!BA:P?v1/?v2/?v3; [get x/y/level of battle in v1-v3. It's for 2 lines below]
+!!TR1:T?y-2/d/d/d/d/d/d/d;  [get terrain, rivers, roads]
+!!TR1:G?y-3; [check for special terrain: y-3]
+
+!!VRz1&y-2=0:S^dirt^; [Standard fields]
+!!VRz1&y-2=1:S^sand^;
+!!VRz1&y-2=2:S^grass^;
+!!VRz1&y-2=3:S^snow^;
+!!VRz1&y-2=4:S^swamp^;
+!!VRz1&y-2=5:S^rough^;
+!!VRz1&y-2=6:S^subt^;
+!!VRz1&y-2=7:S^lava^;
+!!VRz1|y-2=8/v152=24/v152=85:S^water^; [also for Derelict Ship and Shipwreck]
+* Note: there is a SOD bug that new fields override the ship background normally
+* set for Derelict Ship and Shipwreck
+
+!!VRz1&y-2<>8/y-3=046:S^magic^; [Special Fields]
+!!VRz1&y-2<>8/y-3=226:S^fiery^;
+!!VRz1&y-2<>8/y-3=231:S^rockl^;
+!!VRz1&y-2<>8/y-3=229:S^air^;
+!!VRz1&y-2<>8/y-3=228:S^lucid^;
+!!VRz1&y-2<>8/y-3=227:S^holy^;
+!!VRz1&y-2<>8/y-3=222:S^clover^;
+!!VRz1&y-2<>8/y-3=224:S^evil^;
+!!VRz1&y-2<>8/y-3=021:S^cursed^;
+!!VRz1&y-2=8/y-4<>-2:S^dualship^;
+!!VRz1&y-2=8/y-7<>0:S^watertown^;
+* [Now we have the name in z1]
+
+
+* OPTION:  Priority of the standard picture is 1, same as of any new picture.
+*          Increase this value to make standard pictures appear more often.
+!!VRv9:S1;
+
+
+!!VRz2:S^t%V152pic^;
+!!UN:J8/5/^%Z2.pcx^;
+!!VRz3&-1:Sz2 +^1^;
+!!UN&-1:J8/5/^%Z3.pcx^; [Flag1 = 1 if there is a type picture]
+!!VRz1&1:Sz2;
+!!VRv9&1:S0;
+
+!!VRz2:S^t%V152s%V153pic^;
+!!UN:J8/5/^%Z2.pcx^;
+!!VRz3&-1:Sz2 +^1^;
+!!UN&-1:J8/5/^%Z3.pcx^; [Flag1 = 1 if there is a subtype picture]
+!!VRz1&1:Sz2;
+!!VRv9&1:S0;
+
+!!IF:V1/1;
+!!DO63/1/99999/1:P?y-1; [Count number of pictures in y-1]
+!!UN:J8/5/^%Z1.pcx^; [Flag1 = 1 if there is a picture without a number]
+!!VRy-1&1:+1;
+!!FU&y-1=0:E; [If no pics]
+!!VRv1:Sv9;
+!!VRy-1:+v1 -1; [-1 for WOG random]
+!!VRy-2:S0 Ry-1;
+!!VRy-2:-v1;
+!!VRy-2&-1:+1;
+!!BA&1/y-2=0:B^s\%Z1.pcx^;
+!!FU&y-2<=0:E; [Exit if standard or already changed]
+!!BA:B^s\%Z1%Y-2.pcx^;
+
+
+!?FU63; [In: z1,x16, Flag1=1    Out: Count number of pictures to x1]
+!!UN:J8/5/^%Z1%X16.pcx^; [Check if picture number x16 is present]
+!!VRx1&-1:Sx16 -1;
+!!VRx16&-1:S100000; [Exit DO]
+

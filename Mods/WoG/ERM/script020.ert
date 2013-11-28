@@ -1,0 +1,56 @@
+120000	{Week of Monsters} 
+ 
+Week one is not a monster week.	String type = <!!Q>	07.06.2003
+120001	 
+{+%V190 Attack}	String type = <!!S>	07.06.2003
+120002	 
+{+%V190 Defense}	String type = <!!S>	07.06.2003
+120003	 
+{+%V190 Damage}	String type = <!!S>	07.06.2003
+120004	 
+{+%V190 Health}	String type = <!!S>	07.06.2003
+120005	 
+{+%V190 Speed}	String type = <!!S>	07.06.2003
+120006	 
+{+%V190 Growth}	String type = <!!S>	07.06.2003
+120007	{Week of the %Z197.} 
+All %Z198 receive the 
+following bonuses all week: 
+%Z190	String type = <!!S>	07.06.2003
+120008	{Week of the Imp} 
+All Imps recieve the 
+following bonuses all week: 
+{+1 Attack} 
+{+1 Defense} 
+{+1 Damage} 
+{+1 Health} 
+{+1 Speed} 
+{+15 Growth(Familiars too)}	String type = <!!S>	07.06.2003
+120009	{Week of the Woodcutter.} 
+ 
+All Sawmills produce 
+4 wood/day.	String type = <!!S>	07.06.2003
+120010	{Week of the Alchemist.} 
+ 
+All Alchemist's Labs produce 
+2 mercury/day.	String type = <!!S>	07.06.2003
+120011	{Week of the Miner.} 
+ 
+All Ore Mines produce 
+4 ore/day.	String type = <!!S>	07.06.2003
+120012	{Week of Sulfurous Vapors.} 
+ 
+All Sulfur Dunes produce 
+2 sulfur/day.	String type = <!!S>	07.06.2003
+120013	{Week of Sparkling Crystals.} 
+ 
+All Crystal Caverns produce 
+2 crystals/day.	String type = <!!S>	07.06.2003
+120014	{Week of Glittering Gemstones.} 
+ 
+All Gem Ponds produce 
+2 gems/day.	String type = <!!S>	07.06.2003
+120015	{Week of the Gold Digger.} 
+ 
+All Gold Mines produce 
+2000 gold/day.	String type = <!!S>	07.06.2003

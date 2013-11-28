@@ -1,0 +1,331 @@
+ZVSE
+ERMS_ScriptDate=12.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Hourglass of Asmodeus ERM Script Version 1.51 created by Timothy Pulver
+** WoGify Name: script06.erm
+** Last Updated: October 12, 2006 - now uses GetBasicPrim function to check hero's true power
+** Previously Updated: August 24, 2004
+
+** This script adds a new ability to the Hourglass of the Evil Hour artifact.
+** Any hero who has this artifact equipped prior to a battle in which he or
+** she is the *Attacker* will be given the opportunity to summon the Demon
+** Lord Asmodeus to fight the battle instead. If the player is the defender in
+** a combat, no option to summon Asmodeus will be given.
+
+** Asmodeus fights the battle (under the player's control) but with the hero's
+** troops. He possesses good primary abilities (starting at 13) and knows
+** useful secondary skills like Expert Wisdom, Expert Sorcery and Expert Fire
+** Magic. He has several powerful fire spells at his disposal.
+
+** If Asmodeus loses the battle, the hero is *not* lost, but will remain on the
+** map with 3 lowly imps (a gift from Asmodeus). If Asmodeus *flees* the
+** battle, the summoning hero will keep the remaining army.
+
+** If Asmodeus wins the battle, the hero will not gain experience and will not
+** get the artifacts of the hero beaten (Asmodeus may claim these instead).
+** Asmodeus' primary abilities will ALL increase by 1 for each combat won.
+
+** After the battle, Asmodeus takes part of the hero's soul as payment. This
+** results in the hero losing 1 point of Power permanently. However, if the
+** hero is down to only 1 Power, Asmodeus steals the Hourglass and sends
+** three devils to attack the hero soul instead.
+
+** Important Note: the extension hero Xeron (#155) should not appear in the
+** map as this hero is used for Asmodeus (but with Calh's portrait). If Xeron
+** isn't available, the script will instead try to use Kilgor or Roland. If
+** none are available, the script will be disabled.
+
+** Version 1.1 fixes some bugs that allowed Asmodeus to be hired in a tavern
+** after retreating from or being used a combat. It also makes minor message
+** box changes and expands the right-click artifact information to explain
+** the new demon summoning power.
+
+** Version 1.2 adds code to work with the new WoGify Options screen.
+** Version 1.3 fixes several bugs.
+** Version 1.4 fixes some more bugs.
+** Version 1.5 makes some changes to work with 3.58 updates.
+
+Flags Used in this Script: 1-2, 266-271
+Variables used in this Script: v234,v247,v266-284,v1255-v1256,v4600,v9300,z266-269,z444
+Functions used in this Script: FU6664-FU6670
+Macro Names used in this Script: $xpos$, $ypos$, $lpos$, $hpower$, $apower$, $hsex$, $hnumber$, $aknow$, $hcolour$, $aname$, $hrname$, $hisher$
+
+----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v234/?v247;
+!#IF&v234<358:V1/1;
+!#IF&v247<270:V1/1;
+!#IF&1:M1/z106000;
+
+----------------------------------------------------------------------------------------
+
+!#UN:P106/?v1; [Check if Hourglass of Asmodeus script is enabled in WoGify Options]
+
+[Set up Macros]
+!#MCv266:S@xpos@; [x position where Asmodeus initially appears on the map]
+!#MCv267:S@ypos@; [y position where Asmodeus initially appears on the map]
+!#MCv268:S@lpos@; [l position where Asmodeus initially appears on the map]
+!#MCv270:S@hpower@; [stores summoning hero's true Power]
+!#MCv271:S@hsex@;  [stores summoning hero's sex]
+!#MCv272:S@hnumber@; [stores summoning hero's hero number]
+!#MCv273:S@aknow@; [stores Asmodeus' Knowledge]
+!#MCv274:S@hcolour@; [stores colour of summoning hero]
+!#MCv275:S@rpower@; [hero's true Power after reduction by Asmodeus]
+!#MCv276:S@apower@; [hero's Power with artifact bonus]
+!#MCz266:S@aname@; [stores Asmodeus' name]
+!#MCz267:S@hrname@; [stores summoning hero's name]
+!#MCz268:S@hisher@; [stores "his" or "her" depending on summoning hero's sex]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Store information about creature type (Metamorphs)]
+ [in v variables if Metamorph script is enabled]
+!?BR&v997=0/266/-998;
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DO9600/0/41/1:P; [Cycle through all battlefield stacks]
+
+----------------------------------------------------------------------------------------
+
+ [Post-Instruction trigger]
+!?PI;
+
+!!UN:P106/?y-1; [Check if Hourglass of Asmodeus script is enabled in WoGify Options]
+!!FU&y-1=0:E; [Exit if script is disabled]
+
+[Check if Xeron (Hero #155) is disabled at start of game: y-2=0 if disabled]
+!!HE155:R3/?y-2;
+
+[Set v1256 to 155 if Xeron's available]
+!!VRv1256&y-2=0:S155;
+
+[If Xeron's not available, see if Kilgor (#149) is available instead: y-3=0 if disabled]
+!!HE149&y-2=1:R3/?y-3;
+
+[Set v1256 to 149 if Xeron's not available but Kilgor is]
+!!VRv1256&y-2=1/y-3=0:S149;
+
+[If neither Xeron nor Kilgor are available, see if Roland (#152) is available instead: y-4=0 if disabled]
+!!HE152&y-2=1/y-3=1:R3/?y-4;
+
+[Set v1256 to 152 if Xeron's and Kilgor aren't available but Roland is]
+!!VRv1256&y-2=1/y-3=1/y-4=0:S152;
+
+[If Xeron, Kilgor and Roland aren't available, disable script]
+!!IF&y-2=1/y-3=1/y-4=1:M1/z106001;
+!!VRv1256&y-2=1/y-3=1/y-4=1:S-99;
+!!VRv1&y-2=1/y-3=1/y-4=1:S0;
+
+[Change name to Hourglass of Asmodeus - stored in z444]
+!!VRz444&v1256>0:Sz106002;
+
+[Expand right-click artifact description - stored in z269]
+!!VRz269&v1256>0:Sz106003;
+!!UN&v1256>0:A85/10/269;
+!!UN&v1256>0:A85/9/444;
+
+---------------------------------------------------------------------------------------
+
+[Battle Trigger for Start of any Battle]
+!?BA0&v1256>0;
+
+!!UN:P106/?y-1; [Check if Hourglass of Asmodeus script is enabled in WoGify Options]
+
+!!BA:H0/?y-2; [Check attacking hero number: y-2]
+!!HEy-2:O?y-3; [Check owner of hero: y-3]
+!!OW:Iy-3/?y-4; [Check AI or Human: y-4=1 if AI]
+
+!!FU|y-1=0/y-4<>0:E; [Exit if script isn't enabled or if it's an AI]
+
+!!FU6669:P; [Check if network battle - set flag 270 to true if it is]
+
+ [Call Start of Battle function]
+!!FU6670&-270/-998:P;
+
+---------------------------------------------------------------------------------------
+
+ [Start of Function  6670 - Start of Battle]
+!?FU6670;
+
+!!IF:V266/0;  [Sets flag 266 to false]
+
+!!BA:H0/?v269; [Get attacking hero's hero # - store in v269]
+!!HEv269:A2/85/>0/>0;  [Checks if attacking hero has an Hourglass artifact equipped]
+
+ [If hero has hour glass object equipped, do the following...]
+!!HEv269&1:B0/?z267;  [Store current hero's name in z267]
+!!HEv269&1:R2/?$hsex$ N?$hnumber$; [Store current hero's sex in $hsex$ and hero number in $hnumber$]
+
+ [Set Flag 2 to 0]
+!!IF:V2/0;
+
+ [If hero is *Not* the AI, has the hourglass artifact equipped and has fewer than 8 active heroes, ask if he/she wishes to summon Asmodeus]
+!!IF&1/1000:Q2/z106004;
+
+ [If hero agrees to summon Demon Lord, call function 6664]
+!!FU6664&2/1000:P;
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6664 - sets up Asmodeus and brings him into battle instead of hero]
+!?FU6664;
+!!IF:V266/1;  [Set flag 266 to true]
+
+ [Store hero numbers for order of hero list]
+!!OW:O-1/d/?v277/?v278/?v279/?v280/?v281/?v282/?v283/?v284;
+
+ [Set "his" or "her" variable depending on Hero's sex]
+!!VR$hisher$&$hsex$=0:Sz106005;
+!!VR$hisher$&$hsex$=1:Sz106006;
+
+ [Disable Asmodeus' Commander]
+!!COv1256:E0;
+
+!!HEv269:O?$hcolour$;  [Assign colour of summoning hero player to $hcolour$]
+!!VR$aname$:Sz106007; [Put name "Asmodeus" into $aname$]
+
+  [If this is the first time in the map that Asmodeus has been summoned, give him lots of experience and good stats]
+!!HEv1256&-267:E600000 F13/13/13/13;
+
+ [Set Amodeus' spell points to 20 x his Knowledge]
+!!HEv1256:Fd/d/d/?$aknow$;
+!!VR$aknow$:S$aknow$ *20;
+!!HEv1256:I$aknow$;
+
+!!HEv1256:Pv998/v999/v1000/2; [Set Xeron's internal coordinates to 0/0/0]
+!!HEv1256:L4/60 B0/z266; [Set Asmodeus' name and portrait]
+!!HEv1256:S19/0 S25/3 S14/3 S26/3 S7/3 S24/3 S6/3 S9/3 S10/3 S20/3 S22/3; [Remove Asmodeus' tactics skill but give expert Wisdom, Sorcery, Fire Magic, Leadership, Resistance, Luck, Intelligence, Artillery, Ballistics and Offense]
+!!HEv1256:A1/1000/17 M59/1 M21/1 M22/1 M26/1 M29/1 M40/1 M13/1; [Give Asmodeus a spell book and the following spells: Wall of Fire, Berserk, Inferno, Fire Shield, Fireball, Sacrifice, and Armageddon]
+!!HE$hnumber$:O-1; [Set player's hero to "unowned"]
+!!HEv1256:O$hcolour$; [Set Asmodeus to be owned by current player]
+!!BA:H0/v1256;  [Set Asmodeus as attacking battle hero]
+
+---------------------------------------------------------------------------------------
+
+[Battle trigger for end of battle (after it's over)]
+!?BA1&v1256>0;
+
+!!UN:P106/?y-1; [Check if Hourglass of Asmodeus script is enabled in WoGify Options]
+
+!!FU&y-1=0:E; [Exit trigger if script isn't enabled]
+
+!!FU6665&266:P; [If flag 266 is true (means Asmodeus was summoned), calls function 6665]
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6665 - Asmodeus takes payment, is improved and removed]
+!?FU6665;
+
+!!IF:V266/0; [Set flag 266 to false]
+
+!!IF:V267/1 V268/0 V269/1;  [Set flags 267 and 269 to true, flag 268 to false]
+!!HEv1256:O=-1;        [Check if Asmodeus was defeated in battle]
+!!IF&1:V268/1;       [If defeated, set flag 268 to true]
+!!DO6666/0/6/1:P;       [Check if all hero's slots are empty]
+!!HE$hnumber$&269:C0/0/42/1 C0/1/42/1 C0/2/42/1;  [If all slots empty, give summoning hero 3 Imps]
+!!IF&269:Q2/21/196650/1/z106008;
+!!HEv1256:F<95/d/d/d;     [Check if Asmodeus' stats have reached 95]
+!!HEv1256&1/-268:Fd1/d1/d1/d1; [If Asmodeus won and stats not 95, increase his stats by 1 each]
+!!HEv1256:K; [Remove Asmodeus from map]
+
+ [Restore player's hero to map]
+!!HE$hnumber$:O$hcolour$; [Set player's hero back to player's colour]
+!!UN:Lv998/v999/v1000/0;
+!!HE$hnumber$:Pd/d/d; [Teleport hero on the spot to restore focus]
+
+ [Restore order of player's hero in hero list]
+!!OW:O-1/d/v277/v278/v279/v280/v281/v282/v283/v284;
+
+ [Check summoning hero's *true* Power level and Power with artifacts]
+!!FU$GetBasicPrim$:P$hnumber$/d/d/?$hpower$/d; [True Power]
+!!HE$hnumber$:Fd/d/?$apower$/d;   [Power with artifacts]
+
+  [Calculate hero's newly reduced Power (if 2 or more)]
+!!VR$rpower$&$hpower$>1:S$hpower$;
+!!VR$rpower$&$hpower$>1:-1;
+!!VR$apower$&$hpower$>1:-1;
+
+ [If summoning hero has a base Power of 2 or more, display this message or the following message if hero has no artifacts]
+!!IF&$hpower$>1/$rpower$<>$apower$/1000:Q1/33/0/1/z106009;
+!!IF&$hpower$>1/$rpower$=$apower$/1000:Q1/33/0/1/z106010;
+!!HE$hnumber$&$hpower$>1:Fd/d/d-1/d; [And remove 1 Power from summoning hero]
+
+ [If summoning hero has Power of less than 2, display this message]
+!!IF&$hpower$<2/1000:Q1/21/54/1/z106011;
+
+!!HE$hnumber$:P?y1/?y2/?y3; [Store hero's position in y1/y2/y3]
+
+!!UN:P56/?y4; [Check if Metamoprh script is enabled: y4]
+!!DO9602/0/41/1&y4=1/$hpower$<2:P; [If enabled and Power < 2, recombine Metamorphs, as needed]
+!!VRv4600&y4=1/$hpower$<2:S2; [If enabled, and Power <2, set v4600 to 2 to prevent extra Metamorphs appearing]
+!!HE$hnumber$&$hpower$<2:A3/85/1/1 Ty1/y2/y3/54/3;  [Remove hourglass and send 3 Devils to attack hero]
+
+  [Disable Asmodeus so he won't appear in any taverns later in the game]
+!!HEv1256:R3/0;
+
+!!FU6667:P;
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6666 - checks all of summoning hero's slots to see if they're empty]
+!?FU6666;
+!!HE$hnumber$:C0/x16/d/>0;
+!!IF&1:V269/0;
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6667 - removes Asmodeus from tavern if he retreated/surrendered]
+!?FU6667;
+
+ [Get current player - store in y1]
+!!OW:C?y1;
+
+ [Get current tavern heroes - store in y2 and y3]
+!!OW:Vy1/?y2/?y3;
+
+ [If hero is #v1256, generate a new hero]
+!!VRy4:Sy2; !!VRy5:Sy3;
+!!VRy4&y2=v1256:S0 R144;
+!!VRy5&y3=v1256:S0 R144;
+!!OW:Vy1/y4/y5;
+
+ [Check new hero owners and if either belongs to another player, call function 6668]
+!!HEy4:O?y6;  !!HEy5:O?y7;
+!!FU6668|y6<>-1/y7<>-1/y4=y5:Py1;
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6668 - replace any owned heroes in tavern]
+!?FU6668;
+
+ [Generate new random hero numbers]
+!!VRy1:S0 R154;
+!!VRy2:S0 T154;
+
+ [Replace heroes with new ones]
+!!OW:Vx1/y1/y2;
+
+ [Check new hero owners and if either belongs to another player]
+ [or if either is a disabled hero, call function again]
+!!HEy1:O?y3;
+!!HEy2:O?y4;
+!!HEy1:R3/?y5;
+!!HEy2:R3/?y6;
+!!FU6668|y3<>-1/y4<>-1/y1=y2/y5=0/y6=0:Px1;
+
+---------------------------------------------------------------------------------------
+
+[Start of function 6669 - check for network battle]
+!?FU6669;
+
+!!IF:V270/0; [assume not a network hero battle]
+!!BA:E?y1; [Check state of battle: y1>0 means network battle]
+!!IF&y1>0:V270/1; [Set flag 270 to true if network battle]
+
+** End of Script **
+

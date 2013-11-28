@@ -1,0 +1,48 @@
+#	Text resource for "script62.erm" document		
+162000	{SPLIT DECISION}
+
+TO SPLIT A STACK:
+On the stack's turn, ctrl-click on the stack.
+Each stack may only be split once per combat.
+
+TO JOIN TWO STACKS:
+When two stacks of the same type are adjacent and
+it's either stack's turn, ctrl-click on the other stack.	<!!M>	01.08.2004
+162001	{WARNING}
+
+If you split Skeletons or Skeleton Warriors, Necromancy won't always give you new ones, despite the normal message appearing after the battle.	<!!Q>	01.08.2004
+162002	%Z-1  Ctrl-click to split stack.	<!!S>	01.08.2004
+162003	%Z-1  (This stack has already been split.)	<!!S>	01.08.2004
+162004	%Z-1  Ctrl-click to combine stack.	<!!S>	01.08.2004
+162005	You cannot split stacks
+without a hero.	<!!M>	01.08.2004
+162006	Metamorphs cannot be split.	<!!M>	01.08.2004
+162007	War Machines cannot be split.	<!!M>	01.08.2004
+162008	Hypnotized stacks cannot be split.	<!!M>	01.08.2004
+162009	Each stack can only be split
+once per combat.	<!!M>	01.08.2004
+162010	Troops that join a battle in progress cannot be split.	<!!M>	01.08.2004
+162011	%Z2 burgers?	<!!S>	01.08.2004
+162012	a	<!!S>	01.08.2004
+162013	an	<!!S>	01.08.2004
+162014	an	<!!S>	01.08.2004
+162015	an	<!!S>	01.08.2004
+162016	an	<!!S>	01.08.2004
+162017	Don't be silly -- what would you do with only half %Z1 %Z2?
+
+(Unless you're planning on taking it down to the local butcher shop.)	<!!Q>	01.08.2004
+162018	Your hero cannot accomodate
+any more creature groups
+in this combat.	<!!M>	01.08.2004
+162019	Error #1 in Split Decision Code: v3348=%V3348.	<!!M>	01.08.2004
+162020	The %Z-2 split into two stacks!	<!!S>	01.08.2004
+162021	Two stacks of %Z-2 have combined into one!	<!!S>	01.08.2004
+162022	Error #2 in Split Decision Code:
+v3348=%V3348
+v3342=%V3342
+y7=%Y7
+y8=%Y8		
+162023	Error #3 in Split Decision Code:
+v3348=%V3348
+v3342=%V3342
+y7=%Y7		

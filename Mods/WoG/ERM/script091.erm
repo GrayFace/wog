@@ -1,0 +1,620 @@
+ZVSE
+ERMS_ScriptDate=7.2(February).2007
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** last update 7.2(February).2007 - corrected FU1618 (used f.e. to show weekly growth rate)
+** last update 11.7(July).2006 - disable Tree of Knowlegde bugfix, if script100 is enabled (has its own routine)
+
+************ Advanced Legion Statue Script ********************
+** written by Thomas Franz (alias samot)
+
+** The parts of the Legion Statue may be stored in a town (gives the growth bonuses without the
+** need to have a hero with those artifacts in the town).
+
+** Further the Legs of Legion increases the growth for L1-Creatures by 6
+** and the Head the growth of the L7-Creatures by 1 additional to their original
+** bonuses for L2 and L6 creatures
+
+** The third change will increase the bonuses given by external dwellings.
+** Each L1-L3 dwelling will give now a bonus of +3 creatures per week, a L4 or L5
+** dwelling will give you 2 extra units per week. The L6 and L7 dwellings are not changed
+** and give you the usual 1 unit per dwelling and week.
+
+** You can check the actual growth if you do a leftclick on one of the creature icons
+** in the lower left corner of the screen (there you can get back the stored artifacts too).
+
+** To get back the artifact for unit you didn't have (f.e. if you have stored the
+** Head of Legion but didn't build the L6/L7-dwelling yet) you may click on the 8th
+** creature-field (used for the Portal of Summoning in Dungeon towns). It will you show
+** the growth rate for all units and may give you back all stored artifacts.
+
+** The FU1615 will give you back the correct growth bonuses for each town; it will calculate the bonuses
+** separat for basic growth, citatel / castle, Legion Statue, external dwellings, Upgraded dwellings (script40)
+** and grail
+
+** At least the FU1612 / FU1613 called by TM2 will give the *correct* number of addition creatures at the start of each
+** week. It will consider the growth bonuses from this script, corrects the number of external dwellings if some
+** of them have upgraded creatures and corrects the grail bonuses for all "Wog-Changes" as the Upgraded dwellings
+
+** Wog-Option 91
+** Functions used: FU1610-FU1618
+** Timer used: reuse TM2 from script00; every Monday
+** Vars used: v1-v3, v600-v603, v997-v1000, f..n, q, r, t -> may be changed by other scripts (no exclusive use)
+** Strings used: z1, z2
+** Mapfield-Variables (PO:V): V3 for each town entrace - must NOT overwritten by other scriptes (bits 1-5)
+
+**********************************************************************
+** BUGFIXES                                                         **
+**********************************************************************
+** - FU1619 to "repair" the bug that some dwelling numbers (CA:B3) are not set to built,
+**          if you use the build-cheat or the build-all-option in the Map Editor
+** - FU1641 to set the start exp. of commanders (necessary in campaigns)
+** - FU1642 AI uses the upgrade-speciality of Gelu and Dracon; Gelu upgrades also Sylvan Centaurs
+** - disable blank artifacts
+** - OB102 - Tree of knowledge: gives onle +1 Level to Commander, even, if a high-level hero has a low-level commander
+**           uses v600-v676 temporary (not exclusive)
+
+!?TM2&$once$=1;
+!!UN:U98/-1/?y-1; // count towns
+!!DO1619/1/y-1/1:P; // loop through all towns (fix Buildings)
+
+!!DO1641/0/155/1&$day$=1:P; // loop through all heroes at day 1 to correct commanders exp.
+
+!!HE148:O?y-1; // get Gelu's owner
+!!OW&y-1>-1:Iy-1/?y-2; // check if it is AI (=1)
+!!DO1642/0/6/1&y-2=1/y-1>-1:Py-1/148/2/3/18/19/137; // loop through heroes slots (upgrade-function), give owner, hero number 4 basic creatures and upgr. creature
+
+!!HE147:O?y-1; // get Dracons's owner
+!!OW&y-1>-1:Iy-1/?y-2; // check if it is AI (=1)
+!!DO1642/0/6/1&y-2=1/y-1>-1:Py-1/147/8/9/34/35/136; // loop through heroes slots (upgrade-function), give owner, hero number 4 basic creatures and upgr. creature
+
+
+!?FU1619; ** building numbers
+!!VRv7&x16=1:S-1; // initialize in first loop
+!!VRy1:S0; !!VRy2:S0; !!VRy3:S0; !!VRy4:S0; !!VRy5:S0;
+!!UN:U98/-1/-1/7; // save coordinates of the town in v7-v9
+!!CAv7/v8/v9:M1/0/d/?y1; // get number of upgr. creatures L1 aviable
+!!CAv7/v8/v9&y1>0:B1/37; // if there are any then build upgr. dwelling
+!!CAv7/v8/v9:T?y9;
+!!FU&y9>3:E; // if town >= Nekro (4) the bug effects only L1-Creatures
+!!CAv7/v8/v9:M1/1/d/?y2; // get number of upgr. creatures L2 aviable
+!!CAv7/v8/v9&y2>0:B1/38; // if there are any then build upgr. dwelling
+!!CAv7/v8/v9:M1/2/d/?y3; // get number of upgr. creatures L3 aviable
+!!CAv7/v8/v9&y3>0:B1/39; // if there are any then build upgr. dwelling
+!!CAv7/v8/v9:M1/3/d/?y4; // get number of upgr. creatures L4 aviable
+!!CAv7/v8/v9&y4>0:B1/40; // if there are any then build upgr. dwelling
+!!CAv7/v8/v9:M1/4/d/?y5; // get number of upgr. creatures L5 aviable
+!!CAv7/v8/v9&y5>0:B1/41; // if there are any then build upgr. dwelling
+
+***** end function 1619 ********
+
+
+!?FU1641;  ** commander experience
+!!HEx16:E?y1; // get Hero's exp.
+!!COx16:X1/?y2 T?y3; // get Commanders exp. and Type
+!!VRy1&y3=0:*3 :2; // 50% learning bonus to paladins
+!!VRy4:Sy1 -y2; // difference Hero -> Commander
+!!COx16&y4>0:X1/dy4; // add exp. to commander if < than hero's
+
+***** end function 1641 ********
+
+
+!?FU1642; ** Gelu / Dracon: AI upgrades creatures
+!!HEx2:C0/x16/?y1/?y2; // get creatures in slot
+!!VRy10&y1=192/x2=148:S192; // set y10 to Sylvan Centaurs if Gelu has them
+!!FU&y1<>x3/y1<>x4/y1<>x5/y1<>x6/y1<>y10:E; // exit if it is not an upgradable creature
+
+!!MA:Cy1/6/?y3 Cx7/6/?y4; // get costs of the basic and upgr. creature
+!!VRy5:Sy4 -y3 *y2; // calc upgrade costs (new price - old price * number)
+!!OW:Rx1/6/?y6; // get gold of the heroes owner
+!!VRy6:-y5; // calc how much gold remains after the update
+!!FU&y6<0:E; // exit if not enough gold
+!!OW:Rx1/6/y6; // take the gold (set the remaining)
+!!HEx2:C0/x16/x7/d/500/5; // upgrade creatures, new experience will be the old experience multiplied by the Upgrade Multiplier plus an experience bonus.
+
+***** end function 1642 ********
+
+!?OB102; // visiting a tree
+** y-1 = Type of Tree (free, gold or gems)
+** y-2 = players gems
+** y-3 = players gold
+** y-4 = number of Tree
+** y-5 = hero has commander
+** y-6 = hero has visited it or not
+** y-7 = new experience
+** y-8 = commander is dead or alive
+!!UN:P3/=1; !!FU&-1:E; // check for "Disable Commanders" and exit, if disabled
+!!UN:P300/=1; !!FU&1:E; // exit, if script100 (heroes experience boost) is enabled, because it has his own Tree of Knowledge
+!!OB998:M-1/1/0; // disable standard behavior
+!!KTv998/v999/v1000:S?y-1 N?y-4; // get type of tree and its number
+!!HE-1:V5/y-4/?y-6; // check, if hero has visited the tree already
+!!IF&y-6=1/1000:M1/z191018; // if yes show message
+!!FU&y-6=1:E; // and exit
+
+!!IF:V4/0; // disable flag 4
+!!IF|y-1=0/-1000:V4/1; // enable flag 4, if it is a free tree or player is the AI
+!!OW:R-1/5/?y-2 R-1/6/?y-3; // get gems and gold of current player
+
+!!IF&y-1=1/y-3<2000/1000:M1/z191017; // message not enough gold
+!!FU&y-1=1/y-3<2000:E;
+!!IF&y-1=2/y-2<10/1000:M1/z191016; // message not enough gems
+!!FU&y-1=2/y-2<10:E;
+
+
+!!IF&y-1=0/1000:Q4/17/-1/1^%Z191013^; // show message for free tree
+!!IF&y-1=1/1000:Q4/17/-1/6/-102000/2^%Z191015^; // ask for gold (human player only)
+!!IF&y-1=2/1000:Q4/17/-1/5/-100010/2^%Z191014^; // ask for gems (human player only)
+!!FU&-4:E; // exit if "no" is choosen
+!!OW&y-1=1:R-1/6/d-2000; // take gold from player
+!!OW&y-1=2:R-1/5/d-10; // take gems from player
+
+
+** create a list of needed exp. for levelup
+!!VRv600:C1000/1000/1200/1400/1600/1800/2000/2200/2500/2800/3100/3720/4464/5356/6427/7712;
+!!VRv616:C9254/11104/13324/15988/19185/23022/27626/33151/39781/47737/57284/68740/82488/98985/118782/142538;
+!!VRv632:C171045/205254/246304/295564/354676/425611/510733/612879/735454/882544/1059052/1270862/1525034/1830040/2196048/2635257;
+!!VRv648:C3162308/3794769/4553722/5464466/6557359/7868830/9442596/11331115/13597338/16316805/19580166/23496199/28195438/33834525/40601430/48721716;
+!!VRv664:C58466059/70159270/84191124/101029348/121235217/145482260/174578712/209494454/251393344/301672012/2073739175;
+
+!!CO-1:E?y-5 D?y-8 X2/?v1; // check, if commander is active and alive and get its level
+!!VRv1:+600; // add 600 to the level to get the correct v-index
+!!VRy-7:Svv1; // get exp. needed to levelup
+!!CO-1&y-5=1:X1/dy-7; // give exp. to commander (if there is one) and
+!!HE-1&y-5=1:Ed1; // give the hero +1 exp, so that the commander levels up
+!!CO-1&y-5=1:D1; // kill the commander (to prevent, that he gets the hero's exp. too)
+
+!!HE-1:E?y-99/?v1; // get hero's level
+!!VRv1:+600; // add 600 to the level to get the correct v-index
+!!VRy-7:Svv1; // get exp. needed to levelup
+!!HE-1:Edy-7 V5/y-4/1; // give exp. to hero and set tree to visited
+!!CO-1&y-5=1:Dy-8 T?y-9; // revive the commander again (if he was alive before) and get its type
+
+
+**********************************************************************
+
+
+
+
+************ Start Advanced Legion Statue Script ********************
+
+!?CM1; // capture mouse click in the town screen; shows new growth statistics and give stored legion artifacts back
+** Vars:
+** y-1=the field you clicked in the Townscreen
+** y-2=subtype (leftclick / rightclick)
+** y-5 = creature level
+** y-6 = correction if a low(er) level building not exists (f.e. if you clicked on the behmots but have not build the cyclopes cave yet)
+** y-99/y-100 = number of build dwellings / number of not build dwellings (FU1611)
+
+!!UN:P91/?y-1; !!FU&y-1=0:E; // check if script is enabled;
+!!CM:I?y-1; // get the field you clicked in the Townscreen
+!!CM:S?y-2; // =14 if it was an right mouse click
+!!FU|y-1<164/y-1>171/y-2=14/y-2=13:E; // exit if rightclick or "dead area" (y-2=13)
+
+!!VRy-5:Sy-1 -163; // calc "real" monster level (returns 1..7)
+!!VRy-99:S0; !!VRy-100:S0; // initiate vars used in FU1615
+!!DO1611/1/7/1&y1<>171:Py-5; // get correction number if no all dwellings in the town are build (f.e. if you clicked on the behmots but have not build the cyclopes cave yet)
+!!VRy-5:+y-100 -1; // add corrector and decrease by 1 to get the computer-monster-level (0..6 instead of 1..7)
+!!FU1614&y-1>163/y-1<171:Py-5; // call FU1614 if Field is 164-170,
+!!FU1614&y-1<>171:E; // exit if it is not the field for the 8th creature (Portal in dungeon)
+
+!!FU1614:P0; !!FU1614:P1; !!FU1614:P2; !!FU1614:P3; !!FU1614:P4; !!FU1614:P5;
+!!FU1614:P6; // call FU1614 for all 7 levels if clicked on the 8th field (used for Portal of summoning in Dungeon towns)
+
+***** end CM1 ********
+
+
+!?FU1611; // correction of the field / monsterlevel clicked in the townscreen to show the correct statistic for the monster under the cursor
+** vars:
+** y-99   = number of build dwellings
+** y-100   = return value; number of "missed" (not build) dwellings, used as corretor for field number in CM:1
+** x1  = you clicked on the x1 field in the townscreen
+** x16 = loop number between 1 and 7
+!!FU&y-99=x1:E; // exit if you reached the number of build dwellings (f.e. if you have clicked at the 3rd field there have to exists at least 3 buildings (same which level)
+
+!!CA-1:U?y10; // get town number
+!!FU1618:Py10/x16/?y11/?y12; // checks for dwellings / horde buildings;
+**                              y11 will be 0 for non build, 1 for non upgr., 2 for upgr. creature
+**                              y12 will be 0 if there is no horde building, 1 if there is one (for this creature)
+
+
+!!VRy-99|y11>0/y12>0:+1;  // if dwelling is built, increase y-99
+!!VRy-100&y-99=x1:Sx16 -y-99; // if number of build dwellings is the same as the field
+**                           // set return-var (y-100) to the difference between the loop-
+**                           // number and the number of build dwellings to get the number of
+**                           // "missed" (not build) dwellings
+
+***** end function FU1611 ********
+
+
+!?FU1614; // shows the growth rate for the monster with Level given by x1; called by CM1
+** Vars used in this function:
+** x1: creature level (0..6)
+** z1: name of unupgraded monster
+** z2: name of upgraded monster
+** z: text shown by IF:M
+** z-4: name of legion artifact
+** z-5: Extra text to get the artifact back
+** z-6: hint text in the town screen
+
+!!CA-1:U?y1; // get the number of current town
+!!FU1615:Px1/y1/?y10; // get the growth rate for this town (return in f..o and r), y10 will get the monster number, z1/z2 will be set
+!!VRy2:Sr; !!VRy2:+s;
+
+** shows the growth for the Monster
+
+!!CA-1:H1/?y16; // get number of visting hero
+!!VRz3:Sz191003; // "the growth of monster z1/z2 in this town: %Vf basic"
+!!VRz3&g>0:+z191004; // citatel / castle bonus
+!!VRz3&h>0:+z191005; // special buildings
+!!VRz3&i>0:+z191006; // stored Legion Parts
+!!VRz3&j>0:+z191007; // equipped Legion Parts
+!!VRz3&l>0:+z191008; // equipped assembled Legion Statue
+!!VRz3&k>0:+z191009; // external dwellings %y2 without bonus by this script
+!!VRz3&m>0:+z191010; // dwelling upgrade (Wog-Option)
+!!VRz3&n>0:+z191011; // grail
+!!VRz3&o>0:+z191012; // total
+
+!!IF|i=0/y16=-1:Q1/21/y10/1/z3; // if no artifact is stored show statistic
+!!FU|i=0/y16=-1:E; // no visiting hero / no artifact (for this level) stored
+
+!!VRy15:Sx1+117; // set Artifact number
+!!VRy15&x1=0:S118; !!VRy15&x1=6:S122; // correction for L0 and L6
+!!UN:N0/z-4/y15; // name lookup for Legs / Loins etc.
+!!IF:Q2/8/y15/2^%Z3 %Z191002^; // shows the statistics and ask to get back the whole statue
+!!FU&-2:E; // exit if no selected
+!!HEy16:Ay15; // give artifact back
+!!CA-1:P?v998/?v999/?v1000; // get position of the town
+!!POv998/v999/v1000:V3/?y2; // get the value stored in the mapfield (used as flag variable to save the stored Legion-Artifacts)
+!!FU3333:Px1; // calc bit for the creature level; return in y-100
+!!VRy-100&y-100=0:S1; !!VRy-100&y-100=32:S16; // correction for L1 and L7
+!!VRy-100:+1 *-1; // add 1 and negate the bit (neccessary to unset the flag)
+!!VRy2:&y-100; // remove the current bit (f.e. VRy2:&-3 will remove the second bit (2); VRy2:&-17 will remove the 5th bit (16)
+!!POv998/v999/v1000:V3/y2; // set the flag-var on the map
+
+***** end function FU1614 ********
+
+
+!?OB98&1000; // when player (not AI) visits a town
+!!UN:P91/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!CA998:O?y-5; // get owner of the town
+!!OW:C?y-6; // get current player
+!!FU&y-5<>y-6:E; // exit if the current player is not the owner (because otherwise you have to store your artifacts in the town of an enemy even if you loose the battle)
+!!HE-1:N?y-1; // get the number of visiting hero
+!!VRy-99:S1; // set the y-99 to 1, used in FU1610 for bit manipulation
+!!DO1610/1/5/1:Py-1/v998/v999/v1000; // calls 1610 to check if the hero has some legion-artifacts
+
+***** end function OB98********
+
+
+!?FU1610; // check actual hero for each legion artifact and ask to store it in the visited town
+!!POx2/x3/x4:V3/?y2; // get the value stored in the map field  of the town entrace (used as flag variable to save the stored Legion-Artifacts)
+!!CAx2/x3/x4:T?y7; // get type of the town
+** check for Statue of Legion in town
+!!IF:V1/0; // disable Flag 1
+!!FU1629|y7=2/y7=8:Px2/x3/x4/0; // check if dummygrail in tower or conflux is built
+!!IF:V2/0;
+!!VRy2:&31; // check if all 5 Legion Parts are stored (bits 1-5 set), y2 will be 31 if yes
+!!IF&y2=31/x16=5:Q2/8/133/2^%Z191000^; // ask to get back the Statue of Legion; Flag2 = 1 if choosen yes
+!!HE-1&y2=31/2:A133; // if yes give Statue of Legion
+!!POx2/x3/x4&y2=31/2:V3/d-31; // and delete all stored artifacts
+!!FU&y2=31/2:E; // then exit
+
+!!VRy2:&y-99; // check if the bit y-99 is set -> y2 will > 0 if yes
+!!VRy100:Sy-99; // save current bit value in y100
+!!VRy-99:*2; // multiply y-2 by 2 to get the next bit (1 2 4 8 16) for the next loop of this function
+!!FU&y2>0:E; // exit if bit is set (the current artifact already stored in this town)
+
+!!VRy1:S117 +x16; // number of the legion artifact (118-122);
+!!HEx1:A2/y1/?y3/?y4; // checks if the hero has at least one of the artifact
+!!FU&y3=0/y4=0:E; // exit if no
+!!UN:N0/z-1/y1; // get the name of artifact
+!!VRy4:Sx16 +1; // stores now the Level of the creature for the current artifact
+!!IF&y3>0:Q2/8/y1/2^%Z191001^; // ask to store the Legion Artifact
+!!FU&-2:E; // exit function if No select
+!!HEx1:A3/y1/1/0; // remove the artifact (first from backpack, second from equipped)
+
+!!POx2/x3/x4:V3/?y2; // get again the value stored in the map field of the town entrace (used as flag variable to save the stored Legion-Artifacts)
+!!VRy2:|y100; // set the bit for current artifact to the bits in y2
+!!POx2/x3/x4:V3/y2; // write the bits back
+
+***** end function 1610 ********
+
+
+
+!?TM2&$once$=1/$weekday$=$monday$;
+!!UN:P91/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!UN:U98/-1/?y-1; // count all towns on the map
+!!DO1612/1/y-1/1:P; // call 1612 for each found town
+
+***** end function TM2 ********
+
+
+!?FU1612; // called from T2; add monsters to each town for external dwellings and stored legion artifacts
+!!VRv24&x16=1:S-1;
+!!UN:U98/-1/-1/24; // save coordinates of the town to v24..v26
+!!CA24:O?y1 U?y3 T?y4; // get owner to y1, town number and town type
+!!DO1613/0/6/1&y1>-1:Py3/y1/y4; // calls FU1613 for each creature level; gives town number / owner / type as parameter
+
+***** end function 1612********
+
+
+!?FU1613; ** add extra creatures to towns (called by FU1612 for each creature level)
+** call FU1613 for each creature level; gives town number / owner / type as parameter
+** y1 - Monster to add
+** x1 - Town number
+** x2 - Town owner
+** x3 - Town typ
+** x16 - Monster Level
+
+** if no upgr. dwelling in the town is built HoMM gives only the bonuses for ext. dwellings with non upgr. creatures
+** if the upgr. dwelling in the town is built HoMM gives the bonuses for ext. dwellings with upgr. or non upgr. creatures
+** for this reason we have to:
+!!VRy99:Sx16 +1; // get creature level 1..7
+!!FU1618:Px1/y99/?y10/?y11; // check for dwellings; y10: 0 = dwelling not built; 1 only non upgr.; 2 = upgraded dwelling; y11 = 1, if horde building
+!!FU&y10=0:E; // exit if neither upgr. nor not upgr. dwelling is built
+
+!!FU1615:Px16/x1; // get the growth rate for actual monster / town; returns in f-o and q-s
+
+
+
+!!VRy3:Sr; !!VRy3:+s; // add number of upgr. / non upgr. ext. dwellings
+!!VRy1:Sk;  // set y1 to the additional monsters for external dwellings (k = total bonus, r = number of dwellings)
+!!VRy1&y10=1:-r; // if no upgraded dwelling reduce by the number of non upgraded dwellings (because 1 extra creature is given by HoMM already)
+!!VRy1&y10=2:-y3; // if there is an upgraded dwelling reduce by the number of upgraded and non upgr. dwellings
+
+!!VRy1:+i; // add bonus for stored Legion Artifact
+!!VRy1&x16=0:+j; // add bonuses given by equipped Legion Artifact for L1 Creatures
+!!VRy1&x16=6:+j; // add bonuses given by equipped Legion Artifact for L7 Creatures
+!!VRy1:+n; !!VRy1:-q; // add total grail bonuses and decrease by the bonuses usual given by HoMM -> adds only grail bonuses not given yet
+
+**add extra monsters to those currently aviable in town
+!!VRy1&y1<0:S0; // no malus
+!!CA0/x1:M1/x16/?y2/?y3; // get already aviable creatures
+!!VRy2:+y1; !!VRy3:+y1; // add bonus
+
+!!CA0/x1&y10=1:M1/x16/y2/d; // set total to not upgraded monsters aviable
+!!CA0/x1&y10=2:M1/x16/d/y3; // set total to upgraded monsters aviable
+
+***** end function 1613 ********
+
+
+!?FU1615; // get the growth rate for the monster with Level given by x1 in town number x2; return in f-o and q-r, creature name in z-1 and z-2
+** Vars used in this function:
+** x1: creature level (0..6)
+** x2: town number
+** x3: return value for the upgr. / not upgr. creature
+** y2: check if bit for artifact is set
+** y5: town type
+** y6: non-upgraded monster type
+** y7: upgraded monster type
+** y8: number of Legion Artifact
+** y9: visiting hero
+** y10-y12 : Pos. of town
+** y13: creature Level in 1..7-range
+** y14: 0 = dwelling not built; 1 only non upgr.; 2 = upgraded dwelling
+** y15: 0 = no horde building; 1 = horde building built
+
+** y-100: bit number for clicked creature slot (1=Legs, 2=Loins, 4=Torso, 8=Arms, 16=Head)
+** f: basic grow rate
+** g: growth bonuses given by citatel / castle
+** h: growth bonuses given by special buildings
+** i: growth bonuses from _stored_ legion artifacts in the town
+** j: growth bonuses from _equipped_ legion artifacts (hero in the town) in the town
+** k: growth bonuses for external dwellings
+** l: growth bonuses from equipped _Statue_ of Legion
+** m: growth bonuses for upgraded dwellings (script 45)
+** n: growth bonuses for grail (50 % to all)
+** o: total growth rate
+** q: usual grail bonuses without Wog-Bonuses
+** r: number of dwellings with the specified non upgr. creature owned by the owner of the town
+** s: number of dwellings with the specified upgraded creature owned by the owner of the town
+**    use it if you not want the extended ext. dwelling bonus for L1-L5 creatures
+** z1 / z2: name of the creature / upgr. creature
+
+** init
+!!VRf:S0; !!VRg:S0; !!VRh:S0; !!VRi:S0; !!VRj:S0; !!VRk:S0; !!VRl:S0; !!VRm:S0; !!VRn:S0; !!VRo:S0; !!VRq:S0; !!VRr:S0; !!VRs:S0;
+
+!!CA0/x2:T?y5; // get the current town type
+!!UN:Ty5/x1/0/?y6; // get the type of the non upgraded creature hireable in the building
+!!VRx3:Sy6; // return the not upgr. creature
+!!UN:Ty5/x1/1/?y7; // get the type of the upgraded creature hireable in the building
+!!UN:N3/z1/y6/1; // get the name of the monster to z1
+!!UN:N3/z2/y7/1; // get the name of the upgraded monster to z2
+
+!!VRy13:Sx1 +1; // creature Level in 1..7-range
+!!FU1618:Px2/y13/?y14/?y15; // check for built dwellings / horde buildings
+
+!!FU&y14=0:E; // exit if no dwelling for this creature is built
+
+!!MA&y14=1:Gy6/?f; // get the growth rate of the non upgraded monster to f
+!!MA&y14=2:Gy7/?f; // get the growth rate of the upgraded monster to f
+!!VRx3&y14=2:Sy7; // return number of the upgr. creature
+
+** extra growth for citatel / castle
+!!CA0/x2:B3/8; // check if citatel is built
+!!VRg&1:S1; // 50 % growth bonus if citatel is built
+!!CA0/x2:B3/9; // castle is built
+!!VRg&1:S2; // 100%  bonus
+!!VRg:*f :2; // multiply the growing rate with the growing bonuses given by citatel / castle ; divide by 100 because it is in percent
+
+
+** Check for special creatur buildings in the town
+
+!!IF:V1/0; !!IF&y15>0:V1/1; // set flag 1, if there is a built horde building
+
+!!VRh&1/x1=2/y5=0:S4;  // 4 more griffins per week by Griffin bastion
+!!VRh&1/x1=1/y5=1:S4;  // Rampart - Dwarves
+!!VRh&1/x1=4/y5=1:S2;  // Rampart - Dendroids
+!!VRh&1/x1=1/y5=2:S4;  // Tower - Gargoyles
+!!VRh&1/x1=0/y5=3:S15; // Inferno - Imp
+!!VRh&1/x1=2/y5=3:S3;  // Inferno - Hellhounds
+!!VRh&1/x1=0/y5=4:S8;  // Necropolis - Skeletons
+!!VRh&1/x1=0/y5=5:S7;  // Dungeon - Troglodytes
+!!VRh&1/x1=0/y5=6:S10; // Stronghold - Goblins
+!!VRh&1/x1=0/y5=7:S5;  // Fortress - Gnolls
+!!VRh&1/x1=0/y5=8:S10; // Conflux - Pixies or Neutral town - Halfings
+
+
+** extra growth by external dwellings
+!!VRv600:S-1; //initialize for UN:U in FU1616
+!!UN&y6<>33:U17/-1/?y10; // count all external dwellings
+!!UN&y6=33:U20/-1:?y10; // count golem factorys if Monster = Golem (has other type)
+!!CA0/x2:O?y8; // get owner of the town
+!!DO1616/1/y10/1:Py6/y7/y8; // calls FU1616 for each dwelling, gives monster type (non upg
+**                           // and upg) and owner as parameter, returns the number of dwellings
+**                           // with the monsters owned by the player in r (non upgr.) and s (upgr.)
+!!VRy99:Sr; !!VRy99:+s; // add numbers of upgraded / not upgraded dwellings
+!!VRk&x1<3:Sy99 *3; // if lvl 1, 2 or 3 give 3 new creatures for each owned dwelling
+!!VRk|x1=3/x1=4:Sy99 *2; // if lvl 4 or 5 give 2 new creatures for each owned dwelling
+!!VRk&x1>4:Sy99; // if lvl 6 or 7 give 1 new creatures for each owned dwelling
+
+** extra growth by equipped Legion Artifact
+!!VRy99&x1>0/x1<6:Sx1+117; // artifact number
+!!VRy99&x1=0:S118; !!VRy99&x1=6:S122; // correction for L0 and L6
+!!VRy97:Sx1 -6 *-1; // set y97 to the reverse creature level (L0 -> 6; L1 -> 5; L2 -> 4 ...)
+!!VRy97&y97=0:S1; // set y97 to 1 for L7-creature
+!!CA0/x2:H0/?y9; // get garrision hero
+!!HEy9&y9>-1:A2/y99/d/?y98; // calc number of equipped legion Artifacts
+!!HEy9&y9>-1/y98=0:A2/133/d/?y98; // if no part equipped check for whole Statue
+!!VRj&y98>0:Sy97; // set bonus (reverse creature level)
+!!CA0/x2:H1/?y9; // get visiting hero
+!!HEy9&y9>-1:A2/y99/d/?y98; // calc number of equipped legion Artifacts
+!!HEy9&y9>-1/y98=0:A2/133/d/?y98; // if no part equipped check for whole Statue
+!!VRj&y98>0:Sy97; // set bonus (reverse creature level)
+
+** extra growth by stored Legion Artifact
+!!CA0/x2:P?v998/?v999/?v1000; // get position of the current town
+!!POv998/v999/v1000:V3/?y2; // get the value stored in this mapfield (used as flag variable to save the stored Legion-Artifacts)
+!!VRy99:Sx1 +1;
+!!FU3333:Px1; // calc bit for the creature level; return in y-100
+!!VRy-100&y-100=0:S1; !!VRy-100&y-100=32:S16; // correction for L1 and L7
+!!VRy2:&y-100; // check if the bit is set (artifact stored in town), save it in y2
+!!VRi&y2>0/j=0:Sy97; // set bonus (reverse creature level from above (equipped Legion Artifact)) if bit is set and no further bonus by equipped legion artifact
+
+** extra growth by equipped _Statue_ of Legion
+!!VRy-100:S0;
+!!OW:Hy8/1/0; // get number of heroes
+!!DO1617/1/v1/1:Py8; // check if a hero of owner y8 has the Statue of Legion equipped; return in y-100
+!!VRl&y-100>0:Sf; // if yes set the bonus to the basic growth (without any other bonuses)
+
+** extra growth by updated dwellings (script45)
+!!VRy99:Sx1 +1; // set y99 to creaturelvl +1 to get a list of 1..7 instead of 0..6
+!!FU862&432:Px2/y99/0/?o/?m; // calls FU862 from script45 to get the bonus; return bonus creatures in m (o is only a trash-var)
+
+** growth bonuses for grail (50% to the total of basic growth + castle + dwellings + statue)
+!!VRo:Sf; !!VRo:+g; !!VRo:+h; !!VRo:+i; !!VRo:+j; !!VRo:+k; !!VRo:+l; !!VRo:+m; // add total growth
+!!CA0/x2:B3/26; // check if grail is built
+!!CA0/x2:P?y10/?y11/?y12; // get town pos.
+!!FU1629&y5=2/-1:Py10/y11/y12/0; // check if dummygrail is built in Tower
+!!FU1629&y5=8/-1:Py10/y11/y12/0; // check if dummygrail is built in Conflux
+!!VRn&1:So:2; // if yes further 50 % bonus
+!!VRo:+n; //add grail bonus to total
+
+** usual grail bonuses (basic + citatel/castle + special buildings + equipped legion parts + equ. Statue of legion + number of ext. dwellings)
+*!VRy98:Sx1+37; // set y98 upgraded building number
+*!CA0/x2:B3/y2; // check if it is built
+!!VRq:Sf; !!VRq:+g; !!VRq:+h; !!VRq:+j; !!VRq:+l; !!VRq:+r; !!VRq:+s; // add total
+!!VRq::2; // divide by 2 because bonus is only 50%
+!!CA0/x2:B3/26; // check if usual grail is built
+!!VRq&-1:S0; // set to 0 if no grail is built
+
+
+***** end function 1615 ********
+
+
+!?FU1616; // count dwellings with the specified creatures
+** call by using an loop: DO1616/1/y1/1:P<monster nonupgr>/<monster upgraded>/<owner>  while y1 is the number
+** of all dwellings (type 17) on the map
+** get this number by calling
+** UN:U17/-1/?y1;       and
+** UN&y2=33:U20/1/?y1;  first while y2 is the unupgraded monster (33 = stone golem; the second UN counts the golem factories on the map)
+** calcs the number of all dwellings with the monster owned by <owner>; give Result back in r (non upgr.) and s (upgraded)
+** if you want only the numbers of upgraded or only of non upgraded monsters set both parameters equal
+!!VRr&x16=1:S0; !!VRs&x16=1:S0; // initialize r and s in the first loop
+!!UN&x1<>33:U17/-1/-1/600; // get coordinates of the dwelling
+!!UN&x1=33:U20/1/-1/600; // get coordinates of golem factory if monster is golem
+!!DWv600/v601/v602:O?y3; // get the owner
+!!FU&y3<>x3:E; // exit if not the correct owner
+!!DWv600/v601/v602:M0/?y1/?y2; // get the type of monsters you can hire in slot 1
+!!DWv600/v601/v602:M1/?y4/?y2; // get the type of monsters you can hire in slot 2
+!!DWv600/v601/v602:M2/?y5/?y2; // get the type of monsters you can hire in slot 3
+!!DWv600/v601/v602:M3/?y6/?y2; // get the type of monsters you can hire in slot 4
+!!VRr|y1=x1/y4=x1/y5=x1/y6=x1:+1; // increase r if not upg. monster found in one of the 4 generator-slots
+!!VRs|y1=x2/y4=x2/y5=x2/y6=x2:+1; // increase s if upg. monster found in one of the 4 generator-slots
+
+***** end function 1616 ********
+
+
+
+
+!?FU1617; // called from FU1615; check if a hero of owner x1 has the Statue of Legion equipped; return in y-100
+!!OW:Hx1/2/x16; // get current hero in x1's hero list to v2
+!!HEv2:A2/133/d/?y1; // check if Statue of Legion is equipped
+!!VRy-100&y1>0:S1; // if yes set y-100 to 1
+
+***** end function 1617 ********
+
+
+!?FU1618; // checks, if creature dwelling is build
+** calling syntax f.e. FU1618:P<town>/<level>/?y1/y2
+** x1 = Town number
+** x2 = Creature Level (1..7)
+** Return:
+** ?x3 = 0 if dwelling is not build, 1 for non upgraded, 2 for upgraded
+** ?x4 = 0 if there is no horde building for this Creature Level in this town
+**       1 if it is built
+
+!!VRx3:S0; !!VRx4:S0; // default returns
+!!VRy98:Sx2 - 1; // calc internal monster level (0..6)
+!!CA0/x1:T?y5; // get the current town type
+!!VRy99:Sy98 + 30; // get building number for normal building if there is no upgraded
+!!CA0/x1:B3/y99; // check if dwelling is built
+!!VRx3&1:S1; // return there are not upgr. creatures
+!!VRy99:Sy98+37; // // get building number for upgraded dwelling
+!!CA0/x1:B3/y99; // check if upgr. dwelling is built
+!!VRx3&1:S2; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+** horde buildings:
+!!CA0/x1&y98=0/y5>2:B3/18; // check for 1st-level horde building (not upgraded) - all towns beginning at Inferno
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=0/y5>2:B3/19; // if not, check for 1st-level horde building (upgraded)
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+!!CA0/x1&y98=2/y5=0:B3/18; // Griffins
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=2/y5=0:B3/19; // Royal Griffins
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+!!CA0/x1&y98=1/y5=1:B3/18; // Dwarfes
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=1/y5=1:B3/19; // Battle Dwarfes
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+!!CA0/x1&y98=1/y5=2:B3/18; // Gargoyles
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=1/y5=2:B3/19; // Obsidian Gargoyles
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+!!CA0/x1&y98=4/y5=1:B3/24; // Dendroid guards
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=4/y5=1:B3/25; // Dendroid soldiers
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+!!IF:V1/0; // disable flag 1 again
+
+!!CA0/x1&y98=2/y5=3:B3/24; // Hell Hound
+!!VRx3&1:S1; !!VRx4&1:S1; // return there are not upgr. creatures
+!!CA0/x1&y98=2/y5=3:B3/25; // Cerberus
+!!VRx3&1:S2; !!VRx4&1:S1; // return there are upgr. creatures
+
+***** end function 1618 ********
+
+
+
+******************** end Legion Statue script ********************
+

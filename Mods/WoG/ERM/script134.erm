@@ -1,0 +1,860 @@
+ZVSE
+ERMS_ScriptName=Peasants
+ERMS_ScriptAuthor=siegfried
+ERMS_ScriptVersion=1.3.3
+ERMS_ScriptDate=18.3(March).2008
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=German or Deutsch (native)
+ERMS_ScriptUsedVariables=v1000(alltemporary);v1260;v13;v998;v999
+ERMS_ScriptUsedFunctions=FU614-FU619;FU817-FU818
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+
+** Peasant script
+** This adds resource production for peasants stored in towns or mines.
+** This is an alternate to the H4 peasant script and as such disabled if the
+** H4 peasant script is enabled.
+** H4 peasant option is 286
+** This peasant option is 334
+
+** Towns
+** Basic gold production in towns is 1 gold per peasant. It may be increased:
+**   +1% per average rank
+**  +10% for town hall
+**  +20% for city hall
+**  +40% for capitol (note: town hall, city hall and capitol do not sum up)
+**  +10% for market place
+** +100% for grail
+** +0...60% for estates (0..30% normal, 0-60% for gold or estates specialists)
+**  +10% per hero level for gold specialists
+**  +15% for equipped sack of gold
+**  +10% for equipped bag of gold
+**   +5% for equipped purse of gold
+** May sum up to 230% for lvl1 hero and 1120% for lvl89 hero
+
+
+** Vars from script00.erm:
+** v2391 ($once$): 1 if first active color, 0 else (read only)
+** v2393: day (read only)
+
+** Vars from script127 (H4 peasant script) reused:
+** z78: Peasant speciality text (set)
+** v600 - v608: Players hero list (written)
+
+** Message disabling option from script025: Option number 185
+** If option set, disable messages
+
+** v998, v999, v1000: Position of object.
+** Rem: During function executing the content of these
+** variables seems to be destroyed. So position is given
+** by parameter, and after function execution the position
+** is resoored.
+** v1260 for hero ID (same as potion script)
+
+
+**UN:P334/1;                           DEBUG: Manually enable
+**UN:P286/0;                           H4 Peasants option
+**UN:P185/0;                           Message disabling
+
+****************************************************************************
+** Aux. function to iterate through slots
+** Town version (town without hero)
+** x1 = creature type (-1 = any)
+** x2 = dummy (not used)
+** x3 = fixed hitpoint growth rate
+** x4 = additional experience
+** x5 = xpos
+** x6 = ypos
+** x7 = level
+** x16 = slot number
+** v13 = function multiplexer (do not change inside function)
+** returns:
+** v1 = Number of (matching) creatures
+** v2 = Sum of experience per creature (of matching creatures)
+** v3 = Number of slots with matching creatures
+** v4 = First empty slot
+** v5 = First matching slot
+!?FU817&v13=98;                        Town
+!!VRv1&x16=0:S0;                       Init number of creatures
+!!VRv2&x16=0:S0;                       Init Experience
+!!VRv3&x16=0:S0;                       Init number of stacks
+!!VRv4&x16=0:S-1;                      Init first free slot
+!!VRv5&x16=0:S-1;                      Init first matching slot
+** DEBUG
+** Need that for now if there is a town without garrisoned hero
+** plus a visiting hero. The EX trigger then looks for the hero
+** at that position and throws an error, because type = town is
+** specified.
+!!OBx5/x6/x7:T?y1;                     Type (maybe visiting hero)
+**IF&y1<>98:M^Error: No town found at location %X5,%X6,%X7^;
+**FU&y1<>98:E;                         Exit if not town
+!!VRy7:S0;
+!!CAx5/x6/x7&y1=34:M2/x16/?y5/?y6;
+!!EXx5/x6/x7/x16/2&y1=98:A?y5/?y6/?y7; y5=type, y6=number, y7=exp
+!!FU&y5>=160/y5<=163:E;                No emissary growth
+!!VRv4&y6=0/v4=-1:Sx1;                 Found first empty slot
+!!FU&y6=0:E;                           Empty slot: Done
+!!VRv5&y5=x1/v5=-1:Sx1;                Found first matching slot
+!!VRy1&x1<>-1:S-1;
+!!MA&x1<>-1:Ux1/?y2;                   y2 = possible upgraded version
+!!VRv1|x1=-1/x1=y5/x1=y2:+y6;          Add number of creatures
+!!VRv2|x1=-1/x1=y5/x1=y2:+y7;          Add experience per creature
+!!VRv3|x1=-1/x1=y5/x1=y1:+1;           Increment number of stacks
+!!FU&x3=0/x4=0:E;                      Done
+!!FU|x1>=0/x1<>y5/x1<>y2:E;
+!!FU&y6>2000:E;                        No growth beyond 2000
+**FU&y5=139/y6>1000:E;                 EXPERIMENTAL: no growth for peasants > 1000
+!!MA:Py5/?y8;                          y8 = Hitpoints per creature
+!!VRy9:S0;                             Init
+!!VRy9&y8>0/x3>y8:Sx3:y8;              y9 = Number of creatures to add
+!!CAx5/x6/x7&x3<>0:M2/x16/d/dy9;       Add creatures
+!!FU&x4=0:E;                           Done
+!!FU&y1<>98:E;
+!!UN:P900/?y11;                        Stack experience enabled?
+!!FU&y11=0:E;                          Exit if not
+!!EXx5/x6/x7/x16/2&x4<>0:Ad/d/dx4;     Add experience
+!!FU:E;                                Done
+
+****************************************************************************
+** Aux. function to iterate through slots
+** Hero version
+** x1 = creature type (-1 = any)
+** x2 = Hero ID
+** x3 = fixed hitpoint growth rate
+** x4 = additional experience
+** x16 = slot number
+** v13 = function multiplexer (do not change inside function)
+** returns:
+** v1 = Number of (matching) creatures
+** v2 = Sum of experience per creature (of matching creatures)
+** v3 = Number of slots with matching creatures
+** v4 = First empty slot
+** v5 = First matching slot
+!?FU817&v13=34;                        Hero
+!!VRv1&x16=0:S0;                       Init number of creatures
+!!VRv2&x16=0:S0;                       Init Experience
+!!VRv3&x16=0:S0;                       Init number of stacks
+!!VRv4&x16=0:S-1;                      Init first free slot
+!!VRv5&x16=0:S-1;                      Init first matching slot
+!!FU&x1<0:E;                           Parameter error
+!!FU&x1>155:E;                         Parameter error
+!!EXx2/x16:A?y5/?y6/?y7;               y5 = type, y6 = number, y7 = exp.
+!!FU&y5>=160/y5<=163:E;                No emissary growth
+!!VRv4&y6=0/v4=-1:Sx1;                 Found first empty slot
+!!FU&y6=0:E;                           Empty slot: Done
+!!VRy1&x1<>-1:S-1;
+!!MA&x1<>-1:Ux1/?y2;                   y1 = possible upgraded version
+!!VRv1|x1=-1/x1=y5/x1=y2:+y6;          Add number of creatures
+!!VRv2|x1=-1/x1=y5/x1=y2:+y7;          Add experience per creature
+!!VRv3|x1=-1/x1=y5/x1=y2:+1;           Increment number of stacks
+!!FU&x3=0/x4=0:E;                      Done
+!!FU&x1>=0/x1<>y5/x1<>y2:E;
+!!FU&y6>2000:E;                        No growth beyond 2000
+**FU&y5=139/y6>1000:E;                 EXPERIMENTAL: no growth for peasants > 1000
+!!MA:Py5/?y8;                          y8 = Hitpoints per creature
+!!VRy9:S0;                             Init
+!!VRy9&y8>0/x3>y8:Sx3:y8;              y9 = Number of creatures to add
+!!HEx2&x3<>0:C0/x16/d/dy9;             Add creatures
+!!FU&x4<>0:E;                          Done
+!!UN:P900/?y11;                        Stack experience enabled?
+!!FU&y11=0:E;                          Exit if not
+!!EXx2/x16&x4<>0:A?d/d/dx4;            Add experience
+!!FU:E;                                Done
+
+****************************************************************************
+** Aux. function to iterate through slots
+** Mine version (types 53 and 220)
+** x1 = creature type (-1 = any)
+** x2 = Dummy (not used)
+** x3 = fixed hitpoint growth rate
+** x4 = additional experience
+** x5 = xpos
+** x6 = ypos
+** x7 = level
+** x16 = slot number
+** v13 = function multiplexer (do not change inside function)
+** returns:
+** v1 = Number of (matching) creatures
+** v2 = Sum of experience per creature (of matching creatures)
+** v3 = Number of slots with matching creatures
+** v4 = First empty slot
+** v5 = First matching slot
+!?FU817|v13=53/v13=220;                Mine
+!!VRv1&x16=0:S0;                       Init number of creatures
+!!VRv2&x16=0:S0;                       Init Experience
+!!VRv3&x16=0:S0;                       Init number of stacks
+!!VRv4&x16=0:S-1;                      Init first free slot
+!!VRv5&x16=0:S-1;                      Init first matching slot
+** DEBUG
+!!OBx5/x6/x7:T?y1;                     Type (maybe visiting hero)
+**IF&y1<>53/y1<>220:M^Error: No mine type %V13 found at location %X5,%X6,%X7^;
+**IF&y1<>53/y1<>220:M^found: type %Y1^;
+**FU&y1<>53/y1<>220:E;                 Exit if not mine
+**
+!!VRy7:S0;
+!!MNx5/x6/x7&y1=34:Mx16/?y5/?y6;       y5=type, y6=number, y7=exp (vis. hero)
+!!EXx5/x6/x7/x16/3&y1=53:A?y5/?y6/?y7; without visiting hero
+!!EXx5/x6/x7/x16/3&y1=220:A?y5/?y6/?y7;without visiting hero
+!!FU&y5>=160/y5<=163:E;                No emissary growth
+** DEBUG
+**IF&y6>0:M^DEBUG: Mine, type %Y1, slot%X16, %Y6 Creatures^;
+** END DEBUG
+!!VRv4&y6=0/v4=-1:Sx1;                 Found first empty slot
+!!FU&y6=0:E;                           Empty slot: Done
+!!VRy1&x1<>-1:S-1;
+!!MA&x1<>-1:Ux1/?y2;                   y2 = possible upgraded version
+!!VRv1|x1=-1/x1=y5/x1=y2:+y6;          Add number of creatures
+!!VRv2|x1=-1/x1=y5/x1=y2:+y7;          Add experience per creature
+!!VRv3|x1=-1/x1=y5/x1=y2:+1;           Increment number of stacks
+!!FU&x3=0/x4=0:E;                      Done
+!!FU&x1>=0/x1<>y5/x1<>y2:E;
+!!FU&y6>2000:E;                        No growth beyond 2000
+**FU&y5=139/y6>1000:E;                 EXPERIMENTAL: no growth for peasants > 1000
+!!MA:Py5/?y8;                          y8 = Hitpoints per creature
+!!VRy9:S0;                             Init
+!!VRy9&y8>0/x3>=y8:Sx3:y8;             y9 = Number of creatures to add
+!!MNx5/x6/x7&x3<>0:Mx16/d/dy9;         Add creatures
+!!FU&x4<>0:E;                          Done
+!!FU&y1<>53/y1<>220:E;                 Exit if not mine
+!!UN:P900/?y11;                        Stack experience enabled?
+!!FU&y11=0:E;                          Exit if not
+!!EXx5/x6/x7/x16/2&x4<>0:Ad/d/dx4;     Add experience
+!!FU:E;                                Done
+
+****************************************************************************
+** Aux. function to iterate through slots
+** Garrison version (types 33 and 219)
+** x1 = creature type (-1 = any)
+** x2 = Dummy (not used)
+** x3 = fixed hitpoint growth rate
+** x4 = Dummy
+** x5 = xpos
+** x6 = ypos
+** x7 = level
+** x16 = slot number
+** v13 = function multiplexer (do not change inside function)
+** v998, v999, v1000 = position
+** returns:
+** v1 = Number of (matching) creatures
+** v2 = Sum of experience per creature (of matching creatures)
+** v3 = Number of slots with matching creatures
+** v4 = First empty slot
+** v5 = First matching slot
+!?FU817|v13=33/v13=219;                Garrison
+!!VRv1&x16=0:S0;                       Init number of creatures
+!!VRv2&x16=0:S0;                       Init Experience
+!!VRv3&x16=0:S0;                       Init number of stacks
+!!VRv4&x16=0:S-1;                      Init first free slot
+!!VRv5&x16=0:S-1;                      Init first matching slot
+** DEBUG
+!!OBx5/x6/x7:T?y1;                     Type (maybe visiting hero)
+**IF|y1<>33/y1<>219:M^Error: No garrison found at location %X5,%X6,%X7^;
+**FU&y1<>33/y1<>219:E;                 Exit if not garrison
+**
+!!VRy7:S0;
+!!GRx5/x6/x7&y1=34:Gx16/?y5/?y6;       y5 = type, y6 = number (visiting hero)
+!!EXx5/x6/x7/x16/4&y1=33:A?y5/?y6/?y7; without visiting hero, y7 = exp.
+!!EXx5/x6/x7/x16/4&y1=219:A?y5/?y6/?y7;without visiting hero, y7 = exp.
+!!VRv4&y6=0/v4=-1:Sx1;                 Found first empty slot
+!!FU&y6=0:E;                           Empty slot: Done
+!!VRy1&x1<>-1:S-1;
+!!MA&x1<>-1:Ux1/?y1;                   y1 = possible upgraded version
+!!VRv1|x1=-1/x1=y5/x1=y1:+y6;          Add number of creatures
+!!VRv3|x1=-1/x1=y5/x1=y1:+1;           Increment number of stacks
+!!FU&x3=0/x4=0:E;                      Done
+!!FU&x1>=0/x1<>y5/x1<>y2:E;
+!!FU&y5>=160/y5<=163:E;                No emissary growth
+!!FU&y6>2000:E;                        No growth beyond 2000
+**FU&y5=139/y6>1000:E;                 EXPERIMENTAL: no growth for peasants > 1000
+!!MA:Py5/?y8;                          y8 = Hitpoints per creature
+**IF:M^DEBUG: Found creature with %Y8HP per creature in slot %X16 of garrison^;
+!!VRy9:S0;                             Init
+!!VRy9&y8>0/x3>y8:Sx3:y8;              y9 = Number of creatures to add
+!!GRx5/x6/x7&x3<>0:Gx16/d/dy9;         Add creatures
+!!FU&y1<>34:E;                         No visiting hero: Exit
+** If there is a visiting hero in the garrison, apply a modified growth
+** rate to heroes stacks, too. Modification is by remaining movement points:
+** (movement points) : 2000
+!!HEx5/x6/x7:N?y11;                    y11 = Hero ID
+!!FU|y11<0/y11>155:E;                  Error
+!!HEy11:C0/x16/?y15/?y16;              y15 = type, y16 = number of creatures
+!!FU&y16=0:E;                          Empty? Exit.
+!!FU&x1<>-1/y15<>x1:E;                 Not matching? Exit.
+!!VRy19:S0;
+!!VRy20:Sx3;
+!!HEy11:W?y21/1;                       y21 = movement points
+!!VRy20:*y21:2000;                     y20 = modified hitpoints to add
+!!MA:Py15/?y18;                        y18 = Hitpoints per creature
+!!VRy19&y18>0/x3>y18:Sx3:y18;          y19 = Number of creatures to add
+** TODO
+!!FU:E;                                Done
+
+
+****************************************************************************
+!?TM2&$once$=1/$day$>1;
+**IF:M^DEBUG: Peasant script^;
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if H4 peasant script enabled
+!!UN:P334/?y-3;                        Check option for this script
+!!FU&y-3=0:E;                          Exit if not enabled
+!!EA139:L?y-1;                         y-1 = experience scaling and limit
+!!UN:U98/-1/?y-10;                     y-10 = number of towns
+!!DO614/1/y-10/1:P98/$color$;          Do for all towns
+!!UN:U53/-1/?y-10;
+!!DO615/1/y-10/1&y-10>0:P53/$color$;   Do for all mines
+!!UN:U220/-1/?y-10;
+!!DO615/1/y-10/1&y-10>0:P220/$color$;  Do for all mines
+!!FU:E;
+
+!?TM2&$once$=1/$day$>1/$weekday$=$monday$;
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if H4 peasant script enabled
+!!UN:P334/?y-3;                        Check option for this script
+!!FU&y-3=0:E;                          Exit if not enabled
+!!EA139:L?y-1;                         y-1 = experience scaling and limit
+!!UN:U33/-1/?y-10;
+!!DO616/1/y-10/1&y-10>0:P33/$color$;   Do for all garrisons
+!!UN:U219/-1/?y-10;
+!!DO616/1/y-10/1&y-10>0:P219/$color$;  Do for all garrisons
+!!UN:U54/139/?y-10;
+!!DO618/1/y-10/1&y-10>0:P54/139/-1;    Do for all free peasant stacks
+!!FU:E;
+
+!?TM2&$day$>1/$weekday$=$monday$;
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if H4 peasant script enabled
+!!UN:P334/?y-3;                        Check option for this script
+!!FU&y-3=0:E;                          Exit if not enabled
+!!EA139:L?y-1;                         y-1 = experience scaling and limit
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if H4 peasant script enabled
+**UN:P334/?y-3;                        Check option for this script
+**FU&y-3=0:E;                          Exit if not enabled
+** Get active (on adventure map) hero list of player.
+** Variables reused from script127
+!!OW:O$color$/?v600/?v601/?v602/?v603/?v604/?v605/?v606/?v607/?v608;
+!!VRy-10:S601+v600;
+!!DO617/601/y-10/1&v600>0:P34/$color$; Do for players heroes
+!!FU:E;
+
+!?TM2&$day$=1;
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if enabled
+!!UN:P334/?y-3;                        Check option for this script
+!!FU&y-3=0:E;                          Exit if not enabled
+!!UN:P185/?y-4;                        Messages disabled?
+** Set peasant speciality text:
+!!VRz78&y-2=0/y-3=1/y-4=0:S^Produces resources in towns and mines.^;
+!!UN&y-2=0/y-3=1/y-4=0:G1/139/2/78;
+!!IF&y-2=0/y-3=1/y-4=0:M^Peasants in this land may produce gold and resources:
+In villages, they produce 1 gold per peasant.
+In towns, they produce 1.1 gold per peasant.
+In cities, they produce 1.2 gold per peasant.
+In the capitol, they produce 1.4 gold per peasant.
+Peasants with higher ranks do produce more: 10%% per rank.
+A market place increases the production by 10%%.
+The grail increases the production by 100%%.
+The resource silo enables enough peasants to produce that resource, too.
+Heroes in town garrison may increase production further.
+Heroes with resource speciality enable enough peasants to produce that resource too, if the resource silo is built.^;
+!!IF&y-2=0/y-3=1/y-4=0:M^Peasants in mines may increase mine resource production:
+Sawmill production is increased by 1 wood per 500 peasants.
+Alchemist lab production is increased by 1 mercury per 1000 peasants.
+Ore pit production is increased by 1 ore per 500 peasants.
+Sulfur mine production is increased by 1 sulfur per 1000 peasants.
+Crystal mine production is increased by 1 crystal per 1000 peasants.
+Gem pond production is increased by 1 gem per 1000 peasants.^;
+!!MA:G139/?y-5;                        y-5 = Peasant growth rate
+!!UN:P284/?y-6;                        Growth in town dwelling option
+!!UN:P285/?y-7;                        Growth in hero army and garrison
+!!UN:P116/?y-8;                        General army growth
+!!VRy-9:Sy-6+y-7+y-8;
+!!MA&y-2=0/y-3=1/y-9>1:G139/dy1;       Double peasant growth then
+!!FU:E;
+
+
+
+****************************************************************************
+** Towns
+** x1 = object type
+**      98  = town
+** x2 = color (player) number
+** x16 = object number
+** depends on y-1 = experience scaling and limit (!!EA139:L?y-1;)
+** y1 = owner
+** y2 = number of peasants
+** y10 = hero ID
+!?FU614;                               Peasants in town
+!!FU&x1<1:E;                           Error exit
+!!UN:Ux1/-1/x16/998;                   Get object coordinates to x=v998, y=v999, l=v1000
+!!VRy90:Sv998;                         xpos
+!!VRy91:Sv999;                         ypos
+!!VRy92:Sv1000;                        level
+** DEBUG: Remove these two:
+**OBv998/v999/v1000:T?y1;              Type (maybe visiting hero)
+**FU&y1<>98:E;                         Exit if not town
+!!VRy9:S1;                             Slot type (y9): Assume hero
+!!VRy1:S-1;                            Init owner: y1 (no owner)
+!!CA998:O?y1;                          Owner (y1)
+!!FU&y1<0:E;                           Exit if no owner
+!!CA998:H0/?v1260;                     Garrison hero (y10)
+!!VRy2:S0;                             Init number of peasants (y2)
+!!VRy3:S0;                             Init peasant experience (y3)
+!!VRy4:S0;                             Init number of peasant stacks (y4)
+** NEW
+!!VRv13:S98;                           Function multiplexer: Town
+!!VRv13&v1260>=0:S34;                  Function multiplexer: Hero
+!!DO817/0/6/1:P139/v1260/0/0/y90/y91/y92;
+!!VRy2:Sv1;                            y2 = Number of peasants
+!!VRy3:Sv2;                            y3 = Experience sum
+!!VRy3&v3>0: :v3;                      y3 = Average experience
+** END NEW
+!!UN:Ux1/-1/x16/998;                   Restore object coordinates to x=v998, y=v999, l=v1000
+
+!!VRy3: *10;
+!!VRy3: :y-1;                          Rank = (current/max)*10
+** Gold
+** y2 = number of peasants
+** y3 = average rank
+** y4 = percentage extra gold
+** y8 = resource type (6 = gold)
+** Rem: Town hall replaces village hall, city hall replaces town hall,
+** capitol replaces city hall.
+!!VRy8:S6;                             Resource type = Gold
+!!VRy4:Sy3;                            Rank gives an extra gold of 0...10%
+!!CA998:B3/11;                         Town hall?
+!!VRy4&1:+10;                          -> extra 10% gold
+!!CA998:B3/12;                         City hall?
+!!VRy4&1:+20;                          -> extra 20% gold
+!!CA998:B3/13;                         Capitol?
+!!VRy4&1:+40;                          -> extra 40% gold
+!!CA998:B3/14;                         Market place?
+!!VRy4&1:+10;                          -> extra 10% gold
+!!CA998:B3/26;                         Grail?
+!!VRy4&1:+100;                         -> extra 100% gold
+** If garrisoned hero:
+!!VRy13:S0;                            Init estates level (y13)
+!!HEv1260&v1260>=0:S13/?y13;           Estates level -> y13
+!!HEv1260&v1260>=0:X?y14/?y15/d/d/d/d/d; Speciality (type -> y14, subtype -> y15)
+!!VRy13&y14=2/y15=6:*2;                Double for gold specialist
+!!VRy13&y14=0/y15=13:*2;               Double for estates specialist
+!!VRy13&y13>0:*10;                     Estates -> 0 - 60% extra gold
+!!VRy4&y14=2/y15=6:+y13;               Add to extra gold
+** IDEA: Include hero level?
+!!HEv1260&v1260>=0:Ed/?y16;            y16 = hero level
+!!VRy16&y14=2/y15=6:*20;               20% per hero level for gold specialists
+!!VRy4&y14=2/y15=6:+y16;               -> extra percentage
+** Check artifacts
+!!HEv1260:A2/115/d/?y15;               Sack of gold equipped?
+!!VRy4&y15>0:+15;                      -> extra 15% gold
+!!HEv1260:A2/116/d/?y15;               Bag of gold equipped?
+!!VRy4&y15>0:+10;                      -> extra 10% gold
+!!HEv1260:A2/117/d/?y15;               Purse of gold equipped?
+!!VRy4&y15>0:+5;                       -> extra 5% gold
+!!HEv1260:A2/140/d/?y15;               Cornucupia equipped?
+!!VRy4&y15>0:50;                       -> extra 50% gold
+** IDEA: Include difficulty level?
+** TODO
+**
+** Calculate gold
+** y2 = number of peasants
+** y3 = average rank
+** y4 = extra percentage (may sum up to 210%)
+** y5 = gold result
+** y8 = resource type (6=gold)
+!!VRy5:Sy2;                            Gold result = number of peasants
+!!VRy6:Sy2*y4:100;                     Extra gold
+!!VRy5:+y6;                            Add extra gold
+**IF:M^DEBUG: %Y4 extra percentage, %Y5 gold^;
+!!OW:Ry1/y8/dy5;                       Add resource (gold)
+** Other resources
+** y2 = number of peasants
+** y3 = average rank
+** y20 = wood (type 0)
+** y21 = mercury (type 1)
+** y22 = ore (type 2)
+** y23 = sulfur (type 3)
+** y24 = crystal (type 4)
+** y25 = gems (type 5)
+!!OBv998/v999/v1000:U?y12;             Subtype (town class) -> y12
+!!CA998:B3/15;                         Resource silo built? (-> flag 1)
+!!VRy20:S0;                            Wood
+!!VRy21:S0;                            Mercury
+!!VRy22:S0;                            Ore
+!!VRy23:S0;                            Sulfur
+!!VRy24:S0;                            Crystal
+!!VRy25:S0;                            Gems
+!!VRy20&1/y12=0:Sy3+1;                 Castle: Wood
+!!VRy22&1/y12=0:Sy3+1;                 Castle: Ore
+!!VRy24&1/y12=1:Sy3+1;                 Rampart: Crystal
+!!VRy25&1/y12=2:Sy3+1;                 Tower: Gems
+!!VRy21&1/y12=3:Sy3+1;                 Inferno: Mercury
+!!VRy20&1/y12=4:Sy3+1;                 Necro: Wood
+!!VRy22&1/y12=4:Sy3+1;                 Necro: Ore
+!!VRy23&1/y12=5:Sy3+1;                 Dungeon: Sulfur
+!!VRy20&1/y12=6:Sy3+1;                 Stronghold: Wood
+!!VRy22&1/y12=6:Sy3+1;                 Stronghold: Ore
+!!VRy20&1/y12=7:Sy3+1;                 Forttress: Wood
+!!VRy22&1/y12=7:Sy3+1;                 Fortress: Ore
+!!VRy21&1/y12=8:Sy3+1;                 Conflux: Mercury
+** y20 - y25 now contain 0 or peasant rank
+** DEBUG
+!!CA998:N?z1;                          Name of town
+!!HEv1260&y10>=0:B0/?z2;               Name of hero (if any)
+!!OW:Gy1/?y19;                         y19 = 1 if player here
+**IF&1:N0/y20/1/y21/2/y22/3/y23/4/y24/5/y25;
+**IF&1/y19=1:N^DEBUG: %Y2 peasants, resource production^;     (o.k.)
+** Check equipped artifacts
+!!VRy15:S0;                            Preset: No artifact
+!!HEv1260&v1260>=0:A2/114/d/y15;         Cart of lumber equipped?
+!!VRy20&1/y15>0:+10;                   10% extra wood
+!!HEv1260&v1260>=0:A2/111/d/y15;           Vial of mercury equipped?
+!!VRy21&1/y15>0:+10;                   10% extra mercury
+!!HEv1260&v1260>=0:A2/112/d/y15;           Cart of ore equipped?
+!!VRy22&1/y15>0:+10;                   10% extra ore
+!!HEv1260&v1260>=0:A2/113/d/y15;           Ring of sulfur equipped?
+!!VRy23&1/y15>0:+10;                   10% extra sulfur
+!!HEv1260&v1260>=0:A2/109/d/y15;           Crystal cloak equipped?
+!!VRy24&1/y15>0:+10;                   10% extra crystal
+!!HEv1260&v1260>=0:A2/110/d/y15;           Ring of gems equipped?
+!!VRy25&1/y15>0:+10;                   10% extra gems
+!!HEv1260&v1260>=0:A2/140/d/y15;           Cornucupia equipped?
+!!VRy20&1/y15>0:+10;                   10% extra wood
+!!VRy21&1/y15>0:+10;                   10% extra mercury
+!!VRy22&1/y15>0:+10;                   10% extra ore
+!!VRy23&1/y15>0:+10;                   10% extra sulfur
+!!VRy24&1/y15>0:+10;                   10% extra crystal
+!!VRy25&1/y15>0:+10;                   10% extra gems
+** DEBUG
+**IF&1:N0/y20/1/y21/2/y22/3/y23/4/y24/5/y25;
+**IF&1/y19=1:N^DEBUG: %Y2 peasants, resource production^;  (o.k.)
+** Check hero speciality
+!!VRy14:S-1;                           Preset speciality type
+!!VRy15:S-1;                           Preset speciality subtype
+!!HEv1260&v1260>=0:X?y14/?y15/d/d/d/d/d;   Speciality (type -> y14, subtype -> y15)
+!!HEv1260&v1260>=0:Ed/?y16;                y16 = hero level
+!!VRy16&y14=2:*10;                     10% per hero level for res. specialists
+!!VRy20&1/v1260>=0/y14=2/y15=0:+y16;     Wood specialist
+!!VRy21&1/v1260>=0/y14=2/y15=1:+y16;     Mercury specialist
+!!VRy22&1/v1260>=0/y14=2/y15=2:+y16;     Ore specialist
+!!VRy23&1/v1260>=0/y14=2/y15=3:+y16;     Sulfur specialist
+!!VRy24&1/v1260>=0/y14=2/y15=4:+y16;     Crystal specialist
+!!VRy25&1/v1260>=0/y14=2/y15=5:+y16;     Gems specialist
+** DEBUG
+**IF&1:N0/y20/1/y21/2/y22/3/y23/4/y24/5/y25;
+**IF&1/y19=1:N^DEBUG: %Y2 peasants, resource production^;  (o.k.)
+** y20 - y25 now contain the extra percentage + 1
+!!VRy20&1/y20>0:*y2;
+!!VRy21&1/y21>0:*y2;
+!!VRy22&1/y22>0:*y2;
+!!VRy23&1/y23>0:*y2;
+!!VRy24&1/y24>0:*y2;
+!!VRy25&1/y25>0:*y2;
+!!VRy20&1/y20>0: :100;
+!!VRy21&1/y21>0: :100;
+!!VRy22&1/y22>0: :100;
+!!VRy23&1/y23>0: :100;
+!!VRy24&1/y24>0: :100;
+!!VRy25&1/y25>0: :100;
+!!VRy20&1/y20>0:+y2;
+!!VRy21&1/y21>0:+y2;
+!!VRy22&1/y22>0:+y2;
+!!VRy23&1/y23>0:+y2;
+!!VRy24&1/y24>0:+y2;
+!!VRy25&1/y25>0:+y2;
+** y20 - y25 now contain corrected number of peasants
+** Error prevention. It seems erm does not calculate correct.
+** small numbers divided by large numberd do not result in 0
+** but in 1!
+!!VRy20&y20<500:S0;
+!!VRy21&y21<1000:S0;
+!!VRy22&y22<500:S0;
+!!VRy23&y23<1000:S0;
+!!VRy24&y24<1000:S0;
+!!VRy25&y25<1000:S0;
+** div by granularity
+!!VRy20&1/y20>0: :1000;                One unit per 1000 peasants
+!!VRy21&1/y21>0: :1000;                One unit per 1000 peasants (DEBUG: 1)
+!!VRy22&1/y22>0: :1000;                One unit per 1000 peasants
+!!VRy23&1/y23>0: :1000;                One unit per 1000 peasants
+!!VRy24&1/y24>0: :1000;                One unit per 1000 peasants
+!!VRy25&1/y25>0: :1000;                One unit per 1000 peasants
+** DEBUG
+**IF&1:N0/y20/1/y21/2/y22/3/y23/4/y24/5/y25;
+**IF&1/y19=1:N^DEBUG: %Y2 peasants, resource production^; ()
+!!OW&y20>0:Ry1/0/dy20;                 Add wood
+!!OW&y21>0:Ry1/1/dy21;                 Add mercury
+!!OW&y22>0:Ry1/2/dy22;                 Add ore
+!!OW&y23>0:Ry1/3/dy23;                 Add sulfur
+!!OW&y24>0:Ry1/4/dy24;                 Add crystal
+!!OW&y25>0:Ry1/5/dy25;                 Add gems
+** Check if to display message (i.e. current player is player here)
+!!UN:P185/?y19;                        Messages disabled?
+**FU&y19=1:E;                          Exit if yes
+!!OW:Gy1/?y19;                         y19 = 1 if player here
+!!FU&y19<>1:E;                         Exit if not
+** Now display produced resources
+!!VRy18:S29;                           Type index
+!!VRy17:S39;                           Amount index
+** The gold result is in y5
+** Gold
+!!VRy18&y5>0:+1;                       Advance index
+!!VRy17&y5>0:+1;                       Advance index
+!!VRyy18&y5>0:S6;                      First resource: Gold (if any)
+!!VRyy17&y5>0:Sy5;                     Gold amount
+** Wood
+!!VRy18&y20>0:+1;                      Advance index
+!!VRy17&y20>0:+1;                      Advance index
+!!VRyy18&y20>0:S0;                     Next resource: Wood (if any)
+!!VRyy17&y20>0:Sy20;                   Wood amount
+** Mercury
+!!VRy18&y21>0:+1;                      Advance index
+!!VRy17&y21>0:+1;                      Advance index
+!!VRyy18&y21>0:S1;                     Next resource: Mercury (if any)
+!!VRyy17&y21>0:Sy21;
+** Ore
+!!VRy18&y22>0:+1;                      Advance index
+!!VRy17&y22>0:+1;                      Advance index
+!!VRyy18&y22>0:S2;                     Next resource: Ore (if any)
+!!VRyy17&y22>0:Sy22;                   Ore amount
+** Sulfur
+!!VRy18&y23>0:+1;                      Advance index
+!!VRy17&y23>0:+1;                      Advance index
+!!VRyy18&y23>0:S3;                     Next resource: Sulfur (if any)
+!!VRyy17&y23>0:Sy23;                   Sulfur amount
+** Crystal
+!!VRy18&y24>0:+1;                      Advance index
+!!VRy17&y24>0:+1;                      Advance index
+!!VRyy18&y24>0:S4;                     Next resource: Crystal (if any)
+!!VRyy17&y24>0:Sy24;                   Crystal amount
+** Gems
+!!VRy18&y25>0:+1;                      Advance index
+!!VRy17&y25>0:+1;                      Advance index
+!!VRyy18&y25>0:S5;                     Next resource: Gems (if any)
+!!VRyy17&y25>0:Sy25;                   Gems amount
+!!CA998:N?z1;                          Name of town
+!!HEv1260&v1260>=0:B0/?z2;                 Name of hero (if any)
+!!VRz3&v1260<0:S^%Y2 peasants in %Z1 produced some resources^;
+!!VRz3&v1260>=0:S^%Z2s %Y2 peasants in %Z1 produced some resources^;
+** y18 > 29 if any resources (display message), max 36
+!!IF&y19=1/y18=30:Q1/y30/y40/1^%Z3^;   If one resource, display single pic msg
+!!IF&y19=1/y18=31:Ny30/y40/y31/y41;    More resources...
+!!IF&y19=1/y18=32:Ny30/y40/y31/y41/y32/y42;
+!!IF&y19=1/y18=33:Ny30/y40/y31/y41/y32/y42/y33/y43;
+!!IF&y19=1/y18=34:Ny30/y40/y31/y41/y32/y42/y33/y43/y34/y44;
+!!IF&y19=1/y18=35:Ny30/y40/y31/y41/y32/y42/y33/y43/y34/y44/y35/y45;
+!!IF&y19=1/y18=36:Ny30/y40/y31/y41/y32/y42/y33/y43/y34/y44/y35/y45/y36/y46;
+!!IF&y19=1/y18>30:N^%Z3^;              Display the message
+!!FU:E;
+
+****************************************************************************
+** Mines
+** Mines are type 53 and 220
+** x1 = object type
+** x2 = color (player) number
+** x16 = Mine number
+!?FU615;                               Peasants in mine
+!!UN:Ux1/-1/x16/998;                   Get object coordinates to x=v998, y=v999, l=v1000
+!!MNv998/v999/v1000:O?y1/1;            Owner/no redraw
+**FU&y1<0:E;                           Exit if no owner
+!!VRy9:S3;                             Slot type (y9): Mine
+!!MNv998/v999/v1000:R?y8;              Resource type -> y8
+!!FU&y8<0:E;                           Resource error
+!!FU&y8>6:E;                           Resource error
+!!VRy90:Sv998;
+!!VRy91:Sv999;
+!!VRy92:Sv1000;
+** Number of peasants and average experience
+** y1 = owner
+** y2 = number of peasants
+** y3 = experience per peasant
+!!VRv13:Sx1;
+!!VRv1260:S-1;                         Assume no visiting hero
+!!DO817/0/6/1:P139/v1260/0/0/y90/y91/y92; Count peasants
+!!VRy2:Sv1;                            y2 = number of peasants
+!!VRy3:Sv2;                            y3 = experience sum
+!!VRy4:Sv3;                            y4 = number of stacks
+** DEBUG
+**IF&y2>0:M^DEBUG: Mine, position %Y90,%Y91,%Y92, %Y2 Peasants^;
+** END DEBUG
+!!FU&y2=0:E;                           Exit if no peasant stacks
+!!UN:Ux1/-1/x16/998;                   Get object coordinates to x=v998, y=v999, l=v1000
+!!MNv998/v999/v1000:R?y8;              Resource type -> y8
+** Peasant rank (average)
+** y2 = number of peasants
+** y3 = average rank
+** y5 = result amount
+** y11 = rank corrected number of peasants
+!!VRy3: :y4;                           y3 = Average experience
+!!VRy3: *10;
+!!VRy3: :y-1;                          Rank = (current/max)*10
+!!VRy11:Sy3*y2:100;
+!!VRy11:+y2;                           y11 = rank corrected number of peasants
+!!VRy5:S0;
+** y8 = mine resource type
+** y19 = 1 if player here (display message)
+!!VRy5&y8=0:Sy11:500;                  500 peasants per resource unit
+!!VRy5&y8=1:Sy11:1000;
+!!VRy5&y8=2:Sy11:500;                  500 peasants per resource unit
+!!VRy5&y8=3:Sy11:1000;
+!!VRy5&y8=4:Sy11:1000;
+!!VRy5&y8=5:Sy11:1000;
+!!VRy5&y8=6:Sy11;
+!!OW&y5>0/y1>=0:Ry1/y8/dy5;            Add resource
+!!OW:Gy1/?y19;                         y19 = 1 if player here
+!!UN:P185/?y18;                        Messages disabled?
+!!VRz1&y19=1/y18<>1:S^The peasants in the mine produced some resources^;
+!!IF&y19=1/y18<>1/y5>0:Q1/y8/y5/1^%Z1^;Message
+!!FU&$weekday$<>$monday$:E;            Weekly part:
+** Apply growth rate:
+** Growth rate is:
+** (number of peasants) * (peasant growth rate) / 100
+!!MA:G139/?y20;                        y20 = peasant growth rate
+!!VRy20:*y11;
+!!VRy20: :100;
+!!DO817/0/6/1&y8=0:P22/-1/y20/0/y90/y91/y92; Wood: Dendroid guards
+!!DO817/0/6/1&y8=0:P23/-1/y20/0/y90/y91/y92; Wood: Dendroid soldiers
+**DO817/0/6/1&y8=1:P??/-1/y20/0/y90/y91/y92; Mercury: ??? (TODO)
+!!DO817/0/6/1&y8=2:P33/-1/y20/0/y90/y91/y92; Ore: Iron Golems
+!!DO817/0/6/1&y8=3:P135/-1/y20/0/y90/y91/y92;Sulfur: Rust dragon
+!!DO817/0/6/1&y8=4:P133/-1/y20/0/y90/y91/y92;Crystal: Crystal dragon
+!!DO817/0/6/1&y8=5:P117/-1/y20/0/y90/y91/y92;Gem: Diamond golem
+!!DO817/0/6/1&y8=5:P151/-1/y20/0/y90/y91/y92;Gem: Diamond dragon
+!!FU:E;                                Done
+
+****************************************************************************
+** Garrisons
+** Applies a growth rate to any stack in the garrison.
+** Hitpoints to add = (number of peasants) * (peasant growth rate) / 100
+** So for a standard peasant growth rate of 25, this means, you need
+** 4 peasants to produce 1 hitpoint. The growth rate is applied to
+** peasant stacks, too.
+** x1 = object type
+** x2 = color (player) number
+** x16 = Garrison number
+!?FU616;                               Peasants in garrison
+**IF:M^DEBUG: Garrison No.%X16^;
+!!FU&$weekday$<>$monday$:E;            Only weekly
+**IF:M^DEBUG: Garrison No.%X16, weekly^;
+!!UN:Ux1/-1/x16/998;                   Get object coordinates to x=v998, y=v999, l=v1000
+!!VRy90:Sv998;
+!!VRy91:Sv999;
+!!VRy92:Sv1000;
+!!VRv13:Sx1;
+!!VRv1260:S-1;                         Assume no visiting hero
+!!DO817/0/6/1:P139/v1260/0/0/y90/y91/y92;
+!!FU&v1=0:E;                           Exit if no peasants
+**IF:M^DEBUG: Garrison with %V1 peasants^;
+** Apply growth rate (hitpoints to add):
+** (number of peasants) * (peasant growth rate) / 200
+!!MA:G139/?y2;                         y2 = peasant growth rate
+!!VRy2:*v1;
+!!VRy2: :200;
+!!VRv13:Sx1;                           Function multiplexer: Garrison
+!!DO817/0/6/1:P-1/v1260/y2/0/y90/y91/y92; Apply growth rate
+!!FU:E;
+
+****************************************************************************
+** Heroes
+** x1 = object type (34)
+** x2 = color (player) number
+** x16 = Index to hero number (601 - 608)
+!?FU617;                               Peasants in hero army on adv. map
+!!FU&$weekday$<>$monday$:E;            Only weekly
+!!VRv1260:Svx16;                       Get ID
+!!FU&v1260<0:E;                        Exit if unavailable
+!!HEv1260:O?y2;                        Heroes owner
+!!FU&y2<0:E;                           No owner (error): Exit
+!!VRv13:Sx1;
+!!DO817/0/6/1:P139/v1260/0/0;          Count peasants
+!!FU&v1=0:E;                           Exit if no peasants;
+!!VRy2:Sv1;                            y2 = Number of peasants
+!!VRy3:Sv2:v3;                         Average Exp.
+!!VRy3: *10;
+** Growth rate in hitpoints is:
+** (1+Rank) * (Hero level) * (Movement points) * (num peasants) / 10000
+!!VRy3: :y-1;                          y3 = Rank = (current/max)*10
+!!HEv1260:Ed/?y16;                     y16 = hero level
+!!VRy16:+1;                            Hero level + 1
+!!HEv1260:W?y4/1;                      y4 = movement points
+!!VRy5:S0;
+!!VRy5&y4>0:Sy3*y16*y4*y2:10000;
+!!DO817/0/6/1&y5>0/y5<10000:P-1/v1260/y5/0;
+** TODO
+!!FU:E;
+
+****************************************************************************
+** Free peasant stacks
+** x1 = object type (54)
+** x2 = subtype (139)
+** x3 = agression modifier(-1 or +1)
+** x16 = Object number
+!?FU618;
+!!FU&$weekday$<>$monday$:E;            Only weekly
+!!FU|x3<-1/x3>1:E;                     Parameter error
+!!FU&x3=0:E;                           Nothing to do
+!!UN:Ux1/x2/x16/998;                   Get stack coordinates to x=v998, y=v999, l=v1000
+!!MO998:R?y1/1;                        y1 = current stack agression lvl
+!!MO998&y1>0/x3<0:Rdx3/1;              Decrease aggression
+!!MO998&y1<10/x3>0:Rdx3/1;             Increase aggression
+!!FU:E;
+
+****************************************************************************
+** Object triggers
+****************************************************************************
+
+** Dwelling (copied from script096)
+!?OB17; // visit creature generator
+!!UN:P286/?y-2;                        Check H4 peasant script
+!!FU&y-2=1:E;                          Exit if H4 peasant script enabled
+!!UN:P334/?y-3;                        Check option for this script
+!!FU&y-3=0:E;                          Exit if not enabled
+!!HE-1:N?y-8; // get hero's number
+!!DWv998/v999/v1000:M0/?y-4/d; // get creature in slot 1
+!!DWv998/v999/v1000:M1/?y-5/d; // get creature in slot 2
+!!DWv998/v999/v1000:M2/?y-6/d; // get creature in slot 3
+!!DWv998/v999/v1000:M3/?y-7/d; // get creature in slot 4
+** TODO
+!!FU:E;
+
+
+****************************************************************************
+** Arena
+!?OB4;
+
+****************************************************************************
+** Library
+!?OB41;
+
+****************************************************************************
+** School of magic
+!?OB7;
+
+****************************************************************************
+** Mercenary camp
+!?OB51;
+
+****************************************************************************
+** School of war
+!?OB107;
+
+****************************************************************************
+** Marletto tower
+!?OB23;
+
+****************************************************************************
+** Garrison
+!?OB33;
+!!VRv13:S33;
+!!DO817/0/6/1:P-1/0/0/0/v998/v999/v1000; Count creatures
+!!FU&v1>0:E;
+!!GR998:F1;                            If no creatures in, set them removable
+!!FU:E;
+
+!?OB219;
+!!VRv13:S33;
+!!DO817/0/6/1:P-1/0/0/0/v998/v999/v1000; Count creatures
+!!FU&v1>0:E;
+!!GR998:F1;                            If no creatures in, set them removable
+!!FU:E;
+

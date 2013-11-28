@@ -1,0 +1,159 @@
+#	Text resource for "script05.erm" document		
+105000	{Bank}
+
+Sorry, but you can't visit the Bank without a Marketplace.	<!!Q>	01.08.2004
+105001	Bank
+
+"Welcome", the clerk says, "how can I help you?"	<!!S>	01.08.2004
+105002	No thanks. I've changed my mind.	<!!S>	01.08.2004
+105003	Transfer all Resources to another Player	<!!S>	01.08.2004
+105004	Transfer specific Resources to another Player	<!!S>	01.08.2004
+105005	Borrow Money or Resources	<!!S>	01.08.2004
+105006	{Loan Bank}
+
+"Would you like to borrow Money or Resources?"	<!!Q>	01.08.2004
+105007	Borrow Money or Resources	<!!S>	01.08.2004
+105008	Transfer all Resources to another Player	<!!S>	01.08.2004
+105009	Transfer specific Resources to another Player	<!!S>	01.08.2004
+105010	{Loan Bank}
+{- Gold Department -}
+
+"Sorry, but you still owe us {%Y4} {Gold}. Come back when you've paid your last installment."	<!!M>	01.08.2004
+105011	{Loan Bank}
+{- Gold Department -}
+
+"We offer you a maximum of {%Y3} {Gold} but charge 30%% interest. The maximum loan available will increase over time.
+Repayment will start tomorrow and we'll take half of the Gold in your treasury every day until the loan is repaid."	<!!Q>	01.08.2004
+105012	Loan Bank
+- Gold Department -
+(Current Limit: %Y3 Gold)	<!!S>	01.08.2004
+105013	"How much Gold do you want to borrow?"	<!!S>	01.08.2004
+105014	{Loan Bank}
+{- Gold Department -}
+
+"Don't worry, we'll keep this offer open for you. Come back whenever you want."	<!!M>	01.08.2004
+105015	{Loan Bank}
+{- Gold Department -}
+
+"Here you are. It was a pleasure doing business with you."	<!!Q>	01.08.2004
+105016	{Loan Bank}
+{- Resource Department -}
+
+"Sorry, but you still owe us {%Y5} {%Z-9}. Come back when you've paid your last installment."	<!!M>	01.08.2004
+105017	Loan Bank
+- Resource Department -
+"Please choose your desired Resource type:"	<!!S>	01.08.2004
+105018	Wood	<!!S>	01.08.2004
+105019	Mercury	<!!S>	01.08.2004
+105020	Ore	<!!S>	01.08.2004
+105021	Sulfur	<!!S>	01.08.2004
+105022	Crystal	<!!S>	01.08.2004
+105023	Gems	<!!S>	01.08.2004
+105024	{Loan Bank}
+{- Resource Department -}
+
+"We offer you a maximum of {%Y4} {%Z-8} but charge 30%% interest with a minimum of 1 %Z-8. The maximum loan available will increase over time.
+Repayment will start tomorrow and we'll take half of the %Z-8 in your treasury every day until the loan is repaid."	<!!Q>	01.08.2004
+105025	Loan Bank
+- Resource Department -
+(Current Limit: %Y4 %Z-8)	<!!S>	01.08.2004
+105026	"How many %Z-8 do you want to borrow?"	<!!S>	01.08.2004
+105027	{Loan Bank}
+{- Resource Department -}
+
+"Don't worry, we'll keep this offer open for you. Come back whenever you want."	<!!M>	01.08.2004
+105028	{Loan Bank}
+{- Resource Department -}
+
+"Here you are. It was a pleasure doing business with you."	<!!Q>	01.08.2004
+105029	{Loan Bank}
+{- Gold Department -}
+
+"We take a fee of {%Y4} {Gold} today, so you still owe us {%Y5} {Gold}. We'll come back tomorrow."	<!!Q>	01.08.2004
+105030	{Loan Bank}
+{- Gold Department -}
+
+"Congratulations. You've paid your last installment of {%Y4} {Gold}. Feel free to visit us again."	<!!Q>	01.08.2004
+105031	{Loan Bank}
+{- Resource Department -}
+
+"We take a fee of {%Y4} {%Z-1} today, so you still owe us {%Y5} {%Z-1}. We'll come back tomorrow."	<!!Q>	01.08.2004
+105032	{Loan Bank}
+{- Resource Department -}
+
+"Congratulations. You've paid your last installment of {%Y4} {%Z-1}. Feel free to visit us again."	<!!Q>	01.08.2004
+105033	{Loan Bank}
+{- Gold Department -}
+
+"I'm sorry, but you can't borrow more than the current maximum of {%X1} {Gold}."	<!!Q>	01.08.2004
+105034	{Loan Bank}
+{- Gold Department -}
+
+"I'm sorry, but negative values can't be borrowed."	<!!Q>	01.08.2004
+105035	{Loan Bank}
+{- Resource Department -}
+
+"I'm sorry, but you can't borrow more than the current maximum of {%X1} {%Z-8}."	<!!Q>	01.08.2004
+105036	{Loan Bank}
+{- Resource Department -}
+
+"I'm sorry, but negative values can't be borrowed."	<!!Q>	01.08.2004
+105037	{Resource Trading Post}
+
+"Unfortunately, you have no Resources at all, so there's nothing to trade. Maybe time is on your side ..."	<!!M>	01.08.2004
+105038	Gold	<!!S>	01.08.2004
+105039	Mithril	<!!S>	01.08.2004
+105040	Resource Trading Post
+
+Select Resource to be transferred:	<!!S>	01.08.2004
+105041	No, thanks. I've changed my mind.	<!!S>	01.08.2004
+105042	Red Player	<!!S>	01.08.2004
+105043	Blue Player	<!!S>	01.08.2004
+105044	Tan Player	<!!S>	01.08.2004
+105045	Green Player	<!!S>	01.08.2004
+105046	Orange Player	<!!S>	01.08.2004
+105047	Purple Player	<!!S>	01.08.2004
+105048	Teal Player	<!!S>	01.08.2004
+105049	Pink Player	<!!S>	01.08.2004
+105050	Resource Trading Post
+
+Transfer %Z-9 to...	<!!S>	01.08.2004
+105051	Nobody. I've changed my mind.	<!!S>	01.08.2004
+105052	Resource Trading Post
+
+You have %Y11 %Z-2.	<!!S>	01.08.2004
+105053	Enter quantity of %Z-2 to be transferred:	<!!S>	01.08.2004
+105054	{Resource Trading Post}
+
+"Maybe you want to trade another day. Feel free to visit us again."	<!!Q>	01.08.2004
+105055	have	<!!S>	01.08.2004
+105056	has	<!!S>	01.08.2004
+105057	{Resource Trading Post}
+
+"%V1 %Z-2 %Z-3 been transferred to the %Z-1."	<!!Q>	01.08.2004
+105058	{Resource Trading Post}
+
+"You can only give what you have. Not more, but less..."	<!!Q>	01.08.2004
+105059	{Resource Trading Post}
+
+"I'm sorry, but negative values can't be transferred."	<!!Q>	01.08.2004
+105060	Transfer ALL Resources including Gold and Mithril to...	<!!S>	01.08.2004
+105061	Nobody. I've changed my mind.	<!!S>	01.08.2004
+105062	All your resources have been transferred to the %Z3.	<!!Q>	01.08.2004
+105063	You have no resources
+to transfer.	<!!M>	01.08.2004
+105064	{Loan Bank}
+
+"You don't have an outstanding loan with us at the moment. Come back whenever you need our services."		
+105065	{Loan Bank}
+{- Gold Department -}
+
+"You currently owe us {%Y6} {Gold}."		
+105066	{Loan Bank}
+{- Resource Department -}
+
+"You currently owe us {%Y4} {%Z-1}."		
+105067	{Loan Bank}
+{- Main Department -}
+
+"You currently owe us {%Y6} {Gold} and {%Y4} {%Z-1}."		

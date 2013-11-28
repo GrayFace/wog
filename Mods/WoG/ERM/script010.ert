@@ -1,0 +1,72 @@
+110000	Magic Water Mushroom (Not Visited)	String type = <!#S>	07.06.2003
+110001	Magic Water Mushroom (Visited)	String type = <!#S>	07.06.2003
+110002	Magic Fire Mushroom (Not Visited)	String type = <!#S>	07.06.2003
+110003	Magic Fire Mushroom (Visited)	String type = <!#S>	07.06.2003
+110004	Magic Earth Mushroom (Not Visited)	String type = <!#S>	07.06.2003
+110005	Magic Earth Mushroom (Visited)	String type = <!#S>	07.06.2003
+110006	Magic Air Mushroom (Not Visited)	String type = <!#S>	07.06.2003
+110007	Magic Air Mushroom (Visited)	String type = <!#S>	07.06.2003
+110008	{Magic Water Mushroom} 
+ 
+The Magic Water Mushroom gives Expert Water Magic until the end of the week... 
+ 
+Since you already have Expert Water Magic, the mushroom can't help you.	String type = <!!Q>	07.06.2003
+110009	{Magic Water Mushroom} 
+ 
+You have already visited a Magic Water Mushroom this week. 
+Try again next week.	String type = <!!M>	07.06.2003
+110010	{Magic Water Mushroom} 
+ 
+The Magic Water Mushroom gives Expert Water Magic until the end of the week... 
+ 
+You inhale the spores of the magic mushroom... 
+ 
+You learn Expert Water Magic!	String type = <!!Q>	07.06.2003
+110011	{Magic Fire Mushroom} 
+ 
+The Magic Fire Mushroom gives Expert Fire Magic until the end of the week... 
+ 
+Since you already have Expert Fire Magic, the mushroom can't help you.	String type = <!!Q>	07.06.2003
+110012	{Magic Fire Mushroom} 
+ 
+You have already visited a Magic Fire Mushroom this week. 
+Try again next week.	String type = <!!M>	07.06.2003
+110013	{Magic Fire Mushroom} 
+ 
+The Magic Fire Mushroom gives Expert Fire Magic until the end of the week... 
+ 
+You inhale the spores of the magic mushroom... 
+ 
+You learn Expert Fire Magic!	String type = <!!Q>	07.06.2003
+110014	{Magic Earth Mushroom} 
+ 
+The Magic Earth Mushroom gives Expert Earth Magic until the end of the week... 
+ 
+Since you already have Expert Earth Magic, the mushroom can't help you.	String type = <!!Q>	07.06.2003
+110015	{Magic Earth Mushroom} 
+ 
+You have already visited a Magic Earth Mushroom this week. 
+Try again next week.	String type = <!!M>	07.06.2003
+110016	{Magic Earth Mushroom} 
+ 
+The Magic Earth Mushroom gives Expert Earth Magic until the end of the week... 
+ 
+You inhale the spores of the magic mushroom... 
+ 
+You learn Expert Earth Magic!	String type = <!!Q>	07.06.2003
+110017	{Magic Air Mushroom} 
+ 
+The Magic Air Mushroom gives Expert Air Magic until the end of the week... 
+ 
+Since you already have Expert Air Magic, the mushroom can't help you.	String type = <!!Q>	07.06.2003
+110018	{Magic Air Mushroom} 
+ 
+You have already visited a Magic Air Mushroom this week. 
+Try again next week.	String type = <!!M>	07.06.2003
+110019	{Magic Air Mushroom} 
+ 
+The Magic Air Mushroom gives Expert Air Magic until the end of the week... 
+ 
+You inhale the spores of the magic mushroom... 
+ 
+You learn Expert Air Magic!	String type = <!!Q>	07.06.2003

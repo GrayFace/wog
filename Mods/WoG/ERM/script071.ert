@@ -1,0 +1,75 @@
+#	Text resource for "script71.erm" document		
+171000	{+%V7060 Axe of %Z960} 
+ 
+Gives hero +%V7060 to Attack and one rank of %Z960 skill.
+or
+Gives commander +5 Attack plus +1 after 6 victorious battles	<!#S>	01.08.2004
+171001	+%V7060 Axe of %Z960	<!#S>	01.08.2004
+171002	{+%V7062 Mail of %Z961} 
+ 
+Gives hero +%V7062 to Defense and one rank of %Z961 skill
+or
+Gives commander +12% Health plus +1% after every victorious battle.	<!#S>	01.08.2004
+171003	+%V7062 Mail of %Z961	<!#S>	01.08.2004
+171004	{+%V7064 Sword of %Z962} 
+ 
+Gives hero +%V7064 to Attack and one rank of %Z962 skill
+or
+Gives commander +12% Damage plus +1% after every victorious battle.	<!#S>	01.08.2004
+171005	+%V7064 Sword of %Z962	<!#S>	01.08.2004
+171006	{+%V7066 Helm of %Z963} 
+
+Gives hero +%V7066 to Defense and one rank of %Z963 skill
+or
+Gives commander self-resurrection after battle.	<!#S>	01.08.2004
+171007	+%V7066 Helm of %Z963	<!#S>	01.08.2004
+171008	{+%V7068 Pendant of %Z964} 
+
+Gives hero +%V7068 to Power and one rank of %Z964 skill
+or
+Gives commander +1 Magic Power plus +1 after every 10 victorious battles.	<!#S>	01.08.2004
+171009	+%V7068 Pendant of %Z964	<!#S>	01.08.2004
+171010	{+%V7070 Boots of %Z965} 
+
+Gives hero +%V7070 to Knowledge and one rank of %Z965 skill
+or
+Gives commander +1 Speed plus +1 after 10 victorious battles.	<!#S>	01.08.2004
+171011	+%V7070 Boots of %Z965	<!#S>	01.08.2004
+171012	{+%V7072 Bow of %Z966} 
+ 
+Gives hero +%V7072 to Attack and one rank of %Z966 skill
+or
+Gives commander No Obstacle Penalty plus No Long-Range Penalty after 25 victorious battles.	<!#S>	01.08.2004
+171013	+%V7072 Bow of %Z966	<!#S>	01.08.2004
+171014	{+%V7074 Ring of %Z967} 
+
+Gives hero +%V7074 to Power and Knowledge and one rank of %Z967 skill
+or
+Gives commander Breath Attack and Dragon Nature.	<!#S>	01.08.2004
+171015	+%V7074 Ring of %Z967	<!#S>	01.08.2004
+171016	{+%V7076 Shield of %Z968} 
+ 
+Gives hero +%V7076 to Defense and one rank of %Z968 skill
+or
+Gives commander +5 Defense plus +1 after 6 victorious battles.	<!#S>	01.08.2004
+171017	+%V7076 Shield of %Z968	<!#S>	01.08.2004
+171018	{+%V7078 Ring of %Z969} 
+
+Gives hero +%V7078 to all Primary Skills and one rank of %Z969 skill
+or
+Gives commander all 6 Basic Skills at Advanced level.	<!#S>	01.08.2004
+171019	+%V7078 Ring of %Z969	<!#S>	01.08.2004
+171020	Wearing the {Garb of the Forest Lord} has attracted volunteers to %Z1's army.	<!!M>	01.08.2004
+171021	his	<!!S>	01.08.2004
+171022	her	<!!S>	01.08.2004
+171023	The %Z4 in %Z1's army have been augmented by the power of %Z2 {%Z3}.	<!!Q>	01.08.2004
+171024	You have assembled:
+ 
+{The Garb of the Forest Lord}
+
+This attracts volunteers to your army.	<!!S>	01.08.2004
+171025	You have assembled:
+
+{The Vestments of Authority}
+
+This further reduces monster aggression by 1.	<!!Q>	01.08.2004

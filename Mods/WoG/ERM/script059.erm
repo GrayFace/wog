@@ -1,0 +1,191 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+[script name: Piercing shot v.1.11]
+[author: Petyo P. Georgiev]
+[version: WoG 3.57(f)]
+[last changed: 18 May 2004]
+[updated August 24, 2004 by Fnord to disable for network battles]
+
+**what's new:
+**ver.1.11:
+** 1)Crossbowmen ignore 10% of target's defence when shooting. Marksmen ignore 3+20% of target's defence when shooting;
+** 2)some tweaks to the marksman stats: +2 attack, +1 defence, damage 2-5, reduced number of shots to 12.
+
+** ver.1.1:
+** 1)Crossbowmen ignore 10% of target's defence when shooting. Marksmen ignore 20% of target's defence when shooting.
+** 2)New var: v2622.
+
+**  This script modifies the abilities of the level 2 castle troops archer&marksman:
+** 1)Name of archer changed to crossbowman;
+** 2)Marksman shoots "piercing bolt", which deals half damage to a stack behind* the targeted stack;
+
+** *the target behind is calculated depending on the position of the marksman and target stack; if target is on the same,
+** or adjastent line, it is cosidered as straight shot and the stack exactly behind the target is taken for secondary damage.
+** in the other cases it is considered as diagonal shot and the secondary stack is taken like with breath attack.
+
+****v vars used: (v51) v2600-2622
+****z vars used: z66-69
+****std vars used: NONE
+****flags used: 341-366
+****fu used: FU31-33
+****dialogue used: NONE
+****object used: NONE
+
+!#UN:P59/?v2621;
+!#MA&v2621=1:C3/6/150 A3/8 D3/4 P3/10 S3/6 M3/2 E3/5 N3/12 G3/9 B3/0 R3/0 I3/184 F3/115 L3/1 O3/0 X3/20; Marksman
+!#VRz66:Sz159000;
+!#VRz67:Sz159001;
+!#VRz68:Sz159002;
+!#VRz69:Sz159003;
+!#UN&v2621=1:G1/2/0/66G1/2/1/67G1/2/2/68G1/3/2/69; set new texts
+
+!?BG0&v2621=1/-998;
+!!VRv2602:S0;
+!!VRv2611:S-1;
+!!BG:A?v2600;
+!!BG&v2600=7:N?v2601D?v2602;       v2602 - target stack position
+!!BMv2601&v2600=7:T?v2604P?v2605I?v2608; v2604 - type of shooter stack v2605 - shooting stack position
+!!BMv2601&v2600=7/v2604=3:I?v2603;    get shooter's side
+!!BG&v2600=7/v2604=3:Q?v2607H?v2610;         v2607 shooter side | v2610 attacking stack commanding hero(if any)
+!!HEv2610&v2610>-1/v2600=7/v2604=3:A2/60/d/?v2615A2/61/d/?v2616A2/62/d/?v2617S1/?v2618; 53-archery lvl, 50 - +5%,51 - +10%,52 - +15%
+!!BU&v2602>0:Ev2602/?v2619; get target stack num
+!!BMv2619&v2619>-1:G28/d/?v2620; v2620 is the prim target behind air shield
+
+!!BMv2619&v2619>-1/v2604>1/v2604<4:D?v2622; get primary target defence in v2622
+!!VRy-2&v2604>1/v2604<4:Sv2622;
+!!VRy-2&v2604=2::10; defence reduction for crossbowmen
+!!VRy-2&v2604=3::5;  defence reduction for marksmen
+!!VRy-2&v2604=3:+3;
+!!VRy-2&y-2>v2622:Sv2622; do not go below zero
+!!VRy-2:*-1;  negative value
+!!BMv2619&v2619>-1/v2604>1/v2604<4:Ddy-2; subtract value for the shot
+*********************************linear check***********************************
+!!IF:V341/0V342/0V343/0V344/0V345/0V346/0V347/0V348/0V349/0V350/0V351/0V352/0;
+!!IF:V353/0V354/0V355/0V356/0V357/0V358/0V359/0V360/0V361/0V362/0V363/0V364/0;
+!!IF:V365/0V366/0;
+!!IF&v2602>0/v2602<16/v2605>0/v2605<16:V341/1;
+!!IF&v2602>17/v2602<33/v2605>17/v2605<33:V342/1;
+!!IF&v2602>34/v2602<50/v2605>34/v2605<50:V343/1;
+!!IF&v2602>51/v2602<67/v2605>51/v2605<67:V344/1;
+!!IF&v2602>68/v2602<84/v2605>68/v2605<84:V345/1;
+!!IF&v2602>85/v2602<101/v2605>85/v2605<101:V346/1;
+!!IF&v2602>102/v2602<118/v2605>102/v2605<118:V347/1;
+!!IF&v2602>119/v2602<135/v2605>119/v2605<135:V348/1;
+!!IF&v2602>136/v2602<152/v2605>136/v2605<152:V349/1;
+!!IF&v2602>153/v2602<169/v2605>153/v2605<169:V350/1;
+!!IF&v2602>170/v2602<186/v2605>170/v2605<186:V351/1;
+!!IF|341/342/343/344/345/346/347/348/349/350/351:V352/1; if in one line set 352-true
+****************************straight shot group check***************************
+!!IF&v2602>0/v2602<33/v2605>0/v2605<16:V353/1;
+!!IF&v2602>0/v2602<50/v2605>17/v2605<33:V354/1;
+!!IF&v2602>17/v2602<67/v2605>34/v2605<50:V355/1;
+!!IF&v2602>34/v2602<84/v2605>51/v2605<67:V356/1;
+!!IF&v2602>51/v2602<101/v2605>68/v2605<84:V357/1;
+!!IF&v2602>68/v2602<118/v2605>85/v2605<101:V358/1;
+!!IF&v2602>85/v2602<135/v2605>102/v2605<118:V359/1;
+!!IF&v2602>102/v2602<152/v2605>119/v2605<135:V360/1;
+!!IF&v2602>119/v2602<169/v2605>136/v2605<152:V361/1;
+!!IF&v2602>136/v2602<186/v2605>153/v2605<169:V362/1;
+!!IF&v2602>153/v2602<186/v2605>170/v2605<186:V363/1;
+!!IF|353/354/355/356/357/358/359/360/361/362/363:V364/1; if one group set 364 true
+****************************chk target line only********************************
+!!IF&v2602>0/v2602<16:V365/1;
+!!IF&v2602>17/v2602<33:V366/1;
+!!IF&v2602>34/v2602<50:V365/1;
+!!IF&v2602>51/v2602<67:V366/1;
+!!IF&v2602>68/v2602<84:V365/1;
+!!IF&v2602>85/v2602<101:V366/1;
+!!IF&v2602>102/v2602<118:V365/1;
+!!IF&v2602>119/v2602<135:V366/1;
+!!IF&v2602>136/v2602<152:V365/1;
+!!IF&v2602>153/v2602<169:V366/1;
+!!IF&v2602>170/v2602<186:V365/1;
+***if in one line set sec target hex***
+!!VRv2606&352/v2605<v2602:Sv2602+1; set v2606 to secondary target hex (left-to-rigt)
+!!VRv2606&352/v2605>v2602:Sv2602-1; set v2606 to secondary target hex (right-to-left)
+***if not in one line realize actual positions***
+!!VRv2609:S0;
+!!DO31/1/10/1&-352:Pv2602/v2605;
+!!DO32/1/14/1&-352/-364:Pv2602/v2605;
+**(v2609 values:1-shot to right, 2-shot to left, 5-shot to up-right, 6-shot to up-left,**
+********* 9-shot to down-right, 10-shot to down left, 132-shot up, 136-shot down ********
+!!VRv2606&v2609=1:Sv2602+1; set sec target of straight shot
+!!VRv2606&v2609=2:Sv2602-1; set sec target of straight shot
+!!VRv2606&v2609=5/365:Sv2602-16;   set sec target of diagonal shot
+!!VRv2606&v2609=5/366:Sv2602-17;   set sec target of diagonal shot
+!!VRv2606&v2609=6/365:Sv2602-17;   set sec target of diagonal shot
+!!VRv2606&v2609=6/366:Sv2602-18;   set sec target of diagonal shot
+!!VRv2606&v2609=9/365:Sv2602+18;   set sec target of diagonal shot
+!!VRv2606&v2609=9/366:Sv2602+17;   set sec target of diagonal shot
+!!VRv2606&v2609=10/365:Sv2602+17;  set sec target of diagonal shot
+!!VRv2606&v2609=10/366:Sv2602+16;  set sec target of diagonal shot
+!!VRv2606&v2609=132/365:Sv2602-16; set sec target of vertical shot
+!!VRv2606&v2609=132/366:Sv2602-18; set sec target of vertical shot
+!!VRv2606&v2609=136/365:Sv2602+18; set sec target of vertical shot
+!!VRv2606&v2609=136/366:Sv2602+16; set sec target of vertical shot
+!!BU&v2606>0/v2606<186:Ev2606/?v2611;
+!!FU33&v2611>-1:Pv2615/v2616/v2617/v2618;
+!!BMv2611&v2611>-1:I?v51;
+!!BMv2611&v2611>-1/v2600=7/v2604=3/v2619<>v2611/v51<>v2608/v2620=0:Kv2612; apply dmg to sec target
+
+!?BG1&v2621=1/v2604>1/v2604<4/-998;
+!!BMv2619&v2619>-1:Dv2622; restore def value after the shot
+=====================================FUs========================================
+!?FU31; realize positions (horizontally)
+!!VRx1&x1>15:-17; move target position one line higher
+!!VRx2&x2>15:-17; move shooter position one line higher
+!!VRx16&x1<16/x2<16:S10;
+!!VRv2609&x2<x1/x1<16/x2<16:+1; shot to the right
+!!VRv2609&x2>x1/x1<16/x2<16:+2; shot to the left
+!!VRv2609&x2=x1/x1<16:+128; shooter&target in one vertical line
+
+!?FU32; realize positions (vertically)
+!!VRx1&x1<>1/x1<>18/x1<>35/x1<>52/x1<>69/x1<>86/x1<>103/x1<>120/x1<>137/x1<>154/x1<>171:-1;
+!!VRx2&x2<>1/x2<>18/x2<>35/x2<>52/x2<>69/x2<>86/x2<>103/x2<>120/x2<>137/x2<>154/x2<>171:-1;
+!!VRy1|x1=1/x1=18/x1=35/x1=52/x1=69/x1=86/x1=103/x1=120/x1=137/x1=154/x1=171:S10;
+!!VRy2|x2=1/x2=18/x2=35/x2=52/x2=69/x2=86/x2=103/x2=120/x2=137/x2=154/x2=171:S10;
+!!VRx16&y1=10/y2=10:S14;
+!!VRv2609&y1=10/y2=10/x1<x2:+4; shot upwards
+!!VRv2609&y1=10/y2=10/x1>x2:+8; shot downwards
+
+!?FU33;
+!!BMv2601:A?y1N?y2G41/?y20/?y21G42/?y22/?y23; y1 - attack skill of marksman, y2 - number of marksman
+!!BMv2611:D?y3G28/?y24/?y25; y3 - defence of sec target
+!!VRy5&y20=0:Sy2*4; y5 - base damage
+!!VRy5&y20>0/y21<2:Sy2*5; basic bless modifyer
+!!VRy5&y20>0/y21>1:Sy2*11:2; adv/exp bless modifyer
+!!VRy5&y22>0/y23<2:Sy2*2; basic curse modifyer
+!!VRy5&y22>0/y23>1:Sy2*3:2; adv/exp curse modifyer
+!!VRy6:Sy5:20; y6 - bonus dmg (1)
+!!VRy7:Sy1;
+!!VRy7:-y3; attack - defence
+!!VRy6:+y7;
+!!VRy6&y6<0:S0; if defence>attack -> no bonus damage
+!!VRy7:Sy5*3;
+!!VRy6&y6>y7:Sy7; condition bonus dmg not to excess base dmg more than 3 times
+!!VRy8&x1>0:+5; y8 - bonus dmg (2) - archery bonus
+!!VRy8&x2>0:+10;
+!!VRy8&x3>0:+15;
+!!VRy8&x4=1:+10;
+!!VRy8&x4=2:+25;
+!!VRy8&x4=3:+50;
+!!VRy10:Sy5;
+!!VRy10:*y8:100;
+!!VRy8:Sy10;
+!!VRy9:S100; dmg reduction (%)
+!!VRy10:Sy3;
+!!VRy10:-y1;
+!!VRy10:*5:2;
+!!VRy9:-y10;
+!!VRe1:Sy9:100;
+!!VRe1&y1>y3:S1;
+!!VRy5:+y6+y8;
+!!VRy5:*e1;
+!!VRy5&y24>0/y25<2::2; basic air shield modifyer
+!!VRy5&y24>0/y25>1::3; adv/exp air shield modifyer
+!!VRv2612:Sy5; final result damage
+!!VRv2612::2;
+!!VRv2612&v2612<1:S1; no less than 1 HP
+

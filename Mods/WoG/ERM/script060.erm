@@ -1,0 +1,224 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+[script: Forgotten shrine v1.3]
+[author: Petyo P. Georgiev]
+[version: WoG 3.58]
+[last changed: 19 October 2004]
+** last update: 3rd of June 2005 Thomas Franz - renaming / moving graphic file
+
+**=================================DESCRIPTION==================================
+**   This script makes the black shrine (object 63/22) a building named "Forgotten
+** shrine".
+**   When a hero visits it, he/she gets a random blessing from an ancient spirit,
+** applied to all friendly troops (if they are not immune to the spell) in his/her
+** next battle.
+** The spells are: shield, air shield, fire shield, protection from air, protection
+** from fire, protection from water, protection from earth, anti-magic, bless,
+** bloodlust, precision, stone skin, prayer, mirth, fortune, haste, slayer, frenzy,
+** counterstrike and magic mirror. The spells are always applied on expert level.
+**   The recanter's cloak, orb of inhibition,
+** orb of vulnerability and cursed ground terrain effects are applied if present.
+**   The badge of courage "bug" effect (protection from mind spells) is not used.
+**==============================================================================
+
+***what's new:
+** ver 1.21:
+** 1) Picture added;
+** 2) New dialogue - 15, and new var - z4 - temp usage
+
+** ver. 1.2:
+** 1) Added hint text at the battle startup;
+** 2) New fu - FU16;
+** 3) new vars - z2-3 - temporary usage.
+
+** ver. 1.1:
+** 1) new variables - v18-v23.
+
+****v vars used: v15-23,v1100-1108,v1110-1118
+****z vars used: (z2-4), z167-168
+****std vars used: m-o
+****hero vars: w18
+****flags used: 37
+****fu used: fu12-16
+****dialogue used: 15
+****object used: 63/22
+****tm used: NONE
+
+!#UN:P60/?v1109;
+
+!#VRz167:Sz160000;
+!#VRz168:Sz160001;
+
+!#HT63/22&v1109=1:W18/0/167;
+!#HT63/22&v1109=1:T168;
+
+!?CM2;
+!!CM:I?y-1F?y-3;
+!!HE-1:N?y-2;
+!!IF:Wy-2;
+!!IF&y-1=107/y-3=0/v1109=1/w18>0:M1/z160002;
+
+!?OB63/22&v1109=1;
+!!VRz2:Sz160003;
+!!VRz3:Sz160004;
+!!VRz4:S^../Data/p/s060_f_shrine.jpg^;
+!!HE-1:N?nW?m;
+!!IF:Wn;
+!!IF&1000:D15/2/0/0/4/0/0/0/3/0/0/0/0/0/0/0;
+!!IF&1000:E1/15;
+!!IF&1000:Q37/z160005;
+!!IF&-1000:V37/1; AI visits always
+!!IF&37/m>200/w18=0/1000:M1/z160006;
+!!IF&37/w18<>0/1000:M1/z160007;
+!!HEn&37/m>200/w18=0:W0;
+!!FU12&37/m>200/w18=0:P;
+!!IF&37/m<201/w18=0/1000:M1/z160008;
+!!IF&-37/1000:M1/z160009;
+
+!?BA0&v1109=1;
+!!TRv998/v999/v1000:G?v17;
+
+!!BA:H0/?v15;             attacker
+!!DO13/0/6/1&v15>-1:Pv15/0; chk creatures
+!!FU14&v15>-1:Pv15/0;       chk artifacts
+
+!!BA:H1/?v16;             defender
+!!DO13/0/6/1&v16>-1:Pv16/1; chk creatures
+!!FU14&v16>-1:Pv16/1;       chk artifacts
+
+!!FU16:Pv15/v16;             display hint text
+---------------------------------BA50-------------------------------------------
+!?BA50&v1109=1;
+!!TRv998/v999/v1000:G?v17;
+
+!!BA:H0/?v15;             attacker
+!!DO13/0/6/1&v15>-1:Pv15/0; chk creatures
+!!FU14&v15>-1:Pv15/0;       chk artifacts
+
+!!BA:H1/?v16;             defender
+!!DO13/0/6/1&v16>-1:Pv16/1; chk creatures
+!!FU14&v16>-1:Pv16/1;       chk artifacts
+
+!!FU16:Pv15/v16;             display hint text
+--------------------------------------------------------------------------------
+!?BF&v1109=1;
+!!DO15/0/10/1&v15>-1:Pv15/0;
+!!DO15/0/10/1&v16>-1:Pv16/1;
+
+!?BA1&v1109=1;
+!!BA:H0/?v15;
+!!IF&v15>-1:Wv15;
+!!VRw18:S0;
+!!BA:H1/?v16;
+!!IF&v16>-1:Wv16;
+!!VRw18:S0;
+------------------------------------BA51----------------------------------------
+!?BA51&v1109=1;
+!!BA:H0/?v15;
+!!IF&v15>-1:Wv15;
+!!VRw18:S0;
+!!BA:H1/?v16;
+!!IF&v16>-1:Wv16;
+!!VRw18:S0;
+======================================FUs=======================================
+!?FU12;
+!!VRy1:S0R19;       generate random value for effect
+!!VRw18&y1=0:S27;   shield
+!!VRw18&y1=1:S28;   air shield
+!!VRw18&y1=2:S29;   fire shield
+!!VRw18&y1=3:S30;   protection from air
+!!VRw18&y1=4:S31;   protection from fire
+!!VRw18&y1=5:S32;   protection from water
+!!VRw18&y1=6:S33;   protection from earth
+!!VRw18&y1=7:S34;   anti-magic
+!!VRw18&y1=8:S41;   bless
+!!VRw18&y1=9:S43;   bloodlust
+!!VRw18&y1=10:S44;  precision
+!!VRw18&y1=11:S46;  stone skin
+!!VRw18&y1=12:S48;  prayer
+!!VRw18&y1=13:S49;  mirth
+!!VRw18&y1=14:S51;  fortune
+!!VRw18&y1=15:S53;  haste
+!!VRw18&y1=16:S55;  slayer
+!!VRw18&y1=17:S56;  frenzy
+!!VRw18&y1=18:S58;  counterstrike
+!!VRw18&y1=19:S36;  magic mirror
+
+!?FU13;
+!!VRy2&x2=0:S0;
+!!VRy2&x2=1:S10;
+!!HEx1:C0/x16/?y1/d;
+!!VRy1|y1=141/y1=154:S58;
+!!VRy3:Sx16+1100;
+!!VRy3:+y2;
+***1->undead, 2->immune to mind, 3->immune to lvl3, 4->immune to lvl4, 5-> immune to magic***
+***6-> immune to fire, 7-> immune to fire&mind***
+!!VRvy3:S0; init stack resistance info
+!!VRvy3&y1>55/y1<70:S1;
+!!VRvy3|y1=32/y1=33/y1=40/y1=41/y1=112/y1=113/y1=115/y1=116/y1=117/y1=120/y1=123/y1=125/y1=127/y1=152/y1=172/y1=168:S2;
+!!VRvy3|y1=26/y1=82/y1=132:S3;
+!!VRvy3&y1=27:S4;
+!!VRvy3|y1=83/y1=121/y1=155/y1=160/y1=161/y1=162/y1=163:S5;
+!!VRvy3|y1=52/y1=53/y1=130/y1=131/y1=158:S6;
+!!VRvy3|y1=114/y1=129/y1=159/y1=164/y1=165/y1=166/y1=167:S7;
+
+!?FU14;
+!!VRy2&x2=0:S0;
+!!VRy2&x2=1:S10;
+!!VRy2:+1100;
+!!HEx1:A2/83/d/?y1;  recanter's cloak
+!!HEx1:A2/126/d/?y3; orb of inhibition
+!!HEx1:A2/134/d/?y4; power of the dragon father
+!!HEx1:A2/93/d/?y5;  orb of vulnerability
+!!VRvy2&y5>0:C0/0/0/0/0/0/0/0;
+!!VRv1107&y1>0/x2=0:S1;
+!!VRv1117&y1>0/x2=1:S1;
+!!VRv1107&y4>0/x2=0:S2;
+!!VRv1117&y4>0/x2=1:S2;
+!!VRvy2&y3>0:C5/5/5/5/5/5/5/5;
+
+!?FU15;
+!!VRy5:S0; !!VRy6:S0; !!VRy7:S0;
+!!VRy1&x2=0:S0;
+!!VRy1&x2=1:S21;
+!!VRy2:Sx16+y1; index for stack
+!!VRy3&x2=0:S1100;
+!!VRy3&x2=1:S1110;
+!!VRy4:Sx16+y3; index for stack type
+!!IF:Wx1;
+!!VRy6|w18<>29/w18<>48/w18<>55/w18<>56/w18<>58/w18<>36:S1; recanter's cloak effect
+!!VRy7|w18<>27/w18<>41/w18<>43/w18<>46/w18<>53:S1; cursed ground effect
+!!VRw18&v1107=1/x2=0/y6=1:S0; apply recanter's cloak effect - attacker
+!!VRw18&v1117=1/x2=1/y6=1:S0; apply recanter's cloak effect - defender
+!!VRw18&v1107=2/x2=0/w18<>36:S0; apply podf effect - attacker
+!!VRw18&v1117=2/x2=1/w18<>36:S0; apply podf effect - defender
+!!VRw18&v17=21/y7=1:S0; apply cursed ground effect - attacker&defender
+
+!!BMy2&w18>0/vy4=0:Mw18/50/3;
+!!BMy2&w18>0/vy4=1/w18<>41/w18<>44/w18<>49/w18<>56:Mw18/50/3;
+!!BMy2&w18>0/vy4=2/w18<>44/w18<>49/w18<>56:Mw18/50/3;
+!!VRy5|w18=29/w18=48/w18=55/w18=56/w18=58/w18=36:S3;
+!!BMy2&w18>0/vy4=3/y5=3:Mw18/50/3;
+!!BMy2&w18>0/vy4=4/w18=36:Mw18/50/3;
+!!BMy2&vy4=5/w18=-244:Mw18/50/3;
+!!BMy2&w18>0/vy4=6/w18<>29/w18<>31/w18<>43/w18<>55/w18<>56:Mw18/50/3;
+!!BMy2&w18>0/vy4=7/w18<>29/w18<>31/w18<>43/w18<>44/w18<>49/w18<>55/w18<>56:Mw18/50/3;
+
+!?FU16;
+!!VRy1:S0; !!VRy2:S0; !!VRy3:S0; !!VRz-3:S^^;
+!!HEx1&x1>-1:B0/?z-1;
+!!HEx2&x2>-1:B0/?z-2;
+!!IF&x1>-1:Wx1;
+!!UN&x1>-1/w18>0:N1/2/w18;
+!!VRy1&x1>-1:Sw18;
+!!IF&x2>-1:Wx2;
+!!UN&x2>-1/w18>0:N1/3/w18;
+!!VRy2&x2>-1:Sw18;
+!!VRz-3&x2>-1/y2>0:Sz160010;
+!!VRy3|x1<0/y1<1:S10;
+!!IF&x1>-1/y1>0/y2<1/1000:Q1/9/y1/1/z160011;
+!!IF&x1>-1/y1>0/y2>0/1000:Q1/9/y1/9/y2/1/z160012;
+!!IF&y3=10/x2>-1/y2>0/1000:Q1/9/y2/1/z160013;
+

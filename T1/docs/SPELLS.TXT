@@ -1,0 +1,115 @@
+Number  Target  Index   Flags           Name            Abr.Name        Level
+0	0	-1	0x00100002	Summon Boat	Summon Boat	1
+1	0	-1	0x00000002	Scuttle Boat	Scuttle Boat	2
+2	0	-1	0x00000002	Visions	Visions	2
+3	0	-1	0x00000002	View Earth	View Earth	1
+4	0	-1	0x00000002	Disguise	Disguise	2
+5	0	-1	0x00000002	View Air	View Air	1
+6	0	-1	0x00100002	Fly	Fly	5
+7	0	-1	0x00100002	Water Walk	Water Walk	4
+8	0	-1	0x00100002	Dimension Door	Dimension Door	5
+9	0	-1	0x00100002	Town Portal	Town Portal	4
+																																
+10	0	0x37	0x00000081	Quicksand	Quicksand	2
+11	0	0x2F	0x00000081	Land Mine	Land Mine	3
+12	0	-1	0x00000081	Force Field	Force Field	3
+13	0	0x41	0x00000081	Fire Wall	Fire Wall	2
+14	0	-1	0x00100001	Earthquake	Earthquake	3
+15	-1	0x40	0x00008211	Magic Arrow	Magic Arrow	1
+16	-1	0x2E	0x00008211	Ice Bolt	Ice Bolt	2
+17	-1	0x31	0x00008211	Lightning Bolt	Lightning Bolt	2
+18	-1	0x0A	0x00009211	Implosion	Implosion	5
+19	0	0x26	0x00010211	Chain Lightning	Chain Lightning	4
+20	0	0x2D	0x00008281	Frost Ring	Frost Ring	3
+21	0	0x35	0x00008281	Fireball	Fireball	3
+22	0	9	0x00010281	Inferno	Inferno	4
+23	0	0x10	0x00008281	Meteor Shower	Meteor Shower	4
+24	0	8	0x00021201	Death Ripple	Death Ripple	2
+25	0	0x1D	0x00020201	Destroy Undead	Destroy Undead	3
+26	0	0x0C	0x00020201	Armageddon	Armageddon	4
+27	1	0x1B	0x00044845	Shield	Shield	1
+28	1	2	0x00044845	Air Shield	Air Shield	3
+29	1	0x0B	0x00044815	Fire Shield	Fire Shield	4
+30	1	0x16	0x00044845	Protection from Air	Prot. from Air	2
+31	1	0x18	0x00044845	Protection from Fire	Prot. from Fire	1
+32	1	0x17	0x00044845	Prot. from Water	Prot. from Water	1
+33	1	0x1A	0x00044845	Prot. from Earth	Prot. from Earth	3
+34	1	5	0x00044815	Anti-Magic	Anti-Magic	3
+35	0	0x29	0x00040041	Dispel	Dispel	1
+36	1	3	0x00044815	Magic Mirror	Magic Mirror	5
+37	1	0x27	0x00040841	Cure	Cure	1
+38	1	0x32	0x00081011	Resurrection	Resurrection	4
+39	1	4	0x00081011	Animate Dead	Animate Dead	3
+40	1	0x34	0x00001011	Sacrifice	Sacrifice	5
+41	1	0x24	0x00040845	Bless	Bless	1
+42	-1	0x28	0x00040045	Curse	Curse	1
+43	1	-1	0x00041845	Bloodlust	Bloodlust	1
+44	1	0x19	0x00040845	Precision	Precision	2
+45	-1	0x38	0x00040045	Weakness	Weakness	2
+46	1	0x36	0x00044845	Stone Skin	Stone Skin	1
+47	-1	0x0E	0x00040011	Disrupting Ray	Disrupting Ray	2
+48	1	0	0x00040845	Prayer	Prayer	4
+49	1	0x14	0x00040C45	Mirth	Mirth	3
+50	-1	0x1E	0x00040445	Sorrow	Sorrow	4
+51	1	0x12	0x00040845	Fortune	Fortune	2
+52	-1	0x30	0x00040045	Misfortune	Misfortune	3
+53	1	0x1F	0x00041845	Haste	Haste	1	Tail Wind
+54	-1	0x13	0x00041045	Slow	Slow	1	Muckmire
+55	1	0x1C	0x00040815	Slayer	Slayer	4
+56	1	0x11	0x00040C15	Frenzy	Frenzy	4
+57	-1	0x31	0x0010A211	Titan's Lightning Bolt	Titan's Bolt	5
+58	1	7	0x00045845	Counterstrike	Counterstrike	4
+59	-1	0x23	0x00041485	Berserk	Berserk	4
+60	-1	0x15	0x00081415	Hypnotize	Hypnotize	3
+61	-1	0x2A	0x00001425	Forgetfulness	Forgetfulness	3
+62	-1	6	0x00041415	Blind	Blind	2
+63	1	-1	0x00041011	Teleport	Teleport	3
+64	0	0x22	0x00000101	Remove Obstacle	Remove Obstacle	2
+65	1	-1	0x00041011	Clone	Clone	4
+66	0	-1	0x00080001	Fire Elemental	Fire Elemental	5	Sumnelm_
+67	0	-1	0x00080001	Earth Elemental	Earth Elemental	5
+68	0	-1	0x00080001	Water Elemental	Water Elemental	5
+69	0	-1	0x00080001	Air Elemental	Air Elemental	5
+																																	
+Creature Abilities																																	
+																																	
+70	-1	-1	0x0000101C	Stone Gaze	Stone Gaze	3	Paralyze
+71	-1	0x43	0x0000101C	Poison	Poison	0
+72	-1	0x44	0x00001018	Bind	Bind	0
+73	-1	0x45	0x0000101C	Disease	Disease	2
+74	-1	0x46	0x0000101C	Paralyze	Paralyze	4
+75	-1	0x47	0x0000101C	Age	Age	5
+76	0	0x48	0x00000018	Death Cloud	Death Cloud	0
+77	-1	0x31	0x00000218	Thunderbolt	Thunderbolt	0
+78	-1	0x29	0x00000018	Dispel Helpful Spells	Dispel Helpful Spells	0
+79	-1	0x50	0x00000018	Death Stare	Death Stare	0
+80	-1	0x51	0x00000018	Acid breath	Acid Breath	0
+
+Target:
+-1 - enemy creature
+ 0 - no target
+ 1 - friendly target
+
+Flags:
+0x00000001 - BF spell
+0x00000002 - MAP spell
+0x00000004 - Has a time scale (3 rounds or so)
+0x00000008 - Creature Spell
+0x00000010 - target - single stack
+0x00000020 - target - single shooting stack (???)
+0x00000040 - has a mass version at expert level
+0x00000080 - target - any location
+0x00000100 - 
+0x00000200 - 
+0x00000400 - Mind spell
+0x00000800 - friendly and has mass version
+0x00001000 - cannot be cast on SIEGE_WEAPON
+0x00002000 - Spell from Artifact
+0x00004000 -
+0x00008000 - AI 
+0x00010000 - AI area effect
+0x00020000 - AI
+0x00040000 - AI
+0x00080000 - AI number/ownership of stacks may be changed 
+0x00100000 - AI
+

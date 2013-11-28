@@ -1,0 +1,662 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+***DEATH CHAMBER (script70.erm)
+***by Rich Reed (a.k.a. "NexusPurple")
+
+** Updated: September 24, 2005 (ERTified by Timothy)
+** Previously Updated: September 23, 2005 by Rich
+
+**This script allows for heroes to visit the new WoG structure in the Castle
+**Objects in the Map Editor that resembles a pile of skulls (it is the 7th
+**object in the very first column underneath the CASTLE town).
+
+**When a hero visits it, he/she has a choice of fighting an "Undead King",
+**which is a stack of Power Liches.  Additional Power Liches are also summoned
+**onto the battlefield to aid the King in battle.
+
+**The Lich King, being the powerful ruler that he is, casts "Antimagic" on himself
+**and his evil minions, then casts "Inferno" and "Armageddon" on the hero's troops!
+**The key is to kill the Lich King!
+
+**If the Lich King dies AND his Lich Guards are still alive, the Guards will summon
+**Ghosts and either Hell Steeds, Mummies, Nightmares, or Bone Dragons to join the
+**combat.
+
+**During the fourth week and beyond, the Lich King will transform from a Power Lich
+**into a Dracolich!  The Dracolich can attack several times in the same round!
+
+**Upon defeating the King, the hero is awarded gold, Mithril, and Ghosts attempt to
+**join the hero's army.
+
+*FLAGS 800 and 801 are used solely for the Death Chamber battles
+
+*z890 and z891 keeps the hint text for the Death Chamber structures
+*v805 keeps the value of the visited Death Chamber's square
+*v806 is used to store whether the script is enabled or not
+
+**v1172 used for Lich King transforming into a Dracolich!
+**v1173 used temporarily to determine which obstacles are removed by Lich Guards
+**v1175 counts number of Death Chambers on the map at start of game
+**v1176 used to determine number of Lich Guards and Ghosts summoned
+**v1177 keeps track of Lich King's stats
+**v1178 used to determine number of other monsters summoned and when Lich King transforms
+**v1179 is a counter to increase number of guards weekly after second week
+**v1509 used to display special messages during combat
+
+**FUNCTIONS 14300, 14301, 14304, 14305, and 14307 used for the Lich Guards removing obstacles
+**FUNCTIONS 14302 and 14303 used to set up the hero's troops in the middle of the battlefield
+**FUNCTION 14306 used to assign PO numbers to Death Chambers
+**FUNCTION 14309 used to transform the Lich King into the Dracolich King
+**FUNCTION 14310 used to respawn the Death Chambers every 28 days
+
+***********************************************************************************************
+
+**Set up Death Chamber structure
+
+!#VRv1172:S0;
+!#VRv1173:S0;
+!#VRv1175:S0;
+!#VRv1176:S0;
+!#VRv1177:S0;
+!#VRv1178:S1;
+!#VRv1179:S0;
+!#VRv1509:S0;
+
+!#UN:P70/?v806; ** Check to see if "Death Chamber" script is enabled
+!#UN:P235/?v1190;  **Check to see if WoG Option "Creature Bank/Neutral Town Growth" enabled
+
+!#VRv805&v806=1:S0; **Store 0 in the variable v805
+
+!#VRz890&v806=1:Sz170000;
+!#HT63/15&v806=1:P0/890;
+
+!#VRz891&v806=1:Sz170001;
+!#HT63/15&v806=1:P1/891;
+
+!#UN:U63/15/?v1175; **Get the total number of "Death Chambers" on the map into "v1175"
+
+********************************************************************************
+**Timer to assign numbers to the Death Chambers
+!?TM1&$day$=1;
+!!DO14306/1/v1175/1:P;  **Call FUNCTION 14306
+
+**Timer to respawn creature banks
+!?TM1&$once$=1/$day$>=1;
+!!UN:P235/?v4; **Check if "Creature Bank/Neutral Town" option is enabled
+!!DO14310/1/v1175/1&v4=1:P;  **Call FUNCTION 14310
+
+**Timer to increase number of guards and Lich King's stats weekly
+!?TM2&$weekday$=$monday$/$day$>=15/$once$=1;
+!!UN:P235/?y1; **Check if "Creature Bank/Neutral Town" option is enabled
+!!FU&y1<>1:E; **Exit timer if NOT enabled
+!!VRv1179&y1=1:+1;  **Lich Guards increase by +1 and Ghosts increase by +5 weekly AFTER SECOND WEEK
+!!VRv1178&y1=1:+1;  **Other summoned creatures increase by +1 weekly AFTER SECOND WEEK
+
+********************************************************************************
+
+!?FU14306;  **Function to assign numbers to all of the chambers
+!!VRv4:R4;  **Get random number from 0-4 for number of summoned guards
+!!VRv5:R3;  **Get random number from 0-3 for summoned creatures
+!!UN:U63/15/x16/1; **Get coordinates of the chambers at each loop
+!!POv1/v2/v3:B0/v4;  **Store random number into PO number at each loop
+!!POv1/v2/v3:Hv5;  **Store another random number into PO number at each loop
+!!VRv4:S0;  **Clear v4 to get another random number
+!!VRv5:S0;  **Clear v4 to get another random number
+
+!?FU14310;  **Function to respawn the Death Chambers
+!!VRy2:S0;
+!!VRy3:S0;
+!!UN:U63/15/x16/1; **Get coordinates of the chambers at each loop
+!!POv1/v2/v3:T?y2; **Get PO:T value of each Death Chamber into "y2"
+
+!!VRy2:+28;  **Add 28 to PO:T value to get the required day for respawning
+!!VRy3:Sc;  **Store current day value into "y3"
+
+!!POv1/v2/v3&y3>=y2:N0;  **If it's 28 days later, respawn all Death Chambers!
+!!VRy2:S0;  **Clear "y2" to reuse it in checking other chambers
+!!VRy3:S0;  **Clear "y2" to reuse it in checking other chambers
+
+
+********************************************************************************
+*Object trigger when any "Death Chamber" that's already been defeated is visited
+!?OB63/15&1000/v806=1;
+
+!!PO998:N?v805; **Check PO:N value of Death Chamber square
+!!IF&v805=1:M1/z170002;
+
+*-------------------------------------------------------------------------------
+*Object trigger when any "Death Chamber" that HASN'T been defeated is visited
+
+!?OB63/15&v805=0/1000/v806=1;
+
+!!VRj:S0;
+
+!!POv998/v999/v1000:B0/?j; **Read PO:B0 value into j
+!!POv998/v999/v1000:H?k;   **Read PO:H value into k
+
+!!VRv1176:+v1179;  **Add current value in "v1179" weekly counter into "v1176"
+
+**Store values from "j" into "v1176" to determine number of Lich Guards and Ghosts summoned
+!!VRv1176&j=0:+2;
+!!VRv1176&j=1:+4;
+!!VRv1176&j=2:+6;
+!!VRv1176&j=3:+8;
+!!VRv1176&j>=4:+10;
+
+**Store values from "j" into "v1177" to determine Lich King's stats
+!!VRv1177&j=0:S2;
+!!VRv1177&j=1:S4;
+!!VRv1177&j=2:S6;
+!!VRv1177&j=3:S8;
+!!VRv1177&j>=4:S10;
+
+**Store values from "k" into "v1173" to determine type of guards summoned with the Ghosts
+!!VRv1173&k=0:S0;
+!!VRv1173&k=1:S1;
+!!VRv1173&k=2:S2;
+!!VRv1173&k>=3:S3;
+
+**Store values from v1173 into "m" temporarily to show monsters in dialogue box
+!!VRm:S0;
+!!VRm&v1173=0:S68;
+!!VRm&v1173=1:S141;
+!!VRm&v1173=2:S172;
+!!VRm&v1173=3:S195;
+
+**Store names into "z3" to give hints to the player as to the amount of guards inside the chamber
+!!VRz3:S^^;
+!!VRz3&v1177=2:Sz170003;
+!!VRz3&v1177=4:Sz170004;
+!!VRz3&v1177=6:Sz170005;
+!!VRz3&v1177=8:Sz170006;
+!!VRz3&v1177>=10:Sz170007;
+
+**Random numbers from 0-5 determines what the Lich King says in his speech
+!!VRn:S0 T4;
+!!VRo:S0 T4;
+!!VRq:S0 T4;
+!!VRr:S0 T4;
+!!VRs:S0 T4;
+!!VRt:S0 T4;
+
+**Store names into "z4" to describe the Death Chamber structure
+!!VRz4:S^^;
+!!VRz4&n=0:Sz170008;
+!!VRz4&n=1:Sz170009;
+!!VRz4&n=2:Sz170010;
+!!VRz4&n=3:Sz170011;
+!!VRz4&n=4:Sz170012;
+
+**Store names into "z5" to describe the Lich King
+!!VRz5:S^^;
+!!VRz5&o=0:Sz170013;
+!!VRz5&o=1:Sz170014;
+!!VRz5&o=2:Sz170015;
+!!VRz5&o=3:Sz170016;
+!!VRz5&o=4:Sz170017;
+
+**Prepare to change the Power Liches name temporarily
+!!VRz6:S^^;
+!!VRz6:Sz170018;
+!!UN:G1/65/1/z6;  **Change Power Liches name to temporarily
+
+**Store names into "z7" to describe Lich King's voice
+!!VRz7:S^^;
+!!VRz7&q=0:Sz170019;
+!!VRz7&q=1:Sz170020;
+!!VRz7&q=2:Sz170021;
+!!VRz7&q=3:Sz170022;
+!!VRz7&q=4:Sz170023;
+
+**Store names into "z8" to describe Lich King's treasures
+!!VRz8:S^^;
+!!VRz8&r=0:Sz170024;
+!!VRz8&r=1:Sz170025;
+!!VRz8&r=2:Sz170026;
+!!VRz8&r=3:Sz170027;
+!!VRz8&r=4:Sz170028;
+
+**Store names into "z9" to describe Lich King's threat
+!!VRz9:S^^;
+!!VRz9&s=0:Sz170029;
+!!VRz9&s=1:Sz170030;
+!!VRz9&s=2:Sz170031;
+!!VRz9&s=3:Sz170032;
+!!VRz9&s=4:Sz170033;
+
+**Store names into "z10" to describe Lich King's threat
+!!VRz10:S^^;
+!!VRz10&t=0:Sz170034;
+!!VRz10&t=1:Sz170035;
+!!VRz10&t=2:Sz170036;
+!!VRz10&t=3:Sz170037;
+!!VRz10&t=4:Sz170038;
+
+!!IF:Q3/21/65/21/159/21/m/2/z170039;
+
+**Clear "z" variables
+!!VRz3:S^^;
+!!VRz4:S^^;
+!!VRz5:S^^;
+!!VRz6:S^^;
+!!VRz7:S^^;
+!!VRz8:S^^;
+!!VRz9:S^^;
+!!VRz10:S^^;
+
+!!VRv1176&-3:S0;  **Clear "v1176" if CANCEL is pressed
+
+!!IF&3:V800/1;       **Sets FLAG 800 to TRUE if OK is pressed
+!!HE-1&3:R4/0/0;       **Disable "Tactics" for the chamber battle with no redraw
+
+!!UN:G1/65/1/0;  **Restore Power Liches name
+
+!!HE-1&3/v805=0:Tv998/v999/v1000/65/1; **Trigger battle with the Lich King
+
+*===============================================================================
+**Set up the special "Death Chamber" battlefields and Power Liches
+*===============================================================================
+!?BA0&800/v806=1;
+!!UN:J8/6/z170040;  **Check to see if custom image exists in DATA/P folder
+!!BA&1:B^..\data\p\s070_death.pcx^;  **Set background to "Death Chamber"
+!!BA&-1:B20;  **Set background to "Evil Fog"
+
+*-------------------------------------------------------------------------------------------
+!?BF&800/v806=1; **Sets up special battlefield
+!!BF:C; **Clear the battlefield
+
+**Place obstacles on battlefield
+!!BF:O51/41 O51/43 O51/142 O51/144;   **Volcanoes
+!!BF:O1/1 O1/13 O1/171 O1/183;        **Ribs
+!!BF:O3/53 O3/64 O3/104 O3/115;       **Skeletons
+!!BF:O53/86 O53/97 O53/137 O53/148;   **Lava lakes
+!!BF:O61/5 O61/11 O61/7 O61/9 O61/175 O61/181 O61/177 O61/179;  **Tombstones
+!!BF:O64/35 O64/48 O64/154 O64/167;    **Crypts
+
+**Lich King stats
+!!BM21:P99;  **Lich King stack is at position 99 on battlefield
+!!BM21:A100 D100;  **Lich King has 100 Attack and 100 Defense
+!!BM21:S40;  **Lich King has 40 speed for duration of combat
+!!BM21:R4000;  **Lich King has endless retaliations each round
+
+**Lich King's health (160-240)
+!!VRk:S0 +v1176;  **Add current value of "v1176" into "k"
+!!VRk:*2;         **Multiply the new "k" value by 2
+!!VRk&v1177=2:+156;
+!!VRk&v1177=4:+172;
+!!VRk&v1177=6:+188;
+!!VRk&v1177=8:+204;
+!!VRk&v1177=10:+220;
+!!BM21:Hk;     **Lich King's health increases weekly
+
+**Lich King's Damage (16-24)
+!!VRm:S0 +v1178;  **Add current value of "v1178" into "m"
+!!VRm&v1177=2:+15;
+!!VRm&v1177=4:+17;
+!!VRm&v1177=6:+19;
+!!VRm&v1177=8:+21;
+!!VRm&v1177=10:+23;
+!!BM21:U1/m;
+!!BM21:U2/m;    **Minimum & Maximum Damage always exactly the same
+
+!!MA&v1178<3:X65/?i;
+!!VRi&v1178<3:+32768;
+!!BM21&v1178<3:Fi;    **Lich King can attack twice each round (UP UNTIL 3RD WEEK ONLY)
+
+!!FU14302:P;  **Set up troops on the battlefield
+
+*------------------------------------------------------------------------------------------
+**Set up the hero's troops on the battlefield
+*------------------------------------------------------------------------------------------
+
+**Set up the battlefield
+!?FU14302&800;
+
+**Clear function local variables y2 and y3
+!!VRy2:S0;
+!!VRy3:S0;
+
+!!VRy2:S1 T3; **Random setup for hero's troops
+!!DO14303/0/8/1&y2=1:P73/111/90/109/77/92/113/94/75; **Set hero's stacks
+!!DO14303/0/8/1&y2=2:P90/111/73/109/113/75/77/94/92; **Set hero's stacks
+!!DO14303/0/8/1&y2=3:P92/73/113/77/90/75/111/109/94; **Set hero's stacks
+!!DO14303/0/8/1&y2=4:P109/77/90/73/111/92/75/113/94; **Set hero's stacks
+
+**Set stacks
+!?FU14303&800;
+!!BMx16:T?y1 B?y2; [Type of monster: y1, Number of monsters: y2]
+!!VRy3&x16<21:Sx16 +1; [Index for x variable for attacker]
+!!VRy3&x16>=21:Sx16 -20; [Index for x variable for defender]
+!!BMx16&y1>=0/y2>=0/y1<>145/y1<>146/y1<>147/y1<>148:Pxy3; [Set stacks but not war machines]
+
+*=======================================================================================================
+**Begin In-battle code for battle with Power Lich King
+*=======================================================================================================
+!?BR&800/v806=1;
+
+**Clear variables
+!!VRi:S0;
+!!VRj:S0;
+!!VRk:S0;
+!!VRm:S0;
+!!VRn:S0;
+!!VRo:S0;
+!!VRp:S0;
+!!VRq:S0;
+!!VRr:S0;
+
+!!BM21&v1178<3:P?i;  **Get Lich King's battlefield position into "i" (UP UNTIL 3RD WEEK ONLY)
+!!BM21&v997>=1/v1178<3:C26/i/1/1/1;  **Lich King casts "Armageddon" after second round (UP UNTIL 3RD WEEK ONLY)
+
+!!BM32&v1178>2:P?i;  **Get Dracolich King's battlefield position into "i" (4TH WEEK AND BEYOND ONLY)
+!!BM32&v997>=1/v1178>2:C26/i/1/1/1;  **Dracolich King casts "Armageddon" after second round (4TH WEEK AND BEYOND ONLY)
+
+!!BM21&v1178<3:N?j;  **Check to see if Lich King is still living every round (UP UNTIL 3RD WEEK ONLY)
+!!BU&v1178<3:O53/?r; **Check to see if there is a "skeleton" obstacle at POSITION 53 (UP UNTIL 3RD WEEK ONLY)
+
+!!BM32&v1178>2:N?j;  **Check to see if Dracolich King is still living every round (4TH WEEK AND BEYOND ONLY)
+!!BU&v1178>2:O53/?r; **Check to see if there is a "skeleton" obstacle at POSITION 53 (4TH WEEK AND BEYOND ONLY)
+
+**Show messages if obstacles NOT yet removed and the Lich King is dead
+!!IF&v1173=0/j=0/r=3/v1178<3/v997>0:Q1/21/65/21/159/21/68/1/z170042;
+!!IF&v1173=1/j=0/r=3/v1178<3/v997>0:Q1/21/65/21/159/21/141/1/z170043;
+!!IF&v1173=2/j=0/r=3/v1178<3/v997>0:Q1/21/65/21/159/21/172/1/z170044;
+!!IF&v1173=3/j=0/r=3/v1178<3/v997>0:Q1/21/65/21/159/21/195/1/z170045;
+
+**Show messages if obstacles NOT yet removed and the Dracolich King is dead
+!!IF&v1173=0/j=0/r=3/v1178>2/v997>0:Q1/21/65/21/159/21/68/1/z170046;
+!!IF&v1173=1/j=0/r=3/v1178>2/v997>0:Q1/21/65/21/159/21/141/1/z170047;
+!!IF&v1173=2/j=0/r=3/v1178>2/v997>0:Q1/21/65/21/159/21/172/1/z170048;
+!!IF&v1173=3/j=0/r=3/v1178>2/v997>0:Q1/21/65/21/159/21/195/1/z170049;
+
+**Lich Guards remove skeletons for summoned Ghosts
+!!DO14300/21/30/1&v997>=1/j=0/r=3:P;  **CALL FUNCTION 14300 to remove skeletons
+
+**Lich Guards remove additional obstacles for other summoned stacks
+!!DO14301/21/30/1&v1173=0/v997>=1/j=0/r=3:P;  **Call FUNCTION 14301 to remove ribs
+!!DO14304/21/30/1&v1173=1/v997>=1/j=0/r=3:P;  **Call FUNCTION 14304 to remove tombstones
+!!DO14305/21/30/1&v1173=2/v997>=1/j=0/r=3:P;  **Call FUNCTION 14305 to remove crypts
+!!DO14307/21/30/1&v1173=3/v997>=1/j=0/r=3:P;  **Call FUNCTION 14306 to remove volcanoes
+
+**Summon Power Lich guards at beginning of combat
+
+!!BU&v997=0:S65/v1176/6/1/-1/0;
+!!BU&v997=0:S65/v1176/8/1/-1/0;
+!!BU&v997=0:S65/v1176/10/1/-1/0;
+!!BU&v997=0:S65/v1176/176/1/-1/0;
+!!BU&v997=0:S65/v1176/178/1/-1/0;
+!!BU&v997=0:S65/v1176/180/1/-1/0;
+!!BU&v997=0/v1178<3:S65/v1176/86/1/-1/0;
+!!BU&v997=0:S65/v1176/21/1/-1/0;
+!!BU&v997=0:S65/v1176/30/1/-1/0;
+!!BU&v997=0:S65/v1176/157/1/-1/0;
+!!BU&v997=0:S65/v1176/166/1/-1/0;
+
+**Summon Ghosts from the skeletons
+!!VRm:+v1176;
+!!VRm:*2;
+!!BU&v997>=1/j=0:S159/m/53/1/-1/1;
+!!BU&v997>=1/j=0:S159/m/64/1/-1/1;
+!!BU&v997>=1/j=0:S159/m/104/1/-1/1;
+!!BU&v997>=1/j=0:S159/m/115/1/-1/1;
+
+**Summon Bone Dragons from the ribs
+!!VRn:Sv1178;
+!!BU&v1173=0/v997>=1/j=0:S68/n/3/1/-1/1;
+!!BU&v1173=0/v997>=1/j=0:S68/n/15/1/-1/1;
+!!BU&v1173=0/v997>=1/j=0:S68/n/173/1/-1/1;
+!!BU&v1173=0/v997>=1/j=0:S68/n/185/1/-1/1;
+
+**Summon Mummies from the tombstones
+!!VRo:+v1176;
+!!BU&v1173=1/v997>=1/j=0:S141/o/7/1/-1/1;
+!!BU&v1173=1/v997>=1/j=0:S141/o/9/1/-1/1;
+!!BU&v1173=1/v997>=1/j=0:S141/o/177/1/-1/1;
+!!BU&v1173=1/v997>=1/j=0:S141/o/179/1/-1/1;
+
+**Summon Nightmares from the crypts
+!!VRp:Sv1178;
+!!BU&v1173=2/v997>=1/j=0:S172/p/36/1/-1/1;
+!!BU&v1173=2/v997>=1/j=0:S172/p/49/1/-1/1;
+!!BU&v1173=2/v997>=1/j=0:S172/p/155/1/-1/1;
+!!BU&v1173=2/v997>=1/j=0:S172/p/168/1/-1/1;
+
+**Summon Hell Steeds from the volcanoes
+!!VRq:Sv1178;
+!!BU&v1173=3/v997>=1/j=0:S195/q/41/1/-1/1;
+!!BU&v1173=3/v997>=1/j=0:S195/q/44/1/-1/1;
+!!BU&v1173=3/v997>=1/j=0:S195/q/143/1/-1/1;
+!!BU&v1173=3/v997>=1/j=0:S195/q/146/1/-1/1;
+
+*====================================================================================
+**Triggers for spellcasting after every turn of combat
+
+!?BG&800/v806=1/v997>=0;
+
+!!BG:N?s;  **Get current stack number into "s"
+!!BMs:P?t;  **Get position of current stack number into "n"
+!!BM32&v1178>2:N?v5;  **Check to see if Dracolich King is alive
+!!BM21&v1178<4:N?v6;  **Check to see if Lich King is alive
+
+!!VRz2:S^^;
+!!VRz3:S^^;
+!!VRz4:S^^;
+
+!!VRz2&s=21/v1178<4:Sz170050;  **Store "Lich King" into "z2" temporarily
+!!UN&s=21/v1178<4:G1/65/0/z2;  **Change "Power Lich" name to "Lich King" temporarily
+!!UN&s<>21/v1178<4:G1/65/0/0;  **Restore "Power Lich" name when NOT the Lich King's turn
+
+!!VRz3&s=32/v1172=1/v1178>2/v5>0:Sz170051;  **Store "Lich King" into "z2" temporarily
+!!UN&s=32/v1172=1/v1178>2/v5>0:G1/196/0/z3;  **Change "Dracolich" SINGULAR name to "Lich King" temporarily
+!!UN&s=32/v1172=1/v1178>2/v5>0:G1/196/1/z3;  **Change "Dracolich" PLURAL name to "Lich King" temporarily
+!!UN&s<>32/v1178>2:G1/196/0/0;  **Restore "Dracolich" SINGULAR name when NOT the Lich King's turn
+!!UN&s<>32/v1178>2:G1/196/1/0;  **Restore "Dracolich" PLURAL name when NOT the Lich King's turn
+
+!!VRz4:Sz170052;
+!!BU&v6=0/v1509=0:Mz4;  **Show special message to let the player know immediately that the Lich King is dead!
+!!VRv1509&v6=0:+1;
+
+!!VRv4:S0 T1;  **Get random number from 0-1
+
+!!BM21&s<21/v4=1/v1178<3:C22/t/1/1/0; **50% chance Lich King casts INFERNO on a hero's creature stack
+!!BM21&s>20/v1178<3:C34/t/3/3/0; **Lich King casts EXPERT ANTI-MAGIC on himself and his guards
+
+!!BM32&s<21/v4=1/v1178>2/v5>0:C22/t/1/1/0; **50% chance Dracolich King casts INFERNO on a hero's creature stack
+!!BM32&s>20/v1178>2/v5>0:C34/t/3/3/0; **Dracolich King casts EXPERT ANTI-MAGIC on himself and his guards
+
+!!BM21&s=21/v1178>2:V82;
+!!BM21&s=21/v1178>2:V82;
+!!BM21&s=21/v1178>2:V82;  **Show animation on Lich King three times before he transforms
+!!BM21&s=21/v997=0/v1178>2:K5000;   **During 4th week and beyond, Lich King kills himself in first round!
+
+!!BU&v997=0/v1172=1/v1178>2:S196/1/99/1/-1/1;  **During 4th week and beyond, Lich King transforms into Dracolich!
+
+**Dracolich King stats (4TH WEEK AND BEYOND ONLY)
+!!BM32&v1178>2/v5>0:A100 D100;  **Dracolich King has 100 Attack and 100 Defense
+!!BM32&v1178>2/v5>0:S40;  **Dracolich King has 40 speed for duration of combat
+!!BM32&v1178>2/v5>0:R4000;  **Dracolich King has endless retaliations each round
+
+**Dracolich King's health (800-860) (4TH WEEK AND BEYOND ONLY)
+!!VRv2:S0 +v1176;  **Add current value of "v1176" into "v2"
+!!VRv2:*5;         **Multiply the new "v2" value by 4
+!!VRv2&v1177=2:+775;
+!!VRv2&v1177=4:+780;
+!!VRv2&v1177=6:+785;
+!!VRv2&v1177=8:+790;
+!!VRv2&v1177=10:+795;
+!!BM32&v1178>2/v5>0:Hv2;     **Dracolich King's health increases weekly
+
+**Dracolich King's Damage (60-68) (4TH WEEK AND BEYOND ONLY)
+!!VRl:S0 +v1178;  **Add current value of "v1178" into "l"
+!!VRl&v1177=2:+60;
+!!VRl&v1177=4:+62;
+!!VRl&v1177=6:+64;
+!!VRl&v1177=8:+66;
+!!VRl&v1177=10:+68;
+!!BM32&v1178>2/v5>0:U1/l;
+!!BM32&v1178>2/v5>0:U2/l;    **Minimum & Maximum Damage always exactly the same
+
+**Dracolich has unlimited number of shots (4TH WEEK AND BEYOND)
+!!BM32&v1178>2/v5>0:U3/1000;  **1000 ranged shots for the Dracolich
+
+**Dracolich King can attack twice also
+!!MA&v1178>2/v997>=0:X196/?v3;
+!!VRv3&v1178>2/v997>=0:+32768;
+!!BM32&v1178>2/v997>=0/v5>0:Fv3;    **Dracolich King can attack twice each round (4TH WEEK AND BEYOND ONLY)
+
+!!VRv4:S0 T3;  **Random number from 0-4 determines Dracolich King's transformation message
+!!IF&v997=0/v1178>2/v1172=1/v4=0:Q1/21/196/1/z170053;
+!!IF&v997=0/v1178>2/v1172=1/v4=1:Q1/21/196/1/z170054;
+!!IF&v997=0/v1178>2/v1172=1/v4=2:Q1/21/196/1/z170055;
+!!IF&v997=0/v1178>2/v1172=1/v4=3:Q1/21/196/1/z170056;
+
+!!VRv6:S0;
+!!VRv1172&v1178>2:+1;
+
+**==============================================================================
+**BEGIN THE POST-BATTLE TRIGGER AND COMMANDS
+**==============================================================================
+
+**Post-battle trigger
+
+!?BA1&800/v806=1; **Do the following while FLAG 800 is still TRUE
+
+**Determine how much treasure the hero finds after defeating guards
+!!VRj:S0;
+!!VRj:+v1176;  **Add current value of "v1176" into "j"
+!!VRj:*100;    **Multiply new value of "j" by 100
+!!VRj&v1177=2:+11800;
+!!VRj&v1177=4:+13600;
+!!VRj&v1177=6:+15400;
+!!VRj&v1177=8:+17200;
+!!VRj&v1177=10:+19000;
+!!VRj&v1178>2:+4000;     **Add extra 4000 gold if it's the 4th week and beyond
+
+!!HE-1:O?t;  **Get hero's owner
+
+**Calculate number of Ghosts awarded to the hero
+!!VRk:S0;
+!!VRm:S0;
+!!VRk:+v1176;  **Add current value of "v1176" into "k"
+!!VRm:+v1176;  **Add current value of "v1176" into "m"
+!!VRm:-1;      **Subtract 1 from "m" to get value 1 less than "k" always
+!!VRk:-m;      **Subtract "m" from "k" to get the value of 1 always
+!!VRk&v1178>2:+2;  **Add 2 extra Ghosts if it's the 4th week and beyond
+
+!!VRk&v1177=2:+9;
+!!VRk&v1177=4:+11;
+!!VRk&v1177=6:+13;
+!!VRk&v1177=8:+15;
+!!VRk&v1177=10:+17;  **Add values to "k" to determine weekly Ghost reward
+
+**Store special subtype for the Ghost reward message into "r"
+!!VRr:S0;
+!!VRr:Sk;
+!!VRr:*65536;
+!!VRr:+159;
+
+!!IF&t>=0:Q3/21/r/1/z170057;
+
+**Award Ghosts to the hero (10-18)
+!!HE-1&t>=0/v1177=2:C2/159/k/1;
+!!HE-1&t>=0/v1177=4:C2/159/k/1;
+!!HE-1&t>=0/v1177=6:C2/159/k/1;
+!!HE-1&t>=0/v1177=8:C2/159/k/1;
+!!HE-1&t>=0/v1177=10:C2/159/k/1;  **Give Ghosts to the hero
+
+**Calculate Mithril
+!!VRs:S0;
+!!VRs:+v1176;
+!!VRs:+6;
+!!VRs&v1178>2:+4;   **Add 4 extra mithril if it's the 4th week and beyond
+
+!!IF&t>=0:Q3/6/j/7/s/1/z170058;
+
+**Award gold (12000-20000) and mithril (8-16) to the hero
+!!OW&t>=0:R-1/6/dj;
+!!OW&t>=0:R-1/7/ds;
+
+!!PO998&t>=0:N1; **If chamber is defeated, value of Death Chamber PO:N square is 1
+
+!!IF:V800/0;  **Clear FLAG 800
+
+!!PO998&t=-1:N0; **If hero is NOT defeated, value of Death Chamber position is 0 and another hero can visit the structure
+!!PO998&t>=0:Tc;  **Store current game day into PO:T value if chamber is defeated
+
+!!HE-1:R4/-1/0; **Re-enable "Tactics" for hero
+
+**Variables cleared
+!!VRv805:S0;
+!!VRv1172:S0;
+!!VRv1176:S0;
+!!VRv1500:S0;
+
+************************************************************************************************
+**Functions to have Lich Guards remove obstacles each round to summon Ghosts
+************************************************************************************************
+
+!?FU14300&800/v806=1; (SKELETONS)
+
+!!BMx1:N?y1;  **Get current number of monsters in each Lich Guard stack
+
+!!BMx1&y1>0:C64/53/3/3/0;
+!!BMx1&y1>0:C64/64/3/3/0;
+!!BMx1&y1>0:C64/104/3/3/0;
+!!BMx1&y1>0:C64/115/3/3/0;   **Remove skeletons
+
+!!VRx16&y1>0:S32;  **Exit the loop completely if a living Lich Guard stack has cast the spell
+
+*----------------------------------------------------------------------------------------------
+
+!?FU14301&800/v806=1; (RIBS)
+
+!!BMx1:N?y1;  **Get current number of monsters in each Lich Guard stack
+
+!!BMx1&y1>0/v1173=0:C64/1/3/3/0;
+!!BMx1&y1>0/v1173=0:C64/13/3/3/0;
+!!BMx1&y1>0/v1173=0:C64/171/3/3/0;
+!!BMx1&y1>0/v1173=0:C64/183/3/3/0;  **Remove ribs
+
+!!VRx16&y1>0:S32;  **Exit the loop completely if a living Lich Guard stack has cast the spell
+
+*----------------------------------------------------------------------------------------------
+
+!?FU14304&800/v806=1; (TOMBSTONES)
+
+!!BMx1:N?y1;  **Get current number of monsters in each Lich Guard stack
+
+!!BMx1&y1>0/v1173=1:C64/7/3/3/0;
+!!BMx1&y1>0/v1173=1:C64/9/3/3/0;
+!!BMx1&y1>0/v1173=1:C64/177/3/3/0;
+!!BMx1&y1>0/v1173=1:C64/179/3/3/0;   **Remove tombstones
+
+!!VRx16&y1>0:S32;  **Exit the loop completely if a living Lich Guard stack has cast the spell
+
+*----------------------------------------------------------------------------------------------
+
+!?FU14305&800/v806=1; (CRYPTS)
+
+!!BMx1:N?y1;  **Get current number of monsters in each Lich Guard stack
+
+!!BMx1&y1>0/v1173=2:C64/35/3/3/0;
+!!BMx1&y1>0/v1173=2:C64/48/3/3/0;
+!!BMx1&y1>0/v1173=2:C64/154/3/3/0;
+!!BMx1&y1>0/v1173=2:C64/167/3/3/0;   **Remove crypts
+
+!!VRx16&y1>0:S32;  **Exit the loop completely if a living Lich Guard stack has cast the spell
+
+*----------------------------------------------------------------------------------------------
+
+!?FU14307&800/v806=1; (VOLCANOES)
+
+!!BMx1:N?y1;  **Get current number of monsters in each Lich Guard stack
+
+!!BMx1&y1>0/v1173=3:C64/41/3/3/0;
+!!BMx1&y1>0/v1173=3:C64/142/3/3/0;  **Remove volcanoes
+
+!!VRx16&y1>0:S32;  **Exit the loop completely if a living Lich Guard stack has cast the spell
+
+*----------------------------------------------------------------------------------------------
+

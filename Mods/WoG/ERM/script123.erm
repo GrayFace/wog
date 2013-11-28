@@ -1,0 +1,66 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=14.12(December).2006
+
+** Starting heroes have Commanders Artifact
+** by Thomas Franz (alias samot)
+** script123.erm
+** Last Updated: 14.12(December).2006 - AI equips his artifacts (disabled at the moment, because of bug in CO:A)
+** Last Updated: 26.6(June).2006
+** Previously Updated:
+
+** If Commanders are enabled, each hero, that is owned by a player or inside a
+** prison at day 1 will get a random commander artifact (except Slava's Ring of Power).
+
+** Heroes in taverns do not get a commander artifact, because it would overpower
+** this option.
+
+--------------------------------------------------------------------------------
+
+** ERM Option Number: 323
+** Flags and Variables: local/temporary only
+** Functions:
+--------------------------------------------------------------------------------
+
+!?PI;
+!!UN:P323/=1; !!FU&-1:E; // exit, if script is not active
+!!UN:P3/=1;   !!FU&1:E;  // exit, if commanders are disabled
+
+!!DO-1/147/154/1:P?y-1; // create list of enabled commander artifacts in v600 ff, return index of last artifact in v1
+!!FU&y-1=0:E; // exit, if no commander artifact is enabled
+!!DO-2/0/154/1:P; // loop through all heroes and give them artifacts
+
+--------------------------------------------------------------------------------
+
+!?FU-1;
+** get number of enabled commander artifacts to v1
+!!UN:Ax16/=1; !!VRv1&1:+1; // increase counter, if artifact is enabled
+--------------------------------------------------------------------------------
+
+!?FU-2;
+** Looop for each hero, give artifact, if (s)he is eighter owned or in a prison
+** x16 = hero number
+
+!!HEx16:O?y1 P?y2/?y3/?y4; // get heroes owner and position
+!!IF:V1/0; // disable flag 1 (necessary, because the next check is (because of its condition) not always executed)
+!!OBy2/y3/y4&y2>-1/y3>-1/y4>-1:T=62; // check, if hero at the same position as a prison (set flag 1 to true, if yes)
+!!FU&y1<0/-1:E; // exit, if hero has no owner and / or is not in prison
+
+!!VRy-99:S0; // init counter
+!!FU-3:P; // get random commander artifact to v1
+!!OW:Iy1/=0; check, if owner = human (flag 1 will set if yes)
+!!HEx16&v1>0:Av2; // give artifact (if found)
+** AI should equip it by itself, but it is not working at the moment ...
+*!HEx16&v1>0/1:Av2; // give artifact (if found) to humans backbag
+*!COx16&v1>0/-1Av2/1; // AI equips the Artifact immediately
+--------------------------------------------------------------------------------
+
+
+!?FU-3;
+** get random commander artifact
+!!VRy-99:+1; // increase counter
+!!VRv2:S146 R8; // get random artifact
+!!UN:Av2/=1; // check, if it is disabled
+!!FU-3&1/y-99<30:P; // recursive call of the function, to find another enabled artifact, if this one is disabled
+

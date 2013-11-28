@@ -1,0 +1,96 @@
+194001	Convert the %Z-1 into:	CHOOSE STARTING ARTIFACT	22.11.2004
+194002	next page	CHOOSE STARTING ARTIFACT	22.11.2004
+194003	do not change the artifact	CHOOSE STARTING ARTIFACT	22.11.2004
+194004	Do you really want to throw away this nice artifact (there is {no} way to get it back)?	CHOOSE STARTING ARTIFACT	21.12.2004
+194005	You get %V1 additional  experience points for beating %Z-1.	HEROE-BATTLE-EXPERIENCE	21.12.2004
+194006	At the moment your heroes may learn up to %V1215 skills. Is this ok ({yes}) or do you want to modify this ({no})?	UNLIMITED SKILLS	23.12.2004
+194007	Change the number of skills a hero may learn	UNLIMITED SKILLS	23.12.2004
+194008	New skill limit (min 8, max %X1, currently %V1215):	UNLIMITED SKILLS	23.12.2004
+194009	Sorry, you entered a wrong number. Please remember, that the number must be at least 8 and maximal %X1 and may contain only digits.
+
+Do you want to use the old skill limit (%V1215)?	UNLIMITED SKILLS	23.12.2004
+194010	An ancient witch living in a strange hut welcomes you and tries to teach you for her own inscrutable purposes.	UNLIMITED SKILLS - Witch Hut	05.01.2005
+194011	{University}
+
+Your hero's footsteps echo through the quiet halls of this ancient university. A clerk informs you that while here, your hero may receive instructions on {%Z-1} for the little fee of 2000 gold.	UNLIMITED SKILLS - University	06.01.2005
+194012	Sorry, you have not enough gold to pay the study fee.	UNLIMITED SKILLS - University	06.01.2005
+194013	disable Shooting	CHOOSE B.A. - CM4	06.01.2005
+194014	disable Flying	CHOOSE B.A. - CM4	06.01.2005
+194015	disable Strike-and-Return	CHOOSE B.A. - CM4	06.01.2005
+194016	disable No-Retaliation	CHOOSE B.A. - CM4	06.01.2005
+194017	Stack does NOT retaliate (at least to the end of this round)	CHOOSE B.A. - CM4	06.01.2005
+194018	Modify the abilities of the %Z-9	CHOOSE B.A. - CM4	06.01.2005
+194019	Choose the ability of your commander that should be disabled by default (beginning of battle).	CHOOSE B.A. - CM2	06.01.2005
+194020	disable shooting by default (if commander has it)	CHOOSE B.A. - CM2	06.01.2005
+194021	disable flying by default (if commander has it)	CHOOSE B.A. - CM2	06.01.2005
+194022	{Hill Fort}
+
+At this Hill Fort you may train your troops, so that they'll be upgraded or you may leave your upgraded troops and hire some of the new recruits (not upgraded) here. In this case, you would get some money from the coaches, because you spared them much work.
+
+Do you want to Downgrade ({Peasant}) or to Upgrade ({Azure Dragon}) your troops?	DOWNGRADE CREATURES	04.02.2005
+194023	 and %Y11 Mercury	DOWNGRADE CREATURES	04.02.2005
+194024	 and %Y11 Sulfur 	DOWNGRADE CREATURES	04.02.2005
+194025	 and %Y11 Crystal 	DOWNGRADE CREATURES	04.02.2005
+194026	 and %Y11 Gems	DOWNGRADE CREATURES	04.02.2005
+194027	downgrade %Y2 %Z-1 to %Z-2, gives %Y10 Gold	DOWNGRADE CREATURES	04.02.2005
+194028	Please choose the creature to downgrade:	DOWNGRADE CREATURES	04.02.2005
+194029	I changed my mind.	DOWNGRADE CREATURES	04.02.2005
+194030	Sorry, but you have no upgraded creatures, that can be replaced by basic creatures.	DOWNGRADE CREATURES	04.02.2005
+194031	Do you really want to downgrade your nice %Z-1 to poor %Z-2? You will get no money or other benefits for this!	DOWNGRADE CREATURES	04.02.2005
+194032	This is already a basic creature and can not be downgraded furthermore.	DOWNGRADE CREATURES	07.02.2005
+			
+			
+			
+			
+	SHOW ACTIVE SPELLS-SCRIPT	all 1941xx are Strings used in Show Active Spells / Battlestatistics	11.12.2004
+194101	Active Spells on the %Z-9:		11.12.2004
+194102	No active spells on the %Z-9		11.12.2004
+194103	{»} %Y-5 remaining retaliations		11.12.2004
+194104	{»} %Y-6 of original %Y-7 %Z-9 in the stack		11.12.2004
+194105	{»} may cast %Z-1 another %Y-8 times
+	caster	11.12.2004
+194106	{»} is waiting
+	flag	11.12.2004
+194107	{»} is defending
+	flag	11.12.2004
+194108	{»} is done acting for this round
+	flag	11.12.2004
+194109	{»} is summoned (vanishes after the battle)
+	flag	11.12.2004
+194110	{»} is alive
+	flag	11.12.2004
+194111	{»} is undead
+	flag	11.12.2004
+194112	{»} is a war machine
+	flag	11.12.2004
+194113	{»} can shoot (%Y-11 remaining shoots)
+	flag	11.12.2004
+194114	{»} can fly
+	flag	11.12.2004
+194115	{»} has a breath weapon
+	flag	11.12.2004
+194116	{»} no penalty in close combat 
+	flag	11.12.2004
+194117	{»} attack twice
+	flag	11.12.2004
+194118	{»} no enemy retaliation 
+	flag	11.12.2004
+194119	{»} no morale penalty 
+	flag	11.12.2004
+194120	{»} attack all enemies around 
+	flag	11.12.2004
+194121	{»} is immune to fire spells
+	flag	11.12.2004
+194122	{»} immune to mind spell
+	flag	11.12.2004
+194123	
+{»} %Z-1: Duration %Y1 / Power %Y2 %Z-2	active spell list (Z2 = rank (z199025-z199027))	11.12.2004
+194124	{»} is your henchman
+	henchman	11.12.2004
+194125	(unskilled)	rank for active spell (z199023)	11.12.2004
+194126	(basic rank)	rank for active spell (z199023)	11.12.2004
+194127	(advanced rank)	rank for active spell (z199023)	11.12.2004
+194128	(expert rank)	rank for active spell (z199023)	11.12.2004
+194129	{»} fragile (takes double damage from Catapult)
+	Status from script73 (brittle)	02.01.2005
+194033	Commander Artifacts must not be equipped, if you want to substitute them.	CHOOSE B.A. - CM4	03.07.2006

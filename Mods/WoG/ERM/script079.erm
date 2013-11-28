@@ -1,0 +1,592 @@
+ ZVSE
+ERMS_ScriptName=Mithril Forge (script79)
+ERMS_ScriptAuthor=Perfecto
+ERMS_ScriptVersion=1.2.1b
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=v39;v4068-4070;z179-186;z79
+ERMS_AdditionalFiles=..\Data\p\s079_keeper.gif;..\Data\p\s079_MM.jpg
+ERMS_ScriptUsedFlags=22;84
+ERMS_ScriptUsedTimers=2
+ERMS_ScriptUsedFunctions=4062-4069
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+********************************************************************************
+**  Mithril Forge v1.2.1b by Perfecto
+********************************************************************************
+**  Mithril Forge gives 1 mithril per 2 days if owned. Mithril Forge has its own
+**  Keeper who has next proposes to the visiting hero:
+**  1) Kill keeper! - calls fight with Keeper's guardians. Quantity of guardians
+**  depends on hero's army and parameter called Loyalty.
+**  Type of guardians depends on surface:
+**    Power Liches on Dirt
+**    Master Genies on Sand
+**    Faerie Dragons on Grass
+**    Enchanters on Snow
+**    Wraiths on Swamp
+**    Werewolves on Rough
+**    Sorceresses on Underground
+**    Magogs on Lava
+**    Ghosts on Water.
+**  After winning the battle hero takes ownership.
+**  2) Ask to be owner of this place. - If Loyalty 50…74 then keeper propose to give him some gold for ownership. If Loyalty 75 and higher then you became the owner of this place. If Loyalty less then 50 then keeper disclaims to give you ownership.
+**  3) Just left this place saying no word. If Loyalty less then 25 then keeper will attack you anyway. If 25 of higher then you will leave this place.
+**  LOYALTY.
+**  Default value: 50.
+**    -5 to all non magic heroes
+**    +10 to Wizard and Alchemist
+**    -5 to Warlock
+**    -5 to Barbarian
+**  Increases if hero has:
+**    Crowns of the Supreme Magi
+**    Titan's Cuirasses
+**    Orbs of Vulnerability
+**    Wizard's Wells
+**    Rings of the Magi
+**    Pendants of Sorcery
+**    Spellbinder's Hats
+**    Spell Scrolls
+**    Spell Books
+**  Decreases if hero has:
+**    Recanter's Cloaks
+**    Orbs of Inhibition
+**    Green Dragons
+**    Gold Dragons
+**    Red Dragons
+**    Black Dragons
+**    Diamond Dragons
+**    Darkness Dragons
+********************************************************************************
+**  LIMITATION: Don't put near the Mithril Forge other Mithril Forges in
+**  the next two left and top squares. For example:
+**  X X X
+**  X X X
+**  X X O
+**  O - is Mithril Forge, X - is squares where must be NO Mithril Forges
+**  This limitation connected with using of Gold Mines instead of real objects
+**  and when it is replaced with UN:I command it deletes Gold Mines and
+**  Graphic of Mithril Forge doesn't disappear but it becomes not active.
+********************************************************************************
+**  Do not change:
+**  v39, v4068-4070
+**  z79, z179-z186
+**  FU4062-4069
+**  Flag: 22 - TRUE if script is enabled
+**  Flag: 84 - TRUE if battle with Keeper
+**  OB63/27
+**  PO:O (uses next ranges -2, 0..7)
+**  Files: ..\Data\p\s079_MM.jpg
+**  Files: ..\Data\p\s079_keeper.gif
+********************************************************************************
+** update: 3rd of June 2005 Thomas Franz - renaming graphic file
+** last update: 23.8(August).2005 Perfect0 - adding Keeper
+
+
+*[Check version of ERM to see if it's current enough]
+*[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v1/?v2;
+!#IF&v1<358:V1/1;
+!#IF&v2<281:V1/1;
+!#IF&1:M1/z179000;
+
+********************************************************************************
+!p#UN:P79/1;                           [remove 'p' to allow standalone usage of Mithril Mine]
+!p#UN:P273/1;                          [remove 'p' to allow standalone usage of object replacing]
+
+!#UN:P79/=1;                           [flag = 1 if Mithril Forge (script79) is enabled]
+!#IF&1:V22/1;                          [flag 22 used to know if script is enabled]
+!#VRv39&1:S2;                          [v39 = 2 -> means that every 2 days Mine will give mithril]
+
+********************************************************************************
+*!* timer for replacing *!*
+!?TM2&$day$=1/$once$=1/22;
+
+!!UN:P273/=1;                          [check if replacing is enabled]
+!!FU4067&1:P33;                        [THIS FUNCTION REPLACE 33% OF GOLD MINES with Mithril Forges]
+
+!!UN:U63/27/?y1;                       [Calculate all objects (Mithril Mines) on the map]
+
+!!FU&y1<1:E;                           [exit if no Mithril Forge on the map]
+
+!!UN:U63/27/1/1;                       [get coordintes of the first object 63/27 to v1..v3]
+!!PO1:O-2;                             [PO:O = -2 -> means that it's a Mithril Forge]
+!!FU4065:Pv1/v2/v3;                    [replace object]
+!!OB1:H79;                             [set hint to z79]
+!!OB1:M-1/1/1;                         [disable standard message]
+
+*[replace others Mithril Forges (63/27) with gold mines for AI reference (it still will shown as 63/27)]
+!!DO4063/2/y1/1:P;
+
+********************************************************************************
+*!* FU4063 to replace 63/27 with gold mine (looks like 63/27) *!*
+!?FU4063;
+!!UN:U63/27/-1/1;                      [get coordintes of the next object 63/27 to v1..v3]
+!!PO1:O-2;                             [PO:O = -2 -> means that it's a Mithril Forge]
+!!FU4065:Pv1/v2/v3;                    [replace object]
+!!OB1:H79;                             [set hint to z79]
+!!OB1:M-1/1/1;                         [disable standard message]
+
+********************************************************************************
+*!* Mithril Forge visiting *!*
+********************************************************************************
+!?OB53/6&22;
+!!VRy1:S0;
+!!MN998:O?v4069;                       [check owner of mine]
+!!PO998:O?y1;                          [check owner of place]
+!!FU4064|y1=-2/y1>0:Pv998/v999/v1000;  [call needed function if it is a Mithril Forge]
+
+!?FU4064
+!!VRv1:Sx1;                            [v1 = x]
+!!VRv2:Sx2;                            [v2 = y]
+!!VRv3:Sx3;                            [v3 = z (ground/underground)]
+!!MN1:O?y1;                            [y1 = mine owner]
+!!HE-1:O?y2;                           [y2 = hero owner]
+!!VRy3:S-1;
+!!VRy4:S-1;
+!!OW&y1<>-1: Ty1/?y3;
+!!OW&y2<>-1: Ty2/?y4;
+!!FU&y3=y4:E;                          [exit if the same team]
+
+!!FU4068:P;                            [call Keeper's Dialog]
+!!HEv4070&v4070<>-1: O?y8;
+!!VRv4068&y8<>-1/v4070<>-1:S1;
+!!FU&v4068=0:E;
+
+!!VRv1:Sx1;                            [v1 = x]
+!!VRv2:Sx2;                            [v2 = y]
+!!VRv3:Sx3;                            [v3 = z (ground/underground)]
+
+!!MN1:O?y1;                            [y1 = mine owner]
+!!HE-1:O?y2;                           [y2 = hero owner]
+!!VRy3:Sy2+179;                        [calculate z index]
+!!OB1:Hy3;                             [set hint to zy3]
+!!PO1:Oy2;                             [set object owner]
+!!VRz1:S^^;                            [for cleaning]
+!!VRz2:S^..\Data\p\s079_MM.jpg^;
+!!IF&1000:D1/z79/z1/z1/z2/z1/z1/z1/z179001/z1/z1/z1/z1/z1/z1/z1;  [preset Dialog1]
+!!IF&1000:E7/1;                       [show message when get control over the Mithril Forge (***v7 answer)]
+
+!$OB53/6&22/v4068=0;
+
+!!PO998:O?y1;                          [check owner of place]
+!!MN998|y1=-2/y1>0:Ov4069;             [set back owner of Mithril Forge if hero didn't capture the mine]
+********************************************************************************
+*!* timers to give Mithril *!*
+!?TM2&$once$=1/22;
+!!VRy2:S$day$%v39;                     [check if we can give mithril in this day]
+!!FU&y2<>0:E;                          [exit if in this day we cann't give mithril]
+!!UN:U53/6/?y1;                        [calculate all Gold Mines on the map]
+!!VRv1:S-1;                            [starting search coordinate]
+!!DO4062/1/y1/1&y1>0:P;                [try to give mithril if any Gold Mine is present on the map]
+
+********************************************************************************
+*!* FU4062 to give Mithril *!*
+!?FU4062;
+!!UN:U53/6/-1/1;                       [get coordintes of next iterated object in v1..v3]
+!!PO1:O>-1;                            [PO:O > -1 if it's an owned Mithril Forge]
+!!FU&-1:E;                             [exit if it is not a Mithril Forge]
+!!MN1:O?y1;                            [get owner of the Mine]
+!!FU|y1<0/y1>7:E;                      [exit if it is not owned (just check)]
+!!OW: Iy1/?x5;                         [x5 = 0 if owner is Human]
+!!OW&x5=0: Ry1/6/d-1000;               [take gold because Mithril Forge uses gold mine (Human only)]
+!!OW: Ry1/7/d1;                        [give mithril to owner]
+
+********************************************************************************
+*!* FU4065 to replace Mithril Forge *!*
+!?FU4065;
+!!UN:Ox1/x2/x3;                        [delete object]
+!!UN:Ix1/x2/x3/53/6/63/27;             [replace object]
+!!POx1/x2/x3:O?y1;                     [get owner of the object]
+!!FU&y1<0:E;                           [exit if unowned]
+!!MNx1/x2/x3:Oy1;                      [set owner of the mine]
+********************************************************************************
+
+
+
+********************************************************************************
+************************** GOLD MINES REPLACING BEGIN **************************
+********************************************************************************
+*!* FU4067 to replace x1% of gold mines with Mithril Forges *!*
+!?FU4067;
+!!UN:U53/6/?y1;                        [calculate all Gold Mines on the map]
+!!VRv1&y1>0:S-1;
+!!DO4066/1/y1/1&y1>0:Px1;              [Px1 means that x1% of gold mines will be replaced by Mithril Forge]
+
+********************************************************************************
+*!* FU4066 to replace gold mine with Mithril Forge *!*
+!?FU4066;
+!!VRy2:S0R100;
+!!UN:U53/6/-1/1;                       [get coordintes of the next object 53/6 to v1..v3]
+!!FU&y2>x1:E;                          [x1% chance to replace gold mine with Mithril Forge]
+!!MN1:O?y1;                            [y1 = mine's owner]
+
+*[if Gold Mine was unowned]
+!!PO1|y1<0/y1>7:O-2;                   [PO:O = -2 -> means that it's an unowned Mithril Forge]
+!!OB1|y1<0/y1>7:H79;                   [set hint to z79]
+
+*[if Gold Mine was owned]
+!!PO1&y1>-1/y1<8:Oy1;                  [PO:O = 0..7 -> means that it's an owned Mithril Forge]
+!!VRy3&y1>-1/y1<8:Sy1+179;             [set correct z index]
+!!OB1&y1>-1/y1<8:Hy3;                  [set hint to zy3]
+
+!!OB1:M-1/1/1;                         [disable standard message]
+!!VRv1:-1;
+!!UN:Iv1/v2/v3/147/0;                  [place left rocks]
+!!VRv1:+2;
+!!UN:Iv1/v2/v3/147/0;                  [place right rocks]
+!!VRv1:-1;
+!!FU4065:Pv1/v2/v3;                    [replace object]
+
+********************************************************************************
+*************************** GOLD MINES REPLACING END ***************************
+********************************************************************************
+
+
+
+********************************************************************************
+************************* DIALOG WITH KEEPER BEGIN *****************************
+********************************************************************************
+!?FU4068;
+
+!!VRv1:S50;                            [v1 = LOYALTY]
+!!VRv4068:S0;                          [v4068 = AGREEMENT]
+!!VRv4070:S-1;                         [v4070 = hero number]
+________________________________________________________________________________
+ [class dependencies]
+!!HE-1: B2/?v2;                        [v2 = class of hero]
+!!VRy1:Sv2%2;
+!!VRv1&y1=0:-5;                        [-5 to all non magic heroes]
+!!VRv1|v2=5/v2=4:+10;                  [+10 to Wizard and Alchemist]
+!!VRv1&v2=10:-3;                       [-5 to Warlock]
+!!VRv1&v2=12:-5;                       [-5 to Barbarian]
+________________________________________________________________________________
+ [magic and war artifacts dependencies]
+!!HE-1: A2/22/?y1/?y11;                [y1 = quantity of Crowns of the Supreme Magi, y11(equiped)]
+!!HE-1: A2/30/?y2/?y12;                [y2 = quantity of Titan's Cuirasses, y12(equiped)]
+!!HE-1: A2/83/?y3/?y13;                [y3 = quantity of Recanter's Cloaks, y13(equiped)]
+!!HE-1: A2/93/?y4/?y14;                [y4 = quantity of Orbs of Vulnerability, y14(equiped)]
+!!HE-1: A2/126/?y5/?y15;               [y5 = quantity of Orbs of Inhibition, y15(equiped)]
+!!HE-1: A2/138/?y6/?y16;               [y6 = quantity of Wizard's Wells, y16(equiped)]
+!!HE-1: A2/139/?y7/?y17;               [y7 = quantity of Rings of the Magi, y17(equiped)]
+!!HE-1: A2/150/?y8/?y18;               [y8 = quantity of Pendants of Sorcery, y18(equiped)]
+!!HE-1: A2/124/?y9/?y19;               [y9 = quantity of Spellbinder's Hats, y19(equiped)]
+!!HE-1: A2/1/?y10/d;                   [y10 = quantity of Spell Scrolls]
+!!HE-1: A2/0/?y20/d;                   [y20 = quantity of Spell Books]
+!!HE-1: C1/26/d/?y21;                  [check quantity of Green Dragons]
+!!HE-1: C1/27/d/?y22;                  [check quantity of Gold Dragons]
+!!HE-1: C1/82/d/?y23;                  [check quantity of Red Dragons]
+!!HE-1: C1/83/d/?y24;                  [check quantity of Black Dragons]
+!!HE-1: C1/151/d/?y25;                 [check quantity of Diamond Dragons]
+!!HE-1: C1/155/d/?y26;                 [check quantity of Darkness Dragons]
+________________________________________________________________________________
+ [Q = quantity, E = equiped]
+!!VRv1&y5>0:-y5-y15-10;                ["-Q-E-10" Orbs of Inhibition]
+!!VRv1&y3>0:-y3-y13-5;                 ["-Q-E-5" Recanter's Cloaks]
+!!VRv1&y9>0:+y9+y19+8;                 ["+Q+E+8" Spellbinder's Hats]
+!!VRv1&y4>0:+y4+y14+5;                 ["+Q+E+5" Orbs of Vulnerability]
+!!VRv1&y2>0:+y2+y12+4;                 ["+Q+E+4" Titan's Cuirasses]
+!!VRv1&y6>0:+y6+y16+3;                 ["+Q+E+3" Wizard's Wells]
+!!VRv1&y7>0:+y7+y17+3;                 ["+Q+E+3" Rings of the Magi]
+!!VRv1&y8>0:+y8+y18+2;                 ["+Q+E+2" Pendants of Sorcery]
+!!VRv1&y1>0:+y1+y11+2;                 ["+Q+E+2" Crowns of the Supreme Magi]
+!!VRv1&y10>0:+y10;                     ["+Q" Spell Scrolls]
+!!VRv1&y20>0:+5;                       ["+5" Spell Books]
+!!VRv1&y21>0:-3;                       ["-3" Green Dragon]
+!!VRv1&y22>0:-5;                       ["-5" Gold Dragon]
+!!VRv1&y23>0:-3;                       ["-3" Red Dragon]
+!!VRv1&y24>0:-5;                       ["-5" Black Dragon]
+!!VRv1&y25>0:-7;                       ["-7" Diamond Dragon]
+!!VRv1&y26>0:-7;                       ["-7" Darkness Dragon]
+________________________________________________________________________________
+ [Keeper greetings]
+!!VRz40:S^^;
+!!VRz41:S^../Data/p/s079_keeper.gif^;
+!!IF:D1/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40/z40;
+!!IF&1000:D1/z179002//z179006/z41////z179002////z179003/z179004/z179005/;
+!!VRv2:S0;
+!!IF&1000:E2/1;
+________________________________________________________________________________
+ [AI will always capture]
+!!VRv4068&-1000:S1;
+!!FU&-1000:E;
+________________________________________________________________________________
+ [if try to go away]
+!!FU4069&v2=3/v1<25:Pv1;                 [attack if low loyalty]
+!!FU4069&v2=-1/v1<25:Pv1;                [attack if low loyalty]
+!!IF&v2=3/v1<25:M1/z179012;
+!!IF&v2=-1/v1<25:M1/z179012;
+!!FU|v2=3/v2=-1:E;
+________________________________________________________________________________
+ [if asking for ownership]
+!!VRv4068&v2=2/v1>74:S1;                  [set v4068 to true if loyalty 75+ (ownership allowed)]
+!!IF&v4068=1:M1/z179007;
+
+!!VRy27&v2=2/v4068=0/v1>49/v1<75:S75-v1*500;
+!!VRy37:Sc+99;
+!!VRy27:*y37:100;
+ [diplomat's artifacts]
+!!HE-1&v2=2/v4068=0/v1>49/v1<75: A2/66/d/?y31;       [y31 = quantity of Statesman's Medals (equiped)]
+!!HE-1&v2=2/v4068=0/v1>49/v1<75: A2/67/d/?y32;       [y32 = quantity of Diplomat's Rings (equiped)]
+!!HE-1&v2=2/v4068=0/v1>49/v1<75: A2/68/d/?y33;       [y33 = quantity of Ambassador's Sashs (equiped)]
+
+!!HE-1&v2=2/v4068=0/v1>49/v1<75: S4/?y34;            (get Diplomacy skill level)
+!!HE-1&v2=2/v4068=0/v1>49/v1<75: S13/?y35;           (get Estate skill level)
+!!VRy34&v2=2/v4068=0/v1>49/v1<75/y35<y34: Sy35;      (set the worset skill level)
+!!VRy34&v2=2/v4068=0/v1>49/v1<75:*-10;               (each skill level decreases price in 10%)
+!!VRy31&v2=2/v4068=0/v1>49/v1<75:*-5;                (Statesman's Medal decreases price in 5%)
+!!VRy32&v2=2/v4068=0/v1>49/v1<75:*-10;               (Diplomat's Ring decreases price in 10%)
+!!VRy33&v2=2/v4068=0/v1>49/v1<75:*-15;               (Ambassador's Sash decreases price in 15%)
+!!VRy36&v2=2/v4068=0/v1>49/v1<75:Sy31+y32+y33+y34+100;
+!!VRy27&v2=2/v4068=0/v1>49/v1<75:*y36:100;
+!!VRy28&v2=2/v4068=0/v1>49/v1<75:Sy27+100000*-1;
+!!IF&v2=2/v4068=0/v1>49/v1<75:Q2/6/y28/2/z179009;
+!!OW&v2=2/v4068=0/v1>49/v1<75:R-1/6/?y29;
+!!IF&v2=2/v4068=0/2/y27<=y29/v1>49/v1<75:M1/z179010;
+!!VRy30&v2=2/v4068=0/2/y27<=y29/v1>49/v1<75:Sy27*-1;
+!!OW&v2=2/v4068=0/2/y27<=y29/v1>49/v1<75:R-1/6/dy30;
+!!VRv4068&v2=2/v4068=0/2/y27<=y29/v1>49/v1<75:S1;
+!!IF&v2=2/v4068=0/2/y27>y29/v1>49/v1<75:M1/z179011;
+
+!!IF&v2=2/v4068=0/v1<50:M1/z179008;
+
+!!FU&v2=2:E;
+________________________________________________________________________________
+!!FU4069&v2=1:Pv1;
+
+!?FU4069;
+ [calculate heroes army fight value]
+!!HE-1:C0/0/?y1/?y11;    [y1 - 1st slot type, y11 - 1st slot quantity]
+!!HE-1:C0/1/?y2/?y12;
+!!HE-1:C0/2/?y3/?y13;
+!!HE-1:C0/3/?y4/?y14;
+!!HE-1:C0/4/?y5/?y15;
+!!HE-1:C0/5/?y6/?y16;
+!!HE-1:C0/6/?y7/?y17;
+
+!!MA&y1>-1/y1<197: Fy1/?y21;   [y21 - 1st slot creature fight value]
+!!MA&y2>-1/y2<197: Fy2/?y22;
+!!MA&y3>-1/y3<197: Fy3/?y23;
+!!MA&y4>-1/y4<197: Fy4/?y24;
+!!MA&y5>-1/y5<197: Fy5/?y25;
+!!MA&y6>-1/y6<197: Fy6/?y26;
+!!MA&y7>-1/y7<197: Fy7/?y27;
+
+!!VRy21::100*y11;    [y21 - fight value of 1st :100 to avoid overflow]
+!!VRy22::100*y12;
+!!VRy23::100*y13;
+!!VRy24::100*y14;
+!!VRy25::100*y15;
+!!VRy26::100*y16;
+!!VRy27::100*y17;
+
+!!VRy11:S100-x1*50;[x1 - loyalty]
+!!IF:V84/1;        [battle with Keeper]
+!!TRv998/v999/v1000:T?y1/d/d/d/d/d/d/d;
+!!VRy2:S136;       [default is Enchanters]
+!!VRy2&y1=0:S65;   [Power Liches on Dirt]
+!!VRy2&y1=1:S37;   [Master Genies on Sand]
+!!VRy2&y1=2:S134;  [Faerie Dragons on Grass]
+!!VRy2&y1=3:S136;  [Enchanters on Snow]
+!!VRy2&y1=4:S61;   [Wraiths on Swamp]
+!!VRy2&y1=5:S194;  [Werewolves on Rough]
+!!VRy2&y1=6:S193;  [Sorceresses on Underground]
+!!VRy2&y1=7:S45;   [Magogs on  Lava]
+!!VRy2&y1=8:S159;  [Ghosts on  Water]
+!!MA: Fy2/?y3;
+!!VRy3::100;
+!!VRy10:Sy21+y22+y23+y24+y25+y26+y27+y11:y3;
+!!VRy10&y2=134::2;
+!!VRy10&y10<3:S3;  [minimum three guardians]
+!!HE-1:Tv998/v999/v1000/y2/y10;
+!!HE-1: N?v4070;
+
+!?BF&84;
+!!IF:V84/0;        [battle with Keeper]
+!!BF:C;
+!!BF:O69/166 O69/28 O69/126 O67/180 O67/107 O67/31 O70/94 O70/38 O70/57 O68/129 O68/176 O68/41 O66/45 O66/112 O66/5 O66/115 O66/141 O66/158 O67/148;
+
+********************************************************************************
+*************************** DIALOG WITH KEEPER END *****************************
+********************************************************************************
+
+
+********************************************************************************
+************************* CORRECTION UNIT **************************************
+********************* DO NOT CHANGE THIS PART **********************************
+********************************************************************************
+!$OB5&22;                              [ARTIFACT picked up]
+!!VRv1:Sv998-1;                        [correction left]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB6&22;                              [PANDORA picked up]
+!!VRv1:Sv998-1;                        [correction]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB54&22;                             [MONSTER picked up]
+!!VRv1:Sv998-1;                        [correction left]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:Sv998;
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+
+!$OB62&22;                             [PRISON picked up]
+!!VRv1:Sv998-2;                        [correction left]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:+2;                             [correction right]
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:+2;                             [correction right]
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB79&22;                             [RESOURCE picked up]
+!!VRv1:Sv998-1;                        [correction]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB81&22;                             [SCHOLAR picked up]
+!!VRv1:Sv998-1;                        [correction left]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:Sv998;
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB93&22;                             [SPELL SCROLL picked up]
+!!VRv1:Sv998-1;                        [correction]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+!$OB101&22;                            [TREASURE CHEST picked up]
+!!VRv1:Sv998-1;                        [correction]
+!!VRv2:Sv999;
+!!VRv3:Sv1000;
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:Sv998;
+!!VRv2:-1;                             [correction up]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+!!VRv1:-1;                             [correction left]
+!!FU|v1<0/v2<0:E;                      [exit]
+!!OBv1/v2/v3: T?y1;
+!!OBv1/v2/v3: U?y2;
+!!FU4065&y1=63/y2=27:Pv1/v2/v3;        [put back Mithril Forge]
+
+********************************************************************************
+

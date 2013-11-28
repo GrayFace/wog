@@ -1,0 +1,52 @@
+#	Text resource for "script49.erm" document		
+149000	HENCHMAN BONUS STATS AT LEVEL 1 :
+
++1 Attack
++1 Defense
++1 Speed
++2-5 Base Damage
++10 Base Health
+
+At every 3rd level : +1 Attack, +1 Defense
+At every 10th level : +1 Speed 
+
+Henchmen gain {Status} for each battle fought and gain levels (indicated by increased stack quantity). They also benefit from a {Status Bonus} based on hero level and current day.
+
+Henchmen will die after one of the stack is lost, they may offer one last retaliation before doing so.
+
+Lower level/un-upgraded creatures level up faster than higher level/upgraded creatures.
+
+The "Disguise" spell is applied to color their quantity tag to help separate them from normal creatures.
+
+Dead henchmen can be resurrected in a town for a fee based on creature cost and level.
+
+AI heroes have a (good) chance of having a henchman of random level ({Status} based on hero level). The creature type is chosen randomly each battle and may even be of a type not in the hero's army.
+	<!!Q>	01.08.2004
+149001	You have not yet chosen a Henchman.
+Do you wish to look over your troops and see if any are worthy of the honor?
+
+(Selecting NO will disable future reminders for this hero.)
+
+
+
+{To open Henchman screen : Left Click on color banner on hero screen}
+{To view Henchman help : Right Click on color banner on hero screen}	<!!Q>	01.08.2004
+149002	Do you wish to select a new Henchman?	<!!S>	01.08.2004
+149003	DISMISS HENCHMAN	<!!S>	01.08.2004
+149004	NO THANKS	<!!S>	01.08.2004
+149005	<<<<<<{DEAD}>>>>>>	<!!S>	01.08.2004
+149006	{Henchman level} : %Y3
+{Level Rate} : %V7215  {Status for next level} : %Y4
+{Status Total} : %Y11  {Earned} : %W117  {Bonus} : %Y2
+Attack : %Y5
+Defense : %Y6
+Health : %Y7
+Damage : %Y8-%Y9
+Speed : %Y10
+%Z1
+{Do you wish to select a new Henchman?}	<!!Q>	01.08.2004
+149007	{Henchman level = %Y3}
+
+Do you wish to resurrect this Henchman?
+It will cost %Y4 gold.	<!!Q>	01.08.2004
+149008	Sorry, you can't afford to pay for the resurrection.	<!!M>	01.08.2004

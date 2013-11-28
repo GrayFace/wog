@@ -1,0 +1,10 @@
+115000	Mysterious Creature Dwelling	String type = <!#S>	07.06.2003
+115001	Mysterious Creature Dwelling (empty)	String type = <!#S>	07.06.2003
+115002	Hello {%Z141}! 
+I am sorry, but you have already bought creatures here.	String type = <!!M>	07.06.2003
+115003	When you enter the MCD, the sales man steps up to you: 
+"Ah, {%Z141}! 
+I see that you haven`t bought any creatures from here before. Do you wish to buy some for %Y4 gold?"	String type = <!!Q>	07.06.2003
+115004	Come back later!	String type = <!!M>	07.06.2003
+115005	"Don`t try to haggle about the price! 
+You don`t have enough money. The creatures cost %Y4 gold."	String type = <!!Q>	07.06.2003

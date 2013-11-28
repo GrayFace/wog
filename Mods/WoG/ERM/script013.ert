@@ -1,0 +1,82 @@
+113000	There's a game of cards about to start with %$players$ players. Do you want to put down a stake and play?	String type = <!!Q>	07.06.2003
+113001	The bartender comes up to you and says "Sorry %$hname$, you've been winning too many games lately. I suggest you give the cards a rest for awhile."	String type = <!!S>	07.06.2003
+113002	You look around for a game but all the card players have gone home for the day.	String type = <!!M>	07.06.2003
+113003	Do you want to look around the tavern?	String type = <!!Q>	07.06.2003
+113004	You have knowledge of the {Fortune} spell	String type = <!!S>	07.06.2003
+113005	You are a skilled {Fortune} spell caster	String type = <!!S>	07.06.2003
+113006	You are an expert {Fortune} spell caster	String type = <!!S>	07.06.2003
+113007	You are a master {Fortune} spell caster	String type = <!!S>	07.06.2003
+113008	%Z205. Would you like to cast Fortune to improve your luck for this game?	String type = <!!Q>	07.06.2003
+113009	You cast {Fortune} and your luck improves.	String type = <!!Q>	07.06.2003
+113010	You're feeling 
+a bit unlucky today. 
+ 
+{(Luck %$luck$)}	String type = <!!Q>	07.06.2003
+113011	You're feeling 
+quite unlucky today. 
+ 
+{(Luck %$luck$)}	String type = <!!Q>	07.06.2003
+113012	You're feeling 
+very unlucky today. 
+ 
+{(Luck %$luck$)}	String type = <!!Q>	07.06.2003
+113013	You're feeling 
+incredibly unlucky today. 
+ 
+{(Luck %$luck$)}	String type = <!!Q>	07.06.2003
+113014	You're feeling 
+a bit lucky today. 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113015	You're feeling 
+quite lucky today. 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113016	You're feeling 
+very lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113017	You're feeling super lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113018	You're feeling extremely lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113019	You're feeling amazingly lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113020	You're feeling  incredibly lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113021	You're feeling ridiculously lucky today! 
+ 
+{(Luck +%$luck$)	String type = <!!Q>	07.06.2003
+113022	You don't have enough money. You'll have to sit this one out.	String type = <!!M>	07.06.2003
+113023	You're low on gold. 
+Do you still want to play?	String type = <!!Q>	07.06.2003
+113024	Choose your stake.	String type = <!!Q>	07.06.2003
+113025	Confirming your unlucky feeling, you	String type = <!!S>	07.06.2003
+113026	Despite your lucky feeling, you	String type = <!!S>	07.06.2003
+113027	You	String type = <!!S>	07.06.2003
+113028	You	String type = <!!S>	07.06.2003
+113029	Despite your unlucky feeling, you	String type = <!!S>	07.06.2003
+113030	%$you1$ play a lousy game and LOSE your entire stake of 
+ 
+{%$stake$ Gold Coins.}	String type = <!!Q>	07.06.2003
+113031	%$you1$ have a streak of bad luck but pull out in time to only lose half your stake. You lose 
+ 
+{%$stake$ Gold Coins.}	String type = <!!Q>	07.06.2003
+113032	%$you1$ play a difficult game and only barely manage to break even.	String type = <!!Q>	07.06.2003
+113033	%$you2$ play a great game and DOUBLE your stake, winning 
+ 
+{%$stake$ Gold Coins!!}	String type = <!!Q>	07.06.2003
+113034	five aces	String type = <!!S>	07.06.2003
+113035	a full house	String type = <!!S>	07.06.2003
+113036	five kings	String type = <!!S>	07.06.2003
+113037	a royal flush	String type = <!!S>	07.06.2003
+113038	five queens	String type = <!!S>	07.06.2003
+113039	five dragons	String type = <!!S>	07.06.2003
+113040	You play an amazing game and get %$gcards$. You triple your stake, winning {%$stake$} {Gold} {Coins} and also winning the special house prize of a Magical Pendant!	String type = <!!Q>	07.06.2003
+113041	The other %$players$ card players at the table accuse you of cheating! Will you fight to keep the money and pendant you won?	String type = <!!Q>	07.06.2003
+113042	They leave with the goodies, sneering at your lack of courage!	String type = <!!Q>	07.06.2003
+113043	The angry card players attack you!	String type = <!!M>	07.06.2003

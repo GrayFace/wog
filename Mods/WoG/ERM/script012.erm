@@ -1,0 +1,662 @@
+ZVSE
+ERMS_ScriptDate=19.7(July).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Living Skull Script Version 1.5 created by Timothy E. Pulver
+**   Requires WoG version 3.58 or later using ERM version 2.7 or later.
+**   last Updated:  18.7(July).2006 by Thomas Franz (samot) - replaced v77 by y77
+**   prev. Updated: June 23, 2004
+
+** added by Thomas Franz (samot) at 22.12.04 (changes are commented with //):
+** - No search for Warlord's banner, because it would show you the position of all
+**  (neutral) towns and the skull could be used as cheap shop for the Banners
+** - added check for script01: Hero pick up double artifacts (works for the skull too)
+** - check, if artifact is guarded, if yes: don't bring it to the hero
+
+** This script makes all "Living Skulls" on a map function as artifact locating
+** devices. When a hero visits the skull, he or she may request a search for
+** an unclaimed artifact of a given type (e.g., Angel Wings, Golden Bow,
+** Titan's Gladius). To specify a type, the player types the name of the artifact
+** into an input box. Each search costs 100 gold pieces. If the artifact is
+** found on the map, the player will be told and given the option to learn the
+** exact location for the cost of a few resources and to see it revealed for
+** an additional 1000 gold.
+
+** The "Living Skull" is a new WoG object that can be found in the WoG
+** Heroes map editor in the Town Objects section. It's near the bottom of the
+** object list on the right-hand side, just below the black tower. It appears as
+** a skull with a single eye.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 500 or later to avoid the ERM script
+** popping up as if it were a regular event message. The title of the event
+** is unimportant, but I would suggest something like "Living Skull".
+** And of course, you'll also need to put one or more "Living Skulls" on
+** your map for the heroes to visit. Happy relic hunting! :-)
+
+** Version 1.2 adds support for Commander artifacts.
+** Version 1.3 shows the location of an artifact for free to the first hero
+** visiting each week but only allows 3 searches per turn. In addition, it will
+** even fetch a found artifact in exchange for Mithril.
+** Version 1.4 adds substring checking to make it easier for a player to enter
+** the correct name.
+** Version 1.5 adds support for the new artifacts.
+** Note: uses script00.erm for date/colour values.
+
+Flags used in this script: 1, 21, 27
+Variables used: v1-v4, v24-v34, v94, v95, z1, z22-z44,z454
+Function numbers used: FU20-FU24, FU14900-FU14903
+PO Numbers used: N, O, V0
+Function variables used: x16, x1-x3, y1-y8
+Trigger variables used: y-1..y-12
+Extended Dialogue Box numbers used: 20-21
+
+** PO:O - store last visited player colour
+** PO:N - store search counter: 3 searches/day
+** PO:V0 - store last day used
+
+Variables that MUST be preserved outside this script: z454
+
+----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v94/?v95;
+!#IF&v94<358:V1/1;
+!#IF&v95<257:V1/1;
+!#IF&1:M1/z112000;
+
+----------------------------------------------------------------------------------------
+
+!#UN:P12/?v1; [Check if script is enabled: v1]
+
+ [Set up hint text for Living Skulls]
+!#VRz454&v1=1:Sz112001;
+!#HT63/50&v1=1:T454;
+
+----------------------------------------------------------------------------------------
+
+ [Living Skull is trigger]
+!?OB63/50;
+
+!!UN:P12/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+ [Set it so that AI thinks Skull (Pyramid) is already visited and won't visit again]
+!!HE-1:O?v1; [Visiting player's colour]
+!!PM998:V0 Pv1/1;
+
+ [Living Skull script continues only for a human player, not AI]
+!!FU&-1000:E;
+
+ [Disable object - only important to avoid bug with change view command]
+!!OB998:S;
+
+ [Refresh object's hint text]
+!!OB998:H454;
+
+ [Initialize v30 to -1 (no artifact) and Flag 21 to 0]
+!!VRv30:S-1;
+!!IF:V21/0;
+
+ [Store hero's name in z26]
+!!HE-1:B0/?z26;
+
+ [Read values for: last visited player PO:O (y-2), last visited day PO:V0 (y-3)]
+ [and search count PO:N (y-4)]
+!!PO998:O?y-2 V0/?y-3 N?y-4;
+
+ [Reset search count to 0 if it's a new day or new player]
+!!VRy-4&$day$>y-3:S0;
+!!VRy-4&$color$<>y-2:S0;
+
+--------------------------------------------------
+
+ [Free search for first visitor each week]
+
+!!VRy-11:S$day$; [Current day: y-11]
+!!VRy-11:-1; [Subtract 1 from current day: y-11]
+!!VRy-11::7; [Divide by 7 to get week (starting at 0): y-11]
+!!VRy-11:*7 +1; [Determine most recent "Monday": y-11]
+
+!!VRy-12:Sy-3 -1; [Subtract 1 from last day visited: y-12]
+!!VRy-12::7; [Divide by 7 to get week (starting at 0): y-12]
+!!VRy-12:*7 +1; [Determine most recent "Monday" for last day visited: y-12]
+
+ [Check if most recent "Monday" is after previously visited "Monday": set y-5 to 1 if yes]
+!!VRy-5:S0;
+!!VRy-5|y-11>y-12/y-3=0:S1;
+
+!!PO998&y-5=1:V0/$day$; [Set new last day visited]
+!!FU14900&y-5=1:P; [Call Function 14900 to show a random artifact on the map]
+
+!!FU&y-5=1:E; [Exit after "free search"]
+
+--------------------------------------------------
+
+ [If 3 searches already done today, display this and exit]
+!!IF&y-4>=3:M^{%Z454}
+
+%Z112002
+
+%Z112072^;
+!!FU&y-4>=3:E;
+
+ [Set up extended dialogue box number 20]
+!!VRz29:Sz112002;
+!!VRz40:Sz112003;
+!!IF:D20/29/40/0/0/0/0/0/0/0/0/0/0/0/0/0;
+
+ [Call dialogue box number 20]
+!!IF:E1/20;
+
+ [Check if z1 has an empty string (no input) - check result stored in Flag 27]
+!!VRz1:H27;
+
+ [Set alternate names for several artifact types]
+!!VRz30:Sz112004; !!VRz31:Sz112005;
+!!VRz32:Sz112006; !!VRz33:Sz112007;  !!VRz39:Sz112008;
+!!VRz34:Sz112009; !!VRz35:Sz112010;
+!!VRz36:Sz112011; !!VRz37:Sz112012;  !!VRz38:Sz112013;
+!!VRz1&z1=z30:Sz31;  !!VRz1&z1=z32:Sz33;  !!VRz1&z1=z34:Sz35;
+
+ [Artifact type is stored in v27 - default is standard artifact (type 5)]
+!!VRv27:S5;
+
+ [Check for Pandora's Box entry and if true, set artifact type (v27) to 6]
+ [Also set z23 to "Pandora's Box" and v30 to -2]
+!!VRv27|z1=z36/z1=z37/z1=z38:S6;
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!VRz36&v27<>6:Uz1; [Check for substring match 1]
+!!VRz37&v27<>6/-1:Uz1; [Check for substring match 2]
+!!VRz38&v27<>6/-1:Uz1; [Check for substring match 3]
+!!VRv27&1:S6; [Set v27 to 6 if it's a substring match]
+!!VRz23&v27=6:Sz112014;
+!!VRv30&v27=6:S-2;
+
+ [Check for Spell Scroll entry and if true, set artifact type (v27) to 93]
+ [Also set z23 to "Spell Scroll"]
+!!VRv27|z1=z32/z1=z33/z1=z39:S93;
+!!VRz23&v27=93:Sz112015;
+
+ [Function 20 finds artifact name entered, if valid - artifact number is stored in v30]
+!!DO20/0/170/1:P;
+
+ [If artifact is The Grail, change name to "Grail" for text display purposes]
+!!VRz23&z23=z31:Sz30;
+
+ [If artifact is a scroll, call function 22 - get spell desired by player]
+!!FU22&v27=93:P;
+
+ [If artifact wasn't found but could be a scroll name, call Function 23]
+!!DO23/0/69/1&v27=5/v30=-1:P;
+
+** added by Thomas Franz (samot)
+!!IF&v30=156/v27=5:Q1/8/156/1/z112081; // no search for Warlord's Banner
+!!FU&v30=156/v27=5:E; // exit if artifact = Warlords banner
+
+ [If artifact is a valid artifact, display dialogue asking if player will pay for a search]
+!!IF&v30>=0/v27=5:Q1/8/v30/2/z112016;
+
+ [If artifact is a scroll, display slightly different dialogue (with spell picture),]
+ [but otherwise similar to the above]
+!!IF&v30>=0/v27=93:Q1/9/v34/2/z112017;
+
+ [If artifact is a Pandora's Box, display slightly different dialogue (no picture),]
+ [but otherwise similar to the above]
+!!IF&v27=6:Q1/z112018;
+
+ [If player declines to pay for the search, display this message and set Flag 21 to true]
+!!IF&-1/v30<>-1:M1/z112019;
+!!IF&-1:V21/1;
+
+ [Check if player has enough gold]
+!!OW:R-1/6/>=100;
+
+ [If player doesn't have enough gold but wished to search, display this message]
+!!IF&-21/-1/v30>=0:M1/z112020;
+
+ [If artifact requested wasn't a valid artifact, display this message]
+!!IF&v30=-1/27/v27<>6:M1/z112021;
+
+--------------------------------------------
+
+ [Exit script if artifact isn't valid or search isn't paid for]
+!!FU|21/-1/v30=-1:E;
+
+ [Subtract 100 gold from player and display thank you message]
+!!OW:R-1/6/d-100;
+!!IF:Q1/6/-100100/1/z112022;
+
+ [Calls function 21 to search for the requested artifact]
+!!FU21:P;
+
+ [Increase daily search count by 1, set player's colour and current date]
+!!VRy-4:+1; [Search count]
+!!HE-1:P?y-6/?y-7/?y-8; [Hero's location]
+!!POy-6/y-7/y-8:O$color$ Ny-4 V0/$day$;
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 20 - find artifact name entered]
+ [If valid, stores artifact number in v30]
+!?FU20;
+
+ [Looks up name of artifact number x16 (loop) and stores it in variable z22]
+!!UN:N0/22/x16;
+
+ [Sets v30 to x16 if artifact name entered by player (z1) is the same as artifact name
+  for artifact number x16 (loop)]
+!!VRv30&z1=z22/x16<>144/x16<>145:Sx16;
+
+ [Check for substring match: Flag 1=True if match found]
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!VRz22:Uz1; [See if user's input is a substring of z22]
+!!VRz1&-1:Uz22; [See if z22 is a substring of user's input]
+!!VRv30&1/x16<>144/x16<>145:Sx16;
+
+ [Sets z23 to true artifact name (proper capitalisation, etc.) if an artifact
+  match or substring match is found]
+!!VRz23&z1=z22/x16<>144/x16<>145:Sz22;
+!!VRz23&1/x16<>144/x16<>145:Sz22;
+
+ [Exit loop if a match or substring match is found]
+!!VRx16&z1=z22/x16<>144/x16<>145:S999;
+!!VRx16&1/x16<>144/x16<>145:S999;
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 21 - search for requested artifact]
+!?FU21;
+
+ [Set v29 (number of artifacts found) to 0]
+!!VRv29:S0;
+
+ [If v27 = 6 (Pandora's Box) or 93 (Spell Scroll), set v30 to -1]
+!!VRv30|v27=6/v27=93:S-1;
+
+ [Search for artifact - store number found in v29]
+!!UN:Uv27/v30/?v29;
+
+ [Store location of first artifact (if any) in v31/v32/v33]
+!!UN&v29>0:Uv27/v30/1/31;
+
+ [If scroll is searched for and any are on map, Function 24 checks for requested spell]
+!!VRv24:S0;
+!!DO24/1/v29/1&v27=93/v29>0:P;
+
+ [If scroll searched for but requested spell not found, set v29 to 0]
+!!VRv29&v27=93/v24=0:S0;
+
+ [Store "on the surface", "underground" or "nowhere to be found" in z24, depending on
+  the value of v29 and v33]
+!!VRz24&v29>0/v33=0:Sz112023;
+!!VRz24&v29>0/v33=1:Sz112024;
+!!VRz24&v29=0:Sz112025;
+
+ [Set up is/are for correct grammar depending on artifact name]
+!!VRz42:Sz112026;
+!!VRz43:Sz112027;
+!!VRz44:Sz112028;
+!!VRz42|v30=32/v30=41/v30=47/v30=56/v30=59/v30=62/v30=70/v30=72/v30=90/v30=98/v30=125:Sz112029;
+!!VRz43|v30=32/v30=41/v30=47/v30=56/v30=59/v30=62/v30=70/v30=72/v30=90/v30=98/v30=125:Sz112030;
+!!VRz44|v30=32/v30=41/v30=47/v30=56/v30=59/v30=62/v30=70/v30=72/v30=90/v30=98/v30=125:Sz112031;
+!!VRz42&v27<>5:Sz112032;
+!!VRz43&v27<>5:Sz112033;
+!!VRz44&v27<>5:Sz112034;
+
+ [If artifact has super long name, set it in gold colour properly]
+!!VRz23&v27=5/v30=36:Sz112035; [Helm of Heavenly Enlightenment]
+!!VRz23&v27=5/v30=61:Sz112036; [Bowstring of the Unicorn's Mane]
+!!VRz23&v27=5/v30=158:Sz112080; [Barbarian Lord's Axe of Ferocity]
+
+ [Display message indicating if it's on the surface, underground or nowhere to be found]
+!!IF:M1/z112037;
+
+ [If artifact has super long name (e.g., Helm of Heavenly Enlightenment),]
+ [restore it's white colour]
+!!VRz23&v27=5/v30=36:Sz112038;
+!!VRz23&v27=5/v30=61:Sz112039;
+
+--------------------------------------------
+
+ [Exit Function 21 if artifact wasn't located (v29<=0)]
+!!FU&v29<=0:E;
+
+ [Generate random precious resource (y76) as fee for exact location]
+!!VRy76:S0 R7;
+!!VRy76&y76=0:S1;
+!!VRy76&y76=2:S3;
+!!VRy76&y76=6:S4;
+!!VRy76&y76=7:S5;
+!!VRz41&y76=1:Sz112040;
+!!VRz41&y76=3:Sz112041;
+!!VRz41&y76=4:Sz112042;
+!!VRz41&y76=5:Sz112043;
+
+ [Display dialogue box asking if player will pay 2 of this precious resource]
+!!IF:Q1/y76/2/2/z112044;
+
+!!IF&-1:M1/z112045;
+
+--------------------------------------------
+
+ [Exit Function 21 if player doesn't agree to pay resource fee]
+!!FU&-1:E;
+
+ [Check player's current amount of resource (y76) - store amount in y77]
+!!OW:R-1/y76/?y77;
+
+ [If player doesn't have enough to pay the fee, display message]
+!!IF&y77<2:Q1/y76/2/1/z112046;
+
+--------------------------------------------
+
+ [Exit Function 21 if player doesn't have enough of the required resource (y77)]
+!!FU&y77<2:E;
+
+ [Reduce player's resource number y76 by 2 and display thank you message]
+!!OW:R-1/y76/d-2;
+!!IF:Q1/y76/-100002/1/z112047;
+
+ [Calculate x and y artifact location values in relation to current hero's position]
+
+ [Calculate y location difference - store in v25]
+!!VRv25&v999<v32:Sv32-v999;
+!!VRv25&v999>v32:Sv999-v32;
+
+ [Calculate x location difference - store in v26]
+!!VRv26&v998<v31:Sv31-v998;
+!!VRv26&v998>v31:Sv998-v31;
+
+ [Store "pace" or "paces" in z27 and z28 depending on value of v25 and v26]
+!!VRz27&v25=1:Sz112048;  !!VRz27&v25<>1:Sz112049;
+!!VRz28&v26=1:Sz112050; !!VRz28&v26<>1:Sz112051;
+
+ [If artifact has super long name (e.g., Helm of Heavenly Enlightenment),]
+ [set it in gold colour properly]
+!!VRz23&v27=5/v30=36:Sz112052;
+!!VRz23&v27=5/v30=61:Sz112053;
+
+ [If artifact is Northeast of hero, display this]
+!!IF&v998<v31/v999>v32:M1/z112054;
+
+ [If artifact is Southeast of hero, display this]
+!!IF&v998<v31/v999<v32:M1/z112055;
+
+ [If artifact is East of hero, display this]
+!!IF&v998<v31/v999=v32:M1/z112056;
+
+ [If artifact is West of hero, display this]
+!!IF&v998>v31/v999>v32:M1/z112057;
+
+ [If artifact is Southwest of hero, display this]
+!!IF&v998>v31/v999<v32:M1/z112058;
+
+ [If artifact is West of hero, display this]
+!!IF&v998>v31/v999=v32:M1/z112059;
+
+ [If artifact is South of hero, display this]
+!!IF&v998=v31/v999<v32:M1/z112060;
+
+ [If artifact is North of hero, display this]
+!!IF&v998=v31/v999>v32:M1/z112061;
+
+ [If artifact has super long name (e.g., Helm of Heavenly Enlightenment),]
+ [restore its white colour]
+!!VRz23&v27=5/v30=36:Sz112062;
+!!VRz23&v27=5/v30=61:Sz112063;
+
+--------------------------------------------
+
+ [Display dialogue box asking if player will pay 1000 gold to see the artifact]
+!!IF:Q1/6/1000/2/z112064;
+
+!!IF&-1:M1/z112065;
+
+--------------------------------------------
+
+ [Exit Function 21 if player doesn't agree to pay fee of 1000 gold]
+!!FU&-1:E;
+
+ [Check player's current amount of gold - store amount in y77]
+!!OW:R-1/6/?y77;
+
+ [If player doesn't have enough to pay the fee, display message]
+!!IF&y77<1000:Q1/6/1000/1/z112066;
+
+--------------------------------------------
+
+ [Exit Function 21 if player doesn't have enough gold]
+!!FU&y77<1000:E;
+
+ [Reduce player's gold by 1000 and display thank you message]
+!!OW:R-1/6/d-1000;
+!!IF:Q1/6/-101000/1/z112067;
+
+ [Check current player]
+!!OW:C?v28;
+
+ [Open shroud around artifact and move view to that position (4 seconds)]
+!!UN:R5/1/1; [Change mouse cursor to "wait" hourglass symbol]
+!!UN:R7/0/1; [Show mouse cursor and disable changing]
+!!UN:Sv31/v32/v33/v28/1;
+!!UN:Lv31/v32/v33/3000;
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+
+ [Ask if the hero wishes the Artifact (v27=5) brought to him/her for Mithril]
+!!FU14902:Pv31/v32/v33;
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 22 - ask player for type of spell scroll]
+!?FU22;
+
+ [Set up extended dialogue box number 21]
+!!VRz29:Sz112068;
+!!VRz40:Sz112069;
+!!IF:D21/29/40/0/0/0/0/0/0/0/0/0/0/0/0/0;
+
+ [Call dialogue box number 21]
+!!IF:E1/21;
+
+ [Check if z1 has an empty string (no input) - check result stored in Flag 27]
+!!VRz1:H27;
+
+ [Set v30 to -1]
+!!VRv30:S-1;
+
+ [Function 23 finds spell name entered, if valid - spell number is stored in v30 and v34]
+ [and spell name is stored in z23]
+!!DO23/0/69/1:P;
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 23 - find spell name entered]
+ [If valid, stores spell number in v30]
+!?FU23;
+
+ [Looks up name of spell scroll number x16 (loop) and stores it in variable z22]
+!!UN:N1/22/x16;
+
+!!VRz25:Sz112070; [Add "scroll of" to spell name: z25]
+
+!!IF:V1/0; [Initialize Flag 1 to False]
+
+ [Check for exact match: Flag 1=True if match]
+!!IF|z1=z22/z1=z25:V1/1;
+
+ [Assign spelled out name for "protection from" spells (instead of "prot.")]
+!!VRz-1&-1:M2/z22/0; [Store 1st token (word) from z22 in z-1]
+!!VRz-2&-1:M2/z22/1; [Store 2nd token (word) from z22 in z-2]
+!!VRz-3&-1:M2/z22/2; [Store 3rd token (word) from z22 in z-3]
+!!VRz22&-1/z-1=z112078:S^%Z112079 %Z-2 %Z-3^; [Check for "prot"]
+!!VRz25&-1:Sz112070; [Add "scroll of" to spell name: z25]
+
+ [Check for substring match]
+!!VRz22&-1:Uz1; [See if user's input is a substring of spell name: Flag 1=True if yes]
+!!VRz25&-1:Uz1; [See if user's input is a substring of spell name: Flag 1=True if yes]
+
+!!FU&-1:E; [Exit if no match found]
+
+ [Sets v30 and v34 to x16 if spell name entered by player (z1) is the same as spell name]
+ [for spell number x16 (loop)]
+!!VRv30:Sx16;
+!!VRv34:Sx16;
+
+ [Make sure artifact type (v27) is set to scroll if there's a match]
+!!VRv27:S93;
+
+ [Sets z23 to true spell name (proper capitalisation, etc.) if a spell match is found]
+!!VRz23:Sz22;
+
+ [Sets z23 to Scroll of "spell name"]
+!!VRz23:Sz112071;
+
+!!VRx16:S999; [Exit loop if a match is found]
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 24 - searches for requested Spell Scroll among any scrolls found]
+!?FU24;
+
+ [Get coordinates of current Spell Scroll at x16 loop]
+!!UN:U93/-1/x16/31;
+
+ [Store control number of Spell Scroll in y1 variable]
+!!OB31:C?y1;
+
+ [If requested spell found, set v24 to 99]
+!!VRv24&y1=v34:S99;
+
+ [If requested spell found, exit function loop]
+!!VRx16&y1=v34:Sv29;
+
+----------------------------------------------------------------------------------------
+
+ [Start of Function 14900 - show a random artifact on the map to first visitor each week]
+
+!?FU14900;
+!!UN:U5/-1/?y1; [Number of artifacts on map: y1]
+!!VRy-5&y1<1:S0; [Set y-5 to 0 if no artifacts: y-5]
+!!FU&y1<1:E; [Exit if no artifacts on the map]
+
+!!VRy2:Sy1 -1;
+!!VRy3:S1 Ry2; [Random artifact on map: y3]
+
+!!FU14903:Py3/y3/y1; // get the pos. of the next artifact (starting at the random)
+*                    // that is no warlord's banner to v1-v3; Art-Number to v30
+!!FU&v30=-1:E; // exit if there are only banners on the map
+
+!!UN:N0/23/v30; [Artifact name: z23]
+
+!!IF:Q1/8/v30/1/z112077; [Display message]
+
+ [Open shroud around artifact and move view to that position with 3 second delay]
+!!UN:R5/1/1; [Change mouse cursor to "wait" hourglass symbol]
+!!UN:R7/0/1; [Show mouse cursor and disable changing]
+!!UN:Sv2/v3/v4/$color$/1;
+!!UN:Lv2/v3/v4/3000;
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+
+ [Ask if the hero wishes the Artifact (v27=5) brought to him/her for Mithril]
+!!FU14902:Pv2/v3/v4;
+
+----------------------------------------------------------------------------------------
+
+ [Ask if the hero wishes the Artifact (v27=5) brought to him/her for Mithril]
+ [x1/x2/x3 = artifact's location]
+
+!?FU14902;
+
+ [Artifact # is v30]
+ [Doesn't apply to Pandora's Box (v27=6), War Machines, Spell Books or The Grail]
+ [Spell Scrolls are (v27=93) and cost 6 Mithril]
+
+ [Check Artifact Class: y1]
+!!UN&v27=5/v30>=0:Av30/3/?y1;
+!!FU&v27<>5/v27<>93:E; [Exit if not a regular Artifact or Scroll]
+!!FU&v27=5/v30<7:E; [Exit if War Machine, Spell Book or Grail]
+
+!!FU&v27=5/v30=156:E; // added by Thomas Franz (samot) - you can not buy a Warlords banner
+
+ [Set Mithril cost: y2]
+!!VRy2&v27=93:S6; [Spell scroll: 6 Mithril: y2]
+!!VRy2&v27=5/v30>=7/y1>=2:Sy1; [Mithril cost = class cost: y2]
+* [Treasure (2), Minor (4), Major (8), Relic (16)]
+
+ [Display dialogue asking if player will pay the Mithril for the Artifact]
+!!IF:Q1/7/y2/2/z112073;
+
+!!FU&-1:E; [Exit if player doesn't agree to pay the Mithril]
+
+!!OW:R-1/7/?y3; [Check player's current Mithril: y3]
+
+ [If player doesn't have enough Mithril, display this and exit]
+!!IF&y3<y2:Q1/7/y2/1/z112074;
+!!FU&y3<y2:E;
+
+** added by Thomas Franz (samot)
+!!VRy9:S-2; // initialize
+!!UN:P904/1; // disable ERM-Errors (because of a bug with the AR-receiver)
+!!ARx1/x2/x3:G0/?y9/d; !!ARx1/x2/x3&y9<0:G1/?y9/d; !!ARx1/x2/x3&y9<0:G2/?y9/d;
+!!ARx1/x2/x3&y9<0:G3/?y9/d; !!ARx1/x2/x3&y9<0:G4/?y9/d; !!ARx1/x2/x3&y9<0:G5/?y9/d;
+!!ARx1/x2/x3&y9<0:G6/?y9/d; // check, if there are any guards
+!!UN:P904/0; // enable ERM-Errors again
+!!IF&1000/y9>-1:Q1/21/y9/1/z112083; // show message about guards
+!!FU&y9>-1:E; // exit, if there are guards
+
+
+ [Reduce player's Mithril]
+!!VRy8:Sy3 -y2;
+!!OW:R-1/7/y8;
+
+ [If player paid the Mithril, remove Artifact from map and equip on hero]
+ [Replace artifact with Mithril paid]
+!!UN:Ox1/x2/x3/1; [Remove Artifact]
+
+!!UN:Ix1/x2/x3/79/7; [Place Mithril on map]
+!!ARx1/x2/x3:Vy2; [Set correct amount of Mithril]
+!!HE-1&v27=5:A4/v30; [Equip artifact on hero]
+!!VRy4&v27=93:S1001 +v34; [Scroll artifact number: y4]
+!!HE-1&v27=93:A4/y4; [Equip spell scroll on hero]
+
+!!IF&v27=5:Q1/8/v30/1/z112075;
+!!IF&v27=93:Q1/9/v34/1/z112076;
+!!HE-1:P?y5/?y6/?y7; [Hero's location: y5/y6/y7]
+!!UN:Ly5/y6/y7/0; [Move view back to hero]
+
+** added by Thomas Franz (samot)
+!!UN:P119/=1; // check for rule "hero pick up double artifacts"
+!!FU&-1:E; // exit if not enabled
+!!POx1/x2/x3:N?y8; // get custom definde number
+!!FU&y8<>15:E; // exit, if it was no original placed artifact
+!!POx1/x2/x3:N0; // reset PO:N-number, if active (to prevent, that player doubles his artifacts at this place)
+
+!!HE-1&v27=5:A4/v30; // give second artifact, if double-art.-rule is on
+!!HE-1&v27=93:A4/y4; // give second spell scroll
+!!UN&v27=5:N0/-1/v30; // get name of artifact into z-2
+!!VRz-2&v27=93/1:Sz12007; // set name to Spell Scroll
+!!IF&v27=5/1000:Q1/8/v30/1/z112082; // show message about double artifact
+!!IF&v27=93/1000:Q1/9/v34/1/z112082; // show message about double artifact (scroll)
+
+----------------------------------------------------------------------------------------
+
+!?FU14903; // get the next artifact, that is not a warlord's banner
+!!UN:U5/-1/x1/2; [Store coordinates in v2/v3/v4]
+!!VRv27:S5; [Artifact type: 5]
+!!OB2:U?v30; [Artifact #: v30]
+!!VRy1:Sx1 +1; // next artifact pos.
+!!VRy1&y1>x3:S1; // set to 1, if you reached the max. number of art. on the map
+!!VRv30&y1=x2:S-1; !!FU&y1=x2:E; // exit, if you reached again the starting value
+!!FU14903&v30=156:Py1/x2/x3; // call the function again (redundant), if the found artifact was a banner
+
+
+** End of Script **
+

@@ -1,0 +1,10 @@
+#	Text resource for "script42.erm" document		
+142000	Searching the garrison turns up some hidden treasure!	!!Q	01.08.2004
+142001	GARRISONS WILL NOW BE PLACED ON THE MAP 
+ 
+NOTE: On large maps, you may notice a delay while loading.	!#S	01.08.2004
+142002	Select your preferred garrison frequency.	!#S	01.08.2004
+142003	No garrisons	!#S	01.08.2004
+142004	A few garrisons	!#S	01.08.2004
+142005	Some garrisons	!#S	01.08.2004
+142006	Tons of garrisons	!#S	01.08.2004

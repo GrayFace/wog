@@ -1,0 +1,160 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+ERMS_ScriptDate=23.11(November).2013
+
+** Heavily Guarded Dwellings
+** Last updated: 31.7(July).2006 by Thomas Franz - fixed Wog-Option number and bug regarding L8-Dwellings
+** prev. updated: 20.7(July).2006 by Thomas Franz - fixed bug, that let you autowin all battles after a L8-Fight
+
+** Each dwelling will be guarded by the threefold number of creatures, that are
+** recruitable there.
+
+** Level 7 and Level 8 dwellings, that are assigned to a town, will furthermore
+** guarded by the Level 1 - Level 6 creatures of the town.
+
+** vars used: v75
+
+!?OB17&1000; // visiting a usual dwelling
+!!UN:P326/=1; !!FU&-1:E; // exit, if script is not enabled
+!!VRv75:S0; // init reward variable
+!!DW998:O=-1; !!FU&-1:E; // exit, if dwelling is already owned
+!!DO-1/0/3/1:P; // loop through all 4 slots and set guards
+** end OB17
+
+
+!?OB20&1000; // visiting a Golem Factory / Elemental Conflux
+!!UN:P326/=1; !!FU&-1:E; // exit, if script is not enabled
+!!VRv75:S0; // init reward variable
+!!DW998:O=-1; !!FU&-1:E; // exit, if dwelling is already owned
+!!DO-1/0/3/1:P; // loop through all 4 slots and set guards
+** end OB20
+
+
+!$OB17&v75>0/1000; // give reward after capturing a L7 or L8 dwelling
+** v75 - contains y-2 - y-5 (values are merged with the FU$Set4ByteVar$ from script000)
+** y-2 = the number of original recruitable L7-creatures
+** y-3 = will be > 0, if it was a fight in a L8-dwelling
+** y-4 = L1 creature type to give as reward
+** y-5 = reward creatures
+!!UN:P326/=1; !!FU&-1:E; // exit, if script is not enabled
+
+!!HE-1:O<0;   !!VRv75&1:S0;  !!FU&1:E; // exit, if hero lost the battle
+!!DW998:O=-1; !!VRv75&1:S0;  !!FU&1:E;  // exit, if dwelling is not owned (hero did not fight)
+
+!!FU$Get4ByteVar$:Pv75/?y-2/?y-3/?y-4/?y-5; // extract y-2 - y-5 from v75
+!!IF:Q1/21/y-4/1^%Z326001^;
+!!HE-1:C2/y-4/y-5/1/5/10; // give y-6 creatures as reward (they'll have 6200 exp. = Rank 5)
+!!VRv75&-1:S0; // reinit reward var.
+** end $OB17
+
+
+
+!?FU-1; // loop through all slots and set guards of the dwelling
+** x16 = Slot in the dwelling
+** y1  = Type of creature
+** y2  = hireable creatures
+** y3  = new guards
+** y4  = Level of hirable creature
+** y5  = town alignment
+** y6  = hireable creature is not (0) / is upgraded (1)
+** y7  = will be 1, if it is a L8-creature
+** y8  = will be 1, if Master of Life is enabled
+** y98 = slot of Sorceress-Guard
+** y99 = number of Sorceress Guards
+
+!!DW998:Mx16/?y1/?y2; // get creature type and number
+!!FU&y1<0:E; // exit, if empty slot
+!!VRy3:Sy2 *3;
+!!DW998:Gx16/y1/y3; // set guards to the threefold of the hireable creatures
+
+** [Enchanters have some Sorceress Guards as well]
+!!VRy98&y1=136/x16<3:Sx16 +1; // get slot of the Sorceress Guards
+!!VRy99&y1=136/x16<3:Sy3 *3 :2; // number of Sorceress Guards = 126 % of Enchanters Guard
+!!DW998&y1=136/x16<3:Gy98/193/y99; // set Sorceress Guard
+** [end of Enchanters have some Sorceress Guards]
+
+!!MA:Ly1/?y4 Oy1/?y5; // get creature Level and alignment
+!!FU|y4<6/y5=-1:E; // exit, if it is no L7 / L8 or it's a neutral creature
+
+** L7 / L8 creatures are guarded by the L1-L6 creatures of their town; you'll get several L1-creatures as reward
+!!VRy6:S-1; // init
+!!UN:Ty5/6/0/=y1; // compare not upgraded L7-creature in hometown with the hireable creature
+!!VRy6&1:S0; // set y6 to 0 (not upgr.), if it is the same
+!!UN:Ty5/6/1/=y1; // compare upgraded L7-creature in hometown with the hireable creature
+!!VRy6&1:S1; // set y6 to 1 (upgr.), if it is the same
+
+!!VRy7&y6=-1:S1; !!VRy6&y6=-1:S1; // mark it as (upgraded) L8-creature, if it was L7 and neigther the not upgr. nor the upgr. creature in its town (there is no regular L8 in HoMM, so it has to been checked this way)
+
+!!UN:P19/?y8; // check, if script19 Master of Life is enabled
+!!DO-2/0/5/1:Py3/y5/y6/y7/y8; // set L1-L6 troops as guards for the L7 / L8 creatures
+!!FU-3&y7=1:Py1; // for L8-dwellings the battle has to been provoked manual, because WOG overwrites the Guard settings of the dwelling
+
+!!VRx16:+4; // exit loop through the creature stacks of the dwelling, if there is at least one L7 / L8-creature
+** end FU-1
+
+
+!?FU-2; // set L1-L6 troops as guards for the L7 / L8 creatures
+** x1  = number of L7-Guards,
+**      the number of the other guards will be x1 * their basic growth (doubled again for L8 creatures)
+** x2  = town alignment (0..7; Format T)
+** x3  =  hireable creature is not (0) / is upgraded (1)
+** x4  = will be 1, if it is a L8-creature
+** x5  = will be 1, if Master of Life is enabled
+** x16 = creature Level (0..5 = L1..L6)
+** y1  = creature type to set as guard
+** y2  = its basic growth rate
+** y3  = number of guards
+** y4  = guarders slot in the dwelling = x16 + 1
+** y5  = upgrade status (considering the Master of Life rule for L1)
+
+!!VRy5:Sx3; !!VRy5&x5=1/x16=0:S1; // set L1-creatures always to upgraded, if Master of Life is enabled
+
+!!UN:Tx2/x16/y5/?y1; // get the Level x16 creature in the aligned town to y1
+!!MA:Gy1/?y2; // get its basic growth rate
+!!VRy3:Sy2 *x1; // the number of the L1-L6 guards will be x1 * their basic growth
+!!VRy3&x4=1:*2; // double number of guards for L8-creatures
+
+!!VRy4:Sx16 + 1; // guarders slot in the dwelling (slot 0 will be the L7 / L8 creature)
+!!VRy4|y1=29/y1=76/y1=77/y1=123:+1; !!VRy4|y1=30/y1=31/y1=78/y1=79/y1=114/y1=129:-1; // prevents two shooting stacks to stand next to each other (Master Gremlins, Medusas, Ice Elementals change their place with the next higher creature)
+!!DW998:Gy4/y1/y3; // set guards
+!!FU&x16>0:E; // exit, if it is not for L1-creatures
+
+** get reward of L1-creatures
+!!VRy5:Sy2 *2; // basic reward = growth * 2
+!!VRy6&x3=1:Sy2 *2 :7; !!VRy5:+y6; // additional reward for upgraded L1 creatures
+!!VRy5&x4=1:*2; // double reward vs L8 creatures
+!!FU$Set4ByteVar$:P?v75/x1/x4/y1/y5; // only for L1-creatures: merge the 4 values needed for the reward calculation together in v75
+** end FU-2
+
+
+!?FU-3; // for L8-dwellings the battle has to been provoked manual, because WOG overwrites the Guard settings of the dwelling
+** x1 = type of creatures inside the dwelling
+!!OBv998/v999/v1000:M-1/1/0; // disable next message (do you want to fight the guards)
+!!IF:Q1/21/x1/2^%Z326002^;
+!!FU&-1:E; // exit, if No is chosen
+!!HE-1:Tv998/v999/v1000/0/1; // provoke a dummy battle (1 Pikemen), the true guards are set below in the BA-trigger
+!!HE-1:O=-1; !!FU&1:E; // exit, if hero had not won (no owner)
+** end FU-3
+
+
+!?BA0&v75>0/1000; // battle trigger used only for L8-dwelling-fights
+** y-2 = the number of original recruitable L7-creatures
+** y-3 = will be 1, if it was a fight in a L8-dwelling, will be 2, if you fought against its guards (used to disable the battle against the usual guards)
+** y-4 = L1 creature type to give as reward
+** y-5 = reward creatures
+
+!!UN:P326/=1; !!FU&-1:E; // exit, if script is not enabled
+
+!!FU$Get4ByteVar$:Pv75/?y-2/?y-3/?y-4/?y-5; // extract y-2 - y-5 from v75
+!!FU&y-3=0:E; // exit, if it is not a L8-dwelling fight
+
+!!BA&y-3=2:D1; // auto win the second battle (against the usual guards of the dwelling)
+!!FU&y-3=2:E; // exit
+
+!!DW998&y-3=1:G0/?y1/?y10 G1/?y2/?y11 G2/?y3/?y12 G3/?y4/?y13 G4/?y5/?y14 G5/?y6/?y15 G6/?y7/?y16; // get guards of the dwelling (set in FU-1 / FU-2 before)
+!!BA&y-3=1:M1/0/y1/y10 M1/1/y2/y11 M1/2/y3/y12 M1/3/y4/y13 M1/4/y5/y14 M1/5/y6/y15 M1/6/y7/y16; // set the guards to the defender-stacks
+!!FU$Set4ByteVar$&y-3=1:P?v75/y-2/2/y-4/y-5; // remember that you fought already against this guards (by setting y-3 to 2)
+
+** end BA0
+

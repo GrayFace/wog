@@ -1,0 +1,904 @@
+ZVSE
+ERMS_ScriptDate=3.9(September).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** ENHANCED SECONDARY SKILLS  -  ERM script 48
+
+** By Arstahd
+** Version: 1.14C
+** Updated September 3, 2006 by Timothy: Fixed incorrect syntax for UN:V command
+** Updated August 21, 2006 by Thomas: FU7011: uses MM:S instead IF:M for 3.58 and again IF:L for 3.59
+** Updated August 18, 2006 by Timothy: simplified dialog boxes so only one is shown for most events.
+** Updated August 17, 2006 by Timothy: replaced IF:L with IF:M for 3.58f compatibility.
+** Updated 26.7(July).2006 by Thomas Franz (samot): - Lucks "blessing" uses BM:M instead of BM:C to prevent (seldom) crash in Creature Bank
+**                                                  - First Aid Resurrection after the battle checks the Creature type now to prevent illegal bonuses by using the Demon Rush or (seldom) Necromancy and Werewolve's Lycantrophy
+** Updated May 30, 2006 by Fnord to add a check for Map Specifications spell-banning for Scholar skill plus banned Disguise in WoG options
+** Previously updated May 25, 2006 by Fnord
+** Special thanks to Hermann the Weird for help with bug fixing and script maintenance
+
+** added to FU7001: check for disabled system message (artillery pre combat) by Thomas Franz (samot)
+
+*  Variables used: s, r, j
+*  V Variables used: v451-v464, v7018-v7055, v7186-v7199
+*  Z Variables used: z1-z4, z700-z706, z722-z725
+*  Y Variables used: y1-y11
+*  W Variables used: w4-w8
+*  Functions used: 7000-7026   (7018 not used)
+*  Timers used: 50, 51
+*  Flags used: 1, 2
+
+
+
+
+***  Artillery  ***
+**      Ballista does (1-50 + hero level) damage to an enemy stack prior to a battle (attacker or defender). Will not wipe out a stack. Gives Experience.
+**      Ammo Cart adds 100% damage (more shots).
+**      Artillery increases the effect of the ballista.
+**      Basic: adds 100% damage, Advanced: adds 200% damage, Expert: adds 300% damage
+***  Eagle Eye  ***
+**      Grants the ability to counter a beneficial spell cast by the enemy.
+**      Drains 8 spell points from caster (7 with water magic skill).
+**      Basic: 10%, Advanced: 20%, Expert: 30%
+**      Bird of Perception, Stoic Watchman, & Emblem of Cognizance increase the chance.
+**      New combination artifact - (above three) adds 30% to chance to counter enemy hero's spells
+***  Estates  ***
+**      For each level of estates:
+**      The hero will generate an additional 5 gold per hero level every day.
+**      The hero will generate 1-3 units of a resource every week, doubled for wood or ore.
+**      The resource types will be randomly set when the skill is learned.
+***  First Aid  ***
+**      First Aid Tent resurrects (1-50 + hero level) HP's of dead troops for the winner of a battle (attacker or defender).
+**      Ammo Cart adds 100% HP's (medical supplies).
+**      First Aid increases the effect of the first aid tent.
+**      Basic: adds 100% HP's, Advanced: adds 200% HP's, Expert: adds 300% HP's
+***  Learning  ***
+**      Hero gains experience every day.
+**      Basic: +100, Advanced: +200, Expert: +300
+***  Luck  ***
+**      Luck gives each stack in a hero's army a chance to get +2 Attack, +2 Defence and Fortune for a battle.
+**      Basic: 10% - up to 1 stack, Advanced: 20% - up to 2 stacks, Expert: 30% - up to 3 stacks
+***  Mysticism  ***
+**      Mysticism makes it more difficult for an enemy to cast spells, effectively reducing the enemy's spell points for the battle.
+**      Basic: 80% of normal, Advanced: 70% of normal, Expert: 60% of normal
+***  Navigation  ***
+**      Navigation increases attack and defence during naval battles.
+**      Basic: +1, Advanced: +2, Expert: +3
+***  Pathfinding  ***
+**      Pathfinding raises the minimum daily starting movement on land (after any movement bonuses are taken into account)
+**      Basic: 1700 (6), Advanced: 1760 (7), Expert: 1830 (8)
+***  Resistance  ***
+**      Resistance endows a hero's troops with magic resistance. Increased chances.
+**      Basic: 10%, Advanced: 20%, Expert: 30%
+**      New combination artifact - Boots of Polarity, Garniture of Inteference, Surcoat of Counterpoise
+**      Doubles effect of artifacts (+30% to artifact bonus)
+***  Scholar  ***
+**      Each week a hero will attempt to research a new spell.
+**      Basic: 40% up to 2nd, Advanced: 50% up to 3rd, Expert 60% up to 4th.
+***  Scouting  ***
+**      Scouting gives a hero a small chance for a random event for each step taken.
+**      Basic: 1%, Advanced: 1.5%, Expert: 2%
+***  Sorcery  ***
+**      Sorcery increases the damage of hero's spells. Increased percentages.
+**      Basic: +10%, Advanced: +20%, Expert: +30%
+***  Armorer  ***
+**      Armorer reduces the damage a hero's troops receive. Increased percentages.
+**      Basic: -10%, Advanced: -15%, Expert: -20%
+
+
+
+
+** Initialization Code
+
+!#UN:P201/?v7186;                              [Check if Artillery is enabled in WoGify Options]
+!#UN:P202/?v7187;                              [Check if Eagle Eye is enabled in WoGify Options]
+!#UN:P203/?v7188;                              [Check if Estates is enabled in WoGify Options]
+!#UN:P204/?v7189;                              [Check if First Aid is enabled in WoGify Options]
+!#UN:P205/?v7190;                              [Check if Learning is enabled in WoGify Options]
+!#UN:P206/?v7191;                              [Check if Luck is enabled in WoGify Options]
+!#UN:P207/?v7192;                              [Check if Mysticism is enabled in WoGify Options]
+!#UN:P208/?v7193;                              [Check if Navigation is enabled in WoGify Options]
+!#UN:P209/?v7194;                              [Check if Pathfinding is enabled in WoGify Options]
+!#UN:P210/?v7195;                              [Check if Resistance is enabled in WoGify Options]
+!#UN:P211/?v7196;                              [Check if Scholar is enabled in WoGify Options]
+!#UN:P212/?v7197;                              [Check if Scouting is enabled in WoGify Options]
+!#UN:P213/?v7198;                              [Check if Sorcery is enabled in WoGify Options]
+!#UN:P214/?v7199;                              [Check if Armorer is enabled in WoGify Options]
+
+*#VRv7186:C1/1/1/1/1/1/1/1/1/1/1/1/1/1;        [enable for stand-alone use]
+
+!#TM50:S2/999/1/255;                           [timer once/day for all players - starts on day 2]
+!#TM51:S8/999/7/255;                           [timer once/week for all players - starts on day 8]
+
+
+!#VRz722&v7189=1:Sz148000;
+!#VRz723&v7186=1:Sz148001;
+!#VRz724|v7186=1/v7189=1:Sz148002;
+!#HT5/6&v7189=1:Tz722;
+!#HT5/4&v7186=1:Tz723;
+!#HT5/5|v7186=1/v7189=1:Tz724;
+!#VRz725|v7186=1/v7189=1:Sz148003;
+!#UN|v7186=1/v7189=1:A5/9/725;
+
+** end of Initialization Code
+
+** Timer routines
+!?TM19&v7194=1;                                [day 1 - continue if pathfinding enabled]
+!!OW:C?v7026;                                  [get current player]
+!!VRv7020:S0;                                  [start with hero #0]
+!!DO7020/0/155/1:P1;                           [iterate through all heroes]
+
+!?TM50|v7188=1/v7190=1/v7194=1;                [daily - continue if either estates, learning, pathfinding enabled]
+!!OW:C?v7026;                                  [get current player]
+!!VRv7020:S0;                                  [start with hero #0]
+!!DO7020/0/155/1:P0;                           [iterate through all heroes]
+
+!?TM51|v7188=1/v7196=1;                        [weekly - continue if estates or scholar enabled]
+!!OW:C?v7026;                                  [get current player]
+!!VRv7020:S0;                                  [start with hero #0]
+!!DO7012/0/155/1:P;                            [iterate through all heroes]
+** end of timer routines
+
+** start of movement trigger
+!?HM-1|v7193=1/v7197=1;                        [continue if navigation or scouting enabled]
+!!FU&-999:E;
+!!HE-1:N?v7020 O?y-2;                          [get #, owner of hero]
+!!OW:C?y-3;                                    [get current player]
+!!FU&y-2<>y-3:E;                               [exit if not current player's hero]
+!!HEv7020:P?v7023/?v7024/?v7025;               [get hero's position]
+!!TR7023:T?y-5/d/d/d/d/d/d/d;                  [get terrain type]
+
+!!IF:Wv7020;                                   [enable hero variable]
+!!VRw4&v7193=1/y-5<>8:S0;                      [reset w4 if not on water - if enabled]
+!!HEv7020&v7193=1/y-5=8:S5/?w4;                [get hero's navagation skill level if on water - if enabled]
+
+!!HEv7020&v7197=1/y-5<>8:S3/?y-1;              [get hero's scouting skill level if on land]
+!!FU7023&v7197=1/y-5<>8/y-1>0:Py-1;            [do scouting function - if enabled]
+** end of movement trigger
+
+
+** start of battle-start trigger
+!?BA52|v7189=1/v7191=1/v7186=1/v7195=1/v7192=1/v7187=1;  [Continue trigger if any skills are enabled]
+
+** first aid
+!!VRv7040&v7189=1:C0/0/0/0/0/0/0;                   [no creatures to resurrect after battle attacker]
+!!VRv7047&v7189=1:C0/0/0/0/0/0/0;                   [no creatures to resurrect after battle defender]
+!!BA&v7189=1:M0/0/?v451/?v7040;                      [save qty in each of attacking hero's slots for after battle]
+!!BA&v7189=1:M0/1/?v452/?v7041;                      [to determine qty lost for first aid skill]
+!!BA&v7189=1:M0/2/?v453/?v7042;                      // new by Thomas Franz: save creature type in v451-v464
+!!BA&v7189=1:M0/3/?v454/?v7043;
+!!BA&v7189=1:M0/4/?v455/?v7044;
+!!BA&v7189=1:M0/5/?v456/?v7045;
+!!BA&v7189=1:M0/6/?v457/?v7046;
+!!BA&v7189=1:M1/0/?v458/?v7047;                      [save qty in each of defending hero's slots for after battle]
+!!BA&v7189=1:M1/1/?v459/?v7048;                      [to determine qty lost for first aid skill]
+!!BA&v7189=1:M1/2/?v460/?v7049;
+!!BA&v7189=1:M1/3/?v461/?v7050;
+!!BA&v7189=1:M1/4/?v462/?v7051;
+!!BA&v7189=1:M1/5/?v463/?v7052;
+!!BA&v7189=1:M1/6/?v464/?v7053;
+
+** offset skill levels for armorer, resistance, sorcery
+!!VRy-5:S0 +v7195 +v7198 +v7199;                    [check if any are enabled]
+!!BA&y-5>0:H0/?v7054;                               [get attacking hero's #]
+!!BA&y-5>0:H1/?v7055;                               [get defending hero's #]
+!!FU7026&y-5>0/v7054>-1:Pv7054/0;                   [offset skill levels - attacker]
+!!FU7026&y-5>0/v7055>-1:Pv7055/0;                   [offset skill levels - defender]
+
+** luck
+!!VRv7034&v7191=1:C-2/-2/-2/-2/-2/-2;               [reset v7034-v7039]
+!!BA&v7191=1:H0/?v7020;                             [get attacking hero #]
+!!HEv7020&v7191=1/v7020>-1:S9/?y-1;                 [get attacker's luck skill level]
+!!FU7008&v7191=1/y-1>0/v7020>-1:Py-1/1;             [call function 7008 if attacking hero has luck]
+!!BA&v7191=1:H1/?v7020;                             [get defending hero #]
+!!HEv7020&v7191=1/v7020>-1:S9/?y-2;                 [get defender's luck skill level]
+!!FU7008&v7191=1/y-2>0/v7020>-1:Py-2/2;             [call function 7008 if defending hero has luck]
+
+!!BA&v7191=1:H0/?y-11;                              [get attacking hero #]
+!!BA&v7191=1:H1/?y-12;                              [get defending hero #]
+!!HEy-11&v7191=1:S19/?y-13 R4/?y-15;                [get attackers tactics level, tactics status]
+!!HEy-12&v7191=1/y-12>=0:S19/?y-14 R4/?y-16;        [get defenders tactics, tactics status - if any]
+!!VRv7056&v7191=1:S0;                               [initialize round counter]
+!!VRy-13&v7191=1/y-15=0:S0;                         [set to 0 if tactics is disabled]
+!!VRy-14&v7191=1/y-16=0:S0;                         [set to 0 if tactics is disabled]
+!!VRy-13&v7191=1:Xy-14;                             [XOR - get difference between tactics levels in y-13]
+!!VRv7056&v7191=1/y-13>0:+1;                        [add 1 to counter if a tactics round is expected]
+
+** artillery
+!!BA&v7186=1:H0/?v7020;                             [get attacking hero #]
+!!HEv7020&v7186=1/v7020>-1:A2/4/?y-7/?y-8;          [see if attacking hero has a Ballista]
+!!FU7000&v7186=1/y-8>0/v7020>-1:P1;                 [shoot something - attacker]
+!!BA&v7186=1:H1/?v7020;                             [get defending hero #]
+!!HEv7020&v7186=1/v7020>-1:A2/4/?y-7/?y-8;          [see if defending hero has a Ballista]
+!!FU7000&v7186=1/y-8>0/v7020>-1:P2;                 [shoot something - defender]
+
+** mysticism
+!!VRv7030&v7192=1:S-1;                              [reset v7030]
+!!VRv7031&v7192=1:S-1;                              [reset v7031]
+!!BA&v7192=1:H0/?v7020;                             [get attacking hero's #]
+!!BA&v7192=1:H1/?v7022;                             [get defending hero's #]
+!!HEv7020&v7192=1/v7020>-1:S8/?v7030;               [get attacker's mysticism skill level]
+!!HEv7022&v7192=1/v7022>-1:S8/?v7031;               [get defender's mysticism skill level]
+!!FU7006&v7192=1/v7030>0/v7022>-1:Pv7030/0;         [call function 7006 if attacking hero has mysticism and enemy hero is present]
+!!BA&v7192=1:H1/?v7020;                             [get defending hero's #]
+!!BA&v7192=1:H0/?v7022;                             [get attacking hero's #]
+!!FU7006&v7192=1/v7031>0/v7020>-1:Pv7031/1;         [call function 7006 if defending hero has mysticism and enemy hero is present]
+
+** eagle eye
+!!VRv7018&v7187=1:S0;                               [reset v7018]
+!!VRv7019&v7187=1:S0;                               [reset v7019]
+
+!!VRy-9&v7187=1:S-1;                                [reset y-9]
+!!BA&v7187=1:H0/?y-9;                               [get attacking hero's #]
+!!FU7017&v7187=1/y-9>-1:Py-9/0;                     [call function 7017 for attacking hero]
+
+!!VRy-9&v7187=1:S-1;                                [reset y-9]
+!!BA&v7187=1:H1/?y-9;                               [get defending hero's #]
+!!FU7017&v7187=1/y-9>-1:Py-9/1;                     [call function 7017 for defending hero]
+
+
+
+
+** end of battle-start trigger
+
+** start of battlefield start trigger
+!?BF|v7191=1/v7193=1;                               [continue if luck or navigation enabled]
+
+** navigation
+!!BA&v7193=1:H0/?v7020;                             [get attacking hero #]
+!!IF&v7193=1/v7020>-1:Wv7020;                       [enable hero variable]
+!!DO7024/0/20/1&v7193=1/v7020>-1/w4>0:Pw4;          [prepare to add attack and defence to attacking hero's troops]
+!!BA&v7193=1:H1/?v7020;                             [get defending hero #]
+!!IF&v7193=1/v7020>-1:Wv7020;                       [enable hero variable]
+!!DO7024/21/41/1&v7193=1/v7020>-1/w4>0:Pw4;         [prepare to add attack and defence to defending hero's troops]
+
+** end of battlefield start trigger
+
+** start of battle turn one trigger
+!?BR&v7191=1/v997<1;
+** luck
+
+!!VRv7056:+1;                                       [increment round counter]
+!!DO7010/0/20/1&v7056=3:P1;                         [do function 7010 for luck - attacker]
+!!DO7010/21/41/1&v7056=3:P2;                        [do function 7010 for luck - defender]
+
+** end of battle turn one trigger
+
+
+** start of pre-action trigger
+!?BG0&v7187=1;                                      [Continue trigger if eagle eye is enabled]
+
+!!FU&v7018=0/v7019=0:E;                             [exit if no one has eagle eye]
+
+!!VRy-1:S-1;                                        [initailize variables]
+!!VRy-3:S-1;
+!!VRy-5:S-1;
+!!VRy-7:S0;
+!!VRy-9:S0;
+
+!!VRy-6:S0 T99;                                     [random roll]
+
+!!BG:E?y-1 A?y-2 Q?y-3 S?y-4 N?y-11;                [get destination stack, action type, side, spell, acting stack]
+!!BMy-1&y-1>-1/y-2=1:I?y-5 P?y-8;                   [if hero casting, get side, position of target stack]
+!!BMy-1&y-1>-1/y-2=10:I?y-5 P?y-8;                  [if monster casting, get side, position of target stack]
+
+!!VRy-10&y-4>=27/y-4<=33:S1;
+!!VRy-10|y-4=37/y-4=41/y-4=43/y-4=44/y-4=46/y-4=48/y-4=49/y-4=51/y-4=53/y-4=58:S1;  [check for beneficial (mass) spells]
+
+!!VRy-9&y-1=-1/y-10=1:S1;                           [if hero cast spell with no target (mass) set to 1]
+!!VRy-9&y-1>-1/y-3=y-5:S1;                          [if caster is targeting own side set to 1]
+
+!!VRy-7&y-9=1/y-3=0/v7019>0/y-6<v7019:S1;           [if attacker cast, check against defender Eagle Eye rating]
+!!VRy-7&y-9=1/y-3=1/v7018>0/y-6<v7018:S1;           [if defender cast, check against attacker Eagle Eye rating]
+
+!!BMy-11&y-1>-1/y-7=1/y-2=10:C0/y-8/0/0/1 E?y-12;   [have current stack cast summon boat (for sound effect), get # of spells remaining]
+!!VRy-12&y-1>-1/y-7=1/y-2=10:-1;                    [reduce spell count by 1]
+!!BMy-11&y-1>-1/y-7=1/y-2=10:V32 V32 V32 Ey-12;     [show animation (caster), reset spell count]
+!!BG&y-1>-1/y-2=10/y-7=1:A2;                        [make unit move (cancel action)]
+
+!!BG&y-7=1/y-2=1:S0;                                [reset spell to summon boat]
+!!BMy-11&y-7=1/y-2=1:V60 V60 V60;                   [show animation (hero)]
+
+!!VRz2&y-7=1:Sz148004;                              [set combat message]
+!!MM&y-7=1:Sz2;                                     [display combat message]
+
+** end of pre-action trigger
+
+
+** start of post-action trigger
+!?BG1|v7195=1/v7198=1/v7199=1;                      [Continue trigger if any skills are enabled]
+** reset skill levels for armorer, resistance, sorcery
+!!BU:C?y-9;                                         [check for end of battle]
+!!FU7026&v7054>-1/y-9=1:Pv7054/1;                   [reset skill levels - attacker]
+!!FU7026&v7055>-1/y-9=1:Pv7055/1;                   [reset skill levels - defender]
+
+** end of post-action trigger
+
+
+** start of battle end trigger
+!?BA53|v7189=1/v7192=1/v7187=1;                     [Continue trigger if any skills are enabled]
+** first aid
+!!BA&v7189=1:H0/?v7020;                             [get attacking hero #]
+!!HEv7020&v7189=1/v7020>-1:O?v7021;                 [get attacking hero's owner]
+!!HEv7020&v7189=1/v7020>-1:A2/6/?y-7/?y-8;          [see if attacking hero has a First Aid Tent]
+!!FU7002&v7189=1/v7021>-1/y-8>0/v7020>-1:P1;        [handle first aid tent for attacker]
+!!BA&v7189=1:H1/?v7020;                             [get defending hero #]
+!!HEv7020&v7189=1/v7020>-1:O?v7021;                 [get defending hero's owner]
+!!HEv7020&v7189=1/v7020>-1:A2/6/?y-7/?y-8;          [see if defending hero has a First Aid Tent]
+!!FU7002&v7189=1/v7021>-1/y-8>0/v7020>-1:P2;        [handle first aid tent for defender]
+
+** mysticism
+!!BA&v7192=1:H0/?v7020;                             [get attacking hero's #]
+!!BA&v7192=1:H1/?v7022;                             [get defending hero's #]
+!!HEv7020&v7192=1/v7020>-1:I?y-4;                   [get attacker's spell points]
+!!HEv7022&v7192=1/v7022>-1:I?y-5;                   [get defender's spell points]
+!!VRy-5&v7192=1/v7030>0/v7022>-1:*100;              [decimal adjustment]
+!!VRy-5&v7192=1/v7030>0/v7022>-1/v7032>0::v7032;    [calculate defender's new spell points]
+!!VRy-4&v7192=1/v7031>0/v7020>-1:*100;              [decimal adjustment]
+!!VRy-4&v7192=1/v7031>0/v7020>-1/v7033>0::v7033;    [calculate attacker's new spell points]
+!!HEv7020&v7192=1/v7031>0/v7020>-1:Iy-4;            [attacker's spell points returned]
+!!HEv7022&v7192=1/v7030>0/v7022>-1:Iy-5;            [defender's spell points returned]
+
+** reset skill levels for armorer, resistance, sorcery
+!!FU7026&v7054>-1:Pv7054/1;                         [reset skill levels - attacker]
+!!FU7026&v7055>-1:Pv7055/1;                         [reset skill levels - defender]
+
+** end of battle end trigger
+
+
+
+
+** function to handle artillery, hero v7020, skill level y1
+!?FU7000;
+
+!!HEv7020:A2/5/?y7/?y8 E?y3/?y4/1 S20/?y1;          [check for Ammo Cart, get hero's level, artillery level]
+!!VRy5:S1;                                          [set multiplier to 1]
+!!VRy5&y8>0:+1;                                     [ammo cart bonus]
+!!VRy5&y1>0:+y1;                                    [artillery bonus]
+!!VRy3:S0 +1 T49 +y4 *y5;                           [ballista damage: (1-50 + hero level) x bonus multiplier]
+!!VRy2:S0 T6;                                       [random slot # to start search from]
+!!VRj:S7;                                           [7 = slot not found]
+!!DO7001/0/6/1:Px1/y2/y3;                           [shoot next slot with >= 2 monsters]
+** end of function
+
+** function to check one stack for monsters to shoot
+!?FU7001;               x1=slot#   x2=slot    x3=damage
+
+!!HEv7020:B0/?z1;                                   [get hero's name]
+!!VRy4:Sx2 %7;                                      [get an actual slot number]
+!!BA&x1=1:M1/y4/?y5/?y6;                            [get y5 type and y6 qty in slot of defender]
+!!BA&x1=2:M0/y4/?y5/?y6;                            [get y5 type and y6 qty in slot of attacker]
+!!IF:V2/0;                                          [assume not shooting this stack]
+!!IF&j=7/y6>1:V2/1;                                 [shoot if haven't yet and more than 1 monster]
+!!VRj&2:Sy4;                                        [note we found a slot]
+!!MA&y5>-1:Py5/?y7;                                 [get hit points of monster type y5]
+!!VRx3&2/y7>0::y7;                                  [divide damage by hit points per monster to get monsters killed]
+!!VRx3&2/x3>y6:Sy6;                                 [never kill entire stack]
+!!VRx3&2/x3=y6:-1;                                  [broken into two lines since it didn't work as one]
+!!VRy6&2/x3>0:-x3;                                  [kill some monsters]
+!!BA&2/x1=1/x3>0:M1/y4/?y5/y6;                      [store the new monster qty for defender]
+!!BA&2/x1=2/x3>0:M0/y4/?y5/y6;                      [store the new monster qty for attacker]
+!!VRy1&2/x3>0:Sx3 *y7;                              [monsters x hit points]
+!!IF&1000/2/x3>1/v3326=0:Q2/21/y5/1/z148005;    // show what you have killed
+!!IF&1000/2/x3=1/v3326=0:Q2/21/y5/1/z148006;    // added check for disabled messages (v3326) by Thomas Franz
+!!HEv7020&2/x3>0:Edx3;                              [give experience]
+!!VRx2:+1;                                          [next slot]
+** end of function
+
+** function to handle first aid tent
+!?FU7002;                 y1= HP   y2=slot y9= first aid
+
+!!HEv7020:A2/5/?y7/?y8 E?y3/?y4/1 S27/?y9;          [check for Ammo Cart, get hero's level, first aid level]
+!!VRy5:S1;                                          [set multiplier to 1]
+!!VRy5&y8>0:+1;                                     [ammo cart bonus]
+!!VRy5&y9>0:+y9;                                    [first aid bonus]
+!!VRy1:S0 +1 T49 +y4 *y5;                           [first aid tent heal: (1-50 + hero level) x bonus multiplier]
+!!VRy2:S0 T6;                                       [random slot # to start search from]
+!!VRj:S7;                                           [7 = slot not found]
+!!DO7003/0/6/1:Px1/y1/y2;                           [heal next slot with >= 1 monster killed]
+** end of function
+
+** function to find slot where at least 1 cr was lost
+!?FU7003;           x1=filter x2=hp healed  x3=slot
+
+!!VRy4:Sx3 %7;                                      [get an actual slot number]
+!!BA&x1=1:M0/y4/?y5/?y6;                            [get y5 type and y6 qty in slot y3 :attacker]
+!!BA&x1=2:M1/y4/?y5/?y6;                            [get y5 type and y6 qty in slot y3 :defender]
+!!VRy1&x1=1:S7040 +y4;                              [get variable # of previous qty :attacker]
+!!VRy1&x1=2:S7047 +y4;                              [get variable # of previous qty :defender]
+!!VRy2&x1=1:S451 + y4;                              // get variable # of previous type :attacker
+!!VRy2&x1=2:S458 + y4;                              // get variable # of previous type :defender
+!!VRy7:Svy1;                                        [get previous qty]
+!!VRy8:Svy2;                                        // get previous type
+!!VRy7:-y6;                                         [subtract current qty to get qty lost]
+!!FU7004&j=7/y7>0/y6>0/y5=y8:Px1/x2/x3/y4/y5/y6/y7; [try to heal stack if some lost but some left] // and old type = new type
+!!VRx3:+1;                                          [next slot]
+** end of function
+
+** function to heal a stack
+!?FU7004;
+
+!!HEv7020:B0/?z1;                                   [get hero's name]
+!!MA:Px5/?y8;                                       [get hit points of monster x5 into y8]
+!!FU|x5<0/y8<1:E;                                   [exit if invalid value]
+!!VRy5:Sx2;                                         [# of hit points to heal]
+!!VRy5::y8;                                         [divided by monster hit points, rounded down, equals # to save]
+!!VRy5&y5>x7:Sx7;                                   [can't save more than qty that died]
+!!BA&x1=1/y5>0:M0/x4/?x5/dy5;                       [restore y5 creatures attacker]
+!!BA&x1=2/y5>0:M1/x4/?x5/dy5;                       [restore y5 creatures defender]
+!!IF&1000/y5=1:Q2/21/x5/1/z148007;
+!!IF&1000/y5>1:Q2/21/x5/1/z148008;
+!!UN:R1;                                            [redraw screen to show revived creatures]
+!!VRj&y5>0:Sx4;                                     [note that we healed a stack if we did]
+** end of function
+
+** function to give gold - estates
+!?FU7005;   x1=estates level  x2=hero level
+!!VRy1:S5 *x1 *x2;                            [gold = 5 x estates level x hero level]
+!!OW:Rv7021/6/dy1;                            [give gold]
+** end of function
+
+
+** function for mysticism
+!?FU7006;                    x1=mysticism level   x2=0/1-attacker/defnder
+
+!!HEv7020:B0/?z1;                             [get hero's name]
+!!HEv7022:B0/?z3;                             [get enemy hero's name]
+!!HEv7022:I?y4;                               [get enemy hero's spell points]
+!!VRy3:S26 +x1;                               [set mysticism picture]
+!!VRy1:S100;                                  [set to 100%]
+!!VRy1&x1=1/y4>0:S80;                         [basic 80%]
+!!VRy1&x1=2/y4>0:S70;                         [advanced 70%]
+!!VRy1&x1=3/y4>0:S60;                         [expert 60%]
+!!VRv7032&x2=0:Sy1;                           [store attacker's mysticism % total]
+!!VRv7033&x2=1:Sy1;                           [store defender's mysticism % total]
+!!IF&1000/x1>0/y4>0:Q2/20/y3/1/z148009;
+!!VRy4&x1>0/y4>0:*y1;                         [calculate enemy hero's new spell points]
+!!VRy4&x1>0/y4>0::100;                        [decimal adjustment]
+!!HEv7022&x1>0/y4>0:Iy4;                      [enemy hero's spell points reduced]
+** end of function
+
+
+** function for luck      x1=luck   x2=att/def (1/2)
+!?FU7008;
+
+!!VRy3:Sx1 *10;                               [multiply skill level by 10 to get % chance]
+!!VRy4:S0;
+!!VRy5:S0 T6;                                 [random slot # to start search from]
+!!DO7009/0/6/1:Px1/x2/y3/y4/y5;               [pick slots]
+
+** function to pick slots
+!?FU7009;           x1=luck level x2=filter x3=%chance x4=slot counter  x5=random slot #
+
+!!VRy1:Sx5 %7;                                [get an actual slot number]
+!!BA&x2=1:M0/y1/?y2/?y3;                      [creatures - attacker]
+!!BA&x2=2:M1/y1/?y2/?y3;                      [creatures - defender]
+!!VRy6&y3>0:S0 R99;                           [random roll for luck]
+!!VRx4&x3>y6/y3>0:+1;                         [increment slot counter]
+!!VRv7034&x2=1/x3>y6/y3>0/x4=1:Sy1;           [store slot # - attacker]
+!!VRv7035&x2=1/x3>y6/y3>0/x4=2/x1>1:Sy1;      [store slot # - attacker]
+!!VRv7036&x2=1/x3>y6/y3>0/x4=3/x1=3:Sy1;      [store slot # - attacker]
+!!VRv7037&x2=2/x3>y6/y3>0/x4=1:Sy1;           [store slot # - defender]
+!!VRv7038&x2=2/x3>y6/y3>0/x4=2/x1>1:Sy1;      [store slot # - defender]
+!!VRv7039&x2=2/x3>y6/y3>0/x4=3/x1=3:Sy1;      [store slot # - defender]
+
+!!VRx5:+1;                                              [next slot]
+** end of function
+
+** function to check if unit has luck
+!?FU7010;               x1=filter        x16=stack number
+
+!!BMx16:O?y5 P?y6;                            [get hero slot number, position]
+!!FU7011&x1=1/y5=v7034:Px16/y6;               [call function 7011 if attacking unit has luck]
+!!FU7011&x1=1/y5=v7035:Px16/y6;               [call function 7011 if attacking unit has luck]
+!!FU7011&x1=1/y5=v7036:Px16/y6;               [call function 7011 if attacking unit has luck]
+!!FU7011&x1=2/y5=v7037:Px16/y6;               [call function 7011 if defending unit has luck]
+!!FU7011&x1=2/y5=v7038:Px16/y6;               [call function 7011 if defending unit has luck]
+!!FU7011&x1=2/y5=v7039:Px16/y6;               [call function 7011 if defending unit has luck]
+** end of function
+
+** function to give unit luck bonus
+!?FU7011;            x1=stack #  x2=position
+!!BMx1:A?y1;                                  [get attack]
+!!BMx1:D?y2;                                  [get defence]
+!!VRy1:+2;                                    [add attack boost]
+!!VRy2:+2;                                    [add defence boost]
+!!BMx1:Ay1;                                   [set attack]
+!!BMx1:Dy2;                                   [set defence]
+!BMx1:C51/x2/0/100/1;                        [cast Fortune : 100 rounds]
+!!BMx1:M51/100/1;  // replaced by Thomas because of random crash in a battle in creature banks)
+!!BMx1:T?y1; // get monster type
+!!UN:N3/1/y1/1; // get monsters name to z1
+
+!!UN:V?y3/?y4; // get Wog-Version: y3
+!!VRz2:Sz148040; // The .. are lucky.
+!!MM&y3<359:Sz2; !!FU&y3<359:E; // use the battle log and exit for versions below 3.59
+!!IF:Lz2; // use screen log if WOG version > 3.58
+
+** end of function
+
+** function to iterate through current player's heroes (weekly)
+!?FU7012;
+!!HEv7020:O?v7021;                            [get owner of iterated hero]
+!!HEv7020&v7021=v7026:S13/?y1;                [get hero's estates level]
+!!FU7013&v7188=1/v7021=v7026/y1>0:Py1;        [if hero in use and it's that hero's owner's turn, continue in function 7013 (estates) - if enabled]
+!!HEv7020&v7021=v7026:S18/?y1;                [get hero's scholar skill level]
+!!FU7014&v7196=1/v7021=v7026/y1>0:Py1;        [if hero in use and it's that hero's owner's turn, continue in function 7014 (scholar) - if enabled]
+!!VRv7020:+1;                                 [inc hero #]
+** end of function
+
+** function for estates      x1=estates level
+!?FU7013;
+!!HEv7020:B0/?z700;                           [get hero's name]
+!!HEv7020:R2/?y1;                             [get hero's sex]
+!!IF:Wv7020;                                  [enable hero variables]
+!!VRw5&w8<1/x1>0:S0 R5;                       [if not set, get random resource #]
+!!VRw6&w8<2/x1>1:S0 R5;
+!!VRw7&w8<3/x1=3:S0 R5;
+!!VRw8&w8=0/x1>0:S1;                          [set to lock resources]
+!!VRw8&w8=1/x1>1:S2;
+!!VRw8&w8=2/x1=3:S3;
+!!VRy3:S1 R2;                                 [set quantity for resource 1]
+!!VRy3&w5=0|w5=2:*2;                          [double for wood or ore]
+!!VRy4:S1 R2;                                 [set quantity for resource 2]
+!!VRy4&w6=0|w6=2:*2;                          [double for wood or ore]
+!!VRy5:S1 R2;                                 [set quantity for resource 3]
+!!VRy5&w7=0|w7=2:*2;                          [double for wood or ore]
+!!IFv7020&1000/x1=1:Q2/w5/y3/1/z148013;
+!!IFv7020&1000/x1=2:Q2/w5/y3/w6/y4/1/z148014;
+!!IFv7020&1000/x1=3:Q2/w5/y3/w6/y4/w7/y5/1/z148015;
+!!OW&x1=1:Rv7021/w5/dy3;                      [give the resources]
+!!OW&x1=2:Rv7021/w5/dy3 Rv7021/w6/dy4;        [give the resources]
+!!OW&x1=3:Rv7021/w5/dy3 Rv7021/w6/dy4 Rv7021/w7/dy5; [give the resources]
+** end of function
+
+** function for scholar       x1=scholar level
+!?FU7014;
+!!HEv7020:B0/?z700;                           [get hero's name]
+!!HEv7020:S7/?y2;                             [get hero's wisdom skill level]
+!!VRy3&x1=1:S57;                              [set basic scholar picture]
+!!VRy3&x1=2:S58;                              [set advanced scholar picture]
+!!VRy3&x1=3:S59;                              [set expert scholar picture]
+!!HEv7020:A2/0/?y7/?y8;                       [see if hero has a spell book]
+!!VRy6:S0 R99;                                [random roll for chance to learn spell]
+!!VRy6&x1=2:+10;                              [advanced bonus]
+!!VRy6&x1=3:+20;                              [expert bonus]
+!!VRv7027:S0;                                 [loop counter]
+!!FU7015&y8>0/y6>59:Px1/y2/y3;                [call function 7015 if have spell book and rolled over 59]
+** end of function
+
+** function to choose a spell: scholar   x1=scholar x2=wisdom x3=picture
+!?FU7015;
+!!VRy4&x1>0:S0 R29;                           [basic scholar]
+!!VRy4&x1>1/x2>0:S0 R44;                      [advanced scholar]
+!!VRy4&x1=3/x2>1:S0 R59;                      [expert scholar]
+!!FU7022:Px1/x2/x3/y4;                        [go to spell list]
+** end of function
+
+** function to give spell: scholar
+!?FU7016;
+!!HEv7020:Mx5/?y1;                            [check if hero has spell: y1=1 if yes]
+!!VRy2:S0;                                    [initialize y2]
+!!UN&x5=0:P152/?y2;                           [check if Summon Boat is banned: y2=1 if banned]
+!!UN&x5=7:P153/?y2;                           [check if Water Walk is banned: y2=1 if banned]
+!!UN&x5=9:P154/?y2;                           [check if Town Portal is banned: y2=1 if banned]
+!!UN&x5=1:P221/?y2;                           [check if Scuttle Boat is banned: y2=1 if banned]
+!!UN&x5=2:P222/?y2;                           [check if Visions is banned: y2=1 if banned]
+!!UN&x5=26:P223/?y2;                          [check if Armageddon is banned: y2=1 if banned]
+!!UN&x5=5:P246/?y2;                           [check if View Air is banned: y2=1 if banned]
+!!UN&x5=3:P247/?y2;                           [check if View Earth is banned: y2=1 if banned]
+!!UN&x5=4:P651/?y2;                           [check for banned Disguise: y2=1 if banned]
+!!UN&x5=38:P272/?y2;                          [check for banned Resurrection: y2=1 if banned]
+!!UN&x5=39:P271/?y2;                          [check for banned Animated Dead: y2=1 if banned]
+!!UN&y2=0:J0/x5/?y2;                          [if not banned in WoG Options, check in Map Options: y2=1 if banned]
+!!VRy1:+y2;                                   [combine results]
+
+!!VRv7027:+1;                                 [infinite loop counter]
+!!FU7015&y1>0/v7027<50:Px1/x2/x3/x4/x5;       [call function 7015 if hero has spell (up to 50 times)]
+!!HEv7020&y1<1:Mx5/1;                         [give spell: 40% chance + bonus]
+!!IF&1000/y1<1:Q2/9/x5/1/z148016;
+** end of function
+
+** function for eagle eye            x1 = hero #     x2 = attacker/defender
+!?FU7017;
+
+
+!!HEx1:S11/?y1 A2/63/?y2/?y3 A2/64/?y2/?y4 A2/65/?y2/?y5;     [get eagle eye skill level, check for artifacts]
+!!VRy6&y1>0:S10 *y1;                          [set base chance to skill level x 10]
+!!VRy6&y1>0/y3>0:+5;                          [Bird of Perception +5]
+!!VRy6&y1>0/y4>0:+10;                         [Stoic Watchman +10]
+!!VRy6&y1>0/y5>0:+15;                         [Emblem of Cognizance +15]
+!!VRy6&y1>0/y3>0/y4>0/y5>0:+30;               [All three +30]
+
+!!VRv7018&y1>0/x2=0:Sy6;                      [set for attacker]
+!!VRv7019&y1>0/x2=1:Sy6;                      [set for defender]
+
+** end of function
+
+** function to
+*?FU7018;
+** end of function
+
+** function to pick a monster
+!?FU7019;
+!!VRs:S0 T173;                                [random 0 to 173]
+!!VRs&s>=132/s<=135:S0 T173;                  [random 0 to 173 (reroll if super dragons were selected)]
+!!VRs&s>=150/s<=158:S0 T173;                  [random 0 to 173 (reroll if 8th levels were selected)]
+!!VRs&s>=145/s<=149:S0 T131;                  [random 0 to 131 (reroll if war machines were selected)]
+!!VRs&s>=160/s<=163:S0 T131;                  [random 0 to 131 (reroll if emissaries were selected)]
+!!VRs&s=122:S192;                             [set NOT USED 1 to sylvan centaur]
+!!VRs&s=124:S193;                             [set NOT USED 2 to sorceress]
+!!VRs&s=126:S194;                             [set NOT USED 3 to werewolf]
+!!VRs&s=128:S195;                             [set NOT USED 4 to hell steed]
+
+!!UN:N3/z704/s/0;                             [get monster name]
+!!UN:N3/z705/s/1;                             [get monsters name]
+** end of function
+
+** function to iterate through current player's heroes (daily)
+!?FU7020;
+!!HEx16:O?v7021;                              [get owner of iterated hero]
+
+!!HEx16&v7021=v7026:S0/?y1;                   [get hero's pathfinding skill level]
+!!FU7025&v7194=1/v7021=v7026/y1>0:Px16/y1;    [if hero has pathfinding, is in use and it's that hero's owner's turn, continue in function 7025 - if enabled]
+
+!!FU&x1=1:E;                                  [exit if using day 1 timer]
+
+!!HEx16&v7021=v7026:S21/?y1;                  [get hero's learning skill level]
+!!FU7021&v7190=1/v7021=v7026/y1>0:Px16/y1;    [if hero has learning, is in use and it's that hero's owner's turn, continue in function 7021 - if enabled]
+
+!!HEx16&v7021=v7026:S13/?y1 E?y2/?y3/1;       [get hero's estates skill level, hero level]
+!!FU7005&v7188=1/v7021=v7026/y1>0:Py1/y3;     [if hero has estates, is in use and it's that hero's owner's turn, continue in function 7005 - if enabled] [TOBYN mod: now really checks for Estates, not Learning]
+
+** end of function
+
+** function for learning      x1=hero x2=learning level
+!?FU7021;
+!!HEx1&x2=1:Ed100;                            [give 100 experience]
+!!HEx1&x2=2:Ed200;                            [give 200 experience]
+!!HEx1&x2=3:Ed300;                            [give 300 experience]
+** end of function
+
+** function to list spells      x1=scholar/eagle eye x2=wisdom  x3=picture x4=spell index
+!?FU7022;
+** 1st level spells
+!!VRy5&x4=0:S0;
+!!VRy5&x4=1:S3;
+!!VRy5&x4=2:S5;
+!!VRy5&x4=3:S15;
+!!VRy5&x4=4:S27;
+!!VRy5&x4=5:S31;
+!!VRy5&x4=6:S32;
+!!VRy5&x4=7:S35;
+!!VRy5&x4=8:S37;
+!!VRy5&x4=9:S41;
+!!VRy5&x4=10:S42;
+!!VRy5&x4=11:S43;
+!!VRy5&x4=12:S46;
+!!VRy5&x4=13:S53;
+!!VRy5&x4=14:S54;
+** 2nd level spells
+!!VRy5&x4=15:S1;
+!!VRy5&x4=16:S2;
+!!VRy5&x4=17:S4;
+!!VRy5&x4=18:S10;
+!!VRy5&x4=19:S13;
+!!VRy5&x4=20:S16;
+!!VRy5&x4=21:S17;
+!!VRy5&x4=22:S24;
+!!VRy5&x4=23:S30;
+!!VRy5&x4=24:S44;
+!!VRy5&x4=25:S45;
+!!VRy5&x4=26:S47;
+!!VRy5&x4=27:S51;
+!!VRy5&x4=28:S62;
+!!VRy5&x4=29:S64;
+** 3rd level spells
+!!VRy5&x2>0/x4=30:S11;
+!!VRy5&x2>0/x4=31:S12;
+!!VRy5&x2>0/x4=32:S14;
+!!VRy5&x2>0/x4=33:S20;
+!!VRy5&x2>0/x4=34:S21;
+!!VRy5&x2>0/x4=35:S25;
+!!VRy5&x2>0/x4=36:S28;
+!!VRy5&x2>0/x4=37:S33;
+!!VRy5&x2>0/x4=38:S34;
+!!VRy5&x2>0/x4=39:S39;
+!!VRy5&x2>0/x4=40:S49;
+!!VRy5&x2>0/x4=41:S52;
+!!VRy5&x2>0/x4=42:S60;
+!!VRy5&x2>0/x4=43:S61;
+!!VRy5&x2>0/x4=44:S63;
+** 4th level spells
+!!VRy5&x2>1/x4=45:S7;
+!!VRy5&x2>1/x4=46:S9;
+!!VRy5&x2>1/x4=47:S19;
+!!VRy5&x2>1/x4=48:S22;
+!!VRy5&x2>1/x4=49:S23;
+!!VRy5&x2>1/x4=50:S26;
+!!VRy5&x2>1/x4=51:S29;
+!!VRy5&x2>1/x4=52:S38;
+!!VRy5&x2>1/x4=53:S48;
+!!VRy5&x2>1/x4=54:S50;
+!!VRy5&x2>1/x4=55:S55;
+!!VRy5&x2>1/x4=56:S56;
+!!VRy5&x2>1/x4=57:S58;
+!!VRy5&x2>1/x4=58:S59;
+!!VRy5&x2>1/x4=59:S65;
+
+!!FU7016:Px1/x2/x3/x4/y5;                     [give spell: scholar]
+
+** end of function
+
+** function for scouting       x1=scouting
+!?FU7023;
+!!HEv7020:O?v7021;                            [get hero's owner]
+!!HEv7020:B0/?z700;                           [get hero's name]
+!!HEv7020:R2/?y1;                             [get hero's sex]
+!!VRz701&y1=0:Sz148017;
+!!VRz701&y1=1:Sz148018;
+!!VRz702&y1=0:Sz148019;
+!!VRz702&y1=1:Sz148020;
+!!VRz703&y1=0:Sz148021;
+!!VRz703&y1=1:Sz148022;
+!!VRy3:S11 +x1;                               [set scouting picture]
+!!VRy4:S0;                                    [set to 0]
+!!VRy4&x1=1:R1199;                            [set random roll to 1.0% (12/1200)]
+!!VRy4&x1=2:R799;                             [set random roll to 1.5% (12/800)]
+!!VRy4&x1=3:R599;                             [set random roll to 2.0% (12/600)]
+
+!!IFv7020&1000/999/y4=1:Q2/20/y3/35/20/1/z148023;
+!!HEv7020&y4=1:Id+20;                         [give 20 spell points]
+!!VRr&y4=2:S1 R24 *100;                       [random 1 to 25 x 100]
+!!IFv7020&1000/999/y4=2:Q2/20/y3/6/r/1/z148024;
+!!OW&y4=2:Rv7021/6/dr;                        [give gold]
+!!VRs&y4=3:S0 R5;                             [random resource 0 to 5]
+!!VRr&y4=3:S1 R2;                             [random quantity 1 to 3]
+!!VRr&y4=3/s=0:*2;                            [double for wood]
+!!VRr&y4=3/s=2:*2;                            [double for ore]
+!!IFv7020&1000/999/y4=3:Q2/20/y3/s/r/1/z148025;
+!!OW&y4=3:Rv7021/s/dr;                        [give the resources]
+!!VRs&y4=4:S0 R5;                             [random resource 0 to 5]
+!!VRr&y4=4:S4 R2;                             [random quantity 4 to 6]
+!!VRr&y4=4/s=0:*2;                            [double for wood]
+!!VRr&y4=4/s=2:*2;                            [double for ore]
+!!IFv7020&1000/999/y4=4:Q2/20/y3/s/r/1/z148026;
+!!OW&y4=4:Rv7021/s/dr;                        [give resources]
+!!FU7019&y4=5:P;                              [call function 7019 to pick monster]
+!!MA&y4=5:Gs/?r;                              [get 1 weeks production]
+!!IFv7020&1000/999/y4=5/r=1:Q2/20/y3/21/s/1/z148027;
+!!IFv7020&1000/999/y4=5/r>1:Q2/20/y3/21/s/1/z148028;
+!!HEv7020&1000/999/y4=5:Cs/r/-1/0/-1/0/-1/0/-1/0/-1/0/-1/0;  [give creatures]
+!!HEv7020&-1000/y4=5:C2/s/r/0;                [offer AI creatures]
+!!IFv7020&1000/999/y4=6:Q2/20/y3/14/1/1/z148029;
+!!HEv7020&y4=6:R0/d1;                         [+1 morale]
+!!IFv7020&1000/999/y4=7:Q2/20/y3/11/1/1/z148030;
+!!HEv7020&y4=7:R1/d1;                         [+1 luck]
+!!HEv7020&y4=8:E?y5/?y6/1;                    [get hero's level]
+!!VRr&y4=8:Sy6 T20 *50;                       [(level + 0-20) x 50]
+!!IFv7020&1000/999/y4=8:Q2/20/y3/17/r/1/z148031;
+!!HEv7020&y4=8:Edr;                           [give experience]
+!!VRz4&1000/999/y4=9:Sz148035;                [set z4 to "Shortcut" for temporary Boots of Speed text]
+!!UN&1000/999/y4=9:A98/9/4 A98/10/4;          [Temporarily change Boots of Speed's name and description]
+!!IFv7020&1000/999/y4=9:Q2/20/y3/8/98/1/z148032;
+!!UN&1000/999/y4=9:A98/9/0 A98/10/0;          [Restore Boots of Speed's name and description to normal]
+!!HEv7020&y4=9:Wd+400;                        [increase movement]
+!!VRz4&1000/999/y4=10:Sz148037;               [set z4 to "Land Survey" for temporary Spyglass text]
+!!UN&1000/999/y4=10:A52/9/4 A52/10/4;         [Temporarily change Speculum's name and description]
+!!IFv7020&1000/999/y4=10:Q2/20/y3/8/52/1/z148033;
+!!UN&1000/999/y4=10:A52/9/0 A52/10/0;         [Restore Speculum's name and description to normal]
+!!VRr&y4=10:S3 *x1 +16;                       [area]
+!!UN&y4=10:Sv7023/v7024/v7025/v7021/r;        [reveal area]
+!!FU7019&y4=11:P;                             [call function 7019 to pick monster]
+!!MA&y4=11:Vs/?r;                             [get AdvMapL]
+!!IFv7020&1000/999/y4=11:Q2/20/y3/21/s/2/z148034;
+!!HEv7020&2/y4=11:Tv7023/v7024/v7025/s/r;     [fight monsters]
+!!FU7019&y4=12:P;                             [call function 7019 to pick monster]
+!!MA&y4=12:Hs/?r;                             [get AdvMapH]
+!!IFv7020&1000/999/y4=12:Q2/20/y3/21/s/2/z148036;
+!!HEv7020&2/y4=12:Tv7023/v7024/v7025/s/r;     [fight monsters]
+!!UN:R1;                                      [redraw screen]
+** end of function
+
+** function for navigation (add attack and defence)   (Parameters: x1=stat bonus)
+!?FU7024;
+
+!!BMx16:Adx1;                                 [set attack]
+!!BMx16:Ddx1;                                 [set defence]
+** end of function
+
+** function for pathfinding    x1 = hero  x2 = pathfinding
+!?FU7025;
+
+!!HEx1:P?v7023/?v7024/?v7025;                 [get hero's position]
+!!TR7023:T?y1/d/d/d/d/d/d/d;                  [get terrain type]
+!!FU&y1=8:E;                                  [exit if on water]
+
+!!HEx1:W?y2;                                  [get movement if on land]
+!!VRy2&x2=1/y2<1700:S1700;                    [set to 1700 if basic]
+!!VRy2&x2=2/y2<1760:S1760;                    [set to 1760 if advanced]
+!!VRy2&x2=3/y2<1830:S1830;                    [set to 1830 if expert]
+!!HEx1:Wy2 Gy2;                               [set movement, reset intial movement if on land]
+** end of function
+
+** function to offset skill levels
+!?FU7026;   x1=hero  x2=set/reset
+
+!!HEx1:S23/?y1;                               [get hero's armorer skill level]
+!!HEx1&y1=1/x2=0/v7199=1:S23/22;              [set basic armorer skill level]
+!!HEx1&y1=2/x2=0/v7199=1:S23/23;              [set advanced armorer skill level]
+!!HEx1&y1=3/x2=0/v7199=1:S23/19;              [set expert armorer skill level]
+
+!!HEx1&y1=22/x2=1/v7199=1:S23/1;              [restore basic armorer skill level]
+!!HEx1&y1=23/x2=1/v7199=1:S23/2;              [restore advanced armorer skill level]
+!!HEx1&y1=19/x2=1/v7199=1:S23/3;              [restore expert armorer skill level]
+
+
+!!HEx1:S25/?y2;                               [get hero's sorcery skill level]
+!!HEx1&y2=1/x2=0/v7198=1:S25/-3;              [set basic sorcery skill level]
+!!HEx1&y2=2/x2=0/v7198=1:S25/-2;              [set advanced sorcery skill level]
+!!HEx1&y2=3/x2=0/v7198=1:S25/-1;              [set expert sorcery skill level]
+
+!!HEx1&y2=-3/x2=1/v7198=1:S25/1;              [restore basic sorcery skill level]
+!!HEx1&y2=-2/x2=1/v7198=1:S25/2;              [restore advanced sorcery skill level]
+!!HEx1&y2=-1/x2=1/v7198=1:S25/3;              [restore expert sorcery skill level]
+
+
+!!HEx1:S26/?y3;                               [get hero's resistance skill level]
+!!HEx1&y3=1/x2=0/v7195=1:S26/9;               [set basic resistance skill level]
+!!HEx1&y3=2/x2=0/v7195=1:S26/10;              [set advanced resistance skill level]
+!!HEx1&y3=3/x2=0/v7195=1:S26/11;              [set expert resistance skill level]
+
+!!HEx1:A2/57/?y5/?y7 A2/58/?y5/?y8 A2/59/?y5/?y9; [see if hero has Garniture of Interference, Surcoat of Counterpoise, Boots of Polarity]
+!!VRy6&y7>0/y8>0/y9>0:S1;                     [artifact bonus]
+
+!!HEx1&y3=0/y6=1/x2=2/v7195=1:S26/-17;        [set no resistance (combo)]
+!!HEx1&y3=1/y6=1/x2=2/v7195=1:S26/-7;         [set basic resistance (combo)]
+!!HEx1&y3=2/y6=1/x2=2/v7195=1:S26/-6;         [set advanced resistance (combo)]
+!!HEx1&y3=3/y6=1/x2=2/v7195=1:S26/-5;         [set expert resistance (combo)]
+
+
+!!HEx1&y3=9/x2=1/v7195=1:S26/1;               [restore basic resistance skill level]
+!!HEx1&y3=10/x2=1/v7195=1:S26/2;              [restore advanced resistance skill level]
+!!HEx1&y3=11/x2=1/v7195=1:S26/3;              [restore expert resistance skill level]
+
+!!HEx1&y3=-17/x2=1/v7195=1:S26/0;             [restore no resistance (combo)]
+!!HEx1&y3=-7/x2=1/v7195=1:S26/1;              [restore basic resistance (combo)]
+!!HEx1&y3=-6/x2=1/v7195=1:S26/2;              [restore advanced resistance (combo)]
+!!HEx1&y3=-5/x2=1/v7195=1:S26/3;              [restore expert resistance (combo)]
+
+** end of function
+
+
+
+** function to check for combo artifacts
+!?FU7007;   x1= switch
+
+!!HE-1&x1=1:A2/63/?y1/?y2 A2/64/?y1/?y3 A2/65/?y1/?y4;  [see if hero has Bird of Perception, Stoic Watchman, Emblem of Cognizance]
+!!HE-1&x1=2:A2/57/?y1/?y2 A2/58/?y1/?y3 A2/59/?y1/?y4;  [see if hero has Garniture of Interference, Surcoat of Counterpoise, Boots of Polarity]
+
+!!IF&1000/x1=1/y2>0/y3>0/y4>0:Q2/8/63/8/64/8/65/1/z148038;
+!!IF&1000/x1=2/y2>0/y3>0/y4>0:Q2/8/57/8/58/8/59/1/z148039;
+
+** end of function
+
+
+**  object trigger - post visit - Bird of Perception
+!$OB5/63&v7187=1;
+!!FU7007:P1;
+**  object trigger - post visit - Stoic Watchman
+!$OB5/64&v7187=1;
+!!FU7007:P1;
+**  object trigger - post visit - Emblem of Cognizance
+!$OB5/65&v7187=1;
+!!FU7007:P1;
+
+**  object trigger - post visit - Garniture of Interference
+!$OB5/57&v7187=1;
+!!FU7007:P2;
+**  object trigger - post visit - Surcoat of Counterpoise
+!$OB5/58&v7187=1;
+!!FU7007:P2;
+**  object trigger - post visit - Boots of Polarity
+!$OB5/59&v7187=1;
+!!FU7007:P2;
+

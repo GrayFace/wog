@@ -1,0 +1,117 @@
+121000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Freelancer's Guild version 1.0 script.} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+121001	Sell Creatures	String type = <!!S>	07.06.2003
+121002	Trade creatures for resources.	String type = <!!S>	07.06.2003
+121003	Hire Freelancers	String type = <!!S>	07.06.2003
+121004	Hire freelance creatures to hunt down your enemies.	String type = <!!S>	07.06.2003
+121005	{Freelancer's Guild} 
+ 
+Do you wish to sell creatures or hire freelancers?	String type = <!!Q>	07.06.2003
+121006	Sorry, but we're up to our necks in paperwork. You'll have to come back later when we're not quite so busy. Return tomorrow.	String type = <!!M>	07.06.2003
+121007	The following freelance groups are available to hire. Once hired, they will hunt down your enemies and attack them. They will not become part of your army but will work on their own for your cause.	String type = <!!S>	07.06.2003
+121008	No thanks, I've changed my mind	String type = <!!S>	07.06.2003
+121009	{Freelancer's Guild} 
+ 
+Sorry, but there are no freelance creatures available right now. Please check back next week.	String type = <!!M>	07.06.2003
+121010	Please return when you 
+need our services.	String type = <!!M>	07.06.2003
+121011	these freelancers	String type = <!!S>	07.06.2003
+121012	this freelancer	String type = <!!S>	07.06.2003
+121013	Sorry, but you don't have enough gold to afford %Z1. Choose some less expensive ones or return when you have more money.	String type = <!!M>	07.06.2003
+121014	Will you hire %Z1 
+to work for you?	String type = <!!Q>	07.06.2003
+121015	Please return when you 
+need our services.	String type = <!!M>	07.06.2003
+121016	We	String type = <!!S>	07.06.2003
+121017	I	String type = <!!S>	07.06.2003
+121018	Thank you. %Z1 will work hard 
+to dispose of your enemies!	String type = <!!Q>	07.06.2003
+121019	 gold to hire)	String type = <!!S>	07.06.2003
+121020	us	String type = <!!S>	07.06.2003
+121021	me	String type = <!!S>	07.06.2003
+121022	Choose the target hero...	String type = <!!S>	07.06.2003
+121023	Which hero do you wish %Z3 to hunt?	String type = <!!S>	07.06.2003
+121024	us	String type = <!!S>	07.06.2003
+121025	me	String type = <!!S>	07.06.2003
+121026	I don't know what sort of stunt you're trying to pull, but %Z218 is one of {your} guys. We're not getting involved in any internal squabbles!	String type = <!!M>	07.06.2003
+121027	Are you crazy? You're trying to hire %Z3 to attack yourself! What kind of an organization do you think we run here?	String type = <!!M>	07.06.2003
+121028	Sorry, our informants tell us 
+that %Z218 isn't 
+in this area right now.	String type = <!!M>	07.06.2003
+121029	We	String type = <!!S>	07.06.2003
+121030	I	String type = <!!S>	07.06.2003
+121031	us	String type = <!!S>	07.06.2003
+121032	me	String type = <!!S>	07.06.2003
+121033	%Z2 know of no hero called 
+ 
+{"%Z1"} 
+ 
+Perhaps you have given 
+%Z3 the wrong name.	String type = <!!M>	07.06.2003
+121034	Do you still require our services?	String type = <!!Q>	07.06.2003
+121035	Then I suppose you'll 
+be wanting a refund...	String type = <!!Q>	07.06.2003
+121036	We	String type = <!!S>	07.06.2003
+121037	I	String type = <!!S>	07.06.2003
+121038	him	String type = <!!S>	07.06.2003
+121039	her	String type = <!!S>	07.06.2003
+121040	%Z2 will hunt down the hero 
+named {%Z218...} 
+ 
+and DESTROY %Z231!	String type = <!!M>	07.06.2003
+121041	these freelance	String type = <!!S>	07.06.2003
+121042	this freelance	String type = <!!S>	07.06.2003
+121043	creatures	String type = <!!S>	07.06.2003
+121044	creature	String type = <!!S>	07.06.2003
+121045	Select the faction you want %Z3 
+%Z4 to hunt down and destroy.	String type = <!!S>	07.06.2003
+121046	Red	String type = <!!S>	07.06.2003
+121047	Blue	String type = <!!S>	07.06.2003
+121048	Tan	String type = <!!S>	07.06.2003
+121049	Green	String type = <!!S>	07.06.2003
+121050	Orange	String type = <!!S>	07.06.2003
+121051	Purple	String type = <!!S>	07.06.2003
+121052	Teal	String type = <!!S>	07.06.2003
+121053	Pink	String type = <!!S>	07.06.2003
+121054	No thanks, I've changed my mind	String type = <!!S>	07.06.2003
+121055	We	String type = <!!S>	07.06.2003
+121056	I	String type = <!!S>	07.06.2003
+121057	%Z2 will hunt down all 
+heroes belonging to the 
+{%Z1 Faction...} 
+ 
+...and DESTROY them!	String type = <!!Q>	07.06.2003
+121058	Do you still require our services?	String type = <!!Q>	07.06.2003
+121059	Then I suppose you'll 
+be wanting a refund...	String type = <!!Q>	07.06.2003
+121060	these monsters	String type = <!!S>	07.06.2003
+121061	this monster	String type = <!!S>	07.06.2003
+121062	monsters	String type = <!!S>	07.06.2003
+121063	monster	String type = <!!S>	07.06.2003
+121064	Specific Hero	String type = <!!S>	07.06.2003
+121065	Send freelance 	String type = <!!S>	07.06.2003
+121066	Entire Faction	String type = <!!S>	07.06.2003
+121067	Send freelance 	String type = <!!S>	07.06.2003
+121068	Do you want to send %Z1 to hunt down a specific hero or a whole faction?	String type = <!!Q>	07.06.2003
+121069	Freelancer Attack Message	String type = <!!S>	07.06.2003
+121070	What should the %Z1 say when it attacks?	String type = <!!S>	07.06.2003
+121071	What should the %Z1 say when they attack?	String type = <!!S>	07.06.2003
+121072	Sorry, but you're the only faction left in play right now.	String type = <!!M>	07.06.2003
+121073	growl	String type = <!!S>	07.06.2003
+121074	growls	String type = <!!S>	07.06.2003
+121075	us	String type = <!!S>	07.06.2003
+121076	me	String type = <!!S>	07.06.2003
+121077	we're	String type = <!!S>	07.06.2003
+121078	I'm	String type = <!!S>	07.06.2003
+121079	disperse.	String type = <!!S>	07.06.2003
+121080	leaves.	String type = <!!S>	07.06.2003
+121081	"What kind of stunt are you trying to pull?" %Z2 the enraged %Z1. "First you hire %Z3 and then you betray %Z3 by attacking? Well %Z4 having no part of it!" 
+ 
+The %Z1 quickly %Z5.	String type = <!!M>	07.06.2003
+121082	 to hunt down a specific hero.		
+121083	 to hunt all heroes belonging to one faction.		

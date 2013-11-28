@@ -1,0 +1,684 @@
+ZVSE
+ERMS_ScriptName=script99
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=5.9(September).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedFunctions=FU1620
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Magic ban
+** option 99 by Thomas Franz (alias samot) - script99
+
+** Usage
+** Wog-Option 99
+** FU6143-6154;
+** calls FU707 from script01 (9th-and-10th-skill-Rule) to count the number of skills, the hero has
+** calls FU6137 from script94 to get a list of not deactivated artifacts of the given type (x1)
+** w44       - EXCLUSIVE
+** z355-358  - EXCLUSIVE
+** Flag 210  - EXCLUSIVE
+** v600-v630 - not exclusive
+** v549
+
+** If the script is active, no hero may cast any spells. It does not effect spells
+** cast by creatures, commanders or artifacts (as Angel Alliance).
+
+** CAUTION: this script will change very much aspects of the game and may make some maps
+** impossible to play (because some key artifacts are removed / changed).
+
+** - Artifacts and map objects, that gives usually Power or Knowledge, gives Attack and Defense now.
+** - Magic-Only-Artifacts (as the Scrolls, Spell Books, Tomes, Orbs or the Charm of Mana) are removed
+** - All magic skills (except Resistance) are removed
+** - if you Level up, you will get only Might-Skills and Attack or Defense
+** - all heroes are of the Might-Class
+** - Magic Specialisations and Magic-Starting-Skills are replaced by Might-Skills
+** - Magic Wells on the Map are replaced by Idols of Fortune
+** - some other Magic-Map-Objects looks as the old ones, but have internal the function of Might-Objects
+**   (f.e. Pyramides (are now Adventure Caves))
+** - Shrines give now experience to the visiting hero (but only once per shrine type)
+** - all towns have a level 3 mageguild (because of building prerequirements), but you may not visit it
+** - no hero has a spellbook and if you find one on the map or get it from a questhut it will be removed at the start of the next battle
+** - if the Enhanced-Grail-Rule (script93) is enabled, you will get attack / defense bonuses in Tower / Inferno /
+**   Dungeon and 33% more movement points in Conflux
+
+
+** The script replaces the following Hero Specialisations:
+** Bless, Prayer, Cure, Fortune -> First Aid
+** Inferno, Fireball -> Artillery
+** Eagle Eye -> Artillery
+** Precision, Meteor Shower, Chain Lightning, Ice Bolt, Magic Arrow -> Archer
+** Disrupting Ray, Bloodlust, Death Ripple -> Offence
+** Sorcery -> Offence
+** Adrienne -> Offence
+** Fire Wall, Weakness, Stonskin -> Armorer
+** Resi -> Armorer
+** Slow, Resurrection, Animate Dead  -> logistics
+** Intelligence -> logistics
+** Slayer -> Resource (Crystal)
+** Hypno -> learning
+** Haste -> Speed Master (+2 Speed)
+** Mysticismus -> Estates
+
+** Also the following starting skills are replaced
+** Wisdom Magic -> Tactics
+** Fire Magic -> Offence
+** Earth Magic -> Armorer
+** Air Magic -> Archery
+** Water -> First Aid
+** Eagle Eye -> Pathfinding
+** Mysticism -> Estates
+** Scholar -> Learning
+** Sorcery -> Luck
+** Intelligence -> Logistics
+
+** Replaced objects
+** Magic Spring 48 -> Fountain of Youth 31
+** Magic Well 49 -> Idol of Fortune 38
+** Library of Legends 16/16 -> Citadel of Pacification 16/14 (Emissaries)
+** Monastery of Magicians 16/15 -> Palace of Martial Spirit 16/13 (Emissaries)
+
+
+** objects that are replaced, but looks still like the old object (because of the passability)
+** Pyramides (63/0) -> Adventure Caves (63/57)
+** School of Wizardry (63/62) -> Battle Academys (63/32)
+
+** modified objects:
+** Shrines 88-90 -> gives you 1.500, 3.000 or 5.000 exp (only once)
+** Library of Enlightenment -> gives +4 Attack / +4 Defense but no Power / Knowledge
+** Universities, Wich Huts: no magic skills (checked at visit, so that it prevents to get a magic skill by using mithril)
+** Scholars: no magic skills; give primary skill instead of a spell
+** pandoras boxes / events: replaced primary / secondary skills
+** Garden of Revelation 32 -> gives Defense
+** Star Axis 61 -> gives attack
+** School of Magic 47 -> gives attack or defense
+
+*******************************************************************************
+** Start Bann Magic                                                          **
+*******************************************************************************
+
+** artifact banning
+** Spellbook, Scrolls, Garniture of Interference, Surcoat of Counterpoise, Boots of Polarity,
+** Bird of Perception, Stoic Watchman, Emblem of Cognizance, Charm of Mana,
+** Talisman of Mana, Mystic Orb of Mana, Collar of Conjuring, Ring of Conjuring,
+** Cape of Conjuring, Orb of the Firmament, Orb of Silt, Orb of Tempestuous Fire, Orb of Driving Rain,
+** Recanter's Cloak, Tome of Fire Magic, Tome of Air Magic, Tome of Water Magic, Tome of Earth Magic,
+** Sphere of Permanence, Orb of Vulnerability, Spellbinder's Hat, Orb of Inhibition,
+** Wizard's Well, Ring of the Magi
+!#UN:P99/?v1; // check, if script active
+!#UN&v1=1:A0/1 A1/1 A57/1 A58/1 A59/1 A63/1 A64/1 A65/1 A73/1 A74/1 A75/1 A76/1 A77/1 A78/1; // if yes, bann magic artifacts
+!#UN&v1=1:A79/1 A80/1 A81/1 A82/1 A83/1 A86/1 A87/1 A88/1 A89/1 A92/1 A93/1 A124/1 A126/1 A138/1 A139/1;
+
+!?TM2&$day$=1/$once$=1;
+!!UN:P99/=1; !!FU&-1:E; // check if script is active; exit if not
+
+!!IF:V210/1; // enable flag, used in AE1-trigger to prevent its run while the game starts (equip artifacts, that a hero has given by the mapmaker)
+!!DO6143/0/155/1:P; // loop through all heroes, remove spellbook, set type to might, replace skills and specialisations
+
+!!UN:U48/0/?y-1; // count all Magic Springs
+!!VRy-1::2; // divide by 2 because the Magic Spring has two yellow triggers
+!!DO6144/1/y-1/1&y-1>0:P48/0/31/0/1/0; // replaces them by Fountains of Youth (but they still look like the old object)
+
+!!UN:U49/0/?y-1; // count all Magic Wells
+!!DO6144/1/y-1/1&y-1>0:P49/0/38/0; // replaces them by Idols of Fortune
+
+!!UN:U63/0/?y-1; // count all Pyramides
+!!DO6144/1/y-1/1&y-1>0:P63/0/63/57/1; // replaces them by Adventure Caves (but they still look like the old object)
+
+!!UN:U63/62/?y-1; // count all Schools of Wizardry
+!!DO6144/1/y-1/1&y-1>0:P63/62/63/32/1; // replaces them by Battle Academys (but they still look like the old object)
+
+!!UN:U16/15/?y-1; // count all Monasterys of Magicians (Emissaries of Mana)
+!!DO6144/1/y-1/1&y-1>0:P16/15/16/13/0/2/2; // replaces them by Palace of Martial Spirit (Emissaries of War)
+
+!!UN:U16/16/?y-1; // count all Librarys of Legends (Emissaries of Lore)
+!!DO6144/1/y-1/1&y-1>0:P16/16/16/14/0/2/2; // replaces them by Citadels of Pacification (Emissaries of Peace)
+
+!!UN:U6/-1/?y-1; // count all Pandora's Boxes
+!!DO6146/1/y-1/1&y-1>0:P6/-1; // replaces bonuses (knowledge / power / skills)
+
+!!UN:U26/-1/?y-1; // count all local events
+!!DO6146/1/y-1/1&y-1>0:P26/-1; // replaces bonuses (knowledge / power / skills)
+
+
+** Hints for shrines
+!!VRz355:Sz199006; !!VRz356:Sz199007; !!VRz357:Sz199008; !!VRz358:Sz199009;
+!!HT88/-1:W44/0/355 W44/2/355 W44/4/355 W44/6/355; // set hint for not visited Shrines of Magic Incantation (Shrines of Initiation)
+!!HT88/-1:W44/1/358 W44/3/358 W44/5/358 W44/7/358; // set hint for visited Shrines of Magic Incantation (Shrines of Initiation)
+!!HT89/-1:W44/0/356 W44/1/356 W44/4/356 W44/5/356; // set hint for not visited Shrines of Magic Gesture (Shrines of Consolidation )
+!!HT89/-1:W44/2/358 W44/3/358 W44/6/358 W44/7/358; // set hint for visited Shrines of Magic Gesture (Shrines of Consolidation )
+!!HT90/-1:W44/0/357 W44/1/357 W44/2/357 W44/3/357; // set hint for not visited Shrines of Magic Thought (Shrines of Retainance )
+!!HT90/-1:W44/4/358 W44/5/358 W44/6/358 W44/7/358; // set hint for visited Shrines of Magic Thought (Shrines of Retainance )
+
+** towns (build mage guilds - but they are disabled by CM1-trigger)
+!!UN:U98/-1/?y-1; // count towns
+!!DO6149/1/y-1/1&y-1>0:P; // loop through towns
+
+** replace banned magic-artifacts
+!!UN:U5/-1/?y-1; // count all artifacts on the map
+!!DO6152/1/y-1/1&y-1>0:P5/-1; // loop through the artifacts, replace magic-artifacts by other, not banned artifacts
+!!UN:U93/-1/?y-1; // count all artifacts on the map
+!!DO6152/1/y-1/1&y-1>0:P93/-1; // loop through the scrolls, replace them by treasure-artifacts
+
+******** end TM2 (day 1 only) ********
+
+
+!?HL-1; // Hero Level Up trigger
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!HL:S?y-1/?y-2/?y-3; // get prim. and secondary skills
+!!VRy-1&y-1>1:-2; // set power / knowledge to attack / defense
+!!HL:Sy-1/-2/-2; // write the primary skill back (-2 = do not change the SS's)
+
+!!HE-1:N?y-9; // get heroes number
+!!VRy-5:S-19; !!VRy-99:S-2; // initialize
+
+!!VRv1:S0; [count of skills for this hero]
+!!DO6181/0/27/1:P; [count the skills, return in v1] (call FU6181 from script01)
+!!UN:P193/?y-10; // check if Warfare-Script is on
+!!HE-1&y-10=1:S20/?y-11; // check if Hero knows Artillery (and the other two skills too if warfare is on);
+!!VRv1&y-10=1/y-11>0:-2; // decrease v1 (number of known skills) by two if warfare is on and hero knows artillery / fist aid / ballistics (only one skill is visible)
+
+!!FU6147&v1<8:Py-9; // get new (not known) skill to y-5
+
+** get list of not mastered skills
+!!VRv6:S600; // initialize
+!!VRv600:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;  // reset v600-v615
+!!VRv616:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;  // reset v616-v628
+!!DO6148/0/27/1:Py-9; // create a list of the skills the hero know, but has not mastered yet in v600 - (theoretical) v627
+
+** all skills are mastered
+!!VRy-4&v6=600/v549>7:S-1; // set y-4 to not aviable, if hero has no not mastered skills
+!!VRy-4&v6=600/v549<8:Sy-5; // else set it to the new skill from some lines above
+!!VRy-5&v6=600/v549<8:S-19; // (initialize)
+!!FU6147&v6=600/v549<8:Py-9; // and get again a new (not known) skill to y-5
+
+** not all skills are mastered
+!!VRy-7:Sv6 -601; // set y-7 to the number of not mastered skills
+!!VRv8:S0 Ry-7 +600; // random 0 - not mastered skills
+!!VRy-4&v6>600:Svv8; // set y-4 to a random, not mastered skill
+
+** all 8 skill-slots are used, but more than 1 skill is not mastered
+!!VRy-5&v6>601/y-5<0:Sy-4; // set the right skill to the found, not mastered skill
+** (get new list of not mastered skills)
+!!VRv6:S600; // initialize
+!!VRv600:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;  // reset v600-v615
+!!VRv616:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;  // reset v616-v628
+!!DO6148/0/27/1&v6=600/y-5=y-4/y-5>-1:Py-9; // create a new list of the skills the hero know, but has not mastered yet in y-600 - (theoretical) y-57
+** (not all skills are mastered)
+!!VRy-7:Sv6 -601; // set y-7 to the number of not mastered skills
+!!VRv8:S0 Ry-7 +600; // random 0 - not mastered skills
+!!VRy-4&v6>600:Svv8; // set y-4 to a random, not mastered skill
+
+!!VRy-4&y-4<-1:S-1; !!VRy-5&y-5<-1:S-1; // to prevent crashs
+!!HL:Sy-1/y-4/y-5; // write the primary and secondary skills back
+
+******** end HL ********
+
+
+!?CM1; // click in the townscreen
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!CM:I?y-1; // get clicked field
+!!CM&y-1>-1/y-1<5:R0; // disable standard reaction for the mage guilds (you may not visit it)
+!!IF&1000/y-1>-1/y-1<5:M1/z199010; // message MageGuild closed
+
+******** end CM1 ********
+
+
+!?AE0&210; // unequip artifact, run not while the gamestart
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!FU6150:Pv998/?v1/?v2; // get power / knowledge bonus given by the artifact
+!!VRv3:Sv1; !!VRv4:Sv2; // give back to power / knowledge
+!!VRv1:*-1; !!VRv2:*-1; // negate it to get negative values (substract)
+!!HE-1:Fdv1/dv2/dv3/dv4; // modify primary skills
+
+******** end AE0 ********
+
+
+!?AE1&210; // equip artifact, run not while the gamestart
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!FU6150:Pv998/?v1/?v2; // get power / knowledge bonus given by the artifact
+!!VRv3:Sv1 *-1; !!VRv4:Sv2 *-1; // remove bonus from power / knowledge
+!!HE-1:Fdv1/dv2/dv3/dv4; // modify primary skills
+
+******** end AE0 ********
+
+
+!?BA0; // if a battle occurs, remove spellbooks of the heroes (because f.e. the Titans Thunder gives a spellbook)
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!BA:H0/?y-1; // get attacking hero
+!!BA:H1/?y-2; // get defending hero
+!!HEy-1&y-1>-1:A3/0/1 A2/1/?y-3/d A3/1/?y-3 O?y-5; // remove spellbook, count scrolls and remove them too; get owner
+!!HEy-2&y-2>-1:A3/0/1 A2/1/?y-4/d A3/1/?y-3 O?y-6; // remove spellbook, count scrolls and remove them too; get owner
+!!FU&y-3=0/y-4=0:E; // exit, if there were no scrolls
+!!OW:Iy-5/?y-7 Iy-6/?y-8; // check, if AI or human
+!!IF&y-1>-1/y-7=0:M1/z199011; // show message about deleting scrolls
+!!IF&y-2>-1/y-8=0:M1/z199011; // show message about deleting scrolls
+
+******** end BA0 ********
+
+
+!?OB88; Shrines of Magic Incantation
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!IF:W-1; // activate W-Vars
+!!VRy-1:Sw44 &1; // check if bit 1 in w44 is set
+!!IF&y-1=1/1000:M1/z199002; // revisit-message
+!!FU&y-1=1:E; // exit if yes
+!!IF&1000:Q1/17/1500/1^%Z199001^; // show message
+!!HE-1:Ed1500; // give 1500
+!!VRw44:|1; // set bit 1 in w44
+
+******** end OB88 ********
+
+
+!?OB89; Shrines of Magic Gesture
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!IF:W-1; // activate W-Vars
+!!VRy-1:Sw44 &2; // check if bit 2 in w44 is set
+!!IF&y-1=2/1000:M1/z199002; // revisit-message
+!!FU&y-1=2:E; // exit if yes
+!!IF&1000:Q1/17/3000/1^%Z199001^; // show message
+!!HE-1:Ed3000; // give 3000
+!!VRw44:|2; // set bit 2 in w44
+
+******** end OB89 ********
+
+
+!?OB90; Shrines of Magic Thought
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!IF:W-1; // activate W-Vars
+!!VRy-1:Sw44 &4; // check if bit 3 in w44 is set
+!!IF&y-1=4/1000:M1/z199002; // revisit-message
+!!FU&y-1=4:E; // exit if yes
+!!IF&1000:Q1/17/5000/1^%Z199001^; // show message
+!!HE-1:Ed5000; // give 5000 Exp.
+!!VRw44:|4; // set bit 3 in w44
+
+******** end OB90 ********
+
+
+!?OB41; // visiting a Library of Enlightenment
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!UN:U41/-1/?y-1; // count Librarys
+!!VRv6:C0/-1; // initialize v6 and v7
+!!DO6145/1/y-1/1:Pv998/v999/v1000/41/-1; // loop through libraries and set v6 to to object number
+!!HE-1:V6/v6/?y-1; // check, if hero has visited this library already
+!!IF&1000/y-1=1:M1/z199005; // show revisit-message
+!!FU&y-1=1:E; // exit if yes
+
+!!HE-1:Ed/?y-1 S4/?y-2; // get level and Diplo-Skill
+!!IF&1000/y-1<10/y-2<2:Q1/20/16/1^%Z199003^; // Message no worth to visit
+!!FU&y-1<10/y-2<2:E; // exit if no worth
+!!IF&1000:Q1/31/4/32/4/1^%Z199004^; // Message visiting Library
+!!HE-1:Fd4/d4/d-2/d-2 V6/v6/1; // give bonuses (remove the given power and knowledge) and set library to visited
+
+******** end OB41 ********
+
+
+!?OB32; // Gardens of Revelation
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!UN:U32/-1/?y-1; // count gardens
+!!VRv6:C0/-1; // initialize v6 and v7
+!!DO6145/1/y-1/1:Pv998/v999/v1000/32/-1; // loop through Gardens and set v6 to to object number
+!!HE-1:V2/v6/?y-1; // check, if hero has visited this Garden already
+!!IF&1000/y-1=1:M1/z199013; // show revisit-message
+!!FU&y-1=1:E; // exit if yes
+!!HE-1:Fd/d1/d/d V2/v6/1; // give 1 defense and set garden to visited
+!!IF&1000:Q1/32/1/1^%Z199012^; // message visiting
+
+******** end OB32 ********
+
+
+!?OB61; // Star Axises
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!UN:U61/-1/?y-1; // count Star Axises
+!!VRv6:C0/-1; // initialize v6 and v7
+!!DO6145/1/y-1/1:Pv998/v999/v1000/61/-1; // loop through Star Axises and set v6 to to object number
+!!HE-1:V4/v6/?y-1; // check, if hero has visited this Star Axis already
+!!IF&1000/y-1=1:M1/z199015; // show revisit-message
+!!FU&y-1=1:E; // exit if yes
+!!HE-1:Fd1/d/d/d V4/v6/1; // give 1 attack and set Star Axis to visited
+!!IF&1000:Q1/31/1/1^%Z199014^; // message visiting
+
+******** end OB61 ********
+
+
+!?OB47; // Schools of Magic
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!OB998:M-1/1/0; // disable standard message
+!!UN:U47/-1/?y-1; // count Schools of Magic
+!!VRv6:C0/-1; // initialize v6 and v7
+!!DO4745/1/y-1/1:Pv998/v999/v1000/47/-1; // loop through Schools of Magic and set v6 to to object number
+!!HE-1:V8/v6/?y-1; // check, if hero has visited this School of Magic already
+!!IF&1000/y-1=1:M1/z199017; // show revisit-message
+!!FU&y-1=1:E; // exit if yes
+
+!!OW:R-1/6/?y-2; // get gold of the current player
+!!IF&1000/y-2<1000:Q1/6/1000/1^%Z199018^; // message not enough gold
+!!FU&y-2<1000:E; // and exit
+
+!!VRv1:S1 R1; // set v1 to random left (attack) or right (defense) for AI
+!!IF&1000:Q1/31/1/32/1/10^%Z199016^; // ask, for attack or defense
+!!FU&v1=0:E; // exit if Cancel
+
+!!HE-1&v1=1:Fd1/d/d/d V8/v6/1; // give 1 attack (if choosen) and set School of Magic to visited
+!!HE-1&v1=2:Fd/d1/d/d V8/v6/1; // give 1 defense (if choosen) and set School of Magic to visited
+!!OW:R-1/6/d-1000; // take the 1000 gold
+
+******** end OB47 ********
+
+
+!?OB104; // replace magic skills in Universities at visit
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!FU6154:P; // call function (separat, because it is used in script94 - unlimited skills too)
+
+!?FU6154;
+!!URv998/v999/v1000:S?y-1/?y-2/?y-3/?y-4; // get aviable skills
+!!FU6151:P; // get a list of might skills (v600-v616)
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-1|y-1=7/y-1=8/y-1=11/y-1=12/y-1=14/y-1=15/y-1=16/y-1=17/y-1=18/y-1=24/y-1=25:Svv1; // set magic skill to a new random skill
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-2|y-2=7/y-2=8/y-2=11/y-2=12/y-2=14/y-2=15/y-2=16/y-2=17/y-2=18/y-2=24/y-2=25:Svv1; // set magic skill to a new random skill
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-3|y-3=7/y-3=8/y-3=11/y-3=12/y-3=14/y-3=15/y-3=16/y-3=17/y-3=18/y-3=24/y-3=25:Svv1; // set magic skill to a new random skill
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-4|y-4=7/y-4=8/y-4=11/y-4=12/y-4=14/y-4=15/y-4=16/y-4=17/y-4=18/y-4=24/y-4=25:Svv1; // set magic skill to a new random skill
+!!URv998/v999/v1000:Sy-1/y-2/y-3/y-4; // set aviable skills
+
+******** end OB104 ********
+
+
+!?OB113; // replace magic skills in Wich huts at visit
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!FU6853:P; // call function (separat, because it is used in script94 - unlimited skills too)
+
+!?FU6853;
+!!WHv998/v999/v1000:S?y-1; // get aviable skill
+!!FU6151:P; // get a list of might skills (v600-v616)
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-1|y-1=7/y-1=8/y-1=11/y-1=12/y-1=14/y-1=15/y-1=16/y-1=17/y-1=18/y-1=24/y-1=25:Svv1; // set magic skill to a new random might skill
+!!WHv998/v999/v1000:Sy-1; // set the new skill
+
+!!UN:P194/?y-2; // check if advanced Which hut (script64) is active
+!!FU&y-2=0:E; // exit if not;
+!!VRv2328:Sy-1; // else set the vars of script64 to work well with the advanced Wich Huts
+!!HE-1:Sv2328/?v2329; // get hero skill expertise
+
+******** end OB113 ********
+
+
+!?OB81; // visit a scholar
+!!UN:P99/?y-1; !!FU&y-1=0:E; // check if script is active; exit if not
+!!SCv998/v999/v1000:P?y-1 S?y-2 T?y-3; // get primary, secondary skill bonus and type of the bonus
+
+!!VRy-1&y-1>1:-2; // change power / knowledge to attack / defense
+!!FU6151:P; // get a list of might skills (v600-v616)
+!!VRv1:S600 R16; // random between 600 and 616
+!!VRy-2|y-2=7/y-2=8/y-2=11/y-2=12/y-2=14/y-2=15/y-2=16/y-2=17/y-2=18/y-2=24/y-2=25:Svv1; // set magic skill to a new random might skill, if it was a magic skill
+!!VRy-3&y-3=2:S0; // if bonus-type was spell, set it to primary skill bonus
+
+!!SCv998/v999/v1000:Py-1 Sy-2 Ty-3; // set primary, secondary skill bonus and type of the bonus
+
+******** end OB81 ********
+
+
+
+!?FU6143; // changes heroes to fit with the no-magic-concept
+!!HEx16:A3/0/2/1; // remove spellbooks from the hero
+!!HEx16:B2/?y1 F?y2/?y3/?y4/?y5; // get class of hero and his primary attributes
+!!VRy1::2 *2; // set y1 to the might class (f.e: druid = 3 :2 = 1(,5); 1*2=2 (ranger))
+!!VRy2&y4>1:+y4 -1; // add magic power (if >1) to attack
+!!VRy3&y5>1:+y5 -1; // add knowledge (if >1) to defense
+!!HEx16:B2/y1 Fy2/y3/1/1; // set class of hero and his new attack / defense, remove power and knowledge
+
+** replace Skills
+!!HEx16:S7/?y1; // get Wisdom
+!!HEx16&y1>0:S7/0 S19/y1; // replace Wisdom by Tactics
+!!HEx16:S8/?y1; // get Myst
+!!HEx16&y1>0:S8/0 S13/y1; // replace Myst by Estates
+!!HEx16:S11/?y1; // get Eagle Eye
+!!HEx16&y1>0:S11/0 S0/y1; // replace Eagle Eye by Pathfinding
+!!HEx16:S14/?y1; // get Fire
+!!HEx16&y1>0:S14/0 S22/y1; // replace Fire by Offence
+!!HEx16:S15/?y1; // get Air
+!!HEx16&y1>0:S15/0 S1/y1; // replace Air by Archery
+!!HEx16:S16/?y1; // get Water
+!!HEx16&y1>0:S16/0 S27/y1; // replace Water by First Aid
+!!HEx16:S17/?y1; // get Earth
+!!HEx16&y1>0:S17/0 S23/y1; // replace Earth by Armorer
+!!HEx16:S18/?y1; // get Scholar
+!!HEx16&y1>0:S18/0 S21/y1; // replace Scholar by Learning
+!!HEx16:S24/?y1; // get Int
+!!HEx16&y1>0:S24/0 S2/y1; // replace Int by Logistics
+!!HEx16:S25/?y1; // get Sorc
+!!HEx16&y1>0:S25/0 S9/y1; // replace Sorc by Luck
+
+
+** change specialities
+!!HEx16:X?y1/?y2/d/d/d/d/d; // get hero's speciality
+!!FU&y1<>0/y1<>3:E; // exit if no spell or skill specialist
+!!IF:Wx16; // enable W-Variables for the hero
+
+!!HEx16&y1=3/y2=41|y2=48/y2=37/y2=51:X0/27/0/0/0/0/0 S27/1 A4/6; // Bless, Prayer, Cure, Fortune -> First Aid, give First Aid Tent
+!!VRw28&y1=3/y2=41|y2=48/y2=37:S2009; // for HSB-script
+!!HEx16&y1=3/y2=21|y2=22:X0/20/0/0/0/0/0 S20/1 A4/4; // Inferno, Fireball -> Artillery (give Ballista)
+!!VRw28&y1=3/y2=21|y2=22:S2008; // for HSB-script
+!!HEx16&y1=0/y2=11:X0/20/0/0/0/0/0 S20/1; // Eagle Eye -> Artillery
+!!VRw28&y1=0/y2=11:S2008; // for HSB-script
+!!HEx16&y1=3/y2=15|y2=16/y2=19/y2=23/y2=44:X0/1/0/0/0/0/0 S1/1; // Precision, Meteor Shower, Chain Lightning, Ice Bolt, Magic Arrow -> Archer
+!!VRw28&y1=3/y2=15|y2=16/y2=19/y2=23/y2=44:S2006; // for HSB-script
+!!HEx16&y1=3/y2=47|y2=43/y2=24:X0/22/0/0/0/0/0 S22/1; // Disrupting Ray, Bloodlust, Death Ripple -> Offence
+!!VRw28&y1=3/y2=47|y2=43:S2005; // for HSB-script 43
+!!HEx16&y1=0/y2=25:X0/22/0/0/0/0/0 S22/1; // Sorcery -> Offence
+!!VRw28&y1=0/y2=25:S2005; // for HSB-script
+!!HEx16&x16=145:X0/22/0/0/0/0/0 S22/1; // Adrienne -> Offence
+!!VRw28&x16=145:S2005; // for HSB-script
+!!HEx16&y1=3/y2=13|y2=45/y2=46:X0/23/0/0/0/0/0 S23/1; // Fire Wall, Weakness, Stonskin -> Armorer
+!!VRw28&y1=3/y2=13|y2=45/y2=46:S2004; // for HSB-script
+!!HEx16&y1=0/y2=26:X0/23/0/0/0/0/0 S23/1; // Resi -> Armorer
+!!VRw28&y1=0/y2=26:S2004; // for HSB-script
+!!HEx16&y1=3/y2=54|y2=38/y2=39:X0/2/0/0/0/0/0 S2/1; // Slow, Resurrection, Animate Dead  -> logistics
+!!VRw28&y1=3/y2=54|y2=38/y2=39:S2000; // for HSB-script
+!!HEx16&y1=0/y2=24:X0/2/0/0/0/0/0 S2/1; // Intelligence -> logistics
+!!VRw28&y1=0/y2=24:S2000; // for HSB-script
+!!HEx16&y1=3/y2=55:X2/4/0/0/0/0/0; // Slayer -> Resource (Crystal)
+!!VRw28&y1=3/y2=55:S-1; // for HSB-script
+!!HEx16&y1=3/y2=60:X0/21/0/0/0/0/0 S21/1; // hypno -> learning
+!!VRw28&y1=3/y2=60:S-1; // for HSB-script
+!!HEx16&y1=3/y2=53:X5/2/0/0/0/0/0; // haste -> Speed Master (+2 Speed)
+!!VRw28&y1=3/y2=53:S2007; // for HSB-script
+!!HEx16&y1=0/y2=8:X0/13/0/0/0/0/0 S13/1; // Mysticismus -> Estates
+!!VRw28&y1=3/y2=60:S-1; // for HSB-script
+
+!!HEx16&x16=43:X?y1/?y2;
+!!HEx16&x16=43:X0/27/0/0/0/0/0;
+!!HEx16&x16=43:X?y3/?y4;
+!!HEx16&x16=43:X?y5/?y6/0/0/0/0/0;
+!!IF&x16=43:M^new skill: %Y1 %Y2 %Y3 %Y4  %Y5 %Y6 ^;
+!!VRv1:C1/2/3/4/5;
+!!FU806&w28>-1:Px16/0; // calls function from Hero Specialisation Boost (script39); sets z405 to the spec-text, depending on hero's w28
+!!UN:G2/x16/2/405; // set spec.-text for the hero
+!!IF&x16=43:M^new text %Z405^;
+
+******** end FU6143 ********
+
+
+!?FU6144; // replace all objecst of type x1 subtype x2 by object x3/x4
+** if x5 = 1 then the new object will look as the old (and has the same passability!)
+** x6/x7 = correction for creating the new object
+
+!!VRv7&x16=1:S-1; // initialise in the first loop
+!!UN:Ux1/x2/-1/7; // get next object
+!!VRy1:Sv7+x6; !!VRy2:Sv8 +x7;
+!!UN&x5=0/x1<>48:Ov7/v8/v9 Iy1/y2/v9/x3/x4; // delete old object and place new instead (without redraw); not for Magic Spring
+!!UN&x5=1:Ov7/v8/v9 Iv7/v8/v9/x3/x4/x1/x2/-1/0; // delete old object and place new instead, that looks like the old one (without redraw)
+
+!!FU&x1<>48:E; // exit if no Magic Spring
+!!UN:Ov7/v8/v9; // delete Spring
+!!VRv7:+1; // correction of the pos (otherwise it will be created one field left of the original pos)
+!!UN:Iv7/v8/v9/x3/x4; // create Fountain of Youth instead
+!!VRy1&v7>0:Sv7 -1; !!VRy2&v8>0:Sv8 -1; // field right of and above the Magic Spring
+!!TRy1/v8/v9:P1; !!TRy1/y2/v9:P1; !!TRv7/y2/v9:P1; // set passability
+
+******** end FU6144 ********
+
+
+!?FU6145; // sets object number to v6 (the object at the pos x1/x2/x3 is the v6-th object of type x4/x5 on the map); needed for HE:V
+!!UN&v6=0:Ux4/x5/-1/7; // get coordinates of the next object to v7-v9
+!!VRv6&v7=x1/v8=x2/v9=x3:Sx16; // set v6 to the object number if found the correct object
+
+******** end FU6145 ********
+
+
+!?FU6146; // replaces bonuses (knowledge / power / secondary skills) in Pandora's Boxes and Local Events
+!!VRv7&x16=1:S-1; // initialize in first loop
+!!UN:Ux1/x2/-1/7; // get coordinates to v7-v9
+!!LEv7/v8/v9:Fd/d/?y1/?y2 Fdy1/dy2/0/0; // add power / knowledge to attack/defense and set it to 0
+!!LEv7/v8/v9:N?y1; // get number of secondary skills
+!!FU&y1=0:E; // exit if no SS's
+!!FU6151:P; // get list of might skills to v600-v616
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!LEv7/v8/v9:N1/?y2/d; // get the SS
+!!VRy2|y2=7/y2=8/y2=11/y2=14/y2=15/y2=16/y2=17/y2=18/y2=24/y2=25:Svy20; // might skill, if it was a magic skill
+!!LEv7/v8/v9:N1/y2/d; // write skill back
+!!FU&y1=1:E; // exit if there are no more SS's
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!LEv7/v8/v9:N2/?y2/d; // get the SS
+!!VRy2|y2=7/y2=8/y2=11/y2=14/y2=15/y2=16/y2=17/y2=18/y2=24/y2=25:Svy20; // might skill, if it was a magic skill
+!!LEv7/v8/v9:N2/y2/d; // write skill back
+!!FU&y1=2:E; // exit if there are no more SS's
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!LEv7/v8/v9:N3/?y2/d; // get the SS
+!!VRy2|y2=7/y2=8/y2=11/y2=14/y2=15/y2=16/y2=17/y2=18/y2=24/y2=25:Svy20; // might skill, if it was a magic skill
+!!LEv7/v8/v9:N3/y2/d; // write skill back
+!!FU&y1=3:E; // exit if there are no more SS's
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!LEv7/v8/v9:N4/?y2/d; // get the SS
+!!VRy2|y2=7/y2=8/y2=11/y2=14/y2=15/y2=16/y2=17/y2=18/y2=24/y2=25:Svy20; // might skill, if it was a magic skill
+!!LEv7/v8/v9:N4/y2/d; // write skill back
+!!FU&y1=4:E; // exit if there are no more SS's
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!LEv7/v8/v9:N5/?y2/d; // get the SS
+!!VRy2|y2=7/y2=8/y2=11/y2=14/y2=15/y2=16/y2=17/y2=18/y2=24/y2=25:Svy20; // might skill, if it was a magic skill
+!!LEv7/v8/v9:N5/y2/d; // write skill back
+
+******** end FU6146 ********
+
+
+!?FU6147; // get new (not already skilled) might-skill
+!!FU&y-5>-2:E; // exit if y-5 (starts at -19) is at least -1
+
+!!FU6151:P; // get a list of aviable might skills (v600-v616)
+
+!!VRy20:S600 R16; // random number between 600 and 616 (might skills are in v601-v618)
+!!VRy21:Svy20; // set new skill (from list) to y21 (indirekt reference)
+!!FU6147|y21=-1/y21=y-4:Px1; // recall function, if the hero already has this skill or it is remembered in y-4 for the left skill slot
+
+!!HEx1:Sy21/?y22; // check, if hero know this skill
+!!VRy-5&y22=0:Sy21; !!FU&y22=0:E; // if not set the new skill to y-5 and exit
+!!VRy-5:+1; // else increase y-5 (starts by -19)
+!!VRvy20:S-1; // disable this skill (mark as known)
+!!FU6147:Px1; // and recall this function
+
+******** end FU6147 ********
+
+
+!?FU6148; // create a list of the skills the hero know, but has not mastered yet in v600 - (theoretical) v627
+!!FU&x16=y-5:E; // exit, if skill is reserved for right skill (y-5)
+!!HEx1:Sx16/?y1; // get skill level to y1
+!!VRvv6|y1=1/y1=2:Sx16; // set skill number to v600 - (theoretical) v627, if hero has the skill, at basic or advanced level (indirect reference)
+!!VRv6|y1=1/y1=2:+1; // increase counter for indirect references
+
+******** end FU6148 ********
+
+
+!?FU6149; // build L3 mage guilds in Towns
+!!VRv7&x16=1:S-1; // initialize in first loop
+!!UN:U98/-1/-1/7; // get coordinates of next town
+!!CA7:B1/0 B1/1 B1/2 B5/3 B5/4; // build Mage guilds up to L3, disable L4 and L5
+!!CA7:T?y1; // get type of town
+!!CA7|y1=5/y1=8:B2/20 B5/20; // demolish / disable Mana Vortex (Dungeon) and Mag. University
+!!CA7&y1=2:B1/22; // build Library in Tower (necessary for Arch Mages)
+
+******** end FU6149 ********
+
+
+!?FU6150;
+** x1 = Artifact
+** x2 = return power bonus
+** x3 = return knowledge bonus
+!!VRx2:S0; !!VRx3:S0;
+!!VRx3&x1=19:S1;  // Helm of the Alabaster Unicorn
+!!VRx3&x1=20:S2;  // Skull Helmet
+!!VRx3&x1=21:S3;  // Helm of Chaos
+!!VRx3&x1=22:S4;  // Crown of the Supreme Magi
+!!VRx3&x1=23:S5;  // Hellstorm Helmet
+!!VRx3&x1=24:S10;  // Thunder Helmet
+!!VRx2&x1=25:S1; // Breastplate of Petrified Wood
+!!VRx2&x1=26:S2; // Rib Cage
+!!VRx2&x1=27:S3; // Scales of the Greater Basilisk
+!!VRx2&x1=28:S4; // Tunic of the Cyclops King
+!!VRx2&x1=29:S5; // Breastplate of Brimstone
+!!VRx2&x1=30:S10; // Titan's Cuirass
+!!VRx2&x1=31:S1;!!VRx3&x1=31:S1;  // Armor of Wonder
+!!VRx2&x1=32:S2;!!VRx3&x1=32:S2;  // Sandals of the Saint
+!!VRx2&x1=33:S3;!!VRx3&x1=33:S3;  // Celestial Necklace of Bliss
+!!VRx2&x1=34:S4;!!VRx3&x1=34:S4;  // Lion's Shield of Courage
+!!VRx2&x1=35:S5;!!VRx3&x1=35:S5;  // Sword of Judgement
+!!VRx2&x1=36:S6;!!VRx3&x1=36:S6;  // Helm of Heavenly Enlightenment
+!!VRx2&x1=41:S1;!!VRx3&x1=41:S1;  // Dragonbone Greaves
+!!VRx2&x1=42:S2;!!VRx3&x1=42:S2;  // Dragon Wing Tabard
+!!VRx2&x1=43:S3;!!VRx3&x1=43:S3;  // Necklace of Dragonteeth
+!!VRx2&x1=44:S4;!!VRx3&x1=44:S4;  // Crown of Dragontooth
+!!VRx2&x1=128:S3;!!VRx3&x1=128:S6;  // Armageddon's Blade
+!!VRx2&x1=129:S21;!!VRx3&x1=129:S21;  // Angelic Alliance
+!!VRx2&x1=132:S2;!!VRx3&x1=132:S2;  // Armor of the Damned
+!!VRx2&x1=134:S16;!!VRx3&x1=134:S16;  // Power of the Dragon Father
+!!VRx2&x1=135:S8;!!VRx3&x1=135:S8;  // Titans Thunder
+!!VRx2&x1=158:S4;!!VRx3&x1=158:S4;  // Barbarian Lord's Axe of Ferocity
+
+
+!?FU6151; // make list of aviable might skills (v600-v616)
+!!VRv600:C0/1/2/3/4/5/6/9/10/13/19/20/21/22/23/26; !!VRv616:S27;
+** Pathfinding, Scouting, Leadership, Tactics, Offence, Archery, Diplomacy, Luck, Artillery, Armorer, Logistics, Navigation, Ballistics, Estates, Learning, Resistance, First Aid
+
+******** end FU6151 ********
+
+
+!?FU6152;
+!!VRv7&x16=1:S-1; // initialize in first loop
+!!UN:Ux1/x2/-1/7; // get coordinates of next artifact to v7-v9
+!!OBv7/v8/v9:U?y1; // get subtype of object (=artifact number)
+!!IF:V1/0; // disable flag 1
+!!IF|y1=0/y1=1/y1=57/y1=58/y1=59/y1=63/y1=64/y1=65/y1=73/y1=74/y1=75/y1=76/y1=77/y1=78:V1/1; // set flag 1 if it is a banned magic artifact
+!!IF|y1=79/y1=80/y1=81/y1=82/y1=83/y1=86/y1=87/y1=88/y1=89/y1=92/y1=93/y1=124/y1=126/y1=138/y1=139:V1/1; // set flag 1 if it is a banned magic artifact
+!!FU&-1:E; // exit if it is no banned magic-artifact
+
+!!UN:Ay1/3/?y2; // get type of Artifact (treasure, minor ...)
+!!VRy2&x1=93:S2; // set to treasure, if it is a scroll
+!!VRv600:S600; // initialize
+!!DO6137/7/170/1|y1>0/x1<>5:Py2/7; // call FU6137 from script94: get a list of not banned artifacts of the same type to v601 ff (number to v600), not for Spellbook
+!!VRy3:Sv600 -601; // number of found artifacts
+!!VRv1:S601 Ry3; // index of a random new artifact
+!!VRy20|y1>0/x1<>5:Svv1; // set y20 to the new artifact (except spellbook)
+!!VRy20&y1=0/x1=5:S4 R2; // if old artifact is spellbook, set to a war machine
+!!UN:P904/1; // disable ERM-Errors (because of a bug with the AR-receiver)
+!!ARv7/v8/v9:G0/?y2/?y3 G1/?y4/?y5 G2/?y6/?y7 G3/?y8/?y9 G4/?y10/?y11 G5/?y12/?y13 G6/?y14/?y15 X?y16 M?z-1; // get parameters of the artifact
+!!UN:Ov7/v8/v9 Iv7/v8/v9/5/y20; // delete old artifact and create the new one (y20)
+!!ARv7/v8/v9:G0/y2/y3 G1/y4/y5 G2/y6/y7 G3/y8/y9 G4/y10/y11 G5/y12/y13 G6/y14/y15 Xy16 Mz-1; // set parameters of the artifact back
+!!UN:P904/0; // enable ERM-Errors again
+
+******** end FU6152 ********
+

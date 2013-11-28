@@ -1,0 +1,37 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Commander Sanctuary 0.2 by Timothy Pulver
+** WoGify name: script76.erm
+** Updated: February 21, 2004
+
+** Objects: enhances Sanctuary (object 80)
+** Variables: none (local only)
+** Functions: none
+
+ [Sanctuary is post-visit trigger]
+!$OB80;
+!!UN:P3/?y-1; [Check if Commanders are enabled: y-1=0 if enabled]
+!!CO-1:D?y-2; [Check if Commander is alive: y-2=1 if dead]
+!!UN:P76/?y-7; [Check if script is enabled: y-7=1 if enabled]
+!!FU|y-1<>0/y-2<>1/y-7<>1:E; [Exit if Commanders or script not enabled or Commander isn't dead]
+
+!!CO-1:T?y-3; [Commander Type: y-3]
+!!VRy-4:S174 +y-3 +65536; [Creature picture number for Commander]
+
+!!VRy-5:S4 R1; [Random gems or crystals]
+!!IF:Q2/21/y-4/y-5/2/2/z176000;
+
+!!IF&-2:Q1/21/8/1/z176001;
+
+!!OW&2:R-1/y-5/?y-6; [Check current player's number of resource: y-6]
+!!OW&2/y-6>=2:R-1/y-5/d-2; [Remove two resources from player]
+
+!!IF&2/y-6<2:Q1/21/8/1/z176002;
+
+!!IF&2/y-6>=2:Q1/21/8/1/z176003;
+
+!!CO-1&2:D0; [Revive Commander]
+

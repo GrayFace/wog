@@ -1,0 +1,37 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+Monolith Toll v1.2 by Steven Lynch
+Puts a cost for using a two-way monolith
+WoGify Name: script65.erm
+
+Flags used: 1 (temporary)
+Last Updated: April 28, 2006
+
+!#UN:P65/?v1399;
+
+!?OB45; [Trigger for stepping on any Two-Way Monolith]
+!!UN:P65/=1; !!FU&-1:E; // exit, if script is not active
+
+!!OB998:S; [Disable Two-Way Monoliths until conditions are proven]
+!!IF:V1/0;
+!!VRy-2:Sc-1; [Calculate the number of days minus 1]
+!!VRy-2::7 +1; [Calculate number of complete weeks by dividing by 7 and then adding 1]
+!!VRy-3&1000:Sy-2*100; [Calculate cost of lith transport for human players (100 gold per complete week per use)]
+!!VRy-3&-1000:Sy-2*50; [Calculate cost of lith transport for AI players (50 gold per complete week per use)]
+!!IF&1000:Q1/6/y-3/2/z165000; [Question, which only applies to human players]
+!!OW:R-1/6/?y-1; [How much gold does the player have?]
+!!VRy-4:Sy-3; [Use y-4 separately to y-3 so that y-4 stays as a positive number, and greater, less than or equal to functions can be performed on y-1]
+!!VRy-3:*-1; [Multiply by -1 so that y-3 can be added in the next step]
+!!OW&1/y-1>=y-4:R-1/6/dy-3; [If player answered Yes in the IF question, and player's total gold is equal or greater to the amount requested, activate liths for one use]
+!!OW&-1000/y-4>y-1:R-1/6/0; [If the player is AI prevent its gold from becoming less than zero]
+!!OW&-1000/y-1>=y-4:R-1/6/dy-3; [Take away AI gold as long as it has enough gold to take]
+!!OB998&1/y-1>=y-4:R; [If the player answered Yes in the IF question, and has enough gold, activate liths for one use]
+!!IF&1/y-1<y-4:M1/z165001; [Message if the player said yes but doesn't have enough gold]
+!!OB998&-1000:R; [If the player is AI, let it use the liths regardless as it doesn't know what to do if it can't use a lith. The AI player will still have lost the remainder of any fee that it had in its treasury]
+
+!?OB43;
+!!UN:P65/=1;  // check, if script is active (store in Flag 1)
+!!IF&1000/1:M1/z165002;
+

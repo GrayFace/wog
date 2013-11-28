@@ -1,0 +1,359 @@
+ZVSE
+ERMS_ScriptDate=18.7(July).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Enhanced Hint Text Script Version 1.4 created by Timothy E. Pulver
+**   Requires WoG version 3.58 or later using ERM version 2.7 or later.
+**   Last Updated: July 18, 2006 (moved localplayer function into script00 library function)
+**   Previously Updated: May 28, 2006
+**   Previously Updated: June 16, 2004
+
+** This script enhances the information you see when you right-click on a
+** dwelling. If you or an allied player own the dwelling, you'll be shown how
+** many creatures are still available to be hired there. If the dwelling is
+** unowned or owned by another non-allied player, you'll just be shown the
+** standard information.
+
+** Version 1.1 adds code to work with the new WoGify Options screen and
+** no longer uses flag 58.
+
+** Version 1.2 no longer sets the hint text and instead simply displays
+** the extended dialogue box on the screen; this resolves a problem with
+** incorrect text being shown when moving the mouse over other dwellings.
+** Additionally, this update displays pictures of the creatures if there's
+** fewer than 4 types available at the dwelling.
+
+** Version 1.3 is updated to work with the new 3.58 creature dwellings.
+
+** Version 1.4 is updated to give correct information in a network game for
+** non-current players right-clicking.
+
+-----------------------------------------------------------------------------------------
+
+Flags Used in this Script: 1-3
+Variables Used in this Script: v1,v94-v95,z1-z3
+Functions Used in this Script: FU2400-FU2404
+Function Variables Used in this Script: x1-x5,x16,y1-y15
+
+-----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v94/?v95;
+!#IF&v94<358:V1/1;
+!#IF&v95<280:V1/1;
+!#IF&1:M1/z124000;
+
+-----------------------------------------------------------------------------------------
+
+ [Start of CM trigger]
+!?CM;
+
+ [Check if Enhanced Hint Text is enabled in WoGify Options screen]
+!!UN:P24/?v1;
+
+!?CM&v1=1; [Continue trigger if Enhanced Hint Text script is enabled]
+
+ [Check item area clicked]
+!!CM:I?v1;
+
+ [If item area is adventure map, call Function 2400]
+!!FU2400&v1=37:P;
+
+-----------------------------------------------------------------------------------------
+
+ [Start of Function 2400 - get coordinates and object type/subtype]
+ [and control number at the right-click location]
+
+!?FU2400;
+
+ [Get coordinates clicked - store in y1,y2,y3]
+!!CM:P?y1/?y2/?y3;
+
+ [Get object type (y4), subtype (y5) and control number (y6)]
+!!OBy1/y2/y3:T?y4 U?y5 C?y6;
+
+ [Call Function 2401 if object is a dwelling]
+!!FU2401|y4=17/y4=20:Py1/y2/y3/y4/y5/y6;
+
+-----------------------------------------------------------------------------------------
+
+ [Start of Function 2401]
+!?FU2401;
+
+ [Get red/yellow square values for square clicked]
+ [Store in y1 (red) and y2 (yellow)]
+!!TRx1/x2/x3:P?y1 E?y2;
+
+ [Set Flag 2 to true if square is red and not yellow]
+!!IF:V2/0;
+!!IF&y1=0/y2=1:V2/1;
+
+ [Set Flag 3 to false]
+!!IF:V3/0;
+
+ [Locate yellow entrance square of dwelling]
+ [If yellow square found, set Flag 3 to true and Flag 2 to false]
+
+ [Check southeast square]
+!!VRy3:Sx1 +1;
+!!VRy4:Sx2 +1;
+!!TRy3/y4/x3:E?y5;
+!!OBy3/y4/x3:T?y6 U?y7 C?y8;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V3/1;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V2/0;
+
+ [Check south square]
+!!VRy3&2:Sx1;
+!!VRy4&2:Sx2 +1;
+!!TRy3/y4/x3&2:E?y5;
+!!OBy3/y4/x3&2:T?y6 U?y7 C?y8;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V3/1;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V2/0;
+
+ [Check southwest square]
+!!VRy3&2:Sx1 -1;
+!!VRy4&2:Sx2 +1;
+!!TRy3/y4/x3&2:E?y5;
+!!OBy3/y4/x3&2:T?y6 U?y7 C?y8;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V3/1;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V2/0;
+
+ [Check east square]
+!!VRy3&2:Sx1 +1;
+!!VRy4&2:Sx2;
+!!TRy3/y4/x3&2:E?y5;
+!!OBy3/y4/x3&2:T?y6 U?y7 C?y8;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V3/1;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V2/0;
+
+ [Check west square]
+!!VRy3&2:Sx1 -1;
+!!VRy4&2:Sx2;
+!!TRy3/y4/x3&2:E?y5;
+!!OBy3/y4/x3&2:T?y6 U?y7 C?y8;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V3/1;
+!!IF&2/y5=0/y6=x4/y7=x5/y8=x6:V2/0;
+
+ [If not clicking on entrance and entrance is located, set the new]
+ [entrance location coordinates for x and y (y3 and y4)]
+!!VRx1&3:Sy3;
+!!VRx2&3:Sy4;
+
+ [Initialize object to default text]
+!!OBx1/x2/x3:H0;
+
+ [Call Function 2402 and pass coordinates (x1/x2/x3),]
+ [type (x4) and subtype (x5) as parameters]
+!!FU2402:Px1/x2/x3/x4/x5;
+
+-----------------------------------------------------------------------------------------
+
+ [Start of Function 2402 - calculate and display expanded]
+ [right-click dwelling information]
+
+!?FU2402;
+
+ [Call Function 2403 or 2404 to get name of dwelling - store in z1]
+!!FU2403&x4=17:Px5;
+!!FU2404&x4=20:Px5;
+
+ [Get type and number of creatures produced by dwelling (y1-y8)]
+ [Also: get owner of dwelling (y9)]
+!!DWx1/x2/x3:M0/?y1/?y2 M1/?y3/?y4 M2/?y5/?y6 M3/?y7/?y8 O?y9;
+
+ [Store player colour that owns dwelling in z2]
+!!VRz2&y9=0:Sz124103; [Red]
+!!VRz2&y9=1:Sz124104; [Blue]
+!!VRz2&y9=2:Sz124105; [Tan]
+!!VRz2&y9=3:Sz124106; [Green]
+!!VRz2&y9=4:Sz124107; [Orange]
+!!VRz2&y9=5:Sz124108; [Purple]
+!!VRz2&y9=6:Sz124109; [Teal]
+!!VRz2&y9=7:Sz124110; [Pink]
+
+ [Set up start of z1 string for display of info]
+!!VRz1:+z124001;
+
+ [Get name of creatures for first slot and add to display string]
+!!UN&y1<>-1/y2=1:N3/3/y1/0;
+!!UN&y1<>-1/y2<>1:N3/3/y1/1;
+!!VRz1:+^
+
+{%Y2}^+z124002;
+
+ [Get name of creatures (if any) for second slot, add to display string]
+!!UN&y3<>-1/y4=1:N3/3/y3/0;
+!!UN&y3<>-1/y4<>1:N3/3/y3/1;
+!!VRz1&y3<>-1:+^
+
+{%Y4}^+z124003;
+
+ [Get name of creatures (if any) for third slot, add to display string]
+!!UN&y5<>-1/y6=1:N3/3/y5/0;
+!!UN&y5<>-1/y6<>1:N3/3/y5/1;
+!!VRz1&y5<>-1:+^
+
+{%Y6}^+z124004;
+
+ [Get name of creatures (if any) for fourth slot, add to display string]
+!!UN&y7<>-1/y8=1:N3/3/y7/0;
+!!UN&y7<>-1/y8<>1:N3/3/y7/1;
+!!VRz1&y7<>-1:+^
+
+{%Y8}^+z124005;
+
+ [Get current player or playing right-clicking if a Network game (y-100)]
+!!FU$LocalPlayer$:P;
+
+ [Check if owner of dwelling is in game (y12)]
+!!OW:Iy9/?y11/?y12;
+
+ [Initialize team variables to -1 and -2 (y14 and y15)]
+!!VRy14:S-1;
+!!VRy15:S-2;
+
+ [If dwelling owner is a player in the game, get team assignments for]
+ [owner of dwelling clicked on (y14) and current/clicking player (y15)]
+!!OW&y9>=0/y12<>1:Ty9/?y14 Ty-100/?y15;
+
+ [Display extended hint text (z1) if player or a living ally owns dwellings]
+!!VRy16:S0; [Initialize y16 to 0]
+!!VRy16|y9=y-100/y14=y15:S1; [Set y16 to 1 if this player or a living ally owns dwelling]
+
+!!VRy17&y1<0:S-1;  [1st creature slot picture: y17]
+!!VRy17&y1>=0:S21; [Type: monster: y17]
+!!VRy20&y1>=0:Sy2 *65536 +y1; [Picture with number of creatures beneath: y20]
+!!VRy18&y3<0:S-1;  [2nd creature slot picture: y18]
+!!VRy18&y3>=0:S21; [Type: monster: y18]
+!!VRy21&y3>=0:Sy4 *65536 +y3; [Picture with number of creatures beneath: y20]
+!!VRy19&y5<0:S-1;  [3rd creature slot picture: y19]
+!!VRy19&y5>=0:S21; [Type: monster: y19]
+!!VRy22&y5>=0:Sy6 *65536 +y5; [Picture with number of creatures beneath: y20]
+
+!!IF&y16=1/y7<0:Q4/y17/y20/y18/y21/y19/y22/4^%Z1^; [Display text with up to 3 creature picture]
+!!IF&y16=1/y7>=0:Q4/-1/-1/4^%Z1^; [If 4th creature slot filled, just display text]
+!!CM&y16=1:R0; [Disable normal right-click operation]
+
+-------------------------------------------------------------------------------------
+
+ [Start of Function 2403 - set z1 to name of dwelling clicked on]
+ [This function is for type 17 dwellings]
+
+!?FU2403;
+!!VRz1&x1=56:Sz124006;
+!!VRz1&x1=57:Sz124007;
+!!VRz1&x1=25:Sz124008;
+!!VRz1&x1=58:Sz124009;
+!!VRz1&x1=35:Sz124010;
+!!VRz1&x1=05:Sz124011;
+!!VRz1&x1=08:Sz124012;
+!!VRz1&x1=80:Sz124013;
+!!VRz1&x1=06:Sz124014;
+!!VRz1&x1=12:Sz124015;
+!!VRz1&x1=15:Sz124016;
+!!VRz1&x1=50:Sz124017;
+!!VRz1&x1=45:Sz124018;
+!!VRz1|x1=51/x1=68:Sz124019;
+!!VRz1&x1=24:Sz124020;
+!!VRz1&x1=81:Sz124021;
+!!VRz1&x1=43:Sz124022;
+!!VRz1&x1=17:Sz124023;
+!!VRz1&x1=31:Sz124024;
+!!VRz1&x1=18:Sz124025;
+!!VRz1&x1=36:Sz124026;
+!!VRz1&x1=44:Sz124027;
+!!VRz1&x1=82:Sz124028;
+!!VRz1&x1=29:Sz124029;
+!!VRz1&x1=22:Sz124030;
+!!VRz1&x1=27:Sz124031;
+!!VRz1&x1=37:Sz124032;
+!!VRz1&x1=40:Sz124033;
+!!VRz1&x1=14:Sz124034;
+!!VRz1&x1=10:Sz124035;
+!!VRz1&x1=83:Sz124036;
+!!VRz1&x1=54:Sz124037;
+!!VRz1&x1=55:Sz124038;
+!!VRz1&x1=48:Sz124039;
+!!VRz1&x1=53:Sz124040;
+!!VRz1&x1=52:Sz124041;
+!!VRz1&x1=03:Sz124042;
+!!VRz1&x1=04:Sz124043;
+!!VRz1&x1=84:Sz124044;
+!!VRz1&x1=46:Sz124045;
+!!VRz1&x1=26:Sz124046;
+!!VRz1&x1=02:Sz124047;
+!!VRz1&x1=33:Sz124048;
+!!VRz1&x1=34:Sz124049;
+!!VRz1&x1=32:Sz124050;
+!!VRz1&x1=41:Sz124051;
+!!VRz1&x1=85:Sz124052;
+!!VRz1&x1=21:Sz124053;
+!!VRz1&x1=19:Sz124054;
+!!VRz1&x1=39:Sz124055;
+!!VRz1&x1=38:Sz124056;
+!!VRz1&x1=42:Sz124057;
+!!VRz1&x1=09:Sz124058;
+!!VRz1&x1=01:Sz124059;
+!!VRz1&x1=86:Sz124060;
+!!VRz1&x1=20:Sz124061;
+!!VRz1&x1=30:Sz124062;
+!!VRz1&x1=11:Sz124063;
+!!VRz1&x1=00:Sz124064;
+!!VRz1&x1=23:Sz124065;
+!!VRz1&x1=49:Sz124066;
+!!VRz1&x1=28:Sz124067;
+!!VRz1&x1=87:Sz124068;
+!!VRz1&x1=59:Sz124069;
+!!VRz1&x1=07:Sz124070;
+!!VRz1&x1=69:Sz124071;
+!!VRz1&x1=47:Sz124072;
+!!VRz1&x1=72:Sz124073;
+!!VRz1&x1=16:Sz124074;
+!!VRz1&x1=71:Sz124075;
+!!VRz1&x1=13:Sz124076;
+!!VRz1&x1=70:Sz124077;
+!!VRz1&x1=60:Sz124078;
+!!VRz1&x1=61:Sz124079;
+!!VRz1&x1=88:Sz124080;
+!!VRz1&x1=74:Sz124081;
+!!VRz1&x1=73:Sz124082;
+!!VRz1&x1=75:Sz124083;
+!!VRz1&x1=78:Sz124084;
+!!VRz1&x1=77:Sz124085;
+!!VRz1&x1=76:Sz124086;
+!!VRz1&x1=67:Sz124087;
+!!VRz1&x1=79:Sz124088;
+!!VRz1&x1=66:Sz124089;
+!!VRz1&x1=64:Sz124090;
+!!VRz1&x1=65:Sz124091;
+!!VRz1&x1=63:Sz124092;
+!!VRz1&x1=62:Sz124093;
+!!VRz1&x1=89:Sz124094;
+!!VRz1&x1=90:Sz124095;
+!!VRz1&x1=91:Sz124096;
+!!VRz1&x1=92:Sz124097;
+!!VRz1&x1=93:Sz124098;
+!!VRz1&x1=94:Sz124099;
+!!VRz1&x1=95:Sz124100;
+!!VRz1&x1=96:Sz124111;
+!!VRz1&x1=97:Sz124112;
+!!VRz1&x1=98:Sz124113;
+!!VRz1&x1=99:Sz124114;
+!!VRz1&x1=100:Sz124115;
+
+-------------------------------------------------------------------------------------
+
+ [Start of Function 2404 - set z1 to name of dwelling clicked on]
+ [This function is for type 20 dwellings]
+
+!?FU2404;
+!!VRz1&x1=1:Sz124101;
+!!VRz1&x1=0:Sz124102;
+
+-------------------------------------------------------------------------------------
+
+** End of Script **
+

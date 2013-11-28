@@ -1,0 +1,47 @@
+#	Text resource for "script103.erm" document		
+203000	The architect of town %Z1 greets you!		
+203001	Waiting orders.		
+203002	Don't construct anything.		
+203003	Construct all buildings.		
+203004	Specify buildings to construct.		
+203005	Change options.		
+203006	To destroy this town, press the Cancel button.		
+203007	{The} {architect} {of} {town} {%Z1} {will} {construct} {the} {following:}
+
+		
+203008	,
+		
+203009	.
+
+{Do} {you} {wish} {to} {enter} {this} {hall?}		
+203010	Select buildings to construct in %Z1 (page %V1 of %V2).		
+203011	There are not any buildings to construct in %Z1. All possible buildings already built.		
+203012	Select options for your architects.		
+203013	Message on every construction.		
+203014	Message on resources' lack.		
+203015	Message on completion.		
+203016	{The} {architect} {of} {town} {%Z1} {reports:}
+		
+203017	We are ready to construct that new building.  Do you accept?  It costs:
+		
+203018	{%V1} {wood,}
+		
+203019	{%V2} {mercury,}
+		
+203020	{%V3} {ore,}
+		
+203021	{%V4} {sulfur,}
+		
+203022	{%V5} {crystal,}
+		
+203023	{%V6} {gems,}
+		
+203024	{%V7} {gold.}		
+203025	Your orders were carried out.		
+203026	Our town has not enough wood.		
+203027	Our town has not enough mercury.		
+203028	Our town has not enough ore.		
+203029	Our town has not enough sulfur.		
+203030	Our town has not enough crystal.		
+203031	Our town has not enough gems.		
+203032	Our town has not enough gold.		

@@ -1,0 +1,98 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+Spellbook v1.4 by Anders Jonsson (thanks to Timothy Pulver for help)
+Updated September 14, 2004
+(Updated September 16, 2004 by Timothy to change y variables in trigger sections to y- variables)
+
+Makes a spellbook picked up from the adventure map contain a few spells.
+No Adventure Map movement spells will be availible.
+
+Variables used: v1-v4, z1-z9(may be used in other scripts but will be thrashed by this), [z127000-z127003]
+Flags used: none
+
+!?OB5/0;
+!!UN:P27/?v1;
+!?OB5/0&v1=1;
+!!OB998:M-1/1/0;
+!!HE-1:A2/0/?v1/?v1; (checks if hero has a spellbook already)
+!!HE-1&v1>0:A3/0/1/0; (removes existing spellbook if hero already has one to avoid an extra)
+
+!!VRv1:S0 R9; (determines what kind of spellbook is found)
+!!HE-1:S9/?y-1; (Get luck level)
+!!VRv1:+y-1;
+
+!!HE-1:S7/?y-1; (Get Wisdom level)
+!!VRv1:+y-1 +y-1 -6; (Bonus for Wisdom)
+!!VRv1&v1>9:S9;
+!!VRv1&v1<0:S0; (Get into correct range)
+
+!!VRy-2:S600;
+!!VRy-3:S600;
+!!VRy-4:S600; (initialize variables(for error messages))
+
+*** Level 5 ***
+!!FU$spell$&v1=9:P5/5/0/0/1/0; (Get a fifth level spell)
+!!VRv2:Sy-99;
+!!UN&v1=9:N1/z-2/v2; (store spell name)
+!!HE-1&v1=9:Mv2/1; (give spell)
+
+*** Level 4 ***
+!!FU$spell$&v1>6:P4/4/0/0/1/0; (Get a fourth level spell)
+!!VRv2:Sy-99;
+!!FU$spell$&v1>6:P4/4/0/0/1/1/v2; (And another)
+!!VRv3:Sy-99;
+!!UN&v1>6:N1/z-1/v2;
+!!UN&v1>6:N1/z9/v3; (store spell names)
+!!HE-1&v1>6:Mv2/1;
+!!HE-1&v1>6:Mv3/1; (give spells)
+
+*** Level 3 ***
+!!FU$spell$&v1>3:P3/3/0/0/1/0; (Get a third level spell)
+!!VRv2:Sy-99;
+!!FU$spell$&v1>3:P3/3/0/0/1/1/v2; (And another)
+!!VRv3:Sy-99;
+
+!!UN&v1>3:N1/z8/v2;
+!!UN&v1>3:N1/z7/v3; (store spell names)
+!!HE-1&v1>3:Mv2/1;
+!!HE-1&v1>3:Mv3/1; (give spells)
+
+*** Level 2 ***
+!!FU$spell$:P2/2/0/0/1/0; (Get a second level spell)
+!!VRv2:Sy-99;
+!!FU$spell$:P2/2/0/0/1/1/v2; (And another)
+!!VRv3:Sy-99;
+!!FU$spell$:P2/2/0/0/1/2/v2/v3; (And another)
+!!VRv4:Sy-99;
+!!UN:N1/z6/v2;
+!!UN:N1/z5/v3;
+!!UN:N1/z4/v4; (store spell names)
+!!HE-1:Mv2/1;
+!!HE-1:Mv3/1;
+!!HE-1:Mv4/1; (give spells)
+
+*** Level 1 ***
+!!FU$spell$:P1/1/0/0/1/0; (Get a first level spell)
+!!VRv2:Sy-99;
+!!FU$spell$:P1/1/0/0/1/1/v2; (And another)
+!!VRv3:Sy-99;
+!!FU$spell$:P1/1/0/0/1/2/v2/v3; (And another)
+!!VRv4:Sy-99;
+
+!!UN:N1/z3/v2;
+!!UN:N1/z2/v3;
+!!UN:N1/z1/v4; (store spell names)
+
+!!HE-1:Mv2/1;
+!!HE-1:Mv3/1;
+!!HE-1:Mv4/1; (give spells)
+
+*** Display Message ***
+!!IF&1000/v1<4:Q1/8/0/1/z127000;
+!!IF&1000/v1<7/v1>3:Q1/8/0/1/z127001;
+!!IF&1000/v1<9/v1>6:Q1/8/0/1/z127002;
+!!IF&1000/v1=9:Q1/8/0/1/z127003;
+

@@ -1,0 +1,1986 @@
+ZVSE
+ERMS_ScriptDate=27.6(June).2006
+ERMS_ScriptName=script103
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+
+** Architect ERM Script v1.3 created by Tetral00.
+** Requires WOG version 3.58f or later.
+** Updated January 25, 2005.
+** Modified by Thomas Franz at 3rd of June 2005 - renaming/moving graphics, changing WOG-option, ERT-Vars
+
+** This script adds architects to your towns.
+** Architects are able to construct buildings in your towns automatically.
+** But you pay for each building as usual.
+** You can give orders to your architects, specifying buildings
+** that you want to construct.
+
+** To give an order to an architect click the right mouse button
+** on a Village Hall (Town Hall / City Hall / Capitol).
+** To view orders given to an architect click the left mouse button
+** on a Village Hall (Town Hall / City Hall / Capitol).
+
+** Variables used: (v1-v10), v2800-v2949, (v2950-v2999),
+** (z1-z10), (z22-z44).
+** ERT Z Variables used: z203000-z203032
+** Functions used: 28000-28065
+** Dialogs used: 29
+** WoG Options used: 303
+
+
+
+********************************************************************************
+
+
+
+** FU28000 retrieves cost of a building in Castle.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28000;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C0/0/0/0/0/0/0;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C20/0/0/0/0/0/2000;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/10/0/0/0/2000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C10/0/0/0/0/0/2000;
+!!VRv1&x1=22:C5/0/0/0/0/0/500;
+!!VRv1&x1=23:C0/0/0/0/0/0/0;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C0/0/10/0/0/0/500;
+!!VRv1&x1=31:C5/0/5/0/0/0/1000;
+!!VRv1&x1=32:C0/0/5/0/0/0/1000;
+!!VRv1&x1=33:C0/0/5/0/0/0/2000;
+!!VRv1&x1=34:C5/2/5/2/2/2/3000;
+!!VRv1&x1=35:C20/0/0/0/0/0/5000;
+!!VRv1&x1=36:C0/10/0/10/10/10/20000;
+!!VRv1&x1=37:C0/0/5/0/0/0/1000;
+!!VRv1&x1=38:C5/0/5/0/0/0/1000;
+!!VRv1&x1=39:C0/0/5/0/0/0/1000;
+!!VRv1&x1=40:C0/0/5/0/5/0/2000;
+!!VRv1&x1=41:C2/2/2/2/2/2/1000;
+!!VRv1&x1=42:C10/0/0/0/0/0/3000;
+!!VRv1&x1=43:C0/10/0/10/10/10/20000;
+
+** FU28001 retrieves cost of a building in Rampart.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28001;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C0/0/0/0/0/0/0;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C2/2/2/2/2/2/2000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/0/10/0/1500;
+!!VRv1&x1=22:C5/0/10/0/0/0/5000;
+!!VRv1&x1=23:C0/0/0/0/0/0/0;
+!!VRv1&x1=24:C0/0/0/0/0/0/2000;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C10/0/0/0/0/0/500;
+!!VRv1&x1=31:C5/0/0/0/0/0/1000;
+!!VRv1&x1=32:C10/0/0/0/0/0/1500;
+!!VRv1&x1=33:C0/0/0/0/10/0/2000;
+!!VRv1&x1=34:C0/0/0/0/0/0/2500;
+!!VRv1&x1=35:C5/0/5/0/0/10/4000;
+!!VRv1&x1=36:C0/0/30/0/20/0/10000;
+!!VRv1&x1=37:C5/0/0/0/0/0/1000;
+!!VRv1&x1=38:C5/0/0/0/0/0/1000;
+!!VRv1&x1=39:C10/0/0/0/0/0/1500;
+!!VRv1&x1=40:C0/0/0/0/5/0/2000;
+!!VRv1&x1=41:C0/0/0/0/0/0/1500;
+!!VRv1&x1=42:C0/0/0/0/0/5/3000;
+!!VRv1&x1=43:C0/0/30/0/20/0/20000;
+
+** FU28002 retrieves cost of a building in Tower.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28002;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C0/0/0/0/0/0/0;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/10000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C5/0/0/0/0/0/1000;
+!!VRv1&x1=22:C5/5/5/5/5/5/1500;
+!!VRv1&x1=23:C0/0/5/0/0/0/1000;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C5/0/5/0/0/0/300;
+!!VRv1&x1=31:C0/0/10/0/0/0/1000;
+!!VRv1&x1=32:C5/0/5/0/0/0/2000;
+!!VRv1&x1=33:C5/5/5/5/5/5/2500;
+!!VRv1&x1=34:C5/0/5/0/6/6/3000;
+!!VRv1&x1=35:C5/2/5/2/2/2/4000;
+!!VRv1&x1=36:C10/0/10/0/0/10/5000;
+!!VRv1&x1=37:C0/0/0/0/0/0/1000;
+!!VRv1&x1=38:C0/0/5/0/0/0/1500;
+!!VRv1&x1=39:C5/5/5/0/0/0/2000;
+!!VRv1&x1=40:C5/0/0/0/0/0/2000;
+!!VRv1&x1=41:C5/0/0/0/0/0/2000;
+!!VRv1&x1=42:C0/3/0/3/3/3/3000;
+!!VRv1&x1=43:C5/0/5/0/0/30/25000;
+
+** FU28003 retrieves cost of a building in Inferno.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28003;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C0/0/0/0/0/0/0;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/0;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/5/0/0/1000;
+!!VRv1&x1=22:C5/0/5/0/0/0/10000;
+!!VRv1&x1=23:C5/0/0/0/0/0/1000;
+!!VRv1&x1=24:C0/0/0/0/0/0/1000;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C5/0/5/0/0/0/300;
+!!VRv1&x1=31:C0/0/5/0/0/0/1000;
+!!VRv1&x1=32:C10/0/0/0/0/0/1500;
+!!VRv1&x1=33:C5/0/5/0/0/0/2000;
+!!VRv1&x1=34:C0/0/0/0/0/0/3000;
+!!VRv1&x1=35:C0/3/10/3/0/3/4000;
+!!VRv1&x1=36:C10/20/10/0/0/0/15000;
+!!VRv1&x1=37:C0/0/0/0/0/0/1000;
+!!VRv1&x1=38:C0/5/0/0/0/0/1000;
+!!VRv1&x1=39:C0/0/0/5/0/0/1500;
+!!VRv1&x1=40:C5/0/5/0/0/0/2000;
+!!VRv1&x1=41:C0/5/0/5/0/0/3000;
+!!VRv1&x1=42:C0/5/5/5/0/5/3000;
+!!VRv1&x1=43:C5/20/5/0/0/0/20000;
+
+** FU28004 retrieves cost of a building in Necropolis.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28004;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C20/0/0/0/0/0/2000;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/1000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/0/0/0/1000;
+!!VRv1&x1=22:C0/0/0/0/0/0/1000;
+!!VRv1&x1=23:C0/0/0/0/0/0/0;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C5/0/5/0/0/0/400;
+!!VRv1&x1=31:C0/0/5/0/0/0/1000;
+!!VRv1&x1=32:C5/0/5/0/0/0/1500;
+!!VRv1&x1=33:C5/0/5/0/0/0/2000;
+!!VRv1&x1=34:C0/0/10/10/0/0/2000;
+!!VRv1&x1=35:C10/0/10/0/0/0/6000;
+!!VRv1&x1=36:C5/5/5/5/5/5/10000;
+!!VRv1&x1=37:C5/0/5/0/0/0/1000;
+!!VRv1&x1=38:C5/0/5/0/0/0/1000;
+!!VRv1&x1=39:C0/5/0/0/0/0/1500;
+!!VRv1&x1=40:C5/0/0/0/10/10/2000;
+!!VRv1&x1=41:C0/0/5/5/0/0/2000;
+!!VRv1&x1=42:C5/2/5/2/2/2/3000;
+!!VRv1&x1=43:C5/20/5/0/0/0/15000;
+
+** FU28005 retrieves cost of a building in Dungeon.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28005;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C0/0/0/0/0/0/0;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/10000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/0/0/0/1000;
+!!VRv1&x1=22:C0/0/5/0/0/0/2500;
+!!VRv1&x1=23:C5/0/5/0/0/0/1000;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C10/0/0/0/0/0/400;
+!!VRv1&x1=31:C0/0/0/0/0/0/1000;
+!!VRv1&x1=32:C1/1/1/1/1/1/1000;
+!!VRv1&x1=33:C5/0/10/0/0/0/2000;
+!!VRv1&x1=34:C0/0/10/0/0/10/4000;
+!!VRv1&x1=35:C5/5/5/5/0/0/5000;
+!!VRv1&x1=36:C15/0/15/20/0/0/15000;
+!!VRv1&x1=37:C5/0/0/0/0/0/1000;
+!!VRv1&x1=38:C0/0/0/2/2/0/1000;
+!!VRv1&x1=39:C1/1/1/1/1/1/1000;
+!!VRv1&x1=40:C5/0/0/0/0/0/1500;
+!!VRv1&x1=41:C0/0/5/0/0/5/3000;
+!!VRv1&x1=42:C5/5/5/5/0/0/3000;
+!!VRv1&x1=43:C15/0/15/20/0/0/15000;
+
+** FU28006 retrieves cost of a building in Stronghold.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28006;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C0/0/0/0/0/0/0;
+!!VRv1&x1=4:C0/0/0/0/0/0/0;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C0/0/0/0/0/0/0;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C5/0/5/0/0/0/2000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/0/0/0/1000;
+!!VRv1&x1=22:C5/0/0/0/0/0/1000;
+!!VRv1&x1=23:C0/0/0/0/0/0/1000;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C5/0/5/0/0/0/200;
+!!VRv1&x1=31:C10/0/5/0/0/0/1000;
+!!VRv1&x1=32:C5/0/5/0/0/0/1000;
+!!VRv1&x1=33:C20/0/0/0/0/0/2000;
+!!VRv1&x1=34:C0/0/10/0/0/0/2500;
+!!VRv1&x1=35:C0/0/20/0/20/0/3500;
+!!VRv1&x1=36:C10/0/10/0/10/0/10000;
+!!VRv1&x1=37:C5/0/5/0/0/0/1000;
+!!VRv1&x1=38:C5/0/5/0/0/0/1000;
+!!VRv1&x1=39:C2/0/2/0/0/0/1000;
+!!VRv1&x1=40:C5/0/5/0/0/5/2000;
+!!VRv1&x1=41:C5/0/5/0/0/0/2000;
+!!VRv1&x1=42:C5/0/5/0/0/0/3000;
+!!VRv1&x1=43:C10/0/10/0/20/0/15000;
+
+** FU28007 retrieves cost of a building in Fortress.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28007;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C0/0/0/0/0/0/0;
+!!VRv1&x1=4:C0/0/0/0/0/0/0;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C20/0/0/0/0/0/2000;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/1000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C0/0/0/0/0/0/1000;
+!!VRv1&x1=22:C0/0/0/0/0/0/1000;
+!!VRv1&x1=23:C0/0/0/0/0/0/0;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C10/0/0/0/0/0/400;
+!!VRv1&x1=31:C5/0/0/0/0/0/1000;
+!!VRv1&x1=32:C5/2/0/2/0/0/1000;
+!!VRv1&x1=33:C5/0/10/0/0/0/2000;
+!!VRv1&x1=34:C10/5/10/5/0/0/2500;
+!!VRv1&x1=35:C15/0/0/0/0/0/3500;
+!!VRv1&x1=36:C10/0/10/10/0/0/10000;
+!!VRv1&x1=37:C10/0/0/0/0/0/1000;
+!!VRv1&x1=38:C5/0/0/0/0/0/1000;
+!!VRv1&x1=39:C0/2/0/2/0/0/1000;
+!!VRv1&x1=40:C5/0/5/0/0/0/2000;
+!!VRv1&x1=41:C5/0/5/0/0/0/2000;
+!!VRv1&x1=42:C10/10/0/0/0/0/3000;
+!!VRv1&x1=43:C10/0/10/20/0/0/15000;
+
+** FU28008 retrieves cost of a building in Conflux.
+** x1 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28008;
+!!VRv1&x1=0:C5/0/5/0/0/0/2000;
+!!VRv1&x1=1:C5/4/5/4/4/4/1000;
+!!VRv1&x1=2:C5/6/5/6/6/6/1000;
+!!VRv1&x1=3:C5/8/5/8/8/8/1000;
+!!VRv1&x1=4:C5/10/5/10/10/10/1000;
+!!VRv1&x1=5:C5/0/0/0/0/0/500;
+!!VRv1&x1=6:C20/0/0/0/0/0/2000;
+!!VRv1&x1=7:C20/0/20/0/0/0/5000;
+!!VRv1&x1=8:C0/0/5/0/0/0/2500;
+!!VRv1&x1=9:C10/0/10/0/0/0/5000;
+!!VRv1&x1=10:C0/0/0/0/0/0/0;
+!!VRv1&x1=11:C0/0/0/0/0/0/2500;
+!!VRv1&x1=12:C0/0/0/0/0/0/5000;
+!!VRv1&x1=13:C0/0/0/0/0/0/10000;
+!!VRv1&x1=14:C5/0/0/0/0/0/500;
+!!VRv1&x1=15:C0/0/5/0/0/0/5000;
+!!VRv1&x1=16:C5/0/0/0/0/0/1000;
+!!VRv1&x1=17:C0/0/0/0/0/0/10000;
+!!VRv1&x1=18:C0/0/0/0/0/0/1000;
+!!VRv1&x1=19:C0/0/0/0/0/0/0;
+!!VRv1&x1=20:C0/0/0/0/0/0/0;
+!!VRv1&x1=21:C10/0/10/0/0/0/5000;
+!!VRv1&x1=22:C0/0/0/0/0/0/0;
+!!VRv1&x1=23:C0/0/0/0/0/0/0;
+!!VRv1&x1=24:C0/0/0/0/0/0/0;
+!!VRv1&x1=25:C0/0/0/0/0/0/0;
+!!VRv1&x1=26:C0/0/0/0/0/0/0;
+!!VRv1&x1=27:C0/0/0/0/0/0/0;
+!!VRv1&x1=28:C0/0/0/0/0/0/0;
+!!VRv1&x1=29:C0/0/0/0/0/0/0;
+!!VRv1&x1=30:C5/0/5/0/0/0/300;
+!!VRv1&x1=31:C0/0/5/0/0/0/1500;
+!!VRv1&x1=32:C0/0/5/0/0/0/1500;
+!!VRv1&x1=33:C5/0/5/0/0/0/2000;
+!!VRv1&x1=34:C0/0/10/0/0/0/2000;
+!!VRv1&x1=35:C5/2/5/2/2/2/3000;
+!!VRv1&x1=36:C10/10/10/0/0/0/10000;
+!!VRv1&x1=37:C0/0/0/0/0/0/1000;
+!!VRv1&x1=38:C2/2/0/0/0/2/1500;
+!!VRv1&x1=39:C0/5/5/0/0/0/2000;
+!!VRv1&x1=40:C0/5/5/0/0/0/2000;
+!!VRv1&x1=41:C0/0/0/5/0/0/1000;
+!!VRv1&x1=42:C0/3/0/3/3/3/3000;
+!!VRv1&x1=43:C10/20/10/0/0/0/15000;
+
+** FU28009 retrieves cost of a building in town of a specified type.
+** x1 - [in] type of a town (0..8),
+** x2 - [in] number of a building (0..43),
+** v1 - [out] wood cost,
+** v2 - [out] mercury cost,
+** v3 - [out] ore cost,
+** v4 - [out] sulfur cost,
+** v5 - [out] crystal cost,
+** v6 - [out] gems cost,
+** v7 - [out] gold cost.
+!?FU28009;
+!!FU28000&x1=0:Px2;
+!!FU28001&x1=1:Px2;
+!!FU28002&x1=2:Px2;
+!!FU28003&x1=3:Px2;
+!!FU28004&x1=4:Px2;
+!!FU28005&x1=5:Px2;
+!!FU28006&x1=6:Px2;
+!!FU28007&x1=7:Px2;
+!!FU28008&x1=8:Px2;
+
+
+
+********************************************************************************
+
+
+
+** FU28010 gives information about dependences of one building
+** on others in Castle.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a Guardhouse requires a Fort,
+** so if x1=30 then this function sets v1=128 and v2=0.
+!?FU28010;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C0/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C64/0;
+!!VRv1&x1=18:C1073807488/3;
+!!VRv1&x1=19:C1073807488/131;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C1073807488/2;
+!!VRv1&x1=22:C32/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073807488/2;
+!!VRv1&x1=33:C1073807488/0;
+!!VRv1&x1=34:C1073807489/2;
+!!VRv1&x1=35:C1075904640/2;
+!!VRv1&x1=36:C1073807489/6;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073807488/3;
+!!VRv1&x1=40:C1073807488/2;
+!!VRv1&x1=41:C1073807489/6;
+!!VRv1&x1=42:C1075904640/10;
+!!VRv1&x1=43:C1073807489/22;
+
+** FU28011 gives information about dependences of one building
+** on others in Rampart.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a Homestead requires a Fort, and a Centaur Stables,
+** so if x1 = 32 then this function sets v1 = 128 + 1073741824 = 1073741952
+** and v2 = 0.
+!?FU28011;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C0/0;
+!!VRv1&x1=18:C3221225600/0;
+!!VRv1&x1=19:C3221225600/64;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C131072/0;
+!!VRv1&x1=22:C3221487744/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C1073741952/5;
+!!VRv1&x1=25:C1073741952/517;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C1073741952/1;
+!!VRv1&x1=34:C1073741952/1;
+!!VRv1&x1=35:C1073741952/7;
+!!VRv1&x1=36:C1073741955/15;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C1073741952/3;
+!!VRv1&x1=41:C1073741952/5;
+!!VRv1&x1=42:C1073741952/15;
+!!VRv1&x1=43:C1073741959/31;
+
+** FU28012 gives information about dependences of one building
+** on others in Tower.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a City Hall requires a Mage Guild level 1, and a Tavern,
+** and a Town Hall, and a Marketplace, and a Blacksmith,
+** so if x1 = 12 then this function sets v1 = 1 + 32 + 2048 + 16384 + 65536 = 84001
+** and v2 = 0.
+!?FU28012;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C16384/0;
+!!VRv1&x1=18:C3221225600/0;
+!!VRv1&x1=19:C3221225600/64;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C128/0;
+!!VRv1&x1=22:C1/0;
+!!VRv1&x1=23:C1/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C3221225601/1;
+!!VRv1&x1=34:C3221225601/3;
+!!VRv1&x1=35:C3221225601/3;
+!!VRv1&x1=36:C3221225601/15;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C3225419905/3;
+!!VRv1&x1=41:C3221225601/7;
+!!VRv1&x1=42:C3221225601/11;
+!!VRv1&x1=43:C3221225601/31;
+
+** FU28013 gives information about dependences of one building
+** on others in Inferno.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, an Order of Fire requires a Mage Guild level 1,
+** so if x1 = 23 then this function sets v1 = 1 and v2 = 0.
+!?FU28013;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C0/0;
+!!VRv1&x1=18:C1073741952/0;
+!!VRv1&x1=19:C1073741952/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C128/0;
+!!VRv1&x1=22:C384/0;
+!!VRv1&x1=23:C1/0;
+!!VRv1&x1=24:C1073741952/1;
+!!VRv1&x1=25:C1073741952/129;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C3221225600/0;
+!!VRv1&x1=34:C3221225600/2;
+!!VRv1&x1=35:C3221225601/2;
+!!VRv1&x1=36:C3221225601/14;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C3221225600/2;
+!!VRv1&x1=41:C3221225603/6;
+!!VRv1&x1=42:C3221225601/10;
+!!VRv1&x1=43:C3221225601/30;
+
+** FU28014 gives information about dependences of one building
+** on others in Necropolis.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, an Unearthed Graves requires a Fort,
+** and a Skeleton Transformer, and a Cursed Temple,
+** so if x1 = 18 then this function sets
+** v1 = 128 + 4194304 + 1073741824 = 1077936256 and v2 = 0.
+!?FU28014;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C128/0;
+!!VRv1&x1=18:C1077936256/0;
+!!VRv1&x1=19:C1077936256/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C1/0;
+!!VRv1&x1=22:C1073741952/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C3221225600/0;
+!!VRv1&x1=34:C3221225601/0;
+!!VRv1&x1=35:C3221225601/6;
+!!VRv1&x1=36:C3221225601/14;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C3223322753/2;
+!!VRv1&x1=41:C3221225601/4;
+!!VRv1&x1=42:C3221225601/14;
+!!VRv1&x1=43:C3221225601/30;
+
+** FU28015 gives information about dependences of one building
+** on others in Dungeon.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a Labyrinth requires a Fort, a Warren, a Harpy Loft,
+** a Pillar of Eyes, and a Chapel of Stilled Voices,
+** so if x1 = 34 then this function sets
+** v1 = 128 + 1073741824 + 2147483648 = 3221225600 and v2 = 1 + 2 = 3.
+!?FU28015;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C16384/0;
+!!VRv1&x1=18:C1073741952/0;
+!!VRv1&x1=19:C1073741952/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C1/0;
+!!VRv1&x1=22:C0/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C3221225600/1;
+!!VRv1&x1=34:C3221225600/3;
+!!VRv1&x1=35:C3221225600/3;
+!!VRv1&x1=36:C3221225603/15;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C3221225600/3;
+!!VRv1&x1=41:C3221225600/7;
+!!VRv1&x1=42:C3221225600/11;
+!!VRv1&x1=43:C3221225607/31;
+
+** FU28016 gives information about dependences of one building
+** on others in Stronghold.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a Town Hall requires a Tavern,
+** so if x1 = 11 then this function sets v1 = 32 and v2 = 0.
+!?FU28016;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C0/0;
+!!VRv1&x1=4:C0/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C128/0;
+!!VRv1&x1=18:C1073741952/0;
+!!VRv1&x1=19:C1073741952/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C16384/0;
+!!VRv1&x1=22:C65536/0;
+!!VRv1&x1=23:C128/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C1073741952/1;
+!!VRv1&x1=34:C3221225600/0;
+!!VRv1&x1=35:C1073741952/3;
+!!VRv1&x1=36:C3221225600/4;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225600/32;
+!!VRv1&x1=39:C1073807488/1;
+!!VRv1&x1=40:C1073741953/3;
+!!VRv1&x1=41:C3221225600/4;
+!!VRv1&x1=42:C1073741952/11;
+!!VRv1&x1=43:C3221225600/20;
+
+** FU28017 gives information about dependences of one building
+** on others in Fortress.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, an Upgraded Gnoll Hut requires a Tavern, a Fort,
+** and a Gnoll Hut, so if x1 = 37 then this function sets
+** v1 = 32 + 128 + 1073741824 = 1073741984 and v2 = 0.
+!?FU28017;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C0/0;
+!!VRv1&x1=4:C0/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C2099360/0;
+!!VRv1&x1=18:C1073741952/0;
+!!VRv1&x1=19:C1073741984/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C128/0;
+!!VRv1&x1=22:C2097280/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741952/0;
+!!VRv1&x1=32:C1073741952/0;
+!!VRv1&x1=33:C1073741952/1;
+!!VRv1&x1=34:C3221225600/1;
+!!VRv1&x1=35:C3221225600/0;
+!!VRv1&x1=36:C3221225600/11;
+!!VRv1&x1=37:C1073741984/0;
+!!VRv1&x1=38:C3221225600/0;
+!!VRv1&x1=39:C1073741952/1;
+!!VRv1&x1=40:C1073741952/3;
+!!VRv1&x1=41:C3221274752/5;
+!!VRv1&x1=42:C3221225600/8;
+!!VRv1&x1=43:C3221225600/27;
+
+** FU28018 gives information about dependences of one building
+** on others in Conflux.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+** For example, a Magic Lantern requires a Fort,
+** so if x1 = 30 then this function sets v1 = 128 and v2 = 0.
+!?FU28018;
+!!VRv1&x1=0:C0/0;
+!!VRv1&x1=1:C1/0;
+!!VRv1&x1=2:C3/0;
+!!VRv1&x1=3:C7/0;
+!!VRv1&x1=4:C15/0;
+!!VRv1&x1=5:C0/0;
+!!VRv1&x1=6:C0/0;
+!!VRv1&x1=7:C0/0;
+!!VRv1&x1=8:C128/0;
+!!VRv1&x1=9:C384/0;
+!!VRv1&x1=10:C0/0;
+!!VRv1&x1=11:C32/0;
+!!VRv1&x1=12:C84001/0;
+!!VRv1&x1=13:C88993/0;
+!!VRv1&x1=14:C0/0;
+!!VRv1&x1=15:C16384/0;
+!!VRv1&x1=16:C0/0;
+!!VRv1&x1=17:C16384/0;
+!!VRv1&x1=18:C1073741952/0;
+!!VRv1&x1=19:C1073741952/32;
+!!VRv1&x1=20:C0/0;
+!!VRv1&x1=21:C1/0;
+!!VRv1&x1=22:C0/0;
+!!VRv1&x1=23:C0/0;
+!!VRv1&x1=24:C0/0;
+!!VRv1&x1=25:C0/0;
+!!VRv1&x1=26:C0/0;
+!!VRv1&x1=27:C0/0;
+!!VRv1&x1=28:C0/0;
+!!VRv1&x1=29:C0/0;
+!!VRv1&x1=30:C128/0;
+!!VRv1&x1=31:C1073741953/0;
+!!VRv1&x1=32:C1073741953/0;
+!!VRv1&x1=33:C3221225601/0;
+!!VRv1&x1=34:C1073741953/1;
+!!VRv1&x1=35:C3221225601/7;
+!!VRv1&x1=36:C3221225601/15;
+!!VRv1&x1=37:C1073741952/0;
+!!VRv1&x1=38:C3221225601/0;
+!!VRv1&x1=39:C1073741953/1;
+!!VRv1&x1=40:C3221225601/66;
+!!VRv1&x1=41:C1073741953/5;
+!!VRv1&x1=42:C3221225603/15;
+!!VRv1&x1=43:C3221225601/31;
+
+** FU28019 gives information about dependences of one building
+** on others in town of a specified type.
+** x1 - [in] type of a town (0..8).
+** x2 - [in] number of a building (0..43).
+** v1 - [out] dependences on buildings 0..31.
+** v2 - [out] dependences on buildings 32..43.
+!?FU28019;
+!!FU28010&x1=0:Px2;
+!!FU28011&x1=1:Px2;
+!!FU28012&x1=2:Px2;
+!!FU28013&x1=3:Px2;
+!!FU28014&x1=4:Px2;
+!!FU28015&x1=5:Px2;
+!!FU28016&x1=6:Px2;
+!!FU28017&x1=7:Px2;
+!!FU28018&x1=8:Px2;
+
+
+
+********************************************************************************
+
+
+
+** FU28020 gives information about the buildings that a player can construct
+** in the usual way (by using a Village Hall or its upgrades).
+** x1 - [in] type of a town (0..8).
+** v1 - [out] check which of buildings 0..31 can be constructed.
+** v2 - [out] check which of buildings 32..43 can be constructed.
+** For example, in Castle there cannot be constructed Mage Guild level 5 (4),
+** Village Hall (10), Upgraded Griffin Bastion (19), Ship (20),
+** non-existent buildings (23, 24, 25), Grail (26), houses (27, 28, 29),
+** so if x1 = 0 then the function sets v1 = 1 + 2 + 4 + 8 + 32 + 64 + 128 +
+** 256 + 512 + 2048 + 4096 + 8192 + 16384 + 32768 + 65536 + 131072 + 262144 +
+** 1048576 + 2097152 + 4194304 + 1073741824 + 2147483648 = 3228040175,
+** v2 = 1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024 + 2048 = 4095.
+!?FU28020;
+!!VRv1&x1=0:C3228040175/4095;
+!!VRv1&x1=1:C3244817343/4095;
+!!VRv1&x1=2:C3236428735/4095;
+!!VRv1&x1=3:C3253074879/4095;
+!!VRv1&x1=4:C3228040191/4095;
+!!VRv1&x1=5:C3236428735/4095;
+!!VRv1&x1=6:C3236428711/4095;
+!!VRv1&x1=7:C3228040167/4095;
+!!VRv1&x1=8:C3223845887/4095;
+
+
+** FU28021 gives information about the buildings constructed in a town.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] check which of buildings 0..31 were constructed.
+** v2 - [out] check which of buildings 32..43 were constructed.
+** This code is more complicated than what it might be
+** because the CA:B3/# receiver doesn't recognize the buildings that
+** have their upgrades constructed. For example, if a player constructed a Fort,
+** a Citadel, and a Castle in a town, then CA:B3/7 resets flag 1,
+** and CA:B3/8 resets flag 1, and only CA:B3/9 sets flag 1.
+!?FU28021;
+!!CA0/x1:T?y3; // town's type
+!!VRv1:S0;
+!!VRv2:S0;
+!!CA0/x1:B3/0; // mage guild 1
+!!VRv1&1:|1;
+!!CA0/x1:B3/1; // mage guild 1, 2
+!!VRv1&1:|1 |2;
+!!CA0/x1:B3/2; // mage guild 1, 2, 3
+!!VRv1&1:|1 |2 |4;
+!!CA0/x1:B3/3; // mage guild 1, 2, 3, 4
+!!VRv1&1/y3<>6/y3<>7:|1 |2 |4 |8;
+!!CA0/x1:B3/4; // mage guild 1, 2, 3, 4, 5
+!!VRv1&1/y3<>0/y3<>6/y3<>7:|1 |2 |4 |8 |16;
+!!CA0/x1:B3/5; // tavern
+!!VRv1&1:|32;
+!!CA0/x1:B3/6; // shipyard
+!!VRv1&1/y3<>1/y3<>2/y3<>3/y3<>5/y3<>6:|64;
+!!CA0/x1:B3/7; // fort
+!!VRv1&1:|128;
+!!CA0/x1:B3/8; // citadel
+!!VRv1&1:|128 |256;
+!!CA0/x1:B3/9; // fort, citadel, castle
+!!VRv1&1:|128 |256 |512;
+!!CA0/x1:B3/11; // town hall
+!!VRv1&1:|2048;
+!!CA0/x1:B3/12; // city hall
+!!VRv1&1:|2048 |4096;
+!!CA0/x1:B3/13; // capitol
+!!VRv1&1:|2048 |4096 |8192;
+!!CA0/x1:B3/14; // marketplace
+!!VRv1&1:|16384;
+!!CA0/x1:B3/15; // resource silo
+!!VRv1&1:|32768;
+!!CA0/x1:B3/16; // blacksmith
+!!VRv1&1:|65536;
+!!CA0/x1:B3/17; // lighthouse, mystic pond, artifact merchants, etc.
+!!VRv1&1/y3<>3:|131072;
+!!CA0/x1:B3/18; // horde buildings for non-upgraded creatures (1)
+!!VRv1&1:|262144;
+!!VRv2&1/y3=0:|1;
+!!VRv1&1/y3>=1/y3<=2:|2147483648;
+!!VRv1&1/y3>=3:|1073741824;
+!!CA0/x1:B3/19; // horde buildings for upgraded creatures (1)
+!!VRv1&1:|262144;
+!!VRv2&1/y3=0:|1 |128;
+!!VRv1&1/y3>=1/y3<=2:|2147483648;
+!!VRv2&1/y3>=1/y3<=2:|64;
+!!VRv1&1/y3>=3:|1073741824;
+!!VRv2&1/y3>=3:|32;
+!!CA0/x1:B3/21; // stables, fountain of fortune, lookout tower, etc.
+!!VRv1&1:|2097152;
+!!VRv1&1/y3=1:|131072;
+!!CA0/x1:B3/22; // brotherhood of sword, dwarven treasury, library, etc.
+!!VRv1&1/y3<>8:|4194304;
+!!VRv1&1/y3=0:|32;
+!!CA0/x1:B3/23; // wall of Knowledge, etc.
+!!VRv1&1/y3<>0/y3<>1/y3<>4/y3<>7/y3<>8:|8388608;
+!!CA0/x1:B3/24; // horde buildings for non-upgraded creatures (2)
+!!VRv1&1/y3<>0/y3<>2/y3<>4/y3<>5/y3<>6/y3<>7/y3<>8:|16777216;
+!!VRv2&1/y3=1:|4;
+!!VRv2&1/y3=3:|1;
+!!CA0/x1:B3/25; // horde buildings for upgraded creatures (2)
+!!VRv1&1/y3<>0/y3<>2/y3<>4/y3<>5/y3<>6/y3<>7/y3<>8:|16777216;
+!!VRv2&1/y3=1:|4 |512;
+!!VRv2&1/y3=3:|1 |128;
+!!CA0/x1:B3/30; // dwelling 1
+!!VRv1&1:|1073741824;
+!!CA0/x1:B3/31; // dwelling 2
+!!VRv1&1:|-2147483648;
+!!CA0/x1:B3/32; // dwelling 3
+!!VRv2&1:|1;
+!!CA0/x1:B3/33; // dwelling 4
+!!VRv2&1:|2;
+!!CA0/x1:B3/34; // dwelling 5
+!!VRv2&1:|4;
+!!CA0/x1:B3/35; // dwelling 6
+!!VRv2&1:|8;
+!!CA0/x1:B3/36; // dwelling 7
+!!VRv2&1:|16;
+!!CA0/x1:B3/37; // upg. dwelling 1
+!!VRv1&1:|1073741824;
+!!VRv2&1:|32;
+!!CA0/x1:B3/38; // upg. dwelling 2
+!!VRv1&1:|2147483648;
+!!VRv2&1:|64;
+!!CA0/x1:B3/39; // upg. dwelling 3
+!!VRv2&1:|1 |128;
+!!CA0/x1:B3/40; // upg. dwelling 4
+!!VRv2&1:|2 |256;
+!!CA0/x1:B3/41; // upg. dwelling 5
+!!VRv2&1:|4 |512;
+!!CA0/x1:B3/42; // upg. dwelling 6
+!!VRv2&1:|8 |1024;
+!!CA0/x1:B3/43; // upg. dwelling 7
+!!VRv2&1:|16 |2048;
+
+
+** FU28023 converts a number of a building to bit form.
+** x1 - [in] number of a building (0..43).
+** v1 - [out] data related to buildings 0..31.
+** v2 - [out] data related to buildings 32..43.
+** This function resets all the bits in v1, v2, and then sets one bit.
+** The index of this bit depends on x1 (see format U).
+** For example,
+** if x1 = 0 then the function sets v1 = 1 and v2 = 0,
+** if x1 = 1 then the function sets v1 = 2 and v2 = 0,
+** if x1 = 2 then the function sets v1 = 4 and v2 = 0,
+** if x1 = 3 then the function sets v1 = 8 and v2 = 0,
+** if x1 = 4 then the function sets v1 = 16 and v2 = 0,
+** ...
+** if x1 < 32 then the function sets v1 = 2^x1 and v2 = 0,
+** if x1 >= 32 then the function sets v1 = 0 and v2 = 2^(x1-32).
+!?FU28023;
+!!VRy1:S2910 +x1;
+!!VRy1&x1>=32:S2878 +x1;
+!!VRy2:Svy1;
+!!VRv1:Sy2;
+!!VRv1&x1>=32:S0;
+!!VRv2:S0;
+!!VRv2&x1>=32:Sy2;
+
+
+** Powers of two (1, 2, 4, 8, 16, 32, 64, ...)
+** (Though these values can be calculated,
+** they are stored directly to increase speed on slow CPU)
+!#VRv2910:S1;          // 2^0
+!#VRv2911:S2;          // 2^1
+!#VRv2912:S4;          // 2^2
+!#VRv2913:S8;          // 2^3
+!#VRv2914:S16;         // 2^4
+!#VRv2915:S32;         // 2^5
+!#VRv2916:S64;         // 2^6
+!#VRv2917:S128;        // 2^7
+!#VRv2918:S256;        // 2^8
+!#VRv2919:S512;        // 2^9
+!#VRv2920:S1024;       // 2^10
+!#VRv2921:S2048;       // 2^11
+!#VRv2922:S4096;       // 2^12
+!#VRv2923:S8192;       // 2^13
+!#VRv2924:S16384;      // 2^14
+!#VRv2925:S32768;      // 2^15
+!#VRv2926:S65536;      // 2^16
+!#VRv2927:S131072;     // 2^17
+!#VRv2928:S262144;     // 2^18
+!#VRv2929:S524288;     // 2^19
+!#VRv2930:S1048576;    // 2^20
+!#VRv2931:S2097152;    // 2^21
+!#VRv2932:S4194304;    // 2^22
+!#VRv2933:S8388608;    // 2^23
+!#VRv2934:S16777216;   // 2^24
+!#VRv2935:S33554432;   // 2^25
+!#VRv2936:S67108864;   // 2^26
+!#VRv2937:S134217728;  // 2^27
+!#VRv2938:S268435456;  // 2^28
+!#VRv2939:S536870912;  // 2^29
+!#VRv2940:S1073741824; // 2^30
+!#VRv2941:S2147483648; // 2^31
+
+
+** FU28024 converts a bit form to array of numbers.
+** In fact it scans bits of two numbers for set bits
+** and writes their indices in the form of array.
+** x1 - [in] data related to buildings 0..31.
+** x2 - [in] data related to buildings 32..43.
+** v1 - [out] 2950 always.
+** v2950 - [out] size of array.
+** v2951 - [out] first building's number.
+** v2952 - [out] second building's number.
+** v2953 - [out] third building's number.
+** v2954 - [out] forth building's number.
+** .......................................
+** For example, if x1 = 160 (i.e. 2^5+2^7), and x2 = 3 (i.e. 2^0+2^1),
+** then v2950 = 4 (size of array), v2951 = 5 (Tavern), v2952 = 7 (Fort),
+** v2953 = 32 (Griffin Tower), v2954 = 33 (Barracks).
+!?FU28024;
+!!VRv2950:S0;
+!!DO28025/0/43/1:Px1/x2; // scan all the bits
+!!VRv1:S2950;
+
+** scan one bit.
+!?FU28025;
+!!VRy1:S2951 +v2950;
+!!FU28023:Px16;
+!!VRv1:&x1;
+!!VRv2:&x2;
+!!VRvy1&v1<>0|v2<>0:Sx16;
+!!VRv2950&v1<>0|v2<>0:+1;
+
+
+** FU28026 checks if a player may build this turn in a town.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] 0 - if a player may build this turn;
+**            1 - if a player may not build this turn (already did).
+!?FU28026;
+!!UN:P228/?y1;         // Build twice a Day option
+!!CA0/x1&y1<>1:R?v1;   // code if this option is disabled
+!!FU&y1<>1:E;
+!!CA0/x1:P?y2/?y3/?y4; // coordinates of town
+!!POy2/y3/y4:S?y5;     // "daily builds number"
+!!VRv1:S0;
+!!VRv1&y5=2:S1;
+
+
+** FU28027 constructs one building in a town (no any check).
+** x1 - [in] number of a town on the map (0..47).
+** x2 - [in] number of a building (0..43).
+!?FU28027;
+!!CA0/x1:B6/x2;        // construct building
+!!UN:P228/?y1;         // Build twice a Day option
+!!CA0/x1&y1<>1:R1;     // code if this option is disabled
+!!FU&y1<>1:E;
+!!CA0/x1:P?y2/?y3/?y4; // coordinates of town
+!!POy2/y3/y4:S?y5;     // "daily builds number"
+!!VRy5:+1;
+!!POy2/y3/y4:Sy5;
+!!CA0/x1&y5=2:R1;
+
+
+** FU28028 calculates all capitols owned by a player.
+** If the result is zero, then a player may construct
+** a capitol in one of his towns.
+** x1 - [in] owner (0..8).
+** v1 - [out] number of capitols.
+!?FU28028;
+!!OW:Wx1/?y1;
+!!VRy1:-1;
+!!VRv1:S0;
+!!DO28029/0/y1/1:Px1;
+
+** FU28029 checks one town
+!?FU28029;
+!!OW:Wx1/x16/?y2;
+!!CA0/y2:B3/13;
+!!VRv1&1:+1;
+
+
+** FU28030 calculates all water terrains around a town.
+** If the result is a positive number,
+** then a player may construct shipyard in this town.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] count of water terrains.
+!?FU28030;
+!!CA0/x1:P?y1/?y2/?y3;
+!!VRv1:S0;
+!!VRy2:+1; // offset from entry point: 0/1/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+!!VRy2:+1; // offset from entry point: 0/2/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+!!VRy1:-1; // offset from entry point: -1/2/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+!!VRy1:+2; // offset from entry point: 1/2/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+!!VRy2:-1; // offset from entry point: 1/1/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+!!VRy1:-2; // offset from entry point: -1/2/0
+!!TRy1/y2/y3:T?y4/?y5/?y6/?y7/?y8/?y9/?y10/?y11;
+!!VRv1&y4=8:+1;
+
+
+** FU28031 gives information about the buildings that a player may construct
+** but hasn't constructed by this moment.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] information about buildings 0..31.
+** v2 - [out] information about buildings 32..43.
+** (If bit of v1 and v2 is set, then the corresponding building
+** may be constructed but it hasn't been constructed by this moment.)
+!?FU28031;
+!!CA0/x1:O?y9 T?y10;
+!!FU28020:Py10; // buildings what a player can construct
+!!VRy1:Sv1;
+!!VRy2:Sv2;
+!!FU28021:Px1;  // buildings constructed at the past
+!!VRy3:Sv1;
+!!VRy4:Sv2;
+!!FU28028:Py9;  // number of capitols
+!!VRy5:Sv1;
+!!FU28030:Px1;  // number of water terrains
+!!VRy6:Sv1;
+!!VRy3&y5>0:|8192;         // exclude capitol if owner already has it
+!!VRy3&y6=0:|64;           // exclude shipyard if there is not water terrain
+!!VRy3&y6=0/y10=0:|131072; // exclude lighthouse if there is not water terrain
+!!VRv1:Sy3 &y1 Xy1;        // logical operations
+!!VRv2:Sy4 &y2 Xy2;
+
+
+** FU28032 tasks an architect. A task is a building the architect must
+** construct. The architect also will try to construct all required buildings.
+** For example, a Town Hall requires a Tavern.
+** x1 - [in] number of a town on the map (0..47).
+** x2 - [in] number of a building (0..43).
+** In every town there is an independent architect.
+** Every architect remembers his tasks.
+** These tasks are stored in v2800..v2895;
+** tasks of one architect occupies two v variables.
+!?FU28032;
+!!VRy1:S2800 +x1 +x1; // tasks of the town architect
+!!VRy2:Sy1 +1;
+!!FU28023:Px2;        // bit corresponding to the specified building
+!!VRvy1:|v1;
+!!VRvy2:|v2;
+!!CA0/x1:T?y3;    // type of this town
+!!FU28019:Py3/x2; // bits corresponding to buildings required for the specified
+!!VRvy1:|v1;
+!!VRvy2:|v2;
+
+
+** FU28033 tasks an architect to construct all the buildings of a town.
+** x1 - [in] number of a town on the map (0..47).
+!?FU28033;
+!!VRy1:S2800 +x1 +x1; // tasks of the town architect
+!!VRy2:Sy1 +1;
+!!CA0/x1:T?y3;
+!!FU28020:Py3;
+!!VRvy1:Sv1;          // set bits for all the buildings
+!!VRvy2:Sv2;          // a player can construct in the usual way
+
+
+** FU28034 cancels an architect's tasks.
+** x1 - [in] number of a town on the map (0..47).
+!?FU28034;
+!!VRy1:S2800 +x1 +x1; // tasks of the town architect
+!!VRy2:Sy1 +1;
+!!VRvy1:S0;           // clear all the bits
+!!VRvy2:S0;
+
+
+** FU28035 gives information about buildings an architect must construct.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] which of buildings 0..31 an arhcitect must construct.
+** v2 - [out] which of buildings 32..43 an architect must construct.
+** (bit is set if the corresponding building
+** must be constructed by the architect or constructed already.)
+!?FU28035;
+!!VRy1:S2800 +x1 +x1; // tasks of the town architect
+!!VRy2:Sy1 +1;
+!!VRv1:Svy1;
+!!VRv2:Svy2;
+
+
+** FU28036 gives information about buildings an architect must construct
+** except constructed ones.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] which of buildings 0..31 an architect must construct.
+** v2 - [out] which of buildings 32..43 an architect must construct.
+** (bit is set if the corresponding building
+** must be constructed by the architect and not constructed yet.)
+!?FU28036;
+!!FU28035:Px1;          // buidlings the architect must construct
+!!VRy1:Sv1;
+!!VRy2:Sv2;
+!!FU28031:Px1;          // exclude constructed buildings
+!!VRv1:&y1;
+!!VRv2:&y2;
+
+
+** FU28037 gives information about buildings of an architect's tasks
+** he can construct just now considering dependences of buildings
+** and resources of the town's owner.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] which of buildings 0..31 an architect can construct just now.
+** v2 - [out] which of buildings 32..43 an architect can construct just now.
+** v3 - [out] (if positive) number of buildings an architect can construct
+**            if -1, there is lack of wood;
+**            if -2, there is lack of mercury;
+**            if -3, there is lack of ore;
+**            if -4, there is lack of sulfur;
+**            if -5, there is lack of crystal;
+**            if -6, there is lack of gems;
+**            if -7, there is lack of gold.
+!?FU28037;
+!!CA0/x1:O?y1;  // owner of this town
+!!CA0/x1:T?y2;  // type of this town
+!!FU28021:Px1;  // bits of constructed buildings
+!!VRy3:Sv1;
+!!VRy4:Sv2;
+!!FU28036:Px1;  // bits of permissible buildings
+!!VRy5:Sv1;
+!!VRy6:Sv2;
+!!VRv8:S0;      // which of buildings an architect can construct now
+!!VRv9:S0;
+!!VRv10:S0;     // number of buildings / lacking resource
+!!DO28038/0/43/1:Py1/y2/y3/y4/y5/y6;  // check all the buildings
+!!VRv1:Sv8;     // outcome of this function
+!!VRv2:Sv9;
+!!VRv3:Sv10;
+
+** check one building
+!?FU28038;
+!!FU28023:Px16;     // bit of the current building (2^x16)
+!!VRv1:&x5;         // check if the current building is permissible
+!!VRv2:&x6;
+!!FU&v1=0/v2=0:E;
+!!FU28019:Px2/x16; // get dependences of the current building on others
+!!VRy3:Sx3 &v1;    // check if all required buildings have constructed
+!!VRy4:Sx4 &v2;
+!!FU&y3<>v1:E;
+!!FU&y4<>v2:E;
+!!FU28009:Px2/x16; // get cost of the current building
+!!OW:Rx1/0/?y11 Rx1/1/?y12 Rx1/2/?y13; // get resources of the town's owner
+!!OW:Rx1/3/?y14 Rx1/4/?y15 Rx1/5/?y16 Rx1/6/?y17;
+!!VRv10&v10=0/v1>y11:S-1; // wood check
+!!FU&v1>y11:E;
+!!VRv10&v10=0/v2>y12:S-2; // mercury check
+!!FU&v2>y12:E;
+!!VRv10&v10=0/v3>y13:S-3; // ore check
+!!FU&v3>y13:E;
+!!VRv10&v10=0/v4>y14:S-4; // sulfur check
+!!FU&v4>y14:E;
+!!VRv10&v10=0/v5>y15:S-5; // crystal check
+!!FU&v5>y15:E;
+!!VRv10&v10=0/v6>y16:S-6; // gems check
+!!FU&v6>y16:E;
+!!VRv10&v10=0/v7>y17:S-7; // gold check
+!!FU&v7>y17:E;
+!!VRv10&v10>=0:+1; // all the test has been passed
+!!VRv10&v10<=0:S1; // so the architect can construct the current building
+!!FU28023:Px16;
+!!VRv8:|v1;
+!!VRv9:|v2;
+
+
+** FU28039 changes architect's options for a player.
+** x1 - [in] number of a player (0..7).
+** x2 - [in] new options.
+** The architect's options for all the players are stored in v2900..v2907.
+!?FU28039;
+!!VRy1:S2900 +x1;
+!!VRvy1:Sx2;
+
+
+** FU28040 returns architect's options for a player.
+** x1 - [in] number of a player (0..7).
+** v1 - [out] current options.
+!?FU28040;
+!!VRy1:S2900 +x1;
+!!VRv1:Svy1;
+
+
+** Start values for architect's options.
+!#VRv2900:S7;  // player 0
+!#VRv2901:S7;  // player 1
+!#VRv2902:S7;  // player 2
+!#VRv2903:S7;  // player 3
+!#VRv2904:S7;  // player 4
+!#VRv2905:S7;  // player 5
+!#VRv2906:S7;  // player 6
+!#VRv2907:S7;  // player 7
+
+
+** FU28041 checks whether it is allowed to destroy a Village Hall
+** or its upgrades just now. A Mage Guild, or a Fort, or a Citadel,
+** or a Castle, or a Grail, or any Dwelling prevents
+** from demolution of a Village Hall.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] 1 - it is allowed to destroy a Village Hall or its upgrades;
+**            0 - it is not allowed to destroy a Village Hall or its upgrades.
+!?FU28041;
+!!FU28021:Px1;       // bits of constructed buildings
+!!VRy1:Sv1 &3221226399; // bits of buildings that prevent hall demolution
+!!VRy2:Sv2 &4095;
+!!VRv1:S1;
+!!VRv1&y1<>0:S0;
+!!VRv1&y2<>0:S0;
+!!UN:P4/?y3;         // wog option 4: "Disable Town Demolition by a player"
+!!VRv1&y3=1:S0;
+
+
+** FU28042 computes number of a town by its position.
+** x1 - [in] x-coordinate.
+** x2 - [in] y-coordinate.
+** x3 - [in] level.
+** v1 - [out] number of a town on the map;
+**            -1 if there is not a town in this place.
+!?FU28042;
+!!VRv1:S-1;
+!!UN:U98/-1/?y1;            // total number of towns on the map
+!!DO28043/1/y1/1:Px1/x2/x3; // compare x1/x2/x3 with cooordinates of each town
+
+** compare x1/x2/x3 with coordinates of one town
+!?FU28043;
+!!UN:U98/-1/x16/2; // coordinates of the current town
+!!FU&x1<>v2:E;     // compare coordinates
+!!FU&x2<>v3:E;
+!!FU&x3<>v4:E;
+!!CAx1/x2/x3:U?v1; // get number of the current town
+!!VRx16:S49;       // break the cycle
+
+
+** FU28044 computes type of a hero-town interaction.
+** x1 - [in] number of a hero (0..155).
+** x2 - [in] number of a town (0..47).
+** v1 - [out] 0 - if the hero's owner and the town's owner are same or allied;
+**            1 - if the hero's owner and the town's owner are enemy
+**                and this town has no guards (in garrison or visitor);
+**            2 - if the hero's owner and the town's owner are enemy
+**                and this town has some guards.
+!?FU28044;
+!!HEx1:O?y1;      // owner of the hero
+!!CA0/x2:O?y2;    // owner of the town
+!!OWy2:Ty1/?y3;   // alliance team for the hero's owner
+!!OWy1:Ty2/?y4;   // alliance team for the town's owner
+!!VRv1:S0;
+!!VRv1&y3<>y4:S1;  // first switch
+!!VRv1&y2=-1:S1;
+!!FU&v1=0:E;
+!!CA0/x2:M2/0/?y10/?y20;  // number of guards at position 0
+!!CA0/x2:M2/1/?y11/?y21;  // number of guards at position 1
+!!CA0/x2:M2/2/?y12/?y22;  // number of guards at position 2
+!!CA0/x2:M2/3/?y13/?y23;  // number of guards at position 3
+!!CA0/x2:M2/4/?y14/?y24;  // number of guards at position 4
+!!CA0/x2:M2/5/?y15/?y25;  // number of guards at position 5
+!!CA0/x2:M2/6/?y16/?y26;  // number of guards at position 6
+!!CA0/x2:H0/?y6;       // garrison commander (the same number as garrison hero)
+!!COy6&y6>=0:E?y7;     // check if the commander enabled
+!!VRy6&y6>=0/y7=0:S-1;
+!!COy6&y6>=0:D?y8;     // check if the commander alive
+!!VRy6&y6>=0/y8=1:S-1;
+!!CA0/x2:H1/?y7;       // hero - a town visitor
+!!VRv1:S1;
+!!VRv1&y20<>0:S2; // second switch
+!!VRv1&y21<>0:S2;
+!!VRv1&y22<>0:S2;
+!!VRv1&y23<>0:S2;
+!!VRv1&y24<>0:S2;
+!!VRv1&y25<>0:S2;
+!!VRv1&y26<>0:S2;
+!!VRv1&y6<>-1:S2;
+!!VRv1&y7<>-1:S2;
+
+
+** FU28049 returns pictures for an architect.
+** x1 - [in] type of a town (0..8).
+** z1 - [out] first picture.
+** z2 - [out] second picture.
+** z3 - [out] third picture.
+** z4 - [out] forth picture.
+!?FU28049;
+!!VRz5:S^..\data\s\s103_arch^;
+!!VRz6&x1=0:Sz5 +^cas^;
+!!VRz6&x1=1:Sz5 +^ram^;
+!!VRz6&x1=2:Sz5 +^tow^;
+!!VRz6&x1=3:Sz5 +^inf^;
+!!VRz6&x1=4:Sz5 +^nec^;
+!!VRz6&x1=5:Sz5 +^dun^;
+!!VRz6&x1=6:Sz5 +^str^;
+!!VRz6&x1=7:Sz5 +^for^;
+!!VRz6&x1=8:Sz5 +^ele^;
+!!VRz7:Sz5 +^nil^;
+!!VRz1:Sz7 +^1.jpg^;
+!!VRz2:Sz6 +^1.jpg^;
+!!VRz3:Sz6 +^2.jpg^;
+!!VRz4:Sz7 +^2.jpg^;
+
+
+
+********************************************************************************
+
+
+
+** FU28050 displays a multipage menu that allows a player to select buildings.
+** An architect will construct the selected buildings and required for them.
+** x1 - [in] number of a town on the map (0..47).
+!?FU28050;
+!!CA0/x1:N?z1;    // name of this town
+!!FU28034:Px1;    // cancel the current architect's tasks
+!!FU28031:Px1;    // bits of all the non-constructed buildings
+!!IF&v1=0/v2=0:M1/203011; // show special message if no buildings
+!!FU&v1=0/v2=0:E;
+!!FU28024:Pv1/v2; // convert the bit form to an array of buildings' numbers
+!!VRv3:Sv1 +1;    // first building's number to display in menu
+!!VRv4:Svv1;      // number of buildings to display in menu
+!!VRy1:Sv4 :12;   // number of pages (one page containts 12 items)
+!!VRy2:Sy1 *-12 +v4;
+!!VRy1&y2>0:+1;
+!!DO28051/1/y1/1:Px1/y1; // display all the pages
+
+** display one page
+!?FU28051;
+!!VRy1:Sx16 *12 -12;  // number of buildings before the current page
+!!VRv7:Sv3 +y1;       // the first building's number for the current page
+!!VRv8:Sv4 -y1;       // number of buildings starting with the current page
+!!DO28052/1/12/1:Px1; // get text for menu items of the current page
+!!VRv1:Sx16;          // current page
+!!VRv2:Sx2;           // number of pages
+!!IF:G0/10/0/203010/22/23/24/25/26/27/28/29/30/31/32/33;  // v10 - choice
+!!VRv9:S1;
+!!DO28053/1/12/1:Px1; // check state of buttons
+
+** get text for one menu item
+!?FU28052;
+!!VRy1:S22 +x16 -1; // index of z variable to store the current item text
+!!VRzy1:S^^;        // set item text to empty if there is not building's number
+!!FU&x16>v8:E;
+!!CA0/x1:T?y2;      // type of this town
+!!VRy3:Sv7 +x16 -1;
+!!VRy4:Svy3;        // building's number
+!!UN:N2/y1/y2/y4;   // building's name
+
+** check state of one button
+!?FU28053;
+!!VRy1:Sv10 &v9;          // check one bit
+!!VRy2&y1<>0:Sv7 +x16 -1;
+!!VRy3&y1<>0:Svy2;        // number of the corresponding building
+!!FU28032&y1<>0:Px1/y3;   // new task for the architect if the bit is set
+!!VRv9:*2;                // continue with checking the next bit
+
+
+** FU28054 display a request about current tasks of an architect.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] 1 - if the "OK" button pressed;
+**            0 - if the "Cancel" button pressed.
+!?FU28054;
+!!FU28036:Px1;     // bits of buildings the architect must construct
+!!VRy1:Sv1;        // store to local variables
+!!VRy2:Sv2;
+!!VRv1:S1;         // exit if no buildings
+!!FU&y1=0/y2=0:E;
+!!CA0/x1:N?z1;     // name of this town
+!!VRz2:S^^;        // second part of the message (excluding dwellings)
+!!VRz3:S^^;        // third part of the message (including dwellings)
+!!FU28024:Py1/y2;  // convert to an array of building's numbers
+!!VRv2:Svv1;       // size of the array
+!!CA0/x1:T?v3;     // type of this town
+!!DO28055/1/v2/1:P;       // get name of each building in array
+!!IF:Q1^%Z203007%Z2%Z3^;  // display the message
+!!VRv1:S0;
+!!VRv1&1:S1;
+
+** get name of one building
+!?FU28055;
+!!VRy1:Sv1 +x16;
+!!VRy2:Svy1;             // buidling's number
+!!UN:N2/10/v3/y2;        // building's name
+!!VRz10&x16<v2:+z203008; // add separator(,) to the name
+!!VRz10&x16=v2:+z203009; // add ending(.) to the name
+!!VRz2&y2<30:+z10;       // add text to the second part if it is not a dwelling
+!!VRz3&y2>=30:+z10;      // add text to the third part if it is a dwelling
+
+
+** FU28056 displays an architect's option menu.
+** x1 - [in] number of a player (0..7).
+!?FU28056;
+!!FU28040:Px1;                            // get previous options
+!!IF:G0/1/v1/203012/203013/203014/203015; // display the checkbox dialogue
+!!FU28039:Px1/v1;                         // store new options
+
+
+** FU28057 displays an architect's main dialogue.
+** This dialogue allows user to task town architect.
+** x1 - [in] number of a town on the map (0..47).
+** v1 - [out] selected item (1..4, 0-cancel).
+!?FU28057;
+!!CA0/x1:T?y2;   // type of this town
+!!CA0/x1:O?y3;   // owner of this town
+!!FU28041:Px1;   // check if a Village Hall or its upgrades can be destroyed
+!!VRy4:Sv1;
+!!VRz10:S^^;
+!!VRz10&y4=1:S203006;
+!!FU28049:Py2;   // architect's pictures
+!!VRz25:S1;      // picture 1
+!!VRz26:S2;      // picture 2
+!!VRz27:S3;      // picture 3
+!!VRz28:S4;      // picture 4
+!!CA0/x1:N?z1;   // name of the town
+!!VRz22:S203000; // title of dialogue
+!!VRz23:S^^;     // legend above input box
+!!VRz24:S203001; // legend above checkboxes
+!!VRz29:S10;     // legend of picture 1
+!!VRz30:S10;     // legend of picture 2
+!!VRz31:S10;     // legend of picture 3
+!!VRz32:S10;     // legend of picture 4
+!!VRz33:S203002; // choice 1
+!!VRz34:S203003; // choice 2
+!!VRz35:S203004; // choice 3
+!!VRz36:S203005; // choice 4
+!!IF:D29/z22/z23/z24/z25/z26/z27/z28/z29/z30/z31/z32/z33/z34/z35/z36;
+!!IF:E1/29;         // display the dialogue
+!!VRy1:Sv1;         // store the result to local variable
+!!FU28034&y1=1:Px1; // choice 1 selected
+!!FU28033&y1=2:Px1; // choice 2 selected
+!!FU28050&y1=3:Px1; // choice 3 selected
+!!FU28056&y1=4:Py3; // choice 4 selected
+!!VRv1:Sy1;
+!!VRv1&v1=-1:S0;
+
+
+** FU28058 does a work of one architect at this turn.
+** x1 - [in] number of a town on the map (0..47).
+** x2 - [in] maximum count of buildings constructed a day
+!?FU28058;
+!!FU28026:Px1;        // exit if the town's owner already constructs this turn
+!!FU&v1=1:E;
+!!FU28035:Px1;        // bits of buildings that the architect must construct
+!!FU&v1=0/v2=0:E;     // exit if the architect is resting
+!!FU28037:Px1;        // bits of buildings that may be constructed just now
+!!VRy1:Sv1;
+!!VRy2:Sv2;
+!!FU28059&v3<0:Px1/v3; // message if there is not enough resources
+!!FU&v3<0:E;
+!!FU28060&v3=0:Px1;   // display message if the architect carried out his tasks
+!!FU28034&v3=0:Px1;
+!!FU&v3=0:E;
+!!FU28024:Py1/y2;     // convert bit form of permissible buildings to an array
+!!VRy3:Sv3 -1;        // select random building from the array
+!!VRy4:Sv1 +1 Ry3;
+!!VRy5:Svy4;
+!!FU28061:Px1/y5;     // request about the selected building
+!!FU&v1=0:E;          // if the player accepts then construct
+!!FU28062:Px1/y5;     // the selected building and reduce the player's resources
+!!VRx2:-1;            // recursive call for next construction
+!!FU28058&x2>=1:Px1/x2;
+
+** message if there is not enough a resource
+!?FU28059;
+!!CA0/x1:O?y1; // town's owner
+!!FU28040:Py1; // check if this message enabled
+!!VRv1:&2;
+!!FU&v1=0:E;
+!!CA0/x1:N?z1;  // town's name
+!!VRy2:S-1 -x2; // number of the lacking resource
+!!VRy3:S203026 +y2;
+!!VRz3:Szy3;
+!!IF:Q1/y2/0/1^%Z203016%Z3^; // message
+
+** message if an architect carried out his tasks
+!?FU28060;
+!!CA0/x1:O?y1; // town's owner
+!!FU28040:Py1; // check if this message enabled
+!!VRv1:&4;
+!!FU&v1=0:E;
+!!CA0/x1:N?z1; // town's name
+!!CA0/x1:T?y2; // town's type
+!!VRy2:+22;
+!!IF:Q1/y2/9/1^%Z203016%Z203025^; // message
+
+** request about a building
+!?FU28061;
+!!CA0/x1:O?y1;    // town's owner
+!!FU28040:Py1;    // check if this message enabled
+!!VRy1:Sv1 &1;
+!!VRv1:S1;        // suppose "OK" pressed if this message disabled
+!!FU&y1=0:E;
+!!CA0/x1:N?z1;    // town's name
+!!CA0/x1:T?y1;    // town's type
+!!FU28009:Py1/x2; // building's cost
+!!VRz2:S^^;
+!!VRz2&v1>0:+z203018;
+!!VRz2&v2>0:+z203019;
+!!VRz2&v3>0:+z203020;
+!!VRz2&v4>0:+z203021;
+!!VRz2&v5>0:+z203022;
+!!VRz2&v6>0:+z203023;
+!!VRz2:+z203024;
+!!VRy2:Sy1 +22;                       // picture's type for using in message
+!!IF:Q1/y2/x2/2^%Z203016%Z203017%Z2^; // message
+!!VRv1:S0;
+!!VRv1&1:S1;
+
+** construct a building and reduce resources of a town's owner
+!?FU28062;
+!!CA0/x1:T?y1;    // town's type
+!!FU28009:Py1/x2; // building's cost
+!!VRv1:*-1;       // multiply the cost by -1
+!!VRv2:*-1;
+!!VRv3:*-1;
+!!VRv4:*-1;
+!!VRv5:*-1;
+!!VRv6:*-1;
+!!VRv7:*-1;
+!!CA0/x1:O?y1;    // town's owner
+!!OW:Ry1/0/dv1;   // reduce the owner's resources
+!!OW:Ry1/1/dv2;
+!!OW:Ry1/2/dv3;
+!!OW:Ry1/3/dv4;
+!!OW:Ry1/4/dv5;
+!!OW:Ry1/5/dv6;
+!!OW:Ry1/6/dv7;
+!!FU28027:Px1/x2; // construct the building
+
+
+** FU28063 does work of all architects of one player.
+** x1 - [in] number of a player (0..7).
+!?FU28063;
+!!OW:W-1/?y1;         // number of towns the player control
+!!VRy1:-1;
+!!DO28064/0/y1/1:Px1; // do architect's work in each town
+
+** do work of one architect
+!?FU28064;
+!!OW:W-1/x16/?y1;
+!!UN:P228/?y2;         // build twice a day option
+!!FU28058&y2<>1:Py1/1;
+!!FU28058&y2=1:Py1/2;
+
+
+** FU28065 is called after capturing of any town.
+** x1 - [in] number of a town on the map (0..47).
+!?FU28065;
+!!FU28034:Px1; // cancel current tasks of the architects
+
+
+
+********************************************************************************
+
+
+
+** Right mouse click on any Village Hall (Town Hall / City Hall / Capitol)
+** triggers an architect's main dialogue.
+!?CM1;
+!!UN:P303/?y1;       // wog option
+!!FU&y1<>1:E;       // exit if wog option disabled
+!!CM:I?y2;          // building under cursor
+!!FU&y2<10|y2>13:E; // exit if this is not a Village Hall
+!!CM:F?y3;          // flag
+!!FU&y3<>512:E;     // exit if this is not a Right Click
+!!OW:C?y4;          // current player
+!!CA-1:O?y5;        // owner of the current town
+!!FU&y4<>y5:E;      // exit if this is allied town
+!!CA-1:U?y6;
+!!FU28057:Py6;      // display dialogue
+!!CM&v1>0:R0;       // disable standard reaction if "OK" pressed
+!!FU&v1>0:E;
+!!FU28041:Py6;      // check if Village Hall can be destroyed
+!!CM&v1=0:R0;       // disable standard reaction if "Cancel" and check gave Yes
+
+
+** Left mouse click on any Village Hall (Town Hall / City Hall / Capitol)
+** triggers a request about current tasks of an architect.
+!?CM1;
+!!UN:P303/?y1;       // wog option
+!!FU&y1<>1:E;       // exit if wog option disabled
+!!CM:I?y2;          // building under cursor
+!!FU&y2<10|y2>13:E; // exit if this is not a Village Hall
+!!CM:F?y3;          // flag
+!!FU&y3<>0:E;       // exit if this is not a Right Click
+!!CA-1:U?y4;
+!!FU28054:Py4;      // display request
+!!CM&v1=0:R0;       // disable standard reaction if "Cancel" pressed
+
+
+** Every turn constructions.
+!?TM2&1000; // not for AI
+!!UN:P303/=1;   // check, if wog option is enabled
+!!FU28063&1:Py2;  // if yes: architects' work for current player
+
+
+** If a hero comes to enemy town without guards, then the town will be captured.
+!?OB98;
+!!UN:P303/?y1;             // wog option
+!!FU&y1<>1:E;             // exit if wog option disabled
+!!HE-1:N?y2;              // hero who comes in the town
+!!CAv998/v999/v1000:U?y3; // number of the town
+!!FU28044:Py2/y3;         // type of a hero-town interaction
+!!FU28065&v1=1:Py3;       // architect's reaction on capturing of the town
+
+
+** If a town is attacked and a battle occurs then store the town's number.
+!?BA0;
+!!UN:P303/?y1;        // wog option
+!!FU&y1<>1:E;        // exit if wog option disabled
+!!BA:P?y2/?y3/?y4;   // town's position
+!!FU28042:Py2/y3/y4; // check if this is a siege
+!!FU&v1=-1:E;        // exit if check gave "No"
+!!CA0/v1:H0/?y5;     // hero in garrison
+!!CA0/v1:H1/?y6;     // hero - a town visitor
+!!FU&y5>=0/y6>=0:E;  // exit if both the heroes exist
+!!VRv2909:Sv1;       // store number of this town for later using
+
+** Number of a town under siege (-1 if none)
+!#VRv2909:S-1;
+
+** If a siege of a town was successful, the architect of this town must react.
+!?BA1;
+!!UN:P303/?y1;            // wog option
+!!FU&y1<>1:E;            // exit if wog option disabled
+!!FU&v2909=-1:E;         // exit if this is not a siege
+!!BA:H0/?y2;             // hero who attacked the town
+!!HEy2:O?y3;             // hero's owner (-1 if siege was not successful)
+!!FU28065&y3<>-1:Pv2909; // architect's reaction on capturing of town
+!!VRv2909:S-1;           // end of siege
+

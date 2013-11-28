@@ -1,0 +1,273 @@
+ZVSE
+Updated for ERM Option Clash, January 28 2007
+ERMS_ScriptName=Script127
+ERMS_ScriptAuthor=Doom3d
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=28.1(January).2007
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English or Magyar (native)
+ERMS_ScriptUsedVariables=v263-265
+ERMS_AdditionalFiles=none
+ERMS_ScriptUsedFlags=none
+ERMS_ScriptUsedTimers=TM1
+ERMS_ScriptUsedFunctions=642-643
+ERMS_ScriptUsedMacroNames=none
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+*  | (or= alt+w on my pc, used as hotkey)
+
+*ERMS temporary: z78, v34, v600-656
+*ERMS Options: 286-288,291, 327,266
+--------------------------------------------------------------------------------
+*287*y-1* Creature growth in Towns (Dwellings).
+*288*y-2* Creature growth in Hero armies+garrisons * Army Growth (op. 116) affected.
+* Garrison and Hero Army growth rate should be the same,
+* otherwise player forced to hire garrison heroes or leave garrisons.
+**  For both: Different bonuses for Human&AI, depending on game level.
+
+*286*y-3* H4 Peasants. Peasants pay level dependent taxes. build 2
+*291*y-4* AI thinking Radius: increased AI thinking power. Better AI.
+
+*266* Masters of spellcasting-Random version
+* max. 7 spells/turn in random moments, not so dependent on number of stacks
+* number of remained spellcastings carried between turns
+* v263-265 used in battle, can be shared with my adventure screen scripts
+
+*327* Masters of spellcasting
+* Your hero can cast one more spell after every action of your troops, except waiting.
+* Works also with AI.
+*Comments: "If you re-enable spell casting after a spell has been cast,
+* the player still can't cast it immediately.
+* The spell book will only become accessible when the next creature stack
+* belonging to that player gets a turn, or, if the same stack gets morale and can act again immediately."
+--------------------------------------------------------------------------------
+
+*327* Masters of spellcasting (original)
+
+!?BG0;
+!!UN:P327/?y-1;
+!!FU&y-1=0:E;
+!!BG:H?y-26 A?y-24 Q?y-27;
+!!FU&y-24=1|y-24=8/y-26=-1:E;
+!!BHy-27:M0;
+!!FU:E;
+
+--------------------------------------------------------------------------------
+*266* Masters of spellcasting- Random version
+
+!?BR;
+!!UN:P266/?y-1;
+!!FU&y-1=0:E;
+
+!!VRy-50:S5; bonus per turn
+
+; setup RND generator - multiplayer support can be added here
+!!VRy-98: T2000000000;
+!!VR:R0/y-98; time based random seed once per turn
+
+; BR PART- handling carriage over turns
+; reset vars before battle
+!!VRv263&v997=-1:S3; spell flags: INVERTED  Side0-bit0, Side1-bit1, turn0 flag:bit2 (non-inverted)
+!!VRv264&v997=-1:S0; Side0 counter
+!!VRv265&v997=-1:S0; Side1 counter
+!!FU&v997<0:E; exit if tactics phase
+
+!!VRy-1:Sv263 &4; read "turn0 2nd trigger" flag
+!!FU&y-1>0/v997<1:E; exit if 2nd turn0 trigger
+!!VRv263:|4; set 2nd turn0 trigger comes flag- WARNING: turn0 trigger comes 2x
+
+; carry reset flags for sides
+!!BH0:N?y-1; hero number  side0
+!!VRy-2:Sv263 &1; flag side0
+!!BH0&y-1>-1:My-2; carry if side has hero
+
+!!BH1:N?y-2; hero number  side1
+!!VRy-2:Sv263 &2 :2; flag side1
+!!BH1&y-2>-1:My-2; carry if side has hero
+---
+; add spells for new turn
+!!VRv264:Sdy-50; side0
+!!VRv265:Sdy-50; side1
+
+!!FU&v997>0:E;  exit if not first battle turn : Run once
+; options:
+!!UN:P327/0;
+*** dice roll for first turn start here ***  RND(100+10n)<12n?
+* Mflags=1, now reset if throw ok
+!!VRy-51:Sy-50 *5 +100;
+!!VRy-52:S0 Ry-51;
+!!VRy-53:Sy-50 *8;          "Dice"
+!!BH0&y-1>-1/y-52<y-53:M0; reset mflag0
+!!VRv263&y-1>-1/y-52<y-53:&-2; reset rlag0 if reset occured
+
+!!VRy-51:Sy-50 *5 +100;
+!!VRy-52:S0 Ry-51;
+!!VRy-53:Sy-50 *8;         "Dice"
+!!BH1&y-2>-1/y-52<y-53:M0; reset mflag0
+!!VRv263&y-2>-1/y-52<y-53:&-3; reset rlag1 if reset occured
+---
+
+; BG PART1 BH:M flag internally set after action :), BG:A ok before action
+*, so BG1 is needed after spells, and BG0 before other actions. Relax.. ;)
+
+!?BG0;  here we need BG:A
+!!UN:P266/?y-1;
+!!FU&y-1=0|v997<0:E; exit if disabled or tactics phase
+
+!!BG:H?y-1 A?y-2;
+; leave if "wait" command
+!!FU&y-2=8:E;
+!!VRv263&y-2=1:|8; hero spell flag for BG1
+; set flags if spell will be casted
+!!VRv263&y-1=0/y-2=1:|1; set if side0
+!!VRv263&y-1=1/y-2=1:|2; set if side1
+; decrement counter if spell casted
+!!VRv264&y-1=0/y-2=1:-1; decr if side0
+!!VRv265&y-1=1/y-2=1:-1; decr if side1
+---
+; BG PART2 actual BHx:M values needed for reset throws, & it's actual only after action..
+* but I want to do reset dice cast before actions, so I have to manually update BHx:M info,
+* instead of using BG1 trigger for part2. Plus BG1 needed with carried data, if reset occured before hero spell.
+* Otherwise hero will lose spellcasting occasion.
+
+; random dice throw for reenabling spells- both side
+*side0*
+!!BH0:M?y-4 N?y-5; reset flag+ hero side0  (-1 if no hero, 0 if has)
+!!VRy-4&y-1=0/y-2=1:S1; reset flag correction if side0 will cast hero spell
+!!VRy-6:S5 *v264 +100;
+!!VRy-7:S0 Ry-6;  RND
+!!VRy-8:S8 *v264; throw from 0 to 100+5N, ok if below 8N.  "Dice"
+!!VRy-9&y-4=1/y-5>-1/y-7<y-8:S1;  reset flag0 ok, side have hero, and throw ok: RND below limit
+!!BH0&y-9=1:M0; reset if all ok
+!!VRv263&y-9=1:&-2; reset flag0 if reset occured
+
+*side1* don't forget to reset y- , start with Sx or ?x
+!!BH1:M?y-4 N?y-5; reset flag+ hero side1 (-1 if no hero, 1 if has)
+!!VRy-4&y-1=1/y-2=1:S1; reset flag correction if side1 will cast hero spell
+!!VRy-6:S5 *v265 +100;
+!!VRy-7:S0 Ry-6; RND
+!!VRy-8:S8 *v265; throw from 0 to 100+5N, ok if below 8N.   "Dice"
+* y-9 trashed, so new var..
+!!VRy-10&y-4=1/y-5>-1/y-7<y-8:S1; reset flag1 ok, side have hero, and throw ok: RND below limit?
+!!BH1&y-10=1:M0; reset if all ok
+!!VRv263&y-10=1:&-3; reset flag1 if reset occured
+---
+; set/reset Mflags for sides  once more after hero spells
+* After Action="hero spell" & dice cast ok/nok: M flag=1, Rflag=0/1, Mflag will be set to Rflag vaule
+* Otherwise hero will lose casting possibilites.
+
+!?BG1;
+!!UN:P266/?y-1;
+!!FU&y-1=0|v997<0:E;  exit if disabled or tactics phase
+; code execution speedup
+!!VRy-2:Sv263 &8; hero spell flag
+!!FU&y-2>0:E;
+; set flag again
+!!BH0:N?y-1; hero number  side0
+!!VRy-2:Sv263 &1; Rflag side0
+!!BH0&y-1>-1:My-2; carry if side has hero
+
+!!BH1:N?y-1; hero number  side1
+!!VRy-2:Sv263 &2 :2; Rflag side1
+!!BH1&y-1>-1:My-2; carry if side has hero
+
+;reset hero spell flag
+!!VRv263:&-9;
+--------------------------------------------------------------------------------
+
+*287*y-1* Creature growth in Towns (Dwellings)
+*288*y-2* Creature growth in Hero armies +garrisons * Army Growth (op. 116) affected
+*286*y-3* H4 Peasants
+*291*y-4* AI thinking Radius
+;usage: TM1, z78, v33-34
+
+
+; ---------- Main Entry()
+!?TM1;
+!!UN:P287/?y-1 P288/?y-2 P286/?y-3 P291/?y-4 P116/?y-5; checks if options are enabled
+!!FU&y-1=0/y-2=0/y-3=0/y-4=0:E; exit if nothing to do
+!!UN&y-2=1/y-5=1:P116/0; override Option 116 (Monster stacks in hero armies grow every day)
+* If you enable both, you may have army growth up to 11% per day. Have fun. ;)
+
+*291*y-4* AI thinking Radius
+!!VRy-8:Sd0 -1;
+!!UN&y-4=1:J4/y-8; y-8 free
+
+;H4 Peasants: specify tax rate  (It is not plausible to have too much Ace master Peasants :)
+!!VRy-7:S2;  min value
+!!VRy-8:S10; max value
+!!VRy-9:Sc;
+!!VRz78&y-3=1:S^Pays taxes(%Y-7-%Y-8 gold per day).^; y-9 free
+!!UN&y-3=1/y-9=1:G1/139/2/78;      set it on first day (more, then once :)
+
+!!FU&y-9=1:E; exit if first day;  y-9 free
+
+!!OW:W-1/?y-10 C?y-11 I-1/?y-12;  check number of Towns for current Color, Color and AI (AI=1, HUman=0)
+!!VRy-10:Sd0 -1; prepairing loop
+!!UN:J2/?y-13; check player difficulty level (0-4)
+
+;Dwelling bonuses
+!!VRy-14&y-12=0:S6 -y-13; Human  6%-2%
+!!VRy-14&y-12=1:S4 +y-13; AI     4%-8%
+; Garrison&Hero Army bonuses
+!!VRy-15&y-12=0:S6 -y-13; Human  6%-2%
+!!VRy-15&y-12=1:S4 +y-13; AI     4%-8%
+* y-12,13 free
+; Peasant bonuses: y-9 calculated inside loop (depends on actual stack exp. level)
+
+ ; V34 FU name multiplex *"1"* do not modify v34 inside this DO loop
+!!VRv34:S1;
+!!OW:H-1/600; //get heroes list * max.48 towns+8 adventure heroes= 56, so v600-v656 are used.
+!!DO642/1/v600/1&v600>0:P; //iterate through heroes/
+
+; V34 FU name multiplex *"2"* do not modify v34 inside this DO loop
+!!VRv34:S2;
+!!DO642/0/y-10/1&y-10>-1:P; //iterate through Towns/
+
+*--------End of Main()
+
+; Function library
+
+; Hero loop
+!?FU642&v34=1; actual hero setup  FUxxx1   x16 rel. pointer to hero ID adress
+!!VRy1:S600 +x16; set Hero ID pointer
+!!VRg:Svy1; hero ID
+!!DO643/0/6/1:P;
+
+!?FU643&v34=1; Hero Army- actual Hero slot
+!!HEg:C0/x16/?y1/?y2/?y4/4;  mode 4 check, y1 type y2 number y4 exp.
+!!VRy3:Sy2 *y-15 :100;  calculate Army Growth
+!!VRy3&y2>1000000:S0; don't grow above 1 million
+!!HEg&y3>0/y-2=1:C0/x16/y1/dy3;   set
+
+!!FU&y-3=0|y1<>139:E; exit if H4 peasants off or stack not a peasant - y1 free
+!!VRy5:Sy-7 *y2;
+!!VRy1:Sy-8 -y-7 *y4 *100 :29500 *y2 :100 +y5;  calculate H4 Peasants bonus without (), y4= 0-29750
+!!OW:R-1/6/dy1;  set         BUGFIX: mistype "x2" was here Peasants always payed for RED
+
+
+; Town loop
+!?FU642&v34=2;
+!!OW:W-1/x16/?y-16; Town list number
+!!CA0/y-16:H0/?y-17 P?y-20/?y-21/?y-22;  Garrison hero? Position for EX?
+!!DO643/0/6/1:P; iteration
+
+!?FU643&v34=2/y-1=1; Dwellings
+!!CA0/y-16:M1/x16/?y1/?y2; check
+!!VRy3:Sy1 *y-14 :100;    modify
+!!VRy4:Sy2 *y-14 :100;     -II-
+!!CA0/y-16&y1<1000000/y2<1000000:M1/x16/dy3/dy4;  set if below 1 million
+
+!?FU643&v34=2/y-17=-1; Garrison if no hero
+!!CA0/y-16:M2/x16/?y1/?y2 ; check
+!!VRy3:Sy2 *y-15 :100;   calculate Army Growth
+!!CA0/y-16&y2<1000000/y-2=1:M2/x16/y1/dy3;  set if below 1M
+
+!!FU&y-3=0|y1<>139:E; exit if H4 peasants off or stack not a peasant - y1 free
+!!EXy-20/y-21/y-22/x16/2:E?y4;
+!!VRy5:Sy-7 *y2;
+!!VRy1:Sy-8 -y-7 *y4 *100 :29500 *y2 :100 +y5;  calculate H4 Peasants bonus without (), y4= 0-29750
+!!VRy1&y1>100000:S100000; don't pay more, then 100k gold/turn/peasant stack
+!!OW:R-1/6/dy1;    set    BUGFIX: mistype "x2" was here Peasants always payed for RED
+--------------------------------------------------------------------------------
+

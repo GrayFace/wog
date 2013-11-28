@@ -1,0 +1,194 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Commander Witch Huts ERM script v1.0 - Donald X. Vaccarino
+** Updated: Oct. 25. 2003 by Hermann the Weird
+** Updated: July 03. 2004 by Tobyn [only added correct Magic Resistance bonus when increasing Magic Power skill]
+** Requires WOG version 3.58 or later
+** Makes Witch Huts give out commander skills
+
+** bonuses (once per type of hut):
+**   air magic       fly                    mag-spe  16384
+**   archery         shooting               att-spe  16
+**   armorer         endless retaliation    def-hit  32
+**   artillery       no retaliation         att-mag  8
+**   ballistics      +1 attack              0
+**   diplomacy       +1 damage              3
+**   eagle eye       +1 damage              3
+**   earth magic     paralyzing attack      hit-mag  1024
+**   estates         +1 speed               5
+**   fire magic      fire shield            def-mag  128
+**   first aid       regeneration           hit-spe  2048
+**   intelligence    +1 hit points          2
+**   leadership      attack twice           hit-dmg  512
+**   learning        +1 defense             1
+**   logistics       champion bonus         dmg-spe  8192
+**   luck            block                  def-spe  256
+**   mysticism       +1 hit points          2
+**   navigation      +1 defense             1
+**   necromancy      death stare            dmg-mag  4096
+**   offense         max damage             att-dmg  4
+**   pathfinding     +1 attack              0
+**   resistance      reduce defense         att-def  1
+**   scholar         +1 magic power         4
+**   scouting        +1 speed               5
+**   sorcery         fear                   att-hit  2
+**   tactics         attack all directions  def-dmg  64
+**   water magic     +1 speed               5
+**   wisdom          +1 magic power         4
+
+** To use this code, put it into a Global Event, set to never happen.
+
+** Variables Used: v600-v627, z326, w40
+** w40 may not be modified elsewhere!
+** The other variables may be used elsewhere, but get trashed by this code.
+** Functions Used: 6300-6304
+
+
+** initialization
+!#UN:P66/?v1;     [Check for WoG option]
+
+!?FU6303; [function for clearing a w variable]
+!!IF:Wx16; [use hero x16's w variables]
+!!VRw40:S0; [clear our variable (tracking types of witch huts visited)]
+
+!#DO6303/0/155/1&v1=1:P; [loop through all heroes to clear w variable]
+
+** end of initialization
+
+
+** Witch Hut object trigger
+
+!?OB113;
+!!UN:P66/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU6304:P; [do everything in a function for safety]
+
+** end of object trigger
+
+
+** function to do witch hut stuff if commander present
+
+!?FU6304;
+
+!!CO-1:D?y1 E?y2; [get y1 = 0 if alive, y2 = 1 if enabled]
+!!FU6300&y1=0/y2=1:P; [handle witch hut if alive enabled commander]
+
+** end of function
+
+
+** function to handle witch hut for commanders
+
+!?FU6300;
+
+!!VRv600:C100/16/8192/105/103/101/512/104/102/256; [table of effects]
+!!VRv610:C100/103/4096/105/128/16384/105/1024/104/64;    [100-105 are +stat, 0 is special estates]
+!!VRv620:C8/101/4/32/102/2/1/2048;                   [others are bit values of special abilities]
+
+!!WH998:S?y1; [get skill for this hut]
+!!VRy2:S600 +y1; [get variable address]
+!!VRy3:Svy2; [now y3 is code for what to do]
+!!VRy4:S0;
+!!VRy4&y3>=100/y3<=105:S1; [flag for if it's a +stat bonus]
+!!FU6301&y4=0/y3>0:Py1/y3; [handle special ability bonus]
+!!FU6302&y4=1:Py1/y3; [handle +stat bonus]
+
+** end of function
+
+
+** function to handle giving special ability
+** x1 = skill, x2 = ability bit value
+
+!?FU6301;
+
+!!VRz326&x1=1:Sz166000;
+!!VRz326&x1=2:Sz166001;
+!!VRz326&x1=6:Sz166002;
+!!VRz326&x1=9:Sz166003;
+!!VRz326&x1=12:Sz166004;
+!!VRz326&x1=14:Sz166005;
+!!VRz326&x1=15:Sz166006;
+!!VRz326&x1=17:Sz166007;
+!!VRz326&x1=19:Sz166008;
+!!VRz326&x1=20:Sz166009;
+!!VRz326&x1=22:Sz166010;
+!!VRz326&x1=23:Sz166011;
+!!VRz326&x1=25:Sz166012;
+!!VRz326&x1=26:Sz166013;
+!!VRz326&x1=27:Sz166014;
+
+!!CO-1:B0/?y1; [get bonuses]
+!!VRy2:Sy1 &x2; [check for bit already set]
+
+!!VRz-1:Sz166015;
+!!VRz-2&x1=1:S^..\data\zvs\lib1.res\_AT_SP_0.bmp^;
+!!VRz-2&x1=2:S^..\data\zvs\lib1.res\_DM_SP_0.bmp^;
+!!VRz-2&x1=6:S^..\data\zvs\lib1.res\_AT_HP_0.bmp^;
+!!VRz-2&x1=9:S^..\data\zvs\lib1.res\_DF_SP_0.bmp^;
+!!VRz-2&x1=12:S^..\data\zvs\lib1.res\_DM_MP_0.bmp^;
+!!VRz-2&x1=14:S^..\data\zvs\lib1.res\_HP_MP_0.bmp^;
+!!VRz-2&x1=15:S^..\data\zvs\lib1.res\_MP_SP_0.bmp^;
+!!VRz-2&x1=17:S^..\data\zvs\lib1.res\_DF_MP_0.bmp^;
+!!VRz-2&x1=19:S^..\data\zvs\lib1.res\_DF_DM_0.bmp^;
+!!VRz-2&x1=20:S^..\data\zvs\lib1.res\_AT_MP_0.bmp^;
+!!VRz-2&x1=22:S^..\data\zvs\lib1.res\_AT_DM_0.bmp^;
+!!VRz-2&x1=23:S^..\data\zvs\lib1.res\_DF_HP_0.bmp^;
+!!VRz-2&x1=25:S^..\data\zvs\lib1.res\_DM_HP_0.bmp^;
+!!VRz-2&x1=26:S^..\data\zvs\lib1.res\_AT_DF_0.bmp^;
+!!VRz-2&x1=27:S^..\data\zvs\lib1.res\_HP_SP_0.bmp^;
+
+!!IF&1000/y2=0:D10/-1/0/0/-2/0/0/0/326/0/0/0/0/0/0/0;     [Set up message box]
+!!IF&1000/y2=0:F10/0/0/0/0/0;     [Disable cancel button]
+!!IF&1000/y2=0:E1/10;     [Display message box]
+
+!!VRy2:Sy1 |x2; [logical-or our bonus]
+!!CO-1:B0/y2; [set bonuses]
+
+** end of function
+
+
+** function to handle giving +stat
+** x1 = skill, x2 = stat + 100
+
+!?FU6302;
+
+!!VRx2:-100; [get stat number]
+!!CO-1:Sx2/?y1 S6/?y5; [get current skill level]
+!!IF:W-1; [refer to current hero's w variables]
+
+!!VRv600:C1/2/4/8/16/32/64/128/256/512; [bit table for skills]
+!!VRv610:C1024/2048/4096/16384/32768/65536/131072/262144/524288/1048576;
+!!VRv620:C2097152/4194304/8388608/16777216/33554432/67108864/134217728/268435456;
+
+!!VRy2:S600 +x1; [get address of bit value]
+!!VRy3:Svy2; [get bit value]
+!!VRy4:Sw40 &y3; [look at just our bit of w40]
+
+!!CO-1&y4=0/y1<5:Sx2/d1; [give skill level if haven't yet and below grandmaster]
+!!CO-1&y4=0/y1<5/y5<5/x2=4:S6/d1; [increase Magic Resistance along with Magic Power, doesn't work automatically]
+!!VRw40&y4=0/y1<5:|y3; [remember so we don't give it again later]
+
+!!VRz326&x2=0:Sz166016;
+!!VRz326&x2=1:Sz166017;
+!!VRz326&x2=2:Sz166018;
+!!VRz326&x2=3:Sz166019;
+!!VRz326&x2=4:Sz166020;
+!!VRz326&x2=5:Sz166021;
+
+!!VRz-1:Sz166022;
+!!VRz-2&x2=0:S^..\data\zvs\lib1.res\_AT4.bmp^;
+!!VRz-2&x2=1:S^..\data\zvs\lib1.res\_DF4.bmp^;
+!!VRz-2&x2=2:S^..\data\zvs\lib1.res\_HP4.bmp^;
+!!VRz-2&x2=3:S^..\data\zvs\lib1.res\_DM4.bmp^;
+!!VRz-2&x2=4:S^..\data\zvs\lib1.res\_MP4.bmp^;
+!!VRz-2&x2=5:S^..\data\zvs\lib1.res\_SP4.bmp^;
+
+!!IF&1000/y4=0/y1<5:D10/-1/0/0/-2/0/0/0/326/0/0/0/0/0/0/0;     [Set up message box]
+!!IF&1000/y4=0/y1<5:F10/0/0/0/0/0;     [Disable cancel button]
+!!IF&1000/y4=0/y1<5:E1/10;     [Display message box]
+
+** end of function
+

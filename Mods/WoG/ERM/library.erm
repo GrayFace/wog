@@ -1,0 +1,25 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=22.1(January).2007
+
+* ------------------------------------------------------------------------------
+* $PrevStack$ - Returns the stack number of the previous acting stack inside a
+*               battle. Usefull in BG1-receiver (after stacks action), because
+*               BG:N returns in this case not the stack, that just had acted, but
+*               the stack, that will now be ready to act
+*
+* Syntax:       VRy1:S$PrevStack$;
+* usage:        v3314
+*
+
+!#MCv3314:S@PrevStack@; [Set up macro]
+
+!?BA0;
+!!VR$PrevStack$:S-1; // init at the start of every battle
+
+!?BG0;              // before every action
+!!BG:N?$PrevStack$; // get current stack
+
+* ------------------------------------------------------------------------------
+

@@ -1,0 +1,33 @@
+106000	{VERSION OUT-OF-DATE WARNING} 
+
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Hourglass of Asmodeus v1.5} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+106001	{Hourglass of Asmodeus}
+
+Several heroes normally used by this script (Xeron, Kilgor or Roland) are used in this map (they're set as {enabled} in the map editor), therefore the script is being {disabled}. This means that the Hourglass artifact will only have its normal luck negation abilities for this game.
+
+In order to use this script, you must disable at least {one} of Xeron, Kilgor or Roland in the map editor. If the {Enable Extension Heroes} option is enabled, you must disable {Xeron} in the map editor.	String type = <!#M>	07.06.2003
+106002	Hourglass of Asmodeus	String type = <!#S>	07.06.2003
+106003	{Hourglass of Asmodeus} 
+
+This item negates all luck bonuses during combat for both you and your opponent. In addition, if you initiate combat, you have the option of summoning a powerful demon lord to fight the battle instead of you (with your troops). However, there is a price -- a permanent piece of your soul (1 point of Power) is forfeit for each summoning.	String type = <!#S>	07.06.2003
+106004	Do you wish to use the 
+{Hourglass of the Evil Hour} 
+to summon forth 
+{The Demon Lord Asmodeus} 
+who will fight for you in combat?	String type = <!!Q>	07.06.2003
+106005	his	String type = <!!S>	07.06.2003
+106006	her	String type = <!!S>	07.06.2003
+106007	Asmodeus	String type = <!!S>	07.06.2003
+106008	After losing all your troops in combat, Asmodeus generously assigns three of his imps to accompany %$hrname$.	String type = <!!Q>	07.06.2003
+106009	Asmodeus takes a piece of %$hrname$'s soul as payment, reducing %$hisher$ Power by one. 
+ 
+Without artifacts, %$hrname$'s 
+{True Power} is now %$rpower$.	String type = <!!Q>	07.06.2003
+106010	Asmodeus takes a piece of %$hrname$'s soul as payment, reducing %$hisher$ Power by one. 
+ 
+%$hrname$'s {Power} is now %$rpower$.	String type = <!!Q>	07.06.2003
+106011	%$hrname$'s soul is too weak to interest Asmodeus. He takes the {Hourglass} and departs to the underworld, leaving a little gift behind to keep %$hrname$ amused...	String type = <!!Q>	07.06.2003

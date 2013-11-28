@@ -1,0 +1,700 @@
+ZVSE
+ERMS_ScriptName=script20
+ERMS_ScriptAuthor=Timothy Pulver
+ERMS_ScriptVersion=1.8
+ERMS_ScriptDate=22.11(November).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English or Magyar (native)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Updated: November 22, 2006
+
+** Week of Monsters ERM Script Version 1.8 created by Timothy Pulver
+** with minor modifications by Anders Jonnson
+** and suggestions by Donald X. Vaccarino and the Qurqirish Dragon
+** modified by Doom3d (v1.8: map size dependent maximum number of Wondering Monsters.. )
+** Requires WoG version 3.58 or later using ERM version 2.70 or later.
+
+** This script replaces the standard "Week of the" results that appear each
+** day 1, as well as eliminating the monthly "Month of the" results that
+** "double population" and place new monsters on the map. Plague is also
+** eliminated.
+
+** Instead, EVERY week except week 1 is a week of a monster. This gives
+** all monsters of that type a 33% bonus (rounding down but with a minimum
+** bonus of +1) to Attack, Defense, Health, Speed, Damage, and a 50%
+** bonus to Growth for the entire week. If the monster type is neutral, rather
+** than one that may be recruited from a town, there is no Growth bonus.
+
+** There are also weeks of the various War Machines but these bonuses are
+** more limited -- usually to health and defense but sometimes also to
+** attack and damage.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 600 or later to avoid the ERM script
+** popping up as if it were a regular event message. The title of the event
+** is unimportant, but I would suggest something like "Week of Monster".
+** Have fun and enjoy the Monster Mash! :-)
+
+** Version 1.1 adds a check for the Deity of Fire - if it's present, it will be
+** "Week of the Imp" (with +15 Imp *and* +15 Familiar Growth).
+
+** Version 1.2 adds special weeks for resources where mines of that type
+** produce double the number (e.g., 2 crystals for Week of the Sparkling
+** Crystals, 4 Wood for  Week of the Woodcutter).
+
+** Version 1.3 switches from totally random monster weeks to a monster that
+** is present in a hero's army, cycling through all the players in a random
+** fixed order. Once per cycle, a completely random monster week will still
+** occur, as well as a resource week. This version also adds some wandering
+** monsters if it's a monster week or some resource piles if it's a resource
+** week. In addition, any Refugee Camps on the map will offer the monster of
+** the week unless it's a war machine or resource week in which case it's
+** random as normal. Also, week 1 will always be a level 1 monster. The last
+** feature this version adds is a reminder of the week's monster and bonuses
+** by right-clicking on the End-Turn button.
+
+** Version 1.4 fixes a bug with Imps not growing at all if a Deity of Fire
+** is built.
+
+** Version 1.5 is updated to work with new creatures in 3.58. It also reworks
+** a function so that it's not recursive and prevents there being more than 48
+** Wandering Monsters on a map at any one time due to the slow-downs that
+** too many WMs cause.
+
+** Version 1.6 makes the Refugee Camp synchonization a separate option so it
+** can be disabled if desired. It also fixes a few related bugs.
+
+** Version 1.7 gives Warlord's Banners to 33% of wandering/stationary monsters.
+
+** Version 1.8  maximum number of Wandering monsters now increased and map size dependent.
+** Increased weekly growth.  {map size]/18 per level. Means S 2, M 4, L 6, XL: 8 per level.
+** Game level dependent (and random) monster's agression and escape ability.  ->
+** MAX number of WMs = ([{map size]/18]^2 :2 +{map size] +8) *{number of map levels}
+** So S 12, M 20, L 32, XL: 48 per map level.  Non-standard map sizes are now handled. (18*18..252*252)
+** Monster's agression: 2+ R[2* {game level}-4]    So 2-10 at easy,.., 8-10 at expert,
+** and 10(never join) at impossible.
+** Escape ability: 80% - 20%*{game level}. So 80% at easy, .., 20% at expert, and never escape at impossible.
+** 100% -20% *{game level} chance to carry Warlord's Banner. 100% at easy, .. 20% at impossible.
+; remarks
+*** FU5310 speeded up, using v24= last WM checked in this turn
+*** modifications marked with '*Z..**Z'
+*** If You modify this script: Please, do not increase MAX number of WMs above 160. (80/map level)
+*   Otherwise WoG may stop responding, or You may experience critical slowdowns.
+*** Recommended hardwer for WoG, if this option is enabled:
+*** PentiumI 233 Mhz MMX, 64MB EDO RAM, S3 Trio64, or better
+
+** Version 1.81 FU5304, and FU5310 were rewritten, now faster execution. Same functionality as above.
+*** Remark: TM62-> FU180 loop (among others) ->FU5303(..) -> FU5304(..) ->FU5310(..)
+** Version 1.82 FU5310 eliminated, FU5304 even faster. Same functionality. v24-v25 not used.
+
+** v1.83 Check for Diplomacy boost script.
+** add a check for script / option 96 (Diplomancy Boost), and set the aggression always to 10 (never join),
+** if it is enabled.
+
+--------------------------------------------------------------------------------------
+
+Flags Used in this Script: 1, 2, 56, 170-172, 205, 412
+v Variables used: v1-v7, v166-v200, v205, v361-v367, v372-v373, v1200-v1210
+z Variables used: z190-z199, z495
+Functions used: FU180-FU184, FU5300-FU5310, FU8000
+Timers used: TM61-TM63
+ERM Numbers used: 20, 134, 135, 136, 172, 200
+; v1.8: v variables: v24-v25, v27-v29 as temporary
+--------------------------------------------------------------------------------------
+
+ [Initialize timers and variables]
+!#TM61:S7/999/7/255; [Every day 7]
+!#TM62:S1/999/7/255; [Every day 1]
+!#TM63:S8/999/1/255; [Every day, starting with Week 2, Day 1]
+!#VRv170:S-100;
+!#VRv180:S0;
+!#IF:V412/1;
+
+ [Set up selection for player cycle for monster type selection]
+!#VRv372:S0 R9; [Random number for "X" for selecting next player]
+!#VRv373:S1 R9; [Random number for selecting "R" for selecting a player - constant]
+
+!#VRv1200:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;
+
+ [Check if script is enabled: if it is, set flag 56 to true]
+!#UN:P20/?v1;
+!#IF&v1=1:V56/1;
+
+--------------------------------------------------------------------------------------
+
+ [Right-Click on End-Turn button will display current week's monster]
+!?CM0&56;
+
+!!CM:S?v1 I?v2; [Check if it's a right-click on the End-Turn button]
+
+ [Set up v3 and v4 for type/subtype of message display picture]
+!!VRv3&v170>=0:S21;
+!!VRv3&v170<0/v170<>-100:Sv170 *-1 -1;
+!!VRv4&v170>=0:Sv170;
+!!VRv4&v170<0/v170<>-100:S0;
+
+ [Display Week of Monsters info]
+!!IF&v1=14/v2=12/v170<>-100:Q1/v3/v4/4^%Z495^;
+
+ [Display the following if it's the first week]
+!!IF&v1=14/v2=12/v170=-100:Q1/-1/-1/4/z120000;
+
+!!CM&v1=14/v2=12:R0; [Disable standard right-click message]
+
+--------------------------------------------------------------------------------------
+
+>>[Timer 61 sets up new bonuses for "Week of" monster]
+  [Only if Flag 56 is true meaning script is enabled]
+!?TM61&56;
+
+!!VRv188:Sc0; [Set v188 to current day]
+
+ [Continue Timer 61 command only if first time executed this day]
+ [Also: only if Flag 56 is true - set in Map Enhancement dialogue box]
+!?TM61&56/v189<v188;
+
+!!VRv189:Sc0; [Set day check to current day]
+
+ [Function 181 checks if Diety of Fire is built and if so, makes it Week of the Imp]
+!!FU181:P;
+
+!!VRz190:S^^;  [Initialize z190 to a null string]
+
+!!VRv190&-171:Sv181 :3;  [Calculate 33% bonus to Attack - store in v190]
+!!VRv190&-171/v190=0/v180<>147/v180<>148:S1;  [If 33% bonus = 0, set to 1]
+!!VRv191&-171:Sv181 +v190;  [New Attack value - store in v191]
+!!VRz191&-171:Sz120001;  [Attack bonus string - store in z191]
+!!VRz190&-171/v180<>147/v180<>148:+z191;  [Add Attack bonus string to z190]
+
+!!VRv190&-171:Sv182 :3;  [Calculate 33% bonus to Defense - store in v190]
+!!VRv190&-171/v190=0:S1;  [If 33% bonus = 0, set to 1]
+!!VRv192&-171:Sv182 +v190;  [New Defense value - store in v192]
+!!VRz192&-171:Sz120002;  [Defense bonus string - store in z192]
+!!VRz190&-171:+z192;  [Add Defense bonus string to z190]
+
+!!VRv190&-171:Sv186 :3;  [Calculate 33% bonus to Damage High - store in v190]
+!!VRv190&-171/v190=0/v180<>147/v180<>148:S1;  [If 33% bonus = 0, set to 1]
+!!VRv195&-171:Sv185 +v190;  [New Damage Low value - store in v195]
+!!VRv196&-171:Sv186 +v190;  [New Damage High value - store in v196]
+!!VRz196&-171:Sz120003;  [Damage bonus string - store in z196]
+!!VRz190&-171/v180<>147/v180<>148:+z196;  [Add Damage bonus string to z190]
+
+!!VRv190&-171:Sv184 :3;  [Calculate 33% bonus to Health - store in v190]
+!!VRv190&-171/v190=0:S1;  [If 33% bonus = 0, set to 1]
+!!VRv194&-171:Sv184 +v190;  [New Health value - store in v194]
+!!VRz194&-171:Sz120004;  [Health bonus string - store in z194]
+!!VRz190&-171:+z194;  [Add Health bonus string to z190]
+
+!!VRv190&-171:Sv183 :3;  [Calculate 33% bonus to Speed - store in v190]
+!!VRv190&-171/v190=0/v180<>145/v180<>146/v180<>147/v180<>148:S1;  [If 33% bonus = 0, set to 1]
+!!VRv193&-171:Sv183 +v190;  [New Speed value - store in v193]
+!!VRz193&-171:Sz120005;  [Speed bonus string - store in z193]
+!!VRz190&-171/v180<>145/v180<>146/v180<>147/v180<>148:+z193;  [Add Speed bonus string to z190]
+
+!!VRv190&-171:Sv187 :2;  [Calculate 50% bonus to Growth - store in v190]
+!!VRv190&-171/v190=0:S1;  [If 50% bonus = 0, set to 1]
+!!VRz197&-171:Sz120006;  [Growth bonus string - store in z197]
+!!VRv197&-171:Sv187 +v190;  [New Growth value - store in v197]
+!!VRz190&-171/v180<>116/v180<>117/v180<131:+z197;  [Add Growth bonus string to z190]
+
+
+ [Sets up "Week of" monster with appropriate text]
+
+!!UN&-172:N3/197/v180/0; [Lookup monster name - singular]
+!!UN&-172:N3/198/v180/1; [Lookup monster name - plural]
+
+ [Set up "Week of" dialog box text string]
+!!VRz199&-171:Sz120007;
+
+[Special, preset Dialogue for Week of the Imp from Deity of Fire]
+!!VRz199&171:Sz120008;
+
+ [If week is "Week of Resources", set up special text]
+!!FU183&v180<0/v180<>-100/-171:P;
+
+!!UN:K1/1 K2/199 M1; [Change "Week of" text and disable possible "Month of" results]
+
+ [Restore previous "Week of" monsters default Growth rate unless 1st monster week]
+!!MA&170:Gv170/v177;
+
+ [Set new "Week of" monsters Growth rate unless it's Week of Resources]
+!!MA&-172:Gv180/v197;
+
+ [If this week is Week of the Imp from the Deity of Fire, set new Imp values]
+!!MA&171:A42/3 D42/4 S42/6 P42/5 M42/2 E42/3 G42/15;
+
+--------------------------------------------------------------------------------------
+
+>>[Timer 62 sets new "Week of" monster values and restores old ones]
+  [Only if Flag 56 is true meaning script is enabled]
+!?TM62&56;
+
+ [Set z495 equal to z199 for End-Turn button right-click display]
+!!VRz495:Sz199;
+
+!!VRv179:Sc0; [Set v179 to current day]
+
+ [Continue Timer 62 command only if first time executed this day]
+ [Also: only if Flag 56 is true - set in Map Enhancement dialogue box]
+!?TM62&56/v178<v179;
+
+!!VRv178:Sc0; [Set day check to current day]
+
+!!FU8000&v178<>1:P; [Set new stats if it's not day 1]
+
+ [Store previous week's default monster values in v171-v177 - v170 = previous monster number]
+ [Don't store if it's Week of the Imp (Flag 171 set) or Week of Resources (Flag 172 set)]
+!!VRv170&v178<>1:Sv180;      !!VRv171&v178<>1/-171/-172:Sv181; !!VRv172&v178<>1/-171/-172:Sv182;
+!!VRv173&v178<>1/-171/-172:Sv183; !!VRv174&v178<>1/-171/-172:Sv184; !!VRv175&v178<>1/-171/-172:Sv185;
+!!VRv176&v178<>1/-171/-172:Sv186; !!VRv177&v178<>1/-171/-172:Sv187;
+
+ [Function 5300 calculates the next player to base this week's monster type on]
+!!FU5300:P;
+
+ [Function 180 gets number for new "Week of" monster and stores in v180]
+!!DO180/0/999/0:P; [Infinite loop until x16 is set to 1000]
+
+ [Function 181 checks if Deity of Fire is built and if so, makes it Week of the Imp]
+!!FU181:P;
+
+ [Store "Week of" monster's default values in v181-v187 unless it's Week of Resources]
+!!MA&v180>=0:Av180/?v181 Dv180/?v182 Sv180/?v183 Pv180/?v184 Mv180/?v185 Ev180/?v186 Gv180/?v187;
+
+---------------------------------------------------------------------------------------
+
+!?FU8000;
+
+ [Restore previous "Week of" monsters default values unless 1st monster week]
+ [or if previous week was a Week of Resources]
+!!MA&170/v178>8:Av170/v171 Dv170/v172 Sv170/v173 Pv170/v174 Mv170/v175 Ev170/v176;
+!!IF:V170/1; [Flag is set to indicate no longer first monster week]
+
+!!IF&172:V170/0; [If week is Week of Resources, reset "1st week flag" for next week]
+
+ [Set new "Week of" monster values unless it's Week of Resources or Week of Imp from Deity of Fire]
+!!MA&-171/-172:Av180/v191 Dv180/v192 Sv180/v193 Pv180/v194 Mv180/v195 Ev180/v196;
+
+[Setup Imp's new stats if Week of Imp from Deity of Fire]
+!!MA&171:A42/3 D42/4 S42/6 P42/5 M42/2 E42/3 G42/15;
+
+!!VRv205&v180<0/v180<>-100:Sv180;  [Copy to v205 if week of the resource]
+!!VRv205&v180>=0:S0;               [Reset if it's not]
+
+--------------------------------------------------------------------------------------
+
+>>[Function 5300 calculates the next player to base monster type on]
+!?FU5300;
+
+ [Determine which player is next]
+!!VRv372:Sv372 +v373; [Add "R" to "X"]
+!!VRv372:Sv372 %11;   [v372 MOD 11]
+
+ [Check if this player is "alive" (if v372 is less than 8)]
+!!OW&v372<8:Iv372/d/?y1; [Store alive (0) or not (1) in y1]
+!!FU5300&v372<8/y1=1:P;  [Call function 5300 again if player isn't alive]
+
+ [If result is 10, call function again]
+!!FU5300&v372=10:P;
+
+--------------------------------------------------------------------------------------
+
+>>[Function 180 gets number for new "Week of" monster and stores in v180]
+!?FU180;
+
+!!VRx16:S1000; [Initialize x16 to 1000 so it will exit the Function if not changed]
+!!VRv180:S-100;  [Initialize new monster number to -100]
+!!VRy9:S0;
+
+!!IF:V172/0;  [Initialize flag 172 to false]
+
+ [Check previous monster week for a given player]
+!!VRy3:S1200 +v372;
+!!VRy4:Svy3;
+
+!!VRy1:S0 R155; [Random start number for choosing a hero]
+!!VRy2:Sy1 -1;  [End number for second loop]
+!!DO5301/y1/155/1&v372<8/v180=-100:Py4;[Random monster type is based on a hero's army stack]
+!!DO5301/0/y2/1&v372<8/v180=-100/y1>0:Py4; [2nd part of loop]
+!!VRy9&v372<9/v180=-100:S1; [If no monster found in hero's army choose random monster: y9=1]
+!!VRy9&v372=8:S1; [If random monster week, choose random monster: y9=1]
+
+ [Random # for "Week of" monster 0..195, excluding "not used", Emissaries, Commanders]
+!!VRv180|v372=8/y9=1:S0 R169; [Random number for new "Week of" monster from 0 to 169]
+!!VRv180&y9=1/v180>=122:+1;   [Add 1 if "not used" result or higher]
+!!VRv180&y9=1/v180>=124:+1;   [Add 1 if "not used" result or higher]
+!!VRv180&y9=1/v180>=126:+1;   [Add 1 if "not used" result or higher]
+!!VRv180&y9=1/v180>=128:+1;   [Add 1 if "not used" result or higher]
+!!VRv180&y9=1/v180>=160:+4;   [Add 4 if "Emissary" result or higher]
+!!VRv180&y9=1/v180>=174:+18;  [Add 18 if "Commander" result or higher]
+
+!!VRv180&v372=9:S-7 R6; [Random number for resource week]
+
+!!IF&v180<0/v180<>-100:V172/1;  [If week is less than 0 (but not -100), it's a resource week - set flag 172 to true]
+
+!!VRy5:Sc;  [set y5 to current day]
+!!VRy6:Sy5 -1; [set y6 to current day -1]
+!!VRy6::7; [set y6 to current week -1]
+!!VRy6:+1; [set y6 to current week]
+!!VRy10:Sy6 :2; [Half of current week]
+!!VRy10&y10<1:S1;
+
+!!MA&v180>=0:Lv180/?y7; [Store monster level (0-6) in y7]
+!!VRy7&v180>=0:+1;      [set y7 to "true" monster level (1-7)]
+
+ [Get a new number if monster number is same as previous week,]
+ ["Not Used" number, Emissaries, Arrow Towers or higher level than the week divided by 2]
+ [Also, skip level 8 monsters and Commanders]
+!!VRx16|v180=v170/v180=y4:S0; [No duplicates of previous week or previous player week]
+!!VRx16|v180=122/v180=124/v180=126/v180=128/v180=149:S0; [No "not used" or arrow towers]
+!!VRx16&v180>=160/v180<=163:S0; [No Emissaries]
+!!VRx16&v180>=174/v180<=191:S0; [No Commanders]
+!!VRx16&y9=1/v180>=132/v180<=135:S0; [No Level 8 Neutral Dragons unless in a hero's army]
+!!VRx16&y9=1/v180>=150/v180<=158:S0; [No Level 8 Monsters unless in a hero's army]
+!!VRx16&y9=1/y7>y10:S0; [y7=monster level, y10=current week divided by 2 (skip creatures of too high level unless in a hero's army)]
+
+!!VRy18:+1; [Count loops: y18]
+!!VRv180&y18>100:S139; [If too many loops, set it to Peasant: v180]
+!!VRx16&y18>100:S1000; [If too many loops, just exit: x16]
+
+ [Keep track of previous monster weeks for each player]
+!!VRvy3:Sv180;
+
+ [Place some wandering monster stacks and resources of this type unless it's the first week]
+ [Don't call function if it's a war machine or ghost]
+!!VRy8:S1; [Assume wandering monster stacks and resources can be placed]
+!!VRy8&v170=-100:S0; [Must have been a monster chosen]
+!!VRy8&v170>=132/v170<=135:S0; [No Level 8 Neutral Dragons]
+!!VRy8&v170>=145/v170<=159:S0; [No War Machines or Level 8 Monsters]
+!!UN:P135/?y15; [y15=1 if wandering monsters are enabled]
+!!UN:P136/?y16; [y16=1 if stationary monsters are enabled]
+!!VRy8&v170>=0/y15=0/y16=0:S0; [Don't call if a monster week and wandering]
+                               [and stationary monsters are both disabled]
+!!UN:P134/?y17; [y17=1 if resource piles are enabled]
+!!VRy8&v170<0/y17=0:S0; [Don't call if resource week and resource piles are disabled]
+
+!!MA&v170>=0:Lv170/?y11; [Store monster level (0-6) in y11]
+!!VRy11&v170>=0:+1;      [set y11 to "true" monster level (1-7)]
+!!VRy11&v170<0:S0;       [set y11 to 0 if it's a resource week]
+
+!!VRy12:Sc; [Set y12 to current day]
+
+!!FU5303&y8=1/y6>1/y6>=y11/y12<>v1210:P; [Place wandering monster stacks or resources]
+
+ [Store v170 in y13 for purposes of changing Refugee Camps]
+ [If week 1, set it to a level 1 creature]
+!!VRy13:Sv170;
+!!VRy14&v170=-100:S0 R8;
+!!VRy13&v170=-100:Sy14 *14;
+!!VRy13&v170=-100/y14=8:S118;
+!!VRy13&v170=-100:R1; [Add 0 or 1 for possible upgraded level 1]
+
+ [Change monster type of Refugee Camp to match "week of" Monster type]
+ [Don't call function if it's a war machine, resource week or disabled]
+!!UN:P200/?y19; [Check if Refugee Camp synchronization is enabled: y19]
+!!FU5306&y19=1/y13>=0/v170<>145/v170<>146/v170<>147/v170<>148:Py13;
+
+--------------------------------------------------------------------------------------
+
+>>[Function 5301 locates a hero owned by the current player in the cycle to]
+  [select a random troop type from]
+!?FU5301;
+
+!!HEx16:O?y1; [Check who owns hero]
+
+!!VRy2:S0 R6;  [Random starting stack number]
+!!VRy3:Sy2 -1; [End number for second loop]
+
+!!DO5302/y2/6/1&y1=v372/v180=-100:Px16/x1; [If a valid hero is found, call function loop 5302]
+!!DO5302/0/y3/1&y1=v372/v180=-100/y2>0:Px16/x1; [2nd part of loop]
+
+!!VRx16&v180<>-100:S999;  [Exit loop if a monster type is chosen]
+
+--------------------------------------------------------------------------------------
+
+>>[Function 5302 locates a monster stack from the]
+  [chosen hero to use for this week's monster type]
+!?FU5302;
+
+ [Check monsters in hero's slot number x16 - store type in y1, number in y2]
+!!HEx1:C0/x16/?y1/?y2;
+
+ [Set monster type (v180) to y1 if y2 is greater than 0
+ [and monster is different from previous week]
+!!VRv180&y2>0/y1<>v170/y1<>x2:Sy1;
+
+ [Exit loop if acceptable monster stack found]
+!!VRx16&y2>0/y1<>v170/y1<>x2:S999;
+
+--------------------------------------------------------------------------------------
+
+>>[Function 181 checks if Deity of Fire is built, and if so, makes it Week of the Imp]
+!?FU181;
+
+!!UN:U98/3/?y1; [Count Infernos]
+!!IF:V171/0;
+!!VRv198:S-1; [Initialize v198 to -1 so that UN:U will work correctly]
+!!DO182/1/y1/1&y1>0:P; [Check all Infernos for Grail - if Flag 171 is set, there's a Grail]
+
+!!VRv180&171:S42; [If Deity of Fire present, set it to Week of Imp]
+!!IF&171:V172/0;  [If Deity of Fire present, set Week of Resource flag to false]
+
+--------------------------------------------------------------------------------------
+
+>>[Function 182 checks each Inferno to see if Diety of Fire is built]
+  [and set sets Flag 171 if it is]
+!?FU182;
+
+!!UN:U98/3/-1/198;  [store location of Inferno in v198-v200]
+!!CA198:B3/26; [set Flag 1 if Grail found]
+!!IF&1:V171/1; [set Flag 171 if Grail found]
+
+--------------------------------------------------------------------------------------
+
+>>[If week is "Week of Resources", set up special text]
+!?FU183;
+
+!!VRz199&v180=-1:Sz120009; [Wood]
+!!VRz199&v180=-2:Sz120010; [Mercury]
+!!VRz199&v180=-3:Sz120011; [Ore]
+!!VRz199&v180=-4:Sz120012; [Sulfur]
+!!VRz199&v180=-5:Sz120013; [Crystal]
+!!VRz199&v180=-6:Sz120014; [Gems]
+!!VRz199&v180=-7:Sz120015; [Gold]
+
+--------------------------------------------------------------------------------------
+
+>>[Timer 63 sets up new bonuses for "Week of Resources" if flag 173 set to true]
+  [Also: only if Flag 56 is true - set in Map Enhancement dialogue box]
+!?TM63&56/v205<0/v205<>-100;
+
+!!VRv169:S0; [Initialize v169 to 0]
+
+!!OW:C?y-1;           [Get current player - store in y-1]
+!!VRy-2:Sv205 *-1 -1; [Get resource type - store in y-2]
+
+!!UN:U53/y-2/?y-3;    [Count number of mines of bonus type - store in y-3]
+!!UN:U53/7/?y-4;     [Count number of abandoned mines - store in y-4]
+
+ [Count number of mines of bonus type owned by current player]
+!!VRv166:S-1; [Initialize v166 to -1 so UN:U will work correctly]
+!!DO184/1/y-3/1&y-3>0:Py-1/y-2/y-2;
+
+ [Count number of abandoned mines of bonus type owned by current player]
+!!VRv166:S-1; [Initialize v166 to -1 so UN:U will work correctly]
+!!DO184/1/y-4/1&y-4>0:Py-1/7/y-2;
+
+ [Calculate and give bonus resources]
+!!VRv169&v169>0/y-2=0:Sv169 *2;     [Wood x 2]
+!!VRv169&v169>0/y-2=2:Sv169 *2;     [Ore x 2]
+!!VRv169&v169>0/y-2=6:Sv169 *1000;  [Gold x 1000]
+!!OW:Ry-1/y-2/dv169;
+
+--------------------------------------------------------------------------------------
+
+>>[Count number of mines of bonus type owned by current player]
+!?FU184;
+
+!!UN:U53/x2/-1/166;           [Get coordinates of each mine - v166/v167/v168]
+!!MNv166/v167/v168:O?y1/1 R?y2/1;  [Get owner of mine (y1) and resource type (y2)]
+
+ [v169 counts # of mines of bonus type belonging to current player]
+!!VRv169&y1=x1/y2=x3:+1;
+
+--------------------------------------------------------------------------------------
+
+>>[Place some wandering monster stacks or random resources]
+!?FU5303;
+
+ [Set v1210 to current day]
+!!VRv1210:Sc;
+
+ [Get size of map (y1) and if it has an underground (y2=0 for no, 1 for yes)
+!!UN:X?y1/?y2;
+!!VRy9:Sy1 -1; [Map size for loop purposes]
+
+ [Store v170 in y6 - convert value for resource week]
+!!VRy6:Sv170;
+!!VRy6&y6<0/y6<>-100:*-1 -1;
+
+ [Set y7 to object number 54 for a monster and 79 for a resource]
+!!VRy7:S54;
+!!VRy7&v170<0/v170<>-100:S79;
+
+ [Set y8 to number of monsters or resources appearing (resources = number x 2)]
+!!VRy20:Sy1 :18;    *Z
+!!VRy21:Sy20 *y20 :2 +y20 +8; MAX WMs per map level
+!!VRy22:S1 +y2 *y21; set MAX WMs for FU5304
+!!VRy22&y22>128:S128;  upper limit for non-standard WoG maps (18*18.. 252*252)
+
+!!VRy8:Sy20; weekly monster growth per map level    **Z
+!!VRy8&v170<0/v170<>-100:*2; [Double for resources]
+
+ [Calculate base creature numbers - store in y4]
+!!MA&v170>=0:Gv170/?y3;  [Enhanced base value (+50% for Town creatures)]
+!!VRy4&v170>=0:Sc-1;  [Day minus 1]
+!!VRy4&v170>=0:Sy4 :7;  [Week number -1]
+!!VRy4:+1; [Week number]
+!!VRy10&v170>=0:Sy3 :2; [Half of enhanced base value (rounded down)]
+!!VRy10&v170>=0/y10<1:S1; [Make sure y10 is at least 1]
+!!VRy5&v170>=0:Sy10 *y4; [Half enhanced base value x number of weeks]
+!!VRy5&v170>=132/v170<=135::2; [Halve the number if it's a big neutral dragon]
+!!VRy5&v170>=150/v170<=158::2; [Halve the number if it's a level 8 monster]
+!!VRy5&v170>=0/y3<1:S1; [Make sure y5 is at least 1]
+
+ [Generate random resource amount - store in y5]
+!!VRy5&v170<0/v170<>-100:S3;
+!!VRy5&v170<0/v170<>-100/y6=0:S5;
+!!VRy5&v170<0/v170<>-100/y6=2:S5;
+
+; check for option 96 (Diplomancy Boost),and set the aggression always to 10 (never join), if it is enabled
+!!UN:P96/?y23;
+
+ [Place y8 monster/resource stacks]
+ [y9=map size-1, 0/1=map level, y5=monster stack size, y6=resource/monster type]
+ [y7=object type-monster (54)/resource (79), y8=number of stacks]
+ [y3=enhanced monster growth value] *v1.8 [y22= MAX number of WMs]
+ *v1.83 [y23= Option 96(Diplomancy Boost) disabled/enabled state ]
+
+ [reSet v3 and v4 to 0]
+!!VRv3:S0;  !!VRv4:S0;
+
+ [Place monsters/resources on upper level]
+!!DO5304/1/y8/1:Py9/0/y5/y6/y7/y8/y3/y22/y23;   **Z
+
+ [reSet v3 and v4 to 0]
+!!VRv3:S0;  !!VRv4:S0;
+
+ [Place monsters/resources on lower level if it exists]
+!!DO5304/1/y8/1&y2=1:Py9/1/y5/y6/y7/y8/y3/y22/y23;     **Z
+
+--------------------------------------------------------------------------------------
+
+>>[Place monster stacks]
+
+  [x1=map size-1, x2=map level (0 or 1), x3=monster stack size/resource amount]
+  [x4=resource/monster type, x5=object type: monster(54) or resource (79), x6=# of stacks to place]
+  [x7=enhanced monster growth value, x16=function loop number]
+  *v1.8 [x8= max number of WMs]*v1.83 [x9= Option 96(Diplomancy Boost) disabled/enabled state ]
+
+!?FU5304;
+!!VRv4:Sd1; [Count each time through the loop]    *Z
+  [CHECK RANDOM LOCATION]
+!!VRy10:S0 Rx1; [Random x value]
+!!VRy11:S0 Rx1; [Random y value]
+!!TRy10/y11/x2:T?y1/d/d/d/d/d/d/d; [Check terrain type]
+!!OBy10/y11/x2:T?y3; [Check object type for free square]
+!!IF:V2/1;  inverted reset
+!!IF&y1<8/y3=0:V2/0;
+!!VRx16&2/x16>0:-1; [Extend loop if terrain type is wrong]
+!!VRx16&v3>=x6|v4>9999:S9999; End loop: [Failsafe 1: if all monsters/resources placed][Failsafe 2: if loop exceeds 9999]
+!!FU&2:E; exit, if position nok
+
+!!VRv3:Sd1; [Count each monster/resource placed]
+!!UN:Iy10/y11/x2/x5/x4 P135/?y6; [Place monster or resource]
+
+ [WONDERING MONSTERS]
+;[y6=1 if wandering monsters are enabled]
+!!VRy99&x5=54/y6=1:S100; WM to be placed?
+!!MW&y99=100:My10/y11/x2/?y5; [Make a wandering monster: y5=WM number]
+;Limit placement of Wandering Monsters to x8 on the map at once
+!!VRx16&y99=100/y5>x8:S9999; exit flag, if too many WMs (and they are enabled, and WM will be placed)
+!!UN&x16>1000:Oy10/y11/x2; Delete monster if there is too many
+!!FU&x16>1000:E; [Exit Function if already x8 monsters]
+
+!!MWy5&y99=100:A2/0/0/0 A3/0/0/0/0/0/0/0; [Set WM defaults]
+
+  [MONSTER SETTINGS]
+!!VRy2:Sx3 Rx7; [Random number for number of monsters]
+
+!!UN:J2/?v27; check player difficulty level (0-4)
+!!VRv27:*2;
+!!VRv28:S8 -v27;
+!!VRy12:S2 +v27 Rv28; [Random aggression level from 2 to 10: y12]
+!!VRy12&x9=1:S10;  v1.83, Option 96(Diplomancy Boost): set the aggression always to 10 (never join), if it is enabled
+* Means: Weekly Monsters are friendly at easy, .. will never join at impossible.
+
+!!VRv28:S0 R9 -v27 -1; d10 roll against 2+2* (game level)
+!!VRv29:S0;
+!!VRv29&v28>0:S1;   * Escape ability: 80% at easy,.., 0% at impossible. 80% -20% * (game level)
+
+!!MOy10/y11/x2&x5=54:O0 Uv29 Ry12/1 Gy2; [Set number of monsters, aggression, etc.]
+
+!!VRy14:S1 R9; [Random number 1..10: y14]  preparing 100% -20% *(game lvl) chance to have Warlord's Banner
+!!UN:P234/?y15; [Check if Warlord's Banner are disabled: y15=0 if enabled]
+!!UN:P900/?y16; [Check if Stack Experience is disabled: y16=1 if enabled]
+!!MOy10/y11/x2&x5=54/y14>v27/y15=0/y16=1:A156; [chance above of carrying a Warlord's Banner] **Z
+
+  [RESOURCE PILES]
+!!VRy5:Sx3 Rx3; [Random number for value of resource pile]                       ***
+!!ARy10/y11/x2&x5=79:Vy5; [Set value of resource pile]
+
+--------------------------------------------------------------------------------------
+
+>>[Set up any Refugee Camps to match "Week of" Monster]
+  [x1=monster type]
+!?FU5306;
+
+ [Store weekly growth of monster in y1]
+!!MA:Gx1/?y1;
+
+ [Get number of Mercenary Camps]
+!!UN:U78/-1/?y2;
+
+ [Loop through Camps, changing them to this week's monster]
+!!DO5307/1/y2/1&y2>0:Py1/y2/x1;
+
+--------------------------------------------------------------------------------------
+
+>>[Change each camp to this week's monster]
+  [x1=weekly growth of monster, x2=camp number, x3=monster type]
+!?FU5307;
+
+ [Loop backwards through camps to avoid possible errors]
+!!VRy1:Sx2 +1 -x16;
+
+ [Store coordinates of each camp in v1/v2/v3]
+!!UN:U78/-1/y1/1;
+
+ [Copy coordinates into y10/y11/y12]
+!!VRy10:Sv1;
+!!VRy11:Sv2;
+!!VRy12:Sv3;
+
+ [Check if a hero is visiting the camp - if so, get]
+ [his number and owner, store his creatures, then kill him (temporarily)]
+!!OBy10/y11/y12:T?y2;
+!!DO5308/0/6/1&y2=34:Py10/y11/y12;
+!!HEy10/y11/y12&y2=34:N?y3 O?y4 K;
+
+ [Change each camp to this week's monster (subtype) and growth number (control word)]
+!!OBy10/y11/y12:Ux3 Cx1;
+
+ [Restore hero and creatures if one was visiting the camp]
+!!HEy3&y2=34:Py10/y11/y12 Oy4;
+!!DO5309/0/6/1&y2=34:Py10/y11/y12;
+
+--------------------------------------------------------------------------------------
+
+>>[Store hero's troops]
+!?FU5308;
+
+ [Store each slot's type in v1-v7, number in v361-v367]
+!!VRy1:S1 +x16;
+!!VRy2:S361 +x16;
+!!HEx1/x2/x3:C0/x16/?vy1/?vy2;
+
+--------------------------------------------------------------------------------------
+
+>>[Restore hero's troops]
+!?FU5309;
+
+ [Restore each slot's type from v1-v7, and number from v361-v367]
+!!VRy1:S1 +x16;
+!!VRy2:S361 +x16;
+!!HEx1/x2/x3:C0/x16/vy1/vy2;
+
+** End of Script **
+

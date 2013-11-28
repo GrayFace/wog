@@ -1,0 +1,109 @@
+#	Text resource for "Script31.erm" document		
+#131000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Treasure Chest 2 version 1.0 script.} 
+ 
+Please update your files.	String type = <!#M>	08.06.2003
+#131001	scroll	String type = <!!S>	08.06.2003
+#131002	Living Scroll 
+	String type = <!!S>	08.06.2003
+#131003	Inside the chest you find 
+a purse of {%Y5} {gold} {coins} 
+and a %Z2 of {%Z1}. 
+ 
+Do you keep the %Z2 or destroy it to gain its magical energy?	String type = <!!Q>	08.06.2003
+#131004	You destroy the %Z2 of %Z1 and gain %Y3 spell points.	String type = <!!Q>	08.06.2003
+#131005	Inside the chest you discover two comprehensive 
+TOMES OF KNOWLEDGE. 
+ 
+The first book is "Mastering %Z1 in Seven Days" 
+and the second is named "The One Week Guide to %Z2". 
+ 
+There's no way you could ever get through both of them. Choose one volume to study and let your troops fight over the other book.	String type = <!!Q>	08.06.2003
+#131006	In a mere 7 days you'll know everything there is to know about %Z3! 
+ 
+Do you want daily reminders until the skill is learned?	String type = <!!Q>	08.06.2003
+#131007	he	String type = <!!S>	08.06.2003
+#131008	she	String type = <!!S>	08.06.2003
+#131009	his	String type = <!!S>	08.06.2003
+#131010	her	String type = <!!S>	08.06.2003
+#131011	%Z1 realizes %Z3's already learned as much about %Z2 as %Z3 can possibly learn so %Z3 tosses the boring %Z2 book away and plays a game of cards with the troops instead.	String type = <!!Q>	08.06.2003
+#131012	%Z1 spends many hours reading the enormous %Z2 manual. Only %Y3 days left before %Z3 will have mastered its teachings!	String type = <!!Q>	08.06.2003
+#131013	%Z1 is on chapter 2 of the manual: "How to Befuddle Your Foes with %Z2 or Die Trying! Just %Y3 more days and %Z3 will be finished!	String type = <!!Q>	08.06.2003
+#131014	%Z1 is still reading the %Z2 manual but decides to skip the chapter titled: "Dead %Z4, %Z2, and You." Only %Y3 more days of studying left to go!	String type = <!!Q>	08.06.2003
+#131015	%Z1 is learning a lot from the %Z2 book. Today %Z3 learned that if you're short on rations, a few pages of high-fibre parchment smothered in a rich tomato sauce tastes absolutely terrible! Only %Y3 more days to go!	String type = <!!Q>	08.06.2003
+#131016	%Z1 doggedly keeps up %Z5 studies, laboriously skimming the remaining chapters of the %Z2 tome. All this studying better be worth it! Just %Y3 more days of reading to go!	String type = <!!Q>	08.06.2003
+#131017	%Z1 is almost done with the damned %Z2 manual! If %Z3 stays up all night, %Z3 should be able to finish it by tomorrow!	String type = <!!Q>	08.06.2003
+#131018	After spending much of the previous night reading by candlelight, %Z1 has finally finished studying the comprehensive tome of %Z2 and has mastered all its lessons!	String type = <!!Q>	08.06.2003
+#131019	Inside the chest you find 
+the deed to a fully-operational 
+%Z1!	String type = <!!Q>	08.06.2003
+#131020	Sawmill	String type = <!!S>	08.06.2003
+#131021	Alchemist's Lab	String type = <!!S>	08.06.2003
+#131022	Ore Pit	String type = <!!S>	08.06.2003
+#131023	Sulfur Dune	String type = <!!S>	08.06.2003
+#131024	Crystal Cavern	String type = <!!S>	08.06.2003
+#131025	Gem Pond	String type = <!!S>	08.06.2003
+#131026	Gold Mine	String type = <!!S>	08.06.2003
+#131027	Mithril Cavern	String type = <!!S>	08.06.2003
+#131028	{ERROR:} There are no 3rd Level Adventure Spells	String type = <!!M>	08.06.2003
+131000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Treasure Chest 2 version 1.0 script.} 
+ 
+Please update your files.	String type = <!#M>	7/15/03
+131001	scroll	String type = <!!S>	7/15/03
+131002	Living Scroll 
+	String type = <!!S>	7/15/03
+131003	Inside the chest you find 
+a purse of {%Y5} {gold} {coins} 
+and a %Z2 of {%Z1}. 
+ 
+Do you keep the %Z2 or destroy it to gain its magical energy?	String type = <!!Q>	7/15/03
+131004	You destroy the %Z2 of %Z1 and gain %Y3 spell points.	String type = <!!Q>	7/15/03
+131005	Basic	String type = <!!S>	7/15/03
+131006	Advanced	String type = <!!S>	7/15/03
+131007	Basic	String type = <!!S>	7/15/03
+131008	Advanced	String type = <!!S>	7/15/03
+131009	Inside the chest you discover two comprehensive 
+TOMES OF KNOWLEDGE. 
+ 
+The first book is "Mastering %Z1 in Seven Days" 
+and the second is named "The One Week Guide to %Z2". 
+ 
+There's no way you could ever get through both of them. Choose one volume to study and let your troops fight over the other book.
+
+(You currently have %Z6 %Z1 and %Z7 %Z2.)	String type = <!!Q>	7/15/03
+131010	%Z1	String type = <!!S>	7/15/03
+131011	%Z2	String type = <!!S>	7/15/03
+131012	In a mere 7 days you'll know everything there is to know about %Z3! 
+ 
+Do you want daily reminders until the skill is learned?	String type = <!!Q>	7/15/03
+131013	he	String type = <!!S>	7/15/03
+131014	she	String type = <!!S>	7/15/03
+131015	his	String type = <!!S>	7/15/03
+131016	her	String type = <!!S>	7/15/03
+131017	%Z1 realizes %Z3's already learned as much about %Z2 as %Z3 can possibly learn so %Z3 tosses the boring %Z2 book away and plays a game of cards with the troops instead.	String type = <!!Q>	7/15/03
+131018	%Z1 spends many hours reading the enormous %Z2 manual. Only %Y3 days left before %Z3 will have mastered its teachings!	String type = <!!Q>	7/15/03
+131019	%Z1 is on chapter 2 of the manual: "How to Befuddle Your Foes with %Z2 or Die Trying! Just %Y3 more days and %Z3 will be finished!	String type = <!!Q>	7/15/03
+131020	%Z1 is still reading the %Z2 manual but decides to skip the chapter titled: "Dead %Z4, %Z2, and You." Only %Y3 more days of studying left to go!	String type = <!!Q>	7/15/03
+131021	%Z1 is learning a lot from the %Z2 book. Today %Z3 learned that if you're short on rations, a few pages of high-fibre parchment smothered in a rich tomato sauce tastes absolutely terrible! Only %Y3 more days to go!	String type = <!!Q>	7/15/03
+131022	%Z1 doggedly keeps up %Z5 studies, laboriously skimming the remaining chapters of the %Z2 tome. All this studying better be worth it! Just %Y3 more days of reading to go!	String type = <!!Q>	7/15/03
+131023	%Z1 is almost done with the damned %Z2 manual! If %Z3 stays up all night, %Z3 should be able to finish it by tomorrow!	String type = <!!Q>	7/15/03
+131024	After spending much of the previous night reading by candlelight, %Z1 has finally finished studying the comprehensive tome of %Z2 and has mastered all its lessons!	String type = <!!Q>	7/15/03
+131025	Inside the chest you find 
+the deed to a fully-operational 
+%Z1!	String type = <!!Q>	7/15/03
+131026	Sawmill	String type = <!!S>	7/15/03
+131027	Alchemist's Lab	String type = <!!S>	7/15/03
+131028	Ore Pit	String type = <!!S>	7/15/03
+131029	Sulfur Dune	String type = <!!S>	7/15/03
+131030	Crystal Cavern	String type = <!!S>	7/15/03
+131031	Gem Pond	String type = <!!S>	7/15/03
+131032	Gold Mine	String type = <!!S>	7/15/03
+131033	Mithril Cavern	String type = <!!S>	7/15/03
+131034	{ERROR:} There are no 3rd Level Adventure Spells	String type = <!!M>	7/15/03

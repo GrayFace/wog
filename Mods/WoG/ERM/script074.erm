@@ -1,0 +1,440 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Summon elemental by Bonizag
+** Wogify Name: script74.erm
+** Updated: August 21, 2004
+
+** string variables used: z1-z5 temporarily
+
+** variables used:        v848, v860-v861, v881-v882, v7600-v7756
+                          v1 temporarily
+
+** hero variables used:   w84
+
+** flags used:            791
+
+** functions used:        7821-7824
+
+** timer used:            42
+
+!#UN:P74/?v848; //check if option is enabled
+
+!#TM42&v848=1:S1/999/1/255; //init timer 42
+!#VRv860&v848=1:S-2; //init var detecting previous player
+!#VRv861&v848=1:S0; //init intelligance
+!#DO7824/0/155/1&v848=1:P; //init w84 for every hero
+!#VRv882&v848=1:S0; //init previous day
+
+!?TM42&v848=1;
+!!OW&v860>=0:Hv860/7600; //get heroes of previous player
+!!DO7823/1/v7600/1:P; //iterate through heroes and summon elementals for AI player
+!!OW:C?g Ig/?h; //get current colour and intelligence
+!!VRv860:Sg; //update previous player and its intelligence
+!!VRv861:Sh;
+!!VRv881:Sc0; //get current day
+
+!?TM42&v881>v882/v848=1; //if current day is an other day
+!!VRv882:Sv881; //update previous day
+!!DO7824/0/155/1:P; //init w84 for every hero
+
+!?CM0&v848=1; //player cast elementals on adventure scren
+!!CM:I?f; //vf: where we clicked
+!!OW:A-1/?g; //selected hero in vg
+!!OW:C?r; //get current player
+!!OW:Gr/?q; //multiplayer check
+!!CM&f=8/g>=0/q=1:R0; //don't show original message
+
+!!IF:V791/1; // init
+!!IF&f=8/g>=0/q=1:V791/0;
+
+!?CM0&-791/v848=1; //conitnue trigger if basic conditions are fulfilled
+
+!!HEg:M66/?h;
+!!HEg:M67/?i;
+!!HEg:M68/?j;
+!!HEg:M69/?k;
+
+!!HEg:B0/?z1; //get hero name
+!!HEg:R2/?l; //get hero sex
+!!VRz2:Sz174000; //male hero
+!!VRz2&l=1:Sz174001; //female hero
+
+!!IF&h=0/i=0/j=0/k=0:V791/1 M1/z174002;
+
+!?CM0&-791/v848=1; //continue trigger if the hero knows any of the summoning spells
+
+!!IF:Wg; //use hero's w vars
+!!HEg&w84>0:B0/?z1; //get hero name
+!!IF&w84>0:V791/1 M1/z174003;
+
+!?CM0&-791/v848=1; //continue trigger if we didn't summoned any elemental with this hero this day
+
+!!VRz78:Sz174004;
+!!VRz1:S^^;
+!!VRz1&h>0:Sz174005;
+!!VRz2:S^^;
+!!VRz2&i>0:Sz174006;
+!!VRz3:S^^;
+!!VRz3&j>0:Sz174007;
+!!VRz4:S^^;
+!!VRz4&k>0:Sz174008;
+!!VRz5:Sz174009;
+!!VRv1:S0; //init v1
+!!IF:G1/1/16/78/1/2/3/4/5/0/0/0/0/0/0/0;
+
+!!HEg&v1=1:S14/?l I?m/1; //get fire magic skill and spell points
+!!VRr&v1=1/l=0:S250; //basic level
+!!VRr&v1=1/l>0:S200; //above basic level
+!!HEg&v1=1/m<r:B0/?z1; //get hero name
+!!IF&v1=1/m<r:M1/z174010;
+
+!!DO7821/0/6/1&v1=1/m>=r:Pg/114/l; //find an empty slot or existing elemental stack and place elementals in it
+!!HEg&v1=1/m>=r/-791:B0/?z1; //get hero name
+!!IF&v1=1/m>=r/-791:M1/z174011;
+!!VRm&v1=1/m>=r/791:-r;
+!!HEg&v1=1/791:Im; //update hero's spell points
+
+!!HEg&v1=2:S17/?l I?m/1; //get earth magic skill and spell points
+!!VRr&v1=2/l=0:S250; //basic level
+!!VRr&v1=2/l>0:S200; //above basic level
+!!HEg&v1=2/m<r:B0/?z1; //get hero name
+!!IF&v1=2/m<r:M1/z174012;
+
+!!DO7821/0/6/1&v1=2/m>=r:Pg/113/l; //find an empty slot or existing elemental stack and place elementals in it
+!!HEg&v1=2/m>=r/-791:B0/?z1; //get hero name
+!!IF&v1=2/m>=r/-791:M1/z174013;
+!!VRm&v1=2/m>=r/791:-r;
+!!HEg&v1=2/791:Im; //update hero's spell points
+
+!!HEg&v1=4:S16/?l I?m/1; //get water magic skill and spell points
+!!VRr&v1=4/l=0:S250; //basic level
+!!VRr&v1=4/l>0:S200; //above basic level
+!!HEg&v1=4/m<r:B0/?z1; //get hero name
+!!IF&v1=4/m<r:M1/z174014;
+
+!!DO7821/0/6/1&v1=4/m>=r:Pg/115/l; //find an empty slot or existing elemental stack and place elementals in it
+!!HEg&v1=4/m>=r/-791:B0/?z1; //get hero name
+!!IF&v1=4/m>=r/-791:M1/z174015;
+!!VRm&v1=4/m>=r/791:-r;
+!!HEg&v1=4/791:Im; //update hero's spell points
+
+!!HEg&v1=8:S15/?l I?m/1; //get air magic skill and spell points
+!!VRr&v1=8/l=0:S250; //basic level
+!!VRr&v1=8/l>0:S200; //above basic level
+!!HEg&v1=8/m<r:B0/?z1; //get hero name
+!!IF&v1=8/m<r:M1/z174016;
+
+!!DO7821/0/6/1&v1=8/m>=r:Pg/112/l; //find an empty slot or existing elemental stack and place elementals in it
+!!HEg&v1=8/m>=r/-791:B0/?z1; //get hero name
+!!IF&v1=8/m>=r/-791:M1/z174017;
+!!VRm&v1=8/m>=r/791:-r;
+!!HEg&v1=8/791:Im; //update hero's spell points
+
+!!IF&791:Wg;
+!!VRw84&791:+1;
+
+!?FU7821;
+//finds an empty hero slot or existing elemental stack and fills it up with elementals
+//x1 hero number
+//x2 elemental type
+//x3 skill level according to elemental type
+//x16 hero slot
+
+!!HEx1:F?y1/?y2/?y3/?y4; //get spell power in y3
+!!VRy7:Sy3 *2; //count number of elementals to summon in y7
+!!VRy7&x3=2:*150 :100; //advanced level
+!!VRy7&x3=3:*200 :100; //expert level
+!!HEx1:C0/x16/?y5/?y6; //get number of monsters in slot in y6
+!!HEx1&y6=0/-791:C0/x16/x2/y7; //if slot is empty fill it
+!!VRy7&y5=x2/-791:+y6; //add elementals to existing stack
+!!HEx1&y5=x2/-791:C0/x16/x2/y7;
+!!IF|y6=0/y5=x2:V791/1; //don't give more elementals for this spellcast
+
+!?FU7822;
+//x1: hero number
+
+!!IF:V791/0; //init
+
+!!HEx1:M69/?y12 M68/?y13 M66/?y14 M67/?y15 I?y10/1; //get available spells and spell points
+!!IF&y12=0/y13=0/y14=0/y15=0:V791/1; //hero doesn't have elemental spells
+!!IF&y10<200:V791/1; //hero won't have enough spell points
+
+!?FU7822&-791; //continue if hero has at least one elemental spell
+
+//get sec skills and primary skills
+!!HEx1:S15/?y2 S16/?y3 S14/?y4 S17/?y5 F?y6/?y7/?y8/?y9;
+
+//first try to summon air elemental
+!!VRy11:S0; //no elemental to summon by default
+
+!!VRy11&y12>0:S112; //the best is air elemental
+
+!!VRy11&y13>0/y3>y2:S115; //if water magic skill better summon water elemental
+!!VRy11&y13>0/y12=0:S115; //cast water elemental if hero cannot cast air elemental at all
+
+!!VRy11&y14>0/y4>y3:S114;
+!!VRy11&y14>0/y13=0/y12=0:S114;
+
+!!VRy11&y15>0/y5>y4:S113;
+!!VRy11&y15>0/y14=0/y13=0/y12=0:S113;
+
+!!IF&y11=0:V791/1;
+
+!?FU7822&-791;  //continue if there is en elemental type hero can summon
+
+//calculate spell points needed for summoning
+!!VRy16&y11=112/y2>0:S200;
+!!VRy16&y11=112/y2=0:S250;
+
+!!VRy16&y11=115/y3>0:S200;
+!!VRy16&y11=115/y3=0:S250;
+
+!!VRy16&y11=114/y4>0:S200;
+!!VRy16&y11=114/y4=0:S250;
+
+!!VRy16&y11=113/y5>0:S200;
+!!VRy16&y11=113/y5=0:S250;
+
+!!IF&y16>y10:V791/1;
+
+!?FU7822&-791; //continue if hero has spell points to cast
+
+//calculate number of monsters to summon
+!!VRy17:Sy8 *2;
+
+!!VRy17&y11=112/y2=2:*150 :100;
+!!VRy17&y11=112/y2=3:*200 :100;
+
+!!VRy17&y11=115/y3=2:*150 :100;
+!!VRy17&y11=115/y3=3:*200 :100;
+
+!!VRy17&y11=114/y4=2:*150 :100;
+!!VRy17&y11=114/y4=3:*200 :100;
+
+!!VRy17&y11=113/y5=2:*150 :100;
+!!VRy17&y11=113/y5=3:*200 :100;
+
+!!HEx1:C2/y11/0/0; //use AI to join stacks of the same type
+
+!!HEx1:C0/0/?y18/?y19; //store monster numbers and types before we give elementals to hero
+!!HEx1:C0/1/?y20/?y21;
+!!HEx1:C0/2/?y22/?y23;
+!!HEx1:C0/3/?y24/?y25;
+!!HEx1:C0/4/?y26/?y27;
+!!HEx1:C0/5/?y28/?y29;
+!!HEx1:C0/6/?y30/?y31;
+
+!!HEx1:C2/y11/y17/0; //use AI to add elementals
+
+!!HEx1:C0/0/?y32/?y33; //store monster numbers and types after we gave elementals to hero
+!!HEx1:C0/1/?y34/?y35;
+!!HEx1:C0/2/?y36/?y37;
+!!HEx1:C0/3/?y38/?y39;
+!!HEx1:C0/4/?y40/?y41;
+!!HEx1:C0/5/?y42/?y43;
+!!HEx1:C0/6/?y44/?y45;
+
+!!IF|y18<>y32/y19<>y33/y20<>y34/y21<>y35/y22<>y36/y23<>y37:V791/1; //check if AI wanted that elemental stack
+!!IF|y24<>y38/y25<>y39/y26<>y40/y27<>y41/y28<>y42/y29<>y43/y30<>y44/y31<>y45:V791/1;
+
+!!VRy10&791:-y16; //calculate new spell points
+!!HEx1&791:Iy10; //update spell points
+
+!?FU7822&-791; //continue with water elementals
+
+!!VRy11:S0; //no elemental to summon by default
+
+!!VRy11&y13>0:S115; //the best is water elemental
+
+!!VRy11&y14>0/y4>y3:S114;
+!!VRy11&y14>0/y13=0:S114;
+
+!!VRy11&y15>0/y5>y4:S113;
+!!VRy11&y15>0/y14=0/y13=0:S113;
+
+!!IF&y11=0:V791/1;
+
+!?FU7822&-791;  //continue if there is en elemental type hero can summon
+
+//calculate spell points needed for summoning
+
+!!VRy16&y11=115/y3>0:S250;
+!!VRy16&y11=115/y3=0:S250;
+
+!!VRy16&y11=114/y4>0:S200;
+!!VRy16&y11=114/y4=0:S250;
+
+!!VRy16&y11=113/y5>0:S200;
+!!VRy16&y11=113/y5=0:S250;
+
+!!IF&y16>y10:V791/1;
+
+!?FU7822&-791; //continue if hero has spell points to cast
+
+//calculate number of monsters to summon
+!!VRy17:Sy8 *2;
+
+!!VRy17&y11=115/y3=2:*150 :100;
+!!VRy17&y11=115/y3=3:*200 :100;
+
+!!VRy17&y11=114/y4=2:*150 :100;
+!!VRy17&y11=114/y4=3:*200 :100;
+
+!!VRy17&y11=113/y5=2:*150 :100;
+!!VRy17&y11=113/y5=3:*200 :100;
+
+!!HEx1:C2/y11/0/0; //use AI to join stacks of the same type
+
+!!HEx1:C0/0/?y18/?y19; //store monster numbers and types before we give elementals to hero
+!!HEx1:C0/1/?y20/?y21;
+!!HEx1:C0/2/?y22/?y23;
+!!HEx1:C0/3/?y24/?y25;
+!!HEx1:C0/4/?y26/?y27;
+!!HEx1:C0/5/?y28/?y29;
+!!HEx1:C0/6/?y30/?y31;
+
+!!HEx1:C2/y11/y17/0; //use AI to add elementals
+
+!!HEx1:C0/0/?y32/?y33; //store monster numbers and types after we gave elementals to hero
+!!HEx1:C0/1/?y34/?y35;
+!!HEx1:C0/2/?y36/?y37;
+!!HEx1:C0/3/?y38/?y39;
+!!HEx1:C0/4/?y40/?y41;
+!!HEx1:C0/5/?y42/?y43;
+!!HEx1:C0/6/?y44/?y45;
+
+!!IF|y18<>y32/y19<>y33/y20<>y34/y21<>y35/y22<>y36/y23<>y37:V791/1; //check if AI wanted that elemental stack
+!!IF|y24<>y38/y25<>y39/y26<>y40/y27<>y41/y28<>y42/y29<>y43/y30<>y44/y31<>y45:V791/1;
+
+!!VRy10&791:-y16; //calculate new spell points
+!!HEx1&791:Iy10; //update spell points
+
+!?FU7822&-791; //continue with fire elemental
+
+!!VRy11:S0; //no elemental to summon by default
+
+!!VRy11&y14>0:S114; the best is fire elemental
+
+!!VRy11&y15>0/y5>y4:S113;
+!!VRy11&y15>0/y14=0:S113;
+
+!!IF&y11=0:V791/1;
+
+!?FU7822&-791;  //continue if there is en elemental type hero can summon
+
+//calculate spell points needed for summoning
+
+!!VRy16&y11=114/y4>0:S200;
+!!VRy16&y11=114/y4=0:S250;
+
+!!VRy16&y11=113/y5>0:S200;
+!!VRy16&y11=113/y5=0:S250;
+
+!!IF&y16>y10:V791/1;
+
+!?FU7822&-791; //continue if hero has spell points to cast
+
+//calculate number of monsters to summon
+!!VRy17:Sy8 *2;
+
+!!VRy17&y11=114/y4=2:*150 :100;
+!!VRy17&y11=114/y4=3:*200 :100;
+
+!!VRy17&y11=113/y5=2:*150 :100;
+!!VRy17&y11=113/y5=3:*200 :100;
+
+!!HEx1:C2/y11/0/0; //use AI to join stacks of the same type
+
+!!HEx1:C0/0/?y18/?y19; //store monster numbers and types before we give elementals to hero
+!!HEx1:C0/1/?y20/?y21;
+!!HEx1:C0/2/?y22/?y23;
+!!HEx1:C0/3/?y24/?y25;
+!!HEx1:C0/4/?y26/?y27;
+!!HEx1:C0/5/?y28/?y29;
+!!HEx1:C0/6/?y30/?y31;
+
+!!HEx1:C2/y11/y17/0; //use AI to add elementals
+
+!!HEx1:C0/0/?y32/?y33; //store monster numbers and types after we gave elementals to hero
+!!HEx1:C0/1/?y34/?y35;
+!!HEx1:C0/2/?y36/?y37;
+!!HEx1:C0/3/?y38/?y39;
+!!HEx1:C0/4/?y40/?y41;
+!!HEx1:C0/5/?y42/?y43;
+!!HEx1:C0/6/?y44/?y45;
+
+!!IF|y18<>y32/y19<>y33/y20<>y34/y21<>y35/y22<>y36/y23<>y37:V791/1; //check if AI wanted that elemental stack
+!!IF|y24<>y38/y25<>y39/y26<>y40/y27<>y41/y28<>y42/y29<>y43/y30<>y44/y31<>y45:V791/1;
+
+!!VRy10&791:-y16; //calculate new spell points
+!!HEx1&791:Iy10; //update spell points
+
+!?FU7822&-791; //continue with earth elemental
+
+!!VRy11:S0; //no elemental to summon by default
+
+!!VRy11&y15>0:S113;
+
+!!IF&y11=0:V791/1;
+
+!?FU7822&-791;  //continue if there is en elemental type hero can summon
+
+//calculate spell points needed for summoning
+
+!!VRy16&y11=113/y5>0:S200;
+!!VRy16&y11=113/y5=0:S250;
+
+!!IF&y16>y10:V791/1;
+
+!?FU7822&-791; //continue if hero has spell points to cast
+
+//calculate number of monsters to summon
+!!VRy17:Sy8 *2;
+
+!!VRy17&y11=113/y5=2:*150 :100;
+!!VRy17&y11=113/y5=3:*200 :100;
+
+!!HEx1:C2/y11/0/0; //use AI to join stacks of the same type
+
+!!HEx1:C0/0/?y18/?y19; //store monster numbers and types before we give elementals to hero
+!!HEx1:C0/1/?y20/?y21;
+!!HEx1:C0/2/?y22/?y23;
+!!HEx1:C0/3/?y24/?y25;
+!!HEx1:C0/4/?y26/?y27;
+!!HEx1:C0/5/?y28/?y29;
+!!HEx1:C0/6/?y30/?y31;
+
+!!HEx1:C2/y11/y17/0; //use AI to add elementals
+
+!!HEx1:C0/0/?y32/?y33; //store monster numbers and types after we gave elementals to hero
+!!HEx1:C0/1/?y34/?y35;
+!!HEx1:C0/2/?y36/?y37;
+!!HEx1:C0/3/?y38/?y39;
+!!HEx1:C0/4/?y40/?y41;
+!!HEx1:C0/5/?y42/?y43;
+!!HEx1:C0/6/?y44/?y45;
+
+!!IF|y18<>y32/y19<>y33/y20<>y34/y21<>y35/y22<>y36/y23<>y37:V791/1; //check if AI wanted that elemental stack
+!!IF|y24<>y38/y25<>y39/y26<>y40/y27<>y41/y28<>y42/y29<>y43/y30<>y44/y31<>y45:V791/1;
+
+!!VRy10&791:-y16; //calculate new spell points
+!!HEx1&791:Iy10; //update spell points
+
+!?FU7823;
+//calls summon elemental function for previous player if it was controlled by AI
+//set w84 to 0 both for AI and player
+//x16 hero sequence
+
+!!VRy1:S7600 +x16;
+!!FU7822&v861=1:Pvy1; //iterate through all heroes and cast elementals with heroes belonging to the current colour if it is AI, only at the end of the day
+
+!?FU7824;
+//sets w84 to 0 for every hero
+//x16 hero number
+
+!!IF:Wx16;
+!!VRw84:S0;
+

@@ -1,0 +1,2373 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Adventure Cave ERM script v1.0 - Donald X. Vaccarino
+** Last Updated: December 13, 2004 by Fnord
+** Requires WOG v3.58 or later.
+** A location where lots of different things can happen
+
+** To use this code, put each section of this script into a Global Event, set
+** to never happen, and add some Adventure Cave buildings to your map.
+** It's the cave with the spider.
+
+** You can generate a specific cave through ERM by initializing its PO values
+** in a timer numbered higher than 90, on day one. You can set these values easily
+** by calling functions 767 and 769 (or the hard way through PO).
+
+** Caves 0, 1, 2 are stored in PO:H, PO:T, PO:S, low 7 bits
+** Cave 3 is stored with its low 4 bits in PO:N, the next 3 bits the hi bits of PO:S, PO:T, PO:H
+** PO:O stores the number of caves minus 1 in bits 0-1, whether the trogs are killed in bit 2
+
+** Split cave contents are determined by cave X position mod 4:
+**   0 empty
+**   1 troglodytes
+**   2 signpost
+**   3 fallen signpost
+
+** Caves have 7 bits: 6543210
+**   10 - type of cave
+**     00 rogues
+**     01 hermit
+**     10 monsters
+**     11 misc
+**   5432 - variations on cave
+**     Rogues 54 = what they do
+**       00 sell rogues
+**       01 steal gold mine for you
+**       10 attack enemy hero for you
+**       11 steal artifact for you
+**     Rogues 32 = how friendly (+1 if have rogues, +1 if powerful hero)
+**     Hermit 54 = what he teaches
+**       00 more gold/exp from chests
+**       01 extra retaliate per round
+**       02 extra spellcasting first round
+**       03 melee attacks steal MA:X abilities
+**     Hermit 32 = what he requires
+**       00 nothing
+**       01 sick - first aid/tent/vial of lifeblood
+**       10 alone in cave complex (no rogues/monsters/other hermits)
+**       11 only helps those w/o artifacts / war machines
+**     Monster 543 = battlefield
+**       000 sharpshooters tunnel (w/ flame walls)
+**       001 basilisk trap (w/ crusader help)
+**       010 minotaur labyrinth
+**       011 ghost graves (w/ more ghosts)
+**       100 mages w/ golems
+**       101 quicksand liches (w/ poisoning)
+**       110 imp hordes w/ magogs
+**       111 duels w/ swordsmen
+**     Monster 2 = battlefield variations
+**     Misc 54 = contents
+**       00 pool - spell until end of week
+**       01 magic orb - reveal/place shroud around heroes/castles
+**       10 treasure - one-shot
+**       11 altar - "spell" ability until end of week
+**     Misc 32 = variant
+**       pool - 00 bless 01 haste 10 shield 11 blood lust
+**       orb - 00 reveal heroes 01 reveal castles 10 shroud heroes 11 shroud castles
+**       cache - 00 wine 01 dog armor 10 3-handed sword 11 uncharged wand
+**       altar - 00 venom 01 fork 10 aegis 11 ferocity
+**
+**   6 - set if cave action is done (monster killed etc.)
+
+** If there's one cave it's cave 0.
+** If there are two, the left one is cave 0, the right one cave 1
+** For three, left-left is 0, left-right is 1, right is 2
+** For four, left-left is 0, left-right 1, right-left 2, right-right 3
+
+
+** Variables Used: z326-z330, z360-z366, z368-z379, z404, v1, v510-v548, v550-v559, v600-v669, w61-w78, i
+** v510-v548, w61-w74, and z404 must not be changed elsewhere!
+** v550-v559 is a bit table also used by the map rules, it must not be changed but may be used elsewhere.
+** The other variables may be used elsewhere but will be trashed by this code.
+** Flags used: 2, 600-603
+** Functions Used: 730-776, 780-799, 820-835
+** Timers Used: 90
+
+** Notes on hero w variables:
+**   w61 4 bits for what Rogue cave positions have been visited this turn
+**   w62 hero # paying for Rogue attack on this hero
+**   w63 artifact # stolen from this hero by Rogues
+**   w64 # of hermit wealth lessons (0-3)
+**   w65 # of hermit combat lessons (0-3)
+**   w66 # of hermit magic lessons (0-3)
+**   w67 # of hermit voodoo lessons (0-3)
+**   w68 hero has learned from a hermit today
+**   w69 # of books carried (sell at shrine)
+**   w70 # of mandrake roots carried (sell at witch hut)
+**   w71 # of tulip bulbs carried (sell at windmill)
+**   w72 # of toys carried (sell at market)
+**   w73 4 bits of pool spells
+**   w74 4 bits of altar abilities
+**   w75 # of wine carried (sell at tavern)
+**   w76 # of dog armors carried (sell at marletto tower)
+**   w77 # of 3-handed swords carried (sell at mercenary camp)
+**   w78 # of useless wands carried (sell at school of magic)
+
+
+** Initialization code
+!#UN:P30/?v1;     [Check for WoG option]
+!#VRz404&v1=1:Sz130000;
+!#HT63/57&v1=1:T404; [set hint to z404]
+
+!#TM90&v1=1:S1/999/1/255; [timer every day for all players]
+!#VRv548&v1=1:S0; [haven't initialized caves]
+!#VRv547&v1=1:S0; [special battle screen to use]
+!#VRv524&v1=1:C0/0/0/0/0/0/0/0; [stolen gold mine #'s by player]
+!#VRv510&v1=1:C0/0/0/0/0/0/0/0; [obelisk treasures by player]
+
+!#VRv550&v1=1:C1/2/4/8/16/32/64/128/256/512; [bit table, also in map rules]
+
+!#VRz368&v1=1:Sz130001;
+!#VRz369&v1=1:Sz130002;
+!#VRz370&v1=1:Sz130003;
+!#VRz371&v1=1:Sz130004;
+
+!#VRz372&v1=1:Sz130005;
+!#VRz373&v1=1:Sz130006;
+!#VRz374&v1=1:Sz130007;
+!#VRz375&v1=1:Sz130008;
+!#VRz376&v1=1:Sz130009;
+!#VRz377&v1=1:Sz130010;
+!#VRz378&v1=1:Sz130011;
+!#VRz379&v1=1:Sz130012;
+
+** end of Initialization code
+
+
+** Timer routine
+
+!?TM90;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!UN&v548=0:U63/57/?v600; [count caves]
+!!DO730/1/v600/1&v548=0:P; [loop through caves]
+!!DO750/0/155/1&v548=0:P; [initialize hero w variables]
+!!VRv548:S1; [indicate we've initialized
+
+!!OW:C?y-1; [get current player]
+
+!!DO752/0/155/1:Py-1; [clear/check daily hero w variables]
+
+!!VRy-2:S524 +y-1; [get index of variable tracking robbed mines by player]
+!!IF&1000/vy-2>0:M1/z130013;
+!!UN&vy-2>0:U53/6/vy-2/600; [get mine location in v600-v602]
+!!VRv600:+1; [X+1 to prevent phantom visit to hero standing on mine]
+!!UN&vy-2>0:Lv600/v601/v602/0; [change view to show stolen mine]
+!!VRvy-2:S0; [clear flag]
+
+** end of timer routine
+
+
+** Object routine
+
+!?OB63/57;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+!!HE-1:O?v1; [Visiting player's colour]
+!!PM998:V0 Pv1/1; [Tell AI object is visited so it won't try to visit again]
+
+!?OB63/57&1000; [object is for humans only]
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!OB998:S; [disable object so UN:L command will work]
+!!FU768:P601/998; [read split cave bits in v601]
+!!VRv601:&3; [just look at split cave type]
+
+!!VRz326:Sz130014;
+!!VRz327:Sz130015;
+!!VRz328:Sz130016;
+!!FU733&v601=0:P53/98/602; [get choice in v602 - 0 is explore]
+
+!!IF&v601=0/v602=1:M1/z130017;
+!!FU731&v601=0/v602=0:P0; [handle visiting cave 0]
+
+!!FU732&v601<>0:P; [handle split cave]
+
+** end of object routine
+
+
+** function to initialize a cave
+
+!?FU730;
+
+!!UN:U63/57/x16/601; [get x/y/level in v601-v603]
+!!PM601:V0; [tell AI not to come here]
+!!DO770/0/3/1:P; [randomize cave bits]
+!!VRy1:S0 R3; [random split cave value, monster not killed]
+!!FU769:Py1/601; [store it]
+
+** end of function
+
+
+** function to handle visiting cave x1
+
+!?FU731;
+
+!!FU734:Px1/610; [get cave type in v610]
+!!FU766:Px1/611/998; [read cave bits into v611]
+!!VRv611::4; [throw away low cave type bits]
+
+!!FU742&v610=0:Px1/v611; [handle Rogue cave]
+!!FU772&v610=1:Px1/v611; [handle Hermit cave]
+!!FU784&v610=2:Px1/v611; [handle monster cave]
+!!FU795&v610=3:Px1/v611; [handle other cave]
+
+** end of function
+
+
+** function to handle split cave
+** there are four types: 0 empty, 1 monster, 2 signpost, 3 fallen signpost
+** splits can continue two caves deep (to four total end caves)
+** further split caves are always just forks in the tunnel
+
+** v601=1 -> left is 0, right is 1
+** v601=2 -> left is 0-1, right is 2
+** v601=3 -> left is 0-1, right is 2-3
+
+!?FU732;
+
+!!VRy1:Sv998 %4; [use x mod 4 as split cave type]
+!!FU768:P609/998; [read split cave values]
+!!VRy1&y1=1/v609>=4:S0; [then treat monster cave as empty cave]
+
+[initial foray into the cave]
+
+!!VRz326:Sz130018;
+!!VRz327:Sz130019;
+!!VRz328:Sz130020;
+!!FU733:P53/98/602; [get choice in v602 - 0 is searching]
+
+!!IF&v602=1:M1/z130021;
+
+!!IF&v602=0/y1=1:M1/z130022;
+!!VRv547&v602=0/y1=1:S1; [use battlefield #1 for this fight]
+!!HE-1&v602=0/y1=1:Tv998/v999/v1000/71/70; [provoke battle w/ 70 infernal trogs]
+!!HE-1:O?y3; [check owner in y3 to see if hero died]
+!!VRv609:|4; [set split-cave-monster-killed bit]
+!!FU769&v602=0/y1=1/y3<>-1:Pv609/998; [store modified bits if monster and it's beaten]
+!!VRv602&v602=0/y1=1/y3=-1:S1; [treat dead hero as not searching]
+
+[choice of initial two tunnels, sometimes with signpost]
+
+!!VRz329&y1=0:Sz130023;
+!!VRz329&v602=0/y1=1:Sz130024;
+!!VRy1&v602=0/y1=1:S0; [from now on treat monster cave as empty cave]
+
+!!FU734:P0/603; [get type of cave 0 in v603]
+!!VRv608:S-1; [default is no other left cave]
+!!FU734&v601>1:P1/608; [get other left cave in v608]
+!!FU734&v601=1:P1/604; [get type of cave 1 in v604]
+!!FU734&v601>1:P2/604; [get type of cave 2 instead]
+!!VRv609:S-1; [default is no other right cave]
+!!FU734&v601=3:P3/609; [get other right cave in v609]
+
+!!FU735&v602=0:Pv603/v608/360; [get z360 name of left cave type(s)]
+!!FU735&v602=0:Pv604/v609/361; [get z361 name of right cave type(s)]
+
+!!VRz330:Sz360; [temporary copy]
+!!VRy4:Sv999 %2; [use bit 0 of object y as a psuedo-random #]
+!!VRz360&y1=3/y4=0:Sz361; [switch sign sides half the time if down]
+!!VRz361&y1=3/y4=0:Sz330;
+
+!!IF:V2/0; [assume names are different]
+!!IF&z360=z361:V2/1; [they're the same]
+!!VRz329&y1=2/-2:Sz130025;
+!!VRz329&y1=2/2:Sz130026;
+!!VRz329&y1=3/-2:Sz130027;
+!!VRz329&y1=3/2:Sz130028;
+
+!!VRz362:S^"%Z360?" "%Z361?"^;
+!!VRz362&2:S^"%Z360"^; [if fallen but sides same, just show one name]
+
+!!VRz326:Sz329+z130029;
+!!VRz327:Sz130030;
+!!VRz328:Sz130031;
+!!VRv605:S1; [assume hero leaves (for not searching or dead heroes)]
+!!FU733&v602=0:P50/98/605; [get choice in v605 - 0 is exploring]
+
+!!IF&v602=0/v605=1:M1/z130032;
+
+!!VRz326:Sz130033;
+!!VRz327:Sz130034;
+!!VRz327&y1=2:Sz130035+z360+^"^;
+!!VRz327&y1=3:Sz130036+z62;
+!!VRz328:Sz130037;
+!!VRz328&y1=2:Sz130038+z361+^"^;
+!!VRz328&y1=3:Sz130039+z362;
+!!FU733&v605=0:P38/128/606; [get tunnel choice in v606]
+
+[handle case with only two caves]
+
+!!FU731&v605=0/v601=1/v606=0:P0; [handle visiting cave 0 on left]
+!!FU731&v605=0/v601=1/v606=1:P1; [handle visiting cave 1 on right]
+
+[handle case with caves 0-1 left and cave 2 right]
+
+!!VRz326:Sz130040;
+!!VRz327:Sz130041;
+!!VRz328:Sz130042;
+!!FU733&v605=0/v601=2/v606=0:P38/128/607; [get 2nd tunnel choice in v607]
+!!FU731&v605=0/v601=2/v606=0/v607=0:P0; [handle visiting left-left cave 0]
+!!FU731&v605=0/v601=2/v606=0/v607=1:P1; [handle visiting left-right cave 1]
+!!FU731&v605=0/v601=2/v606=1:P2; [handle visiting cave 2 on right]
+
+[handle case with caves 0-1 left and caves 2-3 right]
+
+!!VRz326:Sz130043;
+!!VRz327:Sz130044;
+!!VRz328:Sz130045;
+!!FU733&v605=0/v601=3:P38/128/607; [get 2nd tunnel choice in v607]
+!!FU731&v605=0/v601=3/v606=0/v607=0:P0; [handle left-left cave 0]
+!!FU731&v605=0/v601=3/v606=0/v607=1:P1; [handle left-right cave 1]
+!!FU731&v605=0/v601=3/v606=1/v607=0:P2; [handle right-left cave 2]
+!!FU731&v605=0/v601=3/v606=1/v607=1:P3; [handle right-right cave 3]
+
+** end of function
+
+
+** function to handle choice between two pictures
+** z326 is message to display
+** z327/z328 are choices
+** x1/x2 are artifact numbers for pictures
+** vx3 returns the choice (0 left, 1 right)
+
+!?FU733;
+
+!!UN:Ax1/9/?y1; [remember left artifact name]
+!!UN:Ax1/10/?y2; [remember left artifact description]
+!!UN:Ax2/9/?y3; [remember right artifact name]
+!!UN:Ax2/10/?y4; [remember right artifact description]
+
+!!UN:Ax1/9/327; [set left artifact name]
+!!UN:Ax1/10/327; [set left artifact description (same as name)]
+!!UN:Ax2/9/328; [set right artifact name]
+!!UN:Ax2/10/328; [set right artifact description (same as name)]
+
+!!IF:Q2/8/x1/8/x2/7/z326; [give message with picture choice]
+!!VRvx3&2:S0; [return 0 for left]
+!!VRvx3&-2:S1; [return 1 for right]
+
+!!UN:Ax1/9/y1; [restore original artifact names/descriptions]
+!!UN:Ax1/10/y2;
+!!UN:Ax2/9/y3;
+!!UN:Ax2/10/y4;
+
+** end of function
+
+
+** function to get type of cave #x1 and return it in vx2
+
+!?FU734;
+
+!!FU766:Px1/x2/998; [get cave's bits into vx2]
+!!VRvx2:&3; [cave type is low 2 bits]
+
+** end of function
+
+
+** function to get name of cave types x1/x2 into zx3
+
+!?FU735;
+
+!!VRzx3&x1=0/x2=-1:Sz130046;
+!!VRzx3&x1=0/x2=0:Sz130047;
+!!VRzx3&x1=0/x2=1:Sz130048;
+!!VRzx3&x1=0/x2=2:Sz130049;
+!!VRzx3&x1=0/x2=3:Sz130050;
+!!VRzx3&x1=1/x2=-1:Sz130051;
+!!VRzx3&x1=1/x2=0:Sz130052;
+!!VRzx3&x1=1/x2=1:Sz130053;
+!!VRzx3&x1=1/x2=2:Sz130054;
+!!VRzx3&x1=1/x2=3:Sz130055;
+!!VRzx3&x1=2/x2=-1:Sz130056;
+!!VRzx3&x1=2/x2=0:Sz130057;
+!!VRzx3&x1=2/x2=1:Sz130058;
+!!VRzx3&x1=2/x2=2:Sz130059;
+!!VRzx3&x1=2/x2=3:Sz130060;
+!!VRzx3&x1=3/x2=-1:Sz130061;
+!!VRzx3&x1=3/x2=0:Sz130062;
+!!VRzx3&x1=3/x2=1:Sz130063;
+!!VRzx3&x1=3/x2=2:Sz130064;
+!!VRzx3&x1=3/x2=3:Sz130065;
+
+** end of function
+
+
+** function to set-up special battlefield v547
+
+!?FU736;
+
+!!BF:C; [always start with empty battlefield]
+
+!!BF&v547=1:O47/36 O47/155 O47/146 O46/92 O46/178 O45/63 O44/43 O44/103 O20/99 O79/160 O45/184 O80/14 O46/6 O60/51;
+
+!!BF&v547=2:O45/18 O46/3 O44/38 O46/171 O47/173 O40/163 O41/77 O55/167 O42/65 O40/99 O43/47 O37/154;
+
+!!BF&v547=3:O45/18 O42/29 O35/86 O35/120 O35/92 O35/126 O47/182;
+
+!!BF&v547=4:O0/69 O3/171 O57/105 O3/38 O3/160 O1/127 O3/96 O57/60 O0/11 O3/6;
+
+!!BF&v547=5:M49152/40952/32784/16286/8192/15608/12320/10190/12288/9470/34304/79;
+
+!!BF&v547=6:O64/36 O62/103 O62/138 O62/173 O61/71 O61/124 O61/24 O61/143 O67/158 O61/110 O61/59 O69/24 O61/78 O61/146 O62/165 O66/150 O62/132 O62/99 O61/64 O65/28;
+
+!!BF&v547=7:O80/8 O80/10 O79/25 O79/29 O80/42 O80/44 O79/65 O80/76 O80/78 O79/93 O79/97 O80/110 O80/112 O79/133 O80/144 O80/146 O79/161 O79/165 O80/178 O80/180;
+
+!!BF&v547=8:O57/20 O3/106 O38/159 O67/160 O23/162 O20/179 O2/171 O38/74 O20/27 O20/9 O68/24;
+
+!!BF&v547=9:O80/43 O53/56 O82/78 O53/86 O80/105 O81/113 O82/139 O79/143 O53/161 O51/18 O81/183 O80/171 O80/30;
+
+!!BF&v547=10:M0/992/63504/33264/31752/16632/15876/8316/7938/62/0/75;
+
+** end of function
+
+
+** function to set-up initial troop positions for special battlefield v547
+
+!?FU737;
+
+!!FU738&v547=1:P57/59/90/77/125/111/127/3/133/30/137/70/164/174;
+!!FU740&v547=1:P70/10/4 P70/10/31 P70/10/48 P70/10/173 P70/10/165;
+
+!!FU738&v547=2:P36/53/69/86/103/121/138/41/58/75/93/109/127/144;
+!!FU740&v547=2:P143/10/60 P143/10/95 P143/10/129 P143/10/110 P143/10/80 P143/10/47 P143/10/133 P143/10/148;
+
+!!FU738&v547=3:P96/92/88/86/90/94/98/140/39/142/41/144/43/146;
+!!BM21&v547=3:Q1/40/0 Q1/42/0 Q1/82/0 Q1/83/0 Q1/116/0 Q1/117/0 Q1/141/0 Q1/143/0 Q1/145/0 Q1/57/0 Q1/58/0 Q1/59/0 Q1/60/0 Q1/124/0 Q1/125/0 Q1/126/0 Q1/127/0 Q1/128/0 Q1/129/0;
+
+!!FU738&v547=4:P21/53/56/89/121/124/157/31/48/65/82/116/133/150;
+
+!!FU738&v547=5:P1/35/69/86/103/137/171/80/31/147/47/131/48/164;
+
+!!FU738&v547=6:P89/57/125/93/61/129/97/42/162/131/56/160/63/123;
+
+!!FU738&v547=7:P1/35/69/86/103/137/171/94/26/162/96/28/164/95;
+!!FU740&v547=7:P116/10/27 P116/10/163 P35/90/99;
+
+!!FU738&v547=8:P35/52/69/86/103/120/137/31/167/99/66/134/64/132;
+!!BM21&v547=8:Q0/76/0 Q0/77/0 Q0/93/0 Q0/94/0 Q0/95/0 Q0/110/0 Q0/111/0;
+
+!!FU738&v547=9:P74/76/91/93/95/108/110/57/59/61/90/97/125/129;
+!!FU740&v547=9:P43/25/58 P43/25/60 P43/25/73 P43/25/78 P43/25/107 P43/25/112 P43/25/126 P43/25/127 P43/25/128 P45/30/38 P45/30/45 P45/30/164;
+
+!!FU738&v547=10:P39/72/105/138/130/97/64/42/75/108/141/128/95/62;
+!!FU792&v547=10:P39/42 P72/75 P105/108 P138/141 P130/128 P97/95 P64/62;
+
+** end of function
+
+
+** function to set 14 base slots to positions x1-x14 (attacker first)
+** all defender stacks will always be present
+
+!?FU738;
+
+!!VRv532:Cx1/x2/x3/x4/x5/x6/x7/x8/x9/x10/x11/x12/x13/x14; [look-up table]
+!!DO739/0/41/1:P P; [replace slots with new positions if found, twice to handle some overlaps]
+!!BU:Ev539/?y1; [get slot number of first enemy stack, which must exist]
+!!BMy1:T?y2; [get type of enemy monster]
+!!VRv523:S0; [count of total enemy troops]
+!!DO741/0/6/1:Py2; [fill in empty enemy slots and add up troops]
+!!VRv523::7; [divide troops among all slots]
+!!VRv523&v523<1:S1; [must be at least 1 per slot]
+!!DO771/0/6/1:Pv523; [set all base enemy stacks to this amount]
+
+** end of function
+
+
+** function to set one troop stack to a new position
+
+!?FU739;
+
+!!BMx16:I?y1; [get player 0-1]
+!!BMx16:O?y2; [get hero slot 0-6 or -1]
+!!BMx16:N?y3; [get qty of troops there]
+!!VRy4:S532 +y2;
+!!VRy4&y1=1:+7; [now y4 is index into table of new positions]
+!!BMx16&y1>=0/y1<=1/y2>=0/y2<=6/y3>0:Pvy4; [set new position]
+
+** end of function
+
+
+** function to add new monster for player 1, if space available
+** x1 = type, x2 = qty, x3 = position
+
+!?FU740;
+
+!!BU:Ex3/?y1; [see what's at our position]
+!!BMy1&y1<>-1:N?y2; [see how many creatures in that stack]
+!!VRy1&y1<>-1/y2=0:S-1; [treat no creatures as no stack]
+!!BU&y1=-1:Sx1/x2/x3/1/-1/0; [if nothing there, place our new stack]
+
+** end of function
+
+
+** function to add missing monster to enemy slot x16 from table, x1 = type
+** total not missing monsters accumulated in v523
+
+!?FU741;
+
+!!VRy1:S539 +x16; [get index of variable with monster position]
+!!BU:Evy1/?y2; [see what stack is at that position]
+!!BMy2&y2<>-1:N?y3; [if stack, see how many critters]
+!!VRv523&y2<>-1:+y3; [add up critters]
+!!VRy2&y2<>-1/y3=0:S-1; [treat no critters as no stack]
+!!BU&y2=-1:Sx1/1/vy1/1/-1/0; [place new stack of just 1 monster]
+
+** end of function
+
+
+** Battlefield obstacle set-up trigger
+
+!?BF;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU736&v547<>0:P; [set-up any special battlefield]
+
+** end of Battlefield obstacle trigger
+
+
+** Battlefield round trigger
+
+!?BR;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU737&v547<>0/v997=-1:P; [set-up special troop positions]
+!!FU785&v547>=3/v547<=10:P; [handle special battlefield stuff]
+!!FU820&v997=-1:P; [handle pool effects]
+!!FU826:P; [handle altar effects]
+
+** end of Battlefield round trigger
+
+
+** Pre-battle trigger
+
+!?BA0;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!BA&v547<>0:B12; [subterranean background]
+!!IF:V600/0 V601/0; [clear flags for extra spell cast]
+!!BA:H0/?v519; [get attacking hero number]
+!!HEv519&v547<>0:R4/0; [disable tactics for special battles]
+!!FU832&v547<>0:Pv519; [remove war machines, remember them]
+
+** end of pre-battle trigger
+
+
+** Post-battle trigger
+
+!?BA1;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!BA:H0/?v519; [get attacking hero number]
+!!HEv519&v519>=0:R4/1; [enable tactics]
+!!FU833&v547<>0:Pv519; [restore war machines]
+!!VRv547:S0; [clear battlefield number for next battle]
+
+** end of post-battle trigger
+
+
+** BG0 trigger
+
+!?BG0;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU783:P; [handle hermit-related stuff]
+!!FU827:P; [handle altar stuff]
+
+** end of BG0 trigger
+
+
+** function to handle Rogue caves, x1 cave, x2 cave bits 65432
+
+!?FU742;
+
+!!VRy1:Sx2 &3; [get base Friendliness level in y1]
+!!VRy2:Sx2 :4 &3; [get ability in y2 - 0 sell Rogues, 1 steal mine, 2 attack hero, 3 steal artifact]
+!!VRy3:Sx2 :16; [get stored info in y3 - 1 if Rogues killed]
+
+!!IF&y3=1:M1/z130066;
+
+!!VRv611:S0; [0 Rogues]
+!!VRv612:S0; [0 total hit points]
+!!DO743/0/6/1:P; [count hero's Rogues and total hit points]
+!!VRy1&v611>0:+1; [+1 friendliness if hero has Rogues]
+!!VRy1&v612>200:+1; [+1 friendliness if hero is approx. better than 200 Rogues]
+
+!!VRy4:S0 R5; [pick random Rogue activity 0-5]
+  [0 = rat fight, 1 = dice, 2 = eating, 3 = plans, 4 = divvy loot, 5 = sleep]
+
+!!VRz364&x1=0:Sz130067;
+!!VRz364&x1=1:Sz130068;
+!!VRz364&x1=2:Sz130069;
+!!VRz364&x1=3:Sz130070;
+
+!!VRz360&y4=0:Sz130071;
+!!VRz360&y4=1:Sz130072;
+!!VRz360&y4=2:Sz130073;
+!!VRz360&y4=3:Sz130074;
+!!VRz360&y4=4:Sz130075;
+!!VRz360&y4=5:Sz130076;
+
+!!VRz361&y4=0:Sz130077;
+!!VRz361&y4=1:Sz130078;
+!!VRz361&y4=2:Sz130079;
+!!VRz361&y4=3:Sz130080;
+!!VRz361&y4=4:Sz130081;
+
+!!VRz362&y4=0:Sz130082;
+!!VRz362&y4=1:Sz130083;
+!!VRz362&y4=2:Sz130084;
+!!VRz362&y4=3:Sz130085;
+!!VRz362&y4=4:Sz130086;
+
+!!VRz363&y4=0:Sz130087;
+!!VRz363&y4=1:Sz130088;
+!!VRz363&y4=2:Sz130089;
+!!VRz363&y4=3:Sz130090;
+!!VRz363&y4=4:Sz130091;
+
+!!VRz365:Sz130092;
+!!VRz366&y4<>5:Sz130093;
+
+!!VRz366&y4=5:Sz130094;
+
+!!IF&y3=0:M^%Z365%Z360 %Z366^;
+
+!!VRz326&y1=0:Sz130095;
+!!VRz326&y1=1:Sz130096;
+!!VRz326&y1=2:Sz130097;
+!!VRz326&y1>2:Sz130098;
+!!VRz326&y4=5:Sz130099;
+!!VRz327:Sz130100;
+!!VRy5:S66;
+!!VRz328:Sz130101;
+!!VRy6:S12;
+!!VRz327&y1=0/y4<>5:Sz130102;
+!!VRy5&y1=0/y4<>5:S90;
+!!VRz327&y1=1:Sz130103;
+!!VRz327&y4=5:Sz130104;
+!!VRz328&y4=5:Sz130105;
+!!VRv613:S-1; [default if Rogues dead]
+!!FU733&y3=0:Py5/y6/613; [get choice in v613 - 0 is left]
+!!VRv613&v613=0:Sy5;
+!!VRv613&v613=1:Sy6; [now v613 has chosen picture - 66 peace, 12 fight, 90 flee]
+
+!!IF&v613=90:Q1/16/2/1/z130106;
+!!FU744&v613=90:P-2; [give low morale]
+
+!!FU745&v613=12/y4<>5:P200/x1; [handle Rogues fight]
+
+!!IF&v613=66/y4<>5:M1/z130107;
+!!FU746&v613=66/y4<>5:Py1/y2/x1; [handle Rogues business]
+
+!!VRz326:Sz130108;
+!!VRz327:Sz130109;
+!!VRz328:Sz130110;
+!!FU733&v613=66/y4=5:P50/98/614; [get choice in v614 - 0 disturb, 1 leave]
+
+!!IF&v613=66/y4=5/v614=1:M1/z130111;
+!!IF&v613=66/y4=5/v614=0:M1/z130112;
+!!VRy1:+1; [+1 friendliness]
+!!FU746&v613=66/y4=5/v614=0:Py1/y2/x1;
+
+!!VRz326:Sz130113;
+!!VRz327:Sz130114;
+!!VRz328:Sz130115;
+!!FU749&v613=12/y4=5:P-1; [award morale for evil action]
+!!FU745&v613=12/y4=5:P100/x1; [handle Rogues fight]
+
+** end of function
+
+
+** function to add up Rogues and hit points for slot x16
+
+!?FU743;
+
+!!HE-1:C0/x16/?y1/?y2; [get monster type y1 qty y2]
+!!VRv611&y1=143:+y2; [add up Rogues]
+!!MA&y1<>-1:Py1/?y3; [get hit points of one monster]
+!!VRy3&y1<>-1:*y2 :10; [times qty for total hit points, 1/10 to avoid overflows]
+!!VRv612&y1<>-1:+y3; [add them up]
+
+** end of function
+
+
+** function to give hero +x1 morale
+
+!?FU744;
+
+!!HE-1:R0/?y1; [get morale]
+!!VRy1:+x1;
+!!VRy1&y1<-3:S-3; [minimum of -3]
+!!VRy1&y1>3:S3; [maximum of +3]
+!!HE-1:R0/y1; [set new morale]
+
+** end of function
+
+
+** function to handle fighting x1 Rogues in cave x2
+
+!?FU745;
+
+!!VRv547:S2; [use battlefield #2 for this fight]
+!!HE-1:Tv998/v999/v1000/143/x1; [provoke Rogues battle]
+!!HE-1:O?y1; [get owner in y1]
+!!FU748&y1<>-1:Px2; [set bit if Rogues killed]
+
+!!UN:U57/-1/?v620; [count obelisks into v620]
+!!VRy2&v620>0:Sx2 *7 %v620 +1; [get number of obelisk to match this cave]
+!!UN&v620>0:U57/-1/y2/621; [get obelisk location in v621-v623]
+
+!!VRy3:S0 R99; [roll % dice]
+
+!!VRz326:Sz130116;
+!!VRz327:Sz130117;
+!!VRz328:Sz130118;
+!!VRv624:S-1; [default if no obelisk or no survivor or hero died]
+!!FU733&y1<>-1/v620>0/y3<50:P117/12/624; [get choice in v624 - 0 live, 1 kill]
+
+!!VRz326:Sz130119;
+!!VRz327:Sz130120;
+!!VRz328:Sz130121;
+!!FU749&v624=1:P-1; [award morale for evil action]
+
+!!VRy4:S0 R99; [roll % dice]
+!!VRy5:S640 R9; [artifact index]
+!!VRv640:C8/14/20/26/37/45/105/107/56/52; [artifact table]
+!!FU747:P609; [get hero alignment in v609]
+!!IF&v624=1/y4<25/v609<>1:Q1/8/vy5/1/z130122;
+!!HE-1&v624=1/y4<25/v609<>1:Avy5; [give artifact]
+
+!!IF&v624=0:M1/z130123;
+!!UN&v624=0:Sv621/v622/v623/y1/3; [reveal obelisk]
+!!UN&v624=0:Lv621/v622/v623/1500; [move view to the obelisk]
+!!UN&v624=0:Lv998/v999/v1000/0; [move view back]
+!!IF&v624=0:M1/z130124;
+!!IF:W-1; [W variables for this hero]
+!!VRy6:S550 +x2; [get index into bit table]
+!!VRy7:S510 +y1; [get index of obelisk variable]
+!!VRvy7&v624=0:|vy6; [set flag for picking up obelisk treasures]
+
+!!VRz326&v624=-1/y1<>-1:Sz130125;
+!!VRz326&v624<>-1:Sz130126;
+!!VRy4:S0 R20 *100 +2000; [2000-4000 gold]
+!!VRy5:S3 R5; [3-8 gems]
+!!IF&y1<>-1:Q1/6/y4/5/y5/1/z326;
+!!OW&y1<>-1:Ry1/5/dy5; [give gems]
+!!OW&y1<>-1:Ry1/6/dy4; [give gold]
+
+** end of function
+
+
+** function to handle business with Rogues, x1 friendly, x2 ability, x3 cave
+
+!?FU746;
+
+!!VRy1:S1; [assume Rogue ability is available]
+!!VRy2:S550 +x3; [get bit value]
+!!IF:W-1; [look at current hero's w variables]
+!!VRy3:Sw61 &vy2; [see if hero has visited Rogues in this position this turn]
+!!VRy1&y3>0:S0; [can only visit Rogues in this position once/day/hero]
+
+!!IF&y1=0/x2=0:M1/z130127;
+!!IF&y1=0/x2=1:M1/z130128;
+!!IF&y1=0/x2=2:M1/z130129;
+!!IF&y1=0/x2=3:M1/z130130;
+
+!!FU755&y1=1/x2=0:Px1/x3; [handle Rogue sellers]
+!!FU756&y1=1/x2=1:Px1/x3; [handle gold mine stealers]
+!!FU757&y1=1/x2=2:Px1/x3; [handle hero attackers]
+!!FU758&y1=1/x2=3:Px1/x3; [handle artifact thieves]
+
+** end of function
+
+
+** function to set vx1 to hero alignment - -1 evil, 0 neutral, 1 good
+
+!?FU747;
+
+!!HE-1:N?y1; [get hero's number]
+!!VRvx1:S0; [assume neutral, and neutral for campaign heroes]
+!!VRvx1&y1<48:S1; [good hero]
+!!VRvx1&y1>=48/y1<96:S-1; [evil hero]
+
+** end of function
+
+
+** function to set monsters-killed bit for cave x1
+
+!?FU748;
+
+!!FU766:Px1/660/998; [read cave bits into v660]
+!!VRv660:|64; [set monsters-killed bit]
+!!FU767:Px1/v660/998; [set cave bits]
+
+** end of function
+
+
+** function to give +/- morale with message
+** x1 = 1 if action is good, -1 if action is evil
+** z326 = good reaction msg, z327 = neutral, z328 = bad
+
+!?FU749;
+
+!!FU747:P609; [get hero alignment in v609]
+!!VRy1:S0; [assume neutral reaction]
+!!VRy1&v609<0/x1<0:S1; [good reaction for evil-evil]
+!!VRy1&v609>0/x1>0:S1; [good reaction for good-good]
+!!VRy1&v609<0/x1>0:S-1; [bad reaction for evil-good]
+!!VRy1&v609>0/x1<0:S-1; [bad reaction for good-evil]
+
+!!IF&y1>0:Q1/14/2/1^%Z326^;
+!!IF&y1=0:M^%Z327^;
+!!IF&y1<0:Q1/16/2/1^%Z328^;
+!!FU744&y1>0:P2; [bonus morale for in-character choice]
+!!FU744&y1<0:P-2; [bad morale for out-of-character choice]
+
+** end of function
+
+
+** function to initialize w variables for hero x16
+
+!?FU750;
+
+!!IF:Wx16; [pick hero x16 for w variables]
+!!VRw62:S-1; [hero paying for Rogue attack]
+!!VRw63:S-1; [artifact stolen by Rogues]
+!!VRw64:S0; [hermit wealth skill]
+!!VRw65:S0; [hermit combat skill]
+!!VRw66:S0; [hermit magic skill]
+!!VRw67:S0; [hermit voodoo skill]
+!!VRw69:S0; [books carried]
+!!VRw70:S0; [mandrake roots carried]
+!!VRw71:S0; [tulip bulbs carried]
+!!VRw72:S0; [toys carried]
+!!VRw75:S0; [wine carried]
+!!VRw76:S0; [dog armors carried]
+!!VRw77:S0; [3-handed swords carried]
+!!VRw78:S0; [useless wands carried]
+
+** end of function
+
+
+** Obelisk object trigger
+
+!?OB57/-1&1000; [obelisk trigger for humans only]
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!IF:W-1; [use current hero for w variables]
+!!UN:U57/-1/?v600; [count obelisks into v600]
+!!DO753/0/3/1:P; [set up v601-v604 with findable-treasure obelisk numbers]
+!!DO751/1/v600/1:P; [check each obelisk for matching]
+
+** end of Obelisk object trigger
+
+
+** function to check an obelisk for treasure
+
+!?FU751;
+
+!!VRy1:S0; [assume no treasure]
+!!VRy1&x16=v601:S1; [get y1>0 if treasure findable here]
+!!VRy1&x16=v602:S2;
+!!VRy1&x16=v603:S4;
+!!VRy1&x16=v604:S8;
+!!UN:U57/-1/x16/605; [get obelisk location into v605-v607]
+!!VRy1|v998<>v605/v999<>v606/v1000<>v607:S0; [hero has to be there]
+!!HE-1:O?y7; [get hero owner]
+
+!!VRy2:S15 -y1; [get bit mask]
+!!VRy8:S510 +y7; [get index of obelisk variables]
+!!VRvy8&y1>0:&y2; [clear bit for this treasure]
+!!VRy3:S0 R99; [roll % dice - chance Rogue leader was lying]
+
+!!IF&y1>0/y3<20:M1/z130131;
+
+!!VRv610:C9/17/22/27/31/38/41/97/69/91; [table of combat artifacts]
+!!VRv620:C56/57/63/65/100/107/59/66/67/92; [table of boosted artifacts]
+!!VRy4:S610 R9; [index to combat artifact]
+!!VRy5:S620 R9; [index to boosted artifact]
+!!VRy6:S0 R5 *500 +2500; [2500-5000 gold]
+
+!!IF&y1>0/y3>=20:Q1/6/y6/8/vy4/8/vy5/1/z130132;
+
+!!HE-1&y1>0/y3>=20:Avy4; [give artifacts]
+!!HE-1&y1>0/y3>=20:Avy5;
+!!OW&y1>0/y3>=20:Ry7/6/dy6; [give gold]
+
+** end of function
+
+
+** function to clear daily hero w variables for hero x16, x1 is player
+
+!?FU752;
+
+!!IF:Wx16; [use hero x16 for w variables]
+!!VRw61:S0; [clear flags for Rogue cave #'s visited this turn]
+!!VRw68:S0; [haven't learned from a hermit today]
+
+!!HEx16:O?y1; [get hero owner]
+!!HEx16:B0/?z326; [get hero name]
+
+!!HEw62&w62>=0/x1=y1:B0/?z327; [get paying hero's name]
+!!IF&1000/w62>=0/x1=y1:M1/z130133;
+!!HEx16&w62>=0/x1=y1:P?v600/?v601/?v602; [get hero x/y/level]
+!!HEx16&w62>=0/x1=y1:Tv600/v601/v602/143/210; [provoke Rogue battle]
+!!VRw62&x1=y1:S-1; [clear battle flag]
+
+!!UN&w63>0/x1=y1:N0/327/w63; [get name of artifact]
+!!IF&1000/w63>0/x1=y1:Q1/8/w63/1/z130134;
+!!VRw63:S-1; [clear artifact # stolen by Rogues]
+
+!!VRy2:Sc0 %7; [get day of week]
+!!VRw73&y2=1:S0; [clear pool spells]
+!!VRw74&y2=1:S0; [clear altar abilities]
+
+** end of function
+
+
+** function to do set-up for search for an obelisk
+
+!?FU753;
+
+!!VRy1:S601 +x16; [get index of variable tracking obelisk number]
+!!VRvy1:Sx16 *7 %v600 +1; [set obelisk number]
+!!VRy2:S550 +x16; [get bit number from table]
+!!HE-1:O?y4; [get hero owner]
+!!VRy5:S510 +y4; [get index of obelisk variable]
+!!VRy3:Svy5 &vy2; [look at bit indicating findable treasure]
+!!VRvy1&y3=0:S-1; [clear obelisk number if hero can't find that treasure]
+
+** end of function
+
+
+** function to check gold mine for not being robbed player's or x1's
+** v620 returns mine number, v624 its owner
+
+!?FU754;
+
+!!UN:U53/6/x16/621; [get gold mine location in v621-v623]
+!!MN621:O?v624; [get mine owner]
+!!VRy2:S524 +v624; [get index of variable tracking robbed mines by player]
+!!VRv620&v624>0/v624<>x1/vy2=0:Sx16; [mine #x16 is usable]
+!!VRv627&v624>0/v624<>x1/vy2=0:Sv624; [track mine owner]
+
+** end of function
+
+
+** function to handle Rogues that sell Rogues, x1 friendly, x2 cave
+
+!?FU755;
+
+!!VRv620:S1350; [base price of 1350 gold]
+!!VRv620&x1<2:*2; [double price for unfriendly Rogues]
+!!VRv620&x1=2:*3 :2; [+50% price for somewhat unfriendly Rogues]
+
+!!VRz326:Sz130135;
+!!VRz327:Sz130136;
+!!VRz328:Sz130137;
+!!FU733:P117/98/621; [get choice in v621 - 0 deal, 1 no]
+
+!!IF&v621=1:M1/z130138;
+
+!!FU761&v621=0:Pv620/x2; [handle gold transaction]
+
+!!IF&v621=0/3:M1/z130139;
+!!HE-1&v621=0/3:C2/143/15/1; [give 15 Rogues]
+
+** end of function
+
+
+** function to handle Rogues that steal gold mines, x1 friendly, x2 cave
+
+!?FU756;
+!!HE-1:O?y4; [get hero owner]
+!!UN:U53/6/?y5; [count gold mines]
+!!VRv620:S-1; [no usable gold mine found]
+!!DO754/1/y5/1&y5>0:Py4; [find gold mine of player not y4, not robbed this round]
+
+!!IF&v620=-1:M1/z130140;
+
+!!FU759&v620<>-1:Pv627; [get color word for mine owner in z360]
+!!VRv625:S7500; [base price of 7500 gold]
+!!VRv625&x1<2:*2; [double for unfriendly Rogues]
+!!VRv625&x1=2:*3 :2; [+50% for somewhat unfriendly Rogues]
+
+!!VRz326:Sz130141;
+!!VRz327:Sz130142;
+!!VRz328:Sz130143;
+!!FU733&v620<>-1:P117/98/626; [get choice in v626 - 0 deal, 1 leave]
+
+!!IF&v620<>-1/v626=1:M1/z130144;
+!!VRv626&v620=-1:S1; [now treat no mine available as saying no]
+
+!!FU761&v626=0:Pv625/x2; [handle gold transaction]
+
+!!UN&v626=0/3:U53/6/v620/621; [get gold mine location]
+!!MN621&v626=0/3:Oy4; [steal the mine]
+!!DO835/0/6/1&v626=0/3:P; [clear mine guards]
+!!VRy2:S524 +v627; [get index of variable tracking robbed mines by player]
+!!VRvy2&v626=0/3:Sv620; [note to alert player later that this mine was stolen]
+!!IF&v626=0/3:M1/z130145;
+!!OW:C?y7; [get current player]
+!!UN&v626=0/3:Sv621/v622/v623/y7/3; [reveal gold mine]
+!!UN&v626=0/3:R1; [redraw]
+
+** end of function
+
+
+** function to handle Rogues that attack heroes, x1 friendly, x2 cave
+
+!?FU757;
+
+!!HE-1:O?y1; [get hero owner]
+!!VRv620:S-1; [assume no hero found]
+!!VRv621:S32767; [and high army strength]
+!!DO762/0/155/1:Py1; [find approx. weakest hero not this player's or already attacked]
+
+!!IF&v620=-1:M1/z130146;
+
+!!HEv620&v620<>-1:O?y1; [get target hero owner]
+!!FU759&v620<>-1:Py1; [get color word for target hero owner in z360]
+!!HEv620&v620<>-1:B0/?z361; [get target hero name]
+!!HEv620&v620<>-1:R2/?y2; [get target hero sex]
+!!VRz362&y2=0:Sz130147;
+!!VRz362&y2=1:Sz130148;
+!!VRz363&y2=0:Sz130149;
+!!VRz363&y2=1:Sz130150;
+
+!!VRz364:Sz130151;
+!!VRz364&v621<250:Sz130152;
+!!VRz364&v621<150:Sz130153;
+!!VRz364&v621<50:Sz130154;
+
+!!VRy3:S0 R3; [roll them bones]
+!!VRz365&y3=0:Sz130155;
+!!VRz365&y3=1:Sz130156;
+!!VRz365&y3=2:Sz130157;
+!!VRz365&y3=3:Sz130158;
+
+!!VRv623:S4000; [base price of 4000 gold]
+!!VRv623&x1<2:*2; [double for unfriendly Rogues]
+!!VRv623&x1=2:*3 :2; [+50% for somewhat unfriendly Rogues]
+
+!!VRz326:Sz130159;
+!!VRz327:Sz130160;
+!!VRz328:Sz130161;
+!!FU733&v620<>-1:P117/98/624; [get choice in v624 - 0 deal, 1 leave]
+
+!!IF&v620<>-1/v624=1:M1/z130162;
+!!VRv624&v620=-1:S1; [now treat no target as saying no]
+
+!!FU761&v624=0:Pv623/x2; [handle gold transaction]
+
+!!IF&v624=0/3:Wv620; [use w variables of target hero]
+!!HE-1:N?y5; [get number of buying hero]
+!!VRw62&v624=0/3:Sy5; [set flag for Rogue battle on their turn]
+!!IF&v624=0/3:M1/z130163;
+
+** end of function
+
+
+** function to handle Rogues that steal artifacts, x1 friendly, x2 cave
+
+!?FU758;
+
+!!HE-1:O?y1; [get hero owner]
+!!VRv620:S-1; [number of suitable hero found]
+!!VRv621:S-1; [index number of found liftable artifact]
+!!VRv630:C52/53/46/47/48/49/50/51/64/63; [table of artifacts to steal]
+!!VRv640:C65/112/114/111/80/82/81/79/92/93; [in order worst to best]
+!!VRv650:C117/116/115/125/126/91/86/88/89/87;
+!!DO764/0/155/1:Py1; [find enemy hero with an artifact we can steal]
+
+!!IF&v620=-1:M1/z130164;
+
+!!UN&v620<>-1:N0/360/vv621; [get artifact name in z360]
+!!HEv620&v620<>-1:B0/?z361; [get robbed hero name in z361]
+!!VRv622:S3000; [base price of 3000 gold]
+!!VRv622&v621>=640:S6000; [base price of 6000 gold for better artifacts]
+!!VRv622&v621>=650:S9000; [base price of 9000 gold for best artifacts]
+!!VRv622&x1<2:*2; [double for unfriendly Rogues]
+!!VRv622&x1=2:*3 :2; [+50% for somewhat unfriendly Rogues]
+
+!!VRz326:Sz130165;
+!!VRz327:Sz130166;
+!!VRz328:Sz130167;
+!!FU733&v620<>-1:P117/98/623; [get choice in v623 - 0 deal, 1 leave]
+
+!!IF&v620<>-1/v623=1:M1/z130168;
+!!VRv623&v620=-1:S1; [now treat no artifact available as saying no]
+
+!!FU761&v623=0:Pv622/x2; [handle gold transaction]
+
+!!HEv620&v623=0/3:A3/vv621/1/1; [steal artifact]
+!!IF&v623=0/3:Wv620; [now refer to the robbed hero's w variables]
+!!VRw63&v623=0/3:Svv621; [set flag for robbery message on that player's turn]
+!!HE-1&v623=0/3:Avv621; [give artifact]
+!!IF&v623=0/3:M1/z130169;
+
+** end of function
+
+
+** function to set z360 to color name for player x1
+
+!?FU759;
+
+!!VRz360&x1=0:Sz130170;
+!!VRz360&x1=1:Sz130171;
+!!VRz360&x1=2:Sz130172;
+!!VRz360&x1=3:Sz130173;
+!!VRz360&x1=4:Sz130174;
+!!VRz360&x1=5:Sz130175;
+!!VRz360&x1=6:Sz130176;
+!!VRz360&x1=7:Sz130177;
+
+** end of function
+
+
+** function to handle trying to buy Rogue services without enough money
+** x1 = cave
+
+!?FU760;
+
+!!IF:M1/z130178;
+!!VRy1:S0 R99; [roll % dice]
+!!FU766:Px1/660/998; [read cave's bits into v660]
+!!VRy2:Sv660 :4 &3; [now y2 is unmodified friendliness]
+!!VRy2&y2>0/y1<50:-1; [50% chance to get permanently less friendly if possible]
+!!VRy2:*4; [get bits back to position we need them in]
+!!VRv660:&115 |y2; [clear friendliness bits, then OR our new value in]
+!!FU767:Px1/v660/998; [store new cave bits]
+
+** end of function
+
+
+** handle Rogue gold transaction - check for enough gold, flag 3 set if yes
+** deduct gold and flag cave if enough, call not-enough-gold function otherwise
+** x1 gold required, x2 cave
+
+!?FU761;
+
+!!HE-1:O?y1; [get hero owner]
+!!OW:Ry1/6/?y2; [get hero's owner's gold]
+!!IF:V3/0; [assume not enough gold]
+!!IF&y2>=x1:V3/1; [player has enough gold]
+
+!!FU760&-3:Px2; [handle not enough gold]
+
+!!VRx1:*-1; [get price to subtract]
+!!OW&3:Ry1/6/dx1; [deduct gold paid]
+!!VRy3:S550 +x2; [get bit value for cave]
+!!IF:W-1; [look at current hero's w variables]
+!!VRw61&3:|vy3; [disallow further Rogue deals today for this hero in this cave position]
+
+** end of function
+
+
+** function to find weak heroes, v620 hero, v621 strength, x1 player to avoid
+
+!?FU762;
+
+!!HEx16:O?y1; [get this hero's owner]
+!!IF:Wx16; [look at this hero's w variables]
+!!VRv622:S0; [count of hero hit points]
+!!DO763/0/6/1&y1<>x1/y1<>-1/w62=-1:Px16; [add up hit points in v622]
+!!VRv620&v622<v621/y1<>x1/y1<>-1/w62=-1:Sx16; [this hero is weaker and usable]
+!!VRv621&v622<v621/y1<>x1/y1<>-1/w62=-1:Sv622; [remember new total hit points]
+
+** end of function
+
+
+** function to count hit points of hero x1 slot x16 into v622
+
+!?FU763;
+
+!!HEx1:C0/x16/?y1/?y2; [get y1 type y2 qty of monsters]
+!!MA&y1<>-1:Py1/?y3; [get hit points of one monster]
+!!VRy3&y1<>-1:*y2 :10; [* qty for total hit points, /10 to avoid overflows]
+!!VRv622&y1<>-1:+y3; [add them up]
+
+** end of function
+
+
+** function to check hero x16 for stealable artifact and none stolen yet
+** x1 = player doing the stealing, v620 returns hero, v621 artifact
+
+!?FU764;
+
+!!HEx16:O?y1; [get this hero's owner]
+!!IF:Wx16; [look at this hero's w variables]
+!!DO765/630/659/1&y1<>x1/y1<>-1/w63=-1:Px16; [find best artifact hero x16 has equipped]
+
+** end of function
+
+
+** function to check hero x1 for artifact vx16
+
+!?FU765;
+
+!!HEx1:A2/vx16/?y1/?y2; [get # of artifacts, # of equipped artifacts]
+!!VRv620&y2>0/x16>v621:Sx1; [remember usable hero found]
+!!VRv621&y2>0/x16>v621:Sx16; [note that artifact was found]
+
+** end of function
+
+
+** function to read cave x1's bits into vx2, location x3
+
+!?FU766;
+
+!!POx3:H?y1; [read various PO bytes and nybble]
+!!POx3:T?y2;
+!!POx3:S?y3;
+!!POx3:N?y4;
+
+!!VRvx2&x1=0:Sy1 &127; [cave 0 = low 7 bits of PO:H]
+!!VRvx2&x1=1:Sy2 &127; [cave 1 = low 7 bits of PO:T]
+!!VRvx2&x1=2:Sy3 &127; [cave 2 = low 7 bits of PO:S]
+
+!!VRy1:&128 :2;
+!!VRy2:&128 :4;
+!!VRy3:&128 :8;
+!!VRvx2&x1=3:Sy4 +y1 +y2 +y3; [cave 3 = hi bits of PO:H/T/S, low bits PO:N]
+
+** end of function
+
+
+** function to set cave x1's bits equal to x2, location x3
+
+!?FU767;
+
+!!POx3&x1=0:H?y1; [store cave 0 in low 7 bits of PO:H]
+!!VRy1:&128 |x2;
+!!POx3&x1=0:Hy1;
+
+!!POx3&x1=1:T?y1; [store cave 1 in low 7 bits of PO:T]
+!!VRy1:&128 |x2;
+!!POx3&x1=1:Ty1;
+
+!!POx3&x1=2:S?y1; [store cave 2 in low 7 bits of PO:S]
+!!VRy1:&128 |x2;
+!!POx3&x1=2:Sy1;
+
+!!POx3&x1=3:H?y1; [spread cave 3 among hi bits and PO:N]
+!!VRy1:&127;
+!!VRy1&x2>=64:|128;
+!!POx3&x1=3:Hy1;
+!!VRx2:&63;
+
+!!POx3&x1=3:T?y1;
+!!VRy1:&127;
+!!VRy1&x2>=32:|128;
+!!POx3&x1=3:Ty1;
+!!VRx2:&31;
+
+!!POx3&x1=3:S?y1;
+!!VRy1:&127;
+!!VRy1&x2>=16:|128;
+!!POx3&x1=3:Sy1;
+!!VRx2:&15;
+
+!!POx3&x1=3:Nx2;
+
+** end of function
+
+
+** function to read split cave bits into vx1, location x2
+
+!?FU768;
+!!POx2:O?vx1; [reads bits from PO:O nybble]
+!!VRvx1:&7; [just 3 meaningful bits]
+!!VRy1:Svx1;
+!d!IF:M^ Get x2=%X2, x1=%X1, v[x1]=%Y1^;
+
+** end of function
+
+
+** function to set split cave bits to x1, location x2
+
+!?FU769;
+!d!IF:M^Set x2=%X2, x1=%X1^;
+!!POx2:Ox1; [set PO:O nybble]
+
+** end of function
+
+
+** function to initialize cave x16 to random
+
+!?FU770;
+
+!!VRy1:S0 R63; [random cave bits - hi bit always clear]
+!!FU767:Px16/y1/601; [set bits]
+
+** end of function
+
+
+** function to set enemy stack x16 in table to x1 qty
+
+!?FU771;
+
+!!VRy1:S539 +x16; [get index of variable with monster position]
+!!BU:Evy1/?y2; [see what stack is at that position]
+!!BMy2&y2<>-1:N?y3; [see how many there]
+!!BMy2&y2<>-1/y3>0:Nx1 Bx1; [set number of monsters and starting number]
+
+** end of function
+
+
+** function to handle Hermit caves, x1 cave, x2 cave bits 65432
+
+!?FU772;
+
+!!VRy1:Sx2 &3; [get requirements in y1 - 0 none 1 sick 2 antisocial 3 ascetic]
+!!VRy2:Sx2 :4 &3; [get lesson in y2 - 0 wealth 1 combat 2 magic 3 voodoo]
+!!VRy3:Sx2 :16; [get stored info in y3 - 1 if hermit gone]
+
+!!IF&y3=1:M1/z130179;
+
+!!IF&y3=0:M1/z130180;
+
+!!VRv615:S0; [assume hermit is unusable]
+!!FU773&y3=0/y1=0:Px1/x2; [handle normal hermit]
+!!FU774&y3=0/y1=1:Px1/x2; [handle sick hermit]
+!!FU775&y3=0/y1=2:Px1/x2; [handle antisocial hermit]
+!!FU776&y3=0/y1=3:Px1/x2; [handle ascetic hermit]
+
+!!VRy4:S64 +y2; [get index of lesson w variable]
+!!IF:W-1; [use current hero's w variables]
+
+!!VRz362&y2=0:Sz130181;
+!!VRz362&y2=1:Sz130182;
+!!VRz362&y2=2:Sz130183;
+!!VRz362&y2=3:Sz130184;
+
+!!IF&v615=1/wy4=3:M1/z130185;
+
+!!IF&v615=1/wy4<3/w68>0:M1/z130186;
+
+!!VRz326&v615=1/wy4=0/w68=0:Sz130187;
+!!VRz326&v615=1/wy4>0/wy4<3/w68=0:Sz130188;
+!!VRz327:Sz130189;
+!!VRz328:Sz130190;
+!!FU733&v615=1/wy4<3/w68=0:P88/98/616; [get choice in v616 - 0 learn, 1 leave]
+
+!!IF&v615=1/wy4=0/v616=1/w68=0:M1/z130191;
+!!IF&v615=1/wy4>0/wy4<3/v616=1/w68=0:M1/z130192;
+
+!!VRv616|v615=0/wy4=3/w68>0:S1; [treat not-learning cases as leaving]
+
+!!VRwy4&v616=0:+1; [learn!]
+!!VRw68&v616=0:S1; [prevent further hermit learning today]
+
+!!VRz360&v616=0/wy4=1/y2=0:Sz130193;
+!!VRz360&v616=0/wy4=1/y2=1:Sz130194;
+!!VRz360&v616=0/wy4=1/y2=2:Sz130195;
+!!VRz360&v616=0/wy4=1/y2=3:Sz130196;
+
+!!VRz360&v616=0/wy4=2/y2=0:Sz130197;
+!!VRz360&v616=0/wy4=2/y2=1:Sz130198;
+!!VRz360&v616=0/wy4=2/y2=2:Sz130199;
+!!VRz360&v616=0/wy4=2/y2=3:Sz130200;
+
+!!VRz360&v616=0/wy4=3/y2=0:Sz130201;
+!!VRz360&v616=0/wy4=3/y2=1:Sz130202;
+!!VRz360&v616=0/wy4=3/y2=2:Sz130203;
+!!VRz360&v616=0/wy4=3/y2=3:Sz130204;
+
+!!IF&v616=0/wy4=1:M1/z130205;
+!!IF&v616=0/wy4=2:M1/z130206;
+!!IF&v616=0/wy4=3:M1/z130207;
+
+!!VRy5:S0 R5; [hermit death msg #]
+
+!!IF&v616=0/wy4=3/y5=0:M1/z130208;
+!!IF&v616=0/wy4=3/y5=1:M1/z130209;
+!!IF&v616=0/wy4=3/y5=2:M1/z130210;
+!!IF&v616=0/wy4=3/y5=3:M1/z130211;
+!!IF&v616=0/wy4=3/y5=4:M1/z130212;
+!!IF&v616=0/wy4=3/y5=5:M1/z130213;
+
+!!FU748&v616=0/wy4=3:Px1; [kill hermit]
+
+!!VRy6:Sy2 +368; [# of papyrus message]
+!!QW&v616=0/wy4=3:Ay6/-1/-2/y6; [add papyrus message]
+
+** end of function
+
+
+** function to handle normal hermit
+
+!?FU773;
+
+!!VRy1:S0 R5;
+!!VRz361&y1=0:Sz130214;
+!!VRz361&y1=1:Sz130215;
+!!VRz361&y1=2:Sz130216;
+!!VRz361&y1=3:Sz130217;
+!!VRz361&y1=4:Sz130218;
+!!VRz361&y1=5:Sz130219;
+
+!!VRz360:Sz130220;
+!!VRv615:S1; [hermit is usable]
+
+** end of function
+
+
+** function to handle sick hermit
+
+!?FU774;
+
+!!HE-1:S27/?y1; [get y1 first aid skill level 0-3]
+!!HE-1:A2/6/?y2/?y3; [get y3 # of equipped first aid tents]
+!!HE-1:A2/94/?y2/?y4; [get y4 # of equipped rings of vitality]
+!!HE-1:A2/95/?y2/?y5; [get y5 # of equipped rings of life]
+!!HE-1:A2/96/?y2/?y6; [get y6 # of equipped vials of lifeblood]
+!!VRz361:Sz130221;
+
+!!VRy7:S0; [no cure available]
+!!VRy7&y1=3:S1; [cure is expert first aid skill]
+!!VRy7&y1<3/y3>0:S2; [cure is first aid tent]
+!!VRy7&y1<3/y3=0/y4>0:S3; [cure is ring of vitality]
+!!VRy7&y1<3/y3=0/y4=0/y5>0:S4; [cure is ring of life]
+!!VRy7&y1<3/y3=0/y4=0/y5=0/y6>0:S5; [cure is vial of lifeblood]
+
+!!IF&y1=0/y7=0:M1/z130222;
+!!IF&y1>0/y7=0:M1/z130223;
+
+!!VRv612:S1; [assume not helping]
+!!VRz326&y7=1:Sz130224;
+!!VRz326&y7=2:Sz130225;
+!!VRz326&y7=3:Sz130226;
+!!VRz326&y7=4:Sz130227;
+!!VRz326&y7=5:Sz130228;
+!!VRz327:Sz130229;
+!!VRz328:Sz130230;
+!!FU733&y7<>0:P6/98/612; [get choice in v612 - 0 heal, 1 leave]
+
+!!VRz326:Sz130231;
+!!VRz327:Sz130232;
+!!VRz328:Sz130233;
+!!FU749&y7<>0/v612=1:P-1; [award morale for evil action]
+
+!!HE-1&v612=0/y7=2:A3/6/1/1; [remove used First Aid Tent]
+!!HE-1&v612=0/y7=3:A3/94/1/1; [remove used Ring Of Vitality]
+!!HE-1&v612=0/y7=4:A3/95/1/1; [remove used Ring Of Life]
+!!HE-1&v612=0/y7=5:A3/96/1/1; [remove used Vial Of Lifeblood]
+
+!!VRz361:Sz130234;
+!!VRz361&y7=2:Sz130235;
+!!VRz361&y7=3:Sz130236;
+!!VRz361&y7=4:Sz130237;
+!!VRz361&y7=5:Sz130238;
+!!VRz360:Sz130239;
+
+!!FU766:Px1/613/998; [read cave's bits into v613]
+!!VRv613:&115; [clear hermit requirement bits]
+!!FU767&v612=0:Px1/v613/998; [store new cave bits]
+
+!!VRv615&v612=0:S1; [hermit is usable only if healed]
+
+** end of function
+
+
+** function to handle antisocial hermit
+
+!?FU775;
+
+!!VRv611:S0; [assume no occupants]
+!!VRv614:S0; [assume no hermits]
+!!FU768:P612/998; [read split cave bits into v612]
+!!VRv612:&3; [just look at number of additional caves, 0-3]
+!!DO781/0/3/1:Pv612; [check each cave's living occupants]
+
+!!IF&v611>1:M1/z130240;
+
+!!FU766:Px1/613/998; [read cave's bits into v613]
+!!VRv613:&115; [clear hermit requirement bits]
+!!FU767&v611<2:Px1/v613/998; [store new cave bits]
+
+!!VRz360:Sz130241;
+!!VRv615&v611<2:S1; [hermit is usable only if alone]
+
+** end of function
+
+
+** function to handle ascetic hermit
+
+!?FU776;
+
+!!VRv611:S0; [assume no artifacts]
+!!DO780/4/143/1:P; [count artifacts]
+
+!!IF&v611>0:M1/z130242;
+
+!!VRz360&v611=0:Sz130243;
+!!VRv615&v611=0:S1; [hermit is usable only with no artifacts / war machines]
+
+** end of function
+
+
+** skip Palace Of Dreams function numbers 777-779
+
+
+** function to count artifact x16
+
+!?FU780;
+
+!!HE-1:A2/x16/?y1/?y2; [check for artifacts / equipped artifacts]
+!!VRv611:+y1; [count artifacts]
+
+** end of function
+
+
+** treasure chest trigger
+
+!?OB101/-1&-875;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+ [Get chest subtype - y1]
+!!OB998:U?v1; [v1=0 for standard chest, v1>0 for new chest types]
+
+ [Check if chest is custom or standard]
+!!VRv2:S0;
+!!UN&v1>0:Bv1/?v2; [v2=0 if standard operation, v2=1 if advanced (scripted)]
+
+!!IF:V5/0; [Set flag 5 to false]
+!!IF&v1=0:V5/1; [Set flag 5 to true if chest is normal type (subtype 0)]
+!!IF&v1>0/v2=0:V5/1; [Set flag 5 to true if chest is new type but standard operation]
+
+ [Continue trigger if above conditions are met]
+!?OB101/-1&-875/5;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!IF:W-1; [use current hero's w variables]
+!!CH998:B?v600; [check chest gold qty]
+!!VRv600:*2; [double it!]
+!!VRv600&v600>15:S15; [to a maximum of 15 * 500]
+!!CH998&w64=3:Bv600; [store new chest gold qty]
+
+** end of treasure chest trigger
+
+
+** function to check cave x16 for occupants, x1 # of extra caves
+
+!?FU781;
+
+!!FU766:Px16/613/998; [read cave x16's bits into v613]
+!!VRy1:Sv613 &3; [type of cave in y1]
+!!VRy2:Sv613 :64; [occupied or not in y2]
+!!VRv611&x1>=x16/y2=0/y1<3:+1; [count occupants, including hermit himself]
+!!VRv614&x1>=x16/y2=0/y1=1:+1; [count hermits]
+!!VRz361&x1>=x16/y2=0/y1=0:Sz130244;
+!!VRz361&x1>=x16/y2=0/y1=1/v614>1:Sz130245;
+!!VRz361&x1>=x16/y2=0/y1=2:Sz130246;
+
+** end of function
+
+
+** unused function
+
+!?FU782;
+
+
+** end of function
+
+
+** function to handle hermit-related BG0 stuff
+
+!?FU783;
+!!BA:E?v1; [Check if Network Battle: v1>0 if yes]
+
+!?FU783&v1=0; [Continue function 783 if not a Network Battle]
+!!BG:A?y1; [get type of action]
+!!BG:Q?y2; [get current acting side]
+!!BHy2:N?y3; [get acting hero number if any]
+!!BG:E?y5; [get destination monster stack]
+
+!!IF&y3<>-1:Wy3; [use acting hero's w variables]
+
+!!VRy4:S0; [assume no extra-spell ability]
+!!VRy4&y2=0/-600:S1; [check flag by side for allowing extra spell]
+!!VRy4&y2=1/-601:S1;
+!!BHy2&y3<>-1/w66=3/y4=1:M?y6; [get current spellcasting enabling]
+!!BHy2&y3<>-1/w66=3/y4=1/y6=1:M0; [re-enable spellcasting]
+!!IF&y3<>-1/w66=3/y4=1/y6=1/y2=0:V600/1; [remember extra spell was granted]
+!!IF&y3<>-1/w66=3/y4=1/y6=1/y2=1:V601/1;
+
+!!BMy5&y5<>-1:F?i; [get flags of target stack]
+!!VRi:&-623631; [remove some abilities]
+!!BMy5&y5<>-1/y1=6/y3<>-1/w67=3:Fi; [steal abilities with voodoo]
+
+!!VRy7:S1 -y2; [get attacked side]
+!!BHy7:N?y8; [get attacked hero number if any]
+!!IF&y8<>-1:Wy8; [use attacked hero's w variables]
+
+!!BMy5&y5<>-1:T?y10 F?y11; [get type of monster: y10, Flags: y11]
+!!VRy11:&64; [Check if stack's Siege Weapon flag is set: y11]
+
+ [Exit Function if it's a "blank" monster, War Machine/Siege Weapon, or Emissary]
+!!FU|y11>0/y10=122/y10=124/y10=126/y10=128/y10=145/y10=146/y10=147/y10=148/y10=149/y10=160/y10=161/y10=162/y10=163:E;
+
+!!BMy5&y5<>-1:R?y9; [get number of retaliates: y9]
+!!VRy9:+1; [add a retaliate if it's not a war machine: y9]
+!!BMy5&y5<>-1/y8<>-1/w65=3/y1=6:Ry9; [regain a retaliate]
+
+** end of function
+
+
+** function to handle monster caves, x1 cave, x2 cave bits 65432
+**
+** N - battle type          - battle variant - treasure
+**
+** 0 - sharpshooter tunnel  - flaming arrows - 5000 + 5 sulfur
+** 1 - basilisk trap        - crusader aid   - 7000 + 5 mercury
+** 2 - minotaur labyrinth   -                - 8000 + 5 gems
+** 3 - ghosts               - more ghosts    - 3000 + 5 crystals
+** 4 - golems / mages       -                - 9000 + books (1000-3000)
+** 5 - liches / quicksand   - poisoning      - 5000 + mandrake (5000)
+** 6 - familiar / magog pit -                - 4000 + toys (1000)
+** 7 - crusader duels       -                - 5000 + tulips (2000)
+
+!?FU784;
+
+!!VRy1:Sx2 &7; [get battle type in y1]
+!!VRy2:Sx2 :8 &1; [get battle variant in y2]
+!!VRy3:Sx2 :16; [get stored info in y3 - 1 if monsters dead]
+
+!!VRz360:Sz130247;
+!!IF&y3=1/y1=0:M1/z130248;
+!!IF&y3=1/y1=1:M1/z130249;
+!!IF&y3=1/y1=2:M1/z130250;
+!!IF&y3=1/y1=3:M1/z130251;
+!!IF&y3=1/y1=4:M1/z130252;
+!!IF&y3=1/y1=5:M1/z130253;
+!!IF&y3=1/y1=6:M1/z130254;
+!!IF&y3=1/y1=7:M1/z130255;
+
+!!VRz360&y3=0/y1=0:Sz130256;
+!!VRz360&y3=0/y1=1:Sz130257;
+!!VRz360&y3=0/y1=2:Sz130258;
+!!VRz360&y3=0/y1=3:Sz130259;
+!!VRz360&y3=0/y1=4:Sz130260;
+!!VRz360&y3=0/y1=5:Sz130261;
+!!VRz360&y3=0/y1=6:Sz130262;
+!!VRz360&y3=0/y1=7:Sz130263;
+
+!!VRz326&y3=0:Sz130264;
+!!VRz327:Sz130265;
+!!VRz328:Sz130266;
+!!FU733&y3=0:P50/98/610; [get choice in v610 - 0 continue, 1 leave]
+
+!!IF&y3=0/v610=1:M1/z130267;
+
+!!IF&y3=0/v610=0/y1=0:M1/z130268;
+!!IF&y3=0/v610=0/y1=1:M1/z130269;
+!!IF&y3=0/v610=0/y1=2:M1/z130270;
+!!IF&y3=0/v610=0/y1=3:M1/z130271;
+!!IF&y3=0/v610=0/y1=4:M1/z130272;
+!!IF&y3=0/v610=0/y1=5:M1/z130273;
+!!IF&y3=0/v610=0/y1=6:M1/z130274;
+!!IF&y3=0/v610=0/y1=7:M1/z130275;
+
+!!VRv620:C137/107/79/159/116/65/43/7; [base creature type table]
+!!VRv630:C70/84/56/210/70/77/175/7; [creature qty table]
+!!VRv547&y3=0/v610=0:S3 +y1; [set special battle #]
+!!VRv522&y3=0/v610=0:Sy2; [set battle variant or not]
+!!VRy4:S620 +y1; [index into creature type table]
+!!VRy5:S630 +y1; [index into creature qty table]
+!!IF:V603/0; [flag for crusaders appearing]
+
+!!VRv150:Sy1; [preserve value of y1]
+!!HE-1&y3=0/v610=0:Tv998/v999/v1000/vy4/vy5; [provoke battle]
+!!VRy1:Sv150; [restore value of y1]
+
+!!HE-1:O?y6; [get hero owner in y6]
+!!VRy6|y3<>0/v610<>0:S-1; [now combine no battle with dead hero flag]
+!!FU748&y6<>-1:Px1; [set bit if monsters killed]
+
+!!VRz326:Sz130276;
+
+!!VRz360&y6<>-1/y1=0:Sz130277;
+!!VRz360&y6<>-1/y1=1:Sz130278;
+!!VRz360&y6<>-1/y1=2:Sz130279;
+!!VRz360&y6<>-1/y1=3:Sz130280;
+!!VRz360&y6<>-1/y1=4:Sz130281;
+!!VRz360&y6<>-1/y1=5:Sz130282;
+!!VRz360&y6<>-1/y1=6:Sz130283;
+!!VRz360&y6<>-1/y1=7:Sz130284;
+
+!!VRv640:C5000/7000/8000/3000/9000/5000/4000/5000; [gold found]
+!!VRv650:C3/1/5/4/-1/-1/-1/-1; [resource # found]
+!!VRv660:C-1/-1/-1/-1/69/70/72/71; [w variable for special treasure found]
+!!VRy7:S640 +y1; [get index of gold found]
+!!VRy8:S650 +y1; [get index of resource #]
+!!VRy9:S660 +y1; [get index of w variable #]
+!!VRy9:Svy9; [get w variable #]
+
+!!IF&y6<>-1/vy8=-1:Q1/6/vy7/1^%Z360^; [give message with picture]
+!!IF&y6<>-1/vy8<>-1:Q1/6/vy7/vy8/5/1^%Z360^; [give message with 2 pictures]
+
+!!OW&y6<>-1:Ry6/6/dvy7; [give gold]
+!!OW&y6<>-1/vy8<>-1:Ry6/vy8/d5; [give resources]
+!!IF:W-1; [use current hero's w variables]
+!!VRwy9&y6<>-1/y9<>-1:+1; [give special treasure]
+!!VRy10:Sy9 +303; [# of papyrus message for special treasure]
+!!QW&y6<>-1/y9<>-1:Ay10/-1/-2/y10; [set papyrus message]
+
+!!IF&y6<>-1/y1=1/v522=1/603:M1/z130285;
+
+** end of function
+
+
+** function to handle special battle round-based actions
+
+!?FU785;
+
+!!FU788&v547=3/v522=1/v997>=1:P1/137/520; [get sharpshooter stack # in v520] [should be v997>=0]
+!!FU786&v547=3/v522=1/v997>=1/v520<>-1:Pv520/63/13 Pv520/148/13; [fire walls] [ditto]
+
+!!DO790/0/41/1&v547=4/v997=-1:P70/0/0/4; [turn army to stone]
+!!IF&v547=4/v522=1/v997=1:M1/z130286;
+!!BU&v547=4/v522=1/v997=1:S7/30/1/0/-1/1; [crusaders arrive]
+!!IF&v547=4/v522=1/v997=1:V603/1; [remember that crusaders appeared]
+
+!!FU788&v547=7:P1/35/520; [get archmage stack # in v520]
+!!VRy1:Sv520; [remember archmage stack]
+!!FU788&v547=7/v520=-1:P1/116/520; [get a gold golem stack # in v520]
+!!VRv520&y1<>-1:Sy1; [use archmages for remove obstacles if found, otherwise use golems]
+!!BMy1&v547=7/v997=-1/y1<>-1:M34/3/3; [3 rounds of Anti-Magic on archmages]
+!!BMv520&v547=7/v997=1/v520<>-1:C64/25/3/3/0 C64/93/3/3/0 C64/161/3/3/0; [remove obstacles]
+!!DO791/0/41/1&v547=7/v997>0/y1<>-1:Py1/15; [magic arrow barrage]
+
+!!VRy1:Sv997 %4; [round # mod 4 for new ghosts position]
+!!VRy2&y1=1:S1; [find ghost position]
+!!VRy2&y1=2:S15;
+!!VRy2&y1=3:S185;
+!!VRy2&y1=0:S171;
+!!BU:Ey2/?y3; [see if a stack is there]
+!!VRy4:S0; [assume no ghosts will be created]
+!!VRy4&v547=6/v522=1/v997>0/v997<5/y3=-1:S1; [conditions for new ghosts]
+!!BU&y4=1:S159/30/y2/1/-1/1; [create ghosts]
+!!BU:Ey2/?y5; [see if ghosts were created]
+!!IF&y4=1/y5<>-1:M1/z130287;
+
+!!IF:V602/0; [assume nobody poisoned]
+!!DO790/0/41/1&v547=8/v522=1/v997=1:P71/0/1/4; [poison alive troops]
+!!IF&v547=8/v522=1/v997=1/602:M1/z130288;
+
+** end of function
+
+
+** function to make monster cast flame wall / forcefield
+** stack x1, casts if space at x2, x3 = 12 force field or 13 fire wall
+
+!?FU786;
+
+!!FU787:Px2/521; [get up-right hex location into v521]
+!!BU:Ex2/?y1; [get stack at base position]
+!!BU:Ev521/?y2; [get stack at up-right hex]
+!!BU:Ox2/?y3; [get obstacle at base position]
+!!BU:Ov521/?y4; [get obstacle at up-right hex]
+!!BMx1:N?y5; [get qty of casting monsters]
+!!BMx1&y1=-1/y2=-1/y3=0/y4=0/y5>0:Cx3/x2/1/1/0; [cast force field / fire wall]
+
+** end of function
+
+
+** function to get combat hex up and right of hex x1; returns in vx2
+
+!?FU787;
+
+!!VRvx2:Sx1 -16; [normally -16 from given hex]
+!!VRx1::17 %2;
+!!VRvx2:-x1; [every other row of 17 is one hex off]
+
+** end of function
+
+
+** function to find one stack vx3 by side x1 and creature type x2
+
+!?FU788;
+
+!!VRvx3:S-1; [assume not found]
+!!DO789/0/41/1:Px1/x2/x3; [check each stack for our side/creature type]
+
+** end of function
+
+
+** function to check one stack for a match
+
+!?FU789;
+
+!!BMx16:I?y1 T?y2 N?y3; [get side, type, qty]
+!!VRvx3&y1=x1/y2=x2/y3>0:Sx16; [set stack # if found]
+
+** end of function
+
+
+** put spell x1 on stack x16 if on side x2, x3 = 1 if only alive troops, x4 = duration
+** flag 602 is set if the spell is actually put on anything
+
+!?FU790;
+
+!!BMx16:I?y1 N?y3 F?i; [get side, qty, flags]
+!!VRi:&16; [alive bit]
+!!VRi&x3=0:S16; [assume alive if x3 = 0]
+!!BMx16&y1=x2/y3>0/i<>0:Mx1/x4/3; [effect for x4 rounds, at expert level]
+!!IF&y1=x2/y3>0/i<>0:V602/1; [set flag if cast spell]
+
+** end of function
+
+
+** function to have stack x1 cast spell x2 on player stack x16
+
+!?FU791;
+
+!!BMx16:I?y1 N?y3 P?y4; [get side, qty, position]
+!!BMx1&y1=0/y3>0:Cx2/y4/1/1/0; [cast spell]
+
+** end of function
+
+
+** function to copy qty from stack at hex x1 to stack at hex x2
+
+!?FU792;
+
+!!BU:Ex1/?y1; [get stack # at x1]
+!!BMy1&y1<>-1:N?y2; [get qty of that stack]
+!!BU:Ex2/?y3; [get stack # at x2]
+!!BMy3&y1<>-1/y2>0/y3<>-1:Ny2; [set new qty]
+!!BMy3&y1<>-1/y2>0/y3<>-1:By2; [set new base qty]
+
+** end of function
+
+
+** magic shrine triggers
+
+!?OB88; [shrine of magic incantation]
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+!!VRz361:Sz130289;
+!!FU793:P1000; [pay 1000 for books]
+
+!?OB89; [shrine of magic gesture]
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+!!VRz361:Sz130290;
+!!FU793:P2000; [pay 2000 for books]
+
+!?OB90; [shrine of magic thought]
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+!!VRz361:Sz130291;
+!!FU793:P3000; [pay 3000 for books]
+
+** end of shrine triggers
+
+
+** function to handle visiting a magic shrine
+** x1 = amt to pay for books, z361 is name of shrine people
+
+!?FU793;
+
+!!VRz326:Sz130292;
+!!VRz327:Sz130293;
+!!VRz328:Sz130294;
+!!VRz360:Sz130295;
+!!FU794:Px1/69; [handle transaction - x1 gold per books]
+
+** end of function
+
+
+** function to handle special item transaction
+** z326/z327 is offer msg, z328 is deal msg, z360 is no deal msg
+** x1 is gold to pay per item, x2 is w variable index of items
+
+!?FU794;
+
+!!IF:W-1; [use current hero's w variables]
+!!VRv600:Sx1 *wx2; [calculate total gold to offer]
+!!IF:V2/0; [assume no deal]
+!!IF&wx2>0/1000:Q2/z130296; [offer message]
+!!IF&wx2>0/-1000:V2/1; [AI always accepts]
+!!IF&1000/2:Q1/6/v600/1^%Z328^; [deal! message]
+!!IF&wx2>0/1000/-2:M^%Z360^; [no deal message]
+
+!!HE-1:O?y1; [get hero owner]
+!!OW&2:Ry1/6/dv600; [give gold]
+!!UN&1000/2:R2; [redraw resource status line]
+!!VRwx2&2:S0; [remove items]
+!!VRy2:Sx2 +303; [turn w variable # into papyrus message #]
+!!VRy2&y2>=378:-2; [compensate for two skipped w variables]
+!!QW&2:Ay2/-1/-2/-1; [remove papyrus message for this item]
+
+** end of function
+
+
+** windmill trigger
+
+!?OB112;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130297;
+!!VRz327:Sz130298;
+!!VRz328:Sz130299;
+!!VRz360:Sz130300;
+!!FU794:P2000/71; [handle transaction - 2000 gold per tulip bulbs]
+
+** end of object trigger
+
+
+** witch hut trigger
+
+!?OB113;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130301;
+!!VRz327:Sz130302;
+!!VRz328:Sz130303;
+!!VRz360:Sz130304;
+!!FU794:P5000/70; [handle transaction - 5000 gold per mandrake roots]
+
+** end of object trigger
+
+
+** town trigger
+
+!?OB98;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!CA998:B3/14; [check for marketplace in flag 1]
+
+!!VRz326&1:Sz130305;
+!!VRz327&1:Sz130306;
+!!VRz328&1:Sz130307;
+!!VRz360&1:Sz130308;
+!!FU794&1:P1000/72; [handle transaction - 1000 gold per toys]
+
+** end of object trigger
+
+
+** tavern trigger
+
+!?OB95;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130309;
+!!VRz327:Sz130310;
+!!VRz328:Sz130311;
+!!VRz360:Sz130312;
+!!FU794:P2000/75; [handle transaction - 2000 gold per wine]
+
+** end of object trigger
+
+
+** marletto tower trigger
+
+!?OB23;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130313;
+!!VRz327:Sz130314;
+!!VRz328:Sz130315;
+!!VRz360:Sz130316;
+!!FU794:P2000/76; [handle transaction - 2000 gold per dog armors]
+
+** end of object trigger
+
+
+** mercenary camp trigger
+
+!?OB51;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130317;
+!!VRz327:Sz130318;
+!!VRz328:Sz130319;
+!!VRz360:Sz130320;
+!!FU794:P2000/77; [handle transaction - 2000 gold per 3-handed swords]
+
+** end of object trigger
+
+
+** school of magic trigger
+
+!?OB47;
+!!UN:P30/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRz326:Sz130321;
+!!VRz327:Sz130322;
+!!VRz328:Sz130323;
+!!VRz360:Sz130324;
+!!FU794:P4000/78; [handle transaction - 4000 gold per useless wands]
+
+** end of object trigger
+
+
+** function to handle Other caves, x1 cave, x2 cave bits 65432
+
+!?FU795;
+
+!!VRy1:Sx2 &3; [get variant in y1]
+!!VRy2:Sx2 :4 &3; [get cave type in y2 - 0 pool 1 orb 2 cache 3 altar]
+!!VRy3:Sx2 :16; [get stored info in y3 - 1 if cache treasure gone]
+
+!!FU796&y2=0:Px1/y1/y3; [handle pools]
+!!FU797&y2=1:Px1/y1/y3; [handle orbs]
+!!FU798&y2=2:Px1/y1/y3; [handle caches]
+!!FU799&y2=3:Px1/y1/y3; [handle altars]
+
+** end of function
+
+
+** function to handle pool caves, x1 = cave, x2 = variant, x3 = used up
+
+!?FU796;
+
+!!IF:W-1; [use current hero's w variables]
+!!VRy1:S550 +x2; [get bit number for pool ability]
+!!VRy2:Sw73 &vy1; [look at bit for using this pool type]
+!!VRz326:Sz130325;
+!!VRv611:C41/53/27/43; [table of spell numbers]
+!!VRy3:S611 +x2; [get index of spell number]
+!!UN:N1/327/vy3; [get name of spell in z327]
+
+!!IF&y2=0:Q1/9/vy3/1/z130326;
+!!VRw73:|vy1; [set bit for pool's effect]
+
+!!IF&y2<>0:M1/z130327;
+
+** end of function
+
+
+** function to handle orb caves, x1 = cave, x2 = variant, x3 = used up
+
+!?FU797;
+
+!!HE-1:O?y1; [get hero owner]
+!!VRz326:Sz130328;
+!!VRz327:Sz130329;
+!!VRz328:Sz130330;
+!!UN:U98/-1/?y2; [count towns]
+
+!!IF&x2=0:M1/z130331;
+!!DO822/0/155/1&x2=0:Py1; [reveal heroes owned but not by this player]
+
+!!IF&x2=1:M1/z130332;
+!!DO823/1/y2/1&x2=1:Py1; [reveal towns except owned by this player]
+
+!!IF&x2=2:M1/z130333;
+!!DO824/0/155/1&x2=2:Py1; [conceal heroes owned by this player]
+
+!!IF&x2=3:M1/z130334;
+!!DO825/1/y2/1&x2=3:Py1; [conceal towns owned by this player]
+
+!!UN:R1; [redraw]
+
+** end of function
+
+
+** function to handle cache caves, x1 = cave, x2 = variant, x3 = used up
+
+!?FU798;
+
+!!VRz326:Sz130335;
+
+!!IF&x2=0/x3=1:M1/z130336;
+!!IF&x2=1/x3=1:M1/z130337;
+!!IF&x2=2/x3=1:M1/z130338;
+!!IF&x2=3/x3=1:M1/z130339;
+
+!!VRv611:C2000/1500/1000/0; [gold table]
+
+!!IF&x2=0/x3=0:Q1/6/2000/1/z130340;
+!!IF&x2=1/x3=0:Q1/6/1500/1/z130341;
+!!IF&x2=2/x3=0:Q1/6/1000/1/z130342;
+!!IF&x2=3/x3=0:M1/z130343;
+
+!!HE-1:O?y1; [get hero owner]
+!!VRy2:S611 +x2; [index of gold amt]
+!!OW&x3=0:Ry1/6/dy2; [give gold]
+
+!!IF:W-1; [use current hero's w variables]
+!!VRy3:S75 +x2; [get # of w variable for item]
+!!VRwy3&x3=0:+1; [give item]
+!!FU748&x3=0:Px1; [remove treasure from cave]
+!!VRy4:S376 +x2; [# of papyrus message]
+!!QW&x3=0:Ay4/-1/-2/y4; [set papyrus message]
+
+** end of function
+
+
+** function to handle altar caves, x1 = cave, x2 = variant, x3 = used up
+
+!?FU799;
+
+!!VRv611:C15/25/10/10; [spell point table]
+!!HE-1:I?y1/1; [get hero spell points - no redraw syntax]
+!!VRy2:S611 +x2; [get index of spell point cost]
+!!VRy3:Svy2; [get spell point cost]
+!!VRy4:S550 +x2; [get bit value index]
+!!IF:W-1; [use this hero's w variables]
+!!VRy5:Sw74 &vy4; [see if this spell is active]
+
+!!VRz360:Sz130344;
+!!VRz361&x2=0:Sz130345;
+!!VRz361&x2=1:Sz130346;
+!!VRz361&x2=2:Sz130347;
+!!VRz361&x2=3:Sz130348;
+!!VRz362:Sz130349+^ %Y3 ^+z130350;
+
+!!IF&y1<y3:M1/z130351;
+
+!!IF&y1>=y3/y5<>0:M1/z130352;
+
+!!VRz326:Sz130353+^ %Y1 ^+z130354;
+!!VRz327:Sz130355;
+!!VRz328:Sz130356;
+!!VRv615:S1; [assume no spell cast]
+!!FU733&y1>=y3/y5=0:P124/98/615; [get choice in v615 - 0 cast, 1 don't]
+
+!!IF&y1>=y3/y5=0/v615=1:M1/z130357;
+
+!!IF&v615=0:M1/z130358;
+!!VRy6:Sy3 *-1; [get amt of spell pts to subtract]
+!!HE-1&v615=0:Idy6/1; [subtract spell points - no redraw syntax]
+!!VRw74&v615=0:|vy4; [set bit for this altar effect]
+
+** end of function
+
+
+** skip Potions function numbers, 800-~819
+
+
+** function to handle pool effects at start of battle
+
+!?FU820;
+
+!!BH0:N?y1; [attacking hero #]
+!!IF:Wy1; [use attacker's w variables]
+!!FU821&w73>0:Py1/0; [put pool spells on hero's troops]
+
+!!BH1:N?y2; [defending hero #]
+!!IF&y2<>-1:Wy2; [use defender's w variables]
+!!FU821&y2<>-1/w73>0:Py2/1; [put pool spells on hero's troops]
+
+** end of function
+
+
+** function to put spells on all troops for hero x1 on side x2
+
+!?FU821;
+
+!!IF:Wx1; [use this hero's w variables]
+!!VRy1:Sw73 &1; [bless flag]
+!!VRy2:Sw73 &2; [haste flag]
+!!VRy3:Sw73 &4; [shield flag]
+!!VRy4:Sw73 &8; [blood lust flag]
+
+!!DO790/0/41/1&y1<>0:P41/x2/0/255; [bless]
+!!DO790/0/41/1&y2<>0:P53/x2/0/255; [haste]
+!!DO790/0/41/1&y3<>0:P27/x2/0/255; [shield]
+!!DO790/0/41/1&y4<>0:P43/x2/0/255; [blood lust]
+
+** end of function
+
+
+** function to reveal hero x16 to player x1
+
+!?FU822;
+
+!!HEx16:O?y1; [get hero owner]
+!!HEx16:P?y2/?y3/?y4; [get hero x/y/level]
+!!UN&y1<>-1/y1<>x1:Sy2/y3/y4/x1/3; [reveal hero]
+
+** end of function
+
+
+** function to reveal town x16 to player x1
+
+!?FU823;
+
+!!UN:U98/-1/x16/620; [get town coordinates in v620-v622]
+!!CA620:O?y1; [get town owner]
+!!UN&y1<>x1:Sv620/v621/v622/x1/4; [reveal town]
+
+** end of function
+
+
+** function to conceal hero x16 if owned by player x1
+
+!?FU824;
+
+!!HEx16:O?y1; [get hero owner]
+!!HEx16:P?y2/?y3/?y4; [get hero x/y/level]
+!!UN&y1=x1:Hy2/y3/y4/x1/9; [conceal hero]
+
+** end of function
+
+
+** function to conceal town x16 if owned by player x1
+
+!?FU825;
+
+!!UN:U98/-1/x16/620; [get town coordinates in v620-v622]
+!!CA620:O?y1; [get town owner]
+!!UN&y1=x1:Hv620/v621/v622/x1/16; [hide town]
+
+** end of function
+
+
+** function to handle BR-triggered altar effects
+
+!?FU826;
+
+!!BH0:N?y1; [attacking hero #]
+!!FU828:Py1/0;
+
+!!BH1:N?y2; [defending hero #]
+!!FU828&y2<>-1:Py2/1;
+
+** end of function
+
+
+** function to handle BG-triggered altar effects
+
+!?FU827;
+
+!!BG:H?y1 Q?y3; [get acting hero and side]
+!!IF&y1<>-1:Wy1; [use that hero's w variables]
+!!VRy2&y1<>-1:Sw74 &3; [look at just relevant altar effect bits]
+!!BA:E?y4; [Check if Network Battle: y4>0 if yes]
+!!FU831&y1<>-1/y2>0/y4=0:Py3/y2/y1; [continue if have altar ability and not Network Battle]
+
+** end of function
+
+
+** function to handle altar round for hero x1 on side x2
+
+!?FU828;
+
+!!IF:Wx1; [use attacker's w variables]
+!!VRy1:Sw74 &4; [check altar-visited bits]
+!!VRy2:Sw74 &8;
+!!DO829/0/41/1&y1<>0/v997=-1:Px2; [double 1st-level hit points]
+!!DO830/0/41/1&y2<>0/v997>=1/v997<=20:Px2; [+2 att/def/speed each round]
+
+** end of function
+
+
+** function to double stack x16's hit points if 1st level and on side x1
+
+!?FU829;
+
+!!BMx16:I?y1 H?y2 T?y3 N?y4; [get side, hit points, type, qty]
+!!VRy2:*2; [double hit points]
+!!MA&y4>0:Ly3/?y5; [get monster level]
+!!BMx16&y4>0/y5=0/y1=x1:Hy2; [set hit points]
+
+** end of function
+
+
+** function to give stack x16 +2 att/def/speed if on side x1
+
+!?FU830;
+
+!!BMx16:I?y1 N?y2 A?y3 D?y4 S?y5; [get side, qty, att, def, speed]
+!!VRy3:+2; [+2 attack]
+!!VRy4:+2; [+2 defense]
+!!VRy5:+2; [+2 speed]
+!!BMx16&y1=x1/y2>0:Ay3 Dy4 Sy5; [set att, def, speed]
+
+** end of function
+
+
+** function to handle altar BG effect, x1 hero side, x2 altar bits, x3 hero
+
+!?FU831;
+
+!!BG:A?y1 S?y2 E?y3; [get action, spell, target stack]
+
+!!VRy5:Sx2 &2; [look at fork spell bit]
+!!HEx3&y5<>0/y1=1/y2=15:I?y6/1 Id100/1; [give hero 100 spell points temporarily - no redraw syntax]
+!!DO834/0/41/1&y5<>0/y1=1/y2=15:Px1/y3; [cast more Magic Arrows]
+!!HEx3&y5<>0/y1=1/y2=15:Iy6/1; [restore previous spell points - no redraw syntax]
+
+!!VRy5:Sx2 &1; [look at venom bit]
+!!BMy3&y5<>0/y1>=6/y1<=7/y3<>-1:F?i; [get target stack flags]
+!!VRi:&16; [alive bit]
+!!BMy3&y5<>0/y1>=6/y1<=7/y3<>-1:M71/3/1; [poison the target stack if alive]
+
+** end of function
+
+
+** function to store war machines in v518 and remove them, hero x1
+
+!?FU832;
+
+!!VRv518:S0; [assume no war machines]
+!!HEx1:A2/4/?y1/?y2; [count ballistas]
+!!VRv518&y2>0:+1;
+!!HEx1:A2/5/?y1/?y2; [count ammo carts]
+!!VRv518&y2>0:+2;
+!!HEx1:A2/6/?y1/?y2; [count first aid tents]
+!!VRv518&y2>0:+4;
+
+!!HEx1:A-4 A-5 A-6; [remove war machines]
+
+** end of function
+
+
+** function to restore war machines
+
+!?FU833;
+
+!!HEx1&v518>=4:A1/6/15; [equip first aid tent]
+!!VRv518:&3;
+!!HEx1&v518>=2:A1/5/14; [equip ammo cart]
+!!VRv518:&1;
+!!HEx1&v518>=1:A1/4/13; [equip ballista]
+!!VRv518:S0;
+
+** end of function
+
+
+** function to cast Magic Arrow on stack x16 if not on side x1 or stack x2
+
+!?FU834;
+
+!!BMx16:I?y1 P?y2 N?y3; [get side, position, qty]
+!!BHx1&y1<>x1/x16<>x2/y3>0:C15/y2/2/1; [cast Magic Arrow]
+
+** end of function
+
+
+** function to clear mine guard slot, mine v621-623, slot x16
+
+!?FU835;
+
+!!MN621:Mx16/-1/0; [clear mine guard slot]
+
+** end of function
+

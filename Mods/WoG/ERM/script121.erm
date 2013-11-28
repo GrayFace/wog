@@ -1,0 +1,1192 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=1.2(February).2007
+
+** More Map Options Version .94
+** By Timothy Pulver
+** script121.erm
+** Last Updated: February 1, 2007 by Steven Lynch (added Visibility Check to Display Keymaster Keys Scriptlet)
+** Previously Updated: October 20, 2006 by Timothy Pulver
+
+** Scriptlets: ERM Option Numbers follow in parenthesis:
+** 1) Upgrade All Troops (321)
+** 2) Remove All Monoliths (278)
+** 3) Upgrade at External Dwellings (279)
+** 4) AI Berserk Spell Casting (280)
+** 5) 50% Experience from Fleeing Monsters (281)
+** 6) Monster Stack Resources (282)
+** 7) Limited Dwelling Accumulations (283)
+** 8) Monster Stack Artifacts (284)
+** 9) Guarded Artifacts (285)
+** 10) Display Keymaster Keys (289)
+
+** Permanent Variables: v64-v65            (50% Experience from Fleeing Monsters)
+**                      v66-v67, v762-v769 (Monster Stack Resources)
+**                      v68                (Monster Stack Artifacts)
+
+** Temporary Variables: z1
+** Temporary Flags: 1-2
+** Function: FU195-FU198 (Upgrade All Troops)
+**           FU199 (Remove All Monoliths)
+**           FU158-FU159 (Upgrade at External Dwellings)
+**           FU177 (50% Experience from Fleeing Monsters)
+**           FU178-FU179 (Limited Dwelling Accumulations)
+**           FU140 (Monster Stack Artifacts)
+**           FU452-FU453, FU456 (Guarded Artifacts)
+**           FU457 (not used yet but reserved for this script)
+** PO numbers: PO:T for dwellings (type 17 and type 20)
+
+================================================================================
+  UPGRADE ALL TROOPS (ERM Option: 321)
+================================================================================
+
+** Lets you upgrade, with a click or two, all visiting hero and garrison troops
+** that could normally be upgraded (if you can afford them all). Shift-click on
+** castle icon (same as "Buy All Creatures" button) to upgrade.
+
+** FU195-FU198
+
+ [Shift-click on castle icon beneath town name (CM:I#159)]
+
+ [Mouse click in Town Screen is Trigger]
+!?CM1&999;
+!!UN:P321/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:A?y-1/?y-2 F?y-3 S?y-4; [Get x/y coordinates of screen clicked: y-1/y-2, y-3 = flags, y-4 = type of click]
+!!FU|y-1<122/y-1>159/y-2<413/y-2>450/y-3<>1/y-4<>12:E; [Exit if castle icon isn't shift-clicked]
+!!CA-1:T?y-2 H0/?y-3 H1/?y-4; [Town type: y-2, Garrison Hero: y-3, Visiting Hero: y-4]
+
+!!UN:P96/?y-1; // check if script Diplomancy boost (script96) enabled
+!!FU6136&y-1=1:P; // call FU6136 from script96 to reduce the costs of all monsters if there is a diplo-hero in the town
+
+!!FU195&y-4>=0:P0; [Call main Upgrade Troops function for Visiting Hero]
+!!FU195:P1; [Call main Upgrade Troops function for Garrison/Garrison Hero]
+!!CM:R0; [Disable standard mouse click function]
+!!UN:R4; [Redraw town screen]
+
+--------------------------------------------------------------------------------
+
+ [Main Upgrade Troops function]
+!?FU195;
+
+ [Initialize variables]
+!!VRz1:S^^; [Initialize z1 to null]
+!!VRy-5:S0; [Reset y-5 to 0]
+!!VRy-10:S0; !!VRy-11:S0; !!VRy-12:S0; !!VRy-13:S0; !!VRy-14:S0; [Reset y-10..y-14 to 0]
+!!VRy-15:S0; !!VRy-16:S0; !!VRy-17:S0; !!VRy-18:S0; !!VRy-19:S-1; [Reset y-15..y-18 and y-19 to -1]
+!!VRy-20:S0; !!VRy-21:S0; !!VRy-22:S-1; !!VRy-23:S0; [Initialize y-20, y-21, y-23 to 0 and y-22 to -1]
+
+ [Get Hero/Town names and owners]
+!!HEy-4&x1=0:B0/?z-1 O?y1; [Visiting Hero name: z-1, Hero's owner: y1]
+!!HEy-3&x1=1/y-3>=0:B0/?z-1; [Garrison Hero name: z-1]
+!!CA-1:N?z-5; [Town name: z-5]
+!!CA-1&x1=1:O?y1; [Town owner: y1]
+
+ [Determine cost of upgrading hero/garrison troops]
+!!DO196/0/6/1&x1=0:Py-4/0; [Visiting Hero: y-5=# of upgrades, y-10..y-17=resource cost]
+!!DO196/0/6/1&x1=1:Py-3/0; [Garrison/Garrison Hero: y-5=# of upgrades, y-10..y-17=resource cost]
+!!DO198/0/6/1&y-5>0:Py1/0; [Check if player has enough resources: y-18=1 if no, y-19=1st resource, y-20=amount of resources, y-21=number of resources]
+!!VRy-19&y-21>3:S-1; !!VRy-22&y-21>3:S-1; [If there's more than gold plus two other resource, just show gold picture: y-19, y-22]
+!!VRy-20&y-19<0:S-1; !!VRy-23&y-22<0:S-1; [If there's no additional resource picture, change picture amount to -1: y-20, y-23]
+
+ [Display troop upgrade message]
+!!VRz-6:S^{Upgrade Troops at %Z-5}
+
+^; [Upgrade Troops at town x]
+!!IF&x1=0/y-5=0:M^%Z-6%Z-1 has no troops that can be upgraded here.^; [None of hero's troops to upgrade]
+!!IF&x1=0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all of %Z-1 troops.^; [Can't afford to upgrade hero's troops]
+!!IF&x1=1/y-4<0/y-3>=0/y-5=0:M^%Z-6%Z-1 has no troops that can be upgraded here.^; [None of hero's troops to upgrade]
+!!IF&x1=1/y-4<0/y-3<0/y-5=0:M^%Z-6There are no garrison troops that can be upgraded here.^; [No garrison troops can be upgraded here]
+!!IF&x1=1/y-3>=0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all of %Z-1 troops.^; [You can't afford to upgrade all hero's troops]
+!!IF&x1=1/y-3<0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all garrison troops.^; [You can't afford to upgrade all garrison troops]
+
+!!FU|y-5<1/y-18=1:E; [Exit if no troops to upgrade or can't afford cost]
+
+ [Set up z-2 string with resource cost message]
+!!VRz-2|x1=0/y-3>=0:S^%Z-6Upgrade %Z-1's troops for %Y-16 gold^; [Upgrade hero's troops for x gold]
+!!VRz-2&x1=1/y-3=-1:S^%Z-6Upgrade the garrison troops for %Y-16 gold^; [Upgrade garrison troops for x gold]
+!!VRz-2&y-10>0:+^, %Y-10 wood^; [Wood cost]
+!!VRz-2&y-11>0:+^, %Y-11 mercury^; [Mercury cost]
+!!VRz-2&y-12>0:+^, %Y-12 ore^; [Ore cost]
+!!VRz-2&y-13>0:+^, %Y-13 sulfur^; [Sulfur cost]
+!!VRz-2&y-14>0:+^, %Y-14 crystal^; [Crystal cost]
+!!VRz-2&y-15>0:+^, %Y-15 gems^; [Gems cost]
+!!VRz-2:+^?
+%Z1^; [List of troops to upgrade]
+!!IF:Q2/36/y-16/y-19/y-20/y-22/y-23/2^%Z-2^; [Ask if player wishes to upgrade hero/garrison troops]
+!!DO196/0/6/1&x1=0/2:Py-4/1; [Upgrade visiting hero's troops]
+!!DO196/0/6/1&x1=1/2:Py-3/1; [Upgrade garrison/garrison hero's troops]
+!!DO198/0/6/1&2:Py1/1; [Take resources from player]
+
+--------------------------------------------------------------------------------
+
+ [Determine resources and upgrade troops]
+!?FU196;
+!!HEx1&x1>=0:C0/x16/?y1/?y10; [Troop type in slot x16: y1]
+!!CA-1&x1=-1:M2/x16/?y1/?y10; [Troop type in slot x16: y1]
+!!MA&y1>=0/y10>0:Uy1/?y2 Oy1/?y3 Ly1/?y4; [Slot x16 troop: Upgrade: y2=-2 if none (custom), y2=-1 if default, Town type: y3, Level: y4]
+
+!!FU|y2=-2/y1=y2/y1<0/y10<1:E; [Exit if this creature is set to custom upgrade of none or if no creatures are in this slot]
+!!FU&y3<0/y2=-1:E; [Exit if it's a neutral creature with default upgrade (i.e., none)]
+
+!!VRy5:S37 +y4; [Upgraded dwelling of creature's level: y5]
+!!CA-1:T?y11; [Town type: y11]
+!!CA-1:B3/y5; [Check if town has this upgraded dwelling built: Flag 1 True if yes]
+!!CA-1&-1/y4=0/y11>=3:B3/19; [Check if horde building 1 is built (all *except* Castle, Rampart, Tower): Flag 1 is true if yes]
+!!CA-1&-1/y4=1/y11>=1/y11<=2:B3/19; [Check if horde building 1 is built (Rampart, Tower): Flag 1 is true if yes]
+!!CA-1&-1/y4=2/y11=0:B3/19; [Check if horde building 1 is built (Castle): Flag 1 is true if yes]
+!!CA-1&-1/y4=4/y11=1:B3/25; [Check if horde building 2 is built (Rampart): Flag 1 is true if yes]
+!!CA-1&-1/y4=2/y11=3:B3/25; [Check if horde building 2 is built (Inferno): Flag 1 is true if yes]
+!!FU&-1:E; [Exit if upgraded dwelling/horde building isn't built for this level]
+
+!!UN&y3>=0:Ty3/y4/1/?y6; [Type of creature in creature's native town's upgraded town dwelling: y6]
+!!UN&y3>=0:Ty3/y4/0/?y9; [Type of creature in creature's native town's non-upgraded town dwelling: y9]
+!!FU&y3>=0/y1=y6/y2=-1:E; [Exit if this creature is the same as the town upgrade (i.e., already upgraded) unless custom upgrade set]
+!!FU&y3>=0/y1<>y9/y2=-1:E; [Exit if this non-neutral creature isn't the same as the town non-upgrade unless custom upgrade set]
+
+!!UN:P174/?y7; [Check if Universal Upgrading is enabled: y7=1 if Yes]
+!!FU&y7=0/y-2<>y3:E; [Exit if Universal Upgrading isn't enabled and this creature is from a different town]
+!!FU&y7=0/y2>=0/y2<>y6:E; [Exit if Universal Upgrading isn't enabled and custom upgrade doesn't match upgraded dwelling creature]
+
+!!VRy8&y2>=0:Sy2; [Upgraded creature if custom upgrade is set: y8]
+!!VRy8&y2=-1:Sy6; [Upgraded creature if default upgrade is set: y8]
+
+!!FU197&x2=0:Py1/y8/y10; [Determine Resource costs for upgrading: store in y-10 to y-17]
+!!UN&y10>1/x2=0:N3/-3/y1/1; [Name of current troop type (plural): z-3]
+!!UN&y10=1/x2=0:N3/-3/y1/0; [Name of current troop type (singular): z-3]
+!!UN&y10>1/x2=0:N3/-4/y8/1; [Name of upgraded troop type (plural): z-4]
+!!UN&y10=1/x2=0:N3/-4/y8/0; [Name of upgraded troop type (singular): z-4]
+!!VRz1&x2=0:+^
+%Y10 %Z-3 {»»»} %Y10 %Z-4^; [String for troop type and upgrade: z-5]
+!!VRy-5&x2=0:+1; [Increment number of upgrades: y-5]
+
+!!HEx1&x1>=0/x2=1:C0/x16/y8/d; [Upgrade creature (Hero)]
+!!CA-1&x1=-1/x2=1:M2/x16/y8/d; [Upgrade creature (Garrison)]
+
+--------------------------------------------------------------------------------
+
+ [Determine resource cost for troop upgrades and store in y-10 to y-17]
+ [x1=current troop type, x2=upgraded troop type, x3=number of troops]
+!?FU197;
+ [Determine resource cost of current troop type and store in y10 to y17]
+!!MA:Cx1/0/?y10 Cx1/1/?y11 Cx1/2/?y12 Cx1/3/?y13 Cx1/4/?y14 Cx1/5/?y15 Cx1/6/?y16 Cx1/7/?y17;
+
+ [Determine resource cost of upgraded troop type and store in y20 to y27]
+!!MA:Cx2/0/?y20 Cx2/1/?y21 Cx2/2/?y22 Cx2/3/?y23 Cx2/4/?y24 Cx2/5/?y25 Cx2/6/?y26 Cx2/7/?y27;
+
+ [Determine resource cost difference (actual cost of upgrade) and store in y30 to y37]
+!!VRy30:Sy20 -y10 *x3; !!VRy30&y30<0:S0; [Wood: y30]
+!!VRy31:Sy21 -y11 *x3; !!VRy31&y31<0:S0; [Mercury: y31]
+!!VRy32:Sy22 -y12 *x3; !!VRy32&y32<0:S0; [Ore: y32]
+!!VRy33:Sy23 -y13 *x3; !!VRy33&y33<0:S0; [Sulfur: y33]
+!!VRy34:Sy24 -y14 *x3; !!VRy34&y34<0:S0; [Crystal: y34]
+!!VRy35:Sy25 -y15 *x3; !!VRy35&y35<0:S0; [Gems: y35]
+!!VRy36:Sy26 -y16 *x3; !!VRy36&y36<0:S0; [Gold: y36]
+
+ [Add to total resource cost and store in y-10 to y-17]
+!!VRy-10:+y30; [Total Wood: y-10]
+!!VRy-11:+y31; [Total Mercury: y-11]
+!!VRy-12:+y32; [Total Ore: y-12]
+!!VRy-13:+y33; [Total Sulfur: y-13]
+!!VRy-14:+y34; [Total Crystal: y-14]
+!!VRy-15:+y35; [Total Gems: y-15]
+!!VRy-16:+y36; [Total Gold: y-16]
+
+--------------------------------------------------------------------------------
+
+ [Check if player has enough resources]
+ [Take resources from player for troop upgrades]
+ [x1=hero/town owner, x2=0 for check, x2=1 for take]
+!?FU198;
+!!VRy1:S-10 -x16;
+!!VRy2:Syy1; [Resource cost for upgrade: y2]
+
+!!OW&x2=0:Rx1/x16/?y4; [Player's amount of this resource: y4]
+!!VRy-18&x2=0/y4<y2:S1; [Set y-18 to 1 if player doesn't have enough of any resource]
+!!VRy-19&x2=0/y-19<0/x16<>6/y2>0:Sx16; [Set y-19 to 1 resource other than gold for IF picture]
+!!VRy-20&x2=0/y-19>=0/y-20=0/x16<>6/y2>0:Sy2; [Set y-20 to resource amount other than gold for IF picture]
+!!VRy-22&x2=0/y-22<0/y-19>=0/x16<>6/x16<>y-19/y2>0:Sx16; [Set y-19 to 1 resource other than gold for IF picture]
+!!VRy-23&x2=0/y-22>=0/y-19>=0/y-23=0/x16<>6/x16<>y-19/y2>0:Sy2; [Set y-23 to 2nd resource amount other than gold for IF picture]
+!!VRy-21&x2=0/y2>0:+1; [Count number of different resources: y-21]
+
+!!VRy3&x2=1:Sy2 *-1; [Resource to remove (as negative number): y3]
+!!OW&x2=1:Rx1/x16/dy3; [Remove resource]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  REMOVE ALL MONOLITHS (ERM Option: 278)
+================================================================================
+
+** Removes all one and two-way monoliths from the map at the start of the game.
+
+** FU199
+
+ [Timer activates only once on day 1]
+!?TM2&$day$=1/$once$=1;
+!!UN:P278/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!UN:U43/-1/?y-1; [Number of 1 way monoliths entrances: y-1]
+!!VRv2:S-2; [Set v2 to -2 to start at last monolith]
+!!DO199/1/y-1/1:P43/y-1; [Delete all 1 way monolith entrances]
+!!UN:U44/-1/?y-2; [Number of 1 way monoliths exits: y-2]
+!!VRv2:S-2; [Set v2 to -2 to start at last monolith]
+!!DO199/1/y-2/1:P44/y-2; [Delete all 1 way monolith exits]
+!!UN:U45/-1/?y-3; [Number of 2 way monoliths: y-3]
+!!VRv2:S-2; [Set v2 to -2 to start at last monolith]
+!!DO199/1/y-3/1:P45/y-3; [Delete all 2 way monoliths]
+
+ [Delete Monoliths]
+!?FU199;
+!!UN:Ux1/-1/-2/2; [Store monolith coordinates in v2/v3/v4]
+!!UN:Ov2/v3/v4; [Delete monolith at this location]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  UPGRADE AT EXTERNAL DWELLINGS (ERM Option: 279)
+================================================================================
+
+** Heroes can Upgrade Non-upgraded Troops at External Upgraded Dwellings of the
+** same type for the same discount they would receive at a Hill Fort: L1=free,
+** L2=pay 25% of cost, L3=pay 50% of cost, L4=pay 75% of cost, L5 and higher=pay
+** normal cost.
+
+--------------------------------------------------------------------------------
+
+ [Creature Generator Type 1 is trigger]
+!$OB17;
+!!UN:P279/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DW998:O?y-1; [Owner of dwelling: y-1]
+!!HE-1:O?y-2; [Owner of hero: y-2]
+!!FU&y-1<>y-2:E; [Exit if player doesn't own dwelling]
+!!DO158/0/6/1:P; [Loop through hero's stacks and offer to upgrade (for standard cost) if applicable]
+
+--------------------------------------------------------------------------------
+
+ [Creature Generator Type 4 is trigger]
+!$OB20;
+!!UN:P279/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DW998:O?y-1; [Owner of dwelling: y-1]
+!!HE-1:O?y-2; [Owner of hero: y-2]
+!!FU&y-1<>y-2:E; [Exit if player doesn't own dwelling]
+!!DO158/0/6/1:P; [Loop through hero's stacks and offer to upgrade (for standard cost) if applicable]
+
+--------------------------------------------------------------------------------
+
+ [Loop through hero's stacks and check for available upgrade]
+!?FU158;
+!!HE-1:C0/x16/?y1/?y10; [Troop type in slot x16: y1, Number: y10]
+!!MA&y1>=0/y10>0:Uy1/?y2 Oy1/?y3 Ly1/?y4; [Slot x16 troop: Upgrade: y2=-2 if none (custom), y2=-1 if default, Town type: y3, Level: y4]
+!!FU|y2=-2/y1=y2/y1<0/y10<1:E; [Exit if this creature is set to custom upgrade of none or if no creatures are in this slot]
+!!FU&y3<0/y2=-1:E; [Exit if it's a neutral creature with default upgrade (i.e., none)]
+
+!!UN&y3>=0:Ty3/y4/1/?y6; [Type of creature in creature's native town's upgraded town dwelling: y6]
+!!UN&y3>=0:Ty3/y4/0/?y9; [Type of creature in creature's native town's non-upgraded town dwelling: y9]
+!!FU&y3>=0/y1=y6/y2=-1:E; [Exit if this creature is the same as the town upgrade (i.e., already upgraded) unless custom upgrade set]
+!!FU&y3>=0/y1<>y9/y2=-1:E; [Exit if this non-neutral creature isn't the same as the town non-upgrade unless custom upgrade set]
+
+!!VRy8&y2>=0:Sy2; [Upgraded creature if custom upgrade is set: y8]
+!!VRy8&y2=-1:Sy6; [Upgraded creature if default upgrade is set: y8]
+
+!!DO159/0/3/1:Py1/y8/y10/x16; [Determine resource cost and offer to upgrade stack]
+
+--------------------------------------------------------------------------------
+
+ [Determine resource cost and offer to upgrade stack]
+!?FU159;
+ [x1=current troop type, x2=upgraded troop type, x3=number of troops, x4=troop slot]
+!!DW998:Mx16/?y1/d; [Type of creature in dwelling slot x16: y1]
+!!FU&x2<>y1:E; [Skip if not an upgrade match]
+
+ [Determine resource cost of current troop type and store in y10 to y17]
+!!MA:Cx1/0/?y10 Cx1/1/?y11 Cx1/2/?y12 Cx1/3/?y13 Cx1/4/?y14 Cx1/5/?y15 Cx1/6/?y16 Cx1/7/?y17;
+
+ [Determine resource cost of upgraded troop type and store in y20 to y27]
+!!MA:Cx2/0/?y20 Cx2/1/?y21 Cx2/2/?y22 Cx2/3/?y23 Cx2/4/?y24 Cx2/5/?y25 Cx2/6/?y26 Cx2/7/?y27;
+
+ [Determine resource cost difference (actual cost of upgrade) and store in y30 to y36]
+!!VRy30:Sy20 -y10 *x3; !!VRy30&y30<0:S0; [Wood: y30]
+!!VRy31:Sy21 -y11 *x3; !!VRy31&y31<0:S0; [Mercury: y31]
+!!VRy32:Sy22 -y12 *x3; !!VRy32&y32<0:S0; [Ore: y32]
+!!VRy33:Sy23 -y13 *x3; !!VRy33&y33<0:S0; [Sulfur: y33]
+!!VRy34:Sy24 -y14 *x3; !!VRy34&y34<0:S0; [Crystal: y34]
+!!VRy35:Sy25 -y15 *x3; !!VRy35&y35<0:S0; [Gems: y35]
+!!VRy36:Sy26 -y16 *x3; !!VRy36&y36<0:S0; [Gold: y36]
+
+ [Give gold discount for upgrading L1-L4 creatures]
+!!MA:Lx1/?y37; [Creature's level (0-6): y37]
+!!VRe1:Sy36 :4; [1/4 of upgrade cost: e1]
+!!VRy36&y37=0:S0; [L1 are free: y36]
+!!VRy36&y37=1:Se1; [L2 cost 25%: y36]
+!!VRy36&y37=2::2; [L3 cost 50%: y36]
+!!VRy36&y37=3:Se1 *3; [L4 cost 75%: y36]
+
+ [Determine which resource other than gold (if any) is needed for upgrade: y2]
+!!VRy2:S-1; [Initialize y2 to -1]
+!!VRy2&y30>0:S0; [Wood: y2]
+!!VRy2&y31>0:S1; [Mercury: y2]
+!!VRy2&y32>0:S2; [Ore: y2]
+!!VRy2&y33>0:S3; [Sulfur: y2]
+!!VRy2&y34>0:S4; [Crystal: y2]
+!!VRy2&y35>0:S5; [Gems: y2]
+!!VRy3&y2>=0:S30 +y2; [Index for resource amount: y3]
+!!VRy4&y2>=0:Syy3; [Additional resource amount: y4]
+
+!!VRy5:Sx3*65536+x1; [Subtype for IF display of current troops: y5]
+!!VRy8&y36>0:S6; [Type for IF display of gold cost (if any): y8]
+!!VRy8&y36<1:S-1; [Type for IF display if no gold cost: y8]
+
+!!UN:N3/-1/x1/1 N3/-2/x2/1; [Name of current troop type: z-1, Upgraded: z-2]
+!!VRz-3:S^^; [Initialize z-3 to null string]
+!!VRz-3&y36<1/y2<0:S^ (at no cost)^; [Set z-3 to "(at no cost)" if there's no cost]
+
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!IF&-1000:V2/1; [AI always upgrades]
+!!IF&1000:Q2/21/y5/y8/y36/y2/y4/2^{Upgrade Troops}
+
+Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
+!!OW:R-1/6/?y6; [Player's gold: y6]
+!!OW&y2>=0:R-1/y2/?y7; [Player's other resource: y7]
+!!FU&-2:E; [Exit if player doesn't wish to upgrade]
+!!IF&y6<y36/1000:Q1/6/y36/y2/y4/1^You don't have enough resources to upgrade these troops.^;
+!!IF&y6>=y36/y7<y4/1000:Q1/6/y36/y2/y4/1^You don't have enough resources to upgrade these troops.^;
+!!FU|y6<y36/y7<y4:E; [Exit if player doesn't have enough resources]
+
+!!HE-1:C0/x4/x2/d/0/5; [Upgrade stack, adjusting stack XP as per a normal upgrade]
+!!VRy36:*-1; [Negative of gold cost: y36]
+!!VRy4&y2>=0:*-1; [Negative of other resource: y4]
+!!OW:R-1/6/dy36; [Reduce player's gold by y36]
+!!OW&y2>=0:R-1/y2/dy4; [Reduce player's other resource by y4]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  AI BERSERK SPELL CASTING (ERM Option: 280)
+================================================================================
+
+** 50% chance that an AI hero who knows the Berserk spell will cast it instead
+** of Magic Arrow, Ice Bolt, Lightning Bolt, Fireball, Inferno, Meteor Shower,
+** Curse, Weakness, Sorrow, Misfortune, Slow, Forgetfulness, or Blind, but only
+** against creatures that can be affected by it and aren't already Berserked.
+
+** Local/Temporary variables only.
+
+ [Battle Action Trigger]
+!?BG0;
+!!UN:P280/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!BG:A?y-1 H?y-2; [Action type: y-1, Hero number: y-2]
+!!FU|y-1<>1/y-2<0:E; [Exit if not a hero spell, or no hero]
+!!HEy-2:O?y-3 M59/?y-4; [Hero owner: y-3, Berserk Spell Level: y-4]
+!!OW:Iy-3/?y-5; [Human or AI: y-5=1 if AI]
+!!FU|y-4<1/y-5<>1:E; [Exit if hero doesn't know Berserk or not an AI]
+!!BG:S?y-6; [Spell hero is trying to cast: y-6]
+!!VRy-7|y-6=15/y-6=16/y-6=17/y-6=21/y-6=22/y-6=23/y-6=42/y-6=45/y-6=47/y-6=50/y-6=52/y-6=54/y-6=61/y-6=62:S1;
+!!FU&y-7<>1:E; [Exit if spell isn't Magic Arrow, Ice Bolt, Lightning Bolt, Fireball, Inferno, Meteor Shower,]
+*              [Curse, Weakness, Sorrow, Misfortune, Slow, Forgetfulness, or Blind]
+!!VRy-16:S1 T99; [Random number 1-100: y-16]
+!!FU&y-16<51:E; [Exit if y-16 is less than 51 -- 50% chance of AI casting Berserk]
+!!BG:E?y-8; [Destination monster stack: y-8]
+!!FU&y-8<0:E; [Exit if no monster there for some reason]
+!!BMy-8:F?y-9 F?y-10 T?y-17; [Get destination monster's flags: y-9 and y-10, Type: y-17]
+!!VRy-10:&16; [Check if monster is "alive": y-10]
+!!FU&y-10<>16:E; [Exit if not "alive"]
+!!VRy-10:Sy-9; [Restore flags to y-10]
+!!VRy-10:&64; [Check if monster is a Siege Weapon: y-10]
+!!FU&y-10=64:E; [Exit if a Siege Weapon]
+!!VRy-10:Sy-9; [Restore flags to y-10]
+!!VRy-10:&1024; [Check if monster is Immune to Mind Spells: y-10]
+!!FU&y-10=1024:E; [Exit if Immune to Mind Spells]
+!!VRy-10:Sy-9; [Restore flags to y-10]
+!!VRy-10:&16384; [Check if monster is Immune to Fire Spells: y-10]
+!!FU&y-10=16384:E; [Exit if Immune to Fire Spells]
+!!VRy-10:Sy-9; [Restore flags to y-10]
+!!VRy-10:&262144; [Check if monster is Undead: y-10]
+!!FU&y-10=262144:E; [Exit if Undead]
+!!BMy-8:T?y-11; [Monster type: y-11]
+!!FU|y-11=27/y-11=83/y-11=151/y-11=155:E; [Exit if a Gold Dragon, Black Dragon, Diamond Dragon, or Darkness Dragon]
+!!BMy-8:G59/?y-12/d; [Check if stack already has Berserk on it: y-12=0 if no]
+!!FU&y-12>0:E; [Exit if stack already has the Berserk spell on it]
+!!HEy-2:I?y-13/1 S14/?y-14; [Hero's spell points: y-13, Level of Fire Magic skill: y-14]
+!!VRy-15:S20; [Base spell point cost of Berserk: y-15]
+!!VRy-15&y-14>0:-4; [Subtract 4 from spell cost if hero knows Fire Magic: y-15]
+!!HEy-2:C1/34/d/>0; [Check if hero has Magi in army - flag 1 set to True if yes]
+!!HEy-2&-1:C1/35/d/>0; [Check if hero has Archmagi in army - flag 1 set to True if yes]
+!!VRy-15&1:-2; [Subtract 2 from spell cost if hero has Magi or Archmagi in army: y-15]
+!!FU&y-13<y-15:E; [Exit if hero doesn't have enough spell points to cast Berserk]
+!!BG:S59; [Change AI hero's spell casting to Berserk spell]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  50% EXPERIENCE FROM FLEEING MONSTERS (ERM Option: 281)
+================================================================================
+
+** Hero gains 50% basic experience from fleeing monster stacks. Commanders and
+** Henchmen gain 50% experience but troop stacks don't gain stack experience.
+** Learning skill bonus for heroes (if any) is included.
+
+** v64-v65, FU177
+
+ [Give Heroes 50% Experience for Fleeing Monster Stacks]
+!?OB54;
+!!UN:P281/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!MO998:G?y-1; [Number of monsters in stack: y-1]
+!!OB998:U?y-2; [Type of monster: y-2]
+!!MA:Py-2/?y-3; [Health of 1 Monster: y-3]
+!!VRy-4:Sy-1 *y-3; [Total Health of Monsters: y-4]
+!!VRv64:Sy-4 :2; [50% of Health for XP]
+!!HE-1:N?y-5; [Hero number: y-5]
+!!DO177/0/6/1:Py-5/y-2; [Count number of troops of type y-2 in hero's army. Result in y-6]
+!!VRv65:Sy-6; [Set v65 to total number of troops of this type in hero's army]
+
+--------------------------------------------------------------------------------
+
+!?BA0; [Start of Battle Trigger]
+!!UN:P281/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!VRv64:S0; [Reset v64 to 0 if there's a battle]
+
+--------------------------------------------------------------------------------
+
+!$OB54&v64>0;
+!!UN:P281/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!OB998:U?y-1; [Type of monster: y-1]
+!!HE-1:N?y-2; [Hero number: y-2]
+!!DO177/0/6/1:Py-2/y-1; [Count number of troops of type y-1 in hero's army. Result in y-6]
+!!VRv64&y-6>v65:S0; [Reset v64 to 0 if troops joined]
+!!FU&y-6>v65:E; [Exit if hero has more of this troop type now (i.e., if they joined)]
+!!HEy-2:B0/?z1; [Hero's name]
+!!UN:N3/2/y-1/1; [Name of Monster: z2]
+!!HEy-2:S21/?y-3; [Hero's Learning skill: y-3]
+!!VRy-4:Sv64 :20; [5% of experience: y-4]
+!!VRy-5:Sy-4 *y-3; [0%/5%/10%/15% XP bonus for Learning skill: y-5]
+!!VRv64:+y-5; [Add Learning skill bonus (if any): v64]
+!!IF&1000:Q1/17/v64/21/y-1/1^%Z1 receives %V64 experience for the fleeing %Z2.^;
+!!HEy-2:Edv64; [Give hero half XP]
+!!UN:P49/=1; [Check if Henchmen are enabled: Flag 1=True if yes]
+!!IF&1:Wy-2; [Set w variables to this hero]
+!!VRw117&1:+3 T2; [Henchman experience counter - gain 3-5 points from fleeing monsters]
+!!VRv64:S0; [Reset v64 to 0]
+
+--------------------------------------------------------------------------------
+
+!?FU177;
+ [x1=hero number, x2=monster type, total number in hero's army: y-6]
+ [Note: this function is also used by Monster Stack Resources]
+!!HEx1:C0/x16/?y1/?y2; [Type: y1, Number: y2]
+!!VRy-6&y1=x2/y2>0:+y2; [Add total creatures of type x2: y-6]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  MONSTER STACK RESOURCES (ERM Option: 282)
+================================================================================
+
+** All monster stacks on the map have gold and possibly either wood or ore or
+** a precious resource (or sometimes wood/ore + a precious resource) that you
+** can claim if you defeat them in combat.
+
+** Gathering up the resources uses 500 movement points, or the hero's remaining
+** movement, whichever is less.
+
+** Crystal Dragons have extra crystal, Red, Black, Darkness and Rust Dragons
+** have extra Sulfur, Diamond Golems and Diamond Dragons have extra gems,
+** Stone and Iron Golems have extra ore, Dwarves, Gold Golems and all Dragons
+** have extra gold, Dendroids have extra Wood, Magi, Arch Magi, Genies,
+** Master Genies, Enchanters, Sorceresses, Faerie Dragons, Psychic and
+** Magic Elementals have extra Mithril, Efreet, Efreet Sultans, Firebirds,
+** Phoenix and Sacred Phoenix have extra Mercury. Monsters that have more
+** of a resource always have that resource.
+
+** Resource specialist heroes have a 70% chance of getting their specialist
+** resource unless the monster has its own specialty. If a resource specialist
+** does get their specialty resource, they get one additional resource +20%
+** (rounded down). Gold specialist heroes always get 1/3 more gold.
+
+** If the monsters flee, you get half the treasure (they only have time to
+** flee with half of it).
+
+** If a monster stack has an artifact, it won't have any resources.
+
+** v66-v67, v762-v769
+
+--------------------------------------------------------------------------------
+
+!#VRv67:S-1; [Initialize v67 to -1]
+!#VRv762:C0/0/0/0/0/0/0/0; [Initialize v762-v769 to 0]
+
+--------------------------------------------------------------------------------
+
+ [Give Heroes resources for defeating monster stacks]
+!?OB54;
+!!UN:P282/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!VRv66:S0; [Initialize v66 to 0]
+!!VRv67:S-1; [Initialize v67 to -1]
+!!MO998:G?y-1; [Number of monsters in stack: y-1]
+!!OB998:U?y-2; [Type of monster: y-2]
+
+!!UN:P904/1 P905/0; [Disable ERM error messages and clear error flag]
+!!MO998:A?y-7; [Check monster's artifact: y-7]
+!!UN:P905/?y-8; [Check ERM error flag: y-8=1 if stack has no setup]
+!!UN:P904/0; [Re-enable ERM error messages]
+!!FU&y-8=0/y-7>=0:E; [Skip if monster has an artifact]
+
+!!MA:Cy-2/6/?y-3; [Gold Cost of 1 Monster: y-3]
+!!VRv66:Sy-1 *y-3; [Total Gold Cost of Monsters: v66]
+!!HE-1:N?y-5; [Hero number: y-5]
+!!DO177/0/6/1:Py-5/y-2; [Count number of troops of type y-2 in hero's army. Result in y-6]
+!!VRv67:Sy-6; [Set v67 to total number of troops of this type in hero's army]
+
+--------------------------------------------------------------------------------
+
+!?BA0&v67>=0; [Start of Battle Trigger]
+!!UN:P282/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!OB998:U?y-2; [Type of monster: y-2]
+!!HE-1:N?y-5; [Hero number: y-5]
+!!DO177/0/6/1:Py-5/y-2; [Recount troops (in case of Succubus join ability) of type y-2 in hero's army. Result in y-6]
+!!VRv67:Sy-6; [Set v67 to total number of troops of this type in hero's army]
+!!VRv66:*-1; [Set v66 to negative number if there's a battle]
+
+--------------------------------------------------------------------------------
+
+!$OB54&v66<>0/v67>=0;
+!!UN:P282/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!OB998:U?y-1; [Type of monster: y-1]
+!!HE-1:N?y-2 O?y-10; [Hero number: y-2, Owner: y-10]
+!!DO177/0/6/1:Py-2/y-1; [Count number of troops of type y-1 in hero's army. Result in y-6]
+!!VRy-23|y-6>v67/y-10<0:S1; [Set y-23 to 1 if troops joined hero or if hero lost the battle: y-23]
+!!VRv67:S-1; [Reset v67 to -1]
+!!FU&y-23=1:E; [Exit if hero has more of this troop type now (i.e., if they joined) or if hero lost the battle]
+
+!!VRy-3&v66>0:S1; [Set y-3 to 1 if stack flees]
+!!VRy-3&v66<0:S2; [Set y-3 to 2 if stack fought combat]
+!!VRv66&v66<0:*-1; [Make v66 a positive value again if it isn't]
+
+ [Check for resource specialty hero]
+!!VRy-14:S-1; [Initialize y-14 to -1]
+!!VRy-14&y-2=38:S1; [Rissa is Mercury specialist: y-14=1]
+!!VRy-14&y-2=111:S5; [Saurug is Gems specialist: y-14=5]
+!!VRy-14&y-2=60:S3; [Calid is Sulfur specialist: y-14=3]
+!!VRy-14&y-2=94:S4; [Sephinroth is Crystal specialist: y-14=4]
+
+ [Check for gold specialty heroes: Caitlin, Clavius, Octavia, Nagash, Damacon, Jenova, Aine, Gelare, Grindan]
+!!VRy-14|y-2=15/y-2=70/y-2=52/y-2=79/y-2=84/y-2=18/y-2=47/y-2=142/y-2=143:S6; [Gold specialists: y-14=6]
+
+!!VRy-15&y-14>=0/y-14<6:S1 R9; [Random number 1-10 (70% chance of resource specialist finding their resource): y-15]
+
+ [Calculate Stack's Treasure]
+!!VRv66&y-3=1::2; [50% if stack flees: v66]
+!!VRy-4:Sv66 :24; [1/24th of stack's recruiting cost is gold: y-4]
+!!VRy-4|y-1=16/y-1=17/y-14=6:Sv66 :18; [1/18th is gold for Dwarves, Battle Dwarves and Gold Resource specialists: y-4]
+!!VRy-4&y-1=116:Sv66 :10; [1/10th is gold for Gold Golems: y-4]
+!!VRy-4|y-1=26/y-1=27/y-1=68/y-1=69/y-1=82/y-1=83:Sv66 :12; [1/12th is gold for Dragons: y-4]
+!!VRy-4|y-1=132/y-1=133/y-1=134/y-1=135/y-1=151/y-1=154/y-1=155/y-1=196:Sv66 :12; [1/12th is gold for Dragons: y-4]
+
+!!VRy-11:S0 R4; [0=none, 1=wood, 2=ore, 3=precious, 4=wood/ore+precious: y-11]
+!!VRy-11&v66<4000:S0 R3; [0=none, 1=wood, 2=ore, 3=precious: y-11]
+!!VRy-11&v66<2000:S0 R2; [0=none, 1=wood, 2=ore: y-11]
+!!VRy-11&y-15>=4:S3; [Resource specialist has 70% chance of finding their specialty resource: y-11]
+!!VRy-4&y-11=0/y-1<>116:Sv66 :18; [If gold only, increase the amount to 1/18th of recruiting cost: y-4]
+!!VRy-12&y-11=4:S1 R1; [If wood/ore+precious 1=wood, 2=ore: y-12]
+!!VRy-11|y-1=22/y-1=23:S1; [Dendroids and Dendroid Guards always have wood: y-11]
+!!VRy-11|y-1=32/y-1=33:S2; [Stone and Iron Golems always have ore: y-11]
+!!VRy-11&y-1=116:S0; [Just gold for gold golems: y-11]
+!!VRy-11|y-1=34/y-1=35/y-1=36/y-1=37/y-1=52/y-1=53/y-1=82/y-1=83/y-1=117/y-1=120/y-1=121:S3; [Just precious for specialty creatures: y-11]
+!!VRy-11|y-1=130/y-1=131/y-1=133/y-1=134/y-1=135/y-1=136/y-1=151/y-1=155/y-1=158/y-1=193:S3; [Just precious for specialty creatures: y-11]
+!!VRy-5&y-11=4/y-12=1:S0; [Set to 0 for Wood: y-5]
+!!VRy-5&y-11=4/y-12=2:S2; [Set to 2 for Ore: y-5]
+!!VRy-5&y-11=1:S0; [Set to 0 for Wood: y-5]
+!!VRy-5&y-11=2:S2; [Set to 2 for Ore: y-5]
+!!VRy-7:Sv66 :1000; [1/1000 of recruit cost is wood or ore: y-7]
+!!VRy-7&y-7>=5:Sv66 :4000 +4; [1/4000 of recruit cost after first 4 wood/ore: y-7]
+!!VRy-7&y-7>=9:Sv66 :8000 +7; [1/8000 of recruit cost after first 8 wood/ore: y-7]
+!!VRy-7&y-7>=15:Sv66 :16000 +11; [1/16000 of recruit cost after first 14 wood/ore: y-7]
+!!VRy-7&y-7>=20:Sv66 :32000 +16; [1/32000 of recruit cost after first 19 wood/ore: y-7]
+!!VRy-7&y-7>=30:Sv66 :64000 +23; [1/64000 of recruit cost after first 29 wood/ore: y-7]
+!!VRy-7&y-7>=50:Sv66 :128000 +37; [1/128000 of recruit cost after first 49 wood/ore: y-7]
+!!VRy-7&y-7>=100:Sv66 :256000 +69; [1/256000 of recruit cost after first 99 wood/ore: y-7]
+!!VRy-7&y-7>=200:Sv66 :512000 +135; [1/512000 of recruit cost after first 199 wood/ore: y-7]
+!!VRy-7|y-1=22/y-1=23:Sy-7 *2 +1; [Dendroids and Dendroid Guards have more wood: y-7]
+!!VRy-7|y-1=32/y-1=33:Sy-7 *2 +1; [Stone and Iron Golems have more ore: y-7]
+!!VRy-7&y-7>=250:S250; [Maximum 250 wood/ore: y-7]
+!!VRy-7&y-11=4::2; [Half the amount if it's wood/ore+precious: y-7]
+!!VRy-5|y-11=0/y-11=3/y-7<1:S-1; [Set to -1 if no wood/ore: y-5]
+
+!!VRy-8&y-11>=3:S1 R4; [Determine precious resource: y-8]
+!!VRy-8&y-11>=3/v66<10000:S1 R3; [If mithril amount would be 0, exclude it from chance: y-8]
+!!VRy-8&y-11>=3/y-8>=2:+1; [Skip ore: y-8]
+!!VRy-8&y-11>=3/y-8>=6:+1; [Skip gold: y-8]
+!!VRy-8&y-11=3/y-15>=4/y-14>=0/y-14<6:Sy-14; [Resource specialists have 70% chance of their specialty resource: y-8]
+!!VRy-13|y-1=52/y-1=53/y-1=130/y-1=131/y-1=158:S1; [Efreet, Efreet Sultands, Firebirds, Phoenix, and Sacred Phoenix always have mercury: y-13]
+!!VRy-13|y-1=82/y-1=83/y-1=135/y-1=155:S3; [Red, Black, Darkness and Rust Dragons always have sulfur: y-13]
+!!VRy-13&y-1=133:S4; [Crystal Dragons always have crystal: y-13]
+!!VRy-13|y-1=117/y-1=151:S5; [Diamond Golems and Diamond Dragons always have gems: y-13]
+!!VRy-8&y-11>=3/y-13>0:Sy-13; [For specialty creatures, set resource to their specialty: y-8]
+!!VRy-9&y-11>=3/y-8<7:Sy-7 :2; [1/2 of wood/ore value is precious resources: y-9]
+!!VRy-9&y-11>=3/y-13>0:Sy-7 +1; [Specialty creatures have more of their specialty: y-9]
+!!VRy-16&y-14>=0/y-8=y-14:Sy-9 :5; [20% of precious resource: y-16]
+!!VRy-9&y-14>=0/y-8=y-14:+y-16 +1; [Resource specialists get additional 20%+1 of their specialty resource: y-9]
+
+!!VRy-8|y-1=34/y-1=35/y-1=36/y-1=37/y-1=120/y-1=121/y-1=134/y-1=136/y-1=193:S7; [Magi, Arch Magi, Genies, Master Genies, Psychic Elementals, Magic Elementals, Faerie Dragons, Enchanters and Sorceresses always have Mithril: y-13]
+!!VRy-9&y-8=7:Sy-7 :10; [1/10 of wood/ore value is mithril: y-9]
+!!VRy-9|y-1=34/y-1=35/y-1=36/y-1=37/y-1=120/y-1=121/y-1=134/y-1=136/y-1=193:Sy-7 :8 +1; [Magi, Arch Magi, Genies, Master Genies, Psychic Elementals, Magic Elementals, Faerie Dragons, Enchanters and Sorceresses have more Mithril: y-8]
+
+!!VRy-8|y-9<1/y-11<3:S-1; [Set to -1 if no precious resource: y-8]
+
+!!FU&y-4<1:E; [Exit if no resource treasure]
+
+!!VRy-17:S762 +y-10; [Index for v variable storing this player's last selected option: y-17]
+!!VRy-18:Svy-17; [Last selected option: vy-17 (v762-v769)]
+!!VRy-18&y-18=0:S1; [If no option was selected, default to option 1]
+
+ [** Check if Monster Stack Resource messages are disabled **]
+!!VRy-19:Sy-10 +1; [Add 1 to y-10: y-19]
+!!FU$bit$:Py-19; [Convert to bit number: y-100]
+!!VRy-20:Sv3328; [Set y-20 to v3328]
+!!VRy-20:&y-100; [Check if message is disabled for current player: y-20]
+ [** If y-20=y-100, messages are disabled for current player **]
+
+!!UN:N3/4/y-1/1; [Name of Monster: z4]
+!!VRz-1:S^The %Z4 had resources. Do you want to collect them?
+
+(Right-click System Options to enable/disable option display)^;
+!!VRz-2:S^Yes, collect the resources. This uses up to 500 movement points (5 tiles).^;
+!!VRz-3:S^No, don't collect the resources, I'm in a hurry!^;
+!!VRz-4:S^Yes, collect them every time and don't display these options again.^;
+!!VRz-5:S^No, don't collect them and don't display these options again.^;
+!!VRv1:S0; [Initialize v1 to 0]
+!!IF&y-20<>y-100/1000:G1/1/y-18/-1/-2/-3/-4/-5/0/0/0/0/0/0/0/0; [Display option list unless disabled: choice in v1]
+!!VRy-21&v1=0:S2; [Default to no for AI]
+!!VRy-21|v1=1/v1=4:S1; [Set y-21 to Yes option selected: y-21]
+!!VRy-21|v1=2/v1=8:S2; [Set y-21 to No option selected: y-21]
+!!VRvy-17&1000/y-20<>y-100:Sy-21; [Store selected option in vy-17 (v762-v769) unless disabled]
+!!VRy-21&1000/y-20=y-100:Sy-18; [If message disabled, use last selected option for human hero: y-21]
+
+!!VRz1:S^Message Disabling^; [Section name: z1]
+!!DO10938/3320/3328/1|v1=4/v1=8:P0; [Load the disabling state variables from disk file]
+!!VRv3328|v1=4/v1=8:|y-100; [Add message disabled state to v3328 for this player: v3328]
+!!DO10938/3320/3328/1|v1=4/v1=8:P1; [Save the disabling state variables to disk file]
+
+!!HEy-2:W?y-22; [Hero's remaining movement points: y-22]
+!!VRy-21&-1000/y-22<500:S1; [AI hero only gathers resources if it has less than 500 movement points remaining]
+
+!!FU&y-21=2:E; [Exit if hero doesn't gather resources]
+
+!!VRy-22:-500; [Remove 500 movement points: y-22]
+!!VRy-22&y-22<0:S0; [Minimum 0: y-22]
+!!HEy-2:Wy-22; [Remove 500 movement points from hero]
+
+!!HEy-2:B0/?z1; [Hero's name]
+
+!!VRz3&y-3=1:S^After the %Z4 flee, %Z1's army searches the camp and finds some treasure they left behind!^;
+!!VRz3&y-3=2:S^After defeating the %Z4, %Z1's army searches the camp and finds treasure!^;
+
+!!IF&1000/y-11=0:Q1/6/y-4/1^%Z3^; [Gold alone]
+!!IF&1000/y-11>=1/y-11<=2:Q1/6/y-4/y-5/y-7/1^%Z3^; [Gold + Wood/Ore]
+!!IF&1000/y-11=3:Q1/6/y-4/y-8/y-9/1^%Z3^; [Gold + Precious Resource]
+!!IF&1000/y-11=4:Q1/6/y-4/y-5/y-7/y-8/y-9/1^%Z3^; [Gold + Wood/Ore + Precious Resource]
+
+!!OW:R-1/6/dy-4; [Give player gold: y-4]
+!!OW&y-5>=0/y-7>0:R-1/y-5/dy-7; [Give player wood or ore: y-7]
+!!OW&y-8>=0/y-9>0:R-1/y-8/dy-9; [Give player precious resource: y-9]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  LIMITED DWELLING ACCUMULATIONS (ERM Option: 283)
+================================================================================
+
+** If the Dwellings Accumulate Creatures option is enabled, this script prevents
+** external dwellings from accumulating creatures until the dwelling is owned.
+** Unowned dwellings will never have more than one week's worth of creatures in
+** them when initially captured.
+
+** Dwelling guards will also be limited so that they don't accumulate until the
+** dwelling has captured.
+
+** FU178-FU179
+
+--------------------------------------------------------------------------------
+
+ [Dwelling type 17 is trigger]
+!?OB17;
+!!UN:P283/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!FU178:P; [Reset creatures and guards if dwelling not yet claimed]
+
+--------------------------------------------------------------------------------
+
+ [Dwelling type 20 is trigger]
+!?OB20;
+!!UN:P283/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!FU178:P; [Reset creatures and guards if dwelling not yet claimed]
+
+--------------------------------------------------------------------------------
+
+ [Dwelling type 17 is post-visit trigger]
+!$OB17;
+!!UN:P283/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DW998:O?y-1; [Check owner: y-1]
+!!PO998&y-1>=0:T1; [Set PO:T to 1 if dwelling is captured]
+
+--------------------------------------------------------------------------------
+
+ [Dwelling type 20 is post-visit trigger]
+!$OB20;
+!!UN:P283/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DW998:O?y-1; [Check owner: y-1]
+!!PO998&y-1>=0:T1; [Set PO:T to 1 if dwelling is captured]
+
+--------------------------------------------------------------------------------
+
+ [Reset creatures and guards if dwelling not yet claimed]
+!?FU178;
+!!PO998:T?y1; [Read PO:T value into y1]
+!!FU&y1<>0:E; [Exit if PO:T value isn't 0]
+!!DO179/0/3/1:P; [Loop through all possible slots]
+
+--------------------------------------------------------------------------------
+
+ [Loop through all possible dwelling creature slots]
+!?FU179;
+!!DW998:Mx16/?y1/d; [Get creature type in slot x16: y1]
+!!MA&y1>=0:Gy1/?y2; [Get weekly growth of creature: y2]
+!!DW998:Mx16/y1/y2; [Set one week's worth of creatures only]
+!!DW998:Gx16/?y3/?y4; [Get guard type (y3) and number (y4) in slot x16]
+!!MA&y3>=0:Gy3/?y5; [Get weekly growth of guard creature: y5]
+!!VRy6:Sy5 *3; [Default guards = 3 x weekly growth of guard type: y6]
+!!DW998&y3>=0/y4>0:Gx16/y3/y6; [Set default number of guard creatures if any in slot]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  MONSTER STACK ARTIFACTS (ERM Option: 284)
+================================================================================
+
+** Approximately 25% of Monster Stacks will have artifacts unless the stack is
+** set to always join or already has an artifact. The artifact class depends on
+** the initial gold value of the stack as follows:
+**
+**           under 1000 = none
+**            1000-2999 = Treasure
+**           3000-11999 = Minor
+**          12000-39999 = Major
+**          40000+      = Relic
+**
+** Only enabled artifacts will be given (meaning no assembled combos unless
+** specifically enabled) and WoG Artifacts may be given if they're not banned.
+** Boots of Speed, Equestrian Gloves, Boosts of Levitation and Angel Wings
+** will never be given, even if not banned.
+
+** FU140, v68
+
+--------------------------------------------------------------------------------
+
+ [Day 1 Timer, shared with WoGify so this will occur after main WoGification]
+!?TM19&v950=1;
+!!UN:P284/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!UN:U54/-1/?y-1; [Number of monsters on map: y-1]
+!!VRv1:S-2; [Initialize v1 to -2 for fast UN:U backwards looping]
+!!DO140/1/y-1/1&y-1>0:P; [Loop through all monsters]
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+!!VRv950:S2; [Set v950 to 2 to ensure this occurs only once]
+
+--------------------------------------------------------------------------------
+
+ [Loop through all monsters and possibly give an artifact]
+!?FU140;
+!!UN:U54/-1/-2/1; [Previous monster on map at v1/v2/v3]
+!!VRy1:S1 R99; [Random number: 1-100: y1]
+!!FU&y1>25:E; [Only a 25% chance of monster having an artifact]
+!!MOv1/v2/v3:R?y2/1; [Check monster's aggression: y2]
+!!FU&y2=0:E; [Skip if monster is set to always join]
+!!UN:P904/1 P905/0; [Disable ERM error messages and clear error flag]
+!!MOv1/v2/v3:A?y3; [Check monster's artifact: y3]
+!!UN:P905/?y4; [Check ERM error flag: y4=1 if stack has no setup]
+!!UN:P904/0; [Re-enable ERM error messages]
+!!FU&y4=0/y3>=0:E; [Skip if monster already has an artifact]
+!!MOv1/v2/v3:G?y5 O?y6 U?y7; [Number of monsters: y5, Grow Flag: y6, Escape Flag: y7]
+!!OBv1/v2/v3:U?y8; [Type of monster: y8]
+!!FU|y5<1/y8<0:E; [Skip if no monster is really there]
+!!UN&y4=1:Ov1/v2/v3; [Delete monster if no setup]
+!!UN&y4=1:Iv1/v2/v3/54/y8/54/y8/-1/0; [Place new stack of monsters (same type) if no setup]
+!!MOv1/v2/v3&y4=1:Ry2/1 Gy5 Oy6 Uy7; [Copy attributes to replacement monster stack]
+
+ [Determine Class from 1 to 5 based on stack's gold value: y11]
+!!MA:Cy8/6/?y9;  [Gold cost of 1 monster: y9]
+!!VRy10:Sy9 *y5; [Gold cost of monster stack: y10]
+!!VRy11&y10<=999:S0;              [Stack is Class 0 (No Artifact): y11]
+!!VRy11&y10>=1000/y10<=2999:S1;   [Stack is Class 1 (Treasure): y11]
+!!VRy11&y10>=3000/y10<=11999:S2;  [Stack is Class 2 (Minor): y11]
+!!VRy11&y10>=12000/y10<=39999:S3; [Stack is Class 3 (Major): y11]
+!!VRy11&y10>=40000:S4;            [Stack is Class 4 (Relic): y11]
+
+!!FU&y11=0:E; [Exit if Class 0]
+
+!!VRy12:S1 R99; [Random number: 1-100: y12]
+!!VRy22:S-1; [Initialize y22 to -1]
+
+!!UN:A70/?y23 A72/?y24 A90/?y25 A98/?y26; [Store enabled/disabled status of Equestrian Gloves, Angel Wings, Boots of Levitation, and Boots of Speed: y23-y26]
+!!UN:A70/1 A72/1 A90/1 A98/1; [Temporarily ban movement artifacts]
+
+ [Check if various WoG Artifacts are banned]
+!!UN:P238/?y13; [Check if Commander Artifacts are banned: y13=1 if banned]
+!!UN:P177/?y14; [Check if Slava's Ring of Power is banned: y14=1 if banned]
+!!UN:P234/?y15; [Check if Warlord's Banner is banned: y15=1 if banned]
+!!UN:P236/?y16; [Check if Crimson Shield of Retribution is banned: y16=1 if banned]
+!!UN:P176/?y17; [Check if Magic Wand is banned: y17=1 if banned]
+!!UN:P226/?y18; [Check if Gold Tower Arrow is banned: y18=1 if banned]
+!!UN:P227/?y19; [Check if Monster's Power is banned: y19=1 if banned]
+!!UN:P241/?y20; [Check if Dragonheart is banned: y20=1 if banned]
+!!UN:P243/?y21; [Check if Gate Key is banned: y21=1 if banned]
+
+ [Class 1: Treasure, Dragon Eye Ring, Pendant of Sorcery]
+!!VRy22&y11=1/y13=0/y12<=2:S153; [2% chance of Dragon Eye Ring if Commander Artifacts not banned: y22]
+!!VRy22&y11=1/y13=0/y12>=3/y12<=4:S150; [2% chance of Pendant of Sorcery if Commander Artifacts not banned: y22]
+!!UN&y11=1/y22<0:J6/2/?y22; [Random Treasure artifact: y22]
+!!MOv1/v2/v3&y11=1:Ay22; [Give artifact to monster: y22]
+!!UN:A70/y23 A72/y24 A90/y25 A98/y26; [Restore banned movement artifacts]
+!!FU&y11=1:E; [Exit if class 1]
+
+ [Class 2: Minor, Commander Artifacts (excluding Helm of Immortality, Slava's Ring of Power), Warlord's Banner]
+!!VRy22&y11=2/y13=0/y12>=1/y12<=2:S146; [2% chance of Axe of Smashing if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=3/y12<=4:S147; [2% chance of Mithril Mail if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=5/y12<=6:S148; [2% chance of Sword of Sharpness if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=7/y12<=8:S150; [2% chance of Pendant or Sorcery if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=9/y12<=10:S151; [2% chance of Boots of Haste if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=11/y12<=12:S152; [2% chance of Bow of Seeking if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=13/y12<=14:S153; [2% chance of Dragon Eye Ring if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y13=0/y12>=15/y12<=16:S154; [2% chance of Hardened Shield if Commander Artifacts not banned: y22]
+!!VRy22&y11=2/y15=0/y12>=17/y12<=18:S156; [2% chance of Warlord's Banner if not banned: y22]
+!!UN&y11=2/y22<0:J6/4/?y22; [Random Minor artifact: y22]
+!!MOv1/v2/v3&y11=2:Ay22; [Give artifact to monster: y22]
+!!UN:A70/y23 A72/y24 A90/y25 A98/y26; [Restore banned movement artifacts]
+!!FU&y11=2:E; [Exit if class 2]
+
+ [Class 3: Major, Commander Artifacts (excluding Slava's Ring of Power, Pendant of Sorcery, Dragon Eye Ring), Warlord's Banner, Crimson Shield of Retribution]
+!!VRy22&y11=3/y13=0/y12>=1/y12<=2:S146; [2% chance of Axe of Smashing if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=3/y12<=4:S147; [2% chance of Mithril Mail if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=5/y12<=6:S148; [2% chance of Sword of Sharpness if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=7/y12<=8:S149; [2% chance of Helm of Immortality if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=9/y12<=10:S151; [2% chance of Boots of Haste if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=11/y12<=12:S152; [2% chance of Bow of Seeking if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y13=0/y12>=13/y12<=14:S154; [2% chance of Hardened Shield if Commander Artifacts not banned: y22]
+!!VRy22&y11=3/y15=0/y12>=15/y12<=16:S156; [2% chance of Warlord's Banner if not banned: y22]
+!!VRy22&y11=3/y16=0/y12>=17/y12<=18:S157; [2% chance of Crimson Shield of Retribution if not banned: y22]
+!!UN&y11=3/y22<0:J6/8/?y22; [Random Major artifact: y22]
+!!MOv1/v2/v3&y11=3:Ay22; [Give artifact to monster: y22]
+!!UN:A70/y23 A72/y24 A90/y25 A98/y26; [Restore banned movement artifacts]
+!!FU&y11=3:E; [Exit if class 3]
+
+ [Class 4: Relic, Helm of Immortality, Slava's Ring of Power, Crimson Shield of Retribution, Magic Wand, Gold Tower Arrow, Monster's Power, Dragonheart, Gate Key]
+!!VRy22&y11=4/y13=0/y12>=1/y12<=2:S149; [2% chance of Helm of Immortality if Commander Artifacts not banned: y22]
+!!VRy22&y11=4/y13=0/y14=0/y12>=3/y12<=4:S155; [2% chance of Slava's Ring of Power if Commander Artifacts and Slava's Ring not banned: y22]
+!!VRy22&y11=4/y16=0/y12>=5/y12<=6:S157; [2% chance of Crimson Shield of Retribution if not banned: y22]
+!!VRy22&y11=4/y17=0/y12>=7/y12<=8:S141; [2% chance of Magic Wand if not banned: y22]
+!!VRy22&y11=4/y18=0/y12>=9/y12<=10:S142; [2% chance of Gold Tower Arrow if not banned: y22]
+!!VRy22&y11=4/y19=0/y12>=11/y12<=12:S143; [2% chance of Monster's Power if not banned: y22]
+!!VRy22&y11=4/y20=0/y12>=13/y12<=14:S159; [2% chance of Dragonheart if not banned: y22]
+!!VRy22&y11=4/y21=0/y12>=15/y12<=16:S160; [2% chance of Gate Key if not banned: y22]
+!!UN&y11=4/y22<0:J6/16/?y22; [Random Relic: y22]
+!!MOv1/v2/v3&y11=4:Ay22; [Give artifact to monster: y22]
+!!UN:A70/y23 A72/y24 A90/y25 A98/y26; [Restore banned movement artifacts]
+
+--------------------------------------------------------------------------------
+
+ [Monster stack is trigger]
+!?OB54&v68=0;
+!!UN:P284/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!VRv68:S1; [Set v68 to 1 so trigger doesn't repeat if hero attacks with Angel Wings equipped]
+!!UN:P904/1 P905/0; [Disable ERM error messages and clear error flag]
+!!MO998:A?y-1; [Check monster's artifact: y-1]
+!!UN:P905/?y-2; [Check ERM error flag: y-2=1 if stack has no setup]
+!!UN:P904/0; [Re-enable ERM error messages]
+!!FU|y-1<0/y-2=1:E; [Exit if monster has no setup or no artifact]
+
+!!MO998:G?y-3; [Number of monsters in stack: y-3]
+!!OB998:U?y-4; [Monster type: y-4]
+!!UN&y-3=1:N3/-1/y-4/0; [Name of monsters (singular): z-1]
+!!UN&y-3>1:N3/-1/y-4/1; [Name of monsters (plural): z-1]
+!!UN:N0/-2/y-1; [Name of artifact: z-2]
+!!VRz-3&y-3=1:S^As you approach the %Z-1, you can see that it's jealously guarding the %Z-2!^;
+!!VRz-3&y-3>1:S^As you approach the %Z-1, you can see that they're jealously guarding the %Z-2!^;
+!!VRy-5:S65536 *y-3 +y-4; [Display variable for monster subtype showing numbers: y-5]
+!!IF&1000:Q1/21/y-5/8/y-1/1^%Z-3^; [Display artifact message when monster stack is attacked]
+
+--------------------------------------------------------------------------------
+
+ [Post-visit trigger for monster stack]
+!$OB54;
+!!UN:P284/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!VRv68:S0; [Clear v68]
+
+--------------------------------------------------------------------------------
+
+ [Post-Battle Trigger]
+!?BA1;
+!!UN:P284/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!BA:P?y-1/?y-2/?y-3 H0/?y-4; [Battle Location: y-1/y-2/y-3, Hero: y-4]
+!!OBy-1/y-2/y-3:T?y-5 U?y-9; [Object at battle location: y-5, Subtype: y-9]
+!!HEy-4&y-4>=0:O?y-6 B0/?z-1; [Hero's owner: y-6, Name: z-1]
+!!FU|y-5<>54/y-4<0/y-6<0:E; [Exit if not a monster stack, no hero, or hero lost battle]
+!!UN:P904/1 P905/0; [Disable ERM error messages and clear error flag]
+!!MOy-1/y-2/y-3:A?y-7; [Check monster's artifact: y-7]
+!!UN:P905/?y-8; [Check ERM error flag: y-8=1 if stack has no setup]
+!!UN:P904/0; [Re-enable ERM error messages]
+!!FU|y-7<0/y-8=1:E; [Skip if monster has no setup or no artifact]
+!!MOy-1/y-2/y-3:A-1 G?y-10; [Remove artifact from monster stack, Number of monsters: y-10]
+!!UN&y-10=1:N3/-2/y-9/0; [Name of monsters (singular): z-2]
+!!UN&y-10>1:N3/-2/y-9/1; [Name of monsters (plural): z-2]
+!!UN:N0/-3/y-7; [Name of artifact: z-3]
+!!IF&1000:Q1/8/y-7/1^After defeating the %Z-2, %Z-1 captures the %Z-3!^;
+!!HEy-4:A4/y-7; [Give artifact to hero]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  GUARDED ARTIFACTS (ERM Option: 285)
+================================================================================
+
+** All visible artifacts on the adventure map have guards attached to them.
+** The gold value of the monsters guarding is roughly equal to the gold value
+** of the artifact.
+
+** Guards will be all from one town type (or neutral) and there will be from
+** one to three different types of creatures guarding. Each type has a 50%
+** chance of being divided up into two separate stacks.
+
+** FU452-FU453, FU456
+
+--------------------------------------------------------------------------------
+
+ [Day 1 Timer, shared with WoGify so this will occur after main WoGification]
+!?TM19&v950<3;
+!!UN:P285/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!UN:U5/-1/?y-1; [Number of artifacts on map: y-1]
+!!VRv1:S-2; [Initialize v1 to -2 for fast UN:U backwards looping]
+!!DO452/1/y-1/1&y-1>0:P; [Loop through all artifacts]
+!!VRv950:S3; [Set v950 to 3 to ensure this occurs only once]
+
+--------------------------------------------------------------------------------
+
+ [Loop through all artifacts and set guards]
+!?FU452;
+!!UN:U5/-1/-2/1; [Previous artifact on map at v1/v2/v3]
+!!UN:P904/1 P905/0; [Disable ERM error messages and clear error flag]
+!!ARv1/v2/v3:M1/?z-1; [Check artifact's custom text: z-1]
+!!UN:P905/?y1; [Check ERM error flag: y1=1 if stack has no setup]
+!!UN:P904/0; [Re-enable ERM error messages]
+!!VRy-1:S0; [Initialize y-1 to 0]
+!!DO453/0/6/1&y1=0:P; [Check for guards if artifact has custom setup: y-1=1 if guards found]
+!!FU&y-1=1:E; [Skip artifact if existing guards found]
+
+!!OBv1/v2/v3:U?y2; [Type of artifact: y2]
+!!UN&y1=1:Ov1/v2/v3; [Delete artifact if no setup]
+!!UN&y1=1:Iv1/v2/v3/5/y2/5/y2/-1/0; [Place new artifact (same type) if no setup]
+!!ARv1/v2/v3:X1; [Turn Guards on]
+
+!!UN:Ay2/1/?y3 Ay2/3/?y7; [Artifact's cost: y3, Class: y7]
+!!VRy3&y3=0/y7<=2:S1000; [If cost is 0, set 1500 gp for Treasure or no class: y3]
+!!VRy3&y3=0/y7=4:S4000; [If cost is 0, set 4000 gp for Minor: y3]
+!!VRy3&y3=0/y7=8:S6000; [If cost is 0, set 6000 gp for Major: y3]
+!!VRy3&y3=0/y7=16:S12000; [If cost is 0, set 12000 gp for Relic: y3]
+!!VRy3&y2=0:S0; [Set Spell Book to 0 gp: y3]
+!!VRy3|y2=150/y2=153:S1000; [Set Pendant of Sorcery, Dragon Eye Ring to 1000 gp: y3]
+!!VRy3|y2=146/y2=147/y2=148/y2=151/y2=152/y2=154/y2=156:S4000; [Set Axe of Smashing, Mithril Mail, Sword of Sharpness, Boots of Haste, Bow of Seeking, Hardened Shield, Warlord's Banner to 4000 gp: y3]
+!!VRy3&y2=149:S6000; [Set Helm of Immortality to 6000 gp: y3]
+!!VRy3|y2=141/y2=142/y2=159:S20000; [Set Magic Wand, Gold Tower Arrow, Dragonheart to 20000 gp: y3]
+!!VRy3|y2=143/y2=155/y2=160:S15000; [Set Monster's Power, Slava's Ring of Power, Gate Key to 15000 gp]
+!!VRy3:*2; [Multiply Artifact cost by 2: y3]
+!!FU&y3=0:E; [Skip if cost is still 0 gp]
+
+!!VRy4:S1 R2; [Random number 1..3: y4]
+!!VRy5:Sy3 :y4; [Divide cost into up to three parts for 1..3 creature types]
+
+!!VRy6:S-1 R9; [Random town type (-1=neutral): y6]
+!!DO456/0/1/0:Py6/y5/-10/-11; [Choose first creature type: y-10, number: y-11]
+!!DO456/0/1/0&y5>1:Py6/y5/-12/-13; [Choose second creature type: y-12, number: y-13]
+!!DO456/0/1/0&y5>2:Py6/y5/-14/-15; [Choose third creature type: y-14, number: y-15]
+
+!!VRy7:S1 R1; [See if first stack should be split: y7=2 if split]
+!!VRy7&y-11=1:S1; [No splitting if only 1 there]
+!!VRy8:Sy-11 :y7; [1st Half of stack: y8]
+!!VRy9&y7=2:Sy-11 %y7; [Remainder for uneven splits: y9]
+!!VRy9&y7=2:+y8; [2nd Half of stack: y9]
+!!ARv1/v2/v3:G0/y-10/y8; [Set guards in slot 0]
+!!ARv1/v2/v3&y7=2:G6/y-10/y9; [Set guards in slot 6]
+!!FU&y4<2:E; [Exit if only 1 type of creature]
+
+!!VRy7:S1 R1; [See if second stack should be split: y7=2 if split]
+!!VRy7&y-13=1:S1; [No splitting if only 1 there]
+!!VRy8:Sy-13 :y7; [1st Half of stack: y8]
+!!VRy9&y7=2:Sy-13 %y7; [Remainder for uneven splits: y9]
+!!VRy9&y7=2:+y8; [2nd Half of stack: y9]
+!!ARv1/v2/v3:G1/y-12/y8; [Set guards in slot 1]
+!!ARv1/v2/v3&y7=2:G5/y-12/y9; [Set guards in slot 5]
+!!FU&y4<3:E; [Exit if only 2 types of creature]
+
+!!VRy7:S1 R1; [See if third stack should be split: y7=2 if split]
+!!VRy7&y-15=1:S1; [No splitting if only 1 there]
+!!VRy8:Sy-15 :y7; [1st Half of stack: y8]
+!!VRy9&y7=2:Sy-15 %y7; [Remainder for uneven splits: y9]
+!!VRy9&y7=2:+y8; [2nd Half of stack: y9]
+!!ARv1/v2/v3:G2/y-14/y8; [Set guards in slot 2]
+!!ARv1/v2/v3&y7=2:G4/y-14/y9; [Set guards in slot 4]
+
+--------------------------------------------------------------------------------
+
+ [Check for guards]
+!?FU453;
+!!ARv1/v2/v3:Gx16/?y1/?y2; [Guards in slot x16, Type: y1, Number: y2]
+!!VRy-1&y1>=0/y2>0:S1; [Set y-1 to 1 if any guards found]
+!!VRx16&y1>=0/y2>0:S999; [Finish loop if any guards found]
+
+--------------------------------------------------------------------------------
+
+ [Choose random creature type]
+ [x1=Town Type, x2=maximum stack cost]
+ [x3=index value for creature type, x4=index value for creature number]
+!?FU456;
+!!VRy1&x1>=0:S0 R6; [Random creature level: y1]
+!!VRy2&x1>=0:S0 R1; [Non-upgraded=0, Upgraded=1: y2]
+!!UN&x1>=0:Tx1/y1/y2/?y3; [Type of monster: y3]
+!!VRy3&x1<0:S112 R44; [Random neutral creature: y3]
+!!VRy3&x1<0/y3>=122:+1; [Skip Not Used (1): y3]
+!!VRy3&x1<0/y3>=124:+1; [Skip Not Used (2): y3]
+!!VRy3&x1<0/y3>=126:+1; [Skip Not Used (3): y3]
+!!VRy3&x1<0/y3>=128:+1; [Skip Not Used (4): y3]
+!!VRy3&x1<0/y3>=145:+14; [Skip War Machines and L8 creatures: y3]
+!!VRy3&x1<0/y3>=160:+4; [Skip Emissaries: y3]
+!!VRy3&x1<0/y3>=174:+18; [Skip Commanders: y3]
+!!MA&y3>=0/y3<=196:Cy3/6/?y4; [Cost of 1 monster: y4]
+!!FU|y4>x2/y4<1/y3<0/y3>196:E; [Try again if monster costs more than maximum stack cost, has 0 cost or is invalid]
+!!MA:Oy3/?y5; [Town type of monster: y5]
+!!FU&x1<0/y5>=0:E; [Try again if neutral town type but monster isn't neutral]
+!!VRyx3:Sy3; [Monster type: yx3]
+!!VRyx4:Sx2 :y4; [Number of monsters, rounding down: yx4]
+!!VRx16:S999; [Exit if monster found]
+
+--------------------------------------------------------------------------------
+
+================================================================================
+  DISPLAY KEYMASTER KEYS (ERM Option: 289)
+================================================================================
+
+** Right-clicking on a Borderguard or Bordergate will also show you if you
+** have the key for it or not.
+
+** Ctrl-clicking on any Border Guard, Bordergate or Keymaster Tent will display
+** a full list of all Keymaster Tents visited.
+
+** Uses temporary variables only.
+
+--------------------------------------------------------------------------------
+
+ [Display List if Keymaster Tents Visited with a ctrl-click]
+ [on any Border Guard, Border Gate or Keymaster Tent]
+!?CM5; [Adventure Screen left-click trigger]
+!!UN:P289/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!CM:I?y-1 F?y-2 S?y-3; [Location: y-1, Flags: y-2, Sub-Type of Click: y-3]
+!!FU|y-1<>37/y-2<>4/y-3<>12:E; [Exit if not ctrl-click on Adventure Map]
+
+!!CM:P?y-4/?y-5/?y-6; [Map location clicked: y-4/y-5/y-6]
+
+!!FU$LocalPlayer$:P; [Get current/local player: y-100]
+!!FU&y-100<0:E; [Exit if for some reason Local Player cannot be found]
+!!VRy-75:Sy-100; [Set y-75 to the value of LocalPlayer y-100]
+!!FU$bit$:Py-75; [Turn y-75 (Local Player) into bit value of player colour]
+!!VRy-76:Sy-100; [Get converted Local Player bit into y-76]
+!!TRy-4/y-5/y-6:V?y-78; [Check square for visibility]
+!!VRy-77:Sy-78; [Set y-77 to the value of y-78]
+!!VRy-77:&y-100; [Check for the visibility bit for the square right-clicked]
+!!FU&y-78=0:E; [Exit if the LocalPlayer doesn't have the square visible]
+
+!!OBy-4/y-5/y-6:T?y-7 U?y-8; [Type of object clicked: y-7, Subtype: y-8]
+!!FU&y-7<>9/y-7<>10/y-7<>212:E; [Exit if not a Border Guard, Keymaster Tent or Border Gate]
+
+!!FU$LocalPlayer$:P;
+!!OW:Ky-100/0/?y-10 Ky-100/1/?y-11 Ky-100/2/?y-12 Ky-100/3/?y-13; [Get state of Keymaster Tents 0-3: y-10..y-13]
+!!OW:Ky-100/4/?y-14 Ky-100/5/?y-15 Ky-100/6/?y-16 Ky-100/7/?y-17; [Get state of Keymaster Tents 4-7: y-14..y-17]
+
+!!VRz-1&y-10=0:S^NO^; !!VRz-1&y-10=1:S^YES^; [Light Blue]
+!!VRz-2&y-11=0:S^NO^; !!VRz-2&y-11=1:S^YES^; [Green]
+!!VRz-3&y-12=0:S^NO^; !!VRz-3&y-12=1:S^YES^; [Red]
+!!VRz-4&y-13=0:S^NO^; !!VRz-4&y-13=1:S^YES^; [Dark Blue]
+!!VRz-5&y-14=0:S^NO^; !!VRz-5&y-14=1:S^YES^; [Brown]
+!!VRz-6&y-15=0:S^NO^; !!VRz-6&y-15=1:S^YES^; [Purple]
+!!VRz-7&y-16=0:S^NO^; !!VRz-7&y-16=1:S^YES^; [White]
+!!VRz-8&y-17=0:S^NO^; !!VRz-8&y-17=1:S^YES^; [Black]
+
+!!IF:Q1/10/y-100/1^{KEYMASTER TENTS VISITED}
+
+Light Blue: %Z-1    Dark Blue: %Z-4
+Red: %Z-3    Green: %Z-2
+Brown: %Z-5    Purple: %Z-6
+White: %Z-7    Black: %Z-8^; [Display dialog showing which keymaster tents player has visited]
+!!CM:R0; [Disable standard right-click display]
+
+--------------------------------------------------------------------------------
+
+ [When right-clicking a Border Guard or Border Gate, show if Keymaster Tent visited or not]
+!?CM0; [Adventure Screen left-click trigger]
+!!UN:P289/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!CM:I?y-1 F?y-2; [Location: y-1, Flags: y-2]
+!!FU|y-1<>37/y-2<>512:E; [Exit if not a right-click on adventure map]
+
+!!CM:P?y-3/?y-4/?y-5; [Map location clicked: y-3/y-4/y-5]
+
+!!FU$LocalPlayer$:P; [Get current/local player: y-100]
+!!FU&y-100<0:E; [Exit if for some reason Local Player cannot be found]
+!!VRy-75:Sy-100; [Set y-75 to the value of LocalPlayer y-100]
+!!FU$bit$:Py-75; [Turn y-75 (Local Player) into bit value of player colour]
+!!VRy-76:Sy-100;  [Get converted Local Player bit into y-76]
+!!TRy-3/y-4/y-5:V?y-78; [Check square for visibility]
+!!VRy-77:Sy-78; [Set y-77 to the value of y-78]
+!!VRy-77:&y-100; [Check for the visibility bit for the square right-clicked]
+!!FU&y-78=0:E; [Exit if the LocalPlayer doesn't have the square visible]
+
+!!OBy-3/y-4/y-5:T?y-6 U?y-7; [Type of object clicked: y-6, Subtype: y-7]
+!!FU&y-6<>9/y-6<>212:E; [Exit if not a Border Guard or Border Gate]
+
+!!FU$LocalPlayer$:P;
+!!OW:Ky-100/y-7/?y-8; [Get state of corresponding Keymaster Tent: y-8 (0=not visited, 1=visited]
+
+!!VRz-1&y-7=0:S^Light Blue^; [Light Blue: z-1]
+!!VRz-1&y-7=1:S^Green^; [Green: z-1]
+!!VRz-1&y-7=2:S^Red^; [Red: z-1]
+!!VRz-1&y-7=3:S^Dark Blue^; [Dark Blue: z-1]
+!!VRz-1&y-7=4:S^Brown^; [Brown: z-1]
+!!VRz-1&y-7=5:S^Purple^; [Purple: z-1]
+!!VRz-1&y-7=6:S^White^; [White: z-1]
+!!VRz-1&y-7=7:S^Black^; [Black: z-1]
+
+!!VRz-1&y-6=9:S^%Z-1 Border Guard^; [Colour + Border Guard: z-1]
+!!VRz-1&y-6=212:S^%Z-1 Border Gate^; [Colour + Border Gate: z-1]
+
+!!VRz-1&y-8=0:S^%Z-1
+
+(Keymaster not visited)^; [Keymaster tent not visited: z-1]
+!!VRz-1&y-8=1:S^%Z-1
+
+(Keymaster visited)^; [Keymaster tent visited: z-1]
+
+!!IF:Q1/-1/-1/4^%Z-1^; [Display right-click dialog for Border Guard or Border Gate]
+
+!!CM:R0; [Disable standard right-click display]
+
+--------------------------------------------------------------------------------
+

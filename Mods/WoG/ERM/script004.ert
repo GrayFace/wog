@@ -1,0 +1,16 @@
+104000	Arcane Tower	String type = <!#S>	07.06.2003
+104001	A ghost floats down a staircase and glides up to you. It floats there, flickering, regarding you. At last it speaks. "It is well that you came here, traveller. I can help you."	String type = <!!M>	07.06.2003
+104002	The ghost continues. "I can make you strong, give you power - perhaps as much power as I have! But it will cost you dearly. I can give you skill at attack, defense, spellcasting, or knowledge... in return, I require the same. One for one. Are you interested?"	String type = <!!Q>	07.06.2003
+104003	"Ah, traveller, you will know one day that you have erred."	String type = <!!M>	07.06.2003
+104004	"Of course. Who wouldn't be? I can teach you combat prowess or spell prowess. Do you prefer combat (attack or defense) or spells (spell power or knowledge)?"	String type = <!!Q>	07.06.2003
+104005	"Will it be attack or defense?"	String type = <!!Q>	07.06.2003
+104006	"Will it be spell power or knowledge?"	String type = <!!Q>	07.06.2003
+104007	"Will you pay me with your attack skill?"	String type = <!!Q>	07.06.2003
+104008	"Will you pay me with your defense skill?"	String type = <!!Q>	07.06.2003
+104009	"Will you pay me with your spell power?"	String type = <!!Q>	07.06.2003
+104010	"Will you pay me with your knowledge?"	String type = <!!Q>	07.06.2003
+104011	"Then you have nothing to pay me! Begone!"	String type = <!!M>	07.06.2003
+104012	"You can't trick me! You have none to pay!"	String type = <!!M>	07.06.2003
+104013	The ghost admires its handiwork. "Your new powers are affecting you. I can see the change already..."	String type = <!!M>	07.06.2003
+104014	"Excellent!"	String type = <!!Q>	07.06.2003
+104015	"Excellent! The same trade again?"	String type = <!!Q>	07.06.2003

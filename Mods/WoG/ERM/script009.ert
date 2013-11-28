@@ -1,0 +1,40 @@
+#	Text resource for "script09.erm" document		
+109000	Market of Time	!#S	7/13/2006
+109001	At the {Market of Time} we help you regain some of your lost years by teaching meditation techniques that let you forget useless skills. This frees up your mind for new learning. We charge a nominal fee of 2000 gold coins for our service.	!!M	7/13/2006
+109002	Sorry %Z1, but you've already forgotten a skill today.
+
+Come back tomorrow or yesterday if you feel the need to forget something more.	!!M	7/13/2006
+109003	So, you wish to forget a skill?
+
+We're sorry %Z1, but you need to know at least one skill first.	!!M	7/13/2006
+109004	Which skill do you wish to forget, %Z1?	!!S	7/13/2006
+109005	Which skill do you wish to forget, %Z1?	!!S	7/13/2006
+109006	Display Next Page of Skills	!!S	7/13/2006
+109007	None. I've changed my mind.	!!S	7/13/2006
+109008	Display Next Page of Skills	!!S	7/13/2006
+109009	So, you wish to forget everything you ever knew about %Z3...
+
+Will you pay the fee of 2000 gold coins to forget %Z3?	!!Q	7/13/2006
+109010	You don't have enough money. Come back when you can afford our services.	!!Q	7/13/2006
+109011	he	!!S	7/13/2006
+109012	she	!!S	7/13/2006
+109013	man	!!S	7/13/2006
+109014	woman	!!S	7/13/2006
+109015	"You are wise, %Z1. %Z3 does not lie along the true path of a hero."	!!S	7/13/2006
+109016	"To forget %Z3 is to experience enlightenment."	!!S	7/13/2006
+109017	"Your heart knows there is no place for %Z3 within your tortured soul."	!!S	7/13/2006
+109018	"%Z1, by forsaking the temptation of %Z3, you begin to harmonize with life itself."	!!S	7/13/2006
+109019	"To experience ecstasy, you must first give up %Z3."	!!S	7/13/2006
+109020	"Without %Z3, it is easier to find the stillness in one's soul."	!!S	7/13/2006
+109021	"The prophets say that the forbidden knowledge of %Z3 is a sin of the soul."	!!S	7/13/2006
+109022	"The prophecy tells of the great hero %Z1, and that %Z7 had no knowledge of %Z3."	!!S	7/13/2006
+109023	"Forgetting %Z3 is like listening to the sound of the morning dew."	!!S	7/13/2006
+109024	"Of all the things a %Z8 should learn, %Z3 is the last."	!!S	7/13/2006
+109025	"A wise guru once said: If I were skilled in %Z3, I could be a guru no longer, for I would have to use my %Z3 skill for the greater good."	!!S	7/13/2006
+109026	"As the flame flickers and dies, so must %Z1's %Z3 skill come to an end."	!!S	7/13/2006
+109027	%Z9
+
+{You} {meditate} {long} {and} {hard} {all} {day} {and} {purge} {the} {unwanted} {%Z3} {skill} {from} {your} {mind,} {freeing} {it} {for} {more} {learning.}	!!Q	7/13/2006
+109028	Basic %Z10	!!S	7/13/2006
+109029	Advanced %Z10	!!S	7/13/2006
+109030	Expert %Z10	!!S	7/13/2006

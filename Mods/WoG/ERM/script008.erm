@@ -1,0 +1,255 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Junk Merchant ERM script v1.2 - Donald X. Vaccarino
+** Updated: 09/20/03 by Hermann the Weird
+** Requires WOG 3.52 or later.
+** The Junk Merchant offers various things in trade for certain artifacts
+
+** To use this code, put it into a Global Event, set to never happen,
+** and add some Junk Merchant buildings to your map (and some artifacts he wants).
+** The Junk Merchant is the windmill two down from Random Town in the map editor.
+
+** The Junk Merchant offers trades for 32 artifacts, mostly weak ones, plus scrolls.
+** He doesn't want most of the artifacts that have abilities from the Artifact Boosts script.
+** He only buys unequipped artifacts, and only one copy of each artifact per visit.
+** He usually pays in gold, but sometimes with special things.
+** The AI accepts all trades except ones that give it creatures.
+
+** Variables Used: v590, v600-v612, z326-z330, z400
+** Flags Used: 2
+** v590 must always be 0! Some of my other scripts also use it as 0 for hint text indexing.
+** z400 must not be changed by other programs!
+** The other variables may be used elsewhere but will be trashed by this code.
+
+** Functions Used: 640-641
+
+
+** Initialization code
+!#UN:P108/?v1;     [Check for WoG option]
+!#VRz400&v1=1:Sz108000;
+!#VRv590&v1=1:S0;
+!#HT63/8&v1=1:V590/0/400; [set hint to z400, whenever v590 is 0, which it always will be]
+
+** end of Initialization
+
+
+** Object trigger routine
+
+!?OB63/8;
+!!UN:P108/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRv601:S0; [0 times traded]
+!!HE-1:O?v603; [get owner of visiting hero]
+!!HE-1:P?v604/?v605/?v606; [get location x/y/l of hero]
+!!HE-1:A2/0/?v608/?v607; [see if hero has a spell book]
+!!VRz329:Sz108001;
+!!VRv611:S0; [0 scrolls seen]
+
+!!IF&1000:M1/z108002;
+
+!!DO641/0/69/1:P; [handle scrolls]
+
+!!VRz326:Sz108003;
+!!VRz327:Sz108004;
+!!FU640:P7/21/15; [centaurs for centaur axe]
+!!HE-1&2:C15/50/-1/0/-1/0/-1/0/-1/0/-1/0/-1/0; [give 50 centaur captains]
+
+!!VRz326:Sz108005;
+!!VRz327:Sz108006;
+!!FU640:P13/21/17; [dwarves for shield]
+!!HE-1&2:C17/15/-1/0/-1/0/-1/0/-1/0/-1/0/-1/0; [give 15 battle dwarves]
+
+!!VRz326:Sz108007;
+!!VRz327:Sz108008;
+!!FU640:P15/8/16; [targ for buckler]
+!!HE-1&2:A16; [give targ of the rampaging ogre]
+
+!!VRz326:Sz108009;
+!!VRz327:Sz108010;
+!!FU640:P19/5/5; [5 gems for helm]
+
+!!VRz326:Sz108011;
+!!VRz327:Sz108012;
+!!FU640:P25/33/1; [+1 spell power for breastplate]
+!!HE-1&2:Fd/d/d1/d; [give +1 spell power]
+
+!!VRz326:Sz108013;
+!!VRz327:Sz108014;
+!!FU640:P46/6/1500; [1500 gold for clover]
+
+!!VRz326:Sz108015;
+!!VRz327:Sz108016;
+!!FU640:P47/6/1500; [1500 gold for cards]
+
+!!VRz326:Sz108017;
+!!VRz327:Sz108018;
+!!FU640:P48/6/1500; [1500 gold for ladybird]
+
+!!VRz326:Sz108019;
+!!VRz327:Sz108020;
+!!FU640:P49/6/1500; [1500 gold for badge]
+
+!!VRz326:Sz108021;
+!!VRz327:Sz108022;
+!!FU640:P50/6/1500; [1500 gold for crest]
+
+!!VRz326:Sz108023;
+!!VRz327:Sz108024;
+!!FU640:P51/6/1500; [1500 gold for glyph]
+
+!!VRz326:Sz108025;
+!!VRz327:Sz108026;
+!!FU640:P52/-1/0; [no picture, for speculum]
+!!UN&2:Sv604/v605/v606/v603/30; [reveal area]
+!!UN&2:R1; [redraw screen]
+
+!!VRz326:Sz108027;
+!!VRz327:Sz108028;
+!!FU640:P53/6/1830; [1830 gold for spyglass]
+
+!!VRz326:Sz108029;
+!!VRz327:Sz108030;
+!!FU640:P54/6/600; [600 gold for amulet]
+
+!!VRz326:Sz108031;
+!!VRz327:Sz108032;
+!!FU640:P55/6/2500; [2500 gold for cowl]
+
+!!VRz326:Sz108033;
+!!VRz327:Sz108034;
+!!FU640:P56/6/2000; [2000 gold for boots]
+
+!!VRz326:Sz108035;
+!!VRz327:Sz108036;
+!!FU640:P58/6/4000; [4000 gold for surcoat]
+
+!!VRz326:Sz108037;
+!!VRz327:Sz108038;
+!!FU640:P63/21/5; [royal griffins for bird]
+!!HE-1&2:C5/15/-1/0/-1/0/-1/0/-1/0/-1/0/-1/0; [give 15 royal griffins]
+
+!!VRz326:Sz108039;
+!!VRz327:Sz108040;
+!!FU640:P66/4/10; [10 crystals for medal]
+
+!!VRz326:Sz108041;
+!!VRz327:Sz108042;
+!!FU640:P67/5/10; [10 gems for ring]
+
+!!VRz326:Sz108043;
+!!VRz327:Sz108044;
+!!FU640:P68/1/10; [10 mercury for sash]
+
+!!VRz326:Sz108045;
+!!VRz327:Sz108046;
+!!FU640:P71/0/15; [15 wood for necklace]
+
+!!VRz326:Sz108047;
+!!VRz327:Sz108048;
+!!FU640:P72/21/150; [supreme archangels for wings]
+!!HE-1&2:C150/2/-1/-0/-1/0/-1/0/-1/0/-1/0/-1/0; [give 2 supreme archangels]
+
+!!VRz326:Sz108049;
+!!VRz327:Sz108050;
+!!FU640:P73/-1/0; [no picture, for charm]
+!!HE-1&2:Id60; [give 60 spell points]
+
+!!VRz326:Sz108051;
+!!VRz327:Sz108052;
+!!FU640:P76/9/54; [slow for collar]
+
+!!VRz326:Sz108053;
+!!VRz327:Sz108054;
+!!FU640:P83/6/2500; [2500 gold for cloak]
+
+!!VRz326:Sz108055;
+!!VRz327:Sz108056;
+!!FU640:P84/6/2000; [2000 gold for spirit]
+
+!!VRz326:Sz108057;
+!!VRz327:Sz108058;
+!!FU640:P85/6/500; [500 gold for hourglass]
+
+!!VRz326:Sz108059;
+!!VRz327:Sz108060;
+!!FU640:P92/17/2000; [2000 experience for sphere]
+!!HE-1&2:Ed2000; [give 2000 experience]
+
+!!VRz326:Sz108061;
+!!VRz327:Sz108062;
+!!FU640:P93/8/79; [orb for orb]
+!!HE-1&2:A79; [give orb of firmament]
+
+!!VRz326:Sz108063;
+!!VRz327:Sz108064;
+!!FU640:P106/9/17; [lightning bolt for pendant]
+
+!!VRz326:Sz108065;
+!!VRz327:Sz108066;
+!!FU640:P118/2/15; [15 ore for legs]
+
+!!IF&1000/v601=0:M1/z108067;
+!!IF&1000/v601>0/v601<4:M1/z108068;
+!!IF&1000/v601>=4:M1/z108069;
+
+** end of object trigger routine
+
+
+** function to check for one artifact transaction
+** x1 = art, z326 = offer message, z327 = accept message
+** x2 = type, x3 = subtype, of picture of thing offered in exchange; -1 = no picture
+** returns yes/no in flag 2
+
+!?FU640;
+
+!!HE-1:A2/x1/?v600/?v609; [see if they have this artifact in backpack]
+!!VRv600:-v609; [number they have minus number equipped = number in backpack]
+!!VRv611&v600>0/x1>1000:+1; [count scrolls seen]
+!!VRz326:+z108070;
+!!VRv612&x1>1000:Sx1; [show spell for scroll - all scroll pictures are summon boat]
+!!VRv612&x1>1000:-1001;
+!!IF&1000/v600>0/x1<=1000:Q2/8/x1/2^%Z326^; [msg offering to trade for non-scroll]
+!!IF&1000/v600>0/x1>1000:Q2/9/v612/2^%Z326^; [msg offering to trade for scroll]
+!!IF&-1000/v600>0/x2<>21:V2/1; [AI agrees unless it's for creatures]
+!!IF&-1000/v600>0/x2=21:V2/0; [AI turns down creatures]
+!!IF&1000/v600>0/2/x2<>-1:Q1/x2/x3/1^%Z327^; [msg w/ picture if they said yes]
+!!IF&1000/v600>0/2/x2=-1:M^%Z327^; [msg if they said yes]
+!!VRv602&1000/v600>0/-2:S0 R7; [random msg 0-7 if they said no]
+!!IF&1000/v600>0/-2/v602=0:M1/z108071;
+!!IF&1000/v600>0/-2/v602=1:M1/z108072;
+!!IF&1000/v600>0/-2/v602=2:M1/z108073;
+!!IF&1000/v600>0/-2/v602=3:M1/z108074;
+!!IF&1000/v600>0/-2/v602=4:M1/z108075;
+!!IF&1000/v600>0/-2/v602=5:M1/z108076;
+!!IF&1000/v600>0/-2/v602=6:M1/z108077;
+!!IF&1000/v600>0/-2/v602=7:M1/z108078;
+!!IF&v600=0:V2/0; [now treat no artifact as a no answer]
+!!HE-1&2:A3/x1/1/0; [take the artifact]
+!!VRv601&2:+1; [count times traded]
+!!OW&2/x2>=0/x2<7:Rv603/x2/dx3; [give resource if that's the trade]
+!!IF&1000/2/x2=9/v607=0:M1/z108079;
+!!HE-1&2/x2=9/v607>0:Mx3/1; [give spell if that's the trade]
+
+** end of function
+
+
+** function to handle one scroll
+** scroll # is in x16
+
+!?FU641;
+
+!!VRv610:Sx16 +1001; [get artifact #]
+!!UN:N1/330/x16; [get spell name]
+!!VRz326&v611=0:Sz108080;
+!!VRz326&v611>0:Sz108081;
+!!VRz327&v611=0:Sz108082;
+!!VRz327&v611>0/v601=0:Sz108083;
+!!VRz327&v611>0/v601>0:Sz108084;
+!!FU640:Pv610/6/500; [500 gold for scroll]
+
+** end of function
+

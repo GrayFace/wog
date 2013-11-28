@@ -1,0 +1,195 @@
+#	Text resource for "script44.erm" document		
+144000	Emerald Tower
+
+(Not Visited)	!#S	01.08.2004
+144001	Emerald Tower
+
+(Visited)	!#S	01.08.2004
+144002	{Emerald Tower}
+
+You knock on the gate and a small gnomish man answers.
+
+"Go away! The Wizard's busy!" shouts the rude little gnome, slamming the gate in your face.	!!M	01.08.2004
+144003	{Emerald Tower}
+
+You knock on the gate and a small gnomish man answers.
+
+"Do you have an appointment with the Wizard?"
+
+A sign above the door reads:
+'APPOINTMENTS WITH THE WIZARD BOOKED FOR SEVEN GEMS'
+
+Do you book an appointment?	!!Q	01.08.2004
+144004	You don't have enough gems. No gems, no appointment. 	!!S	01.08.2004
+144005	The gnomish man takes the gems, glares at you and then
+ushers you inside. The enormous foyer is gloomy and full of weird
+paraphenalia, spiderwebs, and thousands of old dusty tomes.
+
+Before you can poke about too much, the Wizard appears, dressed in
+long flowing robes.	!!S	01.08.2004
+144006	{Inside the Tower}
+
+The gnomish man takes the gems, glares at you and then ushers you inside. The enormous foyer is gloomy and full of weird paraphenalia, spiderwebs, and thousands of old dusty tomes.
+
+Before you can poke about too much, the Wizard appears, dressed in long flowing robes.	!!S	01.08.2004
+144007	The Wizard	!!S	01.08.2004
+144008	"%Z9No appointment, no entrance!" shouts the gnome, rudely slamming the gate in your face.	!!M	01.08.2004
+144009	"Hmmph," says the Wizard. "What species do you wish to improve?"	!!S	01.08.2004
+144010	None of them. I've changed my mind.	!!S	01.08.2004
+144011	"You have no creatures with you so I'm afraid I can't help you. Goodbye."	!!M	01.08.2004
+144012	{The Wizard seems annoyed.}
+
+"You don't need my services? Fine! Then go away and stop wasting my precious time!"
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144013	{The Wizard appears agitated.}
+
+"This is a Week of the %Z3 and that interferes with my magic. I'm unable to enchant %Z4 right now. Return next week."
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144014	{The Wizard looks perturbed.}
+
+"Oh no, this won't do at all. %V1240 species have already been enchanted in this land. Any more and the magic will become unstable and very dangerous. I will not do it! Bring me a species already enchanted and I can safely enchant it further, but do not ask me to enchant a new one."
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144015	Just as you're about to leave, the small gnomish man taps you on the shoulder and whispers conspiratorally, "Since you didn't buy anything, here's a refund. But don't tell the wizard. Shhh!"
+
+The gnome slips six gems into your pocket and shows you to the door. The visit still ended up costing you one gem, but you feel it's safest not to quibble.	!!Q	01.08.2004
+144016	Just as you're about to leave, the small gnomish man taps you on the shoulder and whispers conspiratorally, "Since your purchased bonus was trivial, here's a refund. But don't tell the wizard. Shhh!"
+
+The gnome slips six gems into your pocket and shows you to the door. The visit still ended up costing you one gem, but you feel it's safest not to quibble.	!!Q	01.08.2004
+144017	"How would you like the %Z3 species improved?"	!!S	01.08.2004
+144018	Forget it. I've changed my mind.	!!S	01.08.2004
+144019	+%Y2 ATTACK for 15 Sulfur	!!S	01.08.2004
+144020	+%Y3 DEFENSE for 30 Ore	!!S	01.08.2004
+144021	+%Y4 DAMAGE for 20 Gems	!!S	01.08.2004
+144022	+%Y5 HEALTH for 20 Crystal	!!S	01.08.2004
+144023	+%Y6 SPEED for 20 Mercury	!!S	01.08.2004
+144024	+%Y7 GROWTH for 75 Wood	!!S	01.08.2004
+144025	24 SHOTS for 1000 Gold	!!S	01.08.2004
+144026	+1 SPELL CASTING per combat [%Z-2] for %Y15 Mithril	!!S	01.08.2004
+144027	A new SPECIAL ability	!!S	01.08.2004
+144028	{The Wizard seems annoyed.}
+
+"You don't need my services? Fine! Then go away and stop wasting my precious time!"
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144029	sulfur	!!S	01.08.2004
+144030	ore	!!S	01.08.2004
+144031	gems	!!S	01.08.2004
+144032	crystal	!!S	01.08.2004
+144033	mercury	!!S	01.08.2004
+144034	wood	!!S	01.08.2004
+144035	gold	!!S	01.08.2004
+144036	mithril	!!S	01.08.2004
+144037	{The Wizard seems annoyed.}
+
+"You don't have enough %Z1. Go away and stop wasting my time!"
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144038	s	!!S	01.08.2004
+144039	"In addition to the %Y2 %Z1, I'll need %Y7 %Z8 for the magic ritual. The %Z8 won't be returning to your army after."
+
+"Agreed?"	!!Q	01.08.2004
+144040	{The Wizard seems irritated.}
+
+"This just isn't enough. I must have %Y7 of your %Z4 to complete the ritual. Now go away and stop wasting my time or I'll turn you all into warty old toads!"
+
+Do you leave the Emerald Tower?	!!Q	01.08.2004
+144041	The gnome takes your payment of %Y2 %Z1 and leads %Y7 of your %Z4 away down a dark hallway. The %Z8 turn%Z9 to look at you with frightened eyes and whimper%Z9 softly before vanishing from sight into the gloomy depths of the sorcerer's lair.
+
+"You can leave now," says the Wizard, brusquely. "The enchantment will be completed shortly."	!!Q	01.08.2004
+144042	Ignore Obstacles (Flying) for 20 Mithril	!!S	01.08.2004
+144043	Extended 2-hex Attack Depth (Breath attack) for 10 Mithril	!!S	01.08.2004
+144044	Undead for 10 Mithril	!!S	01.08.2004
+144045	Unaffected by Morale for 5 Mithril	!!S	01.08.2004
+144046	Two Attacks for 25 Mithril	!!S	01.08.2004
+144047	Attack all Adjacent Creatures for 20 Mithril	!!S	01.08.2004
+144048	No Retaliation for 15 Mithril	!!S	01.08.2004
+144049	Immune to Mind Spells for 5 Mithril	!!S	01.08.2004
+144050	Immune to Fire Spells for 10 Mithril	!!S	01.08.2004
+144051	No Close Combat Penalty for 10 Mithril	!!S	01.08.2004
+144052	"What new ability do you wish to bestow upon %Z4?"	!!S	01.08.2004
+144053	Forget it. I've changed my mind.	!!S	01.08.2004
+144054	Mean	!!S	01.08.2004
+144055	Mighty	!!S	01.08.2004
+144056	Fierce	!!S	01.08.2004
+144057	Aggressive	!!S	01.08.2004
+144058	Thick-skinned	!!S	01.08.2004
+144059	Steadfast	!!S	01.08.2004
+144060	Toughened	!!S	01.08.2004
+144061	Armoured	!!S	01.08.2004
+144062	Sharp and Pointy	!!S	01.08.2004
+144063	Powerful	!!S	01.08.2004
+144064	Dangerous	!!S	01.08.2004
+144065	Annihilating	!!S	01.08.2004
+144066	Bulky	!!S	01.08.2004
+144067	Sturdy	!!S	01.08.2004
+144068	Reinforced	!!S	01.08.2004
+144069	Healthy	!!S	01.08.2004
+144070	Speedy	!!S	01.08.2004
+144071	Fast	!!S	01.08.2004
+144072	Quick	!!S	01.08.2004
+144073	Rapid	!!S	01.08.2004
+144074	Fertile	!!S	01.08.2004
+144075	Prolific	!!S	01.08.2004
+144076	Promiscuous	!!S	01.08.2004
+144077	Multiplying	!!S	01.08.2004
+144078	Loaded	!!S	01.08.2004
+144079	Well-stocked	!!S	01.08.2004
+144080	Energized	!!S	01.08.2004
+144081	Archer	!!S	01.08.2004
+144082	Enchanted	!!S	01.08.2004
+144083	Magical	!!S	01.08.2004
+144084	Mystical	!!S	01.08.2004
+144085	Divine	!!S	01.08.2004
+144086	Floating	!!S	01.08.2004
+144087	Flying	!!S	01.08.2004
+144088	Levitating	!!S	01.08.2004
+144089	Gliding	!!S	01.08.2004
+144090	Garlic Breath	!!S	01.08.2004
+144091	Bad Breath	!!S	01.08.2004
+144092	Dragon Breath	!!S	01.08.2004
+144093	Long-Reaching	!!S	01.08.2004
+144094	Dead	!!S	01.08.2004
+144095	Undead	!!S	01.08.2004
+144096	Soulless	!!S	01.08.2004
+144097	Spectral	!!S	01.08.2004
+144098	Unflappable	!!S	01.08.2004
+144099	Stoic	!!S	01.08.2004
+144100	Unfeeling	!!S	01.08.2004
+144101	Unemotional	!!S	01.08.2004
+144102	Energetic	!!S	01.08.2004
+144103	Furious	!!S	01.08.2004
+144104	Frenzied	!!S	01.08.2004
+144105	Combative	!!S	01.08.2004
+144106	Whirlwind	!!S	01.08.2004
+144107	Deadly	!!S	01.08.2004
+144108	Ferocious	!!S	01.08.2004
+144109	Circular	!!S	01.08.2004
+144110	Vicious	!!S	01.08.2004
+144111	Overwhelming	!!S	01.08.2004
+144112	Savage	!!S	01.08.2004
+144113	Unstoppable	!!S	01.08.2004
+144114	Stubborn	!!S	01.08.2004
+144115	Strong-willed	!!S	01.08.2004
+144116	Strong-minded	!!S	01.08.2004
+144117	Intelligent	!!S	01.08.2004
+144118	Soggy	!!S	01.08.2004
+144119	Non-Combustible	!!S	01.08.2004
+144120	Fire Resistant	!!S	01.08.2004
+144121	Watery	!!S	01.08.2004
+144122	Fist Fighting	!!S	01.08.2004
+144123	Brawling	!!S	01.08.2004
+144124	Sparring	!!S	01.08.2004
+144125	Combat Trained	!!S	01.08.2004
+144126	Resurrection		
+144127	Rebirth		
+144128	Demon Resurrection		
+144129	Random Spell		
+144130	Random Damage Spell		
+144131	Bloodlust		
+144132	Protection from Water		
+144133	Protection from Earth		
+144134	Protection from Air		
+144135	Protection from Fire		

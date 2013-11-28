@@ -1,0 +1,73 @@
+100000	WoGification is about to begin! 
+ 
+After this message, there will be a delay while the map is converted 
+to include WoG features (and then another message when it's done). 
+ 
+Hint: You can view or save current WoGify options during the game
+by pressing 'S' and then clicking on the WoG Options button. 
+Option changes CANNOT be made during a game from this screen.	String type = <!!S>	07.06.2003
+100001	Large maps may take a few minutes on slow systems. Please be patient.	String type = <!!S>	07.06.2003
+100002	The WoG Options button is located on the Scenario Selection screen.	String type = <!!S>	07.06.2003
+100003	WoGification complete!	String type = <!!S>	07.06.2003
+100004	Enjoy yourself...or ELSE!	String type = <!!S>	07.06.2003
+100005	To battle, Hero!	String type = <!!S>	07.06.2003
+100006	Please select a Stack Experience value to change.		
+100007	Set AI Experience Multiplier.           Currently:    %Y2%%  (%Z2)		
+100008	Set Human Experience Multiplier.  Currently:    %Y5%%		
+100009	Set AI Town Garrison Multiplier.    Currently:    x%Y4  (%Z4)		
+100010	Set AI Additional Experience.          Currently:    +%Y3  (%Z3)		
+100011	Use these values.		
+100012	Set AI Experience Multiplier.
+Currently:  %Y2%% (%Z2)
+
+%Z-9		
+100013	Set Human Experience Multiplier.
+Currently:  %Y5%%		
+100014	Set AI Town Garrison Multiplier.
+Currently:  x%Y4 (%Z4)
+
+%Z-9
+
+Note: If AI Experience Multiplier is 0, Town Garrisons
+will receive 0 experience regardless of this value.		
+100015	Set AI Additional Experience.
+Currently:  +%Y3 (%Z3)
+
+%Z-9		
+100016	Enter an integer value between 0 and 10000		
+100017	{Value Not in Allowed Range}
+
+You must enter a value
+between 0 and 10000.		
+100018	Easier than Easy		
+100019	Easy		
+100020	Easy/Normal		
+100021	Normal		
+100022	Normal/Hard		
+100023	Hard		
+100024	Hard/Expert		
+100025	Expert		
+100026	Expert/Impossible		
+100027	Impossible		
+100028	Harder than Impossible		
+100029	[0=None, 100=Easy, 200=Normal
+300=Hard, 400=Expert, 500=Impossible]		
+100030	[0=None, 10=Easy, 25=Normal
+50=Hard, 75=Expert, 100=Impossible]		
+100031	[0=None, 50=Easy, 100=Normal
+200=Hard, 300=Expert, 400=Impossible]		
+100032	Invalid Spell Parameter: minimum spell level must be 0..5		
+100033	Invalid Spell Parameter: maximum spell level must be 0..5		
+100034	Invalid Spell Parameter: spell type be 0..2		
+100035	Invalid Spell Parameter: element must be 0..15		
+100036	Invalid Spell Parameter: banning must be 0..3		
+100037	Invalid Spell Parameter: number of spell exclusions must be 0..9		
+100038	{WoGification Cancelled!}
+
+Although WoGification has been cancelled, most ongoing WoGify scripts will remain active.
+
+WARNING: Since the map is "half-wogified" some scripts may not work as intended. Continue playing at your own risk.		
+100039	None		
+100040	{Attention:}
+
+Arrow Tower Experience has been DISABLED because this is a Network game and the feature is not yet compatible with Network games.		

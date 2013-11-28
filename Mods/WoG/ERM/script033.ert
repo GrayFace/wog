@@ -1,0 +1,28 @@
+133000	Living Scroll	String type = <!!S>	08.06.2003
+133001	%Z3 has a %Y2%% chance of a Living Scroll casting %Z2 each round after the first.
+
+({Right-click System Options
+{to disable further messages})	String type = <!!M>	08.06.2003
+133002	 or 	String type = <!!S>	08.06.2003
+133003	{Living Scroll} 
+ 
+You find a Living Scroll, mystically 
+inscribed with the %Z1 spell. 
+ 
+When attacking monsters with no hero, there is a 20% chance (times the number of Living Scrolls equipped), that each round a Living Scroll will cast its spell on a random target.	String type = <!!Q>	08.06.2003
+133004	{Living Scroll} 
+ 
+This scroll contains the %Z1 spell which is added into your 
+spell book for as long as you carry the scroll. 
+ 
+When attacking monsters with no hero, there is a 20% chance (times 
+the number of Living Scrolls equipped), that each round a Living 
+Spell Scroll will cast its spell on a random target.	String type = <!!Q>	08.06.2003
+133005	{Spell Scroll} 
+ 
+This scroll contains the %Z1 spell 
+which is added into your spell book 
+for as long as you carry the scroll. 
+ 
+{This is NOT a Living Scroll.}	String type = <!!Q>	08.06.2003
+133006	The Living Scroll teleports the %Z4.		

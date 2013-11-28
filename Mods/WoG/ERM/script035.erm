@@ -1,0 +1,474 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+Mysticism Enhancement v1.2 by Anders Jonsson
+Updated July 14, 2004
+Updated September 15, 2004 by Timothy Pulver for local y variable correction.
+
+This script enhances the Mysticism Skill levels as:
+Basic- hero can predict what next "Week of" will be. This only works if Timothy Pulver's Week of Monsters
+Script v1.3 or higher is running at the same time.
+Advanced- hero can predict what spells a Mage Guild will contain. This will drain the hero of all spell
+points and movement for that turn.
+Expert- if the player right-clicks on an enemy hero whithin a hero with Mysticism's scouting radius, and
+the hero with Mysticism is selected, the hero may pay 5 Spell Points to learn all enemy hero skills,
+spells, equipped artifacts, creatures, and how much experience, primary skills, luck, morale and spell
+points that hero has.
+It also lets heroes regenerate 10%, 20% or 30% of their normal maximum spell points each day, depending
+on their level of Mysticism, double amount for AI heroes.
+
+Variables used:
+v1-v10
+(z1-z9), [z135000-z135177]
+Flags:
+(1-10), 56, 172, 412
+Functions:
+FU8150-FU8164, FU8230-FU8231
+Timers:
+TM30;
+
+
+*************
+*** Basic ***
+*************
+
+!#UN:P35/?v1; (check for WoG option)
+!#TM30&v1<>0:S1/999/1/255; (setup timer)
+!?TM30;
+!!IF:V10/0;
+!!UN:P35/?v1;
+!!IF&v1=0:V10/1; (Abort if script is deactived)
+!!FU8165&-10:P;
+!!VRv1:Sc0;
+!!IF:V9/0;
+!!DO8160/0/155/1&-10/v1<>1:P;(loop through all heroes if not day 1)
+!!IF:V9/0;
+
+!?FU8160;
+
+*** Spell Point bonus ***
+!!HEx16:O?y2; (Check hero owner)
+!!OW:C?y3; (Check current player)
+!!FU&y2<>y3:E; (Abort if not the same)
+
+!!HEx16:S8/?y1; (Check level of Mysticism)
+!!FU&y1=0:E; (Abort if none)
+!!HEx16:Fd0/d0/d0/?y5; (get knowledge of hero)
+!!VRy5:*10; (multiply with 10)
+!!HEx16:S24/?y6; (Get Intelligence level)
+!!VRy5&y6=3:*2; (Double if Expert Intelligence is present)
+!!VRy5&y6=2:*3; (Triple if advanced level)
+!!VRy5&y6=2::2; (Divide by 2 if advanced to get 1.5 normal)
+!!VRy5&y6=1:*5; (Multiply with 5 if basic level)
+!!VRy5&y6=1::4; (Divide by 4 if basic to get 1.25 normal)
+!!HEx16:I?y7; (get current spell points)
+
+!!VRy8:Sy5; (copy to be used to calc how much to add)
+!!VRy8:*y1 :10 -y1 -1; (Spell points are mysticism level/10 of normal, -level of mysticism -1, for normal regeneration)
+!!VRy8&-1000:*2; (Double bonus for AI)
+!!VRy9:Sy8;
+!!VRy8:+y7; (add current spell points)
+!!VRy9&y8>y5:Sy5 -y7;(if under normal max now, but over after, set to normal after)
+!!VRy9&y7>=y5|y8<0:S0; (if result is normal max, or negative, set to zero)
+!!HEx16:Idy9; (Add hero spell points)
+
+*** Linked to Week of Monster Script ***
+!!VRy1:Sc0; (Get date)
+!!VRy10:Sy1; (Copy date to y10)
+!!VRy1%7; (Get day of week)
+!!FU|y1<>2/9/-56/-1000:E; (abort if not tuesday, week of script isn't enabled, this already has been done or current player is A)
+
+!!HEx16:B0/?z1; (get hero name)
+!!HEx16:R2/?y2;
+!!VRz7&y2=0:Sz135000;
+!!VRz7&y2=1:Sz135001;
+!!VRz2&y2=0:Sz135002;
+!!VRz2&y2=1:Sz135003; (Get hero sex)
+!!FU8163:P1/x16; (get creature with description and way to predict)
+!!FU181&y10=2:P; (call Function 181 from Week of Monsters to see if it's "Week of the Imp" at start of game)
+!!UN&v180>=0/-172:N3/z3/v180/0; (get monster Type)
+!!VRz3&v180=-1:Sz135004;
+!!VRz3&v180=-2:Sz135005;
+!!VRz3&v180=-3:Sz135006;
+!!VRz3&v180=-4:Sz135007;
+!!VRz3&v180=-5:Sz135008;
+!!VRz3&v180=-6:Sz135009;
+!!VRz3&v180=-7:Sz135010;
+!!VRz-4:S^ ^;
+!!VRz-4&v180>=0:Sz135011;
+!!VRz1:S^%Z1's^;
+~~VRz1:+z135012; [This doesn't work properly, it adds an extra space]
+!!IF:M1/z135013;
+!!IF:V9/1; (Don't display this again if more heroes have mysticism)
+
+****************
+*** Advanced ***
+****************
+
+!?CM1; (tigger on right-click in town screen)
+!!FU8230:P;
+
+!?FU8230;
+!!IF:V10/0; (Flag 10 is on/off switch)
+!!UN:P35/?y1;
+!!IF&y1=0:V10/1; (Abort if script is deactived)
+
+!!IF&-1000:V10/1; (Disable if AI(fat chance it rightclicks though))
+
+!!VRy4&-10:S0;
+!!CA-1&-10:H0/?v1;
+!!HEv1&-10/v1<>-1:S8/?y4; (Check garrison Hero)
+!!CA-1&-10/y4<2:H1/?v1;
+!!HEv1&-10/y4<2/v1<>-1:S8/?y4; (Check visiting Hero)
+!!IF&-10/v1=-1:V10/1;
+!!IF&-10/y4<2:V10/1; (check if hero has mysticism)
+
+!!CM&-10:S?y1; (Get what type of click)
+!!IF&-10/y1<>14:V10/1; (abort if not rightclick)
+
+!!CM&-10:I?y1;                 (Get what type of click)
+!!IF&-10/y1>3:V10/1;           (abort if else than Mage Guild of Level 1- Level 4)
+
+!!CA-1&-10:G?y1;               (Check Mage Guild level)
+!!IF&-10/y1=5:V10/1;           (skip if Mage Guild is lev 5)
+!!CA-1&-10:T?y2;               (get town type)
+!!IF&-10/y1=4/y2=0:V10/1;      (skip if castle and mage guild is lev 4)
+!!IF&-10/y1=3/y2>5/y2<8:V10/1; (Skip if Fortress or stronghold and mage guild is lev 3)
+
+!!CA-1&-10:N?z1;               (get town name)
+!!HEv1&-10:R2/?y29;
+!!VRz2&-10/y29=0:Sz135014;
+!!VRz2&-10/y29=1:Sz135015;
+!!VRz3&-10/y29=0:Sz135000;
+!!VRz3&-10/y29=1:Sz135001;       (get hero sex)
+!!HEv1&-10:B0/?z7;             (Get hero name)
+!!VRz1&-10:+z135012;
+!!IF&-10:Q1/z135016;
+!!IF&-1/-10:V10/1;
+!!CM&-10:R0;                   (Disable normal popup)
+
+!!HEv1&-10:I0/1;
+!!HEv1&-10:W0/1;                 (Take mana and movement)
+
+!!IF&-10:V1/1;
+!!IF&-10:V2/1;
+!!IF&-10:V3/1;                   (assume levels 1-4 is not built)
+!!IF&-10:V4/0;
+!!IF&-10:V5/0;                   (assume that level 4 and 5 is not an option)
+!!IF&-10/y2<>0/y2<>6/y2<>7:V5/1; (if town with level 5 option, check for it's spells)
+!!IF&-10/y2<>6/y2<>7:V4/1;       (if town can have level 4, check for it)
+!!IF&-10/y1=4:V4/0;              (if mage guild is level 4, don't check it)
+!!IF&-10/y1>2:V3/0;              (if town has level 3 or greater mage guild, don't check for level 3)
+!!IF&-10/y1>1:V2/0;              (if town has level 2 or greater mage guild, don't check for level 2)
+!!IF&-10/y1>0:V1/0;              (if town has a mage guild, don't check for level 1)
+
+!!CA-1&-10/5:G4/0/?y14;
+!!CA-1&-10/4:G3/0/?y15;
+!!CA-1&-10/4:G3/1/?y16;
+!!CA-1&-10/3:G2/0/?y17;
+!!CA-1&-10/3:G2/1/?y18;
+!!CA-1&-10/3:G2/2/?y19;
+!!CA-1&-10/2:G1/0/?y20;
+!!CA-1&-10/2:G1/1/?y21;
+!!CA-1&-10/2:G1/2/?y22;
+!!CA-1&-10/2:G1/3/?y23;
+!!CA-1&-10/1:G0/0/?y24;
+!!CA-1&-10/1:G0/1/?y25;
+!!CA-1&-10/1:G0/2/?y26;
+!!CA-1&-10/1:G0/3/?y27;
+!!CA-1&-10/1:G0/4/?y28;
+
+!!CA-1&-10/5:G4/1/?y29;
+!!CA-1&-10/5:G3/2/?y30;
+!!CA-1&-10/5:G2/3/?y31;
+!!CA-1&-10/5:G1/4/?y32;
+!!CA-1&-10/5:G0/5/?y33; (Check spells)
+
+
+!!VRz1&-10:Sz135017;
+!!VRz1&-10/-4/5/y2<>2:Sz135018; (Initialize text)
+!!VRz3&-10:S^ ^;
+!!VRz2:S^^;
+!!UN&-10/5/y14>=0:N1/z2/y14;
+!!VRz3&-10/5/y14>=0:+^%Z2^;
+!!UN&-10/5/y2=2/y29>=0:N1/z2/y29;
+!!VRz3&-10/4/5/y2=2/y29>=0:+^, %Z2^;
+!!IF&y14<0/y29<0:V5/0; (If no level 5 spells available after all, set Flag 5 to False)
+!!VRz3&-10/-4/5/y2=2/y29>=0:+z135019; (Fifth level)
+
+!!UN&-10/4/y15>=0:N1/z2/y15;
+!!VRz3&-10/4/-5/y15>=0:+^%Z2^;
+!!VRz3&-10/4/5/y15>=0:+^, %Z2^;
+!!VRz2:S^^;
+!!UN&-10/4/y2=2/y30>=0:N1/z2/y30;
+!!VRz3&-10/4/y2=2/y30>=0:+^, %Z2^;
+!!UN&-10/4/y16>=0:N1/z2/y16;
+!!VRz3&-10/4/3/y16>=0:+^, %Z2, ^;
+!!VRz3&-10/4/-3:+^ ^+z135054+^ %Z2^;  (Fourth level)
+
+!!VRz2:S^^;
+!!UN&-10/3/y17>=0:N1/z2/y17;
+!!VRz3&-10/3/y17>=0:+^%Z2,^;
+!!UN&-10/3/y18>=0:N1/z2/y18;
+!!VRz3&-10/3/y18>=0:+^ %Z2^;
+!!UN&-10/3/y2=2/y31>=0:N1/z2/y31;
+!!VRz3&-10/3/y2=2/y31>=0:+^, %Z2^;
+!!UN&-10/3/y19>=0:N1/z2/y19;
+!!VRz3&-10/3/2/y19>=0:+^, %Z2, ^;
+!!VRz3&-10/3/-2:+^ ^+z135054+^ %Z2^;  (Third level)
+
+!!VRz2:S^^;
+!!UN&-10/2/y20>=0:N1/z2/y20;
+!!VRz3&-10/2/y20>=0:+^%Z2,^;
+!!UN&-10/2/y21>=0:N1/z2/y21;
+!!VRz3&-10/2/y21>=0:+^ %Z2,^;
+!!UN&-10/2/y22>=0:N1/z2/y22;
+!!VRz3&-10/2/y22>=0:+^ %Z2^;
+!!UN&-10/2/y2=2/y32>=0:N1/z2/y32;
+!!VRz3&-10/2/y2=2/y32>=0:+^, %Z2^;
+!!UN&-10/2/y23>=0:N1/z2/y23;
+!!VRz3&-10/1/2/y23>=0:+^, %Z2, ^;
+!!VRz3&-10/-1/2:+^ ^+z135054+^ %Z2^;   (Second level)
+
+!!VRz2:S^^;
+!!UN&-10/1/y24>=0:N1/z2/y24;
+!!VRz3&-10/1/y24>=0:+^%Z2,^;
+!!UN&-10/1/y25>=0:N1/z2/y25;
+!!VRz3&-10/1/y25>=0:+^ %Z2,^;
+!!UN&-10/1/y26>=0:N1/z2/y26;
+!!VRz3&-10/1/y26>=0:+^ %Z2,^;
+!!UN&-10/1/y2=2/y33>=0:N1/z2/y33;
+!!VRz3&-10/1/y2=2/y33>=0:+^, %Z2^;
+!!UN&-10/1/y27>=0:N1/z2/y27;
+!!VRz3&-10/1/y27>=0:+^ %Z2 ^+z135054;
+!!UN&-10/1/y28>=0:N1/z2/y28;          (First Level)
+!!VRz3&-10/1/y28>=0:+^ %Z2^;
+
+!!VRz-2:S^ ^;
+!!VRz3&z3=z-2:Sz135055; (If no spells, set to "(none)")
+
+!!FU8163&-10:P2;                              (get creature with description and way to predict)
+!!IF&-10:M1/z135020; (Display Text)
+
+!?FU8163;                    (Draw creature with description and way to predict)
+!!VRy3&-10:T4;               (Draw to decide what kind of method is used)
+!!VRy4&-10:R160;             (Draw to get creature)
+!!VRy4&-10/y4=>122:+1;
+!!VRy4&-10/y4=>124:+1;
+!!VRy4&-10/y4=>126:+1;
+!!VRy4&-10/y4=>128:+1;
+!!VRy4&-10/y4=>145:+1;
+!!VRy4&-10/y4=>146:+1;
+!!VRy4&-10/y4=>147:+1;
+!!VRy4&-10/y4=>148:+1;
+!!VRy4&-10/y4=>149:+1;
+!!VRy4&-10/y4=>160:+1;
+!!VRy4&-10/y4=>161:+1;
+!!VRy4&-10/y4=>162:+1;
+!!VRy4&-10/y4=>163:+1;       (Exclude certain creatures)
+!!UN&-10:N3/z6/y4/0;         (Get creature name)
+
+!!VRy5&-10:S135021 R32;              (Draw description)
+!!VRz4&-10:Szy5; (Get description straight from ert file)
+
+!!VRz5&-10/y3=0:Sz135154;
+!!VRz5&-10/y3=1:Sz135155;
+!!HEv1&-10/x1=2:R2/?y1;     (Get hero sex)
+!!HEx2&-10/x1=1:R2/?y1;     (Get hero sex) (Different methods depending on what called this function)
+!!VRz8&-10/y1=0/y3=2/x1=1:Sz135000;
+!!VRz8&-10/y1=1/y3=2/x1=1:Sz135001;
+!!VRz8&-10/x1=1:Sz7;
+!!VRz8&-10/y3=3/y1=0:Sz135014;
+!!VRz8&-10/y3=3/y1=1:Sz135015;
+!!VRz5&-10/y3=2:Sz135156;
+!!VRz5&-10/y3=3:Sz135157;
+!!VRz5&-10/y3=4:Sz135158;
+
+**************
+*** Expert ***
+**************
+
+!?CM;
+!!FU8231:P;
+
+!?FU8231;
+!!IF:V10/0;
+!!UN:P35/?y1;
+!!IF&y1=0:V10/1;           (Abort if script is deactived)
+
+!!IF&-1000:V10/1;      (check if it's AI)
+!!CM:I?y1;
+!!IF&y1<>37:V10/1;     (Check if clicked on Adventure Map)
+!!CM&-10:P?v4/?v5/?v6; (Get location)
+!!VRy52&-10:S-1;       (assume no hero)
+!!OW&-10:A-1/?y52;     (get current Hero)
+!!IF&-10/y52<0:V10/1;  (abort if no current hero)
+
+!!HEy52&-10:S8/?y1;
+!!IF&-10/y1<3:V10/1;   (Check if Hero has Expert Mysticism)
+
+!!OBv4/v5/v6&-10:T?y55;
+!!IF&-10/y55<>34:V10/1;(abort if not hero)
+
+!!HEv4/v5/v6&-10:N?v1; (Get Hero nr)
+!!HEv1&-10:O?y5;
+!!HEy52&-10:O?y6;
+!!IF&-10/y5=-1:V10/1;
+!!IF&-10/y5=y6:V10/1;  (check color of hero, abort if unowned or woned by current player)
+
+!!HEy52&-10:P?y5/?y6/?y7; (get player Hero Location)
+!!IF&-10/y7<>v6:V10/1;    (check if on same level)
+!!VRy9&-10:Sv4;
+!!VRy9&-10:-y5;
+!!VRy9&-10:*y9;
+!!VRy10&-10:Sv5;
+!!VRy10&-10:-y6;
+!!VRy10&-10:*y10;
+!!VRy9&-10:+y10;
+
+!!VRy20&-10:S5;              (base scouting radius)
+!!HEy52&-10:S3/?y21;
+!!VRy20&-10:+y21;            (add extra from scouting)
+!!HEy52&-10:A1/?y22/9;
+!!HEy52&-10:A1/?y23/10;
+!!HEy52&-10:A1/?y24/11;
+!!HEy52&-10:A1/?y25/12;
+!!HEy52&-10:A1/?y26/18;       (check misc slots for artifacts)
+!!VRy20|y22=52/y23=52/y22=52/y25=52/y26=52:+1; (add 1 if speculum is equipped)
+!!VRy20|y22=53/y23=53/y22=53/y25=53/y26=53:+1; (add 1 if spyglass is equipped)
+!!VRy21&-10:Sy20;
+!!VRy21&-10:+1;
+!!VRy20&-10:*y21;            (If within base radius*(base radius+1), it is normally visible)
+!!IF&-10/y9>=y20:V10/1;      (Check if close enough)
+!!HEy52&-10:I?y2;
+!!IF&-10/y2<5:V10/1;         (Check if enough spell points)
+!!HEy52&-10:B0/?z1;          (Get Hero name)
+!!HEy52&-10:R2/?y1;
+!!VRz3&-10/y1=0:Sz135014;
+!!VRz3&-10/y1=1:Sz135015;
+!!VRz4&-10/y1=0:Sz135000;
+!!VRz4&-10/y1=1:Sz135001;
+!!HEv1&-10:B0/?z2;           (Get Hero name)
+!!HEv1&-10:R2/?y1;
+!!VRz6&-10/y1=0:Sz135002;
+!!VRz6&-10/y1=1:Sz135003;      (Get Hero Sex)
+!!IF&-10:V1/1;               (assume player agrees, for message if he doesn't)
+!!VRz-1&-10:Sz2;
+!!VRz-1&-10:+z135012;
+!!IF&-10:Q1/z135159;
+!!IF&-1/-10:V10/1;
+!!HEy52&-10:Id-5;            (take spell points)
+!!VRv2&-10:S0;
+!!CM&-10:R0;                 (disable standard popup)
+
+!!HEv1&-10:F?y1/?y2/?y3/?y4; (Get primary skills)
+!!HEv1&-10:E?y5;             (Get XP points)
+!!HEv1&-10:I?y6;             (get spell points)
+!!HEv1&-10:R0/?y7;           (get morale)
+!!HEv1&-10:R1/?y8;           (get luck)
+
+!!VRz1&-10:+z135012;
+!!IF&-10:M1/z135160;
+!!HEy52&-10:B0/?z1;          (Get Hero name)
+
+!!VRv2&-10:S0;
+!!DO8150/0/27/1&-10:P;       (Count number of Sec Skills)
+!!IF&-10/v2=0:M1/z135161;
+!!FU8151&-10/v2>0:P;         (Display skills)
+!!VRv2&-10:S0;
+
+!!DO8155/0/18/1&-10:P;       (Count number of Artifacts equipped)
+!!IF&-10/v2=0:M1/z135162;
+!!FU8156&-10/v2>0:P;         (Display Artifacts)
+!!VRv2&-10:S0;
+
+!!DO8153/0/69/1&-10:P;       (Count number of Spells)
+!!IF&-10/v2=0:M1/z135163;
+!!FU8154&-10/v2>0:P;         (Display spells)
+!!VRv2&-10:S0;
+
+!!DO8158/0/6/1&-10:P;        (count number of creatures slots occupied)
+!!IF&-10/v2=0:M1/z135164;
+!!FU8159&-10/v2>0:P;         (Display Creatures)
+
+!?FU8151;                    (check skills)
+!!VRz5&-10:S^ ^;             (Initialise empty variable)
+!!DO8161/0/27/1:P;           (Cycle through skills)
+!!IF:M1/z135165;
+!!IF:V10/0;
+
+!?FU8150;                    (count number of skills)
+!!HEv1:Sx16/?y1;
+!!VRv2&y1<>0:+1;
+
+!?FU8161;                    (cycle through skills)
+!!HEv1:Sx16/?v3;
+!!UN&v3<>0:N4/z3/x16;
+!!VRz5&v3=3:+z135166+^ %Z3^;
+!!VRz5&v3=2:+z135167+^ %Z3^;
+!!VRz5&v3=1:+z135168+^ %Z3^;   (add skillname and level)
+!!FU8152&-10/v3<>0:P;
+
+!?FU8155;                    (count number of artifacts equipped)
+!!VRx16&x16=13:S18;          (Don't count spell books and War Machine slots)
+!!HEv1:A1/?y1/x16;
+!!VRv2&y1>6/y1<144:+1;
+
+!?FU8156;                    (Display Artifacts)
+!!VRz5&-10:S^ ^;             (Initialise empty variable)
+!!DO8157/0/18/1&-10:P;
+!!IF:M1/z135169;
+!!IF:V10/0;
+
+!?FU8157;                     (Function for checking slots)
+!!VRv3:S-1;                   (reinitisalize variable)
+!!VRx16&x16=13/-10:S18;       (No spell book or War Machine)
+!!HEv1&-10:A1/?v3/x16;        (check slot x16)
+!!UN&v3>6/v3<144/-10:N0/z3/v3;  (get artifact name)
+!!VRz5&-10/v3>6/v3<144:+^ %Z3^; (add Artifact name)
+!!FU8152&-10/v3>6/v3<144:P;
+
+!?FU8158;                    (check number of creatures sacks)
+!!HEv1:C0/x16/d0/?y1;
+!!VRv2&y1>0:+1;              (add 1 if stack is occupied)
+
+!?FU8159;                    (Check creature slots)
+!!VRz5:Sz135170;                 (initialize empty variable)
+!!DO8164/0/6/1:P;
+!!IF:M1/z135171;
+!!IF:V10/0;
+
+!?FU8164;                    (Check which creatures)
+!!HEv1&-10:C0/x16/?y1/?y10;  (check slot x16 for creatures)
+!!UN&-10/y10>1:N3/z3/y1/1;   (If more than one creature, get name in plural)
+!!UN&-10/y10=1:N3/z3/y1/0;   (if one creature, get name in singular)
+!!VRz5&-10/y10<>0:+^
+ %Y10 %Z3^;                  (add number and name to dialogue)
+!!VRv3&-10:S0;
+!!VRv3&-10/y10<>0:S1;
+!!FU8152&-10/v3<>0/y1<>-1:P; (add "," or "and", depending on number of stacks left)
+
+!?FU8153;                    (count number of spells)
+!!HEv1:Mx16/?y1;
+!!VRv2&y1=1:+1;              (If spell is present, add 1 to total number)
+
+!?FU8154;                    (Display spells)
+!!VRz5:S^ ^;                 (Initialise empty variable)
+!!DO8162/0/69/1:P;
+!!IF:M1/z135172;
+!!IF:V10/0;
+
+!?FU8162;                    (Cycle through spells)
+!!HEv1:Mx16/?v3;
+!!UN&v3=1:N1/z3/x16;         (Get spell Name)
+!!VRz5&v3=1:+^ %Z3^;         (add spell name)
+!!FU8152&-10/v3=1:P;
+
+!?FU8152;                    (adds a comma, an "and" or a period depending on how many of that kind is left)
+!!VRv2&v3>0:-1;
+!!VRz5&v2>1:+^,^;
+!!VRz5&v2=1:+z135173;
+!!VRz5&v2=0:+^.^;
+!!IF&v2=0:V10/1;             (abort other checks if everything is accounted for)
+

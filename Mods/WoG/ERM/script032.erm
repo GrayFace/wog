@@ -1,0 +1,595 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**  Summoning Stones Script Version 1.2 created by Timothy E. Pulver
+**  Requires WoG version 3.58 or later using ERM version 2.7 or later.
+**  WoGify Name: script32.erm
+**  Updated: September 12, 2004
+
+** This script lets a hero summon creatures from any town the player
+** owns by visiting the Summoning Stones. Each stone ring may be used once
+** per day to summon a single type of creature. Summoned creatures may
+** be purchased from creature dwellings in a town, or may simply be
+** transported if they're already in the town garrison. Town Garrison
+** creatures will retain any experience they already have.
+
+** When buying new creatures, the total number available must be bought.
+** If you wish to buy fewer, you should recruit them in the town instead
+** and then summon them from the town's garrison.
+
+** If you don't accept the newly summoned creatures into your army they
+** will either fight or run away. If they were previously unbought, you
+** will still have used the gold to pay for them.
+
+
+Variables: v1-9, v234, 247, v360-370, v998-1000, v1211, z1-4, z480-494
+All variables may be reused except z493 and z494 which store the hint text.
+Flags: 1,2,4, 57 ("Monster Mutterings" flag)
+Functions: 5219-5229
+Timers: 98
+Local Variables: x1-3, x16, y1-7
+
+----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v234/?v247;
+!#IF&v234<358:V1/1;
+!#IF&v247<270:V1/1;
+!#IF&1:M1/z132000;
+
+----------------------------------------------------------------------------------------
+
+!#UN:P33/?v1; [Check if Summoning Stones is enabled in WoGify Options]
+
+ [Set hint text for Stone Rings]
+!#VRz493&v1=1:Sz132001;
+!#VRz494&v1=1:Sz132002;
+!#HT63/21&v1=1:P0/493;
+!#HT63/21&v1=1:P1/494;
+
+ [Set up timer 98 to reset hint text every day]
+!#TM98&v1=1:S1/999/1/255;
+
+---------------------------------------------------------------------------------
+
+ [Timer 98 sets PO:N number of each Stone Ring to 0 to reset hint text every day]
+!?TM98;
+
+!!UN:P32/?y-1; [Check if Summoning Stones is enabled in WoGify Options: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+ [Get number of Stone Rings on map - store in v1]
+!!UN:U63/21/?v1;
+
+ [Cycle through all Stone Rings and set PO:N to 0 - Function 5224]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO5224/1/v1/1&v1>0:P;
+
+---------------------------------------------------------------------------------
+
+ [Post-visit trigger to restore "Monster Mutterings" Flag]
+!$OB63/21;
+
+!!UN:P32/?y-1; [Check if Summoning Stones is enabled in WoGify Options: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+ [If v1211 is set to 99, restore Flag 57 to True]
+!!IF&v1211=99:V57/1;
+
+---------------------------------------------------------------------------------
+
+ [Stone Ring object is trigger]
+!?OB63/21;
+
+!!UN:P32/?y-1; [Check if Summoning Stones is enabled in WoGify Options: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+ [Check if "Monster Mutterings" script is active (Flag 57 set to True)]
+ [If so, set v1211 to 99 and set Flag 57 to False, otherwise set v1211 to 0]
+!!VRv1211&57:S99;
+!!VRv1211&-57:S0;
+!!IF:V57/0;
+
+ [Clear flag 2]
+!!IF:V2/0;
+
+ [Check if ring has already been visited today - store number in v7]
+!!PO998:N?v7;
+
+ [If already visited, display message and set v4 to 999]
+!!IF&1000/v7=1:M1/z132003;
+!!VRv4:S999;
+
+ [Check current player - store in v1]
+!!OW:C?v1;
+
+ [Count number of towns - store in v2 - count number owned by player - store in v3]
+!!UN:U98/-1/?v2;
+!!VRv3:S0;
+!!VRv4:S-1; [Initialize v4 to -1 to work with new faster UN:U syntax]
+!!DO5219/1/v2/1&v2>0/v7=0:Pv1;
+
+ [If no towns owned, display message]
+!!IF&1000/v3=0/v7=0:M1/z132004;
+
+ [If one or more towns owned, ask this]
+!!IF&1000/v3>0/v7=0:Q2/z132005;
+
+ [If AI, set Flag 2 to True unless already visited today or no towns]
+!!IF&-1000/v3>0/v7=0:V2/1;
+
+ [If player doesn't wish to summon troops, set v4 to 999]
+!!VRv4&-2:S999;
+
+ [If player wishes to summon troops, call Function 5220]
+!!FU5220&v3>0/2/v7=0:Pv1/v2/v3;
+
+ [Ask if player wants to buy troops or use garrison troops]
+ [unless v4=999 ("no thanks" option)]
+!!VRz1:Sz132006;
+!!VRz2:Sz132007;
+!!VRz3:Sz132008;
+!!VRz4:Sz132009;
+!!UN:A116/9/z1; !!UN:A116/10/z2; !!UN:A122/9/z3; !!UN:A122/10/z4;
+!!IF&1000/v4<>999:Q2/8/116/8/122/7/z132010;
+!!UN:A116/9/0; !!UN:A116/10/0; !!UN:A122/9/0; !!UN:A122/10/0;
+
+ [If AI, set Flag 2 to True unless already visited today or no towns]
+!!IF&-1000/v3>0/v7=0:V2/1;
+
+ [Call function 5222 if buying new troops, unless v4=999 - AI always chooses this option]
+!!FU5222&2/v4<>999:P;
+
+ [Call function 5227 if transporting existing garrison troops, unless v4=999]
+!!FU5227&1000/-2/v4<>999:P;
+
+---------------------------------------------------------------------------------
+
+ [Check number of towns owned by player - store in v3]
+ [x1 = current player]
+!?FU5219;
+
+ [Store coordinates of next town in v4/v5/v6]
+!!UN:U98/-1/-1/4;
+
+ [Store owner of town in y1]
+!!CA4:O?y1;
+
+ [Add 1 to v3 if town is owned by current player]
+!!VRv3&x1=y1:+1;
+
+---------------------------------------------------------------------------------
+
+ [Display List of Towns]
+ [x1=current player, x2=number of towns, x3=number of towns owned by current player]
+!?FU5220;
+
+ [If x3 is more than 11, set it to 11]
+!!VRx3&x3>11:S11;
+
+ [Set up initial town variables - v360-v370 with values of 0]
+!!VRv360:C0/0/0/0/0/0/0/0/0/0/0;
+
+ [Set up and Display Dialogue Box List of Towns - store town number in v4]
+!!VRv4:S-1; [Initialize v4 to -1 to work with new faster UN:U syntax]
+!!DO5221/1/x2/1:Px1/x2;
+
+---------------------------------------------------------------------------------
+
+ [Set up v and z variables for List of Towns - x1=current player]
+!?FU5221;
+
+ [Store coordinates of next town in v4/v5/v6]
+!!UN:U98/-1/-1/4;
+
+ [Store name of town in z1, owner in y1, type in y2]
+!!CA4:N?z1 O?y1 T?y2;
+
+ [Store type string in z2]
+!!VRz2&y2=0:Sz132011;
+!!VRz2&y2=1:Sz132012;
+!!VRz2&y2=2:Sz132013;
+!!VRz2&y2=3:Sz132014;
+!!VRz2&y2=4:Sz132015;
+!!VRz2&y2=5:Sz132016;
+!!VRz2&y2=6:Sz132017;
+!!VRz2&y2=7:Sz132018;
+!!VRz2&y2=8:Sz132019;
+
+ [v variable index (v360-v370) for z variables (z480-z490) - store in y2]
+ [and set v variable to z variable index number - store in y3]
+!!VRy4&x1=y1:+1;
+!!VRy2:S359 +y4;
+!!VRy3:Sy2 +120;
+!!VRvy2&x1=y1:Sy3; [Only store number if current player owns town]
+
+ [For each town player owns, store town # in y4+10 variable, indexed by y5]
+!!VRy5&x1=y1:Sy4 +10;
+!!CA4&x1=y1:U?yy5;
+
+ [Store Town name and Type for dialogue box in z variable (at vy1 index)]
+ [Only store if current player owns town]
+!!VRzy3&x1=y1:S^%Z1 (%Z2)^;
+
+------------------------------------
+
+ [Do this section when done loop - x16=x2]
+
+ [Set z variables and display town dialogue box - player's choice is stored in v4]
+!!VRz491&x16=x2:Sz132020;
+!!VRz492&x16=x2:Sz132021;
+!!IF&1000/x16=x2:G1/4/0/491/v360/v361/v362/v363/v364/v365/v366/v367/v368/v369/v370/492;
+
+ [Determine which box was checked - store result in y6]
+!!VRy6&v4=1/x16=x2:S1;
+!!VRy6&v4=2/x16=x2:S2;
+!!VRy6&v4=4/x16=x2:S3;
+!!VRy6&v4=8/x16=x2:S4;
+!!VRy6&v4=16/x16=x2:S5;
+!!VRy6&v4=32/x16=x2:S6;
+!!VRy6&v4=64/x16=x2:S7;
+!!VRy6&v4=128/x16=x2:S8;
+!!VRy6&v4=256/x16=x2:S9;
+!!VRy6&v4=512/x16=x2:S10;
+!!VRy6&v4=1024/x16=x2:S11;
+!!VRy6&v4=2048/x16=x2:S12;
+
+ [If AI, randomly choose a town - store in y6]
+!!VRy8:Sv3 -1;
+!!VRy6&-1000/x16=x2:S1 Ry8;
+
+ [Store town number in v4 - if choice is "no thanks", store 999]
+!!VRy7:Sy6 +10;
+!!VRv4&x16=x2:Syy7;
+!!VRv4&y6=12/x16=x2:S999;
+
+---------------------------------------------------------------------------------
+
+ [Buy new Troops from town v4]
+!?FU5222;
+
+ [Store name of town in z1 and town type in y1]
+!!CA0/v4:N?z1 T?y1;
+
+ [Clear Flag 4]
+!!IF:V4/0;
+
+ [Set up variables to display of creatures from each town]
+!!DO5223/0/6/1:Py1;
+
+ [If no creatures are available (Flag 4 is False), display message]
+ [and set v5 to 2048 (no creature selected)]
+!!IF&1000/-4:M1/z132022;
+!!VRv5&-4:S2048;
+
+ [Set z variables and display town dialogue box - player's choice is stored in v5]
+!!VRz491:Sz132023;
+!!VRz492:Sz132024;
+!!IF&1000/4:G1/5/0/491/480/481/482/483/484/485/486/0/0/0/0/492;
+
+ [Determine which box was checked - store result in y2]
+!!VRy2&v5=1:S0;
+!!VRy2&v5=2:S1;
+!!VRy2&v5=4:S2;
+!!VRy2&v5=8:S3;
+!!VRy2&v5=16:S4;
+!!VRy2&v5=32:S5;
+!!VRy2&v5=64:S6;
+!!VRy2&v5=2048:S-1;
+
+ [Get creature number selected - human only]
+!!DO5223/y2/y2/1&1000/y2>=0:Py1;
+
+ [If player chose a creature to recruit, call Function 5226 - human only]
+!!FU5226&1000/y2>=0:Py2;
+
+ [If AI, buy highest level creatures it can afford - AI only]
+!!DO5229/0/6/1&-1000/y2>=0:Py1;
+
+---------------------------------------------------------------------------------
+
+ [Set up dialogue box z variables for buying troops from Town v4]
+!?FU5223;
+
+ [For town number v4, check # of troops at level x16
+ [Store nonupgraded in y1, upgraded in y2]
+!!CA0/v4:M1/x16/?y1/?y2;
+
+ [Set y3 to 0 for nonupgraded, 1 for upgraded and -1 neither]
+!!VRy3&y1>0:S0;
+!!VRy3&y2>0:S1;
+!!VRy3&y2=0/y1=0:S-1;
+
+ [Set v7 (number of troops) to either y1 or y2]
+ [If an upgraded dwelling is built, only upgraded troops will be available]
+!!VRv7&y1>0:Sy1;
+!!VRv7&y2>0:Sy2;
+
+ [Determine the monster type (v6) and store the monster name in z2]
+!!UN&y3>=0:Tx1/x16/y3/?v6;
+!!UN&y3>=0/v7=1:N3/2/v6/0;
+!!UN&y3>=0/v7>1:N3/2/v6/1;
+
+ [Check how much gold the troops cost and store in v8]
+!!MA:Cv6/6/?v8;
+!!VRv8:Sv8 *v7;
+
+ [Check how many of other resources the troops cost]
+ [Store type in v1 and amount in v9. Store string in z3]
+!!VRv1:S-1;
+!!VRv9:S0;
+!!DO5225/0/5/1&y3>=0:P;
+!!VRv9:*v7;
+
+ [Set y5 as index for z variable (z480-z486) and set z variable with]
+ [appropriate text or to a null string if no troops of this level]
+!!VRy5:S480 +x16;
+!!VRzy5&y3>=0:Sz132026+^ %V7 %Z2 ^+z132027+^ %V8 ^+z132028;
+!!VRzy5&y3>=0/v1>=0:+z132025+^%V9 ^+z3;
+!!VRzy5&y3>=0:+ ^.^;
+!!VRzy5&y3<0:S^^;
+
+ [Set Flag 4 to True if at least one creature is available for recruiting]
+!!IF&y3>=0:V4/1;
+
+---------------------------------------------------------------------------------
+
+ [Set PO:N to 0 for each Stone Ring]
+!?FU5224;
+
+ [Get location of next Stone Ring - store in v2/v3/v4]
+!!UN:U63/21/-1/2;
+
+ [Set PO:N to 0 for this Stone Ring]
+!!PO2:N0;
+
+ [Reset Stone Ring to tell AI it can visit]
+!!PM2:V1;
+
+---------------------------------------------------------------------------------
+
+ [Check how many of other resources the troops cost]
+ [Store type in v1 and amount in v9. x16=resource type being checked]
+ [Store resource type string in z3]
+!?FU5225;
+
+ [Store amount in v9]
+!!MA&v9=0:Cv6/x16/?v9;
+
+ [Store total gems in y1 (v7 is number of creatures)]
+!!VRy1:Sv9 *v7;
+
+ [Store type in v1]
+!!VRv1&v1<0/v9>0:Sx16;
+
+ [Store resource type string in z3]
+!!VRz3&v1=0:Sz132029;
+!!VRz3&v1=1:Sz132030;
+!!VRz3&v1=2:Sz132031;
+!!VRz3&v1=3:Sz132032;
+!!VRz3&v1=4:Sz132033;
+!!VRz3&v1=4/y1=1:Sz132034;
+!!VRz3&v1=5:Sz132035;
+!!VRz3&v1=5/y1=1:Sz132036;
+
+---------------------------------------------------------------------------------
+
+ [Check if player can afford creatures and if so, place]
+ [them on the map at Hero's location, set to compliant]
+!?FU5226;
+
+ [Check how much gold player has - store in y1]
+!!OW:R-1/6/?y1;
+
+ [If creatures require an extra resource, check how much player has - store in y2]
+!!OW&v1>=0:R-1/v1/?y2;
+
+ [Clear Flag 4]
+!!IF:V4/0;
+
+ [Check if player has enough gold - set Flag 4 if yes]
+!!IF&y1>=v8:V4/1;
+
+ [If player has enough gold but creatures require an extra resource,]
+ [check if player has enough - set Flag 4 to True if yes, to False if no]
+!!IF&4/v1>=0/y2>=v9:V4/1;
+!!IF&4/v1>=0/y2<v9:V4/0;
+
+ [If player doesn't have enough gold and/or resources, display this]
+!!IF&1000/-4:Q2/6/v8/v1/v9/1/z132037;
+
+ [Reduce number of troops available in town to 0 for level recruited]
+ [Town type=v4, level=x1]
+!!CA0/v4&4:M1/x1/0/0;
+
+ [Give creatures to hero]
+!!HE-1&4:C2/v6/v7/1;
+
+ [If player has enough gold/resources, reduce player's amounts]
+!!VRy1:Sy1 -v8;
+!!VRy2:Sy2 -v9;
+!!OW&4:R-1/6/y1;
+!!OW&4/v1>=0:R-1/v1/y2;
+
+ [Set hint text to "visited"]
+!!PO998&4:N1;
+
+ [Set Stone Ring to tell AI its been visited this week]
+!!VRy3:Sv999 -1;
+!!PMv998/y3/v1000&4:V0;
+
+ [Set Flag 2 to true before ending function]
+!!IF:V2/1;
+
+---------------------------------------------------------------------------------
+
+ [Transport existing Garrison Troops from town v4]
+!?FU5227;
+
+ [Store name of town in z1]
+!!CA0/v4:N?z1;
+
+ [Clear Flag 4]
+!!IF:V4/0;
+
+ [Check if there's a garrison hero in the town - store hero # in y4 (-1 if no hero)]
+!!CA0/v4:H0/?y4;
+
+ [Set up variables to display creatures from each slot]
+!!DO5228/0/6/1:Py4;
+
+ [If no creatures are available (Flag 4 is False), display message]
+ [and set v5 to 2048 (no creature selected)]
+!!IF&-4:M1/z132038;
+!!VRv5&-4:S2048;
+
+ [Set z variables and display town dialogue box - player's choice is stored in v5]
+!!VRz491:Sz132039;
+!!VRz492:Sz132040;
+!!IF&1000/4:G1/5/0/491/480/481/482/483/484/485/486/0/0/0/0/492;
+
+ [Determine which box was checked - store result in y2]
+!!VRy2&v5=1:S0;
+!!VRy2&v5=2:S1;
+!!VRy2&v5=4:S2;
+!!VRy2&v5=8:S3;
+!!VRy2&v5=16:S4;
+!!VRy2&v5=32:S5;
+!!VRy2&v5=64:S6;
+!!VRy2&v5=2048:S-1;
+
+ [Get creature number selected]
+ [For town number v4, check # of troops in slot y2]
+ [Store type in v6 and number in v7, stack experience in y5]
+!!CA0/v4&y2>=0/y4<0:M2/y2/?v6/?v7; [Garrison]
+!!CA0/v4&y2>=0/y4<0:P?y6/?y7/?y8; [Position of Town: y6/y7/y8]
+!!EXy6/y7/y8/y2&y2>=0/y4<0:E?y5; [Garrison stack's experience: y5]
+!!HEy4&y2>=0/y4>=0:C0/y2/?v6/?v7/?y5;  [Garrison hero]
+
+ [Reduce number of troops available in slot chosen to 0]
+ [Town type=v4, slot=y2]
+!!CA0/v4&y2>=0/y4<0:M2/y2/-1/0; [Garrison]
+!!HEy4&y2>=0/y4>=0:C0/y2/-1/0;  [Garrison hero]
+
+ [Give creatures to hero with experience]
+!!HE-1&y2>=0:C2/v6/v7/1/y5;
+
+ [Set hint text to "visited"]
+!!PO998&y2>=0:N1;
+
+ [Set Stone Ring to AI its been visited this week]
+!!VRy3:Sv999 -1;
+!!PMv998/y3/v1000&y2>=0:V0;
+
+---------------------------------------------------------------------------------
+
+ [Set up dialogue box z variables for transporting troops from Town v4]
+ [x1 has the garrison hero number (-1 if no garrision hero)]
+!?FU5228;
+
+ [For town number v4, check # of troops in slot x16
+ [Store type in v6 and number in v7]
+!!CA0/v4&x1<0:M2/x16/?v6/?v7; [Garrison]
+!!HEx1&x1>=0:C0/x16/?v6/?v7;  [Garrision hero]
+
+ [Store the monster name in z2]
+!!UN&v7=1:N3/2/v6/0;
+!!UN&v7>1:N3/2/v6/1;
+
+ [Set y1 as index for z variable (z480-z486) and set z variable with]
+ [appropriate text or to a null string if no troops of this level]
+!!VRy1:S480 +x16;
+!!VRzy1&v7>0:Sz132041+^ %V7 %Z2 ^+z132042;
+!!VRzy1&v7<1:S^^;
+
+ [Set Flag 4 to True if at least one creature is available for recruiting]
+!!IF&v7>0:V4/1;
+
+---------------------------------------------------------------------------------
+
+ [AI will try to buy the highest level creatures it can afford]
+!?FU5229;
+
+ [For town number v4, check # of troops at level y6-x16
+ [Store nonupgraded in y1, upgraded in y2]
+!!VRy6:S6 -x16;
+!!CA0/v4:M1/y6/?y1/?y2;
+
+ [Set y3 to 0 for nonupgraded, 1 for upgraded and -1 neither]
+!!VRy3&y1>0:S0;
+!!VRy3&y2>0:S1;
+!!VRy3&y2=0/y1=0:S-1;
+
+ [Set v7 (number of troops) to either y1 or y2]
+ [If an upgraded dwelling is built, only upgraded troops will be available]
+!!VRv7&y1>0:Sy1;
+!!VRv7&y2>0:Sy2;
+
+ [Determine the monster type (v6)]
+!!UN&y3>=0:Tx1/y6/y3/?v6;
+
+ [Check how much gold the troops cost and store in v8]
+!!MA:Cv6/6/?v8;
+!!VRv8:Sv8 *v7;
+
+ [Check how many of other resources the troops cost]
+ [Store type in v1 and amount in v9.]
+!!VRv1:S-1;
+!!VRv9:S0;
+!!DO5225/0/5/1&y3>=0:P;
+!!VRv9:*v7;
+
+------------------------------------
+
+ [Continue Function if a creature exists to recruit at this level]
+!?FU5229&y3>=0;
+
+ [Check how much gold AI has - store in y7]
+!!OW:R-1/6/?y7;
+
+ [If creatures require an extra resource, check how much AI has - store in y8]
+!!OW&v1>=0:R-1/v1/?y8;
+
+ [Clear Flag 4]
+!!IF:V4/0;
+
+ [Check if AI has enough gold - set Flag 4 if yes]
+!!IF&y7>=v8:V4/1;
+
+ [If AI has enough gold but creatures require an extra resource,]
+ [check if AI has enough - set Flag 4 to True if yes, to False if no]
+!!IF&4/v1>=0/y8>=v9:V4/1;
+!!IF&4/v1>=0/y8<v9:V4/0;
+
+ [Reduce number of troops available in town to 0 for level recruited]
+ [Town type=v4, level=y6]
+!!CA0/v4&4:M1/y6/0/0;
+
+ [Give creatures to AI hero]
+!!HE-1&4:C2/v6/v7/0;
+
+ [If AI has enough gold/resources, reduce player's amounts]
+!!VRy10:Sy7 -v8;
+!!VRy11:Sy8 -v9;
+!!OW&4:R-1/6/y10;
+!!OW&4/v1>=0:R-1/v1/y11;
+
+ [Set hint text to "visited"]
+!!PO998&4:N1;
+
+ [Set Stone Ring to AI its been visited this week]
+!!VRy9:Sv999 -1;
+!!PMv998/y9/v1000&4:V0;
+
+ [If AI bought creatures, set x16 to 999 to exit loop]
+!!VRx16&4:S999;
+
+ [Set Flag 2 to true before ending function]
+!!IF:V2/1;
+
+** End of Script **
+

@@ -1,0 +1,57 @@
+ZVSE
+ERMS_ScriptName=script110 Change Hero Class
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=16.6(June).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+***************** Change Hero Class  *****************
+** Written by Thomas Franz (alias samot)
+** You are allowed to change the class of your hero to any other.
+** This will affect the primary / secondary skills you get, changes the behavior
+** of the Alter of Sacrify (if the script ALTAR OF SACRIFICE FOR ALL is not active)
+** and interacts with the "Masters of Life"-script, that upgrades all L1-Creatures
+** of the same town as hero.
+
+** To change your class, you have to click onto the class-description in the
+** hero screen.
+*************** start Change Hero Class script ***************
+
+
+!?CM2;
+!!UN:P310/=1; !!FU&-1:E; // exit, if script is not active
+!!CM:I?y1 F?y2; // get clicked field / mouse key
+!!FU|y1<>140/y2<>0:E; // exit, if no leftclick onto class/level
+
+!!HE-1:O?y3 B0/?z-1; // get hero's owner and Name (to Z-1)
+!!OW:C=y3; !!FU&-1:E; // exit, if owner not = current player
+
+!!IF:Q1/34/0/2/z310019; // Do you want to change the class of %Z-1?
+!!FU&-1:E; // exit, if no
+!!IF:Q1/31/0/33/0/7/z310020; // Do you want to change to a {might} or {magic} class?
+!!IF&1:G1/1/512/310021/310001/310002/310003/310004/310005/310006/310007/310008/310009/310022;  // might classes
+!!IF&-1:G1/1/512/310021/310010/310011/310012/310013/310014/310015/310016/310017/310018/310022; // magic classes
+
+!!FU&v1=512:E; // exit, if cancel
+
+** set new class
+!!HE-1&1/v1=1:B2/0;    !!HE-1&-1/v1=1:B2/1; // castle
+!!HE-1&1/v1=2:B2/2;    !!HE-1&-1/v1=2:B2/3; // rampart
+!!HE-1&1/v1=4:B2/4;    !!HE-1&-1/v1=4:B2/5; // tower
+!!HE-1&1/v1=8:B2/6;    !!HE-1&-1/v1=8:B2/7; // inferno
+!!HE-1&1/v1=16:B2/8;   !!HE-1&-1/v1=16:B2/9; // necropolis
+!!HE-1&1/v1=32:B2/10;  !!HE-1&-1/v1=32:B2/11; // dungeon
+!!HE-1&1/v1=64:B2/12;  !!HE-1&-1/v1=64:B2/13; // stronghold
+!!HE-1&1/v1=128:B2/14; !!HE-1&-1/v1=128:B2/15; // fortress
+!!HE-1&1/v1=256:B2/16; !!HE-1&-1/v1=256:B2/17; // conflux
+
+!!UN:R3/-1; // redraw screen
+
+*************** end CM2 ***************
+
+
+*************** end Change Hero Class script ***************
+

@@ -1,0 +1,1637 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=7.7(July).2006
+
+** WoG Cheat Menu 1.0 by Timothy Pulver
+** Script77.erm
+** Last Updated July 7,2006
+** Previously Updated: June 8, 2006
+
+** Variables Used: v9002-v9007, (v1)
+** Flags: (1..9)
+** z variaables: (z1..z9)
+** Functions: FU22300..FU22343
+** ERM Options: 77
+
+********************************************************************************
+** Added by Thomas Franz (samot)
+** function to change the stacksize of Monsters on the map just before combats
+** do an rightclick on the Attack-Value (Adventure screen) to be asked for the
+** percentage you want to resize the stacks
+
+** works for all battles except both - attacker and defender - are humans or both are AI
+** of course it changes only the stacksize of the AI-creatures
+** if the Cheat Menu is disabled (Wog-Option 77 = on / v9004=999), you can't decrease the Stacksize
+** the increased / decreased stack-size does NOT affect the experience you get for the battle
+
+** does not change the number of monsters summoned by spells or karmic battles and
+** not the additional stacks in some objects (f.E. Rogue-Caves in the Adventure Cave or
+** in the Chamber of Death
+
+** usage: v9008 EXCLUSIVE
+** FU22344
+********************************************************************************
+
+!#VRv9004:S-1; [Initialize v9004 to -1]
+!#UN:P903/?v1; [Check if Disable Cheat Codes and Menus enabled: v1]
+!#VRv9004&v1=1:S999; [Set v9004 to 999 if Disable Cheat Codes and Menus enabled]
+
+ [Trigger is Right Mouse-click on Adventure Map]
+!?CM0&v9004<>999;
+!!VRv9003:S0; [Reset v9003 to 0 if adventure map is right-clicked anywhere]
+
+ [Trigger is Left Mouse-click on Adventure Map]
+!?CM5&v9004<>999;
+!!VRv9007:S-1; [Initialize v9007 (Last hero number alt-clicked) to -1]
+!!CM:I?y-1 F?y-2 S?y-7; [Location: y-1, Flags (type of click): y-2 (alt=32) Subtype: y-7]
+!!UN|y-2=33/y-2=36:X?y-10/?y-11; [Size of map: y-10, Underground: y-11=1 if underground]
+!!VRy-12|y-2=33/y-2=36:Sy-10 :2; [Middle of map: y-12]
+!!OW:C?y-13; [Current player: y-13]
+!!UN:P77/?y-8; [Check if script is enabled: y-8]
+!!VRv9004&y-8=1/v9004<0:S0; [Set v9004 to 0 if script enabled and v9004 is less than 0]
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!IF&y-8=1/y-1=1/y-2=33:Q1/z177000;
+!!UN&y-8=1/y-1=1/y-2=33/1:Sy-12/y-12/0/y-13/y-10; [Reveal surface]
+!!UN&y-8=1/y-1=1/y-2=33/1/y-11=1:Sy-12/y-12/1/y-13/y-10; [Reveal underground]
+!!UN&y-8=1/y-1=1/y-2>=32/y-2<=36/1:R1; [Redraw screen]
+!!IF&y-8=1/y-1=1/y-2=36:Q1/z177001;
+!!UN&y-8=1/y-1=1/y-2=36/1:Hy-12/y-12/0/-1/y-10; [Hide surface]
+!!UN&y-8=1/y-1=1/y-2=36/1/y-11=1:Hy-12/y-12/1/-1/y-10; [Hide underground]
+!!VRv9004&y-8=1/y-1=1/y-2>=32/y-2<=36/1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!CM&y-8=1/y-1=1/y-2>=32/y-2<=36:R0; [Disable standard response if shift or ctrl-alt click]
+!!UN&y-8=1/y-1=1/y-2>=32/y-2<=36/1:Ly-12/y-12/0/0; [Move view to centre of map]
+!!VRy-18&y-8=1/y-1=1/y-2>=32/y-2<=36/1:S-1; [Initialize y-18 to -1]
+!!OW&y-8=1/y-1=1/y-2>=32/y-2<=36/1:A-1/?y-16; [Active hero: y-16]
+!!OW&y-16<0/y-8=1/y-1=1/y-2>=32/y-2<=36/1:N-1/?y-17; [Active town: y-17]
+!!HEy-16&y-16>=0/y-8=1/y-1=1/y-2>=32/y-2<=36/1:P?y-18/?y-19/?y-20; [Active hero's location: y-18/y-19/y-20]
+!!CA0/y-17&y-16<0/y-17>=0/y-8=1/y-1=1/y-2>=32/y-2<=36/1:P?y-18/?y-19/?y-20; [Active town's location: y-18/y-19/y-20]
+!!UN&y-18>=0/y-8=1/y-1=1/y-2>=32/y-2<=36/1:Ly-18/y-19/y-20/0; [Restore map view]
+!!VRv9003&y-1=1/y-2=32/y-7=12:+1; [Add 1 to v9003 if mini-map alt-clicked: v9003]
+!!CM&y-1=1/y-2=32:R0; [Disable standard response if mini-map alt-clicked]
+!!VRv9003|y-1<>1/y-2<>32:S0; [Reset v9003 to 0 if not a mini-map alt-click: v9003]
+!!VRz-2&v9004>=0:Sz177002;
+!!VRz-2&v9004=1:Sz177003;
+!!VRz-1&v9004<0:Sz177004;
+!!VRz-1&v9004>=0:Sz177005;
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!IF&y-8<>1/v9003>=3/y-7=12:Q1/z177006;
+!!IF&y-8=1/v9003>=3/y-7=12:Q1/z177007;
+!!UN&v9003>=3/y-8<>1/1:P77/1; [Enable script if disabled, v9003=3 and player clicks OK]
+!!VRv9004&v9003>=3/y-8<>1/1/v9004<0:S0; [Set v9004 to 0 if cheat menu enabled: v9004]
+!!UN&v9003>=3/y-8=1/1:P77/0; [Disable script if enabled, v9003=3 and player clicks OK]
+!!VRv9003&v9003>=3/-1:S0; [Reset v9003 to 0 if v9003=3 and player clicks Cancel]
+
+!!VRy-14:S-1; [Initialize y-14 to -1]
+!!VRy-14&y-1>=39/y-1<=43/y-2=32/y-7=12/y-8=1:Sy-1 -39; [Hero slot alt-clicked in list: y-14]
+!!OW&y-14>=0/y-7=12/y-8=1:O-1/y-14/?y-5; [Hero number alt-clicked: y-5]
+!!HEy-5&y-14>=0/y-5>=0/y-7=12/y-8=1:B0/?z2 P?y-21/?y-22/?y-23 O?y-4; [Get hero's name: z2, location: y-21/y-22/y-23, owner: y-4]
+!!FU22333&y-14>=0/y-5>=0/y-7=12/y-8=1:P; [Display main WoG cheat menu]
+
+!!FU|y-8<>1/y-1<>37/y-2<>32/y-7<>12:E; [Exit if not adventure map, alt-left-click or not enabled]
+
+!!CM:P?y-21/?y-22/?y-23; [Location clicked: y-21/y-22/y-23]
+!!UN:P905/0; [Reset error messages]
+!!UN:P904/1; [Temporarily disable error messages]
+!!HEy-21/y-22/y-23:O?y-4 N?y-5; [Owner of Hero at clicked location: y-4, Hero number: y-5]
+!!UN:P904/0; [Reenable error messages]
+!!UN:P905/?y-6; [Set y-6 to 1 if any error: y-6]
+!!FU|y-4<0/y-6=1:E; [Exit if not a living hero there]
+!!FU22333:P; [Display main cheat menu]
+
+ [Display main cheat menu for hero]
+!?FU22333;
+!!CM:R0; [Cancel normal click operation]
+!!HEy-5:B0/?z2; [Get hero's name: z2]
+!!VRv9007:Sy-5; [Set v9007 hero number alt-clicked: y-5]
+!!VRz-10&y-4=0:Sz177008;
+!!VRz-10&y-4=1:Sz177009;
+!!VRz-10&y-4=2:Sz177010;
+!!VRz-10&y-4=3:Sz177011;
+!!VRz-10&y-4=4:Sz177012;
+!!VRz-10&y-4=5:Sz177013;
+!!VRz-10&y-4=6:Sz177014;
+!!VRz-10&y-4=7:Sz177015;
+!!VRz-1:Sz177016;
+!!VRz-2:Sz177017;
+!!VRz-3:Sz177018;
+!!VRz-4:Sz177019;
+!!VRz-5:Sz177020;
+!!VRz-6:Sz177021;
+!!VRz-7:Sz177022;
+!!VRz3:Sz177023;
+!!VRz4:Sz177024;
+!!VRz5:Sz177025;
+!!VRz1:Sz177026;
+!!VRz-8:Sz177027;
+!!VRz-9:Sz177028;
+!!VRv9002&v9002=0:S2048; [Initialize "Exit" button as default option to start]
+!!IF:G1/9002/v9002/-1/-2/-3/-4/-5/-6/-7/3/4/5/1/-8/-9; [Display WoG Cheat Menu: choice in v9002]
+!!FU22300&v9002=1:P; [Input dialogue for free creature type]
+!!FU22304&v9002=2:P-1; [Input dialogue for free stack experience]
+!!FU22306&v9002=4:P; [Input dialogue for free artifact]
+!!FU22312&v9002=8:P; [Input dialogue for free hero experience]
+!!FU22318&v9002=16:P; [Input dialogue for free luck, morale, movement or spell points]
+!!FU22320&v9002=32:P; [Input dialogue for free spell]
+!!FU22326&v9002=64:P; [Input dialogue for free primary skill]
+!!FU22328&v9002=128:P; [Input dialogue for free secondary skill]
+!!FU22332&v9002=256:P; [Input dialogue for changing hero's owner]
+!!FU22324&v9002=512:P; [Input dialogue for free resources]
+!!FU22323&v9002=1024:P; [Yes/No Dialogue for Variable Dump]
+
+ [Input dialogue for free creature type]
+!?FU22300;
+!!VRz-1:Sz177029;
+!!VRz-2:Sz177030;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz3:Sz1; [Set z3 = z1]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz6:M2/z3/2; [Store 3rd token (word) from z3 in z6]
+!!VRy1:Vz4; [Convert first token to number: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz6:H4; [Check if 3rd token exists - flag 4 = false if no 2nd token: Flag 4]
+!!VRy2&y1>0/3:S1; [Set y2 to 1 if a number and word were entered: y2]
+!!VRz3&y1>0/3/-4:S^%Z5^; [Set z3 to z5 (2nd token) if a number and word were entered: z3]
+!!VRz3&y1>0/3/4:S^%Z5 %Z6^; [Set z3 to z5+z6 (2nd+3rd tokens) if a number and two words entered: z3]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO22302/0/196/1&y1>0/3:Py1; [Check for matching monster name if number and string entered]
+!!DO22303/0/196/1&y1>0/3/-2:Py1; [Check for substring of monster name if no exact match found]
+!!IF&y1>0/3/-2:M1/z177031;
+!!FU&y1>0/3:E; [Exit if substring and monster name entered]
+!!FU22301|y1>0/z3=z-4:Py1; [If a number is entered alone, give that creature to hero]
+!!FU|y1<0/y1>196:E; [Exit if out of creature table]
+!!DO22302/0/196/1&-2:P; [Check for matching monster name if no number entered]
+!!DO22303/0/196/1&-2:P; [Check for substring of monster name if no exact match found]
+!!IF&-2:M1/z177032;
+
+ [Input dialogue for number of creatures]
+ [and give stack of creatures to hero]
+!?FU22301;
+!!IF&x1<0:M1/z177033;
+!!IF&x1>196:M1/z177034;
+!!FU|x1<0/x1>196:E; [Exit if out of creature table]
+!!IF:V2/1; [Set Flag 2 to True]
+!!UN:N3/-5/x1/1; [Creature name: z-5]
+!!VRz-1:Sz177035;
+!!VRz-2:Sz177036;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/-3/-3/-3/-3/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-4:S^0^;
+!!VRy1:Vz1; [Convert string to number: y1]
+!!HEy-5|y1>0/z1=z-4:C2/x1/y1/1; [If a number is entered, give stack of creatures to hero]
+!!VRv9004|y1>0/z1=z-4:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN:R1; [Redraw screen]
+
+ [Search for exact match to creature name]
+!?FU22302;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N3/-5/x16/0; [Creature name (singular): z-5]
+!!UN:N3/-6/x16/1; [Creature name (plural): z-6]
+!!IF|z3=z-5/z3=z-6:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!FU22301&2/x1=0:Py1; [If a match is found, give that creature to hero]
+!!HEy-5&2/x1<>0:C2/y1/x1/1; [If number and string entered, give stack of creatures to hero]
+!!VRv9004&2/x1<>0:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&2/x1<>0:V2/1; [Set Flag 2 to True]
+!!UN&2/x1<>0:R1; [Redraw screen]
+
+ [Search for substring match to creature name]
+!?FU22303;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N3/-5/x16/0; [Creature name (singular): z-5]
+!!UN:N3/-6/x16/1; [Creature name (plural): z-6]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz-6&-1:Uz3; [See if user's input is a match or substring of z-6]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRz3&-1:Uz-6; [See if z-6 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!FU22301&1/x1=0:Py1; [If a match is found, give that creature to hero]
+!!HEy-5&1/x1<>0:C2/y1/x1/1; [If number and string entered, give stack of creatures to hero]
+!!VRv9004&1/x1<>0:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/x1<>0:V2/1; [Set Flag 2 to True]
+!!UN&1/x1<>0:R1; [Redraw screen]
+
+ [Input Dialogue for Free Stack Experience]
+ [x1=stack # (-1 if from adventure map: all stacks}]
+!?FU22304;
+!!VRz-1&x1<0:Sz177037;
+
+!!VRz-1&x1>=0:Sz177038;
+
+!!VRz-2:Sz177039;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy4&z-9=z-8:S1; [Set y4 to 1 if first character is "="]
+!!VRz3&y4=0:Sz1; [Set z3 = z1 if first character is NOT "="]
+!!VRz3&y4=1:M1/z1/1/50; [Set z3 = z1 minus 1st character if 1st character is "="]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRy1:Vz4; [Convert first token to number: y1]
+!!VRz6:Sz177040;
+!!VRz7:Sz177041;
+!!VRy2:S3; [Initialize y2 to 3: y2]
+!!VRy2&y4=1:S2; [Set y2 to 2 if "=" was entered to *set* experience: y2]
+!!VRy3:S161700; [Initialize y3 to 161700: y3]
+!!VRy2|z5=z6/z5=z7:S4; [Set y2 to 4 if 'rank' or 'ranks' entered: y2]
+!!VRy2&y2=4/y4=1:S12; [Set y2 to 12 if ranks are being *set*: y2]
+!!VRy3&y2=4:S10; [Set y3 to 10 if ranks are being added: y3]
+!!DO22305/0/6/1&y1<>0/y1<=y3/x1<0:Py1/y2; [If a number is entered, give y1 experience]
+!!HEy-5&y1<>0/y1<=y3/x1>=0:C0/x1/d/d/y1/y2; [Add y1 experience to rank x1]
+!!VRv9004&y1<>0/y1<=y3:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&y1>134750/y2=3:M1/z177042;
+!!IF&y1>11/y2=4:M1/z177043;
+!!FU|y1=0/y1>y3:E; [Exit if number is 0 or above y3]
+
+ [Give experience to every stack]
+ [x1=experience, x2=experience mode]
+!?FU22305;
+!!HEy-5:C0/x16/d/d/x1/x2; [Add experience or ranks to all stacks]
+
+ [Input dialogue for free artifact type]
+!?FU22306;
+!!VRz-1:Sz177044;
+!!VRz-2:Sz177045;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz3:Sz1; [Set z3 = z1]
+!!IF:V1/0; [Initialize Flag 1 to False: Flag 1]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz6:Sz177046; [Set z6 to "delete"]
+!!VRz6:Uz4; [If user's input is a match or substring of "delete": Flag 1=True]
+!!VRy1:S0; [Initialize y2 to 0: y2]
+!!VRy2&1:S1; [Set y2 to 1 if "delete" entered: y3]
+!!VRz5&y2=1:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz5&y2=1:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz7&y2=1:M2/z3/2; [Store 3rd token (word) from z3 in z7]
+!!VRz7&y2=1:H7; [Check if 3rd token exists - flag 7 = false if no 3rd token: Flag 7]
+!!VRz8&y2=1:M2/z3/3; [Store 4th token (word) from z3 in z8]
+!!VRz8&y2=1:H8; [Check if 4th token exists - flag 8 = false if no 4th token: Flag 8]
+!!VRz9&y2=1:M2/z3/4; [Store 5th token (word) from z3 in z9]
+!!VRz9&y2=1:H9; [Check if 5th token exists - flag 9 = false if no 5th token: Flag 9]
+!!VRz-6&y2=1:M2/z3/5; [Store 6th token (word) from z3 in z-6]
+!!VRz-6&y2=1:H10; [Check if 5th token exists - flag 10 = false if no 6th token: Flag 10]
+!!VRz3&y2=1/3/-7/-8/-9/-10:S^%Z5^; [Set z3 to 2nd token if only 2: z3]
+!!VRz3&y2=1/3/7/-8/-9/-10:S^%Z5 %Z7^; [Set z3 to 2nd and 3rd token if only 3: z3]
+!!VRz3&y2=1/3/7/8/-9/-10:S^%Z5 %Z7 %Z8^; [Set z3 to 2nd, 3rd and 4th token if only 4: z3]
+!!VRz3&y2=1/3/7/8/9/-10:S^%Z5 %Z7 %Z8 %Z9^; [Set z3 to 2nd, 3rd, 4th and 5th tokens if there's 5: z3]
+!!VRz3&y2=1/3/7/8/9/10:S^%Z5 %Z7 %Z8 %Z9 %Z-6^; [Set z3 to 2nd, 3rd, 4th, 5th and 6th tokens if there's 6: z3]
+!!VRy1&-3:Vz3; [Convert entry to number if 2nd token is empty: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!IF:V4/1; [Initialize Flag 4 to True]
+!!IF|y1<0/y1>1070:V4/0; [Set Flag 4 to False if number below 0 or above 1070: Flag 4]
+!!IF&y1>170/y1<1001:V4/0; [Set Flag 4 to False if number above 170 and below 1001: Flag 4]
+!!IF&-4:M1/z177047;
+!!FU&-4:E; [Exit if out of artifact table]
+!!HEy-5&y1>=1001/y1<=1070:A4/y1; [If a scroll number entered, give that scroll to hero]
+!!VRv9004&y1>=1001/y1<=1070:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!FU22309&y1=1:P; [If "1" (spell scroll) is entered, display input for specific spell scroll]
+!!FU|y1=1/y1>=1001:E; [Exit if a spell scroll number was entered given]
+!!HEy-5|y1>0/z3=z-4:A4/y1; [If a number is entered alone, give that artifact to hero]
+!!VRv9004|y1>0/z3=z-4:+1; [Increment v9004 if any cheat option selected: v9004]
+!!FU|y1>0/z3=z-4:E; [Exit if artifact given to hero]
+!!DO22307/0/170/1&-2:P0/y2; [Check for matching artifact name if no number entered]
+!!DO22308/0/170/1&-2:P0/y2; [Check for substring of artifact name if no exact match found]
+!!DO22310/0/69/1&-2:P1/y2; [Check for matching spell scroll name if no number entered]
+!!DO22311/0/69/1&-2:P1/y2; [Check for substring of spell scroll name if no exact match found]
+!!IF&-2/4:M1/z177048;
+
+ [Search for exact match to artifact name]
+ [x1=1 if it's a scroll, x2=1 to delete artifact]
+!?FU22307;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N0/-5/x16; [Artifact name: z-5]
+!!IF&z3=z-5:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!FU22309&y1=1:P0/x2; [If a spell scroll is entered, display input for specific spell scroll]
+!!HEy-5&2/y1<>1/x2=0:A4/y1; [If a match is found, give that artifact to hero]
+!!HEy-5&2/y1<>1/x2=1:A3/y1/1/0; [If a match is found, remove that artifact from hero]
+!!VRv9004&2/y1<>1:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Search for substring match to artifact name]
+ [x1=1 if it's a scroll, x2=1 to delete artifact]
+!?FU22308;
+!!IF:V1/0 V2/0; [Initialize Flag 1 and 2 to False]
+!!UN:N0/-5/x16; [Artifact name: z-5]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!FU22309&y1=1:P0/x2; [If a spell scroll is entered, display input for specific spell scroll]
+!!HEy-5&1/y1<>1/x2=0:A4/y1; [If a match is found, give that artifact to hero]
+!!HEy-5&1/y1<>1/x2=1:A3/y1/1/0; [If a match is found, remove that artifact from hero]
+!!VRv9004&1/y1<>1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True if a match is found]
+
+ [Input dialogue for free spell scroll type]
+ [x2=0 to give a scroll, x2=1 to delete one]
+!?FU22309;
+!!VRz-1&x2=0:Sz177049;
+!!VRz-1&x2=1:Sz177050;
+!!VRz-2:Sz177051;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz3:Sz1; [Set z3 = z1]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRy1&-3:Vz3; [Convert entry to number if 2nd token is empty: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!IF:V4/1; [Initialize Flag 4 to True]
+!!IF|y1<0/y1>1070:V4/0; [Set Flag 4 to False if number below 0 or above 1070: Flag 4]
+!!IF&y1>69/y1<1001:V4/0; [Set Flag 4 to False if number above 69 and below 1001: Flag 4]
+!!IF&-4:M1/z177052;
+!!FU&-4:E; [Exit if out of spell table]
+!!VRy1&z3=z-4:S1001; [Set correct spell scroll number for Summon Boat: y1]
+!!VRy1&y1>0/y1<69:+1001; [Set correct spell scroll number: y1]
+!!HEy-5&y1>=1001/x2=0:A4/y1; [If a number is entered alone, give that scroll to hero]
+!!HEy-5&y1>=1001/x2=1:A3/y1/1/0; [If a number is entered alone, remove scroll from hero]
+!!VRv9004&y1>=1001:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&y1>=1001:V2/1; [Set Flag 2 to True if a spell scroll is given]
+!!FU&y1>=1001:E; [Exit if spell scroll given to hero]
+!!DO22310/0/69/1&-2:P0/x2; [Check for matching spell scroll name if no number entered]
+!!DO22311/0/69/1&-2:P0/x2; [Check for substring of spell scroll name if no exact match found]
+!!IF&-2:V4/0; [Set Flag 4 to False if no spell scroll match found: Flag 4]
+!!IF&-2/x1=0:M1/z177053;
+
+ [Search for exact match to spell name]
+ [x2=0 to give a scroll, x2=1 to delete one]
+!?FU22310;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N1/-5/x16; [Spell name: z-5]
+!!IF&z3=z-5:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16 +1001; [Set y1 to x16+1001 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&2/x2=0:A4/y1; [If a match is found, give that spell scroll to hero]
+!!HEy-5&2/x2=1:A3/y1/1/0; [If a match is found, remove that spell scroll from hero]
+!!VRv9004&2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Search for substring match to spell name]
+ [x2=0 to give a scroll, x2=1 to delete one]
+!?FU22311;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N1/-5/x16; [Spell name: z-5]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRy1&1:Sx16 +1001; [Set y1 to x16+1001 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&1/x2=0:A4/y1; [If a match is found, give that spell scroll to hero]
+!!HEy-5&1/x2=1:A3/y1/1/0; [If a match is found, remove that spell scroll from hero]
+!!VRv9004&1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True if there's a match]
+
+ [Input Dialogue for Free Hero Experience]
+!?FU22312;
+!!VRz-1:Sz177054;
+!!VRz-2:Sz177055;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy6&z-9=z-8:S1; [Set y6 to 1 if first character is "="]
+!!VRz3&y6=0:Sz1; [Set z3 = z1 if first character is NOT "="]
+!!VRz3&y6=1:M1/z1/1/50; [Set z3 = z1 minus 1st character if 1st character is "="]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRy1:Vz4; [Convert first token to number: y1]
+!!VRz6:Sz177056;
+!!VRz7:Sz177057;
+!!VRy2:S1; [Initialize y2 to 1: y2]
+!!VRy3:S2073739175; [Initialize y3 to 2073739175: y3]
+!!VRy2|z5=z6/z5=z7:S2; [Set y2 to 2 if 'level' or 'levels' entered: y2]
+!!VRy3&y2=4:S88; [Set y3 to 88 if levels are being added: y3]
+!!IF&y1<1/y2=1:M1/z177058;
+!!IF&y1<1/y2=2:M1/z177059;
+!!IF&y1>y3/y2=1:M1/z177060;
+!!IF&y1>y3/y2=2:M1/z177061;
+!!FU|y1<1/y1>y3:E; [Exit if number is less than 1 or above y3]
+!!HEy-5&y2=1/y6=0:Edy1; [Give y1 experience to hero]
+!!HEy-5&y2=1/y6=1:Ey1;  [Set hero's experience to y1]
+!!VRv9004&y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!HEy-5&y2=2:Ed/?y4/1; [Hero's level: y4]
+!!VRy4&y2=2:+y1; [Hero's new level: y4]
+!!VRy4&y2=2/y6=1:Sy1; [Set Hero's new level to y1: y4]
+!!FU22313&y2=2:Py4/?y5; [New level experience returned in y5]
+!!HEy-5&y2=2:Ey5; [Set hero's new experience]
+!!VRv9004&y2=2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Determine Hero's Experience for new Level]
+ [Hero's new level in x2]
+ [Experience set in x2, returned to calling function as y5]
+!?FU22313;
+!!VRx2&x1=2:S1000; [Level 2]
+!!VRx2&x1=3:S2000; [Level 3]
+!!VRx2&x1=4:S3200; [Level 4]
+!!VRx2&x1=5:S4600; [Level 5]
+!!VRx2&x1=6:S6200; [Level 6]
+!!VRx2&x1=7:S8000; [Level 7]
+!!VRx2&x1=8:S10000; [Level 8]
+!!VRx2&x1=9:S12200; [Level 9]
+!!VRx2&x1=10:S14700; [Level 10]
+!!VRx2&x1=11:S17500; [Level 11]
+!!VRx2&x1=12:S20600; [Level 12]
+!!VRx2&x1=13:S24320; [Level 13]
+!!VRx2&x1=14:S28784; [Level 14]
+!!VRx2&x1=15:S34140; [Level 15]
+!!VRx2&x1=16:S40567; [Level 16]
+!!VRx2&x1=17:S48279; [Level 17]
+!!VRx2&x1=18:S57533; [Level 18]
+!!VRx2&x1=19:S68637; [Level 19]
+!!VRx2&x1=20:S81961; [Level 20]
+!!VRx2&x1=21:S97949; [Level 21]
+!!VRx2&x1=22:S117134; [Level 22]
+!!VRx2&x1=23:S140156; [Level 23]
+!!VRx2&x1=24:S167782; [Level 24]
+!!VRx2&x1=25:S200933; [Level 25]
+!!VRx2&x1=26:S240714; [Level 26]
+!!VRx2&x1=27:S288451; [Level 27]
+!!VRx2&x1=28:S345735; [Level 28]
+!!VRx2&x1=29:S414475; [Level 29]
+!!VRx2&x1=30:S496963; [Level 30]
+!!VRx2&x1=31:S595948; [Level 31]
+!!VRx2&x1=32:S714730; [Level 32]
+!!VRx2&x1=33:S857268; [Level 33]
+!!VRx2&x1=34:S1028313; [Level 34]
+!!VRx2&x1=35:S1233567; [Level 35]
+!!VRx2&x1=36:S1479871; [Level 36]
+!!VRx2&x1=37:S1775435; [Level 37]
+!!VRx2&x1=38:S2130111; [Level 38]
+!!VRx2&x1=39:S2555722; [Level 39]
+!!VRx2&x1=40:S3066455; [Level 40]
+!!VRx2&x1=41:S3679334; [Level 41]
+!!VRx2&x1=42:S4414788; [Level 42]
+!!VRx2&x1=43:S5297332; [Level 43]
+!!VRx2&x1=44:S6356384; [Level 44]
+!!VRx2&x1=45:S7627246; [Level 45]
+!!VRx2&x1=46:S9152280; [Level 46]
+!!VRx2&x1=47:S10982320; [Level 47]
+!!VRx2&x1=48:S13178368; [Level 48]
+!!VRx2&x1=49:S15813625; [Level 49]
+!!VRx2&x1=50:S18975933; [Level 50]
+!!VRx2&x1=51:S22770702; [Level 51]
+!!VRx2&x1=52:S27324424; [Level 52]
+!!VRx2&x1=53:S32788890; [Level 53]
+!!VRx2&x1=54:S39346249; [Level 54]
+!!VRx2&x1=55:S47215079; [Level 55]
+!!VRx2&x1=56:S56657675; [Level 56]
+!!VRx2&x1=57:S67988790; [Level 57]
+!!VRx2&x1=58:S81586128; [Level 58]
+!!VRx2&x1=59:S97902933; [Level 59]
+!!VRx2&x1=60:S117483099; [Level 60]
+!!VRx2&x1=61:S140979298; [Level 61]
+!!VRx2&x1=62:S169174736; [Level 62]
+!!VRx2&x1=64:S203009261; [Level 63]
+!!VRx2&x1=64:S243610691; [Level 64]
+!!VRx2&x1=65:S292332407; [Level 65]
+!!VRx2&x1=66:S350798466; [Level 66]
+!!VRx2&x1=67:S420957736; [Level 67]
+!!VRx2&x1=68:S505148860; [Level 68]
+!!VRx2&x1=69:S606178208; [Level 69]
+!!VRx2&x1=70:S727413425; [Level 70]
+!!VRx2&x1=71:S872895685; [Level 71]
+!!VRx2&x1=72:S1047474397; [Level 72]
+!!VRx2&x1=73:S1256968851; [Level 73]
+!!VRx2&x1=74:S1508362195; [Level 74]
+!!VRx2&x1=75:S1810034207; [Level 75]
+!!VRx2&x1>=89:S2073739175; [Level 89]
+
+ [Yes/No dialogue for variable dump]
+ [Only non-zero variables and owned hero variables will be output]
+!?FU22323;
+!!UN:J9/0/2; [Get path to Heroes home folder: z2]
+!!VRz2:Sz177062; [Output file name and path: z2]
+!!IF:Q1/z177063;
+!!FU&-1:E; [Exit if player clicks Cancel]
+
+!!UN:R5/1/1; [Change mouse cursor to "wait" hourglass symbol]
+!!UN:R7/0/1; [Show mouse cursor and disable changing]
+!!VRy-9:S0; [Initialize y-9 to 0]
+!!VRz1:Sz177064; [Ouput section name: z1]
+
+ [Quick variables]
+!!VRz-1:Sz177065;
+!!VRy-9&f<>0:+1; [Increment y-9 if variable not 0]
+!!UN&f<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177066;
+!!VRy-9&g<>0:+1; [Increment y-9 if variable not 0]
+!!UN&g<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177067;
+!!VRy-9&h<>0:+1; [Increment y-9 if variable not 0]
+!!UN&h<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177068;
+!!VRy-9&i<>0:+1; [Increment y-9 if variable not 0]
+!!UN&i<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177069;
+!!VRy-9&j<>0:+1; [Increment y-9 if variable not 0]
+!!UN&j<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177070;
+!!VRy-9&k<>0:+1; [Increment y-9 if variable not 0]
+!!UN&k<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177071;
+!!VRy-9&l<>0:+1; [Increment y-9 if variable not 0]
+!!UN&l<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177072;
+!!VRy-9&m<>0:+1; [Increment y-9 if variable not 0]
+!!UN&m<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177073;
+!!VRy-9&n<>0:+1; [Increment y-9 if variable not 0]
+!!UN&n<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177074;
+!!VRy-9&o<>0:+1; [Increment y-9 if variable not 0]
+!!UN&o<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177075;
+!!VRy-9&p<>0:+1; [Increment y-9 if variable not 0]
+!!UN&p<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177076;
+!!VRy-9&q<>0:+1; [Increment y-9 if variable not 0]
+!!UN&q<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177077;
+!!VRy-9&r<>0:+1; [Increment y-9 if variable not 0]
+!!UN&r<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177078;
+!!VRy-9&s<>0:+1; [Increment y-9 if variable not 0]
+!!UN&s<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+!!VRz-1:Sz177079;
+!!VRy-9&t<>0:+1; [Increment y-9 if variable not 0]
+!!UN&t<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+
+!!DO22314/1/10000/1:P; [v variables]
+!!DO22315/1/155/1:P; [w variables]
+!!DO22317/1/1000/1:P; [z variables]
+
+!!VRz3:Sz177080;
+!!UN:G1/59/1/3; [Change creature picture text for display]
+!!IF:Q1/21/59/1/z177081;
+!!UN:G1/59/1/0; [Restore creature picture text after displaying]
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+
+
+ [Output non-zero v variables]
+!?FU22314;
+!!VRy1:Svx16; [v variable at loop (vx16): y1]
+!!VRz-1:Sz177082;
+!!VRy-9&y1<>0:+1; [Increment y-9 if variable not 0]
+!!UN&y1<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+
+ [Output non-zero hero variables for owned heroes]
+!?FU22315;
+!!HEx16:O?y1; [Owner of hero: y1]
+!!IF&y1>=0:Wx16; [Set w variables to hero at loop x16 (if owned): y1]
+!!DO22316/1/200/1&y1>=0:Py1; [Loop through w variables if hero is owned]
+
+ [Output non-zero w variables for owned heroes]
+ [x1=hero number]
+!?FU22316;
+!!VRy1:Swx16; [w variable at loop (wx16): y1]
+!!VRz-1:Sz177083;
+!!VRy-9&y1<>0:+1; [Increment y-9 if variable not 0]
+!!UN&y1<>0:N5/-1/y-9/1/2; [Output line if variable not 0]
+
+ [Output non-null z variables]
+!?FU22317;
+!!VRz-1:Szx16; [z variable at loop (zx16): z-1]
+!!VRz-2:Sz177084;
+!!VRz-1:H1; [Set Flag 1 to True if z variable has text: Flag 1]
+!!VRy-9&1:+1; [Increment y-9 if z variable not empty]
+!!UN&1:N5/-2/y-9/1/2; [Output line if z variable not empty]
+
+ [Input Dialogue for Free Luck, Morale, Movement or Spell Points]
+!?FU22318;
+!!VRz-1:Sz177085;
+!!VRz-2:Sz177086;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy6&z-9=z-8:S1; [Set y6 to 1 if first character is "="]
+!!VRz1&y6=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz2:M2/z1/0; [Store 1st token (word) from z1 in z2]
+!!VRz3:M2/z1/1; [Store 2nd token (word) from z1 in z3]
+!!VRy1:Vz2; [Convert first token to number: y1]
+!!VRz-1:S^0^; [Set z-1 to '0']
+!!VRy2:S0; [Initialize y2 to 0]
+!!VRy2|y1<>0/z1=z-1/z2=z-1/z3=z-1:S1; [If a number entered, set y2 to 1]
+!!VRz3:H2; [Check if a 2nd token was entered: Flag 2=True if yes]
+!!IF&y2=1/-2:M1/z177087;
+!!FU&y2=1/-2:E; [Exit if a number was entered alone]
+!!VRz4:Sz177088;
+!!VRz4:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:R1/dy1;     [Give hero extra luck: y1]
+!!HEy-5&1/y2=1/y6=1:R1/y1; [Set hero's luck to y1]
+!!VRy3&1/y2=0:S1; [Set y3 to 1 if 'luck' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y6=0:M1/z177089;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz5:Sz177090;
+!!VRz5&y3=0:Uz1; [See if user's input is a match or substring of z5: Flag 1=True if yes]
+!!VRz1&-1/y3=0:Uz5; [See if z5 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz5&-1:Uz3; [See if user's 2nd token is a match or substring of z5: Flag 1=True if yes]
+!!VRz3&-1:Uz5; [See if z5 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:R0/dy1;      [Give hero extra morale: y1]
+!!HEy-5&1/y2=1/y6=1:R0/y1; [Set hero's morale to y1]
+!!VRy3&1/y2=0/y3=0:S2; [Set y3 to 2 if 'morale' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y6=0:M1/z177091;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz6:Sz177092;
+!!VRz6&-1/y3=0:Uz1; [See if user's input is a match or substring of z6: Flag 1=True if yes]
+!!VRz1&-1/y3=0:Uz6; [See if z6 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz6&-1:Uz3; [See if user's 2nd token is a match or substring of z6: Flag 1=True if yes]
+!!VRz3&-1:Uz6; [See if z6 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Wdy1;     [Give hero extra movement: y1]
+!!HEy-5&1/y2=1/y6=1:Wy1; [Set hero's movement to y1]
+!!VRy3&1/y2=0/y3=0:S3; [Set y3 to 3 if 'movement' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y6=0:M1/z177093;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz7:Sz177094;
+!!VRz7&-1/y3=0:Uz1; [See if user's input is a match or substring of z7: Flag 1=True if yes]
+!!VRz1&-1/y3=0:Uz7; [See if z7 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz7&-1:Uz3; [See if user's 2nd token is a match or substring of z7: Flag 1=True if yes]
+!!VRz3&-1:Uz7; [See if z7 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!VRz7&-1:Sz177095;
+!!VRz7&-1/y3=0:Uz1; [See if user's input is a match or substring of z7: Flag 1=True if yes]
+!!VRz1&-1/y3=0:Uz7; [See if z7 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz7&-1:Uz3; [See if user's 2nd token is a match or substring of z7: Flag 1=True if yes]
+!!VRz3&-1:Uz7; [See if z7 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Idy1;      [Give hero extra spell points: y1]
+!!HEy-5&1/y2=1/y6=1:Iy1;  [Set hero's spell points to y1]
+!!VRy3&1/y2=0/y3=0:S4; [Set y3 to 4 if 'spell points' or 'mana' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y6=0:M1/z177096;
+!!FU&1/y2=1:E; [Exit if bonus given or no bonus given (0 entry)]
+!!IF|-1/y3=0:M1/z177097;
+!!FU|-1/y3=0:E; [Exit if no match found (Flag 1=False or y3=0)]
+!!FU22319&y3>0:Py3; [Input dialogue to get amount of bonus to give to hero]
+
+ [Input dialogue for amount of luck, morale]
+ [movement or spell points to give to hero]
+ [x1=luck (1), morale (2), movement (3) or mana (4)]
+ [x2=0 if called from adventure map, x2=1 if called from hero screen]
+!?FU22319;
+!!VRz9&x1=1:Sz177098;
+!!VRz9&x1=2:Sz177099;
+!!VRz9&x1=3:Sz177100;
+!!VRz9&x1=4:Sz177101;
+!!HEy-5:B0/?z8; [Get hero's name: z8]
+!!VRz-1:Sz177102;
+!!VRz-2:Sz177103;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/-3/-3/-3/-3/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy2&z-9=z-8:S1; [Set y2 to 1 if first character is "="]
+!!VRz1&y2=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz-4:S^0^;
+!!VRy1:Vz1; [Convert string to number: y1]
+!!IF&y1=0/z1<>z-4:M1/z177104;
+!!FU&y1=0/z1<>z-4:E; [Exit if no number entered]
+!!HEy-5&x1=1:R1/dy1/0;     [Give hero extra luck: y1]
+!!HEy-5&x1=1/y2=1:R1/y1/0; [Set hero's luck to y1]
+!!HEy-5&x1=2:R0/dy1/0;     [Give hero extra morale: y1]
+!!HEy-5&x1=2/y2=1:R0/y1/0; [Set hero's morale to y1]
+!!HEy-5&x1=3:Wdy1;         [Give hero extra movement: y1]
+!!HEy-5&x1=3/y2=1:Wy1;     [Set hero's movement to y1]
+!!HEy-5&x1=4:Idy1/1;       [Give hero extra spell points: y1]
+!!HEy-5&x1=4/y2=1:Iy1/1;   [Set hero's spell points to y1]
+!!IF&y1=0/y2=0:M1/z177105;
+!!FU&y1=0/y2=0:E; [Exit if no bonus given]
+!!VRv9004:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&x2=0:R1; [Redraw screen]
+
+ [Input dialogue for free spell]
+!?FU22320;
+!!VRz-1:Sz177106;
+!!VRz-2:Sz177107;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz3:Sz1; [Set z3 = z1]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz6:Sz177108; [Set z6 to "delete"]
+!!VRz8:Sz177109; [Set z8 to "del"]
+!!VRy2:S1; [Initialize y2 to 1, to give a spell: y2]
+!!VRy2|z4=z6/z4=z8:S0; [Set y2 to 0 if 1st word is "delete" or "del": y2]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz7:M2/z3/2; [Store 3rd token (word) from z3 in z7]
+!!VRz7:H7; [Check if 3rd token exists - flag 7 = false if no 3rd token: Flag 7]
+!!VRz3&y2=0/3/7:S^%Z5 %Z7^; [Remove word "delete" from z3 input: z3]
+!!VRz3&y2=0/3/-7:S^%Z5^; [Remove word "delete" from z3 input (if no 3rd word): z3]
+!!VRy1&-3:Vz3; [Convert entry to number if 2nd token is empty: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!IF:V4/1; [Initialize Flag 4 to True]
+!!IF|y1<0/y1>69:V4/0; [Set Flag 4 to False if number below 0 or above 69: Flag 4]
+!!IF&-4:M1/z177110;
+!!FU&-4:E; [Exit if out of spell table]
+!!IF:V5/0; [Initialize Flag to False]
+!!IF&y1>0/y1<=69:V5/1; [Set Flag 5 to True if a valid spell number entered: Flag 5]
+!!IF&y1=0/z3=z-4:V5/1; [Set Flag 5 to True if 0 entered: Flag 5]
+!!HEy-5&5:My1/1; [If a number is entered alone, give that spell to hero]
+!!VRv9004&5:+1; [Increment v9004 if any cheat option selected: v9004]
+!!FU&5:E; [Exit if spell given to hero]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO22321/0/69/1:Py2; [Check for matching spell name if no number entered]
+!!DO22322/0/69/1&-2:Py2; [Check for substring of spell name if no exact match found]
+!!IF&-2:V4/0; [Set Flag 4 to False if no spell match found: Flag 4]
+!!IF&-2:M1/z177111;
+
+ [Search for exact match to spell name]
+ [x1=0 to delete spell or 1 to give spell]
+!?FU22321;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N1/-5/x16; [Spell name: z-5]
+!!IF&z3=z-5:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&2:My1/x1; [If a match is found, give or remove that spell from hero]
+!!VRv9004&2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Search for substring match to spell name]
+ [x1=0 to delete spell or 1 to give spell]
+!?FU22322;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N1/-5/x16; [Spell name: z-5]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&1:My1/x1; [If a match is found, give or remove that spell from hero]
+!!VRv9004&1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True if there's a match]
+
+ [Input Dialogue for Free Resources]
+!?FU22324;
+!!VRz-1:Sz177112;
+!!VRz-2:Sz177113;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy4&z-9=z-8:S1; [Set y4 to 1 if first character is "="]
+!!VRz1&y4=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz2:M2/z1/0; [Store 1st token (word) from z1 in z2]
+!!VRz3:M2/z1/1; [Store 2nd token (word) from z1 in z3]
+!!VRy1:Vz2; [Convert first token to number: y1]
+!!VRz-1:S^0^; [Set z-1 to '0']
+!!VRy2:S0; [Initialize y2 to 0]
+!!VRy3:S-1; [Initialize y3 to -1]
+!!VRy2|y1<>0/z1=z-1/z2=z-1/z3=z-1:S1; [If a number entered, set y2 to 1]
+!!VRz3:H2; [Check if a 2nd token was entered: Flag 2=True if yes]
+!!IF&y2=1/-2:M1/z177114;
+!!FU&y2=1/-2:E; [Exit if a number was entered alone]
+!!IF:V1/0; [Initialize Flag 1 to False: Flag 1]
+!!VRz4:Sz177115;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1/y4=0:Ry-4/0/dy1 Ry-4/1/dy1 Ry-4/2/dy1 Ry-4/3/dy1; [Give player all resources 1: y1]
+!!OW&1/y2=1/y4=0:Ry-4/4/dy1 Ry-4/5/dy1 Ry-4/6/dy1 Ry-4/7/dy1; [Give player all resources 2: y1]
+!!OW&1/y2=1/y4=1:Ry-4/0/y1 Ry-4/1/y1 Ry-4/2/y1 Ry-4/3/y1; [Set all player's resources to y1 (1)]
+!!OW&1/y2=1/y4=1:Ry-4/4/y1 Ry-4/5/y1 Ry-4/6/y1 Ry-4/7/y1; [Set all player's resources to y1 (2)]
+!!VRy3&1/y2=0/y3<0:S10; [Set y3 to 10 if 'all' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177116;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177117;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/0/dy1;      [Give player extra wood: y1]
+!!OW&1/y2=1/y4=1:Ry-4/0/y1;  [Set player's wood to y1]
+!!VRy3&1/y2=0/y3<0:S0; [Set y3 to 0 if 'wood' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177118;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177119;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/1/dy1;      [Give player extra mercury: y1]
+!!OW&1/y2=1/y4=1:Ry-4/1/y1;  [Set player's mercury to y1]
+!!VRy3&1/y2=0/y3<0:S1; [Set y3 to 1 if 'mercury' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177120;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177121;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/2/dy1;      [Give player extra ore: y1]
+!!OW&1/y2=1/y4=1:Ry-4/2/y1;  [Set player's ore to y1]
+!!VRy3&1/y2=0/y3<0:S2; [Set y3 to 2 if 'ore' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177122;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177123;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/3/dy1;     [Give player extra sulfur: y1]
+!!OW&1/y2=1/y4=1:Ry-4/3/y1; [Set player's sulfur to y1]
+!!VRy3&1/y2=0/y3<0:S3; [Set y3 to 3 if 'sulfur' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177124;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177125;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/4/dy1;     [Give player extra crystal: y1]
+!!OW&1/y2=1/y4=1:Ry-4/4/y1; [Set player's crystal to y1]
+!!VRy3&1/y2=0/y3<0:S4; [Set y3 to 4 if 'crystal' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177126;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177127;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/5/dy1;     [Give player extra gems: y1]
+!!OW&1/y2=1/y4=1:Ry-4/5/y1; [Set player's gems to y1]
+!!VRy3&1/y2=0/y3<0:S5; [Set y3 to 5 if 'gems' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177128;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177129;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/6/dy1;     [Give player extra gold: y1]
+!!OW&1/y2=1/y4=1:Ry-4/6/y1; [Set player's gold to y1]
+!!VRy3&1/y2=0/y3<0:S6; [Set y3 to 6 if 'gold' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177130;
+!!FU&1/y2=1:E; [Exit if bonus given, even if 0]
+!!VRz4:Sz177131;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!OW&1/y2=1:Ry-4/7/dy1;      [Give player extra mithril: y1]
+!!OW&1/y2=1/y4=1:Ry-4/7/y1;  [Set player's mithril to y1]
+!!VRy3&1/y2=0/y3<0:S7; [Set y3 to 7 if 'mithril' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1/y2=1/y1=0/y4=0:M1/z177132;
+!!FU&1/y2=1:E; [Exit if bonus given or no bonus given (0 entry)]
+!!IF|-1/y3<0:M1/z177133;
+!!FU|-1/y3<0:E; [Exit if no match found (Flag 1=False or y3<0)]
+!!FU22325&y3>=0:Py3; [Input dialogue to get amount of bonus resources to give to player]
+
+ [Input dialogue for resource amount. x1=resource type (0..7)]
+!?FU22325;
+!!VRz9&x1=0:Sz177134;
+!!VRz9&x1=1:Sz177135;
+!!VRz9&x1=2:Sz177136;
+!!VRz9&x1=3:Sz177137;
+!!VRz9&x1=4:Sz177138;
+!!VRz9&x1=5:Sz177139;
+!!VRz9&x1=6:Sz177140;
+!!VRz9&x1=7:Sz177141;
+!!VRz9&x1=10:Sz177142;
+!!VRz8:Sz177143;
+!!VRz8&x1=5:Sz177144;
+!!VRz8&x1=10:Sz177145;
+!!VRz-1:Sz177146;
+!!VRz-2:Sz177147;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/-3/-3/-3/-3/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy2&z-9=z-8:S1; [Set y2 to 1 if first character is "="]
+!!VRz1&y2=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz-4:S^0^;
+!!VRy1:Vz1; [Convert string to number: y1]
+!!IF&y1=0/z1<>z-4:M1/z177148;
+!!FU&y1=0/z1<>z-4:E; [Exit if no number entered]
+!!OW&x1<=7:Ry-4/x1/dy1; [Give player extra resources. Type x1, Amount: y1]
+!!OW&x1<=7/y2=1:Ry-4/x1/y1; [Set player's extra resources. Type x1, Amount: y1]
+!!OW&x1=10:Ry-4/0/dy1 Ry-4/1/dy1 Ry-4/2/dy1 Ry-4/3/dy1; [Give player all resources 1: y1]
+!!OW&x1=10:Ry-4/4/dy1 Ry-4/5/dy1 Ry-4/6/dy1 Ry-4/7/dy1; [Give player all resources 2: y1]
+!!OW&x1=10/y2=1:Ry-4/0/y1 Ry-4/1/y1 Ry-4/2/y1 Ry-4/3/y1; [Set all player's resources 1 to y1]
+!!OW&x1=10/y2=1:Ry-4/4/y1 Ry-4/5/y1 Ry-4/6/y1 Ry-4/7/y1; [Set all player's resources 2 to y1]
+!!IF&y1=0/y2=0:M1/z177149;
+!!FU&y1=0/y2=0:E; [Exit if no bonus given]
+!!VRv9004:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN:R1; [Redraw screen]
+
+ [Input Dialogue for Free Primary Skills]
+!?FU22326;
+!!VRz-1:Sz177150;
+!!VRz-2:Sz177151;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy12&z-9=z-8:S1; [Set y12 to 1 if first character is "="]
+!!VRz1&y12=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz5:M2/z1/0; [Store 1st token (word) from z1 in z5]
+!!VRz3:M2/z1/1; [Store 2nd token (word) from z1 in z3]
+!!VRy1:Vz5; [Convert first token to number: y1]
+!!VRz-1:S^0^; [Set z-1 to '0']
+!!VRy2:S0; [Initialize y2 to 0]
+!!VRy3:S-1; [Initialize y3 to -1]
+!!VRy2|y1<>0/z1=z-1/z5=z-1/z3=z-1:S1; [If a number entered, set y2 to 1]
+!!VRz3:H2; [Check if a 2nd token was entered: Flag 2=True if yes]
+!!IF&y2=1/-2:M1/z177152;
+!!FU&y2=1/-2:E; [Exit if a number was entered alone]
+!!HEy-5:F?y4/?y5/?y6/?y7; [Read hero's primary skills: y4/y5/y6/y7]
+!!VRy8:Sy4 +y1; [Total attack: y8]
+!!VRy8&y8<0:S0; [Minimum attack 0: y8]
+!!VRy8&y8>99:S99; [Maximum attack 99: y8]
+!!VRy9:Sy5 +y1; [Total defense: y9]
+!!VRy9&y9<0:S0; [Minimum defense 0: y9]
+!!VRy9&y9>99:S99; [Maximum defense 99: y9]
+!!VRy10:Sy6 +y1; [Total power: y10]
+!!VRy10&y10<1:S1; [Minimum power 1: y10]
+!!VRy10&y10>99:S99; [Maximum power 99: y10]
+!!VRy11:Sy7 +y1; [Total knowledge: y11]
+!!VRy11&y11<1:S1; [Minimum knowledge 1: y11]
+!!VRy11&y11>99:S99; [Maximum knowledge 99: y11]
+!!IF:V1/0; [Initialize Flag 1 to False: Flag 1]
+!!VRz4:Sz177153;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Fy8/y9/y10/y11; [Give hero bonus to all primary skills: y1]
+!!HEy-5&1/y2=1/y12=1:Fy1/y1/y1/y1; [Set all hero's primary skills to y1]
+!!HEy-5&1/y2=1/y12=1/y1<1:F0/0/1/1; [Set all hero's primary skills to minimum]
+!!VRy3&1/y2=0/y3<0:S10; [Set y3 to 10 if 'all' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&1/y2=1:R1; [Redraw screen]
+!!FU&1/y2=1/y1<>0:E; [Exit if bonus given]
+!!VRz4:Sz177154;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Fy8/d/d/d; [Give hero extra attack skill: y8]
+!!HEy-5&1/y2=1/y12=1:Fy1/d/d/d; [Set hero's attack skill to y1]
+!!HEy-5&1/y2=1/y12=1/y1<0:F0/d/d/d; [Set hero's attack skill to minimum]
+!!VRy3&1/y2=0/y3<0:S0; [Set y3 to 0 if 'attack' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&1/y2=1:R1; [Redraw screen]
+!!FU&1/y2=1/y1<>0:E; [Exit if bonus given]
+!!VRz4:Sz177155;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!VRz4:Sz177156;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Fd/y9/d/d; [Give hero extra defense skill: y9]
+!!HEy-5&1/y2=1/y12=1:Fd/y1/d/d; [Set hero's defense skill to y1]
+!!HEy-5&1/y2=1/y12=1/y1<0:Fd/0/d/d; [Set hero's defense skill to minimum]
+!!VRy3&1/y2=0/y3<0:S1; [Set y3 to 1 if 'defense' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&1/y2=1:R1; [Redraw screen]
+!!FU&1/y2=1/y1<>0:E; [Exit if bonus given]
+!!VRz4:Sz177157;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Fd/d/y10/d; [Give hero extra power skill: y10]
+!!HEy-5&1/y2=1/y12=1:Fd/d/y1/d; [Set hero's power skill to y1]
+!!HEy-5&1/y2=1/y12=1/y1<1:Fd/d/1/d; [Set hero's power skill to minimum]
+!!VRy3&1/y2=0/y3<0:S2; [Set y3 to 2 if 'power' entered: y3]
+!!VRv9004&1/y2=1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&1/y2=1:R1; [Redraw screen]
+!!FU&1/y2=1/y1<>0:E; [Exit if bonus given]
+!!VRz4:Sz177158;
+!!VRz4&-1/y3<0:Uz1; [See if user's input is a match or substring of z4: Flag 1=True if yes]
+!!VRz1&-1/y3<0:Uz4; [See if z4 is a match or substring of user's input: Flag 1=True if yes]
+!!VRz4&-1/y3<0:Uz3; [See if user's 2nd token is a match or substring of z4: Flag 1=True if yes]
+!!VRz3&-1/y3<0:Uz4; [See if z4 is a match or substring of user's 2nd token: Flag 1=True if yes]
+!!HEy-5&1/y2=1:Fd/d/d/y11; [Give hero extra knowledge skill: y11]
+!!HEy-5&1/y2=1/y12=1:Fd/d/d/y1; [Set player's knowledge skill to y1]
+!!HEy-5&1/y2=1/y12=1/y1<1:Fd/d/d/1; [Set player's knowledge skill to minimum]
+!!VRy3&1/y2=0/y3<0:S3; [Set y3 to 3 if 'knowledge' entered: y3]
+!!VRv9004&1/y2=1/y1<>0:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&1/y2=1:R1; [Redraw screen]
+!!FU&1/y2=1/y1<>0:E; [Exit if bonus given]
+!!IF&1/y2=1/y1=0/y12=0:M1/z177159;
+!!FU&1/y2=1:E; [Exit if bonus given or no bonus given (0 entry)]
+!!IF|-1/y3<0:M1/z177160;
+!!FU|-1/y3<0:E; [Exit if no match found (Flag 1=False or y3<0)]
+!!FU22327&y3>=0:Py3/y8/y9/y10/y11; [Input dialogue to get primary skill bonus to give to hero]
+
+ [Input dialogue for primary skill bonus. x1=primary skill type]
+ [x1: 0=attack skill, 1=defense skill, 2=power skill, 3=knowledge skill]
+ [x2=0 from adventure screen, x2=1 from hero screen]
+!?FU22327;
+!!VRz9&x1=0:Sz177161;
+!!VRz9&x1=1:Sz177162;
+!!VRz9&x1=2:Sz177163;
+!!VRz9&x1=3:Sz177164;
+!!VRz9&x1=10:Sz177165;
+!!VRz-1:Sz177166;
+!!VRz-2:Sz177167;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/-3/-3/-3/-3/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy12&z-9=z-8:S1; [Set y12 to 1 if first character is "="]
+!!VRz1&y12=1:M1/z1/1/50; [Set z1 = z1 minus 1st character if 1st character is "="]
+!!VRz-4:S^0^;
+!!VRy1:Vz1; [Convert string to number: y1]
+!!IF&y1=0/z1<>z-4:M1/z177168;
+!!FU&y1=0/z1<>z-4:E; [Exit if no number entered]
+!!HEy-5:F?y4/?y5/?y6/?y7; [Read hero's primary skills: y4/y5/y6/y7]
+!!VRy8:Sy4 +y1; [Total attack: y8]
+!!VRy8&y8<0:S0; [Minimum attack 0: y8]
+!!VRy8&y8>99:S99; [Maximum attack 99: y8]
+!!VRy9:Sy5 +y1; [Total defense: y9]
+!!VRy9&y9<0:S0; [Minimum defense 0: y9]
+!!VRy9&y9>99:S99; [Maximum defense 99: y9]
+!!VRy10:Sy6 +y1; [Total power: y10]
+!!VRy10&y10<1:S1; [Minimum power 1: y10]
+!!VRy10&y10>99:S99; [Maximum power 99: y10]
+!!VRy11:Sy7 +y1; [Total knowledge: y11]
+!!VRy11&y11<1:S1; [Minimum knowledge 1: y11]
+!!VRy11&y11>99:S99; [Maximum knowledge 99: y11]
+!!HEy-5&x1=0:Fy8/d/d/d; [Give hero extra attack skill: y8]
+!!HEy-5&x1=0/y12=1:Fy1/d/d/d; [Set hero's attack skill to y1]
+!!HEy-5&x1=0/y12=1/y1<0:F0/d/d/d; [Set hero's attack skill to minimum]
+!!HEy-5&x1=1:Fd/y9/d/d; [Give hero extra defense skill: y9]
+!!HEy-5&x1=1/y12=1:Fd/y1/d/d; [Set hero's defense skill to y1]
+!!HEy-5&x1=1/y12=1/y1<0:Fd/0/d/d; [Set hero's defense skill to minimum]
+!!HEy-5&x1=2:Fd/d/y10/d; [Give hero extra power skill: y10]
+!!HEy-5&x1=2/y12=1:Fd/d/y1/d; [Set hero's power skill to y1]
+!!HEy-5&x1=2/y12=1/y1<1:Fd/d/1/d; [Set hero's power skill to minimum]
+!!HEy-5&x1=3:Fd/d/d/y11; [Give hero extra knowledge skill: y11]
+!!HEy-5&x1=3/y12=1:Fd/d/d/y1; [Set hero's knowledge skill to y1]
+!!HEy-5&x1=3/y12=1/y1<1:Fd/d/d/1; [Set hero's knowledge skill to minimum]
+!!HEy-5&x1=10:Fy8/y9/y10/y11; [Give hero extra primary skills: y8/y9/y10/y11]
+!!HEy-5&x1=10/y12=1:Fy1/y1/y1/y1; [Set all hero's primary skills to y1]
+!!HEy-5&x1=10/y12=1/y1<1:F0/0/1/1; [Set all hero's primary skills to minimum]
+!!IF&y1=0/y12=0:M1/z177169;
+!!FU&y1=0/y12=0:E; [Exit if no bonus given]
+!!VRv9004:+1; [Increment v9004 if any cheat option selected: v9004]
+!!UN&x2=0:R1; [Redraw screen]
+
+ [Input dialogue for free secondary skill]
+!?FU22328;
+!!VRz-1:Sz177170;
+!!VRz-2:Sz177171;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRy2:S-1; [Initialize y2 to -1, to give a skill: y2]
+!!VRz3:Sz1; [Set z3 = z1]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!IF:V1/0; [Initialize Flag 1 to False: Flag 1]
+!!VRz6:Sz177172; [Set z6 to "delete"]
+!!VRz6:Uz4; [If user's input is a match or substring of "delete": Flag 1=True]
+!!VRy2&1:S0; [Set y2 to 0 if "delete" entered: y3]
+!!IF:V1/0 V5/0 V7/0; [Initialize Flag 1, 5 and 7 to False]
+!!VRz9&-1:Sz177173; [Set z9 to "basic"]
+!!VRz9&-1:Uz4; [If user's input is a match or substring of "advanced": Flag 1=True]
+!!VRy2&1:S1; [Set y2 to 1 if "basic" entered: y2]
+!!VRz9&-1/y2<0:Sz177174; [Set z9 to "advanced"]
+!!VRz9&-1/y2<0:Uz4; [If user's input is a match or substring of "advanced": Flag 1=True]
+!!VRy2&1/y2<0:S2; [Set y2 to 2 if "advanced" entered: y2]
+!!VRz9&-1/y2<0:Sz177175; [Set z9 to "expert"]
+!!VRz9&-1/y2<0:Uz4; [If user's input is a match or substring of "expert": Flag 1=True]
+!!VRy2&1/y2<0:S3; [Set y2 to 3 if "expert" entered: y2]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz7:M2/z3/2; [Store 3rd token (word) from z3 in z7]
+!!VRz7:H7; [Check if 3rd token exists - flag 7 = false if no 3rd token: Flag 7]
+!!VRz3&y2=0/3/7:S^%Z5 %Z7^; [Remove word "delete" from z3 input: z3]
+!!VRz3&y2=0/3/-7:S^%Z5^; [Remove word "delete" from z3 input (if no 3rd word): z3]
+!!VRz3&1/3/7:S^%Z5 %Z7^; [Remove skill level word from z3 input: z3]
+!!VRz3&1/3/-7:S^%Z5^; [Remove skill level word from z3 input (if no 3rd word): z3]
+!!VRy1&-3:Vz3; [Convert entry to number if 2nd token is empty: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!IF:V4/1; [Initialize Flag 4 to True]
+!!IF|y1<0/y1>27:V4/0; [Set Flag 4 to False if number below 0 or above 27: Flag 4]
+!!IF&-4:M1/z177176;
+!!FU&-4:E; [Exit if out of skill table]
+!!IF:V5/0; [Initialize Flag to False]
+!!IF&y1>0/y1<=27:V5/1; [Set Flag 5 to True if a valid skill number entered: Flag 5]
+!!IF&y1=0/z3=z-4:V5/1; [Set Flag 5 to True if 0 entered: Flag 5]
+!!FU22331&5:Py1; [If a number is entered alone, call function to get skill level]
+!!VRv9004&5:+1; [Increment v9004 if any cheat option selected: v9004]
+!!FU&5:E; [Exit if spell given to hero]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO22329/0/27/1:Py2; [Check for matching skill name if no number entered]
+!!DO22330/0/27/1&-2:Py2; [Check for substring of skill name if no exact match found]
+!!IF&-2:V4/0; [Set Flag 4 to False if no skill match found: Flag 4]
+!!IF&-2:M1/z177177;
+
+ [Search for exact match to skill name]
+ [x1=skill level (0..3) or -1 if none entered]
+!?FU22329;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N4/-5/x16; [Skill name: z-5]
+!!IF&z3=z-5:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&2/x1>=0:Sy1/x1; [If a match is found, give or remove that skill]
+!!FU22331&2/x1<0:Py1; [If a match is found but no level given, call function to get level]
+!!VRv9004&2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Search for substring match to skill name]
+ [x1=0 to delete skill or 1 to give skill]
+!?FU22330;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N4/-5/x16; [Skill name: z-5]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&1/x1>=0:Sy1/x1; [If a match is found, give or remove that skill]
+!!FU22331&1/x1<0:Py1; [If a match is found but no level given, call function to get level]
+!!VRv9004&1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True if there's a match]
+
+ [Input for choosing secondary skill level]
+ [y1=secondary skill number]
+!?FU22331;
+!!UN:N4/-1/x1; [Skill name: z-1]
+!!VRz-2:Sz177178;
+!!VRz-3:Sz177179;
+!!VRz-4:Sz177180;
+!!VRz-5:Sz177181;
+!!VRz-6:Sz177182;
+!!VRz-7:Sz177183;
+!!IF:G1/1/16/-2/-3/-4/-5/-6/-7/0/0/0/0/0/0/0; [Display Skill Level Menu: choice in v1]
+!!VRy1&v1=1:S0; [Remove skill: y1=0]
+!!VRy1&v1=2:S1; [Basic skill: y1=1]
+!!VRy1&v1=4:S2; [Advanced skill: y1=2]
+!!VRy1&v1=8:S3; [Expert skill: y1=3]
+!!HEy-5&v1>=1/v1<=8:Sx1/y1; [Give or remove skill]
+
+ [Dialogue for changing hero's owner]
+!?FU22332;
+!!VRz1:Sz177184;
+!!HEy-5:O?y1; [Hero's current owner: y1]
+!!VRy5:Sy1 +1; [Add 1 to y1: y5]
+!!FU$bit$:Py5; [Convert to bit: result in y-100]
+!!VRz-1:Sz177008;
+!!VRz-2:Sz177009;
+!!VRz-3:Sz177010;
+!!VRz-4:Sz177011;
+!!VRz-5:Sz177012;
+!!VRz-6:Sz177013;
+!!VRz-7:Sz177014;
+!!VRz-8:Sz177015;
+!!VRz-9:Sz177185;
+!!VRv1:S0;
+!!IF:G1/1/y-100/1/-1/-2/-3/-4/-5/-6/-7/-8/-9/0/0/0; [Display player colour Menu: choice in v1]
+!!VRy2&v1=1:S0; [Red]
+!!VRy2&v1=2:S1; [Blue]
+!!VRy2&v1=4:S2; [Tan]
+!!VRy2&v1=8:S3; [Green]
+!!VRy2&v1=16:S4; [Orange]
+!!VRy2&v1=32:S5; [Purple]
+!!VRy2&v1=64:S6; [Teal]
+!!VRy2&v1=128:S7; [Pink]
+!!VRy2&v1=256:S-1; [None]
+!!OW&y2>=0:Iy2/?y3/?y4; [Check if player is alive: y4]
+!!OW&y2>=0/y4=1:Iy2/1/0; [If not alive, make player AI and alive]
+!!HEy-5&y2>=0:Oy2; [Set new hero owner]
+!!HEy-5&y2>=0:Py-21/y-22/y-23; [Teleport hero on the spot]
+!!HEy-5&y2<0:K; [Kill hero if "none" chosen]
+!!UN&y2>=0:Ly-21/y-22/y-23/0; [Move view to hero]
+!!UN:R1; [Redraw screen]
+!!VRv9004&y1<>y2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Hero screen trigger]
+!?CM2&v9004<>999;
+!!UN:P77/?y-1; [Check if menu is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if not enabled]
+!!CM:I?y-2 F?y-3 S?y-4; [Area clicked: y-2, Flags: y-3, Subtype: y-4]
+!!CM:A?y-10/?y-11; [x/y coordinates of position clicked: y-10/y-11]
+!!FU|y-3<>32/y-4<>12:E; [Exit if not an alt-click or if a click-release]
+
+!!HE-1:B0/?z2 N?y-5; [Get hero's name: z2, number: y-5]
+!!FU22306&y-2>=2/y-2<=44/y-2<>19:P1; [Free artifact]
+!!FU22328&y-10>=77/y-10<=362/y-11>=283/y-11<=470:P1; [Free secondary skill]
+!!FU22319&y-2=117:P1/1; [Free Luck]
+!!FU22319&y-2=116:P2/1; [Free Morale]
+!!FU22319|y-2=109/y-2=113/y-2=120:P4/1; [Free Spell Points]
+!!FU22312|y-2=108/y-2=112/y-2=119:P1; [Free Hero Experience]
+!!FU22327|y-2=46/y-2=50/y-2=103:P0/1; [Free Attack]
+!!FU22327|y-2=47/y-2=51/y-2=104:P1/1; [Free Defense]
+!!FU22327|y-2=48/y-2=52/y-2=105:P2/1; [Free Power]
+!!FU22327|y-2=49/y-2=53/y-2=106:P3/1; [Free Knowledge]
+!!FU22320&y-2=19:P; [Free Spell]
+!!FU22334&y-2>=68/y-2<=74:P; [Free Troops/Troop Experience Menu]
+!!CM:R0; [Cancel normal click action]
+!!UN:R3/-1; [Redraw hero screen]
+
+ [Free Troops/Troop Experience Menu from Hero screen]
+!?FU22334;
+!!VRy1:Sy-2 -68; [Slot number clicked: y1]
+!!HEy-5:C0/y1/?y2/?y3; [Current Type of creatures in slot: y2, Number: y3]
+!!UN&y2>=0/y3=1:N3/-8/y2/0; [Creature name (singular): z-8]
+!!UN&y2>=0/y3<>1:N3/-8/y2/1; [Creature name (plural): z-8]
+!!VRz-1:Sz177186;
+!!VRz-2:Sz177187;
+!!VRz-3:Sz177188;
+!!VRz-9:Sz177189;
+!!VRv9005&v9005=0:S2048; [Initialize "Exit" button as default option to start]
+!!IF&y2>=0:G1/9005/v9005/-1/-2/-3/0/0/0/0/0/0/0/0/0/-9; [Display WoG Cheat Menu: choice in v9005]
+!!VRv9005&y2<0:S1; [If slot is empty, go straight to changing creature dialogue]
+!!FU22335&v9005=1:Py1; [Input dialogue for changing creature type/number]
+!!FU22304&v9005=2:Py1; [Input dialogue for free stack experience]
+
+ [Input dialogue for changing creature type/number in hero troop slot]
+!?FU22335;
+!!HEy-5:C0/x1/?y3/?y4; [Current Type of creatures in slot: y3, Number: y4]
+!!UN&y3>=0/y4=1:N3/-9/y3/0; [Creature name (singular): z-9]
+!!UN&y3>=0/y4<>1:N3/-9/y3/1; [Creature name (plural): z-9]
+!!VRz-10&y3<0:Sz177190;
+!!VRz-10&y3>=0:Sz177191;
+!!VRz-1&y3>=0:Sz177192;
+
+!!VRz-1&y3<0:Sz177193;
+
+!!VRz-2&y3>=0:Sz177194;
+!!VRz-2&y3<0:Sz177195;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz-8:S^=^; [Set z-8 to "="]
+!!VRz-9:S^^; [Set z-9 to null: z-9]
+!!VRz-9:M1/z1/0/1; [First character of string: z-9]
+!!VRy12&z-9=z-8:S1; [Set y12 to 1 if first character is "="]
+!!VRz3&y12=1:M1/z1/1/50; [Set z3 = z1 minus 1st character if 1st character is "="]
+!!VRz3&y12=0:Sz1; [Set z3 = z1 if 1st character isn't "="]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz6:M2/z3/2; [Store 3rd token (word) from z3 in z6]
+!!VRy1:Vz4; [Convert first token to number: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz6:H4; [Check if 3rd token exists - flag 4 = false if no 2nd token: Flag 4]
+!!VRy2&y1<>0/3:S1; [Set y2 to 1 if a number and word were entered: y2]
+!!VRy2&z4=z-4/3:S1; [Set y2 to 1 if "0" and a word were entered: y2]
+!!HEy-5&y1<>0/y2=0/y3>=0/y12=0:C0/x1/d/dy1; [If number alone, add/subtract from stack]
+!!HEy-5&y1<>0/y2=0/y3>=0/y12=1:C0/x1/d/y1;  [If "=" and number, set that number in stack]
+!!HEy-5&z4=z-4/y2=0/y3>=0/y12=1:C0/x1/d/y1;  [If "=" and "0", set that number in stack]
+!!VRv9004&y1<>0/y2=0/y3>=0:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&y1<>0/y2=0/y3<0:M1/z177196;
+!!IF&z4=z-4/-3/y3<0:M1/z177197;
+!!FU&y1<>0/y2=0:E; [Exit if no name entered]
+!!FU&z4=z-4/-3/y3<0:E; [Exit if 0 entered and no second token]
+
+!!VRz3&y2=1/3/-4:S^%Z5^; [Set z3 to z5 (2nd token) if a number and word were entered: z3]
+!!VRz3&y2=1/3/4:S^%Z5 %Z6^; [Set z3 to z5+z6 (2nd+3rd tokens) if a number and two words entered: z3]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO22336/0/196/1:Py1/x1/y12; [Check for matching monster name]
+!!DO22337/0/196/1&-2:Py1/x1/y12; [Check for substring if no exact match found]
+!!IF&-2/z4<>z-4:M1/z177198;
+!!IF&y1=0/y2=0/2/y3<0/z4<>z-4:M1/z177199;
+!!IF&z4=z-4/y2=1/2/y3<0:M1/z177200;
+!!IF&y1<0/y2=1/2/y3<0:M1/z177201;
+
+ [Search for exact match to creature name]
+ [Number: x1, Slot: x2, "=": x3 (1 if entered)]
+!?FU22336;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N3/-5/x16/0; [Creature name (singular): z-5]
+!!UN:N3/-6/x16/1; [Creature name (plural): z-6]
+!!IF|z3=z-5/z3=z-6:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&2/x3=0:C0/x2/y1/dx1; [Add/change stack of creatures in hero's troop slot]
+!!HEy-5&2/x3=1:C0/x2/y1/x1;  [Set/change stack of creatures in hero's troop slot]
+!!VRv9004&2:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&2/x1<>0:V2/1; [Set Flag 2 to True]
+
+ [Search for substring match to creature name]
+ [Number: x1, Slot: x2, "=": x3 (1 if entered)]
+!?FU22337;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N3/-5/x16/0; [Creature name (singular): z-5]
+!!UN:N3/-6/x16/1; [Creature name (plural): z-6]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz-6&-1:Uz3; [See if user's input is a match or substring of z-6]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRz3&-1:Uz-6; [See if z-6 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!HEy-5&1/x3=0:C0/x2/y1/dx1; [Add/change stack of creatures in hero's troop slot]
+!!HEy-5&1/x3=1:C0/x2/y1/x1;  [Set/change stack of creatures in hero's troop slot]
+!!VRv9004&1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True]
+
+
+ [Trigger is Left Mouse-click on Adventure Map]
+!?CM5&v9004<>999;
+!!UN:P77/?y-8; [Check if script is enabled: y-8]
+!!FU&y-8<>1:E; [Exit if not enabled]
+!!CM:I?y-1 F?y-2 S?y-7; [Location: y-1, Flags (type of click): y-2 (alt=32) Subtype: y-7]
+!!FU|y-2<>32/y-7<>12/y-1=1:E; [Exit if not an alt-click or if it's a click-release or it's the mini-map]
+
+!!OW:C?y-13; [Current player: y-13]
+
+!!IF:V1/0; [Initialize Flag 1 to False]
+
+!!VRy-14:S-1; [Initialize y-14 to -1]
+!!VRy-14&y-1>=32/y-1<=36:Sy-1 -32; [Town slot alt-clicked in list: y-14]
+!!OW&y-14>=0:N-1/y-14/?y-5; [Town number alt-clicked: y-5]
+!!CA0/y-5&y-14>=0/y-5>=0:N?z2 P?y-21/?y-22/?y-23; [Get town's name: z2, location: y-21/y-22/y-23]
+!!FU22338&y-14>=0/y-5>=0:P; [Display main Town WoG cheat menu]
+
+!!FU&y-14>=0:E; [Exit if town in town list alt-clicked]
+
+!!CM:P?y-21/?y-22/?y-23; [Location clicked: y-21/y-22/y-23]
+!!UN:P905/0; [Reset error messages]
+!!UN:P904/1; [Temporarily disable error messages]
+!!CAy-21/y-22/y-23:O?y-4; [Owner of town at clicked location: y-4]
+!!UN:P904/0; [Reenable error messages]
+!!UN:P905/?y-6; [Set y-6 to 1 if any error: y-6]
+!!FU&y-6=1:E; [Exit if not a town there]
+!!FU22338:P; [Display main Town cheat menu]
+
+ [Display main cheat menu for town]
+!?FU22338;
+!!HEv9007&v9007>=0:P?y-30/?y-31/?y-32; [Location of hero last alt-clicked: y-30/y-31/y-32]
+!!FU&y-21=y-30/y-22=y-31/y-23=y-32:E; [Exit if visiting hero alt-clicked]
+!!CM:R0; [Cancel normal click operation]
+!!CAy-21/y-22/y-23:N?z2 U?y-5 O?y-4; [Get town's name: z2, number: y-5, Owner: y-4]
+!!VRz-10&y-4=0:Sz177008;
+!!VRz-10&y-4=1:Sz177009;
+!!VRz-10&y-4=2:Sz177010;
+!!VRz-10&y-4=3:Sz177011;
+!!VRz-10&y-4=4:Sz177012;
+!!VRz-10&y-4=5:Sz177013;
+!!VRz-10&y-4=6:Sz177014;
+!!VRz-10&y-4=7:Sz177015;
+!!VRz-1:Sz177202;
+!!VRz-2:Sz177203;
+!!VRz-3:Sz177204;
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!VRz1&y-4>=0:Sz177205;
+!!VRz-8:Sz177206;
+!!VRz-9:Sz177207;
+!!VRv9006&v9006=0:S2048; [Initialize "Exit" button as default option to start]
+!!IF:G1/9006/v9006/-1/-2/-3/0/0/0/0/0/0/0/1/-8/-9; [Display WoG Cheat Menu: choice in v9006]
+!!FU22339&v9006=1:P; [Input dialogue for free town building]
+!!FU22340&v9006=2:P; [Input dialogue for changing town's owner]
+!!FU22324&v9006=512:P; [Input dialogue for free resources]
+!!FU22323&v9006=1024:P; [Yes/No Dialogue for Variable Dump]
+
+ [Dialogue for changing town's owner]
+ [Town's current owner is y-4]
+!?FU22340;
+!!VRz1:Sz177208;
+!!VRy5:Sy-4 +1; [Add 1 to y-4: y5]
+!!FU$bit$:Py5; [Convert to bit: result in y-100]
+!!VRy-100&y-4<0:S256; [Neutral (no owner): y-100]
+!!VRz-1:Sz177008;
+!!VRz-2:Sz177009;
+!!VRz-3:Sz177010;
+!!VRz-4:Sz177011;
+!!VRz-5:Sz177012;
+!!VRz-6:Sz177013;
+!!VRz-7:Sz177014;
+!!VRz-8:Sz177015;
+!!VRz-9:Sz177209;
+!!VRv1:S0;
+!!IF:G1/1/y-100/1/-1/-2/-3/-4/-5/-6/-7/-8/-9/0/0/0; [Display player colour Menu: choice in v1]
+!!VRy2&v1=1:S0; [Red]
+!!VRy2&v1=2:S1; [Blue]
+!!VRy2&v1=4:S2; [Tan]
+!!VRy2&v1=8:S3; [Green]
+!!VRy2&v1=16:S4; [Orange]
+!!VRy2&v1=32:S5; [Purple]
+!!VRy2&v1=64:S6; [Teal]
+!!VRy2&v1=128:S7; [Pink]
+!!VRy2&v1=256:S-1; [None]
+!!OW&y2>=0:Iy2/?y3/?y4; [Check if player is alive: y4]
+!!OW&y2>=0/y4=1:Iy2/1/0; [If not alive, make player AI and alive]
+!!CA0/y-5:Oy2; [Set new town owner]
+!!OW&y-13=y2:Ny2/y-5; [Set town as active town if owned by current player]
+!!UN:R1; [Redraw screen]
+!!VRv9004&y1<>y2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Input dialogue for free town building]
+!?FU22339;
+!!CA0/y-5:T?y-15; [Town type: y-15]
+!!VRz-1:Sz177210;
+!!VRz-2:Sz177211;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+!!VRz3:Sz1; [Set z3 = z1]
+!!VRz4:M2/z3/0; [Store 1st token (word) from z3 in z4]
+!!VRz6:Sz177212; [Set z6 to "remove"]
+!!VRz8:Sz177213; [Set z8 to "rem"]
+!!VRz-8:Sz177214; [Set z-8 to "build"]
+!!VRy2:S1; [Initialize y2 to 1, to build a building: y2]
+!!VRy2|z4=z6/z4=z8:S0; [Set y2 to 0 if 1st word is "remove" or "rem": y2]
+!!VRy3|z4=z6/z4=z8/z4=z-8:S1; [Set y3 to 1 if 1st word is "remove", "rem", or "build": y3]
+!!VRz5:M2/z3/1; [Store 2nd token (word) from z3 in z5]
+!!VRz5:H3; [Check if 2nd token exists - flag 3 = false if no 2nd token: Flag 3]
+!!VRz7:M2/z3/2; [Store 3rd token (word) from z3 in z7]
+!!VRz7:H7; [Check if 3rd token exists - flag 7 = false if no 3rd token: Flag 7]
+!!VRz8:M2/z3/3; [Store 4th token (word) from z3 in z8]
+!!VRz8:H8; [Check if 4th token exists - flag 8 = false if no 4th token: Flag 8]
+!!VRz9:M2/z3/4; [Store 5th token (word) from z3 in z9]
+!!VRz9:H9; [Check if 5th token exists - flag 9 = false if no 5th token: Flag 9]
+!!VRz3&y3=1/3/7/8/9:S^%Z5 %Z7 %Z8 %Z9^; [Remove word "remove" or "build" from z3 input (if 5 word): z3]
+!!VRz3&y3=1/3/7/8/-9:S^%Z5 %Z7 %Z8^; [Remove word "remove" or "build" from z3 input (if only 4 words): z3]
+!!VRz3&y3=1/3/7/-8/-9:S^%Z5 %Z7^; [Remove word "remove" or "build" from z3 input (if only 3 words): z3]
+!!VRz3&y3=1/3/-7/-8/-9:S^%Z5^; [Remove word "remove" or "build" from z3 input (if only 2 words): z3]
+!!VRy1&-3:Vz3; [Convert entry to number if 2nd token is empty: y1]
+!!VRz-4:S^0^; [z-4="0"]
+!!IF:V4/1; [Initialize Flag 4 to True]
+!!IF|y1<0/y1>43:V4/0; [Set Flag 4 to False if number below 0 or above 43: Flag 4]
+!!IF&-4:M1/z177215;
+!!FU&-4:E; [Exit if out of building table]
+!!IF:V5/0; [Initialize Flag to False]
+!!IF&y1>0/y1<=69:V5/1; [Set Flag 5 to True if a valid building number entered: Flag 5]
+!!IF&y1=0/z3=z-4:V5/1; [Set Flag 5 to True if 0 entered: Flag 5]
+!!CA0/y-5&5:B6/y1; [If a number is entered alone, build that building]
+!!CA0/y-5&5:I0; [Synchronize town to match internal town buildings]
+!!VRv9004&5:+1; [Increment v9004 if any cheat option selected: v9004]
+!!FU&5:E; [Exit if building built in town]
+!!VRz-10:Sz177216; [Set z-10 to all]
+!!VRy4:S0; [Initialize y4 to 0]
+!!VRy4|y-15=1/y-15=3:S1; [Set y4 to 1 for Rampart or Inferno]
+!!DO22343/0/43/1&z3=z-10:Py2/y4; [Build or remove all town buildings]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO22341/0/43/1:Py2; [Check for matching building name if no number entered]
+!!DO22342/0/43/1&-2:Py2; [Check for substring of building name if no exact match found]
+!!IF&-2:V4/0; [Set Flag 4 to False if no building match found: Flag 4]
+!!IF&-2:M1/z177217;
+
+ [Search for exact match to town building name]
+ [x1=0 to remove building or 1 to build building]
+!?FU22341;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N2/-5/y-15/x16; [Building name: z-5]
+!!IF&z3=z-5:V2/1; [Set Flag 2 to True if there's a match]
+!!VRy1&2:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&2:S999; [Set x16 to 999 to exit loop if a match is found]
+!!CA0/y-5&2/x1=1:B6/y1; [If a match is found, and x1=1, build building in town]
+!!CA0/y-5&2/x1=0:B2/y1; [If a match is found, and x1=0, remove building from town]
+!!CA0/y-5&2:I0; [Synchronize town to match internal town buildings]
+!!VRv9004&2:+1; [Increment v9004 if any cheat option selected: v9004]
+
+ [Search for substring match to town building name]
+ [x1=0 to remove building or 1 to build building]
+!?FU22342;
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!UN:N2/-5/y-15/x16; [Building name: z-5]
+!!VRz-5:Uz3; [See if user's input is a match or substring of z-5]
+!!VRz3&-1:Uz-5; [See if z-5 is a match or substring of user's input]
+!!VRy1&1:Sx16; [Set y1 to x16 if match is found]
+!!VRx16&1:S999; [Set x16 to 999 to exit loop if a match is found]
+!!CA0/y-5&1/x1=1:B6/y1; [If a match is found, and x1=1, build building in town]
+!!CA0/y-5&1/x1=0:B2/y1; [If a match is found, and x1=0, remove building from town]
+!!CA0/y-5&1:I0; [Synchronize town to match internal town buildings]
+!!VRv9004&1:+1; [Increment v9004 if any cheat option selected: v9004]
+!!IF&1:V2/1; [Set Flag 2 to True if there's a match]
+
+ [Build or remove all buildings in town]
+ [x1=1 to build, x1=0 to remove]
+ [x2=1 for Rampart or Inferno, x2=0 for all other town types]
+!?FU22343;
+!!FU&x2=0/x16>=24/x16<=25:E; [Skip 2nd horde dwelling if not Rampart or Inferno]
+!!VRy1:S43 -x16; [Remove in Reverse order: y1]
+!!CA0/y-5&x1=1:B6/x16; [Build all buildings]
+!!CA0/y-5&x1=0:B2/y1; [Remove all buildings]
+!!CA0/y-5:I0; [Synchronize town to match internal town buildings]
+!!VRv9004:+1; [Increment v9004 if any cheat option selected: v9004]
+
+
+**-----------------------------------------------------------
+** added by Thomas Franz (samot): Change Stacksize of monsters
+
+!#VRv9008:S100; // initialize
+
+!?CM0; // right mouseclick at adventure map
+!!CM:I?y-1 F?y-2; // get clicked field
+!!FU&y-1<>2003/y-2<>32:E; // exit if no Alt-Click at attack-value-button
+
+!!CM:R0; // disable standard reaction
+** input dialog
+!!VRz-4:M3/y-2; // integer to string conversion
+!!VRz-1:Sz177218;
+!!VRz-2:Sz177219;
+!!VRz-3:S^^;
+!!IF:D1/-1/-2/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3/-3; [Set up input dialogue]
+!!IF:F1/4/4/4/4/1; [Enable cancel button]
+!!IF:E1/1; [Display input dialogue, response in v1, z1]
+!!VRz1:H1; [Check for a blank response - flag 1 = false if no text]
+!!FU|v1<0/-1:E; [Exit if ESC clicked or nothing entered]
+
+!!VRv9008:Vz1; // get integer value of the entered number (will be 0 if it is no text)
+!!VRv9008&v9008<=0:S100; // no change if no valid number is entered
+!!VRv9008&v9008<100/v9004=999:S100; // set to 100% if cheat menu is disabled (do not decrease if there are no cheats allowed)
+
+*********** end CM0 ***********
+
+!?BA0&v9008<>100; // start of a battle
+!!VRy-3:S-1; !!VRy-4:S-1; !!VRy-5:S1; !!VRy-6:S1; // initializing
+!!BA:H0/?y-1 H1/?y-2; // get attacking / defending hero
+!!HEy-1&y-1>-1:O?y-3; // get attackers owner
+!!HEy-2&y-2>-1:O?y-4; // get defenders owner
+!!OW&y-3>-1:Iy-3/?y-5; // check if attacker is AI (set to 1 if AI)
+!!OW&y-4>-1:Iy-4/?y-6; // check if defender is AI (set to 1 if AI); if there is no defender it is always set to AI (initializing)
+!!FU&y-5=y-6:E; // exit if both are humans or both AI
+
+!!DO22344/0/6/1&y-5=1:P0; // change attacker (if AI)
+!!DO22344/0/6/1&y-6=1:P1; // change defender (if AI)
+
+*********** end BA0 ***********
+
+
+!?FU22344; // increase / decrease monsters
+** x1 = attacker (0) or defender (1)
+** x16 = slot
+!!BA:Mx1/x16/?y1/?y2; // get number of monsters
+!!VRy2&y1>-1:*v9008 :100; // calc new size
+!!VRy2&y2<=0:S1; // at least one
+!!BA&y1>-1:Mx1/x16/d/y2; // set new number of monsters
+

@@ -1,0 +1,34 @@
+79	Mithril Forge	Created:	24.08.2005
+179001	Gives one mithril per two days	Creator:	Perfecto
+179	Mithril Forge Owned by {Red} (Mithril)		
+180	Mithril Forge Owned by {Blue} (Mithril)		
+181	Mithril Forge Owned by {Brown} (Mithril)		
+182	Mithril Forge Owned by {Green} (Mithril)		
+183	Mithril Forge Owned by {Orange} (Mithril)		
+184	Mithril Forge Owned by {Purple} (Mithril)		
+185	Mithril Forge Owned by {Teal} (Mithril)		
+186	Mithril Forge Owned by {Pink} (Mithril)		
+179000	{VERSION OUT-OF-DATE WARNING}  
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Mithril Forge (script79)}  
+Please update your files.  
+WoG version: 3.58  
+ERM version: 2.81		
+179002	Keeper		
+179003	-Kill keeper!		
+179004	-Ask to be owner of this place.		
+179005	-Just left this place saying no word.		
+179006	Hello, stranger. I am a keeper of this place.		
+179007	I know you are a great wizard. 
+
+{I'll be glad to serve you.}		
+179008	Sorry, I know nothing about you and I don't give you any mithril. 
+
+{Go away stranger.}		
+179009	I have heared something about you and I can produce some mithril for you. 
+But you must {give me some gold} to prove your authority.		
+179010	{Ok, I'll be glad to serve you.}		
+179011	Sorry, it seems you {don't have enough gold}.		
+179012	You've tried to go away but {Keeper attacked you}.		
+179013			

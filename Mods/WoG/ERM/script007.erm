@@ -1,0 +1,529 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Fishing Well ERM Script Version 1.8 created by Timothy E. Pulver
+**   Requires WoG version 3.58 or later using ERM version 2.7 or later.
+**   WoGify Name: script07.erm
+**   Updated: September 12, 2004
+** last update: 3rd of June 2005 Thomas Franz - renaming / moving graphic files
+
+** This script enhances all magic wells on a map by adding an option for
+** the hero to go fishing there. It's all a matter of pure luck as to what he
+** or she will catch. It could be something silly, it could be gold or it
+** could be a chest that contains resources, an artifact or a trap. But there
+** are other dangers too -- there's a chance that something nasty will emerge
+** from within the well and attack the hero.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 500 or later to avoid the ERM script
+** popping up as if it were a regular event message. And of course, you'll
+** also need to put one or more Magic Wells on your map for the heroes
+** visit. Happy fishing! :-)
+
+** Changes in version 1.2: tunnel chance lowered to 1 in 10,
+** obscure result chance raised to 3 in 10, easy option for mapmaker to
+** disable tunnels if desired (see below), "dead end" option added,
+** loose coin value raised to 50-200, chest of gold value raised to
+** 200-900, maximum monsters lowered to 5, tunnel check routine (counts #
+** of wells on map) moved to occur only after a tunnel has been
+** investigated. Flags 4 and 5 added, also function 1109 and
+** v310-v313.
+
+** Changes in version 1.3: tunnel routines changed to use UN:U instead
+** of library functions, AI only visits a Well if it has less than 300 movement
+** points, and AI no longer takes a dead end passage. Also,  variables
+** 310-v313 changed to local y variables. Disabled artifacts won't show
+** up in chests now but Angel Wings and Tomes can, if not disabled by
+** the mapmaker. Even combo artifacts can show up if specifically
+** enabled for the map. If you don't have a First Aid tent, you  can gain one
+** from the "blackfly" result.
+
+** Changes in version 1.4: minor tunnel monster bug fixed. Chest result is now
+** more likely and has two extra possibilities: pink gas which increases the
+** number of one of the hero's stacks by 20% (or a scroll if an empty slot
+** comes up) and purple gas which changes all troops of one type to a
+** downgraded type.Also, traps now kill from 10-30% of creatures instantly,
+** and if you find an artifact in a chest, it's automatically equipped if you have
+** a free slot. Obscure result adds the chance of a gnome riding by who will
+** offer to buy some of your troops (for triple their gold value). This version
+** also adds support for the WoGify options dialogue, switches from a
+** regular object trigger to a post-visit object trigger, and uses the new
+** HE:C2 command to give a creature if that result comes up.
+
+** Changes in version 1.5: movement penalty removed for AI heroes visiting the
+** Fishing Well. Artifacts and scrolls automatically equipped with new HE:A4
+** command.
+
+** Version 1.6 is updated to work correctly with stack experience.
+
+** Version 1.7 adds a check for the custom picture files existing when one will
+** be used, and displays a standard dialogue with no picture if the file isn't
+** found.
+
+** Version 1.8 removes Armageddon from the "Living Scroll" category and switches
+** to using the new $spell$ library function.
+
+Flags Used in this Script: 1-6
+Variables Used in this Script: v300-v305,v308,v998-v1000,z1-z2,z300-z303
+Functions Used in this Script: FU1100-FU1110, (no longer uses FU14000)
+Dialogues Used in this script: 7-9
+
+------------------------------------------------------------------------------------------
+ [Check version of ERM to see if it's current enough]
+ [Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v310/?v311;
+!#IF&v310<358:V1/1;
+!#IF&v311<270:V1/1;
+!#IF&1:M1/z107000;
+-----------------------------------------------------------------------------------------
+!$OB49;          [Magic Well is trigger]
+
+ [Check if Fishing Well script is enabled in WoGify Options]
+!!UN:P107/?v1;
+
+!!FU&v1<>1:E; [Exit trigger if script isn't enabled]
+
+[MAPMAKERS: if you wish to disable the tunnel option for
+Magic Wells, simply change 0 to 1 in the command below
+so that after the colon it reads: V4/1; ]
+!!IF:V4/0;
+
+------------------------------------------------------------------------------------------
+
+ [Clear flags 1-5]
+!!IF:R1111100000;
+
+ [Ask if hero wishes to fish in the well]
+!!IF&1000:Q3/z107001;
+!!VRy-2:S0; [Initialize y-2 to 0: y-2]
+!!VRy-2&3:S1; [Set y-2 to 1 if hero wishes to fish: y-2]
+
+ [If player is AI, generate random response]
+!!VRy-2&-1000:S0 R1;
+
+!!HE-1:W>0; [Check if hero has any movement points left]
+
+ [If hero doesn't have enough movement but does want to fish, display this message]
+!!IF&y-2=1/-1/1000:M1/z107002;
+
+!!FU1100&y-2=1/1:P;  [If hero has enough movement and wishes to fish, call function 1100]
+
+!!HE-1:W?y-1; [Get hero's current movement points: y-1]
+!!VRy-1:-5000; [Subtract 5000 from y-1: y-1]
+!!VRy-1&y-1<0:S0; [If less than 0, set y-1 to 0: y-1]
+!!HE-1&y-2=1/1000:Wy-1;  [Reduce non-AI hero's movement points by 5000 if he/she stopped to fish]
+
+------------------------------------------------------------------------------------------
+
+!?FU1100;  [Start of well fishing Function]
+
+ [If "tunnels" are allowed on map...  (Flag 4 set to 0]
+!!VRy1&-4:S10 T49;    [y1 = random # from 10-59]
+!!VRy1&-4::10;        [Divide result by 10 to get # from 1-5]
+!!VRy1&-4:R5;         [Add 0-5 to get number from 1-10]
+
+ [If "no tunnels" option is used... (Flag 4 set to 1]
+!!VRy1&4:S9 T80;   [y1 = random # from 9-89]
+!!VRy1&4::9;       [Divide result by 9 to get # from 1-9]
+
+!!FU1101&y1>=1/y1<=2:P; [If y1 = 1-2 call function 1101 - obscure result]
+!!FU1102&y1>=3/y1<=4:P; [If y1 = 3-4, call function 1102 - loose coins]
+!!FU1103&y1>=5/y1<=7:P; [If y1 = 5-7, call function 1103 - iron chest]
+!!FU1104&y1>=8/y1<=9:P; [If y1 = 8-9, call function 1104 - monster]
+!!FU1107&y1=10:P; [If y1 = 10, call function 1107 - tunnel]
+
+------------------------------------------------------------------------------------------
+
+!?FU1101;  [Start of obscure fishing result Function]
+
+!!VRz301:Sz107003;
+!!VRz302:Sz107004;
+!!VRy1:S0 T30; [y1 = random # from 0-30]
+
+!!VRz-1&y1=0:Sz107005; [Sandwich]
+!!VRz-5&y1=0:Sz107062; [Cheese sandwich]
+!!VRz-2&y1=0:S^..\data\p\s007_sandwich.jpg^;
+!!VRz-1&y1=1:Sz107006; [Boot]
+!!VRz-5&y1=1:Sz107063; [Old boot]
+!!VRz-2&y1=1:S^..\data\p\s007_boot.jpg^;
+!!VRz-1&y1=2:Sz107007; [Sword]
+!!VRz-5&y1=2:Sz107064; [Rusty sword]
+!!VRz-2&y1=2:S^..\data\p\s007_sword.jpg^;
+!!VRz-1&y1=3:Sz107008; [Lambchop]
+!!VRz-5&y1=3:Sz107065; [Lambchop]
+!!VRz-2&y1=3:S^..\data\p\s007_lambchop.jpg^;
+!!VRz-1&y1=4:Sz107009; [Mud]
+!!VRz-5&y1=4:Sz107066; [Slimy mud]
+!!VRz-2&y1=4:S^..\data\p\s007_mud.jpg^;
+!!VRz-1&y1=5:Sz107010; [Mossy Rocks]
+!!VRz-5&y1=5:Sz107067; [Mossy Rocks]
+!!VRz-2&y1=5:S^..\data\p\s007_mossy.jpg^;
+!!VRz-1&y1=6:Sz107011; [Trout]
+!!VRz-5&y1=6:Sz107068; [Trout]
+!!VRz-2&y1=6:S^..\data\p\s007_trout.jpg^;
+!!VRz-1&y1=7:Sz107012; [Hole]
+!!VRz-5&y1=7:Sz107069; [Dark hole]
+!!VRz-2&y1=7:S^..\data\p\s007_hole.jpg^;
+!!VRz-1&y1=8:Sz107013; [Mermaid]
+!!VRz-5&y1=8:Sz107070; [Mermaid]
+!!VRz-2&y1=8:S^..\data\p\s007_mermaid.jpg^;
+!!VRz-1&y1=9:Sz107014; [Fishing]
+!!VRz-5&y1=9:Sz107071; [Fishing]
+!!VRz-2&y1=9:S^..\data\p\s007_fishing.jpg^;
+!!VRz-1&y1=10:Sz107015; [Worms]
+!!VRz-5&y1=10:Sz107072; [Worms]
+!!VRz-2&y1=10:S^..\data\p\s007_worms.jpg^;
+!!VRz-1&y1=11:Sz107016; [Echoes]
+!!VRz-5&y1=11:Sz107073; [Spookies]
+!!VRz-2&y1=11:S^..\data\p\s007_echoes.jpg^;
+!!VRz-1&y1=12:Sz107017; [*Tales*]
+!!VRz-5&y1=12:Sz107074; [Scaly hero]
+!!VRz-6&y1=12:Sz107075; [Brave dragon]
+!!VRz-7&y1=12:Sz107076; [Silly warlock]
+!!VRz-2&y1=12:S^..\data\p\s007_tales1.jpg^;
+!!VRz-3&y1=12:S^..\data\p\s007_tales2.jpg^;
+!!VRz-4&y1=12:S^..\data\p\s007_tales3.jpg^;
+!!VRz-1&y1=13:Sz107018; [Hot Day]
+!!VRz-5&y1=13:Sz107077; [Hot sun]
+!!VRz-2&y1=13:S^..\data\p\s007_hotday.jpg^;
+!!VRz-1&y1=14:Sz107019; [Anchor]
+!!VRz-5&y1=14:Sz107078; [Anchor]
+!!VRz-2&y1=14:S^..\data\p\s007_anchor.jpg^;
+!!VRz-1&y1=15:Sz107020; [Dunking]
+!!VRz-5&y1=15:Sz107079; [Well dunking!]
+!!VRz-2&y1=15:S^..\data\p\s007_dunking.jpg^;
+!!VRz-1&y1=16:Sz107021; [Bobbing]
+!!VRz-5&y1=16:Sz107080; [Bob with an apple]
+!!VRz-2&y1=16:S^..\data\p\s007_bobbing.jpg^;
+!!VRz-1&y1=17:Sz107022; [Eel]
+!!VRz-5&y1=17:Sz107081; [Electric eel]
+!!VRz-2&y1=17:S^..\data\p\s007_eel.jpg^;
+
+!!VRz-1&y1=19:Sz107024; [Rainbow fish]
+!!VRz-5&y1=19:Sz107082; [Rainbow fish]
+!!VRz-2&y1=19:S^..\data\p\s007_fish.jpg^;
+
+!!VRz-1&y1=22:Sz107028; [Storm]
+!!VRz-5&y1=22:Sz107083; [Storm]
+!!VRz-2&y1=22:S^..\data\p\s007_storm.jpg^;
+
+!!VRz-1&y1>=25/y1<=27:Sz107032; [Gnome trader]
+!!VRz-5&y1>=25/y1<=27:Sz107084; [Gnome trader]
+!!VRz-2&y1>=25/y1<=27:S^..\data\p\s007_gnome.jpg^;
+
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!UN&y1<=19/y1<>18:J8/2/-2; [Check if file z-2 is present in Data\s folder: Flag 1=0 if file missing]
+!!UN&y1=22:J8/2/-2; [Check if file z-2 is present in Data\s folder: Flag 1=0 if file missing]
+!!UN&y1>=25/y1<=27:J8/2/-2; [Check if file z-2 is present in Data\s folder: Flag 1=0 if file missing]
+!!UN&y1=12/1:J8/2/-3; [Check if file z-3 is present in Data\s folder: Flag 1=0 if file missing]
+!!UN&y1=12/1:J8/2/-4; [Check if file z-4 is present in Data\s folder: Flag 1=0 if file missing]
+
+!!IF&1/y1<>12:D7/-1/0/0/-2/0/0/0/-5/0/0/0/0/0/0/0; [Set up custom dialogue box]
+!!IF&1/y1=12:D8/-1/0/0/-2/-3/-4/0/-5/-6/-7/0/0/0/0/0; [Set up custom dialogue box]
+!!IF&1:F7/0/0/0/0/0; [Disable Cancel button]
+!!IF&1/y1<=19/y1<>12/y1<>18/1000:E1/7; [Display Custom Dialogue]
+!!IF&1/y1=12/1000:E1/8; [Display Custom Dialogue for "Tales"]
+!!IF&-1/y1<=19/y1<>18/1000:M^%Z-1^; [Display standard Dialogue if files missing]
+
+!!IF&y1=18/1000:Q1/8/6/1/z107023;
+!!HE-1&y1=18:A1/6/15;
+
+!!HE-1&y1=19:R0/d1; [Rainbow fish gives +1 temporary morale to hero]
+
+!!IF&y1=20/1000:Q1/8/2/1/z107025; [Fake Grail]
+!!IF&y1=20/1000:M1/z107026;
+
+!!VRy2&y1=21:S2 T8; [Set y2 to random # between 2 and 10]
+!!VRy3&y1=21:S0 -y2 -100000; [Create a negative number for message display purposes]
+!!IF&y1=21/1000:Q1/36/y3/1/z107027;
+!!VRy2&y1=21:*-1;     [Change number to a negative number]
+!!OW&y1=21:R-1/6/dy2; [Remove 1 to 10 gold from player]
+
+!!IF&1/y1=22/1000:E1/7; [Display Custom Dialogue for storm]
+!!IF&-1/y1=22/1000:M^%Z-1^; [Display standard Dialogue if files missing]
+!!HE-1&y1=22:R0/d-1; [Reduce morale by 1 for storm]
+
+!!IF&y1=23/1000:Q500/21/16/1/z107029; [Friendly dwarves]
+
+!!FU$spell$&y1=24:P0/0/0/0/1/0; [Generate random spell, excluding banned/disabled: y-99]
+
+!!UN&y1=24:N1/z301/y-99; [Assign spell name to z301]
+!!IF&y1=24/1000:Q1/9/y-99/1/z107030;
+!!HE-1&y1=24:My-99/1; [Give spell to hero]
+
+!!VRy2&y1>=25/y1<=27:S0 R6;     [Set y2 to random number from 0 to 6 -- army slot number]
+!!HE-1&y1>=25/y1<=27:C0/y2/d0/?y4; [Store # of monsters found in hero's army slot y2 in y4]
+!!HE-1&y1>=25/y1<=27:C0/y2/?y5/d0; [Store TYPE of monsters found in hero's army slot y2 in y5]
+!!VRy4&y1>=25/y1<=27/y5<0:S0; [Set number of monsters to 0 if type is less than 0]
+!!VRy6&y1>=25/y1<=27:Sy4 *65536 +y5; [Store type/number of monsters for message display purposes]
+!!UN&y1>=25/y1<=27/y4>1/y5>=0:N3/z2/y5/1; [Store monster name (plural) in z2]
+!!UN&y1>=25/y1<=27/y4=1/y5>=0:N3/z2/y5/0; [Store monster name (singular) in z2]
+!!MA&y1>=25/y1<=27/y4>0:Cy5/6/?y7; [Store cost of troop type in y7]
+!!VRy7&y1>=25/y1<=27/y4>0:*y4; [Multiply by number of troops in stack]
+!!VRy7&y1>=25/y1<=27/y4>0:*3; [Multiply this value by 3]
+!!IF&y1>=25/y1<=27/y4>0/1000:Q2/21/y6/6/y7/2/z107031;  [Ask if player will trade troops for gold - result in flag 2]
+
+!!VRy3&y1>=25/y1<=27/y4>0/-1000:S0 R1; [If AI, generate random number between 0 and 1]
+!!IF&y1>=25/y1<=27/y4>0/-1000/y3=1:V2/1; [If AI and y3=1, set flag 2 to True]
+
+!!IF&1/y1>=25/y1<=27/y4<1/1000:E1/7; [If empty slot was selected, display this instead]
+!!IF&-1/y1>=25/y1<=27/y4<1/1000:M^%Z-1^; [If empty slot selected, display standard dialogue]
+
+!!IF&y1>=25/y1<=27/y4>0/2/1000:Q2/36/y7/1/z107033;
+!!HE-1&y1>=25/y1<=27/y4>0/2:C0/y2/d0/0;  [Remove troop stack]
+!!OW&y1>=25/y1<=27/y4>0/2:R-1/6/dy7;     [Give player y7 gold]
+
+!!VRz-1&y1>=25/y1<=27/y4>0/-2:Sz107034; [Gnome trader]
+!!IF&1/y1>=25/y1<=27/y4>0/-2:D7/-1/0/0/-2/0/0/0/-5/0/0/0/0/0/0/0; [Set up custom dialogue box]
+!!IF&1/y1>=25/y1<=27/y4>0/-2/1000:E1/7; [If refuse to sell your troops, display this instead]
+!!IF&-1/y1>=25/y1<=27/y4>0/-2/1000:M^%Z-1^; [Refuse to sell troops, standard dialogue]
+
+!!FU1105&y1>=28:P;   [Get monster to be rescued by hero]
+!!UN&y1>=28:N3/z301/v300/0; [Assign monster name to z301]
+!!IF&y1>=28/1000:Q1/21/v300/1/z107035;
+!!HE-1&y1>=28/1000:C2/v300/1/1;  [Add monster for human]
+!!HE-1&y1>=28/-1000:C2/v300/1/0; [Add monster for AI]
+
+------------------------------------------------------------------------------------------
+
+!?FU1102;  [Start of loose coins result Function]
+
+!!VRy1:S50 T150;    [Set y1 to random # from 50-200]
+!!IF&1000:Q1/36/y1/1/z107036;
+!!OW:R-1/6/dy1;  [Give player 50 to 200 gold]
+
+------------------------------------------------------------------------------------------
+
+!?FU1103;  [Start of iron chest result Function]
+
+!!VRy1:S1 R5;  [Set y1 to random number from 1-6]
+
+!!VRz-1:Sz107037; [Chest text]
+!!VRz-3:Sz107060; [Do you open it?]
+!!VRz-5:Sz107061; [Rusty old chest]
+!!VRz-2:S^..\data\p\s007_chest.jpg^;
+!!UN:J8/2/-2; [Check if file z-2 is present in Data\s folder: Flag 1=0 if file missing]
+!!IF&1:D9/-1/0/-3/-2/0/0/0/-5/0/0/0/0/0/0/0; [Set up custom dialogue box]
+!!IF&1:F9/0/0/0/0/1; [Enable Cancel button]
+!!IF&1/1000:E1/9; [Display Custom Dialogue]
+!!VRz-1&-1:Sz107059; [Chest text if standard Dialogue box used]
+!!IF&-1/1000:Q2^%Z-1^; [Display standard Dialogue if files missing]
+
+!!IF&1:V2/0; [Initialize Flag 2 to False]
+!!IF&1/v1=5:V2/1; [If player clicks OK, set Flag 2 to True]
+
+!!IF&-1000:V2/1;  [If player is AI, set flag 2 to true]
+
+!!VRy1&-2:S0; [If chest isn't opened, set y1 to 0]
+
+!!IF&y1=0/1000:M1/z107038;
+
+ [Set up for Pink Gas, Purple Gas and Poison Dart Trap]
+!!HE-1:B0/?z303;  [Store hero's name in z303]
+!!VRy2:S0 R6;     [Set y2 to random number from 0 to 6 -- army slot number]
+!!HE-1:C0/y2/d/?y4; [Store # of monsters found in hero's army slot y2 in y4]
+!!HE-1:C0/y2/?y5/d0; [Store TYPE of monsters found in hero's army slot y2 in y5]
+!!VRy4&y5<0:S0; [Set number of monsters to 0 if type is less than 0]
+!!UN&y4>0:N3/z2/y5/1; [Store monster name (plural) in z2]
+
+ [Pink Gas: Increases one of hero's monster stacks by 20%: y1=1]
+!!VRy1&y1=1/y4<1:S7; [Chest contains scroll instead]
+!!VRy7&y1=1/y4>0:Sy4 :5; [Store 20% of number of monsters (y4) in y7]
+!!VRy7&y1=1/y4>0:+1;  [Add one to y7]
+!!VRy6&y1=1/y4>0:Sy7 *65536 +y5; [Store type/number of monsters for message display purposes]
+!!IF&y1=1/y4>0/1000:Q1/21/y6/1/z107039;
+!!HE-1&y1=1/y4>0:C0/y2/d/dy7/0/3; [Add y7 troops to hero's slot number y2, no stack exp. loss]
+
+ [Chest contains gold: y1=2]
+!!VRy7&y1=2:S2 R7 *100; [Set y7 to random number from 200 to 900]
+!!IF&y1=2/1000:Q1/6/y7/1/z107040;
+!!OW&y1=2:R-1/6/dy7;  [Give player gold]
+
+ [Chest contains resources: y1=3]
+!!VRy7&y1=3:S0 R6; [Set y7 to random number from 0 to 6 -- resource type]
+!!VRy7&y1=3/y7=6:S7; [If result is 6, set it to 7 (Mithril)]
+!!VRy8&y1=3:S3 R5; [Set y8 to random number from 3 to 8 -- resource amount]
+!!IF&y1=3/1000:Q1/y7/y8/1/z107041;
+!!OW&y1=3:R-1/y7/dy8; [Give player resources]
+
+ [Chest contains artifact: y1=4]
+!!VRy11&y1=4:S1 R2; [y11=random number from 1-3]
+!!VRy1&y1=4/y11=3:S7; [33% chance that an artifact will be a scroll]
+!!DO1106/1/2/0&y1=4:P; [Set v308 to random artifact number: 7 to 158 excluding disabled artifacts.]
+!!HE-1&y1=4:A4/v308; [Equip on hero artifact # stored in v308]
+!!IF&y1=4/1000:Q2/8/v308/1/z107042;
+
+ [Purple Gas: Downgrades one type of Hero's creatures: y1=5]
+!!IF&y1=5/y4<1/1000:M1/z107043;
+
+!!VRy7:Sy5 %2;  [Store remainder of dividing monster type by 2 in y7]
+
+ [If monster is an upgraded monster, set y8 to number of downgraded monster type]
+!!VRy8:S-1; [Initialize y8 to -1]
+!!VRy8&y7=1/y5<132/y5<>113/y5<>115:Sy5 -1; [If upgraded and less than 132, subtract 1]
+!!VRy8&y5=123:S115; [Ice Elemental to Water Elemental]
+!!VRy8&y5=125:S113; [Magma Elemental to Earth Elemental]
+!!VRy8&y5=127:S112; [Storm Elemental to Air Elemental]
+!!VRy8&y5=129:S114; [Energy Elemental to Fire Elemental]
+!!VRy8&y5=136:S35; [Enchanter to Arch Mage]
+!!VRy8&y5=137:S19; [Sharpshooter to Grand Elf]
+!!VRy8|y5=170/y5=171:S137; [Arctic Sharpshooter or Lava Sharpshooter to Sharpshooter]
+!!VRy8&y5=168:S111; [Gorynych to Chaos Hydra]
+!!VRy8&y5=169:S9; [War Zealot to Zealot]
+!!VRy8&y5=173:S29; [Santa Gremlin to Master Gremlin]
+!!VRy8&y5=150:S13; [Supreme Archangel to Archangel]
+!!VRy8&y5=151:S27; [Diamond Dragon to Gold Dragon]
+!!VRy8&y5=152:S41; [Lord of Thunder to Titan]
+!!VRy8&y5=153:S55; [Antichrist to Arch Devil]
+!!VRy8&y5=154:S69; [Blood Dragon to Ghost Dragonn]
+!!VRy8&y5=155:S83; [Darkness Dragon to Black Dragon]
+!!VRy8&y5=156:S97; [Ghost Behemoth to Ancient Behemoth]
+!!VRy8&y5=157:S111; [Hell Hydra to Chaos Hydra]
+!!VRy8&y5=158:S131; [Sacred Phoenix to Phoenix]
+
+!!VRy1&y1=5/y4>0/y8=-1:S6; [If monster doesn't have an upgraded version, make the result a trap instead]
+
+!!UN&y1=5/y4>0/y8<>-1:N3/z1/y8/1; [Store downgraded monster name (plural) in z1]
+!!IF&y1=5/y4>0/y8<>-1/1000:Q1/21/y5/21/y8/1/z107044;
+!!HE-1&y1=5/y4>0/y8<>-1:C1/y5/y8/d/0/3; [Change y5 troop type to y8 troop type with no stack exp. change]
+
+ [Chest contains trap: y1=6]
+!!VRy3&y1=6/y4>0:Sy4 :10; [Store 10% of number of monsters (y4) in y3]
+!!VRy7&y1=6/y4>0:S1 R2; [Darts kill 10-30% of monsters - store number from 1 to 3 in y7]
+!!VRy3&y1=6/y4>0/y3<1:S1;  [If y3 is less than 1, make it 1]
+!!VRy3&y1=6/y4>0:*y7; [Multiply y3 by y7]
+!!VRy3&y1=6/y4>0/y3>y4:Sy4; [If # killed is greater than # of monsters, make it # of monsters]
+!!VRy6:Sy3 *65536 +y5; [Store type/number of monsters for message display purposes in y6]
+!!IF&y1=6/y4<1/1000:M1/z107045;
+!!IF&y1=6/y4>0/1000:Q1/21/y6/1/z107046;
+!!VRy3&y1=6:*-1; [Change y3 into a negative value]
+!!HE-1&y1=6/y4>0:C0/y2/d0/dy3/0/3; [Remove y3 troops killed by darts without changing stack exp.]
+
+ [Chest contains scroll: y1=7]
+!!FU$spell$&y1=7:P0/0/0/0/1/0; [Generate random spell, excluding banned/disabled: y-99]
+!!VRy8&y1=7:S1001 +y-99; [Number of scroll - store in y8]
+!!UN&y1=7:N1/z301/y-99; [Assign spell name to z301]
+!!UN&y1=7:P33/?y9; [Check if Living Scrolls script is active]
+!!VRy9|y-99<10/y-99=24/y-99=25/y-99=26/y-99=35/y-99=38/y-99=39/y-99=40/y-99>=65:S0;
+!!VRz2&y1=7/y9=0:Sz107047;
+!!VRz2&y1=7/y9=1:Sz107048;
+!!IF&y1=7/1000:Q2/9/y-99/1/z107049;
+!!HE-1&y1=7:A4/y8; [Equip hero with scroll]
+
+------------------------------------------------------------------------------------------
+
+!?FU1104;  [Start of monster result Function]
+
+!!FU1105:P;    [Get monster # Function]
+!!VRy1:S1 T4;  [Set y1 to random number from 1 to 5 - number of monsters that appear]
+!!VRy2:Sy1 *65536 +v300; [Set y2 to monster type/number for message display purposes]
+!!IF&1000:Q1/21/y2/1/z107050;
+!!HE-1:Tv998/v999/v1000/v300/y1;  [Start a battle with hero vs y1 of type v300 monsters]
+
+------------------------------------------------------------------------------------------
+
+!?FU1105;  [Start of get monster # Function]
+
+  [Generate random number from 0-144 for monster]
+!!VRv300:S0 R140; [Random number 0..140: v300]
+!!VRv300&v300>=122:+1; [Add 1 if 122 or higher]
+!!VRv300&v300>=124:+1; [Add 1 if 124 or higher]
+!!VRv300&v300>=126:+1; [Add 1 if 126 or higher]
+!!VRv300&v300>=128:+1; [Add 1 if 128 or higher]
+
+------------------------------------------------------------------------------------------
+
+!?FU1106;  [Start of Artifact-number Function]
+
+!!UN:P3/?y1;      [Check if Commanders are enabled. y1=0 if yes]
+!!VRv308:S7 R149; [Choose a random Artifact]
+!!VRv308&v308>=144:+2; [Skip "artifact lock" and "highlight"]
+!!UN:Av308/?y2;   [Test enabled/disabled value of artifact: y2]
+!!VRx16&y2=0:S99; [Exit loop when enabled artifact is found]
+
+------------------------------------------------------------------------------------------
+
+!?FU1107;  [Start of tunnel result Function]
+
+!!IF&1000:Q6/z107051;
+
+!!IF&-1000:V6/1;  [If player is AI, set flag 6 to true]
+
+ [If hero explores, locate another Well for tunnel to lead to]
+!!FU1108&6:P;
+
+ [Display message and move Hero to new location]
+!!HE-1&6/v304>0:Pv301/v302/v303;
+!!IF&6/1000/v304>0:M1/z107052;
+
+ [If Hero doesn't explore tunnel, display this message]
+!!IF&-6/1000:M1/z107053;
+
+------------------------------------------------------------------------------------------
+
+!?FU1108;  [Start of tunnel # Function]
+
+!!UN:U49/-1/?v304;  [Calculate number of Magic Wells on map - store in v304]
+!!VRv304:-1;  [Number of Wells minus one]
+!!FU1109:P;   [Function 1109 chooses a random Well]
+
+------------------------------------------------------------------------------------------
+
+!?FU1109;  [Start of random Well selection Function]
+
+ [Random Well number - store in v305]
+!!VRv305:S1 Rv304;
+
+ [Location of Magic Well - store in v301-v303]
+!!UN:U49/-1/v305/301;
+
+ [Checks object type at Well location - store in y1]
+!!OB301:T?y1;
+
+ [If object is a hero, call dead-end function unless AI]
+!!FU1110&y1=34/1000:P;
+
+ [As above, but if AI, just set v304 to 0]
+!!VRv304&y1=34/-1000:S0;
+
+ [If Well is same one hero is fishing in, call dead-end function unless AI]
+!!FU1110&v301=v998/v302=v999/v303=v1000/1000:P;
+
+ [As above, but if AI, just set v304 to 0]
+!!VRv304&v301=v998/v302=v999/v303=v1000/-1000:S0;
+
+ [If AI and object isn't a hero, set AI's movement points to 0]
+!!HE-1&y1<>34/-1000:W0;
+
+------------------------------------------------------------------------------------------
+
+!?FU1110;  [Start of "dead end" Function]
+
+!!VRv304:S0; [Set v304 to 0 to indicate dead end function reached]
+!!VRy1:S1 T9;  [Random # from 1 to 10]
+
+!!VRy2&y1<10:Sy1 +149;
+!!VRy2&y1=10:S168;
+!!VRy1:S0 T5;  [Random resource type - from 0 to 5]
+!!VRy3:S4 T4;  [4-8 of Random resource]
+!!VRy4:S2000 T2000; [Random gold - from 2000 to 4000]
+!!UN:N3/301/y2/0; [Get name of monster - store in z301]
+
+[Display text message and ask if Hero wants to fight]
+!!IF:Q5/21/y2/2/z107054;
+
+!!HE-1&5:Tv998/v999/v1000/y2/1; [Provoke a battle with monster]
+!!HE-1&5:O?y2;  [Check if hero won or lost battle]
+!!IF&5/y2>-1:Q1/y1/y3/6/y4/1/z107055;
+!!OW&5/y2>-1:R-1/y1/dy3 R-1/6/dy4;  [Give player resource plus gold]
+!!IF&5/y2>-1:M1/z107056;
+!!IF&-5:M1/z107057;
+!!IF&5/y2=-1:M1/z107058;
+
+** End of Script **
+

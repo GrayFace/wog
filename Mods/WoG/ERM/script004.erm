@@ -1,0 +1,212 @@
+ZVSE
+ERMS_ScriptDate=9.11(November).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Arcane Tower ERM script v1.7 - Donald X. Vaccarino
+** A location to let heroes exchange primary skill points
+
+** Updated: November 9, 2006 by Timothy -- x1 used by GetBasicPrim was not defined - added code to put hero # into x1
+** Updated: 29.6(June).2006 by Thomas Franz (samot) - replaced FU625-FU627 by FU$GetBasicPrim$
+** Updated: 09/20/03 by Hermann the Weird
+** Updated: 02/06/05 by ZVS v1.6
+** - new 3.58 arts support
+
+** To use this code, put it into a Global Event, set to never happen,
+** and add some Arcane Tower buildings to your map.
+** It's the nifty tower three down from the Fortress in the editor
+
+** You can put an Arcane Tower and Alms House on the same map, but don't put them
+** right next to each other. If you put an Arcane Tower by a Magic Well or similar
+** object, note that it can be used to really fill up on spell points.
+
+** Variables Used: v590, v600-v617, v618, z403
+** Flags used: 2-5
+** z403 must not be changed in other programs!
+** v590 must always be 0! Some of my other scripts also use it as 0 for hint indexing.
+** The other variables may be used elsewhere but will be trashed by this code.
+
+** Functions Used: FU620-FU627 (FU625-FU627 no longer used)
+
+
+** Initialization code
+!#UN:P104/?v1;     [Check for WoG option]
+!#VRz403&v1=1:Sz104000;
+!#VRv590&v1=1:S0;
+!#HT63/9&v1=1:V590/0/403; [set hint to z403, whenever v590 is 0, which it always will be]
+
+** end of Initialization code
+
+
+** Object routine
+
+!?OB63/9;
+!!UN:P104/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU620&1000:P; [do rest of code if human (not AI)]
+
+** end of object routine
+
+
+** function to handle visiting by humans
+** code is broken up this way to avoid having to retest the same flags over and over
+
+!?FU620;
+
+!!IF:M1/z104001;
+!!IF:Q2/z104002;
+!!IF&-2:M1/z104003;
+
+!!FU621&2:P; [do rest of code if they picked yes]
+
+** end of function
+
+
+** function to handle meaningful visit by non-AI
+
+!?FU621;
+
+!!IF:Q3/31/0/33/0/7/z104004;
+!!IF&3:Q4/31/1/32/1/7/z104005;
+!!VRv600&3/4:S0; [v600=0 = they want attack]
+!!VRv600&3/-4:S1; [v600=1 = they want defense]
+!!IF&-3:Q4/33/1/34/1/7/z104006;
+!!VRv600&-3/4:S2; [v600=2 = they want spell power]
+!!VRv600&-3/-4:S3; [v600=3 = they want knowledge]
+
+!!VRv601:S4; [v601=4 = no payment chosen]
+!!IF&v600<>0:Q5/31/0/2/z104007;
+!!VRv601&v600<>0/5:S0; [v601=0 = pay with attack]
+!!IF&v600<>1/v601=4:Q5/32/0/2/z104008;
+!!VRv601&v600<>1/v601=4/5:S1; [v601=1 = pay with defense]
+!!IF&v600<>2/v601=4:Q5/33/0/2/z104009;
+!!VRv601&v600<>2/v601=4/5:S2; [v601=2 = pay with spell power]
+!!IF&v600<>3/v601=4:Q5/34/0/2/z104010;
+!!VRv601&v600<>3/v601=4/5:S3; [v601=3 = pay with knowledge]
+
+!!IF&v601=4:M1/z104011;
+!!HE-1:N?y1; [hero number: y1]
+!!FU622&v601<4:Py1; [continue if both skills picked]
+
+** end of function
+
+
+** function to handle trades once skills are selected
+** x1=Hero number
+
+!?FU622;
+
+!!VRv602:Sv600 +31; [get picture # of skill they want]
+!!VRv603:Sv601 +31; [get picture # of skill they pay]
+!!HE-1:F?v604/?v605/?v606/?v607; [fetch skill values]
+!!VRv608:S604 +v600; [variable # of amount of skill they want]
+!!VRv609:S604 +v601; [variable # of amount of skill they pay]
+
+**FU625:P; [get "clean" skill values in v611-v614 (no artifacts)] // replaced general function  Thomas Franz (samot)
+!!FU$GetBasicPrim$:Px1/?v611/?v612/?v613/?v614; // get "clean" skill values in v611-v614 (no artifacts)
+!!VRv618:S611 +v601; [variable # of clean skill amount to pay]
+!!VRv610:Svv618; [times they can trade]
+!!VRv610&v601>1:-1; [can trade one less if spell power or knowledge]
+!!IF&v610<1:M1/z104012;
+!!FU623&v610>0:P; [continue if they can pay]
+
+** end of function
+
+
+** function to trade once we know they can
+
+!?FU623;
+
+!!IF:V2/1; [flag indicates we'll make trade]
+!!DO624/1/30/1:P; [allow them to make the chosen trade as many times as they can]
+!!IF:M1/z104013;
+
+** end of function
+
+
+** function to trade one skill point, done repeatedly
+
+!?FU624;
+
+!!VRvv609&2:-1; [deduct one point of paying skill]
+!!VRvv608&2:+1; [add one point to wanted skill]
+!!HE-1&2:Fv604/v605/v606/v607; [save new skill values]
+!!VRv610&2:-1; [countdown times we can make trade]
+!!IF&2/v610=0:Q1/v602/1/1/z104014;
+!!IF&2/v610=0:V2/0;
+!!IF&2/v610>0:Q2/v602/1/2/z104015;
+
+** end of function
+
+
+** function to get real stats, removing effects of artifacts
+** "clear" stats are stored in v611-v614
+
+
+** Disabled code, because replaced with FU$GetBasicPrim$  [Thomas Franz (samot)]
+*?FU625;
+
+*!HE-1:F?v611/?v612/?v613/?v614; [get stats including artifact effects]
+
+*!VRv616:S1; [amount of skill for subroutine]
+*!DO627/1/6/1:P; [handle artifacts that follow a pattern by number]
+
+*!FU626:P12/12/-3/0/0; [titan's gladius]
+*!FU626:P18/-3/12/0/0; [sentinel's shield]
+*!FU626:P24/0/0/-2/10; [thunder helmet]
+*!FU626:P30/0/0/10/-2; [titan's cuirass]
+*!FU626:P128/3/3/3/6; [armageddon's blade]
+*!FU626:P129/21/21/21/21; [angelic alliance]
+*!FU626:P132/3/3/2/2; [armor of the damned]
+*!FU626:P134/16/16/16/16; [power of the dragon father]
+*!FU626:P135/9/9/8/8; [titan's thunder]
+
+*!FU626:P157/0/2/0/0; [ZVS:3.58 Crimson Shield]
+*!FU626:P158/5/5/4/4; [ZVS:3.58 Axe of Ferocity]
+
+** end of function
+
+
+** function to handle modifying stats for several artifacts that fit a pattern
+** v616 counts from 1 to 6
+
+*?FU627;
+
+*!VRv617&v616>1:Sv616 +5; [attack artifact - 7-11]
+*!FU626&v616>1:Pv617/v616/0/0/0; [modify stats]
+*!VRv617&v616>1:Sv616 +11; [defense artifact - 13-17]
+*!FU626&v616>1:Pv617/0/v616/0/0; [modify stats]
+*!VRv617&v616<6:Sv616 +18; [knowledge artifact - 19-23]
+*!FU626&v616<6:Pv617/0/0/0/v616; [modify stats]
+*!VRv617&v616<6:Sv616 +24; [spell power artifact - 25-29]
+*!FU626&v616<6:Pv617/0/0/v616/0; [modify stats]
+*!VRv617:Sv616 +30; [every skill artifact - 31-36]
+*!FU626:Pv617/v616/v616/v616/v616; [modify stats]
+*!VRv617&v616<5:Sv616 +36; [att/def artifact - 37-40]
+*!FU626&v616<5:Pv617/v616/v616/0/0; [modify stats]
+*!VRv617&v616<5:Sv616 +40; [spell power/knowledge artifact - 41-44]
+*!FU626&v616<5:Pv617/0/0/v616/v616; [modify stats]
+
+*!VRv616:+1; [inc counter]
+
+** end of function
+
+
+** function to modify stats based on presence of one artifact
+** x1 = art, x2 = amt to modify att, x3 def, x4 spell power, x5 knowledge
+
+*?FU626;
+
+*!HE-1:A2/x1/0/?v615; [get number of equipped artifacts]
+*!VRx2:*v615; [multiply amount by number of artifacts]
+*!VRx3:*v615;
+*!VRx4:*v615;
+*!VRx5:*v615;
+*!VRv611:-x2; [deduct total amount from stat variable]
+*!VRv612:-x3;
+*!VRv613:-x4;
+*!VRv614:-x5;
+
+** end of function
+

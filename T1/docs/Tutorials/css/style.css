@@ -1,0 +1,26 @@
+
+body {
+	max-width: 900px;	
+	margin-left: auto;
+	margin-right: auto;	
+	text-align: justify;
+}
+
+i {
+	font-style: normal;
+	color: #b50;
+}
+
+h1 {
+	padding: 30px 10px 10px 10px;
+	/*text-align: center;*/
+}
+
+h3 {
+	padding: 10px 0 0 0;
+}
+
+.img {
+	padding: 0px 15px;
+	/*text-align: center;*/
+}

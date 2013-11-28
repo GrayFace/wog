@@ -1,0 +1,124 @@
+#	Text resource for "script54.erm" document		
+154000	First Aid Tent	<!!S>	01.08.2004
+154001	First Aid Tents	<!!S>	01.08.2004
+154002	Catapult	<!!S>	01.08.2004
+154003	Catapults	<!!S>	01.08.2004
+154004	{Ballista}	<!!S>	01.08.2004
+154005	{Ammo} {Cart}	<!!S>	01.08.2004
+154006	{First} {Aid} {Tent}	<!!S>	01.08.2004
+154007	%X3 %Z1{s}	<!!S>	01.08.2004
+154008	%Z1, Level {%Y6} 	<!!S>	01.08.2004
+154009	{Catapult}	<!!S>	01.08.2004
+154010	%Z1{s}	<!!S>	01.08.2004
+154011	Basic %Z1	<!!S>	01.08.2004
+154012	Advanced %Z1	<!!S>	01.08.2004
+154013	Expert %Z1	<!!S>	01.08.2004
+154014	%X3 %Z1	<!!S>	01.08.2004
+154015	{%Z2}
+
+Level {%Y8}
+
+%Z5	<!!S>	01.08.2004
+154016	Level {%Y8} %Z2	<!!S>	01.08.2004
+154017	
+
+Not enough money.	<!!S>	01.08.2004
+154018	
+
+%Z3's level is to low.	<!!S>	01.08.2004
+154019	
+
+Usable once per day.
+Come back tomorrow.	<!!S>	01.08.2004
+154020	{%Z1}
+
+Upgrade %Z3's 
+Level {%Y6} %Z2?
+Next level will cost {%Y7} gold.%Z4	<!!Q>	01.08.2004
+154021	{Catapult}	<!!S>	01.08.2004
+154022	Basic {Catapult}	<!!S>	01.08.2004
+154023	Advanced {Catapult}	<!!S>	01.08.2004
+154024	Expert {Catapult}	<!!S>	01.08.2004
+154025	Level {%Y6} {Ballista}	<!!S>	01.08.2004
+154026	Level {%Y6} {Ammo} {Cart}	<!!S>	01.08.2004
+154027	Level {%Y6} {First} {Aid} {Tent}	<!!S>	01.08.2004
+154028	Use this war machine to target
+your enemy's fortifications in
+combat.
+
+%Z5	<!!S>	01.08.2004
+154029	Use this war machine to target
+your enemy's troops in combat.
+
+%Z5	<!!S>	01.08.2004
+154030	The Ammo Cart ensures that your
+missile troops will never run out of
+ammunition in combat.
+
+%Z5	<!!S>	01.08.2004
+154031	The First Aid Tent provides
+healing to your troops 
+during each round of combat.
+
+%Z5	<!!S>	01.08.2004
+154032	This item can't be traded.	<!!S>	01.08.2004
+154033	Enabled	<!!S>	01.08.2004
+154034	Disabled	<!!S>	01.08.2004
+154035	Disable	<!!S>	01.08.2004
+154036	Re-Enable	<!!S>	01.08.2004
+154037	his	<!!S>	01.08.2004
+154038	her	<!!S>	01.08.2004
+154039	%Z1
+
+{%Z4}
+
+%Z7 can choose to
+enable or disable
+%Z8 machines during combat.
+
+Do you wish to {%Z5}?	<!!Q>	01.08.2004
+154040	Catapult	<!!S>	01.08.2004
+154041	Ballista	<!!S>	01.08.2004
+154042	Ammo Cart	<!!S>	01.08.2004
+154043	First Aid Tent	<!!S>	01.08.2004
+154044	Enabled	<!!S>	01.08.2004
+154045	Disabled	<!!S>	01.08.2004
+154046	%Z1
+
+%Z7's %Z2
+is now {%Z4}.	<!!Q>	01.08.2004
+154047	Allows {%Y10} shots in combat.
+	<!!S>	01.08.2004
+154048	%Z3 Currently it has {%Y8} Hit Points.	<!!S>	01.08.2004
+154049	{Resurrection} ability.
+	<!!S>	01.08.2004
+154050	%Z6 Gives {%Y7}%% Healing Points
+and has {%Y8} Hit Points.	<!!S>	01.08.2004
+154051	s	<!!S>	01.08.2004
+154052	Gives {%X4} Spell Point%Z4 every turn
+and has {%Y8} Hit Points.	<!!S>	01.08.2004
+154053	Target loses {%Y11} speed.
+	<!!S>	01.08.2004
+154054	%Z6 Does {%Y7}%% damage
+and has {%Y8} Hit Points.	<!!S>	01.08.2004
+154055	{%Z3}
+empty book.	<!!S>	01.08.2004
+154056	{%Z3's}
+Spell Book
+contains
+{%V1} spells.	<!!S>	01.08.2004
+154057	{%Z3's}
+Spell Book
+is full.	<!!S>	01.08.2004
+154058	{Spell Book}
+
+Left-click on the Spell Book to view
+your spells.	<!!S>	01.08.2004
+154059	{Spell Book}
+
+This item can't be traded.	<!!S>	01.08.2004
+154060	s	<!!S>	01.08.2004
+154061	%Z1
+
+{%Z3's} Spell Book
+contains {%V1} spell%Z2.	<!!S>	01.08.2004

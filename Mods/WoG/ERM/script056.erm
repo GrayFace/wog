@@ -1,0 +1,422 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Metamorphs by Timothy Pulver
+** Version 1.4
+** Script56.erm
+** Last Updated: August 1, 2005
+** Previously Updated August 23, 2004
+
+** This script changes all Earth Messengers into Metamorphs. Metamorphs stacks transform
+** in battle on their first action into another type of creature. The type is determined
+** randomly but their total Health will be equal or lower in the new form. They'll change
+** again each time they completely kill a stack of enemy monsters, unless the Health of
+** one creature of that type exceeds the total Health of the (transformed) Metamorph
+** stack or if the target is a 2-hex creature and there isn't enough room. After battle,
+** transformed Metamorphs will change back into their normal (Metamorph) form. Metamorphs
+** won't transform on Cursed Ground.
+
+** Note: this script won't operate in MP (network) human-to-human battles.
+
+** Version 1.4 fixes a bug where transforming into 2-hex creatures could overlap another
+** cureature, causing it to vanish from the combat map. If there's no available hex
+** this may result in the Metamorph not transforming, although this will be rare.
+
+** Version 1.4 also adds an optional transformation: right-click the Wait button to
+** transform (uses Metamorph's action), and introduces a minimum level of transformation
+** determined by the Metamorph stack's Rank (initial rank, not rank after transformation),
+** although if no valid creature is found, a lower level one will be used instead:
+** Rank 0-3 : No minimum
+** Rank 4-5 : Minimum Level 2
+** Rank 6-7 : Minimum Level 3
+** Rank 8-9 : Minimum Level 4
+** Rank 10+ : Minimum Level 5
+
+Permanent Variables used:  v4500-v4603, z206-z209
+Temporary Variables used:  v1-v10, v13-v14, v24
+Functions used:  FU9600-FU9603
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Check if script is enabled: v1]
+!#UN:P56/?v1;
+
+ [Set Name and Description for Metamorph (Earth Messenger)]
+!#VRz206&v1=1:Sz156000;
+!#VRz207&v1=1:Sz156001;
+!#VRz208&v1=1:Sz156002;
+!#UN&v1=1:G1/165/0/206 G1/165/1/207 G1/165/2/208;
+!#VRv4542&v1=1:S-1; [Initialize v4542 to -1]
+
+ [Set new bonus lines for Metamorphs (but only when in Metamorph form)]
+!#EA165&v1=1:F97/10/?v2; [Bonus line number for Quicksand Post-Attack Spell: v2]
+!#EA165&v1=1:Bv2/1/87/43/0/5/10/15/20/25/30/35/40/45/50; [5% Magic Resistance per Rank]
+!#EA165&v1=1:F112/67/?v3; [Bonus line number for Summon Earth Elemental Pre-Attack Spell: v3]
+!#EA165&v1=1:Bv3/1/114/75/0/35/40/45/50/55/60/65/70/75/80; [75% Chance of Regeneration: Rank 1]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Store information about creature type (Metamorphs) in v variables: v4500-v4541 and v4550-v4591)]
+!?BR&v997=0/1000/-998;
+
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!DO9600/0/41/1:P; [Cycle through all battlefield stacks]
+!!VRv4542:S-1; [Initialize v4542 to -1]
+!!BA:P?y-2/?y-3/?y-4; [Battle location: y-2/y-3/y-4]
+!!TRy-2/y-3/y-4:G?y-5; [Check for special terrain type: y-5]
+!!VRv4603:S0; [Initialize v4603 to 0]
+!!VRv4603&y-5=21:S1; [Set v4603 to 1 if battle is on Cursed Ground: v4603]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Store information about creature type (Metamorphs) in v variables v4500-v4541 and v4550-v4591]
+!?FU9600;
+!!VRy1:S4500 +x16; [Index number (4500-4541) for monster Type: y1]
+!!VRy2:S4550 +x16; [Index number (4550-4591) for number in stack: y2]
+!!BMx16:T?vy1 B?vy2; [Store monster Type in vy1, Number in vy2]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Check if Metamorphed creature defeats an enemy stack]
+!?BG0&v4603=0/1000/-998;
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!VRv4542:S-1; [Initialize v4542 to -1]
+!!BG:N?v1 A?v2; [Current stack number: v1, Action: v2]
+!!VRv3:S4500 +v1; [Index for original acting monster: v3]
+!!VRv4:Svv3; [Original monster number of acting stack: v4]
+
+!!BG:E?y-2; [Destination monster stack: y-2]
+!!BMy-2&y-2>=0:T?y-3 R?y-4; [Target type (y-3), Retaliations left (y-4)]
+!!VRy-5&y-2>=0:S4500 +y-2; [Index for original target monster: y-5]
+!!VRy-6&y-2>=0:Svy-5; [Original monster number of target stack: y-6]
+!!VRv4601:S-1; [Initialize v4601 to -1]
+!!VRv4601&y-2>=0/y-6=165/v2=6/y-4>0:Sv1; [Set v4601 to attacking stack number if target is a Metamorph and it can retaliate]
+!!VRv4602:S-1; [Initialize v4602 to -1]
+!!VRv4602&y-2>=0/y-6=165/v2=6/y-4>0:Sy-2; [Set v4602 to target's stack number if target is a Metamorph and it can retaliate]
+
+!!BG&v4=165/v2>=6/v2<=7:E?v4542; [Target monster stack: v4542]
+!!FU&v4542<0:E; [Exit if no valid target monster]
+!!BMv4542&v4=165/v2>=6/v2<=7:T?v4543; [Target type: v4543]
+!!BG&v4=165/v2>=6/v2<=7:N?v4544; [(Metamorph's) stack #: v4544]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Determine if victorious Metamorphed stack transforms]
+!?BG1&v4542>=0/v4603=0/1000/-998;
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!BU:C?y-3; [Check if battle is ending this turn: y-3=1 if yes]
+!!FU|y-1<>1/y-3=1:E; [Exit if script isn't enabled or battle is ending]
+
+!!BMv4542:N?v1; [Number of target monsters still alive: v1]
+!!FU&v1>0:E; [Exit if any still alive]
+
+!!VRv1:Sv4544; [(Metamorph's) stack number: v1]
+!!BMv1:T?v2 N?v3; [Type that Metamorph is currently: v2, Number in stack: v3]
+!!MA:Pv2/?v4; [Health of one (Metamorph): v4]
+!!VRv4:*v3; [Total health of (Metamorph) stack: v4]
+!!MA:Pv4543/?v5; [Health of one target creature: v5]
+!!FU&v2=v4543:E; [Exit if target creature is the same type as Metamorph's current type]
+!!FU&v4<v5:E; [Exit if single target creature's health is higher than (Metamorph stack's)]
+!!FU&v4543>=145/v4543<=149:E; [Exit if target creature is a War Machine]
+
+!!VRy-4:Sv1 *-1 -1; [Negative of Metamorph stack number: y-4]
+!!EAy-4:E?y-5/d/d/d; [Experience of Metamorph stack: y-5]
+!!VRv9:Sv4 :v5; [Number of creatures (Metamorphs) can transform to: v9]
+!!VRv9&v9<1:S1; [Minimum 1]
+!!BMv1:P?v6 O?v7 I?v8; [Position: v6, Hero's slot: v7, Side: v8]
+
+!!BMv1:F?y-8; [Read Metamorph's Flags: y-8]
+!!VRy-9:Sy-8; [Copy Metamorph's Flags to y-9]
+!!VRy-10:Sy-8; [Copy Metamorph's Flags to y-10]
+!!VRy-11:Sy-8; [Copy Metamorph's Flags to y-11]
+!!VRy-9:&8388608; [See if Metamorph is a clone: y-9=8388608 if yes]
+!!VRy-10:&4194304; [See if Metamorph was summoned: y-10=4194304 if yes]
+!!VRy-11:&1; [See if Metamorph is a 2-hex creature: y-11=1 if yes]
+!!VRy-8:|4194304; [Set Metamorph's "summoned" bit if not set]
+!!VRy-8:|8388608; [Set Metamorph's "clone" bit if not set]
+
+!!MA:Xv4543/?y-12; [Target creature's standard Flags: y-12]
+!!VRy-12:&1; [See if target is a 2-hex creature: y-12=1 if yes]
+!!VRy-13&y-11<>1/y-12=1/v8=0:Sv6 -1; [Corrected position (for left hero) if transforming into 2-hex creature: y-13]
+!!VRy-13&y-11<>1/y-12=1/v8=1:Sv6 +1; [Corrected position (for right hero) if transforming into 2-hex creature: y-13]
+!!BU&y-11<>1/y-12=1:Ey-13/?y-14; [Check if corrected position for 2-hex creature is empty: y-14=-1 if empty]
+!!VRy-17&y-11<>1/y-12=1/v8=0:Sv6 +1; [Extra non-corrected position space (for left hero) if transforming into 2-hex creature: y-17]
+!!VRy-17&y-11<>1/y-12=1/v8=1:Sv6 -1; [Extra non-corrected position space (for right hero) if transforming into 2-hex creature: y-17]
+!!BU&y-11<>1/y-12=1:Ey-17/?y-15; [Also check if extra non-corrected position space is empty: y-15=-1 if empty]
+!!VRy-14|y-13=0/y-13=17/y-13=34/y-13=51/y-13=68/y-13=85/y-13=102/y-13=119/y-13=136/y-13=153/y-13=170:S999; [If corrected position is out of bounds, set to 999: y-14]
+!!VRy-14|y-13=16/y-13=33/y-13=50/y-13=67/y-13=84/y-13=101/y-13=118/y-13=135/y-13=152/y-13=169/y-13=186:S999; [If corrected position is out of bounds, set to 999: y-14]
+!!FU&y-11<>1/y-12=1/y-14>=0/y-15>=0:E; [Exit if target is a 2-hex creature and neither position is empty]
+
+!!BMv1:Fy-8; [Write Metamorph's Flags: y-8]
+
+!!BMv1:C18/v6/3/1/0; [Metamorph casts Implosion on self]
+!!VRv6&y-11<>1/y-12=1/y-14<0:Sy-13; [Use corrected position for 2-hex creature transormation: v6]
+!!BU:Sv4543/v9/v6/v8/v7/1; [Summon new (Metamorph) creature stack: type=v4543]
+!!BU:Ev6/?y-1; [Stack number of new (Metamorph) creature stack: y-1]
+!!BMy-1&v4543>=174/v4543<=191:E2; [Set Commander Monster Metamorph spell castings to 2]
+!!BMv4542&v4543>=174/v4543<=191:U4/?y-14; [Target Commander's spell number: y-14]
+!!BMy-1&v4543>=174/v4543<=191:U4/y-14; [Set Commander Monster Metamorph's spell number]
+!!BMy-1&y-1>=0:F?y-2; [New (Metamorph's) Flags: y-2]
+!!VRy-2:|67108864; [Add "done acting this round" Flag]
+!!VRy-2&y-9=8388608:|8388608; [Set new Metamorph stack's "clone" bit if it was a clone]
+!!VRy-2&y-10=4194304:|4194304; [Set new Metamorph stack's "summoned" bit if it was summoned]
+!!BMy-1&y-1>=0:Fy-2; [Write modified Flags to (Metamorph) stack: y-2]
+
+!!VRy-6:Sy-1 *-1 -1; [Negative of New Metamorph stack number: y-6]
+!!EAy-6:Ov4543; [Copy Bonus Lines for new type (v4543) to Metamorph stack (y-6)]
+!!EAy-6:Ey-5/2/v4543/d; [Set Experience of Metamorph stack: y-5]
+
+!!VRz1&v5=1:Sz156003;
+!!VRz1&v5>1:Sz156004;
+!!UN:N3/2/v4543/1; [New creature name (plural): z2]
+!!VRz3:Sz156005;
+!!BU:Mz3; [Display scroll bar message]
+
+!!BG:N?v10; [Next stack to act: v10]
+!!BMv10:P?v13; [Next stack's position: v13]
+!!BMv10:C2/v13/3/1/0; [Next stack casts dummy spell on self]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Post-Action Trigger if Metamorph is being attacked and retaliates]
+ [to see if it transforms into the creature type that attacked it]
+!?BG1&v4601>=0/v4603=0/1000/-998; [After action - only if v4601 isn't less than 0]
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!BU:C?y-3; [Check if battle is ending this turn: y-3=1 if yes]
+!!FU|y-1<>1/y-3=1:E; [Exit if script isn't enabled or battle is ending]
+
+!!BMv4601:N?y-11; [Number of attacking monsters still alive after retaliation: y-11]
+!!FU&y-11>0:E; [Exit if any still alive]
+
+!!VRv1:Sv4602; [(Metamorph's) stack number: v1]
+!!BMv1:T?v2 N?v3; [Type that Metamorph is currently: v2, Number in stack: v3]
+!!MA:Pv2/?v4; [Health of one (Metamorph): v4]
+!!VRv4:*v3; [Total health of (Metamorph) stack: v4]
+!!BMv4601:T?y-7; [Type of attacking creature: y-7]
+!!MA:Py-7/?v5; [Health of one attacking creature: v5]
+!!FU&v2=y-7:E; [Exit if attacking creature is the same type as Metamorph's current type]
+!!FU&v4<v5:E; [Exit if attacking creature's health is higher than (Metamorphs)]
+!!FU&y-7>=145/y-7<=149:E; [Exit if attacking creature is a War Machine]
+
+!!VRy-4:Sv1 *-1 -1; [Negative of Metamorph stack number: y-4]
+!!EAy-4:E?y-5/d/d/d; [Experience of Metamorph stack: y-5]
+!!VRv9:Sv4 :v5; [Number of creatures (Metamorphs) can transform to: v9]
+!!VRv9&v9<1:S1; [Minimum 1]
+!!BMv1:P?v6 O?v7 I?v8; [Position: v6, Hero's slot: v7, Side: v8]
+
+!!BMv1:F?y-8 R?y-12; [Read Metamorph's Flags (y-8) and Retaliations (y-12)]
+!!VRy-9:Sy-8; [Copy Metamorph's Flags to y-9]
+!!VRy-10:Sy-8; [Copy Metamorph's Flags to y-10]
+!!VRy-11:Sy-8; [Copy Metamorph's Flags to y-11]
+!!VRy-9:&8388608; [See if Metamorph is a clone: y-9=8388608 if yes]
+!!VRy-10:&4194304; [See if Metamorph was summoned: y-10=4194304 if yes]
+!!VRy-11:&1; [See if Metamorph is a 2-hex creature: y-11=1 if yes]
+!!VRy-8:|4194304; [Set Metamorph's "summoned" bit if not set]
+!!VRy-8:|8388608; [Set Metamorph's "clone" bit if not set]
+
+!!MA:Xv4543/?y-16; [Target creature's standard Flags: y-16]
+!!VRy-16:&1; [See if target is a 2-hex creature: y-16=1 if yes]
+!!VRy-13&y-11<>1/y-16=1/v8=0:Sv6 -1; [Corrected position (for left hero) if transforming into 2-hex creature: y-13]
+!!VRy-13&y-11<>1/y-16=1/v8=1:Sv6 +1; [Corrected position (for right hero) if transforming into 2-hex creature: y-13]
+!!BU&y-11<>1/y-16=1:Ey-13/?y-14; [Check if corrected position for 2-hex creature is empty: y-14=-1 if empty]
+!!VRy-17&y-11<>1/y-16=1/v8=0:Sv6 +1; [Extra non-corrected position space (for left hero) if transforming into 2-hex creature: y-17]
+!!VRy-17&y-11<>1/y-16=1/v8=1:Sv6 -1; [Extra non-corrected position space (for right hero) if transforming into 2-hex creature: y-17]
+!!BU&y-11<>1/y-16=1:Ey-17/?y-15; [Also check if extra non-corrected position space is empty: y-15=-1 if empty]
+!!VRy-14|y-13=0/y-13=17/y-13=34/y-13=51/y-13=68/y-13=85/y-13=102/y-13=119/y-13=136/y-13=153/y-13=170:S999; [If corrected position is out of bounds, set to 999: y-14]
+!!VRy-14|y-13=16/y-13=33/y-13=50/y-13=67/y-13=84/y-13=101/y-13=118/y-13=135/y-13=152/y-13=169/y-13=186:S999; [If corrected position is out of bounds, set to 999: y-14]
+!!FU&y-11<>1/y-16=1/y-14>=0/y-15>=0:E; [Exit if target is a 2-hex creature and neither position is empty]
+
+!!BMv1:Fy-8; [Write Metamorph's Flags: y-8]
+
+!!BMv1:C18/v6/3/1/0; [Metamorph casts Implosion on self]
+!!VRv6&y-11<>1/y-16=1/y-14<0:Sy-13; [Use corrected position for 2-hex creature transormation: v6]
+!!BU:Sy-7/v9/v6/v8/v7/1; [Summon new (Metamorph) creature stack: type=y-7]
+!!BU:Ev6/?y-1; [Stack number of new (Metamorph) creature stack: y-1]
+!!BMy-1&y-7>=174/y-7<=191:E2; [Set Commander Monster Metamorph spell castings to 2]
+!!BMv4601&y-7>=174/y-7<=191:U4/?y-14; [Target Commander's spell number: y-14]
+!!BMy-1&y-7>=174/y-7<=191:U4/y-14; [Set Commander Monster Metamorph's spell number]
+!!BMy-1&y-1>=0:F?y-2; [New (Metamorph's) Flags: y-2]
+!!VRy-2:|67108864; [Add "done acting this round" Flag]
+!!VRy-2&y-9=8388608:|8388608; [Set new Metamorph stack's "clone" bit if it was a clone]
+!!VRy-2&y-10=4194304:|4194304; [Set new Metamorph stack's "summoned" bit if it was summoned]
+!!BMy-1&y-1>=0:Fy-2 Ry-12; [Write modified Flags (y-2) and Retaliations (y-12) to (Metamorph) stack]
+!!VRy-6:Sy-1 *-1 -1; [Negative of New Metamorph stack number: y-6]
+!!EAy-6:Oy-7; [Copy Bonus Lines for new type (y-7) to Metamorph stack (y-6)]
+!!EAy-6:Ey-5/2/y-7/d; [Set Experience of Metamorph stack: y-5]
+!!VRz1&v5=1:Sz156006;
+!!VRz1&v5>1:Sz156007;
+!!UN:N3/2/y-7/1; [New creature name (plural): z2]
+!!VRz3:Sz156008;
+!!BU:Mz3; [Display scroll bar message]
+!!BG:N?v10; [Next stack to act: v10]
+!!BMv10:P?v13; [Next stack's position: v13]
+!!BMv10:C2/v13/3/1/0; [Next stack casts dummy spell on self]
+
+--------------------------------------------------------------------------------
+
+ [Post-Action trigger]
+!?BG1&v4603=0/1000/-998;
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!BG:N?v1; [Current stack number: v1]
+!!BMv1:T?v2 N?v5; [Type of monster: v2, Number in stack: v5]
+!!FU9603&v2=165/v5>=1:P; [Initial Transformation of Metamorph]
+
+--------------------------------------------------------------------------------
+
+ [Optional Transformation if player right-clicks Wait]
+ [button on Metamorph's turn -- uses Metamorph's action]
+!?CM4;
+!!CM:I?y-1 F?y-2; [Location: y-1, Flags (type of click): y-2]
+!!FU|y-1<>2009/y-2<>512:E; [Exit if not a right-click or not the Wait button]
+
+!!BG:N?v1; [Current stack number: v1]
+!!VRy-11:S4500 +v1; [Index for original acting monster: y-11]
+!!VRy-12:Svy-11; [Original monster number of acting stack: y-12]
+!!BMv1:T?v2 N?v5; [Type of monster: v2, Number in stack: v5]
+!!FU9603&y-12=165/v5>=1:P; [Optional Transformation of Metamorph]
+!!BG&y-12=165/v5>=1:A12; [Use up Metamorph's action]
+!!CM&y-12=165/v5>=1:R0; [Cancel normal right-click for button]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Initial/Optional Transformation of Metamorph]
+!?FU9603;
+!!MA:Pv2/?v6; [Health of one Metamorph: v6]
+!!VRv6:*v5; [Total health of Metamorph stack: v6]
+!!BMv1:F?y-8; [Read Metamorph's Flags: y-8]
+!!VRy1:Sy-8; [Copy Metamorph Flags to y1]
+!!VRy1:&1; [See if Metamorph is a 2-hex creature: y1=1 if yes]
+!!BMv1:P?v8 O?v14; [Position of Metamorph: v8, Hero's slot: v14]
+!!BMv1:I?v9; [Side that owns Metamorph: v9]
+!!VRy2&v9=0:Sv8 +1; [One hex in front of Metamorph (left player): y2]
+!!VRy2&v9=1:Sv8 -1; [One hex in front of Metamorph (right player): y2]
+!!BU:Ey2/?y3; [Check if hex in front of one-hex Metamorph is empty: y3=-1 if empty]
+
+!!VRy-4:Sv1 *-1 -1; [Negative of Metamorph stack number: y-4]
+!!EAy-4:E?y-5/d/d/d; [Experience of Metamorph stack: y-5]
+!!VRy4&y-5<6000:S0;              [Metamorph is Rank  0: y4]
+!!VRy4&y-5>=6000/y-5<12000:S1;   [Metamorph is Rank  1: y4]
+!!VRy4&y-5>=12000/y-5<19200:S2;  [Metamorph is Rank  2: y4]
+!!VRy4&y-5>=19200/y-5<27600:S3;  [Metamorph is Rank  3: y4]
+!!VRy4&y-5>=27600/y-5<37200:S4;  [Metamorph is Rank  4: y4]
+!!VRy4&y-5>=37200/y-5<48000:S5;  [Metamorph is Rank  5: y4]
+!!VRy4&y-5>=48000/y-5<60000:S6;  [Metamorph is Rank  6: y4]
+!!VRy4&y-5>=60000/y-5<73200:S7;  [Metamorph is Rank  7: y4]
+!!VRy4&y-5>=73200/y-5<88200:S8;  [Metamorph is Rank  8: y4]
+!!VRy4&y-5>=88200/y-5<105000:S9; [Metamorph is Rank  9: y4]
+!!VRy4&y-5>=105000:S10;          [Metamorph is Rank 10: y4]
+!!VRy4:*5 :10 -1; [Minimum level of new creature type (if possible) (-1..4=Level 1..5 : y4]
+
+!!VRv3:S0 R164; [Random number from 0..164 for monster: v3]
+!!VRv4:S-1; [Initialize v4 to -1]
+!!DO9601/v3/164/1:Py1/y3/y4; [Determine new creature: v4]
+!!DO9601/0/v3/1&v4<0:Py1/y3/y4; [Determine new creature part 2: v4]
+
+!!VRv3&v4<0:S0 R164; [Random number from 0..164 for monster: v3]
+!!DO9601/v3/164/1&v4<0:Py1/y3/-1; [Determine new creature (no minimum level): v4]
+!!DO9601/0/v3/1&v4<0:Py1/y3/-1; [Determine new creature (no minimum level) part 2: v4]
+
+!!FU&v4<0:E; [Exit if no valid creature found (failsafe)]
+
+!!VRy-9:Sy-8; [Copy Metamorph's Flags to y-9]
+!!VRy-10:Sy-8; [Copy Metamorph's Flags to y-10]
+!!VRy-9:&8388608; [See if Metamorph is a clone: y-9=8388608 if yes]
+!!VRy-10:&4194304; [See if Metamorph was summoned: y-10=4194304 if yes]
+!!VRy-8:|4194304; [Set Metamorph's "summoned" bit if not set]
+!!VRy-8:|8388608; [Set Metamorph's "clone" bit if not set]
+!!BMv1:Fy-8; [Write Metamorph's Flags: y-8]
+
+!!BMv1:G33/0/0; [Remove Protection from Earth]
+!!BMv1:C18/v8/3/1/0; [Metamorph casts Implosion on self]
+
+!!BU:Sv4/v7/v8/v9/v14/1; [Summon new creature stack: Type is v4]
+!!BU:Ev8/?v24; [Stack number of new summoned stack: v24]
+!!EAy-4:Ov4; [Copy Bonus Lines for new type (v4) to (Metamorph) stack (y-4)]
+!!EAy-4:Ey-5/2/v4/d; [Set Experience of (Metamorph) stack: y-5]
+
+!!BMv24:F?y-2; [New (Metamorph's) Flags: y-2]
+!!VRy-2&y-9=8388608:|8388608; [Set new Metamorph stack's "clone" bit if it was a clone]
+!!VRy-2&y-10=4194304:|4194304; [Set new Metamorph stack's "summoned" bit if it was summoned]
+!!BMv24:Fy-2; [Write modified Flags to (Metamorph) stack: y-2]
+!!BMv24&v24>=0:C4/v8/3/1/0; [Metamorph casts dummy spell on self]
+
+!!VRz1&v5=1:Sz156009;
+!!VRz1&v5>1:Sz156010;
+!!UN:N3/2/v4/1; [New creature name (plural): z2]
+!!VRz3:Sz156011;
+!!BU:Mz3; [Display scroll bar message]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [Determine random creature Metamorph transforms into: v4]
+ [x1=0 if Metamorph is 1-hex, x1=1 if Metamorph is 2-hex]
+ [x2=-1 if hex in front of Metamorph is empty]
+ [x2>=0 if hex in front of Metamorph has a living stack there]
+ [x3=minimum level (-1..4=L1..L5) of new creature]
+!?FU9601;
+!!VRx16&x16>=122:+1; [Skip "Not Used (1)"]
+!!VRx16&x16>=124:+1; [Skip "Not Used (2)"]
+!!VRx16&x16>=126:+1; [Skip "Not Used (3)"]
+!!VRx16&x16>=128:+1; [Skip "Not Used (4)"]
+!!VRx16&x16>=145:+5; [Skip War Machines]
+!!VRx16&x16>=160:+4; [Skip Emissaries]
+!!VRx16&x16>=165:+1; [Skip Earth Messenger (Metamorph)]
+!!VRx16&x16>=174:+18; [Skip Commanders]
+
+!!MA:Xx16/?y2 Lx16/?y3; [New creature's standard Flags: y2, Level (0..6): y3]
+!!VRy2:&1; [See if new creature is a 2-hex creature: y2=1 if yes]
+!!FU&x1=0/y2=1/x2>=0:E; [Skip this creature if it's 2-hexes and won't fit]
+!!FU&y3<x3:E; [Skip this creature if it's below the minimum level]
+
+!!MA:Px16/?y1; [Health of one of creature at x16: y1]
+!!VRv7:Sv6 :y1; [Number of creatures it can transform to: v7]
+!!VRv4&v7>0:Sx16; [Set v4 to creature type: v4]
+!!VRx16&v7>0:S999; [Exit loop]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [After battle, set correct Metamorphs in hero's army]
+!?BA1&1000/-998;
+!!UN:P56/?y-1; [Check if script is enabled: y-1]
+!!VRy-1&v4600=1:S0; [Set y-1 to 0 if v4600=1: y-1]
+!!VRv4600&v4600=1:S0; [Reset v4600 to 0: v4600]
+!!FU&y-1<>1:E; [Exit if script isn't enabled or v4600=1]
+!!DO9602/0/41/1:P; [Set correct Metamorphs in hero's army]
+!!VRv4600&v4600=2:S1; [Set v4600 to 1 to prevent extra Metamorphs appearing if used with Asmodeus script and Devils battle]
+
+--------------------------------------------------------------------------------------------------------------------
+
+ [After battle, set correct Metamorphs in hero's army]
+!?FU9602&1000/-998;
+!!VRy1:S4500 +x16; [Stack number index: y1]
+!!VRy10:Svy1; [Type of creature at start of battle: y10]
+!!BMx16:N?y2 O?y3; [Number of creatures in stack: y2, Hero slot #: y3]
+
+ [Exit if not a Metamorph at start of battle,]
+ [all killed, or a summoned creature there now]
+!!FU|y10<>165/y2<1/y3<0:E;
+
+!!MA:P165/?y4; [Health of one Metamorph: y4]
+!!BMx16:T?y5; [Type of creature: y5]
+!!MA:Py5/?y6; [Health of one creature: y6]
+!!VRy7:Sy6 *y2; [Total health of remaining stack of creatures: y7]
+!!VRy8:Sy7 :y4; [Number of Metamorphs to convert to: y8]
+!!VRy8&y8<1:S1; [If less than 1, make it 1]
+!!BMx16:B?y12; [Starting number of summoned stack: y12]
+!!VRy13:S4550 +x16; [Starting Metamorph index number]
+!!VRy8&y12=y2:Svy13; [Set to starting Metamorph number if none lost: y8]
+!!BMx16:I?y11; [Check which side owns it: y11]
+!!BMx16:Ny8; [Set to correct number]
+!!BA:My11/y3/165/y8; [Set Metamorphs of correct number]
+!!VRy14:Sx16 *-1 -1; [Negative of stack number: y14]
+!!EAy14:E?y15/d/d/d; [Experience of stack: y15]
+!!BA:Hy11/?y16; [Hero number: y16]
+!!HEy16&y16>0/y15>0:C0/y3/d/d/y15/3; [Add back any experience from before the battle]
+!!UN:R1; [Redraw screen]
+

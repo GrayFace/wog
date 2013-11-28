@@ -1,0 +1,205 @@
+126000	Artificer	Created by Perfecto	18.08.2004
+126001	I am the %Z126000 and I can upgrade your equipped artifacts. 
+Choose what you want to do.	 	
+126002	I am the %Z126000 and I can upgrade your equipped artifacts 
+but I'm a bit tired now and my services will cost double. 
+Choose what you want to do.	 	
+126003	{%Z126000} 
+
+My services cost %Y21 gold. 
+Do you really want to upgrade this artifact?	 	
+126004	{%Z126000} 
+
+I am sorry but I can't help you! You haven't got any artifacts that I can work with.	 	
+126005	%Z126000 
+You carry %V4119 artifact that I can upgrade. Choose this one to proceed.	 	
+126006	%Z126000 
+You carry %V4119 artifacts that I can upgrade. 
+Choose one which you want to upgrade.	 	
+126007	{%Z126000} 
+ 
+This is my offer: 
+ 
+For {%V4135 gold} I can upgrade your 
+%Z161 
+to an absolutely new 
+%Z162. 
+ 
+Do you agree to upgrade this artifact?  	 	
+126008	{%Z126000} 
+ 
+I need %V4135 gold for my work. 
+Come back when you have enough!	 	
+126009	%Z126000 {(not tired)}	 	
+126010	%Z126000 {(tired)}	 	
+126011	%Z126000 {(very tired)}	 	
+126012	{%Z126000} 
+
+I can upgrade your equipped artifacts. 
+But I am very tired today. 
+
+Come back tommorow.
+	 	
+126013	-   Nothing. I've changed my mind.	 	
+126014	   (head)	 	
+126015	   (shoulders)	 	
+126016	   (neck)	 	
+126017	   (right hand)	 	
+126018	   (left hand)	 	
+126019	   (torso)		
+126020	   (right ring)		
+126021	   (left ring)		
+126022	   (feet)		
+126023	   (misc. 1)		
+126024	   (misc. 2)		
+126025	   (misc. 3)		
+126026	   (misc. 4)		
+126027	   (misc. 5)		
+126028	>   Next page...		
+126029	<   Previous page...		
+126030	{%Z126000} 
+
+I'm tired but if you want I can upgrade a second artifact today for double the price. 
+
+Do you wish to employ my services for double the price?		
+126031	{%Z126000} 
+ 
+This is my offer: 
+ 
+For {%V4135 gold} and {%Y2 Mithril} I can upgrade your 
+%Z161 
+to an absolutely new 
+%Z162. 
+Do you agree to upgrade this artifact?  		
+126032	{%Z126000} 
+ 
+I need %Y2 Mithril for my work. 
+Come back when you you have enough!		
+126033	{%Z126000} 
+ 
+I need %V4135 gold and %Y2 Mithril for my work. 
+Come back when you have enough!		
+126034	»   Upgrade an artifact		
+126035	»   Change an artifact to another one that's similar		
+126036	»   Combine a group of artifacts to a more powerful one		
+126037	?   Find out about services		
+126038	-   Leave this place		
+126039	%Z126000 
+
+Choose the artifact that you want to get.		
+126040	{%Z126000} 
+
+This is my offer: 
+ 
+For {%V4135 gold} I can make from your 
+%Z161 
+an absolutely new 
+%Z162. 
+ 
+Do you agree to this?  		
+126041	{%Z126000} 
+
+This is my offer: 
+ 
+For {%V4135 gold} and {%Y2 Mithril} I can make from your 
+%Z161 
+an absolutely new 
+%Z162. 
+ 
+Do you agree to this?  		
+126042	%Z126000 
+
+Choose the group of artifacts that you want to combine.		
+126043	{1. Upgrade artifact.} 
+This service lets you upgrade your equipped artifact to the next level. This is the list of upgradeable artifacts with their further upgrades: 
+
+Centaur Axe => Blackshard of the Dead Knight => Greater Gnoll's Flail => Ogre's Club of Havoc => Sword of Hellfire => Titan's Gladius 
+
+Shield of the Dwarven Lords => Shield of the Yawning Dead => Buckler of the Gnoll King => Targ of the Rampaging Ogre => Shield of the Damned => Sentinel's Shield 
+
+Helm of the Alabaster Unicorn => Skull Helmet => Helm of Chaos => Crown of the Supreme Magi => Hellstorm Helmet => Thunder Helmet 
+
+Breastplate of Petrified Wood => Rib Cage => Scales of the Greater Basilisk => Tunic of the Cyclops King => Breastplate of Brimstone => Titan's Cuirass 
+
+Armor of Wonder => Sandals of the Saint => Celestial Necklace of Bliss => Lion's Shield of Courage => Sword of Judgement => Helm of Heavenly Enlightenment 
+
+Quiet Eye of the Dragon => Red Dragon Flame Tongue => Dragon Scale Shield => Dragon Scale Armor 
+
+Dragonbone Greaves =>  Dragon Wing Tabard => Necklace of Dragonteeth => Crown of Dragontooth 
+
+Still Eye of the Dragon => Pendant of Courage 
+
+Amulet of the Undertaker => Vampire's Cowl => Dead Man's Boots 
+
+Garniture of Interference => Surcoat of Counterpoise => Boots of Polarity 
+
+Bow of Elven Cherrywood => Bowstring of the Unicorn's Mane => Angel Feather Arrows 
+
+Bird of Perception => Stoic Watchman => Emblem of Cognizance 
+
+Statesman's Medal => Diplomat's Ring => Ambassador's Sash 
+
+Ring of the Wayfarer => Cape of Velocity 
+
+Equestrian's Gloves => Boots of Speed 
+
+Necklace of Ocean Guidance => Sea Captain's Hat 
+
+Charm of Mana => Talisman of Mana => Mystic Orb of Mana 
+
+Collar of Conjuring => Ring of Conjuring => Cape of Conjuring 
+
+Recanter's Cloak => Orb of Inhibition 
+
+Ring of Vitality => Vial of Lifeblood 
+
+Ring of Life => Vial of Lifeblood 
+
+Necklace of Swiftness => Cape of Velocity 
+
+EndlessPurse of Gold => Endless Bag of Gold => Endless Sack of Gold
+
+Legs of Legion => Loins of Legion => Torso of Legion => Arms of Legion => Head of Legion 
+
+{2. Change artifact to one that's similar.} 
+This service lets you to change one artifact to another with similar abilities. This is the list of changeable artifacts with their possible exchanges. 
+
+Ring of Vitality <=> Ring of Life 
+
+Clover of Fortune <=> Cards of Prophecy <=> Ladybird of Luck 
+
+Badge of Courage <=> Crest of Valor <=> Glyph of Gallantry 
+
+Speculum <=> Spyglass 
+
+Spirit of Oppression <=> Hourglass of the Evil Hour 
+
+Orb of the Firmament <=> Orb of Silt <=> Orb of Tempestuous Fire <=> Orb of Driving Rain 
+
+Tome of Fire Magic <=> Tome of Air Magic <=> Tome of Water Magic <=> Tome of Earth Magic 
+
+Everflowing Crystal Cloak <=> Ring of Infinite Gems <=> Everpouring Vial of Mercury <=> Eversmoking Ring of Sulfur 
+
+Inexhaustible Cart of Ore <=> Inexhaustible Cart of Lumber 
+
+Pendant of Life <=> Pendant of Death 
+
+{3. Combine a group of artifacts to a more powerful one.} 
+This service lets you choose a group of artifacts and combine them to a more powerful artifact. This is the list of combineable groups with their final artifacts. 
+
+Quiet Eye of the Dragon + Still Eye of the Dragon => Dragon Eye Ring 
+
+Clover of Fortune + Cards of Prophecy + Ladybird of Luck + Badge of Courage + Crest of Valor + Glyph of Gallantry => Pendant of Courage 
+
+Orb of the Firmament + Orb of Silt + Orb of Tempestuous Fire + Orb of Driving Rain => Orb of Vulnerability 
+
+{Note:} 
+There is no way to upgrade your artifacts to banned artifacts. Please remember this.		
+126044	%Z126000 
+You carry the %V4119 artifact that I can change. Choose this one to proceed.		
+126045	%Z126000 
+You carry the %V4119 artifacts that I can change. 
+Choose one which you want to change.		
+126046	{%Z126000} 
+
+All is ok. Take your new artifact.		

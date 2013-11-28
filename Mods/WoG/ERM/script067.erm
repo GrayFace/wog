@@ -1,0 +1,469 @@
+ZVSE
+ERMS_ScriptDate=12.7(July).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** TownC ERM script v1.2 - Donald X. Vaccarino, Jonas Gustafsson and Timothy Pulver,
+** with some balancing suggestions from Kerill Kennedy.
+** Requires WOG version 3.58 or later
+** Updated August 7, 2005
+** Previously Updated  July 26, 2004
+
+** Turns Conflux into a town of neutral creatures
+** Fire/Air Messengers changed into new level 3 monsters
+** Edits the Rust Dragons, to fit the other castles
+** Edits the weekly growth of Rogues, Halflings, Boars, Trolls, Sorc/Ench
+
+** To use this code elsewhere, put it into a Global Event, set to never happen.
+** This code also requires Events for the other scripts it uses.
+** The Event with this code should be the first ERM event in your map.
+
+** Modified by Thomas Franz (alias samot) at 17.09.2004
+** added FU1609 to replace Conflux-Dwellings by Neutral dwellings and neutral by
+** conflux dwellings. The replacement is "intelligent" means that it will save the
+** passability of the fields, so that there should no problems at narrow places on maps
+** and opens no loop hole if it replace a large dwelling by a smaller dwelling (f.E.
+** Hellfire Rift (2*3 fields -> Altar of Thought (1*2 fields))
+
+** No Replacement for Natural Calamity because the Messengers hirable in it changes each week
+** Futuremore I have corrected some of the monster level
+
+** Variables Used: v900-914 (not exclusive)
+** Flags Used: none
+** Functions Used: 6100-6106
+** Timers Used: TM2 (script00)
+
+** Timer routine
+
+!?TM2&$day$=1/$once$=1; // only once at day 1
+!!UN:P67/?y-1; [check if script is enabled: y-1]
+!!FU6104&y-1=1:P; // do conversion if script is enabled
+
+** end of timer routine
+
+
+** function to convert Conflux into neutral town
+
+!?FU6104;
+
+// change Dwellings in the town
+!!UN:T8/0/0/138; [level 1 no upg - Halfling]
+!!UN:T8/0/1/143; [level 1    upg - Rogue]
+!!UN:T8/1/0/140; [level 2 no upg - Boar]
+!!UN:T8/1/1/142; [level 2    upg - Nomad]
+!!UN:T8/2/0/164; [level 3 no upg - Fire messenger]
+!!UN:T8/2/1/166; [level 3    upg - Air messenger]
+!!UN:T8/3/0/194; [level 4 no upg - Werewolf]
+!!UN:T8/3/1/144; [level 4    upg - Troll]
+!!UN:T8/4/0/193; [level 5 no upg - Sorceress]
+!!UN:T8/4/1/136; [level 5    upg - Enchanter]
+!!UN:T8/5/0/195; [level 6 no upg - Hell Steed]
+!!UN:T8/5/1/172; [level 6    upg - Nightmare]
+!!UN:T8/6/0/168; [level 7 no upg - Gorynych]
+!!UN:T8/6/1/135; [level 7    upg - Rust Dragon]
+
+
+!!MA:U138/143; [upg halfing to rogue]
+!!MA:U140/142; [upg boar to nomad]
+!!MA:U164/166; [upg fire msg to air msg]
+!!MA:U194/144; [upg werewolf to troll]
+!!MA:U193/136; [upg sorceress to enchanter]
+!!MA:U195/172; [upg hellsteed to nightmare]
+!!MA:U168/135; [upg gorynych to rust dragon]
+
+* [These creatures all count as being conflux troops]
+!!MA:O138/8; [Halfling]
+!!MA:O143/8; [Rogue]
+!!MA:O140/8; [Boar]
+!!MA:O142/8; [Nomad]
+!!MA:O164/8; [Fire Messenger]
+!!MA:O166/8; [Air Messenger]
+!!MA:O194/8; [Werewolf]
+!!MA:O144/8; [Troll]
+!!MA:O193/8; [Sorceress]
+!!MA:O136/8; [Enchanter]
+!!MA:O195/8; [Hell Steed]
+!!MA:O172/8; [Nightmare]
+!!MA:O168/8; [Gorynych]
+!!MA:O135/8; [Rust Dragon]
+
+ [change messengers]
+
+!!MA:L164/2; [level 2 (3)]
+!!MA:L166/2;
+!!MA:C164/6/250; [costs $250]
+!!MA:C166/6/300; [costs $300]
+!!MA:F4/?v600; [griffin fight value]
+!!MA:F164/v600;
+!!MA:F5/?v600; [royal griffin fight value]
+!!MA:F166/v600;
+!!MA:I4/?v600; [griffin ai value]
+!!MA:I164/v600;
+!!MA:I5/?v600; [royal griffin ai value]
+!!MA:I166/v600;
+!!MA:G4/?v600; [griffin grow rate]
+!!MA:G164/v600;
+!!MA:G166/v600;
+!!MA:R4/?v600; [griffin grow H]
+!!MA:R164/v600;
+!!MA:R166/v600;
+!!MA:P164/30; [30 hit points]
+!!MA:P166/30;
+!!MA:S164/5; [Fire Messenger: speed 5]
+!!MA:S166/8; [Air Messenger: speed 8]
+!!MA:A164/8; [Fire Messenger: attack 8]
+!!MA:A166/10; [Air Messenger: attack 10]
+!!MA:D164/8; [Fire Messenger: defense 8]
+!!MA:D166/8; [Air Messenger: defense 8]
+!!MA:M164/3; [Fire Messenger: min dmg 3]
+!!MA:M166/4; [Air Messenger: min dmg 4]
+!!MA:E164/5; [Fire Messenger: max dmg 5]
+!!MA:E166/6; [Air Messenger: max dmg 6]
+!!MA:X164/32784; [Fire Messenger: alive, attack twice for Fire Messengers]
+!!MA:X166/32786; [Air Messenger: fly, alive, attack twice for Air Messengers]
+!!MA:L164/2; //set Monster Level to L3
+!!MA:L166/2; //set Monster Level to L3
+
+!!UN:P50/?y1; [Check if Enhanced Monsters is enabled: y1=1 if yes]
+!!VRz707&y1=0:Sz167000;
+!!UN&y1=0:G1/164/2/707;      [fire messenger]
+!!VRz708&y1=0:Sz167001;
+!!UN&y1=0:G1/166/2/708;      [air messenger]
+
+ [adjust Rogues and Halflings]
+!!MA:L143/0; //set Rogue Monster Level to L1
+!!MA:L138/0; //set Halfing Monster Level to L1
+!!MA:G143/14; [Increase Rogue Growth to 14]
+!!MA:C143/6/90; [Reduce Rogue cost to 90 Gold]
+!!MA:G138/14; [Reduce Halfing Growth to 14]
+
+ [adjust Boars]
+!!MA:G140/7; [Reduce Boar Growth to 7]
+!!MA:L140/1; //set Monster Level to L2
+!!MA:L142/1; //set Nomands Monster Level to L2
+
+ [adjust Trolls]
+!!MA:G144/4; [Increase Troll Growth to 4]
+!!MA:L144/3; //set Monster Level to L4
+!!MA:L194/3; //set Werewolf Monster Level to L4
+
+
+ [adjust Sorceresses and Enchanters]
+!!MA:G193/3; [Increase Sorceress Growth to 3]
+!!MA:G136/3; [Increase Enchanter Growth to 3]
+!!MA:L136/4; // set Monster Level to L5
+!!MA:L193/4; // set Monster Level to L5
+
+[adjust Gorynyches]
+!!MA:C168/6/3200; [Decrease Gorynych cost to 3200 Gold]
+!!MA:C168/1/1; [Increase Gorynych resource cost to 1 Mercury]
+!!MA:L168/6; // set Monster Level to L7
+
+ [adjust Rust Dragons]
+!!MA:P135/300; Change Rust dragons, 300 HP
+!!MA:C135/6/5000; Change Rust dragons, cost 5000
+!!MA:C135/1/5 C135/3/0; Change Rust dragons, cost 5 Mercury and 0 Sulfur
+!!MA:M135/30; Change Rust dragons, [min dmg 30 (50 ori)]
+!!MA:S135/15; Change Rust dragons, [speed 15 (17 ori)]
+!!MA:L135/6; // set Monster Level to L7
+
+
+ [adjust conflux might hero specialties]
+!!HE128:X4/194/2/1/2; [Pasis - Werewolf/Troll specialist: +2 att, +1 def, +2 dmg]
+!!VRz169:Sz167002; [Pasis' specialty text]
+!!UN:G2/128/2/169; [Set Pasis' specialty text to z169]
+!!HE129:X0/13; [Thunar - Estates specialist]
+!!VRz170:Sz167003; [Thunar's specialty text]
+!!UN:G2/129/2/170; [Set Thunar's specialty text to z170]
+!!HE130:X0/20; [Ignissa - Artillery specialist]
+!!VRz171:Sz167004; [Ignissa's specialty text]
+!!UN:G2/130/2/171; [Set Ignissa's specialty text to z171]
+!!HE131:X5/2; [Lacus - Speed bonus (like Sir Mullich)]
+!!VRz172:Sz167005; [Lacus' specialty text]
+!!UN:G2/131/2/172; [Set Lacus' specialty text to z172]
+!!HE132:X4/193/3/3/3; [Monere - Sorceress/Enchanter specialist: +3 att, +3 def, +3 dmg]
+!!VRz173:Sz167006; [Monere's specialty text]
+!!UN:G2/132/2/173; [Set Monere's specialty text to z173]
+!!HE133:S13/0 S19/0 S23/2 X0/23; [Erdamon - Armorer Specialist - starts with Advanced Armorer instead of Basic Tactics and Estates]
+!!VRz174:Sz167007; [Erdamon's specialty text]
+!!UN:G2/133/2/174; [Set Erdamon's specialty text to z174]
+!!HE134:X1/164; [Fiur - Fire Messenger/Air Messenger specialist (old style)]
+!!VRz175:Sz167008; [Fiur's specialty text]
+!!UN:G2/134/2/175; [Set Fiur's specialty text to z175]
+!!HE135:X0/21 Y9/100/999/1; [Kalt - Learning bonus plus gains 100 experience daily (Blessing)]
+!!VRz176:Sz167009; [Kalt's specialty text]
+!!UN:G2/135/2/176; [Set Kalt's specialty text to z176]
+
+
+!!DO6100/0/155/1:P; [iterate through all heroes to fix starting troops]
+!!DO6105/128/143/1:P; [set future starting troops for conflux heroes]
+
+** replace dwellings (by Thomas Franz alias samot)
+
+** y2 = old object subtype
+** y3 = new object subtype (non upgr)
+** y4 = move object one field to left (-1) or right (1), no change by 0
+** y5 = new object subtype (upgr)
+** y6 = move object one field to left (-1) or right (1), no change by 0
+** y7 = new creature (non upgr)
+** y8 = new creature (upgr)
+** y9 = Rule "Some dwellings have upgr. creatures" is on or off
+
+!!UN:P133/?y9; // check for rule "Some dwellings have upgr. creatures"
+
+!!VRy2:S59; // Magic Latern
+!!VRy3:S73; !!VRy4:S0; !!VRy5:S78; !!VRy6:S0; // Thatched Hut (Halflings) or Rogue Cave
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S138; !!VRy8:S143; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S69; // Altar Air
+!!VRy3:S75; !!VRy4:S0; !!VRy5:S77; !!VRy6:S0; // Boar Glen / Nomads Tent
+!!VRv900:C0/0/0/1/1/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S140; !!VRy8:S142; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S72; // Altar Water
+!!VRy3:S16; !!VRy4:S1; !!VRy5:S7; !!VRy6:S1; // Fire / Air Messenger
+!!VRv900:C0/0/1/0/0/0/0/0/1/0/0/0; // changes of passability
+!!VRy7:S164; !!VRy8:S166; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S71; // Altar Fire
+!!VRy3:S98; !!VRy4:S0; !!VRy5:S79; !!VRy6:S0; // Werewolf / Troll
+!!VRv900:C0/0/0/0/0/0/0/0/0/1/0/0; // changes of passability
+!!VRy7:S194; !!VRy8:S144; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S70; // Altar Earth
+!!VRy3:S97; !!VRy4:S0; !!VRy5:S66; !!VRy6:S0; // Sorceresses / Enchanters
+!!VRv900:C0/0/1/0/0/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S193; !!VRy8:S136; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S60; // Altar Thought
+!!VRy3:S99; !!VRy4:S1; !!VRy5:S92; !!VRy6:S0; // Hell Steed / Nightmare
+!!VRv900:C0/0/1/1/1/1/0/0/0/0/0/0; // changes of passability
+!!VRy7:S195; !!VRy8:S172; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S61; // Pyre
+!!VRy3:S91; !!VRy4:S1; !!VRy5:S65; !!VRy6:S0; // Gorynyches / Rust Dragons
+!!VRv900:C0/0/1/0/0/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S168; !!VRy8:S135; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y5/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S73; // Thatched Hut
+!!VRy3:S59; !!VRy4:S0;  // Pixies / Sprites
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S118; !!VRy8:S119; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S78; // Rogue Cave
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+
+!!VRy2:S75; // Boar Glen
+!!VRy3:S69; !!VRy4:S0;  // Air / Storm Elem.
+!!VRv900:C0/0/0/-1/-1/0/0/0/0/-1/-1/0; // changes of passability
+!!VRy7:S112; !!VRy8:S127; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S77; // Nomad Tent
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+
+**No Replacement for Natural Calamity because the Messengers hirable in it changes each week
+
+!!VRy2:S98; // Howling Hollow
+!!VRy3:S71; !!VRy4:S0;  // Fire / Energy Elem.
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!VRy7:S114; !!VRy8:S129; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S79; // Troll Bridge
+!!VRv900:C0/0/0/-1/0/0/0/0/0/-1/0/0; // changes of passability
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+
+!!VRy2:S97; //Enchanted Tower (Sorceresses)
+!!VRy3:S70; !!VRy4:S1;  // Earth / Magma Elem.
+!!VRv900:C1/0/0/0/0/0/1/0/0/0/0/0; // changes of passability
+!!VRy7:S113; !!VRy8:S125; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S66; !!VRy6:S0; // Enchanter's Hollow
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y6/y3/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S99; // Hellfire Rift (Hell Steeds)
+!!VRy3:S60; !!VRy4:S0;  // Psych. / Magic Elem.
+!!VRv900:C0/0/-1/-1/-1/-1/0/0/-1/-1/-1/-1; // changes of passability
+!!VRy7:S120; !!VRy8:S121; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S92; !!VRy6:S1;// Dream Horse-shoe (Nightmares)
+!!VRv900:C1/0/0/0/0/0/1/0/0/0/0/0; // changes of passability
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y6/y3/y6/y7/y8/y9; // call replace routine
+
+!!VRy2:S91; // Vast Cavern (Gorynyches)
+!!VRy3:S61; !!VRy4:S0;  // Firebirds / Phoenixes
+!!VRv900:C0/0/-1/0/0/0/0/0/-1/0/0/0; // changes of passability
+!!VRy7:S130; !!VRy8:S131; // creatures
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+!!VRy2:S65; // Sulfurous Lair (Rust Dragons)
+!!VRv900:C0/0/0/0/0/0/0/0/0/0/0/0; // changes of passability
+!!UN:U17/y2/?y1; // get number of dwellings
+!!DO6106/1/y1/1:P0/y2/y3/y4/y3/y4/y7/y8/y9; // call replace routine
+
+** Set alignment of the original Conflux creatures
+** to neutral and restore their normal upgrades
+** so they can still be upgraded at Hill Forts
+!!MA:O112/-1 U112/127; !!MA:O113/-1 U113/125; !!MA:O114/-1 U114/129;
+!!MA:O115/-1 U115/123; !!MA:O118/-1 U118/119; !!MA:O119/-1;
+!!MA:O120/-1 U120/121; !!MA:O121/-1; !!MA:O123/-1; !!MA:O125/-1;
+!!MA:O127/-1; !!MA:O129/-1; !!MA:O130/-1 U130/131; !!MA:O131/-1;
+
+********* end of function FU1604 **************
+
+** function to fix one hero's starting troops
+
+!?FU6100;
+
+!!DO6101/0/6/1:Px16; [iterate through creature slots]
+
+** end of function
+
+
+** function to fix one slot
+
+!?FU6101;
+
+!!HEx1:C0/x16/?y1/?y2; [get y1 type y2 qty]
+!!VRy1&y1=118:S138; [pixie -> halfling]
+!!VRy1&y1=112:S140; [air elemental -> boar]
+!!VRy1&y1=115:S164; [water elemental -> fire messenger]
+!!HEx1:C0/x16/y1/y2; [set creature type/qty]
+
+** end of function
+
+
+** function to set starting troops for hero
+
+!?FU6105;
+
+!!HEx16:H0/138/30/45; [30-45 halflings]
+!!HEx16:H1/140/2/6; [2-6 boars]
+!!HEx16:H2/-1/0/0; [no 3rd slot]
+
+** end of function
+
+
+
+!?FU6106; // replaces conflux by neutral town dwellings (by Thomas Franz (samot))
+** x1 = level
+** x2 = old object subtype
+** x3 = new object subtype (non upgr)
+** x4 = move object one field to left (-1) or right (1), no change by 0
+** x5 = new object subtype (upgr)
+** x6 = move object one field to left (-1) or right (1), no change by 0
+** x7 = new creature (non upgr)
+** x8 = new creature (upgr)
+** x9 = Rule "some dwellings have upgr. creatures" is on or off
+
+** y8 = MapSize (x=y)
+
+** change passability of fields, referending to the origin entrace (ignore the move by x6)
+** 0 means no change, 1 = make passable, -1 make inpassable
+** v900 = field left of entrace (non upgr. dwelling)
+** v901 = entrace
+** v902 = right of entrace
+** v903 = left over the entrace
+** v904 = over the entrace
+** v905 = right over the entrace
+** v906 = field left of entrace (upgr. dwelling)
+** v907 = entrace
+** v908 = right of entrace
+** v909 = left over the entrace
+** v910 = over the entrace
+** v911 = right over the entrace
+
+!!UN:X?y8/?y9; // get size of map
+
+!!VRv912&x16=1:S-1; // initialize for first loop
+!!UN:U17/x2/-1/912; // get coordinates to v912-v914
+!!VRy99:S0 R3; // Random 0-3
+!!VRy99&x9=0:S0; // set to 0 if Rule for upgr. creatures is of
+!!VRy11:Sv912 +1; !!VRy12:Sv912 -1;
+!!POv912/v913/v914:N?y98 N0; // check if is already replaced (y98 will be 1) and reset the flag
+!!POy11/v913/v914&y98=0/y11<y8:N?y98 N0; // check if is already replaced (y98 will be 1) and reset the flag
+!!POy12/v913/v914&y98=0/y12>-1:N?y98 N0; // check if is already replaced (y98 will be 1) and reset the flag
+
+!!FU&y98=1:E; // exit if Object has been already replaced before
+
+!!DWv912/v913/v914:O?y1 M1/?y2/?y3; // get owner and creature in the second slot (map rule Boars)
+!!UN:Ov912/v913/v914/1; // delete old dwelling incl. hint
+
+!!VRy10:Sv912+x4; !!VRy10&x9=0/y99=3:Sv912+x6; // set y10 to insert position
+!!VRy10&y10<0:S0; !!VRy10&y10=>y8:Sy8 -1; // set y10 to min 0 / max MapSize
+
+!!VRy4:Sx3; !!VRy4&y99=3:Sx5; // set new dwelling (25 % Chance for upgr. if Rule is on)
+!!VRy5:Sx7; !!VRy5&y99=3:Sx8; // set new creature (25 % Chance for upgr. if Rule is on)
+
+!!UN:Iy10/v913/v914/17/y4; // create new object
+!!DWv912/v913/v914:Oy1; // set owner
+!!POv912/v913/v914:N1 Oy1; // mark it as replaced
+!!POy10/v913/v914:N1 Oy1; // mark it as replaced
+!!MA:Gy5/?y6; // get growth rate of new creature
+!!DWv912/v913/v914:M0/y5/y6 M1/y2/y3; // set new creature to hire and the boars / air elementals to the second stack
+!!DWv912/v913/v914&x1>3:G0/y5/d; // set new guards for L5-7, do not change their number
+
+!!VRy1:Sv900; !!VRy1&x9=0/y99=3:Sv906;
+!!VRy2:Sv901; !!VRy2&x9=0/y99=3:Sv907;
+!!VRy3:Sv902; !!VRy3&x9=0/y99=3:Sv908;
+!!VRy4:Sv903; !!VRy4&x9=0/y99=3:Sv909;
+!!VRy5:Sv904; !!VRy5&x9=0/y99=3:Sv910;
+!!VRy6:Sv905; !!VRy6&x9=0/y99=3:Sv911;
+!!FU&y1=0/y2=0/y3=0/y4=0/y5=0/y6=0:E; // exit if no changes at passability necessary
+
+
+!!VRy7:Sv912 -1; // left of entrace
+!!UN&y1=-1/y7>-1:Iy7/v913/v914/153/0; // set inpassable (create stump)
+!!TRy7/v913/v914&y1=1/y7>-1:P1; // set passable
+
+!!VRy7:Sv912; // original entrace
+!!UN&y2=-1:Iy7/v913/v914/153/0; // set inpassable
+!!TRy7/v913/v914&y2=1:P1; // set passable
+
+!!VRy7:Sv912 +1; // right of entrace
+!!UN&y3=-1/y7<=y8:Iy7/v913/v914/153/0; // set inpassable
+!!TRy7/v913/v914&y3=1/y7<=y8:P1; // set passable
+
+!!VRy9:Sv913 -1; // the line above the entrace
+!!FU&y9<0:E; // if not on map
+
+!!VRy7:Sv912 -1; // left above the entrace
+!!UN&y4=-1/y7>-1:Iy7/y9/v914/153/0; // set inpassable
+!!TRy7/y9/v914&y4=1/y7>-1:P1; // set passable
+
+!!VRy7:Sv912; // above the entrace
+!!UN&y5=-1:Iy7/y9/v914/153/0; // set inpassable
+!!TRy7/y9/v914&y5=1:P1; // set passable
+
+!!VRy7:Sv912 +1; // right above the entrace
+!!UN&y6=-1/y7<=y8:Iy7/y9/v914/153/0; // set inpassable
+!!TRy7/y9/v914&y6=1/y7<=y8:P1; // set passable
+
+********* end of function FU6106 **************
+

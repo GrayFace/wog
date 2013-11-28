@@ -1,0 +1,544 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=21.8(August).2006
+
+** Victory Points version 0.7
+** By Timothy Pulver
+** Script119.erm
+** Last Updated: August 10, 2006
+** Previously Updated: August 3, 2006
+
+** ERM Number: 319
+** Variables: v61-v63, v77-v79
+** Temporary Flags and Variables: v1-v3, z1-z5, Flag 1-2
+** Functions: FU302-FU316 (FU316 not used but reserved)
+
+--------------------------------------------------------------------------------
+
+ [Select Victory Point Values]
+
+!?FU311; [Get input from player for number of Victory Points or Days: v63]
+!!VRz1:S^^;
+!!VRz2&v62=1:S^How many Victory Points are needed to Win?
+
+TIP: 100-300 points are good for a large map.^;
+!!VRz3&v62=1:S^Enter a number between 25 and 5000.^;
+!!VRz2&v62=2:S^How many Victory Points MORE than other players are needed to Win?
+
+TIP: 25-50 points is usually a good number.^;
+!!VRz3&v62=2:S^Enter a number between 25 and 1000.^;
+!!VRz2&v62=3:S^How many Days will the game be played?^;
+!!VRz3&v62=3:S^Enter a number between 14 and 1000.^;
+!!IF:D1/2/3/1/1/1/1/1/1/1/1/1/1/1/1/1; [Set up Input Box #1]
+!!IF:F1/1/1/1/1/0; [Disable ESC button for Input Box #1]
+!!IF:E2/1; [Display Input Box #1]
+!!VRv63:Vz1; [Convert input string to a number and store in v63]
+!!IF&v62=1/v63<25:M^You must enter a number between 25 and 5000.^;
+!!IF&v62=1/v63>5000:M^You must enter a number between 25 and 5000.^;
+!!IF&v62=2/v63<25:M^You must enter a number between 25 and 1000.^;
+!!IF&v62=2/v63>1000:M^You must enter a number between 25 and 1000.^;
+!!IF&v62=3/v63<14:M^You must enter a number between 14 and 1000.^;
+!!IF&v62=3/v63>1000:M^You must enter a number between 14 and 1000.^;
+!!VRx16&v62=1/v63>=25/v63<=5000:S999; [Exit if acceptable number]
+!!VRx16&v62=2/v63>=25/v63<=1000:S999; [Exit if acceptable number]
+!!VRx16&v62=3/v63>=14/v63<=1000:S999; [Exit if acceptable number]
+
+--------------------------------------------------------------------------------
+
+ [Select Victory Point Options at Game Start]
+
+!?FU310; [Select type of Victory Point game to play and details]
+!!VRz1:S^V I C T O R Y   P O I N T S
+
+Select type of Victory Point game to play.^;
+!!VRz2:S^Play until one player reaches a set number of Victory Points (e.g., 1000).^;
+!!VRz3:S^Play until one player has MORE VPs than any other player (e.g., 100 more).^;
+!!VRz4:S^Play for a set number of days (e.g., 90). The player with the most VPs wins.^;
+!!VRz5:S^Victory Points do NOT determine a winner and are for information use only.^;
+!!IF:G1/1/8/1/2/3/4/5/0/0/0/0/0/0/0/0; [Display radio button dialog: result in v1]
+!!VRv62&v1=1:S1; [Set v62 to 1 for set number of VPs]
+!!VRv62&v1=2:S2; [Set v62 to 2 for MORE VPs than other players]
+!!VRv62&v1=4:S3; [Set v62 to 3 for a set number of days]
+!!VRv62&v1=8:S4; [Set v62 to 4 for VPs are information only]
+!!DO311/0/1/0&v1<=4:P; [Get input from player for number of Victory Points or Days: v63]
+!!VRv61:S0; [Initialize v61 to 0]
+!!VRv77:C0/0/0; [Initialize v77-v79 to 0]
+!!FU&v62=4:E; [Exit if VPs are for information only]
+
+!!VRz1:S^VICTORY POINT OPTIONS
+
+Enable/Disable Desired Options for this game.^;
+!!VRz2:S^AI (computer) players CAN win the game with Victory Points.^;
+!!VRz3:S^No human mine or dwelling recapture from human players in end-game period.^;
+!!VRz4:S^Victory Point totals of other players are HIDDEN during the game.^;
+!!IF:G0/1/3/1/2/3/4/0/0/0/0/0/0/0/0/0; [Display checkbox selection button dialog: result in v1]
+!!VRy2:Sv1; [Copy v1 to y2]
+!!VRy2:&1; [Check if option 1 is enabled (AI's can win with VPs): y2>0 if yes]
+!!VRv61&y2>0:S1; [Set v61 to 1 if computer players CAN win with Victory Points: v61]
+!!IF&v61=0:M^Note: Although computer players cannot win the game, the winning human player must still beat the computer players' Victory Point totals. In a time-limited game, the game will continue beyond the time-limit until a human player has more points than computer players.^;
+!!VRy2:Sv1; [Copy v1 to y2]
+!!VRy2:&2; [Check if option 2 is enabled (no human mine/dwelling capture in end-game): y2>0 if yes]
+!!VRv77&y2>0:S1; [Set v77 to 1 if no human mine/dwelling capture in end-game: v77]
+!!VRy2:Sv1; [Copy v1 to y2]
+!!VRy2:&4; [Check if option 3 is enabled (point totals of other players are hidden): y2>0 if yes]
+!!VRv78&y2>0:S1; [Set v78 to 1 if point totals of other players are hidden: v78]
+
+--------------------------------------------------------------------------------
+
+ [Select Victory Point Options at Game Start]
+
+!#UN:P319/?y-1; [Check if script is enabled: y-1]
+!#TM1&y-1=1:S1/999/1/255; [Daily Timer for all players]
+!#FU310&y-1=1:P; [Select type of Victory Point game to play and details]
+
+--------------------------------------------------------------------------------
+
+ [Display Starting Victory Point Information]
+
+!?TM1; [Daily Timer]
+!!UN:P319/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!VRy-2:Sc0; [Current Day: y-2]
+!!FU|y-2<>1/-1000:E; [Exit if not Day 1 or for computer players]
+
+!!OW:C?y-3; [Current player: y-3]
+!!VRy-4&v62=3:Sv63 :28 +1; [Month to win: y-4]
+!!VRy-5&v62=3:Sv63 %28 :7 +1; [Week to win: y-5]
+!!VRy-6&v62=3:Sv63 %28 %7 +1; [Day to win: y-6]
+
+!!VRz-1&v62=1:S^The first player to have %V63 Victory Points at the start of their turn will win the game. In the case of a tie, the game will continue until one player has %V63 points AND at least one more Victory Point than any other player.^;
+!!VRz-1&v62=2:S^The first player to have %V63 {more} Victory Points than any other player at the start of their turn will win the game.^;
+!!VRz-1&v62=3:S^The game will end Month %Y-4, Week %Y-5, Day %Y-6. The player with the most Victory Points at this time will win the game. In the case of a tie, the game continues until one player has at least one point more than any other player.^;
+!!VRz-1&v62=4:S^Victory Points are for information only in this game.^;
+!!VRz-2&v61=0:S^Computer players CANNOT win the game by gaining Victory Points but you must still beat their Victory Point total to win.^;
+!!VRz-2&v61=1:S^Computer players CAN win the game by gaining Victory Points.^;
+!!VRz-2&v62=4:S^^;
+!!VRz-3:S^all players'^; [Set z-3 to "all players'" if Victory Points aren't hidden: z-3]
+!!VRz-3&v78=1:S^your own^; [Set z-3 to "your own" if Victory Points ARE hidden: z-3]
+!!IF:Q1/10/y-3/1^{Victory Points}
+
+%Z-1 %Z-2
+
+To see %Z-3 current Victory Points, right-click on the Adventure Options button. To see a list of Victory Point values, press Ctrl-A.^; [Display opening VP information message]
+
+!!FU&v77=0:E; [Exit if no end-game limits on human mine/dwelling recapture]
+
+!!VRy-7&v62<=2:Sv63 -10; [10 less than the number of VPs needed to win: y-7]
+!!VRy-7&v62=3:Sy-5 -1; [One week before game is scheduled to end: y-7]
+!!VRy-4&v62=3/y-7=0:-1; [Subtract 1 from month for end-game date if win date is first week of a month: y-4]
+!!VRy-7&v62=3/y-7=0:S4; [Set week to 4 for end-game date if win date is first week of a month: y-7]
+
+!!VRz-4&v62=1:S^The end-game period begins when any player reaches %Y-7 Victory Points (ten points less than the number needed to win).^;
+!!VRz-4&v62=2:S^The end-game period begins when one player has %Y-7 Victory Points more than other players (ten points less than the number needed to win).^;
+!!VRz-4&v62=3:S^The end-game period begins on Month %Y-4, Week %Y-7, Day %Y-6 (one week before the game is scheduled to end).^;
+
+!!IF:M^{End-Game Period}
+
+%Z-4
+
+Once the end-game period begins, human players cannot recapture mines or dwellings owned by other human players for the rest of the game. Unowned and computer-owned mines and dwellings may continue to be captured, however, and computer players may likewise capture human-owned mines and dwellings.^; [Display end-game period information message]
+
+--------------------------------------------------------------------------------
+
+ [Check for a Winner]
+
+!?TM1; [Daily Timer]
+!!UN:P319/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!FU&v62=4:E; [Exit if Victory Points are for information purposes only]
+!!FU&v61=0/-1000:E; [Exit if AI turn and computer players can't win the game with Victory Points]
+
+!!FU302:P; [Calculate each player's points and store in y-10..y-17]
+!!VRy-2:Sc0; [Current Day: y-2]
+!!OW:C?y-3; [Current player: y-3]
+
+!!VRy-20:S-1; [Initialize y-20 (smallest difference) to -1]
+!!DO312/0/7/1:P; [Determine player with most points (y-18=points, y-19=player) and what the smallest difference is (y-20=difference, y-21=player)]
+
+!!VRy-26|y-3<>y-19/y-20<1:S999; [Set y-26 6o 1 if player with the most points isn't the current player or no player has more victory points than others (tied for points)]
+
+!!VRy-7:Sy-2 :28 +1; [Current Month: y-7]
+!!VRy-8:Sy-2 %28 :7 +1; [Current Week: y-8]
+!!VRy-9:Sy-2 %28 %7; [Current Day: y-9]
+
+!!VRy-22&y-26=0/v62=1/y-18>=v63:S999; [Set y-22 to 999 if current player meets win conditions: set VP total]
+!!VRy-22&y-26=0/v62=2/y-20>=v63:S999; [Set y-22 to 999 if current player meets win conditions: relative VP total]
+!!VRy-22&y-26=0/v62=3/y-2>v63:S999; [Set y-22 to 999 if current player meets win conditions: set number of days]
+
+ [v77 set to 2 if "end game" period reached]
+!!VRy-23&v77=1/v62<=2:Sv63 -10; [Set y-23 to VP difference minus 10 points: y-23]
+!!VRv77&v77=1/v62=1/y-18>=y-23:S2; [Set v77 to 2 to indicate "end game" reached if end-game (set VPs) conditions reached: v77]
+!!VRv77&v77=1/v62=2/y-20>=y-23:S2; [Set v77 to 2 to indicate "end game" reached if end-game (within 10 VPs of more VPs) condition reached: v77]
+!!VRy-23&v77=1/v62=3:Sv63 -7; [Set y-23 to number of days minus 7: y-23]
+!!VRv77&v77=1/v62=3/y-2>y-23:S2; [Set v77 to 2 to indicate "end game" reached if end-game (last 7 days of set days) condition reached: v77]
+
+!!VRy-24&v77=2:Sv79; [Copy v79 to y-24]
+!!VRy-25:Sy-3 +1; [Add 1 to current player number: y-25]
+!!FU$bit$:Py-25; [Convert y-25 to a bit value: y-100]
+!!VRy-24&v77=2:&y-100; [See if current player number bit is in y-24 (v79): y-24=0 if no]
+!!VRv79&v77=2/y-24=0:|y-100; [Add current player number bit to v79]
+!!IF&1000/y-22<>999/v77=2/y-24=0:M^{WARNING: End-Game Period in Effect!}
+
+The end-game period is now in effect. For the rest of the game, human controlled mines and dwellings cannot be captured by other human players.
+
+AI and unowned mines and dwellings may continue to be captured and AI players may capture human-controlled mines and dwellings.^;
+
+!!FU&y-22<>999:E; [Exit if no player has won the game this turn]
+
+!!UN:V?y-40/?y-40/?y-40/?y-41/?y-40; [Get Game Information: y-41=1 for a Network Game]
+!!IP&y-41=1:D-1; [Set receiver for IP transfers to ALL players for a Network Game]
+!!FU315&y-41=1:Dy-7/y-8/y-9/y-18/y-19/y-20; [Call FU315 if a player wins this turn - Network]
+!!FU315:Py-7/y-8/y-9/y-18/y-19/y-20; [Call FU315 if a player wins this turn - current player]
+
+--------------------------------------------------------------------------------
+
+ [Display Player Won Information]
+
+!?FU315; [Player wins this turn]
+!!UN:J9/0/-3; [WoG Folder Path: z-3]
+!!VRz-1&x5=0:S^RED^;
+!!VRz-1&x5=1:S^BLUE^;
+!!VRz-1&x5=2:S^TAN^;
+!!VRz-1&x5=3:S^GREEN^;
+!!VRz-1&x5=4:S^ORANGE^;
+!!VRz-1&x5=5:S^PURPLE^;
+!!VRz-1&x5=6:S^TEAL^;
+!!VRz-1&x5=7:S^PINK^;
+!!VRz-2:S^points^;
+!!VRz-2&x6=1:S^point^;
+!!VRz1:S^%Z-3Victory Points.txt^;
+!!VRz2:S^Most Recent Victory Points Recorded^;
+!!FU302:P; [Re-calculate each player's points and store in y-10..y-17]
+!!DO314/1/8/1:P; [Loop through players and write Victory Point data to file]
+!!VRz3:S^The %Z-1 player won the game on Month %X1, Week %X2, Day %X3 with %X4 Victory Points! (%X6 %Z-2 more than the next highest player.)^;
+!!UN:N5/3/1000/2/1; [Write Victory Point Win info. to file "Victory Points.txt" ]
+
+!!IF&v62=1/999:Q1/10/x5/1^The %Z-1 player WINS the game with %X4 Victory Points!
+
+(%X6 %Z-2 more than the next highest player.)^;
+
+!!IF&v62=2/999:Q1/10/x5/1^The %Z-1 player WINS the game with %X4 Victory Points, %X6 %Z-2 MORE than any other player!^;
+
+!!IF&v62=3/999:Q1/10/x5/1^The %Z-1 player WINS the game on Month %X1, Week %X2, Day %X3 with %X4 points!
+
+(%X6 %Z-2 more than the next highest player.)^;
+
+!!IF&v62=1/-999:Q1/10/x5/4^The %Z-1 player WINS the game with %X4 Victory Points!
+
+(%X6 %Z-2 more than the next highest player.)^;
+
+!!IF&v62=2/-999:Q1/10/x5/4^The %Z-1 player WINS the game with %X4 Victory Points, %X6 %Z-2 MORE than any other player!^;
+
+!!IF&v62=3/-999:Q1/10/x5/4^The %Z-1 player WINS the game on Month %X1, Week %X2, Day %X3 with %X4 points!
+
+(%X6 %Z-2 more than the next highest player.)^;
+
+!!UN&999:Q1/1; [Win Game for current player]
+!!UN&-999:Q0; [Lose Game for non-current player]
+
+--------------------------------------------------------------------------------
+
+ [Write Record of Victory Points to "Victory Points.txt" Data File at End of Game]
+
+!?FU314; [Loop through players and write Victory Point data to file]
+!!VRy1:S-9 -x16; [Index for y- variable with player's current Victory Points (-10..-17): y1]
+!!VRy2:Syy1; [Player's Victory Points: y2]
+!!VRy3:Sx16; [Option Index: y3]
+!!VRz-5&x16=1:S^RED^;
+!!VRz-5&x16=2:S^BLUE^;
+!!VRz-5&x16=3:S^TAN^;
+!!VRz-5&x16=4:S^GREEN^;
+!!VRz-5&x16=5:S^ORANGE^;
+!!VRz-5&x16=6:S^PURPLE^;
+!!VRz-5&x16=7:S^TEAL^;
+!!VRz-5&x16=8:S^PINK^;
+!!VRz3:S^%Z-5's Victory Points: %Y2^; [Player's Victory Points: z4]
+
+!!UN:N5/3/y3/2/1; [Write Victory Point info. to file "Victory Points.txt" ]
+
+--------------------------------------------------------------------------------
+
+ [Determine Player with the Most Victory Points]
+
+!?FU312; [Determine player with most points (y-18=points, y-19=player) and what the smallest difference is (y-20=difference, y-21=player)]
+!!VRy1:S-10 -x16; [Index for y- variable with player's current Victory Points (-10..-17): y1]
+!!DO313/0/7/1:Py1/x16; [Determine if y-x16 is higher than any other player's total]
+
+--------------------------------------------------------------------------------
+
+ [Determine Player with the Most Victory Points]
+
+!?FU313;
+!!FU&x16=x2:E; [Skip same player]
+!!VRy1:S-10 -x16; [Index for y- variable with player's current Victory Points (-10..-17): y1]
+!!VRx16&yx1<yy1:S999; [End loop if points are less than another player's points]
+!!FU&yx1<yy1:E; [Exit loop if points are less than another player's points or no higher than highest so far]
+!!VRy-20&yx1>y-18:S-1; [Reset y-20 if a higher number of VPs is found]
+!!VRy-19&yx1>y-18:Sx2; [Store player with highest number of VP so far: y-19]
+!!VRy-18&yx1>y-18:Syx1; [Store highest number of VP so far: y-18]
+!!VRy3:Sy-18 -yy1; [Calculate difference: y3]
+!!VRy-21|y3<y-20/y-20<0:Sx16; [Store player with 2nd highest number so far: y-21]
+!!VRy-20|y3<y-20/y-20<0:Sy3; [Store smallest difference so far: y-20]
+
+--------------------------------------------------------------------------------
+
+ [Display Victory Point Values on Ctrl-A Click]
+
+!?CM5; [Adventure Screen left-click trigger]
+!!UN:P319/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!CM:I?y-1 F?y-2 S?y-3; [Location: y-1, Flags: y-2, Sub-Type of Click: y-3]
+!!FU|y-1<>9/y-2<>4/y-3<>12:E; [Exit if not Ctrl-A]
+!!UN:V?y-1/?y-2/?y-3/?y-4/?y-5; [Check if it's a network game: y-4=1 if yes]
+!!OW&y-4=0:C?y-6; [If not a Network game, get current player: y-6]
+!!DO309/0/7/1&y-4=1:P; [If Network game, determine which Player is Pressing Ctrl-A: y-6]
+!!IF:Q1/10/y-6/1^V I C T O R Y   P O I N T   V A L U E S
+{Heroes:} 1 pt per Level
+{Town (no Fort):} 5 pts   {Town+Fort:} 10 pts
+{Town+Citadel:} 15 pts   {Town+Castle:} 20 pts
+{Town+Capitol:} 25 pts   {Grail Building:} 25 pts
+{Mine (not Gold):} 2 pts {Gold Mine:} 5 pts
+{External Dwelling:} 1-7 pts (by creature level)
+{Garrison, Shipyard, Lighthouse:} 1 pt
+{Wood/Ore (100):} 1 pt  {Mithril (20):} 1 pt
+{Precious Resource (50):} 1 pt  {Gold (20,000):} 1 pt^;
+
+--------------------------------------------------------------------------------
+
+ [Determine Which Player is Pressing Ctrl-A]
+
+!?FU309; [Determine which Player is Pressing Ctrl-A: y-4]
+!!OW:Gx16/?y1; [Is this player in front of screen?: y1=1 if yes]
+!!VRy-6&y1=1:Sx16; [Set y-6 to x16 if this is the player in front of screen]
+!!VRx16&y1=1:S999; [End Loop if player found]
+
+--------------------------------------------------------------------------------
+
+ [Right-Click on Adventures Options Displays Player's Current Victory Point Totals]
+
+!?CM0; [Adventure Screen right-click trigger]
+!!UN:P319/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!CM:I?y-1; [Location clicked: y-1]
+!!FU&y-1<>9:E; [Exit if not Adventure Options button]
+!!FU302:P; [Calculate each player's points and store in y-10..y-17]
+!!FU$LocalPlayer$:P; [Get local/current player: y-100]
+!!VRz2&v62=1:S^{Get %V63 points to Win!}^;
+!!VRz2&v62=2:S^{Get %V63 points MORE than other players to Win!}^;
+!!VRy-20&v62=3:Sv63 :28 +1; [Month to win: y-20]
+!!VRy-21&v62=3:Sv63 %28 :7 +1; [Week to win: y-21]
+!!VRy-22&v62=3:Sv63 %28 %7 +1; [Day to win: y-22]
+!!VRz2&v62=3:S^{Have most points Month %Y-20, Week %Y-21, Day %Y-22 to Win!}^;
+!!VRz2&v62=4:S^{Victory Points are for information only in this game!}^;
+!!VRz1:S^V I C T O R Y   P O I N T S
+
+%Z2
+
+^; [Initialize Victory Points string]
+!!DO308/0/7/1:Py-100; [Build text string to display player points: z1]
+!!VRy-18&y-18>0:%2; [Remainder of counter 2, divided by 2: y-18]
+!!VRz1&y-18=1:+^
+^; [Add additional line if uneven number of players: z1]
+!!VRz1:+^
+(Press Ctrl-A for List of Victory Point Values)^; [Add text for displaying Victory Point Values: z1]
+!!IF:Ny-1/y-30/y-2/y-31/y-3/y-32/y-4/y-33/y-5/y-34/y-6/y-35/y-7/y-36/y-8/y-37; [Setup for Dialog with up to 8 Flags]
+!!IF:N1/z1; [Display Dialog with player's points]
+!!CM:R0; [Cancel standard click action]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Players' Victory Points]
+
+!?FU302; [Calculate each player's points]
+!!VRy-10:S0; !!VRy-11:S0; !!VRy-12:S0; !!VRy-13:S0; [Initialize player's VP totals to 0]
+!!VRy-14:S0; !!VRy-15:S0; !!VRy-16:S0; !!VRy-17:S0; [Initialize player's VP totals to 0]
+!!DO303/0/155/1:P; [Loop through Heroes: 1 point per level]
+!!UN:U98/-1/?y1; [Number of Towns: y1]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO304/1/y1/1&y1>0:P; [Loop through Towns: 5-25 points each +25 points for Grail Building]
+!!UN:U53/-1/?y2; [Number of Mines: y2]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y2/1&y2>0:P53; [Loop through Mines: 3 points each, 5 points for gold mines]
+!!UN:U17/-1/?y3; [Number of Dwellings (type 17): y3]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y3/1&y3>0:P17; [Loop through Dwellings (type 17): 1..7 points each]
+!!UN:U20/-1/?y4; [Number of Dwellings (type 20): y4]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y4/1&y4>0:P20; [Loop through Dwellings (type 20): 1..7 points each]
+!!UN:U33/-1/?y5; [Number of Garrison (type 33): y5]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y5/1&y5>0:P33; [Loop through Garrisons (type 33): 1 point each]
+!!UN:U219/-1/?y6; [Number of Garrison (type 219): y6]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y6/1&y6>0:P219; [Loop through Garrisons (type 219): 1 point each]
+!!UN:U87/-1/?y7; [Number of Shipyards: y7]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y7/1&y7>0:P87; [Loop through Shipyards: 1 point each]
+!!UN:U42/-1/?y8; [Number of Lighthouses: y8]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!DO305/1/y8/1&y8>0:P42; [Loop through Lighthouses: 1 point each]
+!!DO306/0/7/1:P; [Loop through all players to count resource points]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Victory Points from Hero Levels]
+
+!?FU303; [Hero Level Points]
+!!HEx16:O?y1; [Owner of hero: y1]
+!!FU&y1<0:E; [Exit if hero is unowned]
+!!VRy2:S-10 -y1; [Index for y- variable to store player's point: y-10..y-17: y2]
+!!HEx16:Ed/?y3/1; [Hero's level: y3]
+!!VRyy2:+y3; [Add Hero's level to player's point total: yy2]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Victory Points from Towns]
+
+!?FU304; [Town Points]
+!!UN:U98/-1/-1/1; [Town location: v1/v2/v3]
+!!CA1:O?y1; [Owner of town: y1]
+!!FU&y1<0:E; [Exit if town is unowned]
+!!VRy2:S-10 -y1; [Index for y- variable to store player's point: y-10..y-17: y2]
+!!CA1:B3/26; [Check for Grail Building: Flag 1]
+!!VRyy2&1:+25; [25 Points for Grail Building]
+!!CA1:B3/13; [Check for Capitol: Flag 1]
+!!VRyy2&1:+25; [25 Points for Capitol]
+!!FU&1:E; [Exit if Capitol built]
+!!CA1:B3/9; [Check for Castle: Flag 1]
+!!VRyy2&1:+20; [20 Points for Castle]
+!!FU&1:E; [Exit if Castle built]
+!!CA1:B3/8; [Check for Citadel: Flag 1]
+!!VRyy2&1:+15; [15 Points for Citadel]
+!!FU&1:E; [Exit if Citadel built]
+!!CA1:B3/7; [Check for Fort: Flag 1]
+!!VRyy2&1:+10; [10 Points for Fort]
+!!FU&1:E; [Exit if Fort built]
+!!VRyy2:+5; [5 Points for Town without Fort]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Victory Points from Mines, Dwellings, Garrisons, Shipyards and Lighthouses]
+
+!?FU305; [Mine, Dwelling, Garrison, Shipyard, and Lighthouse Points]
+!!UN:Ux1/-1/-1/1; [Object location: v1/v2/v3]
+!!MN1&x1=53:O?y1/1; [Owner of mine: y1]
+!!DW1|x1=17/x1=20:O?y1; [Owner of dwelling: y1]
+!!GR1|x1=33/x1=219:O?y1; [Owner of garrison: y1]
+!!SY1&x1=87:O?y1; [Owner of shipyard: y1]
+!!MN1&x1=42:O?y1/1; [Owner of lighthouse: y1]
+!!FU&y1=-1:E; [Exit if object is unowned]
+!!VRy2:S-10 -y1; [Index for y- variable to store player's point: y-10..y-17: y2]
+!!MN1&x1=53:R?y3/1; [Mine Resource: y3]
+!!VRyy2&x1=53/y3<>6:+2; [2 Points for a non-Gold Mine]
+!!VRyy2&x1=53/y3=6:+5; [5 Points for a Gold Mine]
+!!DW1|x1=17/x1=20:M0/?y3/d; [Type of creature in slot 0 of dwelling: y3]
+!!MA|x1=17/x1=20:Ly3/?y4; [Level of creature (0..6) in dwelling: y4]
+!!VRyy2|x1=17/x1=20:+1 +y4; [+1..+7 Points for a Dwelling]
+!!VRyy2|x1=33/x1=219/x1=87/x1=42:+1; [1 Point for a Garrison, Shipyard or Lighthouse]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Victory Points from Resources]
+
+!?FU306; [Resource Points]
+!!OW:Ix16/d/?y1; [Alive player: y1=0]
+!!DO307/0/7/1&y1=0:Px16; [Loop through each resource and calculate points for alive players]
+
+--------------------------------------------------------------------------------
+
+ [Calculate Victory Points from Resources]
+
+!?FU307; [100 wood/ore=1 Point, 50 precious resource=1 Point, 20 mithril=1 Point, 20,000 gold=1 Point]
+!!VRy2:S-10 -x1; [Index for y- variable to store player's point: y-10..y-17: y2]
+!!OW:Rx1/x16/?y3; [Amount of this resource: y3]
+!!VRy4|x16=0/x16=2:Sy3 :100; [1 point per 100 wood or ore: y4]
+!!VRy4&x16>0/x16<>2/x16<6:Sy3 :50; [1 point per 50 precious resource: y4]
+!!VRy4&x16=7:Sy3 :20; [1 point per 20 mithril: y4]
+!!VRy4&x16=6:Sy3 :20000; [1 point per 20,000 gold: y4]
+!!VRyy2&y4>0:+y4; [Add Points for Resources]
+
+--------------------------------------------------------------------------------
+
+ [Build Text String to Display Players' Victory Points]
+
+!?FU308; [Build text string to display player points: x1=local/current player]
+!!VRy6:S-1 -x16; [Player colour index for initializing to -1: y6]
+!!VRyy6:S-1; [Initialize each colour to -1 (nothing)]
+!!VRy1:S-10 -x16; [Index variable for player points: y-10..y-17: y1]
+!!VRy2:S-1 -y-29; [Index variable for alive players: y-1..y-8: y2]
+!!VRy5:S-30 -y-29; [Index variable for flag colours: y-30..y-37]
+!!OW:Ix16/d/?y3; [Alive player: y3=0]
+!!VRyy2&y3=0:S10; [Set y-1..y-8 to 10 (Flag) if player is alive]
+!!VRyy2&y3=1:S-1; [Set y-1..y-8 to -1 (nothing) if player isn't alive]
+!!VRyy5&y3=0:Sx16; [Set y-30..y-37 to player colour (for Flag picture) if player is alive]
+!!VRy-29&y3=0:+1; [Increment y-29 counter if player is alive]
+!!FU&y3=1:E; [Skip if player isn't alive]
+!!VRy4:Syy1; [Player x16's total points: y4]
+!!VRz-1&x16=0:S^Red^;
+!!VRz-1&x16=1:S^Blue^;
+!!VRz-1&x16=2:S^Tan^;
+!!VRz-1&x16=3:S^Green^;
+!!VRz-1&x16=4:S^Orange^;
+!!VRz-1&x16=5:S^Purple^;
+!!VRz-1&x16=6:S^Teal^;
+!!VRz-1&x16=7:S^Pink^;
+!!VRy-9:+1; [Counter 1: y-9]
+!!VRy-18:+1; [Counter 2: y-18]
+!!VRz1|v78=0/x16=x1:+^%Z-1's Points: {%Y4}^;
+!!VRz1&v78=1/x16<>x1:+^%Z-1's Points: {???}^;
+!!VRz1&y-9=1:+^    ^; [4 spaces between players totals on same line]
+!!VRz1&y-9=2:+^
+^; [Blank line every two player totals: z1]
+!!VRy-9&y-9=2:S0; [Reset y-9 to 0]
+
+--------------------------------------------------------------------------------
+
+ [No Human Mine Capture by Human Players During "End Game" Period]
+
+!?OB53&1000/v77=2;
+!!MN998:O?y-1; [Owner of mine: y-1]
+!!OW&y-1>=0:Iy-1/?y-2; [Human/AI: y-2=1 if AI]
+!!HE-1:O?y-3; [Owner of hero: y-3]
+!!OB998|y-1<0/y-2=1:Ey-3; [Enable mine for visiting player if unowned or owned by AI]
+!!FU|y-1<0/y-2=1/y-1=y-3:E; [Exit if mine is owned by AI or visiting player]
+!!IF:M^Human controlled mines cannot be captured by human players during the end-game period.^;
+!!OB998:Dy-3; [Disable mine for visiting player]
+
+--------------------------------------------------------------------------------
+
+ [No Human Mine Capture by Human Players During "End Game" Period]
+
+!?OB220&1000/v77=2;
+!!MN998:O?y-1; [Owner of mine: y-1]
+!!OW&y-1>=0:Iy-1/?y-2; [Human/AI: y-2=1 if AI]
+!!HE-1:O?y-3; [Owner of hero: y-3]
+!!OB998|y-1<0/y-2=1:Ey-3; [Enable mine for visiting player if unowned or owned by AI]
+!!FU|y-1<0/y-2=1/y-1=y-3:E; [Exit if mine is owned by AI or visiting player]
+!!IF:M^Human controlled mines cannot be captured by human players during the end-game period.^;
+!!OB998:Dy-3; [Disable mine for visiting player]
+
+--------------------------------------------------------------------------------
+
+ [No Human Dwelling Capture by Human Players During "End Game" Period]
+
+!?OB17&1000/v77=2;
+!!DW998:O?y-1; [Owner of dwelling: y-1]
+!!OW&y-1>=0:Iy-1/?y-2; [Human/AI: y-2=1 if AI]
+!!HE-1:O?y-3; [Owner of hero: y-3]
+!!OB998|y-1<0/y-2=1:Ey-3; [Enable dwelling for visiting player if unowned or owned by AI]
+!!FU|y-1<0/y-2=1/y-1=y-3:E; [Exit if dwelling is unowned, or owned by AI or visiting player]
+!!IF:M^Human controlled dwellings cannot be captured by human players during the end-game period.^;
+!!OB998:Dy-3; [Disable dwelling for visiting player]
+
+--------------------------------------------------------------------------------
+
+ [No Human Dwelling Capture by Human Players During "End Game" Period]
+
+!?OB20&1000/v77=2;
+!!DW998:O?y-1; [Owner of dwelling: y-1]
+!!OW&y-1>=0:Iy-1/?y-2; [Human/AI: y-2=1 if AI]
+!!HE-1:O?y-3; [Owner of hero: y-3]
+!!OB998|y-1<0/y-2=1:Ey-3; [Enable dwelling for visiting player if unowned or owned by AI]
+!!FU|y-1<0/y-2=1/y-1=y-3:E; [Exit if dwelling is unowned, or owned by AI or visiting player]
+!!IF:M^Human controlled dwellings cannot be captured by human players during the end-game period.^;
+!!OB998:Dy-3; [Disable dwelling for visiting player]
+
+--------------------------------------------------------------------------------
+

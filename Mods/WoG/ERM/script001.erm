@@ -1,0 +1,987 @@
+ZVSE
+ERMS_ScriptDate=18.1(January).2007
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+WoGify Name: script01.erm
+Last Updated:18.1(Jan.).2007 by Thomas Franz - Double Artifact: if guarded give only if you win the battle
+Last Updated: 6.7(July).2006 by Thomas Franz - script complet rewritten
+Previously Updated: September 20, 2005 by Timothy to disable placing of Warlords Banners in front of towns
+              if Stack Experience is disabled.
+Previously Updated: Mar. 30, 2005 by Thomas Franz (samot)
+Previously Updated: Mar. 23, 2005 by Slava
+
+
+
+WoGify ERM code: 101 (0-5) plus 111-130 (0-1) for individual rules
+101 code value:
+ 0=choose map rules each game, defaulting to rules selected below
+ 1=choose map rules each game (no defaults)
+ 2=use rules selected in options dialogue
+ 3=use two random map rules
+ 4=use two random map rules from those selected in options dialogue
+ 5=disable all map rules
+
+** Map Rules ERM script v2.0 - Donald X. Vaccarino
+** Requires WOG version 3.58 or later
+** Adds rules to a map on day one
+** Several rules were suggested by Timothy Pulver
+** WoGify Options editing by Timothy Pulver
+
+** Modified by Thomas Franz (samot):
+** - script complete rewritten, some bugfixes (particulary Rule 1, 2 and 19)
+** - FU6179 - 9th / 10th skill: added check for warfare (script64),
+** - added a new FU6182 (used in FU6179), so that the 9th/10th-skill-rule works with the Magic Bann (script99)
+** - added check for v1215 in FU6179 to work well with the "Unlimited-Skills-Rule"
+** - Heroes pick up double artifacts works only for artifacts that are on the map if you start the game
+**   (modified ?OB5; new FU6176, reuse of TM19 (script00), once at day 1);
+** - FU690 / FU6173: Dwellings have Air Elementals instead of Boars if Neutral Town (script67) is active
+** - FU690: Option "All towns have grail" - works even if there are confluxes on the map, if the script93
+**   (enhanced Grail) active (because this scripts disables the standard conflux grail)
+** - FU6185: Option "All towns have grail" - if town = conflux or tower the dummygrail will build instead of the
+**   usual grail if the Enhanced Grail / Disable usual Tower Grail is on
+
+** Rules: (Number in parenthesis is ERM code)
+**   1. Fliers can't fly but instead aren't retaliated against. (111)            uses v73/v74
+**   2. Monster speed is inverted. (112)                                         uses v73/v74
+**   3. Monsters are half price on 7th day of week. (113)                        uses v72
+**   4. Heroes create magic plains each day. (114)
+**   5. All monsters attack twice. (115)
+**   6. Monster stacks in hero armies grow by 4% each day, to 10000 max. (116)
+**   7. Most dwellings also have boars. (117)
+**   8. Heroes start at 5th level (+5000 experience). (118)
+**   9. Heroes pick up double artifacts. (119)
+**  10. Perpetual darkness. (120)
+**  11. Heroes have double movement. (121)
+**  12. Mines change resources once/week. (122)
+**  13. +1 places can be revisited each month. (123)
+**  14. Heroes get 9th-10th skills. (124)                                        uses v1215
+**  15. A hero's upgraded 7th level monsters automatically become 8th level (125)
+**  16. Heroes gain an artifact each level. (126)
+**  17. Rogues attack heroes at random. (127)
+**  18. All creatures have a breath weapon. (128)                                uses v69
+**  19. Shooters can't shoot but instead have +50% hit points. (129)             uses v73/v74
+**  20. All towns have a grail (only used if no confluxes on map) (130)
+**  21. All towns have Warlord's Banners in front of them. (239)
+
+** To use this code, put it into a Global Event, set to never happen.
+** Make sure this event is prior to other events that may be affected by it.
+
+** Usage:
+** Variables EXCLUSIVE: v69, v72-v74, v1215 (set in script94, unlimited skills)
+** Strings EXCLUSIVE:   none
+** Variables temporary: v1-v10, v600-v640
+** Strings temporary:   z1-z10, z480-z492,
+** Flags Used: (1-3)
+** Functions Used: FU709, FU6160-FU6187
+** Timers Used: 2
+** PO:N(=15) for Artifacts on the map (OB-Type 5) if double artifact rule is on
+
+
+
+!?FU709;
+** function to set flag 3 if rule x1 has been chosen
+!!VRy1:Sx1 + 110;  // Wog-Option number
+!!VRy1&x1=21:S239; // Warlord's Banners
+!!UN:Py1/?y2;  // check WOG-Option for the choosen rule
+!!IF:V3/0; !!IF&y2>0:V3/1;  // set flag 3 if our rule is enabled
+
+** end of function
+
+
+** Timer routine
+
+!?TM2&$day$=1/$once$=1;
+!!UN:P101/?y-1; [check wogify options number - 5 means no rules]
+**              0 = choose rules each game (with defaults)
+**              1 = choose rules each game (no defaults)
+**              2 = use rules selected in wogify options
+**              3 = use random, 4 = random from selected, 5 = disable
+
+!!VRv600:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0;
+!!VRv615:C0/0/0/0/0/0/0/0/0/0/0/0/0/0/0/0;
+!!VRv1:C0/0; // init v1 / v2
+!!UN:P93/=1; // check, if the Dummy-Grail for Conflux is enabled
+!!UN&-1:U98/8/?y-2; // get number of Conflux towns on the map if not Dummygrail
+!!DO6160/1/21/1&y-1<>3:Py-2; // get list of enabled rules to v600 ff, get bit mask to v1 / v2, if rules are not random chosen
+** 0 / 1 = choose rules each game (with / without defaults)
+!!if&y-1<2:; // if
+  !!VRz480:Sz101020;
+  !!VRz481:Sz101000; !!VRz482:Sz101001; !!VRz483:Sz101002; !!VRz484:Sz101003; !!VRz485:Sz101004;
+  !!VRz486:Sz101005; !!VRz487:Sz101006; !!VRz488:Sz101007; !!VRz489:Sz101008; !!VRz490:Sz101009; !!VRz491:Sz101010;
+  !!VRv1&y-1=1:C0/0; / no defaults, if Option 1 is chosen
+  !!IF:G0/1/v1/480/481/482/483/484/485/486/487/488/489/490/491; [get bit choices in v1]
+  !!VRz480:Sz101021;
+  !!VRz481:Sz101011; !!VRz482:Sz101012; !!VRz483:Sz101013; !!VRz484:Sz101014; !!VRz485:Sz101015;
+  !!VRz486:Sz101016; !!VRz487:Sz101017; !!VRz488:Sz101018; !!VRz489:Sz101019; !!VRz490:Sz101051;
+  !!IF:G0/2/v2/480/481/482/483/484/485/486/487/488/489/490; [get bit choices in v2]
+!!en:; // end-if
+
+** 2 = use rules selected in wogify options
+   nothing to do
+
+** 3 = use two randoms
+!!if&y-1=3:; // if
+  !!VRv1:C0/0; // init v1 / v2
+  !!VRy-3:S0 R21;
+  !!VRy-3&y-3=20/y-2>0:S0 R21; // new random, if rule 20 (all towns have grail) and there are confluxes
+  !!VRy-3&y-3=20/y-2>0:S7;  // if again the 20, than use rule 7 (all dwellings sells boars)
+  !!VRy-4:S0 R21;
+  !!VRy-4&y-4=y-3:S0 R21; // new random, if = y-3
+  !!VRy-4&y-4=20/y-2>0:S3;  // if again the 20, than use rule 3 (half price at day 7)
+
+  !!VRy-5&y-3<12:Sy-3;
+  !!VRy-5&y-3>11:-11;
+  !!FU$bit$:Py-5/?y-6; // get flag for the first random rule
+  !!VRv1&y-3<12:|y-6; // set flag in v1 (if rule < 12)
+  !!VRv2&y-3>11:|y-6; // set flag in v2 (if rule > 11)
+
+  !!VRy-5&y-4<12:Sy-4;
+  !!VRy-5&y-4>11:-11;
+  !!FU$bit$:Py-5/?y-6; // get flag for the first random rule
+  !!VRv1&y-4<12:|y-6; // set flag in v1 (if rule < 12)
+  !!VRv2&y-4>11:|y-6; // set flag in v2 (if rule > 11)
+!!en:; // end-if
+
+** 4 = use two randoms from selected
+!!if&y-1=4:; // if
+  !!VRv3:C0/0; // init
+  !!DO6161/1/100/1:P; // get one random from selected to v3 and v4 (flagged similar to v1/v2)
+  !!DO6161/1/100/1:P; // get second random from selected to v3 and v4 (flagged similar to v1/v2)
+  !!VRv1:Sv3; !!VRv2:Sv4; // overwrite the original selected with the random ones (or twos :-))
+!!en:; // end-if
+
+** 5 = map rules are disabled
+!!if&y-1=5:; // if
+   !!VRv1:C0/0; // reset flags
+!!en:; // end-if
+
+** Set UN:P's / show the enabled rules / make Papyrus entries
+!!UN:P230/?y-7; // check, if the "Display chosen rules" is enabled
+!!IF:V2/0; // disable flag (used to show eighter "In this strange land " or "Also, "
+!!DO6162/1/21/1:Py-7; // call routine to set the UN:P-Values and Show the chosen rules (if enabled)
+
+!!FU&y-1=5:E; [Exit timer if map rules are disabled in wogify options]
+
+
+** do Day-1-Work
+!!UN:R5/1/1; [Change mouse cursor to "wait" hourglass symbol]
+!!UN:R7/0/1; [Show mouse cursor and disable changing]
+
+!!FU709:P5; [check for rule 5]
+!!DO6170/0/196/1&3:P; [all monsters attack/shoot twice]
+
+!!FU709:P7; [check for rule 7]
+!!UN&3:U17/-1/?y1; [count dwellings]
+!!VRv600:S-1; [reset coordinate index]
+!!VRy4:S140; // set y4 to boars
+!!UN:P67/=1; // check if Neutral town is active (flag1)
+!!VRy4&1:S112; // if yes set to Air Elementals instead of boars
+!!DO6173/1/y1/1&3:Py4; [add boars / Air Elementals to dwellings]
+
+!!FU709:P8; [check for rule 8]
+!!DO6174/0/155/1&3:P-1; [upgrade unowned heroes to 5th level]
+
+!!FU709:P9; // check for rule 9 (pick up double artifacts)
+!!UN&3:U5/-1/?y-1; // get number of artifacts on the map
+!!VRv7&3:S-1; // init for the UN:U-Loop
+!!DO6176/1/y-1/1&3:P; // set PO:N for each artifact, that was placed at game start on the map
+
+!!FU709:P14; // check for rule 14 (9th / 10th skill)
+!!VRv1215&3/v1215<10:S10; // initialize v1215 (control var of the Unlimited Skills (script94), if rule is activated
+
+!!VRv69:S0; [rule 17 init day of last rogue attack]
+
+!!FU709:P18; [check for rule 18]
+!!DO6184/0/196/1&3:P; [all monsters gain breath weapon]
+
+!!FU709:P20; [check for rule 20]
+!!UN&3:U98/-1/?y1; [count towns: y1]
+!!VRv600:S-1; [reset coordinate index]
+!!DO6185/1/y1/1&3/y1>0/y5=0:P; [build grails in towns]
+
+!!VRy1:S0; // init
+!!FU709:P21; [check for rule 21]
+!!UN&3:U98/-1/?y1; [Number of Towns on map: y1]
+!!VRv1:S-1; [reset coordinate index]
+!!UN:P900/?y7; [Check if Stack Experience is enabled: y7=1 if enabled]
+
+!!DO6186/1/y1/1&y1>0/y7=1:P; [Place Warlord's Banners in front of towns]
+
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+
+** end of TM2 - once at first day
+
+
+
+!?TM2; // timer for the daily (or weekly or monthly) rules
+
+!!FU709:P3; [check for rule 3]
+!!VRy-5:S0; [assume creatures should be normal price: y-5]
+!!VRy-5&3/-1000:S1; [for AI with this rule they're always half price]
+!!VRy-5&3/1000/$weekday$=$sunday$:S1; [for humans just half price on sunday]
+!!DO6165/0/196/1&y-5=1/v72=0:P; [make creatures half price when needed]
+!!DO6166/0/196/1&y-5=0/v72=1:P; [make creatures double price when needed]
+!!VRv72:Sy-5; [remember whether creatures currently are normal or half price]
+
+!!FU709:P6; [check for rule 6]
+!!OW&3:H-1/1/0; // get number of heroes, the player has to v1
+!!DO6171/1/v1/1&3:P; [grow hero monster stacks by 4%]
+
+!!FU709:P8; [check for rule 8]
+!!OW:C?y-5; [get current player: y-5]
+!!DO6174/0/155/1&3/$day$=1:Py-5; [upgrade current player's heroes to 5th level on day 1]
+
+!!FU709:P11; [check for rule 11]
+!!OW&3:H-1/2/0; [number of heroes current player has: v2]
+!!DO6175/1/v2/1&3/v2>0:P; [double hero movement of current player's heroes]
+
+!!FU709:P12; [check for rule 12]
+!!UN&3/y-2=1/y-3=1/y-1<>1:U53/-1/?y-1; [count mines: y-1]
+!!VRv600:S-1; [reset coordinate index]
+!!DO6178/1/y-1/1&3/$weekday$=$monday$/$once$=1/y-1>0:P; [change mine production once/week]
+
+!!FU709:P13; [check for rule 13]
+!!DO6177/0/155/1&3/$week$=1/$weekday$=$monday$/$once$=1:P; [clear learning stones etc. on day 1 of month]
+
+!!FU709:P4; [check for rule 4]
+!!OW&3:H-1/2/0; [number of heroes current player has: v2]
+!!DO6167/1/v2/1&3/v2>0:P; [create magic plains by today's heroes]
+
+!!FU709:P15; [check for rule 15]
+!!UN:P67/?y-99; // check for Neutral town script
+!!DO6168/1/v2/1&3/v2>0:Py-99; [upgraded 7th level creatures become 8th for current players heroes]
+
+!!FU709:P10; [check for rule 10]
+!!UN&3:H0/0/0/-1/144; [replace entire shroud, surface]
+!!UN&3:H0/0/1/-1/144; [replace entire shroud, underground]
+
+!!UN&3/y-5=0:R1; [redraw screen]
+
+** end of  timer for the daily (or weekly or monthly) rules
+
+
+********************************************************************************
+
+!?FU6160;
+** get list of enabled rules (at game start) to v600 ff, get bit mask to v1 / v2
+** x1 - if > 0 than the Rule 20 (all towns have grail) is disabled, because there are Confluxes on the map
+
+!!VRy1:Sx16 + 110; // Number of Wog-Option (111-130)
+!!VRy1&x16=21:S239; // Warlords Banner
+!!VRy2:Sx16 + 599; // index of the vvar
+!!UN:Py1/?vy2; // set vvar (v600 ff), if rule is enabled
+
+!!VRvy2&x1>0/x16=20:S0; // disable Rule 20, if there are Confluxes on the map
+
+!!VRy3:Sx16; !!VRy3&x16>11:-11; // get the number of bit
+!!FU$bit$:Py3/?y4; // get the bit value (1, 2, 4, 8 ...)
+!!VRv1&x16<12/vy2=1:|y4; // set bit for the first 11 rules
+!!VRv2&x16>11/vy2=1:|y4; // set bit for the second half
+
+** end of function FU6160
+
+
+!?FU6161;
+** get random rule from selected (called in a DO-Loop 100 times)
+** remember: v600 ff contains the original selected rules (0 or 1)
+!!VRy1:S600 R20; // get random rule
+!!FU&vy1=0:E; // next loop, if rule is not active
+
+!!VRvy1:S0; // disable rule (to prevent, that it will be chosen again for the second random rule)
+!!VRy1:-599; // get rule number
+!!VRy2:Sy1; !!VRy2&y1>11:-11; // get bit-number
+!!FU$bit$:Py2/?y3; // get the flag for the chosen rule
+!!VRv3&y1<12:|y3; !!VRv4&y1>11:|y3; // set the flag
+!!VRx16:+100; // exit the loop
+
+** end of function FU6161
+
+
+!?FU6162;
+** routine to set the UN:P-Values and Show the chosen rules (if enabled)
+** v1 and v2 = the chosen rules as flags
+** x1        = 1, if Show the chosen Rules is enabled, otherwise 0
+** x16       = rule number
+
+!!VRy1:Sx16; !!VRy1&x16>11:-11; // get bit number of the rule number
+!!FU$bit$:Py1/?y2; // get the flag for the bit number
+!!VRy3&x16<12:Sv1 &y2; // check, if the flag is set (first 11 rules)
+!!VRy3&x16>11:Sv2 &y2; // check, if the flag is set (second half rules)
+
+!!VRy4:Sx16 + 110; // Number of Wog-Option (111-130)
+!!VRy4&x16=21:S239; // Warlords Banner
+!!UN&y3>0:Py4/1; !!UN&y3=0:Py4/0; // set or unset the Wog-Option
+!!FU|y3=0/x1=0:E; // exit, if rule is not chosen or "Show chosen rules" is not enabled
+
+
+
+!!VRz1&-2:Sz101022; // "In this strange land" (for first enabled rule only)
+!!VRz1&2:Sz101023; // "Also, " for the other rules
+!!IF:V2/1; // set flag 2 after first enabled rule
+!!VRy6:S101023 + x16; // index of the Rule-Text to be shown
+!!VRy6&x16=21:S101052; // Warlord banner
+!!VRz2:Szy6;
+!!IF:M^%Z2^; // show rule text
+
+** end of function FU6162
+
+
+!?CM2&1000; // click inside hero screen
+!!UN:P101/<5;
+!!CM&1:I=128;
+!!FU&-1:E; // exit, if Map rules are deactivated or not clicked at the Quest-Log
+!!VRz480:S^%Z101058^; // "The following map rules are currently active:"
+!!VRz481:S^^; !!VRz482:S^^; !!VRz483:S^^; !!VRz484:S^^; !!VRz485:S^^; !!VRz486:S^^; !!VRz487:S^^; // init
+
+** remove old Papyrus entries
+!!QW:A111/-2/-2/-1; !!QW:A112/-2/-2/-1; !!QW:A113/-2/-2/-1; !!QW:A114/-2/-2/-1; !!QW:A115/-2/-2/-1; !!QW:A116/-2/-2/-1; !!QW:A117/-2/-2/-1;
+
+!!VRy-1:S0;
+!!DO6163/1/21/1:P;    // get list of enabled Map rules to z481-z486 ff;
+*                     // each 4 rules use one z-Var. This is necessary, because there is a limit of 512 characters per zVar
+
+** add new (used) entries to the papyrus
+!!QW:A111/-2/-2/480; !!QW:A112/-2/-2/481; !!QW&y-1>4:A113/-2/-2/482; !!QW&y-1>8:A114/-2/-2/483; !!QW&y-1>12:A115/-2/-2/484; !!QW&y-1>16:A116/-2/-2/485; !!QW&y-1>20:A117/-2/-2/486;
+
+** end of CM2
+
+
+!?FU6163; // get list of enabled Map rules to z1
+** x16 = current rule
+!!FU709:Px16; !!FU&-3:E; // exit, if rule is not active
+!!VRy-1:+1; // increase counter
+!!VRy3:Sy-1 :4 + 481; // Index of the zVar to store the new text (z481 ff)
+!!VRz1:Szy3; // copy old text to z1
+
+!!VRy1:S101000 +x16 -1; // get Index of rule description
+!!VRy1&x16=21:S101051; // Warlord's banner
+!!VRz2:Szy1; // copy ERT-Text to Z2
+
+!!VRzy3:S^%Z1
+{»} %Z2^; // add new rule to z1
+
+** end of function FU6163
+
+
+!?BA0; // battle occurs
+!!UN:P101/<5; // check if map rules are enabled
+!!VRv73&1:C0/0; // reset flag-vars for the stacks (v73/v74)
+** end of BA
+
+!?BR&v997<1;
+!!UN:P101/<5; !!FU&-1:E; // exit, if map rules are not enabled
+!!DO6164/0/41/1:P; // loop through all stacks (do work for monster-rules)
+** end of BR
+
+!?BG0&v997<2; // actions in the first battle round
+!!UN:P101/<5; !!FU&-1:E; // exit, if map rules are not enabled
+!!DO6164/0/41/1:P; // loop through all stacks (do work for monster-rules)
+** end of BR
+
+!?FU6164;
+** called for every stack in the first battle round
+** function to make monster x16 lose flying but gain no-retaliation if it flew
+** function to invert the speed of monster x16
+** function to make monster x16 lose shooting but gain +50% hit points if it shot
+
+!!BMx16:T?y1 F?y2 S?y3 H?y4; // get creature type, flags, Speed and Health of the stack
+!!FU&y1<0:E;           // exit, if there is no stack
+!!FU&y1>144/y1<150:E;  // exit, if it is a war machine
+!!FU&y1>173/y1<1192:E; // exit, if it is a commander
+!!FU&y1=124:E;         // exit, if it is a dummy-catapult (from the War Machine Scriptes)
+
+!!VRy90:Sx16 +1; !!VRy90&x16>20:-20; // get bit number from stack number
+!!FU$bit$:Py90/?y91; // get flag value for the bit
+!!VRy92&x16<21:Sv73 &y91; // attackers stacks
+!!VRy92&x16>20:Sv74 &y91; // defenders stacks
+!!FU&y92>0:E; // exit, if the stack was already modified by an earlier call of this function
+
+!!VRv73&x16<21:|y91; !!VRv74&x16>20:|y91; // otherwise mark this stack as changed
+
+!!FU709:P1; [check for rule 1 fliers lose flying but can't be retaliated against]
+!!if&3:; if enabled
+  !!VRy5:Sy2 &2; [just look at flying bit]
+  !!VRy2&y5>0:&-3; [lose flying]
+  !!VRy2&y5>0:|65536; [can't be retaliated against]
+!!en:; // end if
+
+!!FU709:P2; [check for rule 2 - Inverted Monster Speed]
+!!if&3:; if enabled
+  !!VRv600:C25/21/18/15/13/11/9/7/6/5; [table of new monster speeds]
+  !!VRv610:C5/5/4/4/4/4/4/3/3/3;
+
+  !!MA:Sy1/?y5; // get original speed of the monster
+  !!VRy7:S600 +y5; // index of the new speed
+  !!VRy8:S3; // default of 3 for very fast monsters
+  !!VRy8&y5<20:Svy7; // get new (basic) speed
+  !!VRy8&y8<3:S3; // minimum 3 speed
+  !!VRy9:Sy5 -y8; // get difference between old and new basic speed; will be negative, if it was a slow and is now a fast monster
+  !!VRy10:Sy3 -y9; // get new battle speed (old battle speed - difference)
+  !!VRy3:Sy10;
+!!en:; // end if
+
+!!FU709:P19; [check for rule 19 - shooters lose shooting but gain +50% hit points]
+!!if&3:; if enabled
+  !!VRy5:Sy2 &4; [just look at shooting bit]
+  !!VRy2&y5>0:&-5; [lose shooting]
+  !!VRy2&y5>0:|4096; [give no penalty in close combat]
+  !!VRy4&y5>0:*3 :2; [+50% health if creature shot]
+!!en:; // end if
+
+!!BMx16:Fy2 Sy3 Hy4; // set Flags, Speed and Health of the stack
+
+
+** end of function FU6164
+
+
+!?FU6165;
+** function to make monster x16 cost half as much
+!!MA:Cx16/6/?y1; [get gold cost]
+!!VRy1::2; [half price]
+!!MA&x16<145|x16>149:Cx16/6/y1; [save gold cost, except for war machines]
+
+** end of function FU6165
+
+
+!?FU6166;
+** function to make monster x16 cost twice as much
+!!MA:Cx16/6/?y1; [get gold cost]
+!!VRy1:*2; [double price]
+!!VRy2:Sy1 %10; [check low digit of price]
+!!VRy1&y2=4:+1; [turn 4's to 5's]
+!!MA&x16<145|x16>149:Cx16/6/y1; [save gold cost, except for war machines]
+
+** end of function FU6166
+
+
+!?FU6167;
+** function to place magic plains by current player's hero
+!!OW:H-1/1/x16; [get number of current hero to v1]
+!!HEv1:P?y3/?y4/?y5; [get hero x/y/l]
+!!VRy3:+2;
+!!VRy4:+1; [place so that hero is kind of in the middle]
+!!TRy3/y4/y5:P?y6; [get y6=0 if red square]
+!!TRy3/y4/y5:E?y7; [get y7=0 if yellow square]
+!!TRy3/y4/y5:T?y8/d/d/d/d/d/d/d; [get terrain in y8, 8 = water]
+!!UN&y5=0/y6<>0/y7<>0/y8<>8:Iy3/y4/y5/46/0; [place magic plains]
+
+ [If Passable Terrain script active, make squares passable again]
+!!UN:P63/?y9; [Check if Passable Terrain script is enabled: y9]
+!!FU&y9<>1:E; [Exit if Passable Terrain isn't enabled]
+!!UN:X?y10/?y11;          [Map size: y10]
+
+!!VRy12:Sy4 -3;  [Starting y-coordinate for loop (Magic Plains/Cursed Land): y12]
+!!VRy13:Sy4 +0;  [Ending y-coordinate for loop (Magic Plains/Cursed Land): y13]
+!!VRy12&y12<0:S0;         [No y-coordinate below 0: y12]
+!!VRy13&y13>=y10:Sy10 -1; [No y-coordinate above map size: y13]
+
+!!DO8/y12/y13/1:P0/y3/y5; [Make trees, mountains etc. passable again]
+
+** end of function FU6167
+
+
+
+!?FU6168;
+** function to make hero's upgraded 7th level troops into 8th level
+** x1 = Neutral Town active
+!!OW:H-1/1/x16; [get the x16th hero of current player to v1]
+!!DO6169/0/6/1:Px16/x1; [check each slot]
+
+** end of function FU6168
+
+!?FU6169;
+** function to convert a stack of upgraded 7th level to 8th level
+** x1 = hero, x2 = Neutral Town active, x16 = slot x16
+!!HEx1:C0/x16/?y1/?y2; [get y1 type y2 qty]
+!!VRy1&y1=13:S150; [archangel]
+!!VRy1&y1=27:S151; [gold dragon]
+!!VRy1&y1=41:S152; [titan]
+!!VRy1&y1=55:S153; [archdevil]
+!!VRy1&y1=69:S154; [ghost dragon]
+!!VRy1&y1=83:S155; [black dragon]
+!!VRy1&y1=97:S156; [ancient behemoth]
+!!VRy1&y1=111:S157; [chaos hydra]
+!!VRy1&y1=131:S158; [phoenix]
+!!VRy1&y1=135/x2=1:S134; // Rust Dragon to Faerie Dragon, if Neutral town is active
+!!HEx1:C0/x16/y1/y2; [set creature type/qty]
+
+** end of function FU6169
+
+
+
+!?FU6170;
+** function to make monster x16 attack/shoot twice
+!!FU&x16>144/x16<150:E;  // exit, for war machines
+!!FU&x16>173/x16<1192:E; // exit, for commanders
+!!FU&x16=124:E ;         // exit, for dummy-catapult (from the War Machine Scriptes)
+
+!!MA:Xx16/?y1; [get flags]
+!!VRy1:|32768; [set attack twice bit]
+!!MA:Xx16/y1; [save flags]
+
+** end of function FU6170
+
+
+!?FU6171;
+** function to make hero x16's monster stacks grow by 4%, to 10000
+!!OW:H-1/1/x16; // get the x16'th hero of the current player to v1
+!!DO6172/0/6/1:Pv1; [handle each slot]
+** end of function  FU6171
+
+
+!?FU6172;
+** function to make slot x16 of hero x1's army grow by 4%, to 10000
+!!HEx1:C0/x16/?y1/?y2; [get y1 type y2 qty]
+!!VRy3:Sy2 *26 :25; [add 4%]
+!!VRy3&y3>10000/y2<10000:S10000; [limit to 10000]
+!!HEx1&y2<10000:C0/x16/y1/y3; [store new qty]
+
+** end of function FU6172
+
+
+!?FU6173;
+** function to add boars to dwelling number x16 if not first level
+** x1 = new type (140 = boars, 112 = Air Elemental)
+!!UN:U17/-1/-1/600; [get dwelling location into v600-v602]
+!!DW600:M0/?y1/?y2; [get y1 type y2 qty in slot 0]
+!!MA:Ly1/?y3; // get monster Level
+!!DW600&y3>0:M1/x1/12; [12 boars / Air Elementals in slot 1, if no L1-dwelling]
+
+** end of function FU6173
+
+
+!?FU6174;
+** function to make hero x16 at least 5th level if it has owner x1
+** has to be done in this way, because unowned heroes are set seperaty from the owned
+** (otherwise the player couldn't choose the skils for his own heroes)
+!!HEx16:O?y1; [get hero's owner]
+!!HEx16&y1=x1:Ed5000; [give 5000 experience]
+** end of function
+
+
+!?CO2; // is called after buying a Commander in a Town
+!!FU709:P8; !!FU&-3:E; // exit, if 5th level rule is not on
+!!CO-1:T?y-1;
+!!CO-1&y-1=0:X1/d7500; // give 5000 + 50% Experience to Paladins
+!!CO-1&y-1>0:X1/d5000; // give 5000 Experience to other commanders
+
+** end of CO2
+
+
+!?FU6175;
+** function to double hero x16's movement
+
+!!OW:H-1/3/x16; [store hero number of hero x16 in v3]
+!!HEv3:W?y1; [get hero's movement: y1]
+!!VRy1:*2; [double hero's movement: y1]
+!!HEv3:Wy1 Gy1; [set hero's new movement plus initial hero movement values]
+
+** end of function FU6175
+
+
+!$OB5;
+** artifact trigger
+!!FU709:P9; [check for rule 9 (pick up double artifacts)]
+!!FU&-3:E;
+
+!!HE-1:O>-1; // check if hero has owner (hero could lost the battle vs guardians of the artifact)
+!!FU&-1:E;
+
+!!PO998:N?y-5; // get custom number of the artifact-field
+!!FU&y-5=0:E; // exit if =0 (usually an artifact left by the player - it should not be doubled)
+!!PO998&y-5=15:N0; // set to 0 it was an "original" artifact (placed on the map by the map maker)
+
+!!OB998:U?y-1; [get artifact number]
+!!FU&y-1<7:E; // exit if lower than Centaur's Axe
+
+!!UN:P904/1; // disable WOG error messages (because of bug with the AR receiver)
+!!AR998:G0/?y-98/?y-99; !!AR998&y-99<1:G1/?y-98/?y-99; !!AR998&y-99<1:G2/?y-98/?y-99; !!AR998&y-99<1:G2/?y-98/?y-99; !!AR998&y-99<1:G2/?y-98/?y-99; !!AR998&y-99<1:G2/?y-98/?y-99; !!AR998&y-99<1:G2/?y-98/?y-99; // check for guardians in slots 1-7
+!!FU&y-99>0:E; // exit, if artifact is still guarded (hero chose not to fight)
+!!UN:P904/0; // enable  WOG error messages again
+
+!!UN:Ay-1/=0; !!FU&-1:E; // exit, if not enabled
+!!HE-1:A2/y-1/?y-2/?y-3; [get y-2 number carried y-3 number equipped]
+!!HE-1&y-2<2:Ay-1; [give an extra copy if they don't already have one (<2, because the found artifact is given already to the hero in the after trigger]
+!!UN:N0/-1/y-1; [get name of artifact into z2]
+!!IF&1000/y-2<2:Q1/8/y-1/1/z101044;
+
+** end of artifact trigger
+
+!?FU6176;
+** mark all artifacts, that were on the map at game start (to prevent doubling by dropping artifacts)
+!!UN:U5/-1/-1/7; // get pos next artifact to v7-v9
+!!PO7:N15; // set custom number for map field to 15 (used for double artifact rule)
+
+** end of FU6176
+
+
+!?FU6177;
+** function to let hero x16 revisit objects
+!!HEx16:V0/0; Learning stone
+!!HEx16:V1/0; Marletto tower
+!!HEx16:V2/0; Garden of Revelation
+!!HEx16:V3/0; Mercenary Camp]
+!!HEx16:V4/0; Star Axis
+!!HEx16:V5/0; Tree of Knowledge
+!!HEx16:V6/0; Library of Enlightenment
+!!HEx16:V7/0; Arena
+!!HEx16:V8/0; School of Magic
+!!HEx16:V9/0; School of War
+** end of function FU6177
+
+
+
+!?FU6178;
+** function to change a mine's produced resource
+!!UN:U53/-1/-1/600; [get mine location into v600-v602]
+!!UN:P36/=1; // check, if Mithril Enhancements is enabled
+!!POv600/v601/v602&1:N?y3; !!FU&1/y3>0:E; // exit, if Mine is protected with Mithril
+
+!!VRy1:S0 R6; [random 0-6]
+!!MN600:Ry1/1; [set random resource produced]
+** end of function
+
+
+!?HM-1;
+** hero movement trigger
+!!FU709:P10; [check for rule 10]
+!!UN&3:H0/0/0/-1/144; [replace entire shroud, surface]
+!!UN&3:H0/0/1/-1/144; [replace entire shroud, underground]
+!!UN&3/y-5=0:R1; [redraw screen]
+** end of hero movement trigger
+
+
+!?HL-1;
+** hero level-up trigger
+!!FU709:P14; [check for rule 14]
+!!FU6179&3:P; [handle giving hero a 9th-10th skill]
+
+!!FU709:P16; [check for rule 16]
+!!FU6180&3:P; [give hero an artifact]
+
+** end of hero level-up trigger
+
+
+!?FU6179;
+** function to handle giving a 9th-10th skill to a hero going up a level
+!!VRv1:S0; [count of skills for this hero]
+!!DO6181/0/27/1:P; [count the skills, return in v1]
+
+** added by Thomas Franz (samot): check for Warfare (script64), Magic Ban (script99) and Unlimited Skills (script94)
+!!UN:P193/?y99; // check if Warfare-Script is on
+!!HE-1&y99=1:S20/?y98; // check if Hero knows Artillery (and the other two skills too if warfare is on);
+!!VRv1&y99=1/y98>0:-2; // decrease v1 (number of known skills) by two if warfare is on and hero knows artillery / fist aid / ballistics (only one skill is visible)
+
+!!FU|v1<8/v1>=v1215:E; // exit if hero has not enough or to much skills
+
+!!VRy-100:S-1; // init
+!!DO6182/0/100/1:P; // get new (not known) skill to y-100
+!!FU&y-100<0:E; // exit, if no (not known) skill was found
+!!VRy1:Sy-100;
+** end changes from Thomas Franz (samot)
+
+!!HE-1:B0/?z352; [get hero name]
+!!UN:N4/353/y1; [get skill name]
+!!HE-1:R2/?y3; [get hero sex]
+!!VRz354&y3=0:Sz101045;
+!!VRz354&y3=1:Sz101046;
+!!VRy4:Sy1 *3 +3; [get picture of skill]
+!!IF:V2/0; [assume won't learn skill]
+** zvs start
+!!HE-1:O?y10; [get hero owner]
+!!OW&y10<>-1:Iy10/?y11; [get AI 1 or human 0]
+!!OW&y10<>-1:Gy10/?y12; [is this PC player]
+!!IF&1000/y10<>-1/y11=0/y12=1:Q2/20/y4/2/z101047; [show if Human and at this PC]
+** zvs
+!!IF&-1000:V2/1; [AI always learns it]
+!!HE-1&2:Sy1/1; [give skill]
+
+** end of function FU6179
+
+
+!?FU6180;
+** function to give hero an artifact based on experience
+
+!!HE-1:E?y2; [get experience]
+**Here's new part of code
+!!UN&y2<6200:J6/2/?y3; //UN:J6 creates a random artifact of the given value
+!!UN&y2>=6200/y2<20600:J6/4/?y3;
+!!UN&y2>=20600/y2<57533:J6/8/?y3;
+!!UN&y2>=57533:J6/16/?y3;
+
+!!HE-1:A4/y3; [give (equip) artifact]
+!!HE-1:B0/?z2; [get hero name]
+** zvs start
+!!HE-1:O?y4; [get hero owner]
+!!FU&y4=-1:E; [exit if no owner]
+!!OW:Iy4/?y5; [get AI 1 or human 0]
+!!FU&y5=1:E; [exit if AI]
+!!OW:Gy4/?y5; [is this PC player]
+!!FU&y5=0:E; [exit if not this PC]
+!!IF:Q2/8/y3/1/z101048; [show message]
+** zvs
+** end of function FU6180
+
+
+!?FU6181;
+** function to count skills for a hero
+!!HE-1:Sx16/?y1; [check for presence of skill]
+!!VRv1&y1>0:+1; [count it]
+** end of function FU6181
+
+
+!?FU6182;
+** returns a random, not known skill in y-100
+!!VRx16&y-100>-1:+100; !!FU&y-100>-1:E; // exit loop, if already a skill was found
+!!VRy1:S0 R27; [pick a random skill to offer]
+!!HE-1:Sy1/?y2; [check for presence of random skill]
+!!FU&y2>0:E; // exit, if skill is known
+
+!!UN:P99/?y3; // check for Magic Ban (script99)
+!!VRy-100&y3=0:Sy1; !!VRx16&y3=0:+100; !!FU&y3=0:E; // exit if Magic Ban is not active (set the found skill to y-100 before exit)
+
+!!FU|y1=7/y1=8/y1=11/y1=14/y1=15/y1=16/y1=17/y1=18/y1=24/y1=25:E; // exit to get a new skill if Magic Ban is on and it was a Magic Skill
+
+!!VRy-100:Sy1; // return new found skill to FU6179
+!!VRx16:+100; // exit do-loop
+** end of function FU6182
+
+
+** Object triggers for Rogue fights
+
+!?OB12/-1; [campfire]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB17/-1; [most creature dwellings]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB29/-1; [flotsam]
+!!FU6183:P1; [handle generating roving bands of Rogues]
+
+!?OB32/-1; [garden of revelation]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB39/-1; [lean to]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB47/-1; [school of magic]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB51/-1; [mercenary camp]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB53/-1; [mine]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB55/-1; [mystical garden]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB57/-1; [obelisk]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB58/-1; [redwood observatory]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB60/-1; [pillar of fire]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB61/-1; [star axis]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB79/-1; [resource]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB82/-1; [sea chest]
+!!FU6183:P1; [handle generating roving bands of Rogues]
+
+!?OB88/-1; [shrine of magic incantation]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB94/-1; [stables]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB100/-1; [learning stone]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB101/-1; [treasure chest]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB102/-1; [tree of knowledge]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB104/-1; [university]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB105/-1; [wagon]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB107/-1; [school of war]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB109/-1; [water wheel]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB112/-1; [windmill]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+!?OB113/-1; [witch hut]
+!!FU6183:P; [handle generating roving bands of Rogues]
+
+** end of set of object triggers
+
+
+!?FU6183;
+** function to generate roving bands of Rogues
+** x1 - if not 0 then use Water Elementars instead
+
+!!FU709&x1=0:P17; [check for rule 17]
+!!FU&-3:E; // exit, if not enabled
+
+!!OW:I-1/?y2; [get AI 1 or human 0]
+!!VRy1&y2=0:S0 R16; [1 in 16 chance for human]
+!!VRy1&y2=1:S0 R63; [1 in 64 chance for AI]
+!!FU|y1<>0/$day$=v69:E; // exit, if odds are not met or there was already an ambush today
+
+!!VRv69:S$day$; // set day of last Rogue fight
+
+!!HE-1:B0/?z1; [get hero name]
+!!IF&1000/x1=0:Q1/21/143/1^%Z101049^; // Rogues message
+!!IF&1000/x1=1:Q1/21/115/1^%Z101056^; // Water Elementals message
+
+!!VRy3&x1=0:S$weeks$ *10; [10 Rogues elapsed per week]
+!!VRy3&x1=1:S$weeks$ *7;  [7 Water Elementals elapsed per week]
+
+!!HE-1:Ed/?y4/1; [get hero level]
+!!VRy4&x1=0:*10; // 10 additional Rogues per hero level
+!!VRy4&x1=1:*7; // 7 additional 7 Water Elementals per hero level
+!!VRy3:+y4; [number = 10*week + 10*level]
+
+!!HE-1:P?y5/?y6/?y7; [get hero location]
+!!HE-1:N?y8; [get hero number]
+
+!!HE-1&x1=0:Ty2/y3/y4/143/y3; [provoke Rogue battle]
+!!HE-1&x1=1:Ty2/y3/y4/115/y3; [provoke Water Elemental battle]
+
+!!HEy8:O?y9; [get hero owner]
+!!FU&y9<0:E; // exit, if the hero lost the battle
+
+!!VRy3&x1=0:*10 +300; [10 gold per Rogue + 300]
+!!VRy3&x1=1:*25; [25 gold per Water Elemental]
+
+!!IF&1000/x1=0:Q2/6/y3/1/z101050;
+!!IF&1000/x1=1:Q2/6/y3/1/z101057;
+!!OW:R-1/6/dy3; [give gold]
+
+** end of function FU6183
+
+
+!?FU6184;
+** function to make monster x16 gain a breath weapon
+!!MA:Xx16/?y1; [get flags]
+!!VRy1:|8; [breath weapon]
+!!MA&x16<145|x16>149:Xx16/y1; [save flags, except for war machines]
+
+** end of function FU6184
+
+
+!?FU6185;
+** function to build a grail in town # x16
+!!UN:U98/-1/-1/600; [get town location into v600-v602]
+!!CA600:T?y1 O?y2; [get town type and owner]
+
+** added by Thomas Franz (samot)
+!!UN:P93/?y3 P252/?y4; // check for Enhanced grail and Disable standard tower grail
+!!FU1629&y1=8/y3=1:Pv600/v601/v602/1; // build dummygrail in Conflux if rule is on (call FU from script93)
+!!FU1629&y1=2/y4=1:Pv600/v601/v602/1; // build dummygrail in Tower if rule is on   (call FU from script93)
+!!FU&y3=1/y1=8:E; !!FU&y4=1/y1=2:E;   // and exit in this cases
+
+!!CA600:B1/26; [build grail]
+!!UN&y1=2:S0/0/0/y2/144; [remove entire shroud, surface, for tower's skyship]
+!!UN&y1=2:S0/0/1/y2/144; [remove entire shroud, underground]
+
+** end of function FU6185
+
+
+ [Put Warlord's Banners in front of Towns]
+!?FU6186;
+!!UN:U98/-1/-1/1; [Store Town Coordinates in v1/v2/v3]
+!!CA1:T?y2 O?y3; [Town Type: y2, Owner: y3]
+!!IF:V1/0 V2/0; [Set Flags 1 and 2 to False]
+!!VRy4:Sv1;    [Copy x coordinate to y4]
+!!VRy5:Sv2 +1; [Copy y+1 coordinate to y5]
+!!UN:X?y6/?y7; [Size of map: y6]
+!!FU&y5>=y6:E; [Exit Function if Y coordinate will be off the bottom of the map]
+!!UN:Ey4/y5/v3; [Check space directly in front of Town: Flag 1=True if blocked]
+!!VRy4&1:Sv1 -1; [X coordinate 1 to the left of entrance: y4]
+!!IF&y4<0/1:V2/1; [Set Flag 2 to True if X coordinate will be off the map to the left]
+!!UN&1/-2:Ey4/y5/v3; [Check space to left in front of Town: Flag 1=True if blocked]
+!!VRy4&1:Sv1 +1; [X coordinate 1 to the right of entrance: y4]
+!!IF:V2/0; [Reset Flag 2 to False]
+!!IF&y4>=y6/1:V2/1; [Set Flag 2 to True if X coordinate will be off the map to the right]
+!!UN&1/-2:Ey4/y5/v3; [Check space to right in front of Town: Flag 1=True if blocked]
+!!FU|1/2:E; [Exit if all spaces blocked or off the map]
+!!UN:Iy4/y5/v3/5/156/0; [Place Warlord's Banner, no redraw]
+!!UN:J2/?y9; [Player Difficulty level (0..4): y9]
+!!VRy8&y9<=2:Sy2 +1; [Add 1 to town type (y2) for Easy/Normal/Hard levels: y8]
+!!VRy10&y9=0:Sy2 -2; [Upgraded level 6 for Easy difficulty: y10]
+!!VRy10&y9=1:Sy2 -1; [Non-upgraded level 7 for Normal difficulty: y10]
+!!VRy10&y9=2:Sy2;    [Upgraded level 7 for Hard difficulty: y10]
+!!VRy8&y9<=2:*13 +y10; [Level 6 or 7 Guardian (for Easy/Normal/Hard difficulty): y8]
+!!VRy8&y9=0/y2=8:S121; [Set Magic Elemental for Conflux Town (for Easy difficulty): y8]
+!!VRy8&y9=1/y2=8:S130; [Set Firebird for Conflux Town (for Normal difficulty): y8]
+!!VRy8&y9=2/y2=8:S131; [Set Phoenix for Conflux Town (for Hard difficulty): y8]
+!!VRy8&y9>=3:S150 +y2; [Level 8 Guardian (for Expert/Impossible difficulty): y8]
+!!ARy4/y5/v3&y3>=0:X0 G0/y8/0; [If Town is owned, set 0 guardians and don't turn them on]
+!!POy4/y5/v3&y3>=0:Oy3; [Set PO:O to town owner (y3)]
+!!FU&y3>=0:E; [Exit if Town is owned: Banner is unguarded until month 2]
+!!UN&y8>=0:N3/-1/y8/0; [Name of single monster: z-1]
+!!ARy4/y5/v3:X1 G0/y8/1 M1/z101053; [Set 1 Guardian with message]
+
+** end of function
+
+ [Weekly Timer, only activates once (for first colour)]
+!?TM2&$once$=1/$weekday$=$monday$/$day$>7;
+!!FU709:P21; [check for rule 21]
+!!FU&-3:E; [Exit if rule not enabled]
+!!UN:U5/156/?y-10; [Number of Warlord's Banners on map: y-10]
+!!FU&y-10<1:E; [Exit if no Banners on map]
+!!VRy-11:Sc0 -1; [Current day -1: y-11]
+!!VRy-1:Sy-11 :7 +1; [Current week: y-1]
+!!VRy-22:Sy-1 :2 *2; [Check if it's every 2rd week: y-22]
+!!VRy-2&y-22=y-1:S1; [Set y-2 to 1 every 2nd (even) week: y-2]
+!!VRy-33:Sy-1 :3 *3; [Check if it's every 3rd week: y-33]
+!!VRy-3&y-33=y-1:S1; [Set y-3 to 1 every 3rd week: y-3]
+!!VRy-44:Sy-1 :4 *4; [Check if it's every 4th week: y-44]
+!!VRy-4&y-44=y-1:S1; [Set y-4 to 1 every 4th week: y-4]
+!!VRy-12:Sy-1 -1; [Current week -1: y-12]
+!!VRy-55:Sy-12 :4 *4; [Check if it's the 1st of every month: y-55]
+!!VRy-5&y-55=y-1:S1; [Set y-5 to 1 at the start of every month: y-5]
+!!UN:J2/?y-6; [Player Difficulty level: y-6]
+!!VRy-7&y-6=0/y-5=1:S1; [Set y-7 to 1 for Easy if start of a month: y-7]
+!!VRy-7&y-6=1/y-5=1:S1; [Set y-7 to 1 for Normal if start of a month: y-7]
+!!VRy-7&y-6=2/y-2=1:S1; [Set y-7 to 1 for Hard every 2 weeks: y-7]
+!!VRy-7&y-6=3/y-5=1:S1; [Set y-7 to 1 for Expert if start of a month: y-7]
+!!VRy-7&y-6=4/y-2=1:S1; [Set y-7 to 1 for Impossible every 2 weeks: y-7]
+!!FU&y-7<>1:E; [Exit if not a banner guard increase day]
+!!VRv1:S-1; [reset coordinate index]
+!!DO6187/1/y-10/1&y-10>0:P; [Loop through all banners]
+
+** end of timer
+
+ [Add 1 to Banner Guardians on day 1 of each month]
+!?FU6187;
+!!UN:U5/156/-1/1; [Store Banner Coordinates in v1/v2/v3]
+!!PO1:O?y2; [Read PO:N for Warlord's Banner: y2]
+!!FU&y2=-2:E; [Exit if not a Banner in front of a town]
+!!ARv1/v2/v3:G0/?y3/?y1; [Number of guards (y1), Type (y3)]
+!!VRy1:+1; [Add 1 to number of guards: y1]
+!!ARv1/v2/v3:X1 G0/d/y1; [Enable guards and set number of guards to y1]
+!!UN&y3>=0/y1=1:N3/-1/y3/0; [Name of single monster: z-1]
+!!UN&y3>=0/y1>1:N3/-1/y3/1; [Name of plural monsters: z-1]
+!!ARv1/v2/v3&y1=1:M1/z101054; [Update message (if only 1 guard)]
+
+!!ARv1/v2/v3&y1>1:M1/z101055; [Update message (if more than 1 guard)]
+
+** end of function
+

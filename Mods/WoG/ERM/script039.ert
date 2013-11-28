@@ -1,0 +1,335 @@
+139000	{Hero Specialization Boost is activated:} 
+{	String type = <!!S>	08.06.2003
+139001	 he 	String type = <!!S>	08.06.2003
+139002	 she 	String type = <!!S>	08.06.2003
+139003	Additionally and randomly in a battle 
+	String type = <!!S>	08.06.2003
+139004	can cast spell 	String type = <!!S>	08.06.2003
+139005	In battles	String type = <!!S>	08.06.2003
+139006	greatly improves parameters of all 
+{	String type = <!!S>	08.06.2003
+139007	Specialist in Logistics. 
+Receives +5% per level bonus to {Logistics} skill percentage. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139008	receives	String type = <!!S>	08.06.2003
+139009	Mobile Veil of Darkness. 
+When the hero moves, the shroud is replaced in a circle around him for 
+all players who are not allies. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139010	receives	String type = <!!S>	08.06.2003
+139011	Specialist in Navigation. 
+Receives +5% per level bonus to {Navigation} skill percentage. 
+ 
+{Commander} of this hero has {Flying} ability	String type = <!!S>	08.06.2003
+139012	Specialist in Estates. 
+Receives +5% per level bonus to {Estates} skill percentage. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139013	receives	String type = <!!S>	08.06.2003
+139014	Specialist in Armorer. 
+Receives +5% per level bonus to {Armorer} skill percentage. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139015	receives	String type = <!!S>	08.06.2003
+139016	Specialist in Offence. 
+Receives +5% per level bonus to {Offence} skill percentage. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139017	receives	String type = <!!S>	08.06.2003
+139018	Specialist in Archery. 
+Receives +5% per level bonus to {Archery} skill percentage. 
+ 
+In the beginning of any battle	String type = <!!S>	08.06.2003
+139019	casts 
+{Precision} spell on all allied units	String type = <!!S>	08.06.2003
+139020	Specialist in Speed. 
+All creatures receive +2 speed 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139021	receives	String type = <!!S>	08.06.2003
+139022	Specialist in Ballistas. 
+ 
+{Commander} of this hero {Can Shoot}	String type = <!!S>	08.06.2003
+139023	Specialist in First Aid. 
+ 
+In the beginning of any battle	String type = <!!S>	08.06.2003
+139024	 
+casts {Stone skin} spell for all allied units	String type = <!!S>	08.06.2003
+139025	Specialist in Sorcery. 
+Receives +5% per level bonus to {Sorcery} skill percentage. 
+ 
+In the beginning of each battle	String type = <!!S>	08.06.2003
+139026	casts 
+{Misfortune} spell on all enemy units	String type = <!!S>	08.06.2003
+139027	Specialist in Eagle Flying. 
+Receives +5% per level bonus to {Eagle Eye} skill percentage. 
+ 
+All 1st and 2nd level creatures additionally receive flying ability.	String type = <!!S>	08.06.2003
+139028	Specialist in Intelligence. 
+Receives +5% per level bonus to {Intelligence} skill percentage. 
+ 
+{Commander} of this hero has {DeathStare} ability	String type = <!!S>	08.06.2003
+139029	Specialist in Mysticism. 
+Receives +5% per level bonus to {Mysticism} skill percentage. 
+ 
+In the beginning of each battle	String type = <!!S>	08.06.2003
+139030	adds	String type = <!!S>	08.06.2003
+139031	mana. 
+Amount of added mana will grow by 3 mana for each level of hero	String type = <!!S>	08.06.2003
+139032	Specialist in Resistance. 
+Receives +5% per level bonus to {Resistance} skill percentage. 
+ 
+In the beginning of each battle	String type = <!!S>	08.06.2003
+139033	reduces	String type = <!!S>	08.06.2003
+139034	mana of enemy hero 
+Amount will grow by 3 mana for each level of hero	String type = <!!S>	08.06.2003
+139035	Specialist in Fire Magic. 
+Starts with expert level of Fire Magic secondary skill. 
+ 
+In the beginning of each battle	String type = <!!S>	08.06.2003
+139036	casts {Curse} on all enemy units	String type = <!!S>	08.06.2003
+139037	Specialist in Necromancy. 
+Receives +5% per level bonus to {Necromancy} skill percentage. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139038	receives	String type = <!!S>	08.06.2003
+139039	Specialist in Resource. 
+Increases kingdom's wood production 
+by 1 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139040	receives	String type = <!!S>	08.06.2003
+139041	Specialist in Resource. 
+Increases kingdom's mercury production 
+by 1 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139042	receives	String type = <!!S>	08.06.2003
+139043	Specialist in Resource. 
+Increases kingdom's ore production 
+by 2 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139044	receives	String type = <!!S>	08.06.2003
+139045	Specialist in Resource. 
+Increases kingdom's sulfur production 
+by 1 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139046	receives	String type = <!!S>	08.06.2003
+139047	Specialist in Resource. 
+Increases kingdom's crystal production 
+by 1 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139048	receives	String type = <!!S>	08.06.2003
+139049	Specialist in Resource. 
+Increases kingdom's gem production 
+by 1 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139050	receives	String type = <!!S>	08.06.2003
+139051	Specialist in Resource. 
+Increases kingdom's income 
+by 350 per day. 
+ 
+No additional bonuses	String type = <!!S>	08.06.2003
+139052	receives	String type = <!!S>	08.06.2003
+139053	Specialist in Behemothes. 
+All {Behemothes} gets +5 Attack, +5 Defence and +10 Damage	String type = <!!S>	08.06.2003
+139054	Specialist in Black Knights. 
+All {Black Knights} gets +5 Attack, +5 Defence and +10 Damage	String type = <!!S>	08.06.2003
+139055	Specialist in Devils. 
+All {Devils} gets +5 Attack, +5 Defence and +10 Damage	String type = <!!S>	08.06.2003
+139056	Specialist in Dragons. 
+All {Dragons} gets +5 Attack, +5 Defence	String type = <!!S>	08.06.2003
+139057	Specialist in SharpShooters. 
+Can upgrade {Elves} and {Archers} to {Sharpshooters}	String type = <!!S>	08.06.2003
+139058	Specialist in Enchanters. 
+Can upgrade {Monks} and {Magi} to {Enchanters}	String type = <!!S>	08.06.2003
+139059	{Magic Arrow}	String type = <!!S>	08.06.2003
+139060	{Ice Bolt}	String type = <!!S>	08.06.2003
+139061	{Lightning Bolt}	String type = <!!S>	08.06.2003
+139062	{Shield}	String type = <!!S>	08.06.2003
+139063	{Air Shield}	String type = <!!S>	08.06.2003
+139064	{Fire Shield}	String type = <!!S>	08.06.2003
+139065	{Cure}	String type = <!!S>	08.06.2003
+139066	{Bless}	String type = <!!S>	08.06.2003
+139067	{Bloodlust}	String type = <!!S>	08.06.2003
+139068	{Weakness}	String type = <!!S>	08.06.2003
+139069	{Stone Skin}	String type = <!!S>	08.06.2003
+139070	{Disrupting Ray}	String type = <!!S>	08.06.2003
+139071	{Prayer}	String type = <!!S>	08.06.2003
+139072	{Fortune}	String type = <!!S>	08.06.2003
+139073	{Haste}	String type = <!!S>	08.06.2003
+139074	{Slow}	String type = <!!S>	08.06.2003
+139075	{Slayer}	String type = <!!S>	08.06.2003
+139076	{Hypnotize}	String type = <!!S>	08.06.2003
+139077	 at no cost. 
+ 
+Average chance to cast is 1 of	String type = <!!S>	08.06.2003
+139078	 
+At the moment it is 1 of	String type = <!!S>	08.06.2003
+139079	 
+Additional attack:	String type = <!!S>	08.06.2003
+139080	 
+Additional defence:	String type = <!!S>	08.06.2003
+139081	 
+Each {	String type = <!!S>	08.06.2003
+139082	} give additional damage:	String type = <!!S>	08.06.2003
+139083	 
+In battles health of each {	String type = <!!S>	08.06.2003
+139084	} increased by	String type = <!!S>	08.06.2003
+139085	 
+Additional speed: +1	String type = <!!S>	08.06.2003
+139086	 
+ 
+Additional values will increased with level and skills of hero.	String type = <!!S>	08.06.2003
+139087	{Hero Specialization Boost}
+
+		
+139088	Magic Arrow		
+139089	Ice Bolt		
+139090	Lightning Bolt		
+139091	Shield		
+139092	Air Shield		
+139093	Fire Shield		
+139094	Cure		
+139095	Bless		
+139096	Bloodlust		
+139097	Weakness		
+139098	Stone Skin		
+139099	Disrupting Ray		
+139100	Prayer		
+139101	Fortune		
+139102	Haste		
+139103	Slow		
+139104	Slayer		
+139105	Hypnotize		
+139106	Frost Ring		
+139107	Chain Lightning		
+139108	Inferno		
+139109	Fireball		
+139110	Death Ripple		
+139111	Meteor Shower		
+139112	Animate Dead		
+139113	Resurrection		
+139114	Blind		
+139115	Meteor Shower		
+139116	Precision		
+139117	Fire Wall		
+139118	he		
+139119	she		
+139120	his		
+139121	her		
+139122	%Z-1 has a stronger {%Z-3} spell.
+
+Randomly in a battle, %Z-1 may automatically cast an additional %Z-2 spell at no cost.		
+139123	%Z-1's level and stats affect all
+		
+139124	Receives a 5% per level bonus to {Logistics} skill percentage.
+
+%Z-1 has no further bonus.		
+139125	Mobile Veil of Darkness.
+Each new day, the shroud is replaced in a circle around %Z-1 for all non-allied players.
+
+%Z-1 has no further bonus.		
+139126	Receives a 5% per level bonus to {Navigation} skill percentage.
+
+Commander of this hero can {Fly}.		
+139127	Receives a 5% per level bonus to {Estates} skill percentage.
+
+%Z-1 has no further bonus.		
+139128	Receives a 5% per level bonus to {Armorer} skill percentage.
+
+%Z-1 has no further bonus.		
+139129	Receives a 5% per level bonus to {Offence} skill percentage.
+
+%Z-1 has no further bonus.		
+139130	Receives a 5% per level bonus to {Archery} skill percentage.
+
+All allied units have {Precision}
+at the beginning of each battle.		
+139131	All creatures receive {+2 Speed}
+
+%Z-1 has no further bonus.		
+139132	Specialist in {Ballistas}.
+
+Commander of this hero can {Shoot}.		
+139133	Specialist in {First Aid}.
+
+All allied units have {Stone Skin}
+at the beginning of each battle.		
+139134	Receives a 5% per level bonus to {Sorcery} skill percentage.
+
+All enemy units have {Misfortune}
+at the beginning of each battle.		
+139135	Specialist in {Eagle Flying}.
+Receives a 5% per level bonus to Eagle Eye skill percentage.
+
+All 1st and 2nd level creatures receive flying ability in a battle.		
+139136	Receives a 5% per level bonus to {Intelligence} skill percentage.
+
+Commander of this hero has {DeathStare}.		
+139137	Receives a 5% per level bonus to {Mysticism} skill percentage.
+
+%Z-1 adds {%W29 mana} at the beginning of each battle. Amount further increases by 3 mana per hero level.		
+139138	Receives a 5% per level bonus to {Resistance} skill percentage.
+
+%Z-1 reduces {%W29 mana} of enemy hero at the beginning of each battle. Amount further decreases by 3 mana per hero level.		
+139139	Starts with {Expert Fire Magic} skill.
+
+%Z-1 will cast {Curse} on all enemy units at the beginning of each battle.		
+139140	Receives a 5% per level bonus to {Necromancy} skill percentage.
+
+%Z-1 has no further bonus.		
+139141	Increases kingdom's {Wood} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139142	Increases kingdom's {Mercury} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139143	Increases kingdom's {Ore} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139144	Increases kingdom's {Sulfur} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139145	Increases kingdom's {Crystal} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139146	Increases kingdom's {Gem} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139147	Increases kingdom's {Gold} production by 350 per day.
+
+%Z-1 has no further bonus.		
+139148	Increases kingdom's {Mithril} production by 1 per day.
+
+%Z-1 has no further bonus.		
+139149	{Behemoths} gain +5 Attack, +5 Defense and +10 Damage in battle.		
+139150	{Black Knights} gain +5 Attack, +5 Defense and +10 Damage in battle.		
+139151	{Devils} gain +5 Attack, +5 Defense and +10 Damage in battle.		
+139152	{Dragons} gain +5 Attack, +5 Defense in battle.		
+139153	Can upgrade Elves and Archers to {Sharpshooters}.		
+139154	Can upgrade Monks and Magi to {Enchanters}.		
+139155	
+Average casting chance is 1 of		
+139156	
+At the moment it is 1 of		
+139157	{%Z406} under %Z-5 command:		
+139158	
+Attack: {+%W31}		
+139159	
+Defense: {+%W32}		
+139160	
+Damage: {+%V432}		
+139161	
+Health: {+%W30%}		
+139162	
+Speed: +1		
+139163			
+139164			
+139165			

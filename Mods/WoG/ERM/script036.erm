@@ -1,0 +1,1058 @@
+ZVSE
+ERMS_ScriptDate=12.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Mithril Enhancements Script v1.51 by Anders Jonsson
+** Last Updated: October 12, 2006 - removed extra exclamation mark to avoid problems with 3.59 parser check and moved some new text into ERT file.
+** Previously Updated: July 18, 2006 (by Timothy) to display a player's Mithril in a Network game when not that player's turn.
+** Previously Updated: May 5, 2006 (by Timothy)
+** Previously Updated: August 28, 2005
+
+changed interface for Price List and Mithril display by Tobyn
+Minor updates by Timothy Pulver and QQD
+Mithril Display Scripts by Timothy Pulver
+Mithril Price List graphic by Dieter Averbeck
+Advanced University part by Dieter and Tobyn
+
+** Modified at 08.01.2005 by Thomas Franz (samot): corrected check for Mithril Forge from PO:V3 to PO:O
+** last update: 24th of July 2005 Thomas Franz - renaming / moving graphic file
+
+*** Important: ***
+If you take this script out of the data/s folder to use in your map, you HAVE to remove the d in
+the following line in order for it to work!
+!d#UN:P36/1;
+
+
+The Mithril Script lets a player enhance certain buildings the player owns, and some others, by
+right-clicking on their yellow entrance square and paying some Mithril.
+Mine- enhance it to produce twice the normal amount of resources each day for one week. Works with
+Timothy Pulver's "Week of" Script, giving up to four times the normal production.
+Monster Dwelling- enhance it to produce upgraded creatures instead of normal. Does not work with new,
+neutral creatures(from AB/SoD or Wog) or Golem Factory. Does work with old Elemental Conflux dwelling.
+Castle- put a special terrain (Magic Plains, Holy Ground, Lucid Pools etc.) at castle to enhance it in
+sieges.
+Spell shrines- change spell to a new, random one.*
+Witch Hut- change skill to a new, random one.*
+Shipyard- place a Lighthouse at one of the red squares.
+Windmill, Water Wheel- double weekly production.*
+Monoliths- see area around exits.*
+(*- Requires that the player have visited them before, and has a selected hero standing at a position
+from which he can reach the entrance square with one step)
+
+Mithril Enhancements Price List
+
+1. Upgrading Wood and Ore Mines
+ - doubles the production for one week: 4 Mithril
+2. Upgrading Crystal, Gem, Sulfur and Mercury Mines
+ - doubles the production for one week: 4 Mithril
+3. Upgrading Gold Mines
+ - doubles the production for one week: 7 Mithril
+4. Upgrading Windmills and Water Wheels
+ - doubles the production: 5 Mithril
+5. Upgrading Creature Dwellings
+ - offers upgraded creatures: 1 to 3 Mithril
+6. Place Magical Terrain
+ - to Protect a Town you Own: 1 or 3 Mithril
+7. Build a Lighthouse near a Shipyard: 3 Mithril
+8. Change Spell Offered at Magic Shrines: 1 to 3 Mithril
+9. Change Skill Offered at Witch Huts: 2 Mithril
+10. Check What's Around a Monolith's Possible Exits: 1 Mithril
+11. Protect a Mine from Changing if you use "Mines Change Every Week" Map Rule
+    (for one week's protection)
+ - Wood & Ore: 1 Mithril
+ - Gem, Crystal, Mercury & Sulfur: 3 Mithril
+ - Gold: 5 Mithril
+12. Upgrade University
+ - may improve a hero's Basic skills: 4 Mithril
+
+It also replaces 1 in 15 resource stacks with stacks with the same amount of mithril (Half amount if
+it's wood, ore or gold), and 1 in 15 campfires contain mithril. To disable this feature, remove the
+"d" from the following line:
+!#UN:P170/d0;
+
+If you want to change the frequency, change the number 15 below to how often you want mithril to
+appear. If you set it to 4, one in four stacks will be replaced, and so on(if set to 1 or lower,
+or 50 or higher, it will default to 15):
+!#VRv70:S15;
+
+It also sets up Windmills and Mystical Gardens so that one in ten contain Mithril. To disable this
+feature, remove the "d" from the following line:
+!#UN:P171/d0;
+
+If you want to change the frequency, change the number 10 below to how often you want mithril to
+appear(if set to 1 or lower, or 50 or higher, it will default to 10):
+!#VRv71:S10;
+
+Mithril Display scripts shows a message when a player picks up a pile of Mithril, showing how much
+Mithril that pile contained, and how much Mithril the player has right now. It also shows how much
+Mithril the player has if (s)he right-clicks on the Kingdom Overwiev button.
+
+Variables used:
+(v1-v6)
+(z1-z9), v70, v71, z429, z805-z815, z919, [z136000-z136084]
+
+Flags:
+(1,2,9,10)
+172, 410, 870-875
+
+Timers:
+TM99
+
+Functions:
+FU709, FU8170-FU8189
+
+Sets up PO:N numbers at University, Mine, Water Wheel and Windmill
+entrance squares. Do not use this with another script that might do the same
+
+
+
+*--- Setup ---*
+!#UN:P36/?v1;  [Check if Mithril script is enabled: v1]
+!#UN:P149/?v2; [Check if Mithril Display is enabled: v2]
+!#UN:P170/?v3; [Check if Mithril Replacment is enabled: v3]
+!#UN:P171/?v4; [Check if Mithril in Windmills and Gardens is enabled: v4]
+!#UN|v1=1/v2=1/v3=1/v4=1:B0/1;   (Enable Mithril)
+!#UN|v1=1/v3=1:P149/1; [Enable Mithril Display if Mithril script or Mithril Replacement is enabled]
+!#IF|v1=1/v2=1/v3=1/v4=1:V410/0; (For Sorcery/Mithril)
+!#TM99&v1=1:S1/999/1/255; (setup Mine Timer)
+!#VRv550:C1/2/4/8/16/32/64/128/256/512; (Setup table of bit values)
+!#VRz805:Sz136000;
+!#VRz806:Sz136001;
+!#VRz807:Sz136002;
+!#VRz808:Sz136003;
+!#VRz429:Sz136060;
+!#HT104/-1&v1=1:P2/429; (set "Advanced University" hint text)
+
+!#HT109/-1&v1=1:P2/805;
+!#HT112/-1&v1=1:P2/806;  (Setup Hint text)
+!#HT109/-1&v1=1:P3/807;
+!#HT112/-1&v1=1:P3/808;  (Setup Hint text)
+!#IF:V874/0;
+!#IF:V870/1;
+!#IF:V873/1;        (security measure)
+!#VRv70&v70<2|v70>49:S15;
+!#VRv71&v70<2|v70>49:S10;
+
+!#UN:P170/?v1;
+!#IF&v1=0:V870/0;
+!#UN:P171/?v1;
+!#IF&v1=0:V873/0; (Check for replacing)
+
+*** Post-Instruction trigger ***
+!?PI;
+!!UN:P36/?y-1; [Check if Mithril script is enabled: y-1]
+!!VRz-2:S^%Z136090^; [User-defined section of WoG.ini file ("Mithril Enhancements")
+!!UN:N6/-1/1/-2; [Check if Mithril Ctrl Message has already been displayed]
+!!VRz-1:H2; [Set Flag 2 to True if z-1 isn't empty: Flag 2]
+!!FU&2:E; [Exit if Flag 2 is True]
+!!IF:Q2/7/0/7/0/7^%Z136091^; [Important Update message]
+!!VRz-1:S^%Z136092^; ["message shown"]
+!!UN:N5/-1/1/-2; [Write data to WoG.ini to show that Ctrl Message has already been displayed]
+
+*** Display Mithril on Rightclick on Kingdom Overview ***
+!?CM;
+!!UN:P36/?y-1; [Check if Mithril script is enabled: y-1]
+!!UN:P149/?y-2; [Check if Mithril Display is enabled: y-2]
+!!CM:I?y-3; [Store right-click location in y-3]
+!!FU|y-2<>1/y-3<>3:E; [Exit if Mithril Display disabled or Kingdom Overview isn't clicked]
+
+!!FU$LocalPlayer$:P; [Get local/current player: y-100]
+!!OW:Ry-100/7/?y-5; [Store local/current player's Mithril in y-5]
+
+!!VRz-1&y-5<>1:Sz136004; [Set "bars" unless Mithril total is 1: z-1]
+!!VRz-1&y-5=1:Sz136005; [Set "bar" if Mithril total is 1: z-1]
+
+ [Display current player's Mithril amount in a text box]
+!!IF&y-1<>1:Q1/7/y-5/4/z136059; [Just display total Mithril if Mithril script is disabled] [TOBYN mod]
+!!IF&y-1=1:Q2/7/y-5/4/z136006; [Display Mithril and offer to display price list: Flag 2]   [TOBYN mod]
+!!CM:R0; [Disable standard right-click info. for Kingdom Overview button]
+
+!?CM5;             left-click trigger for Mithril Price list  [TOBYN mod]
+!!UN:P36/?y-1;       check if Mithril script is enabled: y-1
+!!CM:I?y-3 F?y-4 S?y-5; check click location y-3 (=3 if Kingdom overview button), click flags y-4 (=4 for CTRL), click subtype y-5 (=12 left click, 13 left release)
+!!FU|y-1<>1/y-3<>3/y-4<>4/y-5<>12:E; exit if neither of the above
+!!CM:R0;             disable standard click reaction
+!!VRz-2:S^s036_mithril_price_list.gif^; [Store name of price list file in z-2]
+!!VRz-3:S^..\data\p\%Z-2^; [File and path name for Mithril Price List gif: z-3]
+!!UN:J8/6/^s036_mithril_price_list.gif^; [Check if Mithril Price List image is there: Flag 1=True if yes]
+!!IF&1:B1/-3/0;      [Set up dialogue box for displaying Mithril price list]
+!!IF&1:P1;           [Display Mithril price list]
+!!VRz-4&-1:Sz136087; [Set alternate dialogue text for standard dialogue if image file missing]
+!!VRz-5&-1:Sz136088; [Set 2nd part of alternate dialogue text: z-5]
+!!VRz-6&-1:Sz136089; [Set 3rd part of alternate dialogue text: z-5]
+!!IF&-1:Q1/7/0/1^%Z-4%Z-5%Z-6^; [Display standard dialogue price list if image file missing]
+
+*** Display when Mithril is picked up ***
+!?OB79/7;  [Mithril is trigger]
+!!UN:P149/?v1;
+!!FU&v1=0:E; (If Mithril display is disabled, end function)
+
+!!OW:A-1/?y-21; (get current hero)
+!!IF:V10/0;
+!!IF&y-21=-1:V10/1;
+!!IF&875:V10/1;
+!!HE-1&-10:B0/?z1; [Store hero's name in z1]
+
+!!ARv998/v999/v1000&-10:V?v1; [Store value of Mithril bars in v1]
+
+!!OW&-10:R-1/7/?v2; [Store current player's previous total Mithril in v2]
+!!VRv2&-10:+v1; [Add new Mithril to previous Mithril - store in v2]
+
+!!VRz2&v2=1/-10:S^%Z136005 ^;
+!!VRz2&v2>1/-10:S^%Z136004 ^;
+!!VRz3&v1=1/-10:S^%Z136005 ^;
+!!VRz3&v1>1/-10:S^%Z136004 ^;
+!!VRz4&-10:S^%V1^;
+!!VRz4&v1=1/-10:Sz136007; (setup varius strings for use depening if one or more than one bar of Mithril)
+
+ [Display amount of Mithril picked up and total amount owned]
+!!IF&-410/-10/1000:Q1/7/v1/1/z136008;
+!!IF:V410/0;
+
+
+** Update hint text for Mines on right-click ***
+!?CM0;
+!!UN:P36/?v1;              (Check if Mithril Enhancements script is enabled: v1)
+!!VRv1&-999:S0;            (check if the current player is in front of the PC that clicked)
+!!FU&v1=0:E;               (If script is disabled or not player's turn, exit trigger)
+!!CM:I?y-1;                (Location clicked: y-1]
+!!FU&y-1<>37:E;            (Exit if not on the Adventure Map itself)
+!!CM:P?v4/?v5/?v6;         (Get location: v4/v5/v6)
+!!TRv4/v5/v6:E?y-20;       (Check for yellow trigger square: y-20)
+!!OBv4/v5/v6&y-1=37:T?v1;         (Get type of object)
+!!OBv4/v5/v6&y-1=37:U?v2;         (Get Subtype)
+!!FU8184&v1=53/y-20=1:Pv4/v5/v6/99/0/88; (update and display hint text)
+
+
+*** Adventure map Objects ***
+!?CM5;                     (Left-click on Adventure Map so we can use ctrl-click instead of right-click)
+!!UN:P36/?v1;              (Check if Mithril Enhancements script is enabled: v1)
+!!VRv1&-999:S0;            (check if the current player is in front of the PC that clicked)
+!!FU&v1=0:E;               (If script is disabled or not player's turn, exit trigger)
+
+!!CM:I?y-1;                (Location clicked: y-1]
+!!CM:F?y-40;               (Get Flags for type of mouse-click: y-40)
+!!FU|y-1<>37/y-40<>4:E;    (Exit if not on the Adventure Map itself or not a ctrl-click)
+
+!!IF:V10/0;                (General abort if Flag 10 is True)
+!!IF:V9/0;                 (special abort if Flag 9 is True)
+!!CM&-10:P?v4/?v5/?v6;     (Get location: v4/v5/v6)
+!!TRv4/v5/v6&-10:E?y-20;   (Check for yellow trigger square: y-20)
+!!IF&y-20=1:V10/1;         (Check if entrance)
+
+!!OBv4/v5/v6:T?v1;         (Get type of object)
+!!OBv4/v5/v6:U?v2;         (Get Subtype)
+
+!!FU8184&v1=53/y-20=1:Pv4/v5/v6/99/0/88; (update and display hint text)
+
+!!FU&10:E;       (If not a valid click on a yellow trigger square, exit CM trigger)
+
+!!IF&v1<>43/v1<>45/v1<>88/v1<>89/v1<>90/v1<>109/v1<>112/v1<>113/v1<>104:V9/1;  (Don't do checks if not Monolith entrance, University, Shrine, Windmill, Water Wheel or Witch Hut)
+!!OBv4/v5/v6&-9:C?y-32;   (get control word of object)
+!!VRy-31&-9:Sy-32;        (copy to y-31 for checking later)
+!!OW&-9:C?y-30;           (get current player: y-30)
+!!VRy-30&-9:+550;
+!!VRy-30&-9:Svy-30;
+!!VRy-30&-9:*32;          (Set to bit value for checking Control Word)
+!!VRy-32&-9:|y-30;        (Try to "or" with current player's bit)
+!!IF&-9/y-32<>y-31:V9/1;  (Check if not same, then abort)
+!!IF|v1=43/v1=45/v1=109/v1=112/v1=104:V9/0;   (Override above if University, Monolith, Water Wheel or Windmill)
+
+!!OW&-9:A-1/?y-21;           (Check which hero is selected)
+!!IF&y-21=-1:V9/1;           (special abort if no hero selected)
+!!HEy-21&-9:P?y-4/?y-5/?y-6; (Get Hero Location- for Shrine or Witch Hut)
+
+!!IF&-9/y-6<>v6:V9/1; (check if on same level)
+!!VRy-10&-9:Sv4;
+!!VRy-10&-9:-1;
+!!VRy-11&-9:Sv4;
+!!VRy-11&-9:+1;
+!!VRy-13&-9:Sv5;
+!!VRy-13&-9:+1;
+!!IF&-9/y-4<>v4/y-4<>y-10/y-4<>y-11:V9/1;
+!!IF&-9/y-5<>v5/y-5<>y-13:V9/1; (check if location is within range)
+
+!!IF:V3/0;
+!!FU8170&v1=17:P;          (Normal Creature Generator)
+!!FU8171&v1=20/v2=00:P;    (Conflux dwelling)
+!!FU8185&-9/v1=43:P1/y-21;
+!!FU8185&-9/v1=45:P2/y-21; (Monolith (with instruction on which type and what hero))
+!!FU8172&v1=53:P;          (Mine)
+!!FU8183&v1=87:P;          (Shipyard)
+!!FU8173&-9/v1=88:P;       (Shrine level 1)
+!!FU8174&-9/v1=89:P;       (Shrine level 2)
+!!FU8175&-9/v1=90/v2=0:P;  (Shrine level 3)
+!!FU8176&v1=98/y-20=0:P;   (Town: for placing special terrain)
+!!FU8181&-9/v1=109:P;      (Water Wheel)
+!!FU8182&-9/v1=112:P;      (Windmill)
+!!FU8177&-9/v1=113:P;      (Witch Hut)
+!!FU8187&-9/v1=104:P;      (University)
+
+!!FU&-9:E; [Exit if Flag 9 is False]
+
+!!VRy-39&v1>=88/v1<=90:Sv1 -87; [Shrine number and therefore Mithril cost: y-39]
+!!PO4:N?y-38; [Get PO Number: y-38]
+
+!!IF&v1=45:Q1/7/1/1^{Mithril Enhancements}
+
+To see what's on the other side of a monolith, the active hero must be adjacent when you ctrl-click.
+
+It takes 1 bar of mithril to see what's on the other side of a monolith.^; [Monolith]
+!!IF&v1>=88/v1<=90:Q1/7/y-39/1^{Mithril Enhancements}
+
+To change the spell at a shrine, the active hero must be adjacent when you ctrl-click (and one of your heroes must already have visited the shrine).
+
+It takes %Y-39 mithril to change the spell at this shrine.^; [Shrine]
+!!IF&v1=109/y-38>=2/y-38<=3:Q1/7/0/6/2000/1^{Mithril Enhancements}
+
+This water wheel has already been upgraded.^; [Upgrade Water Wheel]
+!!IF&v1=109/y-38<>2/y-38<>3:Q1/7/5/1^{Mithril Enhancements}
+
+To upgrade a water wheel, the active hero must be adjacent when you ctrl-click.
+
+It takes 5 bars of mithril to upgrade a water wheel.^; [Water Wheel]
+!!IF&v1=112/y-38>=2/y-38<=3:Q1/7/0/1^{Mithril Enhancements}
+
+This windmill has already been upgraded.^; [Upgraded Windmill]
+!!IF&v1=112/y-38<>2/y-38<>3:Q1/7/5/1^{Mithril Enhancements}
+
+To upgrade a windmill, the active hero must be adjacent when you ctrl-click.
+
+It takes 5 bars of mithril to upgrade a windmill.^; [Windmill]
+!!IF&v1=113:Q1/7/2/1^{Mithril Enhancements}
+
+To change the skill taught by a witch, the active hero must be adjacent when you ctrl-click (and one of your heroes must already have visited the witch).
+
+It takes 2 bars of mithril to change the skill at this witch hut.^; [Witch Hut]
+!!IF&v1=104/y-38=2:Q2/7/0/1^{Mithril Enhancements}
+
+This university has already been upgraded.^; [Upgraded University]
+
+!!IF&v1=104/y-38<>2:Q1/7/4/1^{Mithril Enhancements}
+
+To upgrade a university, the active hero must be adjacent when you ctrl-click.
+
+It takes 4 bars of mithril to upgrade a university.^; [University]
+
+
+*** Upgrade Dwelling ***
+!?FU8170;
+!!VRy1:S-1;
+!!DWv4/v5/v6:O?y1;       (check who owns dwelling)
+!!IF&y1=-1:Q1/7/0/1^{Mithril Enhancements}
+
+You can only enhance a dwelling that you already own.^;
+!!FU&y1=-1:E; (abort if unowned)
+!!OW:Ty1/?y21;       (Check team)
+!!OW:C?y2;           (check current player)
+!!OW:Ty2/?y22;       (Check team)
+!!IF&y21<>y22:Q1/7/0/1^{Mithril Enhancements}
+
+You can only enhance a dwelling that you already own.^;
+!!FU&y21<>y22:E; (abort if not same)
+!!DWv4/v5/v6:M0/?y2/?y3;
+!!VRy4&y2<111:Sy2;
+!!VRy4&y2<111:%2;
+!!IF&y4=1/y2<111:Q1/21/y2/7/0/1^{Mithril Enhancements}
+
+This dwelling cannot be further enhanced because the creatures here are already upgraded.^;
+!!FU&y4=1/y2<111:E; (Divide Monster Number by 2 to see if it's already upgraded, and if so, abort)
+!!VRy6&y2<111:Sy2;
+!!VRy6&y2<111::2;
+!!VRy6&y2<111:+1;
+!!VRy6&y2<111:%7;    (y6 is now monster level)
+!!VRy6&y2<111/y6<4/y6>0:S1;
+!!VRy6&y2<111/y6>3:S2;
+!!VRy6&y2<111/y6=0:S3;  (y6 is now cost)
+
+!!VRy6&y2=118:S1;
+!!VRy6&y2=112:S1;
+!!VRy6&y2=113:S2;
+!!VRy6&y2=114:S2;
+!!VRy6&y2=115:S1;
+!!VRy6&y2=120:S2;
+!!VRy6&y2=130:S3;
+!!VRy8:S-1;
+!!VRy8&y2=118:S119;
+!!VRy8&y2=112:S127;
+!!VRy8&y2=113:S125;
+!!VRy8&y2=114:S129;
+!!VRy8&y2=115:S123;
+!!VRy8&y2=120:S121;
+!!VRy8&y2=130:S131;          (Special table for Conflux)
+
+!!IF|y2=116/y2=117/y2>130:Q1/21/y2/7/0/1^{Mithril Enhancements}
+
+This dwelling cannot be enhanced because the creatures here cannot be upgraded further.^;
+!!FU|y2=116/y2=117/y2>130:E; (abort if non-upgradeable creature)
+!!OW:R-1/7/?y7;              (get amount of mithril)
+!!IF&y7<y6:Q1/21/y2/7/y6/1^{Mithril Enhancements}
+
+This dwelling requires %Y6 bars of mithril to upgrade. Sadly, you do not have enough.^;
+!!FU&y7<y6:E;                (check if has enough mithril)
+!!VRy8&y2<111:Sy2;
+!!VRy8&y2<111:+1;
+!!FU&y8=-1:E;                (abort if no creature selected)
+!!UN:N3/z1/y8/1;             (Get new creature name- plural)
+!!UN:N3/z2/y2/1;             (Get old creature name- plural)
+!!UN:N3/z3/y2/0;             (Get old creature name- singular)
+!!CM:R0;                     (disable standard popup)
+
+!!IF:V1/0;                       (To be sure)
+!!IF&y6>1:Q1/7/y6/2/z136009;
+
+!!IF&y6=1:Q1/7/y6/2/z136010;
+
+!!FU&-1:E;
+!!VRy6:*-1;
+!!OW:R-1/7/dy6;               (take Mithril)
+!!DWv4/v5/v6&y2<111:M0/d1/y3; (Upgrade dwelling if non-conflux)
+!!DWv4/v5/v6&y2>110:M0/y8/y3; (Upgrade dwelling if conflux)
+
+!?FU8171;
+!!VRy1:S-1;
+!!DWv4/v5/v6:O?y1;   (check who owns dwelling)
+!!IF&y1=-1:Q1/7/0/1^{Mithril Enhancements}
+
+You can only enhance a dwelling that you already own.^;
+!!FU&y1=-1:E;
+!!OW:Ty1/?y21;       (Check team)
+!!OW:C?y2;           (check current player)
+!!OW:Ty2/?y22;       (Check team)
+!!IF&y21<>y22:V10/1; (abort if not same)
+!!IF&y21<>y22:Q1/7/0/1^{Mithril Enhancements}
+
+You can only enhance a dwelling that you already own.^;
+!!OW:R-1/7/?y7;  (get amount of mithril)
+!!IF&y7<4:Q1/21/112/7/4/1^{Mithril Enhancements}
+
+This dwelling requires 4 bars of mithril to upgrade. Sadly, you do not have enough.^;
+!!IF&y7<4:V10/1; (check if has enough mithril)
+!!DWv4/v5/v6:M0/?y1/d0;
+!!IF&y1<>112:Q1/21/y1/7/0/1^{Mithril Enhancements}
+
+This dwelling cannot be further enhanced because the creatures here are already upgraded.^;
+!!IF&y1<>112:V10/1;(abort if not Air elementals in first slot)
+!!CM&-10:R0;         (disable standard popup)
+!!IF&-10:Q1/7/4/2/z136011;
+!!IF&-1:V10/1;
+!!OW&-10:R-1/7/d-4;        (take Mithril)
+!!DWv4/v5/v6&-10:M0/127/d0;
+!!DWv4/v5/v6&-10:M1/123/d0;
+!!DWv4/v5/v6&-10:M2/129/d0;
+!!DWv4/v5/v6&-10:M3/125/d0;(Upgrade dwelling)
+
+*** Upgrade Mine ***
+!?FU8172;
+!!UN:P79/=1; // check, if Mithril Mine is enabled
+!!VRy99:S-1; [Initialize y99 to -1]
+!!PO4&1:O?y99; // if yes: check, if it it a mithril forge (y99 = -2 or 0..7)
+!!IF|y99=-2/y99>-1:Q1/7/0/1^{Mithril Enhancements}
+
+The Mithril Forge cannot be upgraded.^;
+!!FU|y99=-2/y99>-1:E; // exit, if yes
+
+!!FU709:P12;         (check for "Mines change Resource every week" rule)
+!!FU&3:E;            (exit Function if mines change resources every week)
+!!VRy1:S-1;
+!!MNv4/v5/v6:O?y1;   (check who owns mine)
+!!IF&y1=-1:Q1/7/0/1^{Mithril Enhancements}
+
+You can only upgrade a mine that you already own.^;
+!!FU&y1=-1:E;
+!!OW:Ty1/?y21;       (Check team)
+!!OW:C?y2;           (check current player)
+!!OW:Ty2/?y22;       (Check team)
+!!CM:R0;             (disable standard popup)
+!!FU8184&y21<>y22:Pv4/v5/v6/99/0/0; (update and display hint text)
+!!IF&y21<>y22:Q1/7/0/1^{Mithril Enhancements}
+
+You can only upgrade a mine that you already own.^;
+!!FU&y21<>y22:E; (abort if not same)
+!!POv4/v5/v6:N?y3;
+!!FU8184&y3<>0:Pv4/v5/v6/99/0/0; (update and display hint text)
+!!MNv4/v5/v6:R?y4;    (Get resource produced)
+!!VRy8:S-2; [Initialize y8 to 2 for resource type, for info. display]
+!!VRy8|y4=0/y4=2:S-4; [Set y8 to 4 for wood or ore, for info. display]
+!!VRy8&y4=6:S-2000; [Set y8 to 2000 for gold for info. display]
+!!IF&y3<>0:Q1/y4/y8/1^{Mithril Enhancements}
+
+This mine has already been upgraded.^;
+!!FU&y3<>0:E;     (see if mine has been upgraded earlier)
+!!IF:V3/0;
+!!VRy5:S4;            (Set base Cost)
+!d!VRy5&y4<>1/y4<3:S3; (Set cost for ore/wood) (deactivated)
+!!VRy5&y4=6:S7;       (Set Cost for Gold Mine)
+!!OW:R-1/7/?y7;       (get amount of mithril)
+!!FU8184&y7<y5:Pv4/v5/v6/99/0/0; (update and display hint text)
+!!IF&y7<y5:Q1/y4/0/7/y5/1^{Mithril Enhancements}
+
+This mine requires %Y5 bars of mithril to upgrade. Sadly, you do not have enough.^;
+!!FU&y7<y5:E;     (check if has enough mithril)
+!!IF:V1/0;
+!!IF&y4=0:Q1/7/y5/2/z136012;
+
+!!IF&y4=1:Q1/7/y5/2/z136013;
+
+!!IF&y4=2:Q1/7/y5/2/z136014;
+
+!!IF&y4=3:Q1/7/y5/2/z136015;
+
+!!IF&y4=4:Q1/7/y5/2/z136016;
+
+!!IF&y4=5:Q1/7/y5/2/z136017;
+
+!!IF&y4=6:Q1/7/y5/2/z136018;
+
+!!FU&-1:E;
+!!VRy5:*-1;                (set amount to negative)
+!!OW:R-1/7/dy5;            (take mithril)
+!!POv4/v5/v6:N7;           (set flag so mine is upgraded)
+!!FU8184:Pv4/v5/v6/0/0/0;  (set hint text for upgraded mine)
+
+
+*** Special if Mines change resources every week is in effect ***
+!?FU8172;
+!!UN:P79/=1; // check, if Mithril Mine is enabled
+!!VRy99:S-1; [Initialize y99 to -1]
+!!PO4&1:O?y99; // if yes: check, if it it a mithril forge (y99 = -2 or 0..7)
+!!IF|y99=-2/y99>-1:Q1/7/0/1^{Mithril Enhancements}
+
+The Mithril Forge cannot be upgraded.^;
+!!FU|y99=-2/y99>-1:E; // exit, if yes
+
+!!FU709:P12;          (check for "Mines change Resource every week" rule)
+!!FU&-3:E;            (exit Function if mines don't change resources every week)
+!!MNv4/v5/v6:O?y1/1;  (check who owns Mine)
+!!OW:C?y2;            (check current player)
+!!FU8184&y1<>y2:Pv4/v5/v6/99/0/0; (Display hint text for protected mine)
+!!IF&y1<>y2:Q1/7/0/1^{Mithril Enhancements}
+
+You can only upgrade a mine that you already own.^;
+!!FU&y1<>y2:E;        (abort if not same)
+!!POv4/v5/v6:N?y3;
+!!FU8184&y3<>0:Pv4/v5/v6/99/0/0; (Display hint text for protected mine)
+!!IF&y3<>0:Q1/7/0/1^{Mithril Enhancements}
+
+This mine has already been protected.^;
+!!FU&y3<>0:E;         (see if mine has been protected earlier)
+!!MNv4/v5/v6:R?y4/1;  (Get resource produced)
+!!VRy5:S3;            (Set base Cost: y5)
+!!VRy5&y4<>1/y4<3:S1; (Set cost for ore/wood: y5)
+!!VRy5&y4=6:S5;       (Set Cost for Gold Mine: y5)
+!!OW:R-1/7/?y7;       (get player's current mithril: y7)
+!!FU8184&y7<y5:Pv4/v5/v6/99/0/0; (Display hint text for protected mine)
+!!IF&y7<y5:Q1/y4/0/7/y5/1^{Mithril Enhancements}
+
+This mine requires %Y5 bars of mithril to upgrade. Sadly, you do not have enough.^;
+!!FU&y7<y5:E;         (check if has enough mithril)
+!!VRz1&y4=0:Sz136019;
+!!VRz1&y4=1:Sz136020;
+!!VRz1&y4=2:Sz136021;
+!!VRz1&y4=3:Sz136022;
+!!VRz1&y4=4:Sz136023;
+!!VRz1&y4=5:Sz136024;
+!!VRz1&y4=6:Sz136025;
+!!CM:R0;                  (disable standard popup)
+!!IF:Q1/7/y5/2/z136026;
+!!FU&-1:E;
+!!VRy5:*-1;
+!!OW:R-1/7/dy5;           (take mithril)
+!!VRy4:+2;
+!!POv4/v5/v6:Ny4;         (set marker so mine is protected: N=2 through 8)
+!!FU8184:Pv4/v5/v6/0/0/0; (set hint text for protected mine)
+
+*** Mine produce Extra, AI gets gold & Replace resource piles and campfires with Mithril ***
+!?TM99&v3340<>99;
+!!IF:V9/0;
+!!IF:V10/0;
+!!UN:P36/?y-1;
+!!IF:V2/0;
+!!IF&y-1=1:V2/1;
+
+*** AI Gets Gold ***
+!!OW&-1000:R-1/7/?y-7; (get amount of mithril if AI)
+!!VRy-7&-1000:*100;
+!!OW&2/-1000:R-1/6/dy-7; (Give mithril*100 in gold to AI)
+
+*** Replace Resource Piles ***
+!!VRy-1&870:S1;
+!!UN&870:U79/-1/?v1;  (Get number of resource piles on map (for replacing with Mithril))
+!!VRy-3:S10;
+!!VRy-3&v1<10:Sv1;       (1 of the ten first stacks will always be replaced. If less than ten stacks total, one will still be replaced)
+!!VRy-1&870:S1 Ry-3;     (Draw random number to see what pile to start with)
+!!VRv5:Sv70 +v70 -1;     (Get replacing frequency)
+!!DO8179/y-1/v1/1&870:P; (Cycle through all resource piles, replace one in what value v70 holds)
+
+*** Campfires ***
+!!IF:V9/1;
+!!UN&870:U12/-1/?v1;   (Get number of campfires on map(for replacing with Mithril))
+!!VRy-3:S10;
+!!VRy-3&v1<10:Sv1;      (1 of the ten first stacks will always be replaced. If less than ten stacks total, one will still be replaced)
+!!VRy-1&870:S1 Ry-3;    (Draw random number to see what pile to start with)
+!!VRv5:Sv70 +v70 -1;    (Get replacing frequency)
+!!DO8179/y-1/v1/1&870:P;(Cycle through all Campfires, replace one in what value v70 holds)
+
+!!IF:V870/0;    (set Flag to indicate that Mithril has been added)
+!!IF:V9/0;
+
+*** Mines ***
+!!FU709:P12;          (check for "Mines change Resource every week" rule)
+!!VRy-20:Sc0;
+!!VRy-20:%7;          (get day of week)
+
+!!IF:V9/0;
+!!IF&y-20=2:V872/0;   (If day 2 of week, reset flag)
+!!IF&3/872:V9/1;
+!!IF&3/y-20<>1:V9/1;  (Don't do anything about mines if it already have been done or it's not day 1 of the week (only if mines changes resources))
+!!UN:U53/-1/?v5;      (Get number of Mines on the map)
+!!UN&v5<>0:U53/-1/1/7;      (Get location of mine: v7/v8/v9)
+!!DO8178/1/v5/1&2/v5>0/-9:P; (Cycle through all mines)
+!!IF:V9/0;
+
+!!VRy-20:Sc0;
+!!VRy-20:%7;      (get day of week)
+!!IF&y-20=1:V9/1; (Check for Windmills, Mystical Gardens and Water Weels, so they only work on day one of the week and if it hasn't been done earlier)
+
+!!VRv6:Sv71 -1; (value for frequency of replacing)
+
+*** Mystical Gardens ***
+!!UN:U55/-1/?v5;                (Get number of Mystical Gardens on the map)
+!!UN&v5<>0:U55/-1/1/7;
+!!DO8180/1/v5/1&9/-872/873/v5>0:P55;(Cycle through all Gardens)
+
+*** Water Weels ***
+!!UN:U109/-1/?v5;                (Get number of Water Weels on the map)
+!!UN&v5<>0:U109/-1/1/7;
+!!DO8180/1/v5/1&2/9/-872/v5>0:P109;(Cycle through all Weels)
+
+*** Windmills ***
+!!UN:U112/-1/?v5;                (Get number of Windmills on the map)
+!!UN&v5<>0:U112/-1/1/7;
+!!DO8180/1/v5/1&9/-872/v5>0:P112;(Cycle through all Windmills)
+!!VRy-20:Sc0;
+!!VRy-20:%7;          (get day of week)
+!!IF&y-20=1:V872/1;   (Flag that marks that Windmills, Water Wheels and Mystical Gardens have been set up. Also for mines if that rule is in effect)
+!!IF:V9/0;
+
+!?FU8180;                    (Mystical Gardens, Water Weels and Windmills)
+!!IF:V1/0;
+!!UN&x16>1:Ux1/-1/-1/7;           (get location in v7, v8 and v9)
+!!VRy2:S0 Rv6;               (Random number to see if to replace normal resource)
+!!GD7&x1=55:B?y7;            (Get if it is gold or resource)
+!!GD7&x1=55/y7=7:B5;         (resource is normally Gems)
+!!GD7&x1=55/873/y2=v6:B7;
+!!GD7&x1=55/873/y2=v6:T1;    (In one in ten, resource is Mithril)
+!!POv7/v8/v9:N?y1;           (Get PO number at position)
+!!IF&y1<>2/y1<>3:V1/1;       (abort if wrong number)
+!!POv7/v8/v9&y1=3:N2;        (reset hint text)
+!!ML7&x1=112/873/y2=v6:B7/d0;(One in ten contains Mithril)
+!!ML7&-1/x1=112:Bd0/?y3;     (Get number produced)
+!!ML7&-1/x1=112:Bd0/dy3;     (Windmill now contains new value)
+!!WM7&-1/x1=109:B?y3;        (Get Gold value in Water Wheel)
+!!WM7&-1/x1=109:Bdy3;        (Water Wheel now contains new value)
+
+
+!?FU8178;
+!!UN&x16>1:U53/-1/-1/7;      (Get location of mine: v7/v8/v9)
+!!IF:V1/0;
+!!FU709:P12;            (check for "Mines change Resource every week" rule)
+!!IF&3:V1/1;            (If mines change every week, Flag 1 set to True)
+!!MNv7/v8/v9:R?y1/1;    (Get resource produced)
+!!MNv7/v8/v9&-1:O?y5/1; (get owner of mine without redrawing)
+!!OW:C?y20;             (Get Current Player)
+!!FU&-1/y5<>y20:E;      (Exit Function if not current player)
+!!POv7/v8/v9:N?y6;      (get custom number)
+!!FU&y6=0:E;            (Exit Function if PO:N is 0)
+!!VRy7&-1:S1;
+!!VRy7&-1/y1=0:S2;
+!!VRy7&-1/y1=2:S2;
+!!VRy7&-1/y1=6:S1000;
+!!VRy8&-1/v205>173:Sv205;
+!!VRy8&-1/v205>173:-174;        (If resource week, get what resource)
+!!VRy7&-1/v205>173/y1=y8:*2;    (double resource if resource week)
+!!OW&-1:R-1/y1/dy7;             (give adjusted mine resources to player)
+!!POv7/v8/v9&-1:Nd-1;           (set custom number to one less)
+!!FU8184&-1:Pv7/v8/v9/0/y6/0/0; (update hint text, resetting if no longer upgraded)
+
+*** Special if mine change resource every week ***
+!!FU709:P12;            (check for "Mines change Resource every week" rule)
+!!FU&-3:E;              (Exit Function if mines don't change every week)
+!!POv7/v8/v9:N?y21;          (Get custom number)
+!!VRy20:Sy21 -2; (transform number to resource)
+!!MNv7/v8/v9&-9/y21>1:Ry20/1;(Set resource produced)
+!!FU8184&-9/y21>1:Pv7/v8/v9/0/y6/0/0; (update hint text)
+!!POv7/v8/v9:N0; (reset custom number so mine is no longer protected)
+!!FU8184&1:Pv7/v8/v9/0/1/0/0; (update hint text to show unprotected)
+
+
+
+*** Upgrade Shrines ***
+** Level 1 Shrine **
+!?FU8173;
+!!SRv4/v5/v6:S?y1;   (Get Spell Number: y1)
+!!OW:R-1/7/?y2;  (Get amount of mithril)
+!!IF&y2<1:Q1/7/1/1^{Mithril Enhancements}
+
+This shrine requires 1 bar of mithril to change the spell. Sadly, you do not have any.^;
+!!FU&y2<1:E; (Exit if not enough mithril)
+!!UN:N1/z1/y1;   (get Spell name: z1)
+!!CM:R0;         (disable standard popup)
+!!IF:Q1/7/1/2/z136027;
+!!FU&-1:E;
+!!OW:R-1/7/d-1; (Take Mithril)
+!!FU$spell$:P1/1/0/0/1/1/y1; [Spell number in y-99, skip banned spells, exclude spell y1]
+!!SRv4/v5/v6&y-99>=0:Sy-99; (Setup new Spell)
+
+** Level 2 Shrine **
+!?FU8174;
+!!SRv4/v5/v6:S?y1;   (Get Spell Number: y1)
+!!OW:R-1/7/?y2;  (Get amount of mithril)
+!!IF&y2<2:Q1/7/2/1^{Mithril Enhancements}
+
+This shrine requires 2 bars of mithril to change the spell. Sadly, you do not have enough.^;
+!!FU&y2<2:E; (Exit if not enough mithril)
+!!UN:N1/z1/y1;   (get Spell name: z1)
+!!CM:R0;         (disable standard popup)
+!!IF:Q1/7/2/2/z136028;
+!!FU&-1:E;
+!!OW:R-1/7/d-2; (Take Mithril)
+!!FU$spell$:P2/2/0/0/1/1/y1; [Spell number in y-99, skip banned spells, exclude spell y1]
+!!SRv4/v5/v6&y-99>=0:Sy-99; (Setup new Spell)
+
+** Level 3 Shrine **
+!?FU8175;
+!!SRv4/v5/v6:S?y1;   (Get Spell Number: y1)
+!!OW:R-1/7/?y2;      (Get amount of mithril)
+!!IF&y2<3:Q1/7/3/1^{Mithril Enhancements}
+
+This shrine requires 3 bars of mithril to change the spell. Sadly, you do not have enough.^;
+!!FU&y2<3:E; (Exit if not enought mithril)
+!!UN:N1/z1/y1;   (get Spell name: z1)
+!!CM:R0;         (disable standard popup)
+!!IF:Q1/7/3/2/z136029;
+!!FU&-1:E;
+!!OW:R-1/7/d-3; (Take Mithril)
+!!FU$spell$:P3/3/0/0/1/1/y1; [Spell number in y-99, skip banned spells, exclude spell y1]
+!!SRv4/v5/v6&y-99>=0:Sy-99; (Setup new Spell)
+
+
+*** Castles ***
+!?FU8176;
+!!CM:R0;          (disable standard popup)
+!!CAv4/v5/v6:O?y1;    (Check owner of castle)
+!!OW:C?y2;            (check current player)
+!!IF&y1<>y2:Q1/7/0/1^{Mithril Enhancements}
+
+You can only enhance a town with special terrain if you already own the town.^;
+!!FU&y1<>y2:E;
+!!IF:V3/0;
+!!OW-10:R-1/7/?y2;    (Get amount of mithril)
+!!VRz-5:Sz136004; (set z-5 to "bars")
+!!VRz-5&y2=1:Sz136005; (set z-5 to "bar" if only 1)
+!!IF:V9/0;        (Special for Magic Plains and Cursed Ground)
+!!IF&y2<1:Q1/7/1/1^{Mithril Enhancements}
+
+You need at least 1 bar of mithril to enhance a town with special terrain. Sadly, you do not have any.^;
+!!FU&y2<1:E;
+!!IF&y2<3:V9/1;
+!!CAv4/v5/v6:N?z1;(Get Town Name)
+!!FU709:P4;       (check for "Heroes Create Magic Plains each day" rule)
+!!IF&3:M1/z136030;
+!!CM:R0;          (disable standard popup)
+!!FU&3:E;
+!!IF&-9:Q1/z136031;
+!!IF&9:Q1/7/1/2/z136032;
+
+!!FU&-1:E;
+!!IF&-9:G1/1/0/z136042/z136033/z136034/z136035/z136036/z136037/z136038/z136039/z136040/z136041/0/0/0;
+!!IF&9:G1/1/0/z136042/z136033/z136034/z136035/z136036/z136037/z136038/z136039/0/0/0/0/0; (variables are taken from ERT file)
+!!OW&v1<65:R-1/7/d-1;
+!!OW&v1>64:R-1/7/d-3; (take Mithril)
+!!VRy5&v1=1:S227;
+!!VRy5&v1=2:S222;
+!!VRy5&v1=4:S224;
+!!VRy5&v1=8:S226;
+!!VRy5&v1=16:S228;
+!!VRy5&v1=32:S229;
+!!VRy5&v1=64:S231;
+!!VRy5&v1=128:S46;
+!!VRy5&v1=256:S21; (set y5 to type of magic terrain)
+!!VRy3:Sv4;
+!!VRy4:Sv5;
+!!VRy4&v1<>256/v1<>128:+2; (setup were to place terrain)
+!!VRy3&v1=256:+2;
+!!VRy4&v1=256:+1;  (Special for Cursed Ground)
+!!VRy3&v1=128:+2;
+!!VRy4&v1=128:+1;  (Special for Magic Plains)
+!!UN:Iy3/y4/v6/y5/0/y5/0/-1/0; (Place terrain)
+!!VRy3:+1;
+!!UN:Iy3/y4/v6/y5/0/y5/0/-1/0; (Place second patch(unless Cursed Ground))
+
+
+*** Witch Hut ***
+!?FU8177;
+!!OW:R-1/7/?y2;        (Get amount of mithril)
+!!IF&y2<2:Q1/7/2/1^{Mithril Enhancements}
+
+It takes 2 bars of mithril to change the skill that a witch teaches. Sadly, you do not have enough.^;
+!!FU&y2<2:E;       (Check if enough Mithril)
+!!WHv4/v5/v6:S?y1; (Get skill)
+!!UN:N4/z1/y1;     (Get skill name)
+!!CM:R0;           (disable standard popup)
+!!IF:Q1/7/2/2/z136043;
+!!FU&-1:E;
+!!OW:R-1/7/d-2;   (Take Mithril)
+!!VRy2:S0;            (Set to 0)
+!!VRy2:T26;
+!!VRy2&y2=>y1:+1; (Draw random skill)
+!!WHv4/v5/v6:Sy2; (Set skill)
+
+*** Water Wheel ***
+!?FU8181;
+!!POv4/v5/v6:N?y1;   (Get PO number)
+!!IF|y1=2/y1=3:Q1/7/0/6/2000/1^{Mithril Enhancements}
+
+This water wheel has already been upgraded.^;
+!!FU|y1=2/y1=3:E;(Abort if Upgraded earlier)
+!!OW:R-1/7/?y2;  (Get amount of mithril)
+!!IF&y2<5:Q1/7/5/1^{Mithril Enhancements}
+
+It takes 5 bars of mithril to upgrade a water wheel. Sadly, you do not have enough.^;
+!!FU&y2<5:E; (Check if enough Mithril)
+!!CM:R0;         (disable standard popup)
+!!IF:Q1/7/5/2/z136044;
+!!FU&-1:E;
+!!OW:R-1/7/d-5;    (Take Mithril)
+!!POv4/v5/v6:N2;   (setup so it's upgraded)
+!!POv4/v5/v6&y5=0:N3;(setup so it's upgraded (and visited hint text))
+
+
+***  Windmill ***
+!?FU8182;
+!!POv4/v5/v6:N?y1;   (Get PO number)
+!!IF|y1=2/y1=3:Q1/7/0/1^{Mithril Enhancements}
+
+This windmill has already been upgraded.^;
+!!FU|y1=2/y1=3:E;(Abort if Upgraded earlier)
+!!OW:R-1/7/?y2;  (Get amount of mithril)
+!!IF&y2<5:Q1/7/5/1^{Mithril Enhancements}
+
+It takes 5 bars of mithril to upgrade a windmill. Sadly, you do not have enough.^;
+!!FU&y2<5:E; (Check if enough Mithril)
+!!CM:R0;         (disable standard popup)
+!!IF:Q1/7/5/2/z136045;
+!!FU&-1:E;
+!!OW:R-1/7/d-5;       (Take Mithril)
+!!POv4/v5/v6:N2;      (setup so it's upgraded)
+!!POv4/v5/v6&y5=0:N3;(setup so it's upgraded(and visited hint text))
+
+*** Setup hint text for visted windmills and water wheels ***
+!?OB112;
+!!UN:P36/?y-2;
+!!POv998/v999/v1000&y-2=1:N?y-1;
+!!POv998/v999/v1000&y-1=2/y-2=1:N3; (For Hint text)
+
+!?OB109;
+!!UN:P36/?y-2;
+!!POv998/v999/v1000&y-2=1:N?y-1;
+!!POv998/v999/v1000&y-1=2/y-2=1:N3; (For Hint text)
+
+!?FU8183;              (Shipyard)
+!!VRy1:Sv4;
+!!VRy1:-1;             (Setup location where Lighthouse will be placed)
+!!TRy1/v5/v6:E?y2;
+!!IF&y2=0:Q1/7/0/1^{Mithril Enhancements}
+
+This shipyard has already been upgraded with a lighthouse.^;
+!!FU&y2=0:E;   (check if entrance(which means that there's a lighthouse already))
+!!SYv4/v5/v6:O?y3; (check who owns yard)
+!!OW:C?y2;         (check current player)
+!!IF&y2<>y3:Q1/7/0/1^{Mithril Enhancements}
+
+You can only build a lighthouse at a shipyard that you own.^;
+!!FU&y2<>y3:E; (if not the same, abort)
+!!OW:R-1/7/?y2;    (Get amount of mithril)
+!!IF&y2<3:Q1/7/3/1^{Mithril Enhancements}
+
+It takes 3 bars of mithril to build a lighthouse at a shipyard. Sadly, you do not have enough.^;
+!!FU&y2<3:E;   (Exit if not enough Mithril)
+!!CM:R0;           (disable standard popup)
+!!IF:Q1/7/3/2/z136046;
+!!FU&-1:E;
+!!OW:R-1/7/d-3;      (Take Mithril)
+!!TRy1/v5/v6:P1;     (Make square passable(Maybe unnecessary))
+!!UN:Iy1/v5/v6/42/0; (Place Lighthouse)
+!!MNy1/v5/v6:Oy3;    (Setup owner)
+
+
+*** Liths ***
+!?FU8185;
+!!OW:R-1/7/?y2;    (Get amount of mithril)
+!!IF&y2<1:Q1/7/1/1^{Mithril Enhancements}
+
+It takes 1 bar of mithril to check what's on the other side of a monolith. Sadly, you do not have any.^;
+!!FU&y2<1:E;   (Check if enough Mithril)
+!!VRz1&x1=1:Sz136047;
+!!VRz1&x1=2:Sz136048;
+!!HEx2:B0/?z2; (get hero name)
+!!HEx2:R2/?y1;
+!!VRz3&y1=0:Sz136049;
+!!VRz3&y1=1:Sz136050;
+
+!!CM:R0; (disable standard popup)
+!!IF:Q1/z136051;
+!!FU&-1:E;
+!!OW:R-1/7/d-1;   (Take Mithril)
+!!VRv1&x1=1:S44;
+!!UN:Uv1/v2/?y2;  (get number of liths)
+!!DO8186/1/y2/1:P;(loop through liths)
+
+!?FU8186;
+!!UN:Uv1/v2/x16/3;   (Get coords of lith)
+!!OW:C?y1;           (Get current player)
+!!UN:Sv3/v4/v5/y1/2; (open shroud)
+!!UN:Lv3/v4/v5/0;    (Center view)
+
+*** University ***
+!?FU8187;
+!!IF:V1/0; (Init flag)
+!!VRy9:S4;                  (init Mithril Cost for upgrading to Advanced Universities)
+!!OW:R-1/7/?y7;             (get owner Mithril)
+!!PO4:N?y8; (check if already upgraded)
+!!IF&y8=2:Q2/7/0/1^{Mithril Enhancements}
+
+This university has already been upgraded.^;
+!!IF&y7<y9/y8<>2:Q2/7/y9/1^{Mithril Enhancements}
+
+It takes %Y9 bars of mithril to upgrade a university. Sadly, you do not have enough.^;
+!!IF&y8<>2/y7=>y9:Q1/7/y9/2/z136061; (upgrading need Mithril)
+!!CM&y8<>2/y7=>y9:R0;      (disable standard msg)
+!!PO4&1:N2;        (setup Advanced University PO number (=2 if upgraded with Mithril))
+!!VRy7&1:-y9;              (Mithril calculations for payment)
+!!OW&1:R-1/7/y7;           (set updated Mithril)
+
+!$OB104/0;                   (post-visit trigger for Universities)
+!!POv998/v999/v1000:N?y-5;   (check if Advanced University)
+!!FU&y-5<>2:E;               (exit trigger if not an Advanced University)
+!!VRy-1:S28; !!VRy-2:S28;    (set skill variables out of range)
+!!VRy-3:S0;                  (init trigger-based var y-3)
+!!IF:V2/0;                   (init flag 2)
+!!OW:R-1/6/?y-4;             (get owner gold)
+!!DO8188/0/27/1:P;           (check for Basic skills on hero)
+!!IF&y-4<3000/1000/y-1<28:Q2/6/3000/1/z136062;
+!!IF&y-4>2999/1000/y-1<28:Q2/6/3000/2/z136063;
+!!FU8189&y-4>2999/1000/2:P; (function for human if enough gold)
+!!HE-1&y-1<28/-1000:Sy-1/2; (AI gets max 2 skills Advanced (doesn't pay gold))
+!!HE-1&y-2<28/-1000:Sy-2/2;
+
+!?FU8188;                    (check for Basic skills on hero)
+!!HE-1:Sx16/?y1;             (get skill expertise)
+!!VRy-1&y-1=28/y1=1:Sx16;    (set first skill)
+!!VRy-2&y-1<x16/y1=1:Sx16;   (set second skill)
+
+!?FU8189;                    (human interaction for skills)
+!!IF:V2/0;                   (re-init flag 2)
+!!VRy1:Sy-1 *3 +4;           (calculate Pic for first skill)
+!!VRy2:Sy-2 *3 +4;           (calculate Pic for second skill)
+!!UN:N4/1/y-1; (Get skill name 1)
+!!UN:N4/2/y-2; (Get skill name 2)
+
+!!IF&y-1<28/y-2<28:Q2/20/y1/20/y2/7/z136064;  (2 skills)
+!!HE-1&2/y-1<28/y-2<28:Sy-1/2;  (left one chosen)
+!!HE-1&-2/y-1<28/y-2<28:Sy-2/2; (right one chosen)
+
+!!VRy1&-2/y-1<28/y-2<28:Sy2;
+!!VRz1&-2/y-1<28/y-2<28:Sz2;
+
+!!IF:Q2/20/y1/1/z136065;     (Learn message)
+!!HE-1&y-1<28/y-2=28:Sy-1/2; (only 1 skill, no choice)
+!!OW&y-1<28:R-1/6/d-3000;    (pay 3000 gold)
+
+
+!$OB53;                          (Post-visit trigger for Mines)
+!!UN:P36/?y-1;                   (Check if Mithril Enhancements enabled: y-1)
+!!PO998:N?y-2;                   (Check PO:N number: y-2)
+!!FU|y-1<>1/y-2=0:E;             (Exit trigger if script not enabled or not upgraded/protected)
+!!FU8184:Pv998/v999/v1000/0/0/0; (Update mine hint text)
+
+
+!?FU8184;              (Hint text for upgraded/protected mines)
+ (Location of mine = x1/x2/x3, x4=99 if called from CM Trigger)
+ (x5=1 if mine no longer upgraded, restore hint text)
+ (x6=88 if CM Trigger call when not clicking on yellow square)
+
+!!OBx1/x2/x3:H?y4;              (Hint text z variable index: y4)
+!!VRx1&x6=88/y4<=0:-1;          (Adjust x1 variable for possible 1 square left click: x1)
+!!OBx1/x2/x3&x6=88/y4=0:H?y4;   (Hint text z variable index if clicked on left: y4)
+!!VRx1&x6=88/y4<=0:+2;          (Adjust x1 variable for possible 1 square right click: x1)
+!!OBx1/x2/x3&x6=88/y4<=0:H?y4;  (Hint text z variable index if clicked on right: y4)
+
+!!CM&x4=99/y4<=0:R1;    (Re-enable normal right-click operation for CM trigger if exiting)
+!!FU&y4<=0/x4=99:E;     (Exit if mine not upgraded/protected and called by CM trigger)
+!!MNx1/x2/x3:R?y1/1 O?y2/1; (Type of Mine: y1, Owner: y2)
+!!OBx1/x2/x3:U?y6;      (Subtype of mine: y6)
+
+!!VRz-1&y1=0:Sz136052; (Sawmill: z-1)
+!!VRz-1&y1=1:Sz136053; (Alchemist's Lab: z-1)
+!!VRz-1&y1=2:Sz136054; (Ore Pit: z-1)
+!!VRz-1&y1=3:Sz136055; (Sulfur Dune: z-1)
+!!VRz-1&y1=4:Sz136056; (Crystal Cavern: z-1)
+!!VRz-1&y1=5:Sz136057; (Gem Pond: z-1)
+!!VRz-1&y1=6:Sz136058; (Gold Mine: z-1)
+!!VRz-1&y6=7:Sz136085; (Abandoned Mine: z-1)
+
+!!FU709:P12;     (check for "Mines change Resource every week" rule)
+!!VRz-2&-3:Sz136066; (Upgraded: z-2)
+!!VRz-2&3:Sz136067; (Protected: z-2)
+
+!!VRz-3&y2<0:Sz136086; (no player: z-3)
+!!VRz-3&y2=0:Sz136068; (red: z-3)
+!!VRz-3&y2=1:Sz136069; (blue: z-3)
+!!VRz-3&y2=2:Sz136070; (tan: z-3)
+!!VRz-3&y2=3:Sz136071; (green: z-3)
+!!VRz-3&y2=4:Sz136072; (orange: z-3)
+!!VRz-3&y2=5:Sz136073; (purple: z-3)
+!!VRz-3&y2=6:Sz136074; (teal: z-3)
+!!VRz-3&y2=7:Sz136075; (pink: z-3)
+!!VRz-4&y1=0:Sz136076; (wood: z-4)
+!!VRz-4&y1=1:Sz136077; (mercury: z-4)
+!!VRz-4&y1=2:Sz136078; (ore: z-4)
+!!VRz-4&y1=3:Sz136079; (sulfur: z-4)
+!!VRz-4&y1=4:Sz136080; (crystal: z-4)
+!!VRz-4&y1=5:Sz136081; (gems: z-4)
+!!VRz-4&y1=6:Sz136082; (gold: z-4)
+!!VRy5:S809 +y1;   (Index for hint text z variable: y5)
+!!VRzy5&x4=0:Sz136084;  (Upgraded/Protected mine hint text: zy5)
+!!OBx1/x2/x3&x4=0:Hzy5; (Set new hint text: zy5) (z809..z815)
+!!OBx1/x2/x3&x5=1:H0; (If x5=1 (mine no longer upgraded or protected), restore hint text)
+
+!!IF&x4=99:Q1/-1/-1/4/z136083; (Display text for CM trigger)
+!!CM&x4=99:R0; (Disable standard right-click operation)
+
+
+*** Replacement functions ***
+
+!?FU8179;
+
+*** Resource Pile ***
+!!UN&-9:U79/-1/x16/2;   (Store location of resource pile nr x16 in v2/v3/v4)
+!!OBv2/v3/v4&-9:U?y1;   (Get Subtype)
+!!ARv2/v3/v4&-9:V?y2;   (Get amount)
+!!VRy3:Sy2;
+!!VRy2&-9/y1<>1/y1<>3/y1<>4/y1<>5::2;(Divide by 2 if wood, ore or gold)
+!!VRy2&-9/y1<>1/y1<>3/y1<>4/y1<>5:+1;(Then add 1 to get the same amount range as other stacks)
+
+!!UN&-9/y3<10/y3>2:Ov2/v3/v4;      (Delete old resource pile)
+!!UN&-9/y3<10/y3>2:Iv2/v3/v4/79/7/79/7/-1/0; (place Mithril)
+!!ARv2/v3/v4&-9/y3<10/y3>2:Vy2;    (set new amount)
+!!VRv6&-9/y3<10/y3>2:+1;
+
+*** Campfire ***
+!!UN&9:U12/-1/x16/2;    (Store location of campfire nr x16 in v2/v3/v4)
+!!FRv2/v3/v4&9:B?y1/?y2;(Get resource and amount)
+!!FRv2/v3/v4&9:B7/y2;   (Setup to contain Mithril)
+
+!!VRx16&-9/y2<10/y2>2:Rv5;
+!!VRx16&9:Rv5; (distance between piles is random between 1 and 30. If resource and not replaced, move to next)
+

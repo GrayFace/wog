@@ -1,0 +1,254 @@
+  First fixes in 3.59:
+
+1. 3.58 bug:
+*************
+  I checked the old enough Perfecto's report that right mouse click on
+a map start giving you "Cannot add more objects." later in the game.
+  Here is a reason why it happens.
+  The next !!OB command: H,M,D,E,S,R add another object in the ERM
+internal structures anyway EVEN if you use a check syntax
+(!!OB...:H?v10;). So later in the game, the internal table is
+overflowed and a player gets the message. This is how it works now.
+  I will fix the problem with checking syntax in 3.59 or earlier (if
+we make a new executable for the patch), but now I think that it is
+quite important to check all scripts that uses mentioned !!OB command
+to make sure that they are not used with checking syntax too often.
+  If you have something to say here, I am listening :-)
+*************
+  Now OB:H,M now should not add an internal object if you use a
+check/get syntax.
+  Now if you check/get a hint zvar with OB:H for an object that has no
+hint settings, it returns 0 (and do not add the object to the table).
+  The easiest way to check the fix is to use !!OB...:H?$; in long
+cycle (say 100000 times). You should not get the message that there is
+no more room in the internal table.
+
+2. Crash fix.
+  If you play RoE campaign (not WoGified), goes to the next map and
+one of heroes keep new WoG artifact, there was a crash.
+  Now should be fixed.
+
+3. I found a potential error in my code that removes an object from a
+map (in particular removing a drawing squares). It might be a reason
+of incorrect drawing of some dwellings sometimes.
+
+4. The bug with Arrow Towers in MP mode:
+*************
+  Also Tower Experience may work incorrect (different damage) if:
+- it is the first day of a week;
+- you attack another human player who's turn is after yours.
+  The problem appears because for you the enemy towers get experience
+bonus of a new week but for your opponent they did not yet.
+  This may be fixed with hard coded changes only.
+*************
+  Should be fixed now.
+
+5. <3.59 bug:
+*************
+  If you use in the third parameter in HE:C0 any variable index -1 or
+-2 (in your case y-1 or y-2) it is interpreted as -1 and -2 (some old
+code left) and so works as an upgrade/downgrade syntax.
+  So until it is fixed in the next EXE, you may not use a negative
+indexes of variables in HE:C0 command at a third place.
+  Example:
+!!HE-1:C0/0/?y-1/?y-4; incorrect (assumed C0/0/-1...)
+!!HE-1:C0/0/?y-2/?y-4; incorrect (assumed C0/0/-2...)
+!!HE-1:C0/0/?y-3/?y-4; correct
+!!HE-1:C0/0/?y-4/?y-1; correct
+!!HE-1:C0/0/?y-4/?y-2; correct
+!!HE-1:C0/0/?y-4/?y-3; correct
+*************
+  Should work correct way now.
+
+6. Timothy's wish:
+*************
+TP> Here's an example:
+TP> !!HE-1:C0/0/d/d/?y1/12;
+TP> I believe y1 returns stack 0's experience and not the rank,
+*************
+  Now if the modifier is >=10 and you use C0 get syntax to get the
+stack experience, it returns an experience level.
+
+  All changes are not tested!
+
+
+*********************************************************************
+  Some changes.
+
+  These are changes are mostly for MP mode for Horn will test these
+features on the upcoming tournaments before 3.59 release.
+
+1. Now all dialogs that are used to fill waiting with creature
+movement animation shows only WoG creatures. Usually you can see them
+when "Host generating map..." or "Waiting for other players..." and so
+on.
+
+2. Fixed network MP time SoD bug.
+  When you pass turn to the next player and there is a turn time
+limit, the timer starts count down immediately that your PC gets
+control but not you press the button "your turn...".
+  Now timer starts count down when you press the button not earlier
+and will wait for it forever.
+
+3. New receiver !!TL Turn Limit Control.
+  Commands:
+  E$ - turn "show left time always" ON(1) or OFF (0).
+    If you turn it ON, it will shows seconds left always but not tle
+latest 10 seconds as usual.
+  C# - control turn time run(0) or pause(1)
+    The latest command works. So you can call "pause it" 10 times but
+call "continue" one time and it will run. So no calling stack present.
+  T#/$ - time routine
+   # = 0, $ = current time in ms (get/set/check)
+   # = 1, $ = current time in s (get/set/check)
+   # = 2, $ = turn start time in ms (get/set/check)
+   # = 3, $ = turn start time in s (get/set/check)
+   # = 4, $ = pause start time in ms (get/set/check)
+   # = 5, $ = pause start time in s (get/set/check)
+   # = 6, $ = turn length time in ms (get/set/check)
+   # = 7, $ = turn length time in s (get/set/check)
+  Now how it works.
+  When a player gets control, the current time is stored in "turn
+start time". Then every second the engine checks that:
+  current_time - turn_start_time < turn_length
+  If it is false, the turn ends.
+  Now if you go to battle, the timer is paused. At this moment the
+current time is stored in "pause start time".
+  Until "pause start time" is not 0, the turn will continue.
+  Hint: to check if the turn paused or not, get "pause start time" and
+if it is 0, the timer runs but if it is 0, the timer is paused.
+  When the timer continues (the battle is finished) "turn start time"
+is modified to reduce spent time for a length of the pause:
+  turn_start_time = current_time - pause_start_time + turn_start_time
+  and pause_start_time is set to 0.
+
+
+  Save is incompatible with the previous T1 save.
+
+  To discuss.
+  I found a way to show any internal message/request dialog
+(IF:M,IF:Q) no longer than a fixed time. Say you ask a player "Do you
+want ...?" and this dialog will wait for a player answer no more than
+10 seconds than leave with a default answer.
+  Do we need this feature?
+  And if yes, how to incorporate this time to the ERM commands a
+better way for scriptwriters?
+
+*********************************************************************
+1. I disabled one call to avoid opening minimap to the first human
+hero before it gets a control. In original SoD first you can see the
+latest AI hero location and then it moves to a new human hero or town
+location. The problem is that now we have a lot of ERM executable code
+between these two events and it looks a bit incorrect that you can see
+the latest AI location.
+  Now the first minimap update should not apper.
+
+2. I fixed a check/get syntax for OB:M
+  It may return nonsense value if there is no this object setting
+before.
+
+3. OB:H returns now 0 for check/get syntax if this object was not set
+before.
+
+4. I added a control over structure building sequence in towns.
+New command CD:B
+  Syntax:
+    B0/town/struct/ENdis - global enanle/disable structure
+    B1/town/struct/$/$ - build dependence
+    B2/town/struct/#/#/#... - build dependence
+    B3/town/struct/$/$ - exclusion dependence
+    B4/town/struct/#/#/#... - exclusion dependence
+  Details:
+    B0/#1/#2/$;
+      Enable/disable #2 structure to build in any towns of #1 type.
+      $ - flag (0=disabled, 1=enabled).
+    B1/#1/#2/$1/$2;
+      #2 structure of town #1 dependencies. Every set bit in $1 (dword
+0) or in $2 (dword 1) means that this structure may be build only when
+a structure represented by this bit is built.
+    Example: $1=0x00000024 means that this structure may be build only
+when Magic Guild Lvl 3 and Tavern both built.
+    B2/#1/#2/#3/#4/#5...
+      Another way to set dependencies (you cannot check or get it with
+this command, use B1 for it).
+    #2 structure of town #1 may be built only when #3, #4, #5...
+structures are built.
+    B3/#1/#2/$1/$2;
+      Exclusive structures. It has the same syntax as B1 but this
+command means that if this structure is built all dependent structures
+will be removed from the town screen. Usually it is used for a
+specific structures like upgraded dwellings (when you build then
+non-upgraded dwellings are removed) and Magic Guild.
+   I do not think that this command is really important but added for
+any case.
+    B4/#1/#2/#3/#4/#5...
+      Another way to set dependencies like in B3. The syntax is
+similar to B2 command.
+  You may use command as instructions.
+
+  Example:
+!#CD:B2/0/0/30/31/37;
+  Make Magic Guild Level1 in Castle depends on Dweling 1, Dwelling 2
+and upgraded Dwelling 1.
+
+  Structures list.
+  I checked the help and found incorrect format (Format U) in my
+version. Perhaps it is yet wrong. So here is the list:
+*******************************
+?  - unknown for me.
+#d - index of dword in CD:B1 and CD:B3
+#b - bit reference in dword #d
+#  - index of structure
++  - upgraded version or version for upgraded dwelling support
+value in parenthesis is town type indexes
+#d-#b--------#--description
+0  00000001  0  Magic Guild Lvl 1
+0  00000002  1  Magic Guild Lvl 2
+0  00000004  2  Magic Guild Lvl 3
+0  00000008  3  Magic Guild Lvl 4
+0  00000010  4  Magic Guild Lvl 5,?(6,7)
+0  00000020  5  Tavern
+0  00000040  6  Shipyard(0,4,7,8),?(1,2,3,5,6)
+0  00000080  7  Fort
+0  00000100  8  Citadel
+0  00000200  9  Castle
+0  00000400 10  Village
+0  00000800 11  Town Hall
+0  00001000 12  City Hall
+0  00002000 13  Capitol
+0  00004000 14  Marketplace
+0  00008000 15  Resource Silo
+0  00010000 16  Blacksmith
+0  00020000 17  Lighthouse(0),Mystic Pond(1),Artifact Merchants(2,5,8),?(3),Cover of Darkness(4),Escape Tunnel (6),Cage of
+Warlords(7)
+0  00040000 18  Griffin Bastion(0),Miner's Guild(1),Sculptor's Wings(2),Birthing Pools(3),Unearthed Graves(4),Mushroom
+Rings(5),Mess Hall(6),Captain's Quarters(7),Garden of Life(8)
+0  00080000 19  Griffin Bastion+(0),Miner's Guild+(1),Sculptor's Wings+(2),Birthing Pools+(3),Unearthed
+Graves+(4),Mushroom Rings+(5),Mess Hall+(6),Captain's Quarters+(7),Garden of Life+(8)
+0  00100000 20  ?(0,1,2,3,4,5,6,7,8)
+0  00200000 21  Stables(0),Fountain of Fortune(1),Lookout Tower(2),Brimstone Storm clouds(3),Necromancy amplifier(4),Mana
+Vortex(5),Freelance Guild (6),Glyphs of Fear(7),Magic University(8)
+0  00400000 22  Brotherhood of the Sword(0),Treasure(1),Library(2),Castle Gate(3),Skeleton Transformer(4),Portal of
+Summoning(5),Ballista Yard(6),Blood Obelisk(7),?(8)
+0  00800000 23  ?(0,1,4,7,8),Wall of Knowledge(2),Order of Fire(3),Battle Scholar Academy(5),Hall of Valhala(6)
+0  01000000 24  ?(0,2,4,5,6,7,8),Dendroid Saplings(1),Cages(3)
+0  02000000 25  ?(0,2,4,5,6,7,8),Dendroid Saplings+(1),Cages+(3)
+0  04000000 26  Grail
+0  08000000 27  ?(x)
+0  10000000 28  ?(x)
+0  20000000 29  ?(x)
+0  40000000 30  Dwelling 1
+0  80000000 31  Dwelling 2
+1  00000001 32  Dwelling 3
+1  00000002 33  Dwelling 4
+1  00000004 34  Dwelling 5
+1  00000008 35  Dwelling 6
+1  00000010 36  Dwelling 7
+1  00000020 37  Dwelling 1+
+1  00000040 38  Dwelling 2+
+1  00000080 39  Dwelling 3+
+1  00000100 40  Dwelling 4+
+1  00000200 41  Dwelling 5+
+1  00000400 42  Dwelling 6+
+1  00000800 43  Dwelling 7+
+*******************************

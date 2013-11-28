@@ -1,0 +1,2301 @@
+ZVSE
+ERMS_ScriptDate=22.11(November).2013
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+
+** Extra informations and improvements for spells (working title) by Alexandru Balahura
+** Version 1.1
+** Script108.erm
+** WoG Option: 308
+** Last Updated: July 9, 2013
+
+
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+*Variables: v2075-v2099
+*Functions: FU687-FU696
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+
+!#UN:P308/=1; !#FU&-1:E;   [Check is the script is enabled, otherwise exit]
+
+
+
+ ** Extra informations for spells **
+
+
+
+** Adventure Spells **
+
+
+*Summon Boat
+!#SS0:D0/?y-2;
+!#VRy-2:Sz308001;
+!#SS0:D0/y-2;
+
+!#SS0:D1/?y-2;
+!#VRy-2:Sz308002;
+!#SS0:D1/y-2;
+
+!#SS0:D2/?y-2;
+!#VRy-2:Sz308003;
+!#SS0:D2/y-2;
+
+!#SS0:D3/?y-2;
+!#VRy-2:Sz308004;
+!#SS0:D3/y-2;
+
+
+*Scuttle Boat
+!#SS1:D0/?y-2;
+!#VRy-2:Sz308005;
+!#SS1:D0/y-2;
+
+!#SS1:D1/?y-2;
+!#VRy-2:Sz308006;
+!#SS1:D1/y-2;
+
+!#SS1:D2/?y-2;
+!#VRy-2:Sz308007;
+!#SS1:D2/y-2;
+
+!#SS1:D3/?y-2;
+!#VRy-2:Sz308008;
+!#SS1:D3/y-2;
+
+
+*Visions
+!#SS2:D0/?y-2;
+!#VRy-2:Sz308009;
+!#SS2:D0/y-2;
+
+!#SS2:D1/?y-2;
+!#VRy-2:Sz308010;
+!#SS2:D1/y-2;
+
+!#SS2:D2/?y-2;
+!#VRy-2:Sz308011;
+!#SS2:D2/y-2;
+
+!#SS2:D3/?y-2;
+!#VRy-2:Sz308012;
+!#SS2:D3/y-2;
+
+
+*View Earth
+!#SS3:D0/?y-2;
+!#VRy-2:Sz308013;
+!#SS3:D0/y-2;
+
+!#SS3:D1/?y-2;
+!#VRy-2:Sz308014;
+!#SS3:D1/y-2;
+
+!#SS3:D2/?y-2;
+!#VRy-2:Sz308015;
+!#SS3:D2/y-2;
+
+!#SS3:D3/?y-2;
+!#VRy-2:Sz308016;
+!#SS3:D3/y-2;
+
+
+*Disguise
+!#SS4:D0/?y-2;
+!#VRy-2:Sz308017;
+!#SS4:D0/y-2;
+
+!#SS4:D1/?y-2;
+!#VRy-2:Sz308018;
+!#SS4:D1/y-2;
+
+!#SS4:D2/?y-2;
+!#VRy-2:Sz308019;
+!#SS4:D2/y-2;
+
+!#SS4:D3/?y-2;
+!#VRy-2:Sz308020;
+!#SS4:D3/y-2;
+
+
+*View Air
+!#SS5:D0/?y-2;
+!#VRy-2:Sz308021;
+!#SS5:D0/y-2;
+
+!#SS5:D1/?y-2;
+!#VRy-2:Sz308022;
+!#SS5:D1/y-2;
+
+!#SS5:D2/?y-2;
+!#VRy-2:Sz308023;
+!#SS5:D2/y-2;
+
+!#SS5:D3/?y-2;
+!#VRy-2:Sz308024;
+!#SS5:D3/y-2;
+
+
+*Fly
+!#SS6:D0/?y-2;
+!#VRy-2:Sz308025;
+!#SS6:D0/y-2;
+
+!#SS6:D1/?y-2;
+!#VRy-2:Sz308026;
+!#SS6:D1/y-2;
+
+!#SS6:D2/?y-2;
+!#VRy-2:Sz308027;
+!#SS6:D2/y-2;
+
+!#SS6:D3/?y-2;
+!#VRy-2:Sz308028;
+!#SS6:D3/y-2;
+
+
+*Water Walk
+!#SS7:D0/?y-2;
+!#VRy-2:Sz308029;
+!#SS7:D0/y-2;
+
+!#SS7:D1/?y-2;
+!#VRy-2:Sz308030;
+!#SS7:D1/y-2;
+
+!#SS7:D2/?y-2;
+!#VRy-2:Sz308031;
+!#SS7:D2/y-2;
+
+!#SS7:D3/?y-2;
+!#VRy-2:Sz308032;
+!#SS7:D3/y-2;
+
+
+*Dimension Door
+!#SS8:D0/?y-2;
+!#VRy-2:Sz308033;
+!#SS8:D0/y-2;
+
+!#SS8:D1/?y-2;
+!#VRy-2:Sz308034;
+!#SS8:D1/y-2;
+
+!#SS8:D2/?y-2;
+!#VRy-2:Sz308035;
+!#SS8:D2/y-2;
+
+!#SS8:D3/?y-2;
+!#VRy-2:Sz308036;
+!#SS8:D3/y-2;
+
+
+*Town Portal
+!#SS9:D0/?y-2;
+!#VRy-2:Sz308037;
+!#SS9:D0/y-2;
+
+!#SS9:D1/?y-2;
+!#VRy-2:Sz308038;
+!#SS9:D1/y-2;
+
+!#SS9:D2/?y-2;
+!#VRy-2:Sz308039;
+!#SS9:D2/y-2;
+
+!#SS9:D3/?y-2;
+!#VRy-2:Sz308040;
+!#SS9:D3/y-2;
+
+
+
+** Combat Spells **
+
+
+*Quick Sand
+!#SS10:D0/?y-2;
+!#VRy-2:Sz308041;
+!#SS10:D0/y-2;
+
+!#SS10:D1/?y-2;
+!#VRy-2:Sz308042;
+!#SS10:D1/y-2;
+
+!#SS10:D2/?y-2;
+!#VRy-2:Sz308043;
+!#SS10:D2/y-2;
+
+!#SS10:D3/?y-2;
+!#VRy-2:Sz308044;
+!#SS10:D3/y-2;
+
+
+*Land Mine
+!#SS11:D0/?y-2;
+!#VRy-2:Sz308045;
+!#SS11:D0/y-2;
+
+!#SS11:D1/?y-2;
+!#VRy-2:Sz308046;
+!#SS11:D1/y-2;
+
+!#SS11:D2/?y-2;
+!#VRy-2:Sz308047;
+!#SS11:D2/y-2;
+
+!#SS11:D3/?y-2;
+!#VRy-2:Sz308048;
+!#SS11:D3/y-2;
+
+
+*Force Field
+!#SS12:D0/?y-2;
+!#VRy-2:Sz308049;
+!#SS12:D0/y-2;
+
+!#SS12:D1/?y-2;
+!#VRy-2:Sz308050;
+!#SS12:D1/y-2;
+
+!#SS12:D2/?y-2;
+!#VRy-2:Sz308051;
+!#SS12:D2/y-2;
+
+!#SS12:D3/?y-2;
+!#VRy-2:Sz308052;
+!#SS12:D3/y-2;
+
+
+*Fire Wall
+!#SS13:D0/?y-2;
+!#VRy-2:Sz308053;
+!#SS13:D0/y-2;
+
+!#SS13:D1/?y-2;
+!#VRy-2:Sz308054;
+!#SS13:D1/y-2;
+
+!#SS13:D2/?y-2;
+!#VRy-2:Sz308055;
+!#SS13:D2/y-2;
+
+!#SS13:D3/?y-2;
+!#VRy-2:Sz308056;
+!#SS13:D3/y-2;
+
+
+*Earthquake
+!#SS14:D0/?y-2;
+!#VRy-2:Sz308057;
+!#SS14:D0/y-2;
+
+!#SS14:D1/?y-2;
+!#VRy-2:Sz308058;
+!#SS14:D1/y-2;
+
+!#SS14:D2/?y-2;
+!#VRy-2:Sz308059;
+!#SS14:D2/y-2;
+
+!#SS14:D3/?y-2;
+!#VRy-2:Sz308060;
+!#SS14:D3/y-2;
+
+
+*Magic Arrow
+!#SS15:D0/?y-2;
+!#VRy-2:Sz308061;
+!#SS15:D0/y-2;
+
+!#SS15:D1/?y-2;
+!#VRy-2:Sz308062;
+!#SS15:D1/y-2;
+
+!#SS15:D2/?y-2;
+!#VRy-2:Sz308063;
+!#SS15:D2/y-2;
+
+!#SS15:D3/?y-2;
+!#VRy-2:Sz308064;
+!#SS15:D3/y-2;
+
+
+*Ice Bolt
+!#SS16:D0/?y-2;
+!#VRy-2:Sz308065;
+!#SS16:D0/y-2;
+
+!#SS16:D1/?y-2;
+!#VRy-2:Sz308066;
+!#SS16:D1/y-2;
+
+!#SS16:D2/?y-2;
+!#VRy-2:Sz308067;
+!#SS16:D2/y-2;
+
+!#SS16:D3/?y-2;
+!#VRy-2:Sz308068;
+!#SS16:D3/y-2;
+
+
+*Lightning Bolt
+!#SS17:D0/?y-2;
+!#VRy-2:Sz308069;
+!#SS17:D0/y-2;
+
+!#SS17:D1/?y-2;
+!#VRy-2:Sz308070;
+!#SS17:D1/y-2;
+
+!#SS17:D2/?y-2;
+!#VRy-2:Sz308071;
+!#SS17:D2/y-2;
+
+!#SS17:D3/?y-2;
+!#VRy-2:Sz308072;
+!#SS17:D3/y-2;
+
+
+*Implosion
+!#SS18:D0/?y-2;
+!#VRy-2:Sz308073;
+!#SS18:D0/y-2;
+
+!#SS18:D1/?y-2;
+!#VRy-2:Sz308074;
+!#SS18:D1/y-2;
+
+!#SS18:D2/?y-2;
+!#VRy-2:Sz308075;
+!#SS18:D2/y-2;
+
+!#SS18:D3/?y-2;
+!#VRy-2:Sz308076;
+!#SS18:D3/y-2;
+
+
+*Chain Lightning
+!#SS19:D0/?y-2;
+!#VRy-2:Sz308077;
+!#SS19:D0/y-2;
+
+!#SS19:D1/?y-2;
+!#VRy-2:Sz308078;
+!#SS19:D2/y-2;
+
+!#SS19:D2/?y-2;
+!#VRy-2:Sz308079;
+!#SS19:D2/y-2;
+
+!#SS19:D3/?y-2;
+!#VRy-2:Sz308080;
+!#SS19:D3/y-2;
+
+
+*Frost Ring
+!#SS20:D0/?y-2;
+!#VRy-2:Sz308081;
+!#SS20:D0/y-2;
+
+!#SS20:D1/?y-2;
+!#VRy-2:Sz308082;
+!#SS20:D1/y-2;
+
+!#SS20:D2/?y-2;
+!#VRy-2:Sz308083;
+!#SS20:D2/y-2;
+
+!#SS20:D3/?y-2;
+!#VRy-2:Sz308084;
+!#SS20:D3/y-2;
+
+
+*Fireball
+!#SS21:D0/?y-2;
+!#VRy-2:Sz308085;
+!#SS21:D0/y-2;
+
+!#SS21:D1/?y-2;
+!#VRy-2:Sz308086;
+!#SS21:D1/y-2;
+
+!#SS21:D2/?y-2;
+!#VRy-2:Sz308087;
+!#SS21:D2/y-2;
+
+!#SS21:D3/?y-2;
+!#VRy-2:Sz308088;
+!#SS21:D3/y-2;
+
+
+*Inferno
+!#SS22:D0/?y-2;
+!#VRy-2:Sz308089;
+!#SS22:D0/y-2;
+
+!#SS22:D1/?y-2;
+!#VRy-2:Sz308090;
+!#SS22:D1/y-2;
+
+!#SS22:D2/?y-2;
+!#VRy-2:Sz308091;
+!#SS22:D2/y-2;
+
+!#SS22:D3/?y-2;
+!#VRy-2:Sz308092;
+!#SS22:D3/y-2;
+
+
+*Meteor Shower
+!#SS23:D0/?y-2;
+!#VRy-2:Sz308093;
+!#SS23:D0/y-2;
+
+!#SS23:D1/?y-2;
+!#VRy-2:Sz308094;
+!#SS23:D1/y-2;
+
+!#SS23:D2/?y-2;
+!#VRy-2:Sz308095;
+!#SS23:D2/y-2;
+
+!#SS23:D3/?y-2;
+!#VRy-2:Sz308096;
+!#SS23:D3/y-2;
+
+
+*Death Ripple
+!#SS24:D0/?y-2;
+!#VRy-2:Sz308097;
+!#SS24:D0/y-2;
+
+!#SS24:D1/?y-2;
+!#VRy-2:Sz308098;
+!#SS24:D1/y-2;
+
+!#SS24:D2/?y-2;
+!#VRy-2:Sz308099;
+!#SS24:D2/y-2;
+
+!#SS24:D3/?y-2;
+!#VRy-2:Sz308100;
+!#SS24:D3/y-2;
+
+
+*Destroy Undead
+!#SS25:D0/?y-2;
+!#VRy-2:Sz308101;
+!#SS25:D0/y-2;
+
+!#SS25:D1/?y-2;
+!#VRy-2:Sz308102;
+!#SS25:D1/y-2;
+
+!#SS25:D2/?y-2;
+!#VRy-2:Sz308103;
+!#SS25:D2/y-2;
+
+!#SS25:D3/?y-2;
+!#VRy-2:Sz308104;
+!#SS25:D3/y-2;
+
+
+*Armageddon
+!#SS26:D0/?y-2;
+!#VRy-2:Sz308105;
+!#SS26:D0/y-2;
+
+!#SS26:D1/?y-2;
+!#VRy-2:Sz308106;
+!#SS26:D1/y-2;
+
+!#SS26:D2/?y-2;
+!#VRy-2:Sz308107;
+!#SS26:D2/y-2;
+
+!#SS26:D3/?y-2;
+!#VRy-2:Sz308108;
+!#SS26:D3/y-2;
+
+
+*Shield
+!#SS27:D0/?y-2;
+!#VRy-2:Sz308109;
+!#SS27:D0/y-2;
+
+!#SS27:D1/?y-2;
+!#VRy-2:Sz308110;
+!#SS27:D1/y-2;
+
+!#SS27:D2/?y-2;
+!#VRy-2:Sz308111;
+!#SS27:D2/y-2;
+
+!#SS27:D3/?y-2;
+!#VRy-2:Sz308112;
+!#SS27:D3/y-2;
+
+
+*Air Shield
+!#SS28:D0/?y-2;
+!#VRy-2:Sz308113;
+!#SS28:D0/y-2;
+
+!#SS28:D1/?y-2;
+!#VRy-2:Sz308114;
+!#SS28:D1/y-2;
+
+!#SS28:D2/?y-2;
+!#VRy-2:Sz308115;
+!#SS28:D2/y-2;
+
+!#SS28:D3/?y-2;
+!#VRy-2:Sz308116;
+!#SS28:D3/y-2;
+
+
+*Fire Shield
+!#SS29:D0/?y-2;
+!#VRy-2:Sz308117;
+!#SS29:D0/y-2;
+
+!#SS29:D1/?y-2;
+!#VRy-2:Sz308118;
+!#SS29:D1/y-2;
+
+!#SS29:D2/?y-2;
+!#VRy-2:Sz308119;
+!#SS29:D2/y-2;
+
+!#SS29:D3/?y-2;
+!#VRy-2:Sz308120;
+!#SS29:D3/y-2;
+
+
+*Protection from Air
+!#SS30:D0/?y-2;
+!#VRy-2:Sz308121;
+!#SS30:D0/y-2;
+
+!#SS30:D1/?y-2;
+!#VRy-2:Sz308122;
+!#SS30:D1/y-2;
+
+!#SS30:D2/?y-2;
+!#VRy-2:Sz308123;
+!#SS30:D2/y-2;
+
+!#SS30:D3/?y-2;
+!#VRy-2:Sz308124;
+!#SS30:D3/y-2;
+
+
+*Protection from Fire
+!#SS31:D0/?y-2;
+!#VRy-2:Sz308125;
+!#SS31:D0/y-2;
+
+!#SS31:D1/?y-2;
+!#VRy-2:Sz308126;
+!#SS31:D1/y-2;
+
+!#SS31:D2/?y-2;
+!#VRy-2:Sz308127;
+!#SS31:D2/y-2;
+
+!#SS31:D3/?y-2;
+!#VRy-2:Sz308128;
+!#SS31:D3/y-2;
+
+
+*Protection from Water
+!#SS32:D0/?y-2;
+!#VRy-2:Sz308129;
+!#SS32:D0/y-2;
+
+!#SS32:D1/?y-2;
+!#VRy-2:Sz308130;
+!#SS32:D1/y-2;
+
+!#SS32:D2/?y-2;
+!#VRy-2:Sz308131;
+!#SS32:D2/y-2;
+
+!#SS32:D3/?y-2;
+!#VRy-2:Sz308132;
+!#SS32:D3/y-2;
+
+
+*Protection from Earth
+!#SS33:D0/?y-2;
+!#VRy-2:Sz308133;
+!#SS33:D0/y-2;
+
+!#SS33:D1/?y-2;
+!#VRy-2:Sz308134;
+!#SS33:D1/y-2;
+
+!#SS33:D2/?y-2;
+!#VRy-2:Sz308135;
+!#SS33:D2/y-2;
+
+!#SS33:D3/?y-2;
+!#VRy-2:Sz308136;
+!#SS33:D3/y-2;
+
+
+*Anti-Magic
+!#SS34:D0/?y-2;
+!#VRy-2:Sz308137;
+!#SS34:D0/y-2;
+
+!#SS34:D1/?y-2;
+!#VRy-2:Sz308138;
+!#SS34:D1/y-2;
+
+!#SS34:D2/?y-2;
+!#VRy-2:Sz308139;
+!#SS34:D2/y-2;
+
+!#SS34:D3/?y-2;
+!#VRy-2:Sz308140;
+!#SS34:D3/y-2;
+
+
+*Dispel
+!#SS35:D0/?y-2;
+!#VRy-2:Sz308141;
+!#SS35:D0/y-2;
+
+!#SS35:D1/?y-2;
+!#VRy-2:Sz308142;
+!#SS35:D1/y-2;
+
+!#SS35:D2/?y-2;
+!#VRy-2:Sz308143;
+!#SS35:D2/y-2;
+
+!#SS35:D3/?y-2;
+!#VRy-2:Sz308144;
+!#SS35:D3/y-2;
+
+
+*Magic Mirror
+!#SS36:D0/?y-2;
+!#VRy-2:Sz308145;
+!#SS36:D0/y-2;
+
+!#SS36:D1/?y-2;
+!#VRy-2:Sz308146;
+!#SS36:D1/y-2;
+
+!#SS36:D2/?y-2;
+!#VRy-2:Sz308147;
+!#SS36:D2/y-2;
+
+!#SS36:D3/?y-2;
+!#VRy-2:Sz308148;
+!#SS36:D3/y-2;
+
+
+*Cure
+!#SS37:D0/?y-2;
+!#VRy-2:Sz308149;
+!#SS37:D0/y-2;
+
+!#SS37:D1/?y-2;
+!#VRy-2:Sz308150;
+!#SS37:D1/y-2;
+
+!#SS37:D2/?y-2;
+!#VRy-2:Sz308151;
+!#SS37:D2/y-2;
+
+!#SS37:D3/?y-2;
+!#VRy-2:Sz308152;
+!#SS37:D3/y-2;
+
+
+*Resurrection
+!#SS38:D0/?y-2;
+!#VRy-2:Sz308153;
+!#SS38:D0/y-2;
+
+!#SS38:D1/?y-2;
+!#VRy-2:Sz308154;
+!#SS38:D1/y-2;
+
+!#SS38:D2/?y-2;
+!#VRy-2:Sz308155;
+!#SS38:D2/y-2;
+
+!#SS38:D3/?y-2;
+!#VRy-2:Sz308156;
+!#SS38:D3/y-2;
+
+
+*Animate Dead
+!#SS39:D0/?y-2;
+!#VRy-2:Sz308157;
+!#SS39:D0/y-2;
+
+!#SS39:D1/?y-2;
+!#VRy-2:Sz308158;
+!#SS39:D1/y-2;
+
+!#SS39:D2/?y-2;
+!#VRy-2:Sz308159;
+!#SS39:D2/y-2;
+
+!#SS39:D3/?y-2;
+!#VRy-2:Sz308160;
+!#SS39:D3/y-2;
+
+
+*Sacrifice
+!#SS40:D0/?y-2;
+!#VRy-2:Sz308161;
+!#SS40:D0/y-2;
+
+!#SS40:D1/?y-2;
+!#VRy-2:Sz308162;
+!#SS40:D1/y-2;
+
+!#SS40:D2/?y-2;
+!#VRy-2:Sz308163;
+!#SS40:D2/y-2;
+
+!#SS40:D3/?y-2;
+!#VRy-2:Sz308164;
+!#SS40:D3/y-2;
+
+
+*Bless
+!#SS41:D0/?y-2;
+!#VRy-2:Sz308165;
+!#SS41:D0/y-2;
+
+!#SS41:D1/?y-2;
+!#VRy-2:Sz308166;
+!#SS41:D1/y-2;
+
+!#SS41:D2/?y-2;
+!#VRy-2:Sz308167;
+!#SS41:D2/y-2;
+
+!#SS41:D3/?y-2;
+!#VRy-2:Sz308168;
+!#SS41:D3/y-2;
+
+
+*Curse
+!#SS42:D0/?y-2;
+!#VRy-2:Sz308169;
+!#SS42:D0/y-2;
+
+!#SS42:D1/?y-2;
+!#VRy-2:Sz308170;
+!#SS42:D1/y-2;
+
+!#SS42:D2/?y-2;
+!#VRy-2:Sz308171;
+!#SS42:D2/y-2;
+
+!#SS42:D3/?y-2;
+!#VRy-2:Sz308172;
+!#SS42:D3/y-2;
+
+
+*Bloodlust
+!#SS43:D0/?y-2;
+!#VRy-2:Sz308173;
+!#SS43:D0/y-2;
+
+!#SS43:D1/?y-2;
+!#VRy-2:Sz308174;
+!#SS43:D1/y-2;
+
+!#SS43:D2/?y-2;
+!#VRy-2:Sz308175;
+!#SS43:D2/y-2;
+
+!#SS43:D3/?y-2;
+!#VRy-2:Sz308176;
+!#SS43:D3/y-2;
+
+
+*Precision
+!#SS44:D0/?y-2;
+!#VRy-2:Sz308177;
+!#SS44:D0/y-2;
+
+!#SS44:D1/?y-2;
+!#VRy-2:Sz308178;
+!#SS44:D1/y-2;
+
+!#SS44:D2/?y-2;
+!#VRy-2:Sz308179;
+!#SS44:D2/y-2;
+
+!#SS44:D3/?y-2;
+!#VRy-2:Sz308180;
+!#SS44:D3/y-2;
+
+
+*Weakness
+!#SS45:D0/?y-2;
+!#VRy-2:Sz308181;
+!#SS45:D0/y-2;
+
+!#SS45:D1/?y-2;
+!#VRy-2:Sz308182;
+!#SS45:D1/y-2;
+
+!#SS45:D2/?y-2;
+!#VRy-2:Sz308183;
+!#SS45:D2/y-2;
+
+!#SS45:D3/?y-2;
+!#VRy-2:Sz308184;
+!#SS45:D3/y-2;
+
+
+*Stone Skin
+!#SS46:D0/?y-2;
+!#VRy-2:Sz308185;
+!#SS46:D0/y-2;
+
+!#SS46:D1/?y-2;
+!#VRy-2:Sz308186;
+!#SS46:D1/y-2;
+
+!#SS46:D2/?y-2;
+!#VRy-2:Sz308187;
+!#SS46:D2/y-2;
+
+!#SS46:D3/?y-2;
+!#VRy-2:Sz308188;
+!#SS46:D3/y-2;
+
+
+*Disrupting Ray
+!#SS47:D0/?y-2;
+!#VRy-2:Sz308189;
+!#SS47:D0/y-2;
+
+!#SS47:D1/?y-2;
+!#VRy-2:Sz308190;
+!#SS47:D1/y-2;
+
+!#SS47:D2/?y-2;
+!#VRy-2:Sz308191;
+!#SS47:D2/y-2;
+
+!#SS47:D3/?y-2;
+!#VRy-2:Sz308192;
+!#SS47:D3/y-2;
+
+
+*Prayer
+!#SS48:D0/?y-2;
+!#VRy-2:Sz308193;
+!#SS48:D0/y-2;
+
+!#SS48:D1/?y-2;
+!#VRy-2:Sz308194;
+!#SS48:D1/y-2;
+
+!#SS48:D2/?y-2;
+!#VRy-2:Sz308195;
+!#SS48:D2/y-2;
+
+!#SS48:D3/?y-2;
+!#VRy-2:Sz308196;
+!#SS48:D3/y-2;
+
+
+*Mirth
+!#SS49:D0/?y-2;
+!#VRy-2:Sz308197;
+!#SS49:D0/y-2;
+
+!#SS49:D1/?y-2;
+!#VRy-2:Sz308198;
+!#SS49:D1/y-2;
+
+!#SS49:D2/?y-2;
+!#VRy-2:Sz308199;
+!#SS49:D2/y-2;
+
+!#SS49:D3/?y-2;
+!#VRy-2:Sz308200;
+!#SS49:D3/y-2;
+
+
+*Sorrow
+!#SS50:D0/?y-2;
+!#VRy-2:Sz308201;
+!#SS50:D0/y-2;
+
+!#SS50:D1/?y-2;
+!#VRy-2:Sz308202;
+!#SS50:D1/y-2;
+
+!#SS50:D2/?y-2;
+!#VRy-2:Sz308203;
+!#SS50:D2/y-2;
+
+!#SS50:D3/?y-2;
+!#VRy-2:Sz308204;
+!#SS50:D3/y-2;
+
+
+*Fortune
+!#SS51:D0/?y-2;
+!#VRy-2:Sz308205;
+!#SS51:D0/y-2;
+
+!#SS51:D1/?y-2;
+!#VRy-2:Sz308206;
+!#SS51:D1/y-2;
+
+!#SS51:D2/?y-2;
+!#VRy-2:Sz308207;
+!#SS51:D2/y-2;
+
+!#SS51:D3/?y-2;
+!#VRy-2:Sz308208;
+!#SS51:D3/y-2;
+
+
+*Misfortune
+!#SS52:D0/?y-2;
+!#VRy-2:Sz308209;
+!#SS52:D0/y-2;
+
+!#SS52:D1/?y-2;
+!#VRy-2:Sz308210;
+!#SS52:D1/y-2;
+
+!#SS52:D2/?y-2;
+!#VRy-2:Sz308211;
+!#SS52:D2/y-2;
+
+!#SS52:D3/?y-2;
+!#VRy-2:Sz308212;
+!#SS52:D3/y-2;
+
+
+*Haste
+!#SS53:D0/?y-2;
+!#VRy-2:Sz308213;
+!#SS53:D0/y-2;
+
+!#SS53:D1/?y-2;
+!#VRy-2:Sz308214;
+!#SS53:D1/y-2;
+
+!#SS53:D2/?y-2;
+!#VRy-2:Sz308215;
+!#SS53:D2/y-2;
+
+!#SS53:D3/?y-2;
+!#VRy-2:Sz308216;
+!#SS53:D3/y-2;
+
+
+*Slow
+!#SS54:D0/?y-2;
+!#VRy-2:Sz308217;
+!#SS54:D0/y-2;
+
+!#SS54:D1/?y-2;
+!#VRy-2:Sz308218;
+!#SS54:D1/y-2;
+
+!#SS54:D2/?y-2;
+!#VRy-2:Sz308219;
+!#SS54:D2/y-2;
+
+!#SS54:D3/?y-2;
+!#VRy-2:Sz308220;
+!#SS54:D3/y-2;
+
+
+*Slayer
+!#SS55:D0/?y-2;
+!#VRy-2:Sz308221;
+!#SS55:D0/y-2;
+
+!#SS55:D1/?y-2;
+!#VRy-2:Sz308222;
+!#SS55:D1/y-2;
+
+!#SS55:D2/?y-2;
+!#VRy-2:Sz308223;
+!#SS55:D2/y-2;
+
+!#SS55:D3/?y-2;
+!#VRy-2:Sz308224;
+!#SS55:D3/y-2;
+
+
+*Frenzy
+!#SS56:D0/?y-2;
+!#VRy-2:Sz308225;
+!#SS56:D0/y-2;
+
+!#SS56:D1/?y-2;
+!#VRy-2:Sz308226;
+!#SS56:D1/y-2;
+
+!#SS56:D2/?y-2;
+!#VRy-2:Sz308227;
+!#SS56:D2/y-2;
+
+!#SS56:D3/?y-2;
+!#VRy-2:Sz308228;
+!#SS56:D3/y-2;
+
+
+*Titan's Lightning Bolt
+!#SS57:D0/?y-2;
+!#VRy-2:Sz308229;
+!#SS57:D0/y-2;
+
+!#SS57:D1/?y-2;
+!#VRy-2:Sz308230;
+!#SS57:D1/y-2;
+
+!#SS57:D2/?y-2;
+!#VRy-2:Sz308231;
+!#SS57:D2/y-2;
+
+!#SS57:D3/?y-2;
+!#VRy-2:Sz308232;
+!#SS57:D3/y-2;
+
+
+*Counterstrike
+!#SS58:D0/?y-2;
+!#VRy-2:Sz308233;
+!#SS58:D0/y-2;
+
+!#SS58:D1/?y-2;
+!#VRy-2:Sz308234;
+!#SS58:D1/y-2;
+
+!#SS58:D2/?y-2;
+!#VRy-2:Sz308235;
+!#SS58:D2/y-2;
+
+!#SS58:D3/?y-2;
+!#VRy-2:Sz308236;
+!#SS58:D3/y-2;
+
+
+*Berserk
+!#SS59:D0/?y-2;
+!#VRy-2:Sz308237;
+!#SS59:D0/y-2;
+
+!#SS59:D1/?y-2;
+!#VRy-2:Sz308238;
+!#SS59:D1/y-2;
+
+!#SS59:D2/?y-2;
+!#VRy-2:Sz308239;
+!#SS59:D2/y-2;
+
+!#SS59:D3/?y-2;
+!#VRy-2:Sz308240;
+!#SS59:D3/y-2;
+
+
+*Hypnotize
+!#SS60:D0/?y-2;
+!#VRy-2:Sz308241;
+!#SS60:D0/y-2;
+
+!#SS60:D1/?y-2;
+!#VRy-2:Sz308242;
+!#SS60:D1/y-2;
+
+!#SS60:D2/?y-2;
+!#VRy-2:Sz308243;
+!#SS60:D2/y-2;
+
+!#SS60:D3/?y-2;
+!#VRy-2:Sz308244;
+!#SS60:D3/y-2;
+
+
+*Forgetfulness
+!#SS61:D0/?y-2;
+!#VRy-2:Sz308245;
+!#SS61:D0/y-2;
+
+!#SS61:D1/?y-2;
+!#VRy-2:Sz308246;
+!#SS61:D1/y-2;
+
+!#SS61:D2/?y-2;
+!#VRy-2:Sz308247;
+!#SS61:D2/y-2;
+
+!#SS61:D3/?y-2;
+!#VRy-2:Sz308248;
+!#SS61:D3/y-2;
+
+
+*Blind
+!#SS62:D0/?y-2;
+!#VRy-2:Sz308249;
+!#SS62:D0/y-2;
+
+!#SS62:D1/?y-2;
+!#VRy-2:Sz308250;
+!#SS62:D1/y-2;
+
+!#SS62:D2/?y-2;
+!#VRy-2:Sz308251;
+!#SS62:D2/y-2;
+
+!#SS62:D3/?y-2;
+!#VRy-2:Sz308252;
+!#SS62:D3/y-2;
+
+
+*Teleport
+!#SS63:D0/?y-2;
+!#VRy-2:Sz308253;
+!#SS63:D0/y-2;
+
+!#SS63:D1/?y-2;
+!#VRy-2:Sz308254;
+!#SS63:D1/y-2;
+
+!#SS63:D2/?y-2;
+!#VRy-2:Sz308255;
+!#SS63:D2/y-2;
+
+!#SS63:D3/?y-2;
+!#VRy-2:Sz308256;
+!#SS63:D3/y-2;
+
+
+*Remove Obstacle
+!#SS64:D0/?y-2;
+!#VRy-2:Sz308257;
+!#SS64:D0/y-2;
+
+!#SS64:D1/?y-2;
+!#VRy-2:Sz308258;
+!#SS64:D1/y-2;
+
+!#SS64:D2/?y-2;
+!#VRy-2:Sz308259;
+!#SS64:D2/y-2;
+
+!#SS64:D3/?y-2;
+!#VRy-2:Sz308260;
+!#SS64:D3/y-2;
+
+
+*Clone
+!#SS65:D0/?y-2;
+!#VRy-2:Sz308261;
+!#SS65:D0/y-2;
+
+!#SS65:D1/?y-2;
+!#VRy-2:Sz308262;
+!#SS65:D1/y-2;
+
+!#SS65:D2/?y-2;
+!#VRy-2:Sz308263;
+!#SS65:D2/y-2;
+
+!#SS65:D3/?y-2;
+!#VRy-2:Sz308264;
+!#SS65:D3/y-2;
+
+
+*Fire Elemental
+!#SS66:D0/?y-2;
+!#VRy-2:Sz308265;
+!#SS66:D0/y-2;
+
+!#SS66:D1/?y-2;
+!#VRy-2:Sz308266;
+!#SS66:D1/y-2;
+
+!#SS66:D2/?y-2;
+!#VRy-2:Sz308267;
+!#SS66:D2/y-2;
+
+!#SS66:D3/?y-2;
+!#VRy-2:Sz308268;
+!#SS66:D3/y-2;
+
+
+*Earth Elemental
+!#SS67:D0/?y-2;
+!#VRy-2:Sz308269;
+!#SS67:D0/y-2;
+
+!#SS67:D1/?y-2;
+!#VRy-2:Sz308270;
+!#SS67:D1/y-2;
+
+!#SS67:D2/?y-2;
+!#VRy-2:Sz308271;
+!#SS67:D2/y-2;
+
+!#SS67:D3/?y-2;
+!#VRy-2:Sz308272;
+!#SS67:D3/y-2;
+
+
+*Water Elemental
+!#SS68:D0/?y-2;
+!#VRy-2:Sz308273;
+!#SS68:D0/y-2;
+
+!#SS68:D1/?y-2;
+!#VRy-2:Sz308274;
+!#SS68:D1/y-2;
+
+!#SS68:D2/?y-2;
+!#VRy-2:Sz308275;
+!#SS68:D2/y-2;
+
+!#SS68:D3/?y-2;
+!#VRy-2:Sz308276;
+!#SS68:D3/y-2;
+
+
+*Air Elemental
+!#SS69:D0/?y-2;
+!#VRy-2:Sz308277;
+!#SS69:D0/y-2;
+
+!#SS69:D1/?y-2;
+!#VRy-2:Sz308278;
+!#SS69:D1/y-2;
+
+!#SS69:D2/?y-2;
+!#VRy-2:Sz308279;
+!#SS69:D2/y-2;
+
+!#SS69:D3/?y-2;
+!#VRy-2:Sz308280;
+!#SS69:D3/y-2;
+
+
+--------------------------------------------------------------------------------
+
+ ** Improvements for spells **
+
+
+These spells don't have improvements: Summon Boat, Scuttle Boat, Visions, View Earth, Disguise, View Air, Fly, Water Walk, Dimension Door, Quicksand,
+Force Field, Earthquake, Fire Shield, Anti-Magic, Dispel, Prayer, Slayer, Frenzy, Titan's Lightning Bolt, Berserk, Forgetfulness, Blind, Teleport, Remove Obstacle, Clone.
+
+* 20% from power of spell multiplied by hero's level
+This spell is improved: Cure.
+
+For instance: Cure has 5 power and if hero is level 10, then Cure has 15 power.
+
+* 10% from power of spell multiplied by hero's level
+These spells are improved: Land Mind, Firewall, Magic Arrow, Ice bolt, Lightning Bolt, Implosion,
+Chain Lightning, Frost Ring, Fireball, Meteor Shower, Death Ripple, Destroy Undead, Armageddon.
+
+For instance: Magic Arrow has 10 power and if hero is level 10, then Magic Arrow has 20 power.
+
+* 2% from power of spell multiplied by hero's level
+These spells are improved: Resurrection, Animate Dead, Hyptonize.
+
+* 1% for every two levels of the hero
+These spells are improved: Shield, Air Shield, Protection from Air, Protection from Fire, Protection from Water,
+Protection from Earth, Magic Mirror, Slow.
+
+For instance: Expert Air Shield - reducing the amount of damage received from ranged attacks by 50% +1% for every two levels of the hero.
+
+* 1 for every level of the hero
+This spell is improved: Sacrifice.
+
+* 1 for every three levels of the hero
+These spells are improved: Bloodlust, Precision, Weakness, Stone Skin.
+
+* 1 for every five levels of the hero
+These spells are improved: Bless, Curse, Disrupting Ray
+
+* 1 for every ten levels of the hero
+These spells are improved: Mirth, Sorrow, Fortune, Misfortune, Haste, Counterstrike.
+
+* 10% from hero's spell power + 10% from hero's knowledge + 10% from hero's level
+These spells are improved: Fire Elemental, Earth Elemental, Water Elemental, Air Elemental
+
+
+
+
+!?BA0&-998;
+!?BF&-998;
+
+!?BG0&-998;
+!!BG:Q?y-5;
+!!BA:Hy-5/?y-6;
+!!HEy-6&y-6>-1:Fd/d/?y3/?y4/1 Ed/?y-8; Check the hero's stats without bonuses from artifacts
+
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS11:Py-2; Land Mind
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS13:Py-2; Firewall
+
+
+!SS:P?y-2;
+!VRy-3:S1;               1
+!VRy-4:Sy-3:1*y-8:10;    +1 at every 10 hero's level
+!VRy-2:Sy-3+y-4;         1 +1 at every 10 hero's level
+!SS14:Py-2; Earthquake
+
+
+!SS:E0/?y-2;
+!VRy-3:S2;               +2 sections of castle wall
+!VRy-4:Sy-3:2*y-8:10;    +0,1 per hero's level
+!VRy-2:Sy-3+y-4;         2 +0,1% per hero's level
+!SS14:E0/y-2; Earthquake
+
+
+!SS:E1/?y-2;
+!VRy-3:S2;               +2 sections of castle wall
+!VRy-4:Sy-3:2*y-8:10;    +0,1 per hero's level
+!VRy-2:Sy-3+y-4;         2 +0,1% per hero's level
+!SS14:E1/y-2; Earthquake
+
+
+!SS:E2/?y-2;
+!VRy-3:S3;               +3 sections of castle wall
+!VRy-4:Sy-3:3*y-8:10;    +0,1 per hero's level
+!VRy-2:Sy-3+y-4;         3 +0,1% per hero's level
+!SS14:E2/y-2; Earthquake
+
+
+!SS:E3/?y-2;
+!VRy-3:S4;               +4 sections of castle wall
+!VRy-4:Sy-3:4*y-8:10;    +0,1 per hero's level
+!VRy-2:Sy-3+y-4;         4 +0,1% per hero's level
+!SS14:E0/y-2; Earthquake
+
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS15:Py-2; Magic Arrow
+
+
+!!SS:P?y-2;
+!!VRy-3:S20;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS16:Py-2; Ice Bolt
+
+
+!!SS:P?y-2;
+!!VRy-3:S25;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS17:Py-2; Lightning Bolt
+
+
+!!SS:P?y-2;
+!!VRy-3:S75;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS18:Py-2; Implosion
+
+
+!!SS:P?y-2;
+!!VRy-3:S40;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS19:Py-2; Chain Lightning
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS20:Py-2; Frost Ring
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS21:Py-2; Fireball
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS22:Py-2; Inferno
+
+
+!!SS:P?y-2;
+!!VRy-3:S25;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS23:Py-2; Meteor Shower
+
+
+!!SS:P?y-2;
+!!VRy-3:S5;
+!!VRy-4:Sy-3:5*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS24:Py-2; Death Ripple
+
+
+!!SS:P?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS25:Py-2; Destroy Undead
+
+
+!!SS:P?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS26:Py-2; Armageddon
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S85;
+!!VRy-4:Sy-3:85*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS27:E0/y-2; Shield
+
+!!SS:E1/?y-2;
+!!VRy-3:S85;
+!!VRy-4:Sy-3:85*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS27:E1/y-2; Basic Shield
+
+!!SS:E2/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS27:E2/y-2; Advanced Shield
+
+!!SS:E3/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS27:E3/y-2; Expert Shield
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S75;
+!!VRy-4:Sy-3:75*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS28:E0/y-2; Air Shield
+
+!!SS:E1/?y-2;
+!!VRy-3:S75;
+!!VRy-4:Sy-3:75*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS28:E1/y-2; Basic Air Shield
+
+!!SS:E2/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS28:E2/y-2; Advanced Air Shield
+
+!!SS:E3/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS28:E3/y-2; Expert Air Shield
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS30:E0/y-2; Protection from Air
+
+!!SS:E1/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS30:E1/y-2; Basic Protection from Air
+
+!!SS:E2/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS30:E2/y-2; Advanced Protection from Air
+
+!!SS:E3/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS30:E3/y-2; Expert Protection from Air
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS31:E0/y-2; Protection from Fire
+
+!!SS:E1/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS31:E1/y-2; Basic Protection from Fire
+
+!!SS:E2/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS31:E2/y-2; Advanced Protection from Fire
+
+!!SS:E3/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS31:E3/y-2; Expert Protection from Fire
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS32:E0/y-2; Protection from Water
+
+!!SS:E1/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS32:E1/y-2; Basic Protection from Water
+
+!!SS:E2/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS32:E2/y-2; Advanced Protection from Water
+
+!!SS:E3/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS32:E3/y-2; Expert Protection from Water
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS33:E0/y-2; Protection from Air
+
+!!SS:E1/?y-2;
+!!VRy-3:S70;
+!!VRy-4:Sy-3:70*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS33:E1/y-2; Basic Protection from Air
+
+!!SS:E2/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS33:E2/y-2; Advanced Protection from Air
+
+!!SS:E3/?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:50*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS33:E3/y-2; Expert Protection from Air
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S20;
+!!VRy-4:Sy-3:20*y-8:2;
+!!VRy-2:Sy-3+y-4;
+!!SS36:E0/y-2; Magic Mirror
+
+!!SS:E1/?y-2;
+!!VRy-3:S20;
+!!VRy-4:Sy-3:20*y-8:2;
+!!VRy-2:Sy-3+y-4;
+!!SS36:E1/y-2; Basic Magic Mirror
+
+!!SS:E2/?y-2;
+!!VRy-3:S30;
+!!VRy-4:Sy-3:30*y-8:2;
+!!VRy-2:Sy-3+y-4;
+!!SS36:E2/y-2; Advanced Magic Mirror
+
+!!SS:E3/?y-2;
+!!VRy-3:S40;
+!!VRy-4:Sy-3:40*y-8:2;
+!!VRy-2:Sy-3+y-4;
+!!SS36:E3/y-2; Expert Magic Mirror
+
+
+!!SS:P?y-2;
+!!VRy-3:S5;
+!!VRy-4:Sy-3:5*y-8; 20%
+!!VRy-2:Sy-3+y-4;
+!!SS37:Py-2; Cure
+
+
+!!SS:P?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:20*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS38:Py-2; Resurrection
+
+
+!!SS:P?y-2;
+!!VRy-3:S50;
+!!VRy-4:Sy-3:20*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS39:Py-2; Animate Dead
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS40:E0/y-2; Basic Sacrifice
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS40:E1/y-2; Basic Sacrifice
+
+!!SS:E2/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS40:E2/y-2; Advanced Sacrifice
+
+!!SS:E3/?y-2;
+!!VRy-3:S10;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS40:E3/y-2; Expert Sacrifice
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS41:E2/y-2; Advanced Bless
+
+!!SS:E3/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS41:E3/y-2; Expert Bless
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS42:E2/y-2; Advanced Curse
+
+!!SS:E3/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS42:E3/y-2; Expert Curse
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS43:E0/y-2; Bloodlust
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS43:E1/y-2; Basic Bloodlust
+
+!!SS:E2/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS43:E2/y-2; Advanced Bloodlust
+
+!!SS:E3/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS43:E3/y-2; Expert Bloodlust
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS44:E0/y-2; Precision
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS44:E1/y-2; Basic Precision
+
+!!SS:E2/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS44:E2/y-2; Advanced Precision
+
+!!SS:E3/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS44:E3/y-2; Expert Precision
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS45:E0/y-2; Weakness
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS45:E1/y-2; Basic Weakness
+
+!!SS:E2/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS45:E2/y-2; Advanced Weakness
+
+!!SS:E3/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS45:E3/y-2; Expert Weakness
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS46:E0/y-2; Stone Skin
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS46:E1/y-2; Basic Stone Skin
+
+!!SS:E2/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS46:E2/y-2; Advanced Stone Skin
+
+!!SS:E3/?y-2;
+!!VRy-3:S6;
+!!VRy-4:Sy-3:6*y-8:3;
+!!VRy-2:Sy-3+y-4;
+!!SS46:E3/y-2; Expert Stone Skin
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS47:E0/y-2; Disrupting Ray
+
+!!SS:E1/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy-3:3*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS47:E1/y-2; Basic Disrupting Ray
+
+!!SS:E2/?y-2;
+!!VRy-3:S4;
+!!VRy-4:Sy-3:4*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS47:E2/y-2; Advanced Disrupting Ray
+
+!!SS:E3/?y-2;
+!!VRy-3:S5;
+!!VRy-4:Sy-3:5*y-8:5;
+!!VRy-2:Sy-3+y-4;
+!!SS47:E3/y-2; Expert Disrupting Ray
+
+
+
+*!SS:E0/?y-2;
+*!SS48:E0/y-2; Prayer
+
+*!SS:E1/?y-2;
+*!SS48:E1/y-2; Basic Prayer
+
+*!SS:E2/?y-2;
+*!SS48:E2/y-2; Advanced Prayer
+
+*!SS:E3/?y-2;
+*!SS48:E3/y-2; Expert Prayer
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS49:E0/y-2; Mirth
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS49:E1/y-2; Basic Mirth
+
+!!SS:E2/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS49:E2/y-2; Advanced Mirth
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS49:E3/y-2; Expert Mirth
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS50:E0/y-2; Sorrow
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS50:E1/y-2; Basic Sorrow
+
+!!SS:E2/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS50:E2/y-2; Advanced Sorrow
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS50:E3/y-2; Expert Sorrow
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS51:E0/y-2; Fortune
+
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS51:E1/y-2; Basic Fortune
+
+!!SS:E2/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS51:E2/y-2; Advanced Fortune
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS51:E3/y-2; Expert Fortune
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS52:E0/y-2; Misfortune
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS52:E1/y-2; Basic Misfortune
+
+!!SS:E2/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS52:E2/y-2; Advanced Misfortune
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS52:E3/y-2; Expert Misfortune
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS53:E0/y-2; Haste
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS53:E1/y-2; Basic Haste
+
+!!SS:E2/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS53:E2/y-2; Advanced Haste
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS53:E3/y-2; Expert Haste
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S90;
+!!VRy-4:Sy-3:90*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS54:E0/y-2; Slow
+
+!!SS:E1/?y-2;
+!!VRy-3:S90;
+!!VRy-4:Sy-3:90*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS54:E1/y-2; Basic Slow
+
+!!SS:E2/?y-2;
+!!VRy-3:S80;
+!!VRy-4:Sy-3:80*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS54:E2/y-2; Advanced Slow
+
+!!SS:E3/?y-2;
+!!VRy-3:S80;
+!!VRy-4:Sy-3:80*y-8:2;
+!!VRy-2:Sy-3-y-4;
+!!SS54:E3/y-2; Expert Slow
+
+
+!SS:E0/?y-2;
+!VRy-3:S8;
+!VRy-4:Sy-3:8*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS55:E0/y-2; Slayer
+
+!SS:E1/?y-2;
+!VRy-3:S8;
+!VRy-4:Sy-3:8*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS55:E1/y-2; Basic Slayer
+
+!SS:E2/?y-2;
+!VRy-3:S8;
+!VRy-4:Sy-3:8*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS55:E2/y-2; Advanced Slayer
+
+!SS:E3/?y-2;
+!VRy-3:S8;
+!VRy-4:Sy-3:8*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS55:E3/y-2; Expert Slayer
+
+
+!SS:E0/?y-2;
+!VRy-3:S100;
+!VRy-4:Sy-3:100*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS56:E0/y-2; Frenzy
+
+!SS:E1/?y-2;
+!VRy-3:S100;
+!VRy-4:Sy-3:100*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS56:E1/y-2; Basic Frenzy
+
+!SS:E2/?y-2;
+!VRy-3:S150;
+!VRy-4:Sy-3:150*y-8:5;
+!VRy-2:Sy-3+y-4;
+!SS56:E2/y-2; Advanced Frenzy
+
+!SS:E3/?y-2;
+!VRy-3:S200;
+!VRy-4:Sy-3:100*y-8;
+!VRy-2:Sy-3+y-4;
+!SS56:E3/y-2; Expert Frenzy
+
+
+!SS:E0/?y-2;
+!VRy-3:S600;
+!VRy-4:Sy-3:10*y-8;
+!VRy-2:Sy-3+y-4;
+!SS57:E0/y-2; Titan's Lightning Bolt
+
+!SS:E1/?y-2;
+!VRy-3:S600;
+!VRy-4:Sy-3:10*y-8;
+!VRy-2:Sy-3+y-4;
+!SS57:E1/y-2; Titan's Lightning Bolt
+
+!SS:E2/?y-2;
+!VRy-3:S600;
+!VRy-4:Sy-3:10*y-8;
+!VRy-2:Sy-3+y-4;
+!SS57:E2/y-2; Titan's Lightning Bolt
+
+!SS:E3/?y-2;
+!VRy-3:S600;
+!VRy-4:Sy-3:10*y-8;
+!VRy-2:Sy-3+y-4;
+!SS57:E3/y-2; Titan's Lightning Bolt
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS58:E0/y-2; Counterstrike
+
+!!SS:E1/?y-2;
+!!VRy-3:S1;
+!!VRy-4:Sy-3:1*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS58:E1/y-2; Basic Counterstrike
+
+!!SS:E2/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS58:E2/y-2; Advanced Counterstrike
+
+!!SS:E3/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy-3:2*y-8:10;
+!!VRy-2:Sy-3+y-4;
+!!SS58:E3/y-2; Expert Counterstrike
+
+
+!SS:E3/?y-2;
+!VRy-3:S2;
+!VRy-4:Sy-3:2*y-8:10;
+!VRy-2:Sy-3+y-4;
+!SS59:E3/y-2; Expert Berserk
+
+
+!!SS:P?y-2;
+!!VRy-3:S25;
+!!VRy-4:Sy-3:10*y-8;
+!!VRy-2:Sy-3+y-4;
+!!SS60:Py-2; Hypnotize
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS66:E0/y-2; Fire Elemental
+
+
+!!SS:E1/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS66:E1/y-2; Fire Elemental
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS66:E2/y-2; Fire Elemental
+
+
+!!SS:E3/?y-2;
+!!VRy-3:S4;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS66:E3/y-2; Fire Elemental
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS67:E0/y-2; Earth Elemental
+
+
+!!SS:E1/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS67:E1/y-2; Earth Elemental
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS67:E2/y-2; Earth Elemental
+
+
+!!SS:E3/?y-2;
+!!VRy-3:S4;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS67:E3/y-2; Earth Elemental
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS68:E0/y-2; Water Elemental
+
+
+!!SS:E1/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS68:E1/y-2; Water Elemental
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS68:E2/y-2; Water Elemental
+
+
+!!SS:E3/?y-2;
+!!VRy-3:S4;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS68:E3/y-2; Water Elemental
+
+
+
+!!SS:E0/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS69:E0/y-2; Air Elemental
+
+
+!!SS:E1/?y-2;
+!!VRy-3:S2;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS69:E1/y-2; Air Elemental
+
+
+!!SS:E2/?y-2;
+!!VRy-3:S3;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS69:E2/y-2; Air Elemental
+
+
+!!SS:E3/?y-2;
+!!VRy-3:S4;
+!!VRy-4:Sy3:10;
+!!VRy-5:Sy4:10;
+!!VRy-6:Sy-8*10:100;
+!!VRy-2:Sy-3+y-4+y-5+y-6;
+!!SS69:E3/y-2; Air Elemental
+
+
+--------------------------------------------------------------------------------
+
+ ** Town Portal, Anti-Magic, Dispel, Magic Mirror **
+
+
+
+
+
+!#SS9:S15;  Town Portal
+!#SS34:S15; Anti-Magic
+!#SS35:S15; Dispel
+!#SS36:S15; Magic Mirror
+

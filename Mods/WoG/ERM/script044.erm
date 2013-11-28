@@ -1,0 +1,846 @@
+ZVSE
+ERMS_ScriptDate=12.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Emerald Tower Script Version 1.31 Created by Timothy Pulver
+** with thanks to Steve Hanna for extra naming ideas
+** Requires WoG version 3.58f or later using ERM version 2.7 or later.
+** WoGify Name: script44.erm
+** Last Updated: October 12, 2006
+** Previously Updated: August 22, 2005
+
+** This script makes all golden-green roofed towers in the game (object type 63,
+** subtype 65) into Emerald Towers where the Wizard who dwells there will
+** improve any creature type in your army for a price. The price is a lot of
+** resources of a specific type, depending on the improvement. In addition,
+** one of the creatures of the type being improved must also be left for the
+** Wizard.
+
+** The improvement number is usually a percentage of the existing score. For
+** example, 50% growth bonus, or 25% health bonus. In addition to standard
+** stat improvements, new special abilities may be added. Special abilities
+** all cost mithril.
+
+** Each Emerald Tower may only be visited once per week. A maximum of 12
+** types of creatures may be improved in any game, but each creature type
+** may have many improvements made to it. A creature cannot be improved
+** during a "Week of" that creature type, if the "Week of Monsters" script
+** is active.
+
+** The AI can also use the Emerald Tower but not quite the same way that
+** a human player can. Instead, each AI player may get one free random
+** upgrade for the AI's most valuable stack when an AI visits the tower.
+** If the ability can't be granted for any reason, no bonus is given the AI
+** for that particular visit.
+
+** Version 1.3 adds limits to the number of special ability "Mithril"
+** upgrades that may be bought for each creature type in order to
+** prevent "super" creatures of high level that can annihilate everything.
+** Therefore, lower level creatures may be given more upgrades than
+** higher level creatures, as shown below.
+
+**  Maximum # of Special "Mithril" Abilities per creature type:
+**   Level  1: 7 abilities
+**   Level  2: 6 abilities
+**   Level  3: 5 abilities
+**   Level  4: 4 abilities
+**   Level  5: 3 abilities
+**   Level  6: 2 abilities
+**   Level 7+: 1 abilities
+
+** Version 1.31 corrects a name change bug that occurred if the AI visits and
+** was offered a special ability the creature couldn't get or already had.
+
+------------------------------------------------------------------------
+
+Permanent Variables: z816-z841, v470-v481, v1240-v1252, v1270-v1271
+Temporary Variables: v1-v7, v360-v369, z1-z9, z480-z490
+Temporary Flags: 1-5
+Functions: FU10900-FU10912
+Custom Dialogue #s: DG3
+
+-----------------------------------------------------------------------
+
+ [Setup]
+
+!#UN:P44/?v1; [Check if script is enabled: v1]
+
+  [Bit table, also in Adventure Cave, Map Rules and Monster Mutterings]
+!#VRv550&v1=1:C1/2/4/8/16/32/64/128/256/512;
+
+!#UN&v1=1:B0/1; [Enable Mithril]
+
+!#VRv1240&v1=1:S0; [Initialize changed species counter to 0]
+
+!#VRz816&v1=1:Sz144000; [Hint text - not visited]
+
+!#VRz817&v1=1:Sz144001; [Hint text- visited]
+
+!#HT63/65&v1=1:P0/816;
+!#HT63/65&v1=1:P1/817;
+
+-----------------------------------------------------------------------
+
+ [Timer resets the Emerald Towers' non-visited status each week]
+
+!?TM2&$day$>7/$weekday$=$monday$/$once$=1;
+!!UN:P44/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!UN:U63/65/?y-2; [Number of Emerald Towers: y-2]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO10910/1/y-2/1&y-2>0:P; [Loop through all Emerald Towers]
+
+-----------------------------------------------------------------------
+
+ [Reset non-visited status for each Emerald Tower]
+
+!?FU10910;
+
+!!UN:U63/65/-1/1; [Coordinates of next tower in v1/v2/v3]
+!!POv1/v2/v3:N0; [Set PO:N to 0 to reset hint text]
+!!PMv1/v2/v3:V1; [Set Tower to "not visited" for AI]
+
+-----------------------------------------------------------------------
+
+ [Tower with turret is trigger]
+
+!?OB63/65;
+!!UN:P44/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+ [Initialize Flag 5 to False]
+!!IF:V5/0;
+
+ [Set AI bonus "pyramid" spell to Disguise]
+!!PM998:S4;
+
+ [Store current player in v2 and convert to player bit number]
+!!OW:C?v2;
+!!VRv2:+1; [Add 1 to v2]
+!!FU$bit$:Pv2; [Convert to bit number - result in y-100]
+!!VRv2:Sy-100; [Copy bit number to v2]
+
+ [Check if current AI player has already gotten an improved creature]
+ [v3=v2 if AI has already gotten an improved creature]
+!!VRv3:Sv1271 &v2;
+
+!!VRv1270:S0; [Initialize bonus bought variable to 0]
+!!PO998:N?v1; [Check if tower has been visited this week: v1=1 if visited]
+
+!!IF&v1=1/1000:M1/z144002; ["Go away, wizard is busy" text]
+
+ [Exit trigger if Tower has already been visited this]
+ [week or AI has already gotten an improved creature]
+!!FU|v1=1/v2=v3:E;
+
+!!IF&1000:Q2/5/7/2/z144003; ["Do you have an appointment?" text]
+!!IF&-1000:V2/1; [Set flag 2 to true for AI]
+
+!!OW&2:R-1/5/?y-2; [Player's current gem total: y-2]
+!!VRz9:S^^;
+!!VRz9&2/y-2<7:Sz144004; ["Not enough gems" text]
+!!IF&y-2<7/1000:V2/0; [Set flag 2 to false if human player doesn't have at least 7 gems]
+
+!!OW&2/1000:R-1/5/d-7; [Remove seven gems from human player's total]
+!!VRz1:Sz144005; ["You enter and the wizard appears" text]
+!!VRz-1:Sz144006; [Alternate dialogue "You enter and the wizard appears" text]
+!!VRz2:S^../data/p/s044_emerald.gif^;
+!!VRz3:Sz144007; ["The Wizard"]
+!!UN:J8/6/^s044_emerald.gif^; [Check if image file exists: Flag 1=True if yes]
+!!IF&1000/1:D3/1/0/0/2/0/0/0/3/0/0/0/0/0/0/0; [Set up custom dialogue with wizard picture]
+!!IF&1000/1:F3/0/0/0/0/0; [Remove cancel button]
+!!IF&2/1000/1:E1/3; [Display custom dialogue box]
+!!IF&2/1000/-1:M^%Z-1^; [Display alternative standard dialogue if image file is missing]
+
+!!FU10900&2:P; [Choose species to improve]
+
+!!IF&-2/1000:M1/z144008; ["No appointement, no entrance" text]
+
+-----------------------------------------------------------------------
+
+!?FU10900;
+
+  [Build a listing of different creature types in hero's army (v360-v366), v1=total number]
+  [Store creature names in z480-z486 - skip this if AI]
+!!FU10901&1000:P;
+
+!!VRz1:Sz144009; ["What species do you want to improve" text]
+!!VRz2:Sz144010; ["None, I changed my mind" text]
+!!VRv367:S0; [Initialize v367 to 0]
+!!IF&v1>0/1000:G1/367/128/1/480/481/482/483/484/485/486/2/0/0/0/0; [Display checkbox dialogue to choose a creature]
+
+!!IF&v1=0/1000:M1/z144011; ["You have no creatures" text]
+
+ [Determine which box was checked - store result (creature number) in v2]
+!!VRv2:S0;
+!!VRv2&v367=1:Sv360; [Creature type 1]
+!!VRv2&v367=2:Sv361; [Creature type 2]
+!!VRv2&v367=4:Sv362; [Creature type 3]
+!!VRv2&v367=8:Sv363; [Creature type 4]
+!!VRv2&v367=16:Sv364; [Creature type 5]
+!!VRv2&v367=32:Sv365; [Creature type 6]
+!!VRv2&v367=64:Sv366; [Creature type 7]
+!!VRv2&v367=128:S-1; [None]
+
+!!DO10912/0/6/1&-1000:P; [Choose creature for AI to buy a bonus for: v2]
+
+!!IF:V4/1; [Set flag 4 to true]
+!!IF&v2=-1/1000:Q4/z144012; ["If you don't need my services then go away" text]
+
+ [Check for "Week of Monsters" script activated and if it's the monster of the week.]
+ [Flag 56 will be true if script is active, v170 is monster of the week]
+!!UN&v2>=0:N3/3/v2/0; [Store monster name (singular) in z3]
+!!UN&v2>=0:N3/4/v2/1; [Store monster name (plural) in z4]
+!!IF&56/v170>=0/v170=v2/1000:Q4/21/v2/2/z144013; ["Sorry, but that's a 'week of' monster" text]
+
+!!VRv2&56/v170>=0/v170=v2:S-1; [Set v2 to -1 if it's the monster of the week]
+
+  [Check if this is a new creature (if it is and if v1240>12, set v2 to -1)]
+  [If this is a new creature, set v6 to -1, if not new, set v6 to loop index number]
+!!VRv6:S-1;
+!!DO10908/1/v1240/1&v2>=0/v1240>0:P;
+!!IF&v1240>=12/v6<0/v2>=0/1000:Q4/z144014; ["Sorry but there's already 12 species enchanted" text]
+
+!!VRv2&v1240>=12/v6<0:S-1; [Set v2 to -1 if v1240 = 12 and creature isn't new]
+
+!!FU10902&v2>=0:P; [Display improvement options]
+
+!!FU10900&v2=-1/-4/1000:P; [Choose another species to improve]
+
+ [If player didn't buy a bonus]
+!!IF&4/-5/v1270=0/v1270<>100/1000:Q1/5/6/1/z144015; ["You didn't buy anything so here's a refund" text]
+!!OW&4/-5/v1270=0/v1270<>100/1000:R-1/5/d6; [Give back 6 gems if nothing bought]
+!!IF&4/-5/v1270=0/v1270<>100/1000:V5/1; [Set Flag 5 to True]
+
+ [If player bought "24 shots" and nothing else]
+!!IF&4/-5/v1270=100/1000:Q1/5/6/1/z144016; ["You didn't buy much so here's a refund" text]
+!!OW&4/-5/v1270=100/1000:R-1/5/d6; [Give back 6 gems if only "24 shots" bought]
+!!IF&4/-5/v1270=100/1000:V5/1; [Set Flag 5 to True]
+
+-----------------------------------------------------------------------
+
+ [Store unique creature numbers in v360-v366 (-1 equals no creature)]
+ [v1=number of unique creature numbers in hero's army]
+
+!?FU10901;
+
+!!VRv1:S0;
+!!VRv360:C-1/-1/-1/-1/-1/-1/-1;
+!!VRz480:S^^;
+!!VRz481:S^^;
+!!VRz482:S^^;
+!!VRz483:S^^;
+!!VRz484:S^^;
+!!VRz485:S^^;
+!!VRz486:S^^;
+
+!!HE-1:C0/0/?y1/?y2;   [Slot 0]
+!!VRv1&y2>0:+1;
+!!VRv360&y2>0:Sy1;
+!!UN&y2>0:N3/480/y1/1;
+
+!!HE-1:C0/1/?y1/?y2;   [Slot 1]
+!!VRy4:S0;
+!!VRy4&v1=1/y1=v360:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+!!HE-1:C0/2/?y1/?y2;   [Slot 2]
+!!VRy4:S0;
+!!VRy4&v1>=1/y1=v360:S99;
+!!VRy4&v1=2/y1=v361:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+!!HE-1:C0/3/?y1/?y2;   [Slot 3]
+!!VRy4:S0;
+!!VRy4&v1>=1/y1=v360:S99;
+!!VRy4&v1>=2/y1=v361:S99;
+!!VRy4&v1=3/y1=v362:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+!!HE-1:C0/4/?y1/?y2;   [Slot 4]
+!!VRy4:S0;
+!!VRy4&v1>=1/y1=v360:S99;
+!!VRy4&v1>=2/y1=v361:S99;
+!!VRy4&v1>=3/y1=v362:S99;
+!!VRy4&v1=4/y1=v363:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+!!HE-1:C0/5/?y1/?y2;   [Slot 5]
+!!VRy4:S0;
+!!VRy4&v1>=1/y1=v360:S99;
+!!VRy4&v1>=2/y1=v361:S99;
+!!VRy4&v1>=3/y1=v362:S99;
+!!VRy4&v1>=4/y1=v363:S99;
+!!VRy4&v1=5/y1=v364:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+!!HE-1:C0/6/?y1/?y2;   [Slot 6]
+!!VRy4:S0;
+!!VRy4&v1>=1/y1=v360:S99;
+!!VRy4&v1>=2/y1=v361:S99;
+!!VRy4&v1>=3/y1=v362:S99;
+!!VRy4&v1>=4/y1=v363:S99;
+!!VRy4&v1>=5/y1=v364:S99;
+!!VRy4&v1=6/y1=v365:S99;
+!!VRv1&y2>0/y4<>99:+1;
+!!VRy3&y2>0/y4<>99:S359 +v1;
+!!VRy5&y2>0/y4<>99:S479 +v1;
+!!UN&y2>0/y4<>99:N3/y5/y1/1;
+!!VRvy3&y2>0/y4<>99:Sy1;
+
+-----------------------------------------------------------------------
+
+ [Choose the type of improvement]
+
+!?FU10902;
+
+!!UN:N3/3/v2/0; [Store singular name of creature type in z3]
+
+!!VRy2:S5; [+5 Attack bonus: y2]
+
+!!VRy3:S5; [+5 Defense bonus: y3]
+
+!!MA:Ev2/?y1; [Calculate 25% Damage bonus: y4]
+!!VRy4:Sy1 :4;
+!!VRy4&y4=0:S1; [Minimum bonus is 1]
+
+!!MA:Pv2/?y1; [Calculate 25% Health bonus: y5]
+!!VRy5:Sy1 :4;
+!!VRy5&y5=0:S1; [Minimum bonus is 1]
+
+!!MA:Sv2/?y1; [Calculate 25% Speed bonus: y6]
+!!VRy6:Sy1 :4;
+!!VRy6&y6=0:S1; [Minimum bonus is 1]
+
+!!MA:Gv2/?y1; [Calculate 50% Growth bonus: y7]
+!!VRy7:Sy1 :2;
+!!VRy7&y7=0:S1; [Minimum bonus is 1]
+
+!!MA:Nv2/?y8; [Determine number of shots creature has now: y8]
+
+!!MA:Bv2/?y10; [Determine number of spell castings creature has now: y10]
+!!VRy15&y10>0:S5; [Initialize cost of extra spells to 5 Mithril: y15]
+!!VRy15|v2=13/v2=150:S20; [Archangels/Supreme Archangels = 20 Mithril: y15]
+!!VRz-2|v2=13/v2=150:Sz144126; [Resurrection]
+!!VRy15|v2=131/v2=158:S18; [Phoenix/Sacred Phoenix = 18 Mithril: y15]
+!!VRz-2|v2=131/v2=158:Sz144127; [Rebirth]
+!!VRy15&v2=51:S10; [Pit Lords = 10 Mithril: y15]
+!!VRz-2&v2=51:Sz144128; [Demon Resurrection]
+!!VRy15&v2=37:S8; [Master Genies = 8 Mithril: y15]
+!!VRz-2&v2=37:Sz144129; [Random Spell]
+!!VRy15&v2=134:S5; [Faerie Dragons = 5 Mithril: y15]
+!!VRz-2&v2=134:Sz144130; [Random Damage Spell]
+!!VRy15&v2=91:S3; [Ogre Magi = 3 Mithril: y15]
+!!VRz-2&v2=91:Sz144131; [Bloodlust]
+!!VRy15|v2=123/v2=125/v2=127/v2=129:S2; [Ice/Magma/Storm/Energy Elementals = 2: y15]
+!!VRz-2&v2=123:Sz144132; [Protection from Water]
+!!VRz-2&v2=125:Sz144133; [Protection from Earth]
+!!VRz-2&v2=127:Sz144134; [Protection from Air]
+!!VRz-2&v2=129:Sz144135; [Protection from Fire]
+!!VRy15|v2=152/v2=173:S0; [Lords of Thunder/Santa Gremlins = n/a: y15]
+
+!!VRz1:Sz144017; ["How would like this species improved?" text]
+!!VRz2:Sz144018; ["Forget it, I've changed my mind" text]
+!!VRz480:Sz144019; [Attack]
+!!VRz481:Sz144020; [Defense]
+!!VRz482:Sz144021; [Damage]
+!!VRz483:Sz144022; [Health]
+!!VRz484:Sz144023; [Speed]
+!!VRz485:Sz144024; [Growth]
+!!VRz486:S^^; [Initialize shots text to null string: z486]
+!!UN:P900/?y13; [Check if Stack Experience is enabled: y13=1 if yes]
+!!EAv2:F0/?y16; [Check next empty line for creature: y16]
+!!EAv2:F102/83/?y17; [Check if stack can gain Shooting ability from stack experience: y17]
+!!VRy14&y16<>y17/y8<24/y13=1:S99; [Set y14 to 99 if creature can gain Shooting ability and <24 shots: y14]
+!!VRz486&y8>0/y8<24/v2<>14/v2<>15|y14=99:Sz144025; [24 shots]
+!!VRz487&y10>0/y15>0:Sz144026; [+1 spell casting]
+!!VRz487|y10<1/y10>12:S^^; [If creature has no spell castings or more than 12, don't offer option]
+
+!!MA:Lv2/?y18; [Creature's level: 0..6: y18]
+!!VRy19&v6>0:S469 +v6; [Index for v variable with # of Mithril special abilities this creature already has: y19]
+!!VRy20&v6>0:Svy19; [Number of Mithril special abilities this creature already has: y20]
+!!VRy21:S7 -y18; [Maximum # of Mithril special abilities (1..7): y21]
+
+!!VRz488:Sz144027; [A new special ability]
+!!VRz488&v6>0/y20>=y21:S^^; [Don't offer Special Ability option if creature has maximum number already]
+
+!!IF&1000:G1/368/512/1/480/481/482/483/484/485/486/487/488/2/0/0; [Display option checkbox for bonuses]
+
+* [Determine which box was checked (bonus type) - store result in v3]
+!!VRv3:S0;
+!!VRv3&v368=1:S2;
+!!VRv3&v368=2:S3;
+!!VRv3&v368=4:S4;
+!!VRv3&v368=8:S5;
+!!VRv3&v368=16:S6;
+!!VRv3&v368=32:S7;
+!!VRv3&v368=64:S8;
+!!VRv3&v368=128:S9;
+!!VRv3&v368=256:S10;
+!!VRv3&v368=512:S-1;
+
+!!VRv3&-1000:S2 R6; [For AI, set v3 to random number from 2..8]
+!!VRv3&-1000/v3=8:S10; [For AI, if v3=8, set ot to 10]
+
+!!VRv5:S0;
+!!FU10906&v3=10:P; [Give choice of Special Bonus]
+
+!!VRv4:S0;
+!!FU10903&v3>1/1000:Py15;  [Ask player to pay for Bonus: v4=1 if player pays]
+!!VRv4&v3>1/-1000:S1; [Set v4 to 1 if AI unless special bonus not given]
+
+!!VRy9&v3>=2/v3<=7:Syv3; [Bonus amount: y9]
+
+!!FU10905&v4=1:Py9; [Add bonus to creature type if player paid for it]
+
+!!VRv1240&v4=1/v6<0:+1; [Increment Changed Creature Counter if v4=1 and v6<0]
+!!FU10909&v4=1:P; [Change species name to reflect ability/bonus just gained]
+
+!!PO998&v4=1:N1; [Set hint text to "visited"]
+
+!!IF&v3=-1/1000:Q4/z144028;
+
+!!VRv3&v3>1/v4=0/-4/1000:S-1; [Set v3 to -1 if player can't pay but doesn't leave]
+!!FU10900&v3=-1/-4/1000:P; [Choose another species to improve]
+
+!!OW:C?y11;        [Store current player in y11]
+!!VRy12:S550 +y11; [y12 is index for v variable with bit number for current player]
+!!VRv1271&-1000/v3>0:+vy12; [Add AI player number to v1271 so it won't get another bonus]
+
+-----------------------------------------------------------------------
+
+ [Player pays for bonus in resources plus creatures]
+ [v2=creature type, v3=bonus type]
+
+!?FU10903;
+
+ [Determine resource type and cost: y1=resource type, y2=resource amount]
+!!VRy1&v3=2:S3;  [Attack]
+!!VRy2&v3=2:S15;
+!!VRz1&v3=2:Sz144029;
+!!VRy1&v3=3:S2;  [Defense]
+!!VRy2&v3=3:S30;
+!!VRz1&v3=3:Sz144030;
+!!VRy1&v3=4:S5;  [Damage]
+!!VRy2&v3=4:S20;
+!!VRz1&v3=4:Sz144031;
+!!VRy1&v3=5:S4;  [Health]
+!!VRy2&v3=5:S20;
+!!VRz1&v3=5:Sz144032;
+!!VRy1&v3=6:S1;  [Speed]
+!!VRy2&v3=6:S20;
+!!VRz1&v3=6:Sz144033;
+!!VRy1&v3=7:S0;  [Growth]
+!!VRy2&v3=7:S75;
+!!VRz1&v3=7:Sz144034;
+!!VRy1&v3=8:S6;  [Shots]
+!!VRy2&v3=8:S1000;
+!!VRz1&v3=8:Sz144035;
+!!VRy1&v3=9:S7;  [Spells]
+!!VRy2&v3=9:Sx1;
+!!VRz1&v3=9:Sz144036;
+!!VRy1&v3=10:S7;  [Special]
+!!VRy2&v3=10/v5=1:S20;  [Flying]
+!!VRy2&v3=10/v5=2:S10;  [Extended Attack]
+!!VRy2&v3=10/v5=3:S10;  [Undead]
+!!VRy2&v3=10/v5=4:S5;  [No Morale]
+!!VRy2&v3=10/v5=5:S25;  [Two Attacks]
+!!VRy2&v3=10/v5=6:S20;  [Attack All Adjacent]
+!!VRy2&v3=10/v5=7:S15;  [No Retaliation]
+!!VRy2&v3=10/v5=8:S5;  [Immune to Mind Spells]
+!!VRy2&v3=10/v5=9:S10;  [Immune to Fire Spells]
+!!VRy2&v3=10/v5=10:S10; [No Close Combat Penalty]
+!!VRz1&v3=10:Sz144036;
+
+!!IF:V4/1; [Set flag 4 to true]
+!!OW:R-1/y1/?y3; [Check if player can afford resource cost: y3=player's amount of resource]
+
+!!IF&y2>y3/1000:Q4/y1/y2/2/z144037;
+
+ [Calculate number of creatures that must be left: y7]
+!!MA:Gv2/?y6; [Growth of creature: y6]
+!!VRy10:Sy6 :2; [50% of growth (rounded down): y10]
+!!VRy7:Sy6 +y10; [150% of growth (rounded down): y7]
+!!VRy7|v2=56/v2=57:S48; [Double for Skeletons or Skeleton Warriors]
+
+!!VRz8&y7=1:Sz3; [One]
+!!VRz8&y7>1:Sz4; [More than one]
+!!VRz9&y7=1:Sz144038; [One]
+!!VRz9&y7>1:S^^; [More than one]
+
+!!IF:V3/0;
+!!VRy5:S65536 *y7; [Set number text for creature picture]
+!!VRy5:+v2; [Set number text for creature picture]
+
+!!IF&y3>=y2/1000:Q3/21/y5/2/z144039;
+
+!!VRv3&-3/y3>=y2:S-1; [If the player doesn't agree, set v3 to -1]
+
+!!VRv7:S0;
+!!DO10904/0/6/1&3:P; [See if hero has enough creatures of the type to be enchanted]
+!!DO10911/0/6/1&v7>=y7/3:Py7; [Remove the creatures (if enough)]
+
+!!IF&v7<y7/3/1000:Q4/21/y5/2/z144040;  [If not enough creatures, display this]
+
+!!UN&3:N3/4/v2/1;
+!!IF&3/v7>=y7/1000:Q1/21/y5/y1/y2/1/z144041;
+
+!!VRy4&3/v7>=y7:Sy3 -y2; [y4 = player's new amount of resource after payment]
+!!OW&3/v7>=y7:R-1/y1/y4; [Set player's resource amount to y4]
+
+!!VRv4&3/v7>=y7:S1; [Set v4 to 1 to indicate the bonus should be given]
+!!VRv1270&v4=1/v3<>8:+1; [Increment v1270 to indicate at least one bonus bought this visit]
+!!VRv1270&v4=1/v3=8/v1270=0:S100; [Set v1270 to 100 to indicate "24 shots" was bought]
+
+-----------------------------------------------------------------------
+
+ [Check if hero has enough creatures of specified type for "payment"]
+ [v2=creature type, x16=slot number]
+ [At end of loop, v7=total creatures of type v2 in hero's army]
+
+!?FU10904;
+
+!!HE-1:C0/x16/?y1/?y2; [y1=type, y2=number]
+!!VRv7&y1=v2/y2>0:+y2; [Add number of creatures of right type in slot to v7 total]
+
+-----------------------------------------------------------------------
+
+ [Add bonus to creature type]
+ [v2=creature type, v3=bonus type, x1=bonus amount]
+
+!?FU10905;
+
+!!MA&v3=2:Av2/dx1; [Attack bonus]
+!!MA&v3=3:Dv2/dx1; [Defense bonus]
+!!MA&v3=4:Ev2/dx1; [Damage high bonus]
+!!MA&v3=4:Mv2/dx1; [Damage low bonus]
+!!MA&v3=5:Pv2/dx1; [Health bonus]
+!!MA&v3=6:Sv2/dx1; [Speed bonus]
+!!MA&v3=7:Gv2/dx1; [Growth bonus]
+!!MA&v3=8:Nv2/24;  [Shots bonus]
+!!MA&v3=9:Bv2/d1;  [Spell casting bonus]
+
+!!FU10907&v3=10:P; [Special]
+
+-----------------------------------------------------------------------
+
+ [Choose Special Ability: v2=creature number]
+
+!?FU10906;
+
+!!VRz480:S^^; !!VRz481:S^^; !!VRz482:S^^; !!VRz483:S^^; !!VRz484:S^^;
+!!VRz485:S^^; !!VRz486:S^^; !!VRz487:S^^; !!VRz488:S^^; !!VRz489:S^^; !!VRz490:S^^;
+
+!!MA:Xv2/?v369; [Existing special abilities of monster v2: v369]
+
+!!VRy3&-1000:S1 R9; [If AI, set y3 to random number from 1..10]
+!!VRy4&-1000:S-1; [If AI, initialize y4 to -1]
+
+!!VRy1:Sv369; [Flying]
+!!VRy1:&2;
+!!VRz480&y1=0:Sz144042;
+!!VRz480&y1=2:S^^;
+!!VRy4&-1000/y3=1/y1=0:S1; [Give AI Flying if y3=1 and doesn't have it already]
+
+!!VRy1:Sv369; [Extended Attack]
+!!VRy1:&8;
+!!VRy5:Sv369; [Check for Attack All Adjacent]
+!!VRy5:&524288;
+!!VRz481&y1=0/y5=0:Sz144043;
+!!VRz481|y1=8/y5=524288:S^^;
+!!VRy4&-1000/y3=2/y1=0/y5=0:S2; [Give AI Extended Attack if y3=2 and doesn't have it already]
+
+!!VRy1:Sv369; [Undead]
+!!VRy1:&262144;
+!!VRz482&y1=0:Sz144044;
+!!VRz482&y1=262144:S^^;
+!!VRy4&-1000/y3=3/y1=0:S3; [Give AI Undead if y3=3 and doesn't have it already]
+
+!!VRy1:Sv369; [No Morale]
+!!VRy1:&131072;
+!!VRz483&y1=0:Sz144045;
+!!VRz483&y1=131072:S^^;
+!!VRy4&-1000/y3=4/y1=0:S4; [Give AI No Morale if y3=4 and doesn't have it already]
+
+!!VRy1:Sv369; [Two Attacks]
+!!VRy1:&32768;
+!!VRz484&y1=0:Sz144046;
+!!VRz484&y1=32768:S^^;
+!!VRy4&-1000/y3=5/y1=0:S5; [Give AI Two Attacks y3=5 and doesn't have it already]
+
+!!VRy1:Sv369; [Attack All Adjacent]
+!!VRy1:&524288;
+!!VRy5:Sv369; [Check for Extended Attack]
+!!VRy5:&8;
+!!VRz485&y1=0/y5=0:Sz144047;
+!!VRz485|y1=524288/y5=8/v2=63/v2=159:S^^; [Note: V. Lords and Ghosts can't get this because it overrides their ability]
+!!VRy4&-1000/y3=6/y1=0/y5=0/v2<>63/v2<>159:S6; [Give AI Attack All Adjacent if y3=6 and doesn't have it already]
+
+!!VRy1:Sv369; [No Retaliation]
+!!VRy1:&65536;
+!!VRz486&y1=0:Sz144048;
+!!VRz486&y1=65536:S^^;
+!!VRy4&-1000/y3=7/y1=0:S7; [Give AI No Retaliation if y3=7 and doesn't have it already]
+
+!!VRy1:Sv369; [Immune to Mind Spells]
+!!VRy1:&1024;
+!!VRz487&y1=0:Sz144049;
+!!VRz487&y1=1024:S^^;
+!!VRy4&-1000/y3=8/y1=0:S8; [Give AI Immune to Mind Spells if y3=8 and doesn't have it already]
+
+!!VRy1:Sv369; [Immune to Fire Spells]
+!!VRy1:&16384;
+!!VRz488&y1=0:Sz144050;
+!!VRz488&y1=16384:S^^;
+!!VRy4&-1000/y3=9/y1=0:S9; [Give AI Immune to Fire Spells if y3=9 and doesn't have it already]
+
+!!VRy1:Sv369; [No Close Combat Penalty]
+!!VRy2:Sv369;
+!!VRy1:&4096; (Check No Close Combat Penalty)
+!!VRy2:&4;    (Check Shooter)
+!!VRz489&y1=0/y2=4:Sz144051;
+!!VRz489|y1=4096/y2=0:S^^;
+!!VRy4&-1000/y3=10/y1=0/y2=4:S10; [Give AI No Close Combat Penalty if y3=10, Shooter and doesn't have it already]
+
+!!VRz1:Sz144052;
+!!VRz2:Sz144053;
+
+!!IF&1000:G1/368/1024/1/480/481/482/483/484/485/486/487/488/489/2/0;
+
+ [Determine which box was checked - store result in v5]
+!!VRv5:S0;
+!!VRv5&v368=1:S1;
+!!VRv5&v368=2:S2;
+!!VRv5&v368=4:S3;
+!!VRv5&v368=8:S4;
+!!VRv5&v368=16:S5;
+!!VRv5&v368=32:S6;
+!!VRv5&v368=64:S7;
+!!VRv5&v368=128:S8;
+!!VRv5&v368=256:S9;
+!!VRv5&v368=512:S10;
+!!VRv5&v368=1024:S-1;
+
+!!VRv5&-1000:Sy4; [For AI, set v5 to special ability selected]
+
+!!VRv3&v5=-1:S-1; [If player changes his or her mind, set v3 to -1]
+
+-----------------------------------------------------------------------
+
+ [Add Special Ability: v2=creature number, v5=bonus number]
+
+!?FU10907&v5>=1/v5<=10;
+
+!!VRy2&v5=1:S2;       [Flying: y2]
+!!VRy2&v5=2:S8;       [Extended Attack: y2]
+!!VRy2&v5=3:S262144;  [Undead: y2]
+!!VRy2&v5=4:S131072;  [Unaffected by Morale: y2]
+!!VRy2&v5=5:S32768;   [Two Attacks: y2]
+!!VRy2&v5=6:S524288;  [Attack All Adjacent: y2]
+!!VRy2&v5=7:S65536;   [No Retaliation: y2]
+!!VRy2&v5=8:S1024;    [Immunity to Mind Spells: y2]
+!!VRy2&v5=9:S16384;   [Immunity to Fire Spells: y2]
+!!VRy2&v5=10:S4096;   [No Close Combat Penalty: y2]
+
+!!MA:Xv2/?y1; [Read Creature Flags: y1]
+!!VRy1:|y2; [OR Creature Flags (y1) with Special Ability bit (y2): y1]
+!!MA:Xv2/y1; [Set updated Creature Flags: y1]
+
+* [Index for v variable with # of Mithril special abilities this creature already has: y3]
+!!VRy3&v6>0:S469 +v6; [For creature that's been enchanted before: y3]
+!!VRy3&v6<0:S469 +v1240 +1; [For newly enchanted creature: y3]
+
+* [Store number of Mithril special abilities this creature already has in v470-v481]
+!!VRvy3:+1; [Add 1 to current number of special abilities for this creature: vy3]
+
+-----------------------------------------------------------------------
+
+ [Check if this is a new creature species to be enchanted]
+ [If new, v6=-1, if not new, set v6 to loop index number (x16)]
+
+!?FU10908;
+
+!!VRy1:S1240 +x16;  [Index of v variable, holding creature numbers]
+!!VRv6&vy1=v2:Sx16; [If not new, set v6 to loop index number (x16)]
+!!VRx16&vy1=v2:S99; [If not new, exit loop]
+
+-----------------------------------------------------------------------
+
+ [Change species name to reflect ability or bonus just gained]
+ [v2=creature number, v3=standard bonus type, v5=special bonus type (if v3=10 or v5>0)]
+ [v6=loop index number, v1240=changed creature counter]
+
+!?FU10909;
+
+!!VRy1:S1 R3;   [y1=random number from 1 to 4]
+!!UN:G1/v2/0/0; [Restore original singular name of species]
+!!UN:G1/v2/1/0; [Restore original plural name of species]
+
+ [If a new species, store creature number in v(1240+v1240)]
+!!VRy4:S1240 +v1240;
+!!VRvy4&v6<0:Sv2;
+
+ [Set index number for singular name z variable (y2) and plural name z variable (y3)]
+!!VRy2&v6<0:Sv1240 *2;
+!!VRy2&v6>0:Sv6 *2;
+!!VRy2:+816;
+!!VRy3:Sy2 +1;
+
+ [Store standard singular species name in z6 variable, plural in z7]
+!!UN:N3/6/v2/0;
+!!UN:N3/7/v2/1;
+
+ [Generate descriptor word to preface name: z5]
+!!VRz5&v3=2/y1=1:Sz144054;  [Attack]
+!!VRz5&v3=2/y1=2:Sz144055;
+!!VRz5&v3=2/y1=3:Sz144056;
+!!VRz5&v3=2/y1=4:Sz144057;
+
+!!VRz5&v3=3/y1=1:Sz144058;  [Defense]
+!!VRz5&v3=3/y1=2:Sz144059;
+!!VRz5&v3=3/y1=3:Sz144060;
+!!VRz5&v3=3/y1=4:Sz144061;
+
+!!VRz5&v3=4/y1=1:Sz144062;  [Damage]
+!!VRz5&v3=4/y1=2:Sz144063;
+!!VRz5&v3=4/y1=3:Sz144064;
+!!VRz5&v3=4/y1=4:Sz144065;
+
+!!VRz5&v3=5/y1=1:Sz144066;  [Health]
+!!VRz5&v3=5/y1=2:Sz144067;
+!!VRz5&v3=5/y1=3:Sz144068;
+!!VRz5&v3=5/y1=4:Sz144069;
+
+!!VRz5&v3=6/y1=1:Sz144070;  [Speed]
+!!VRz5&v3=6/y1=2:Sz144071;
+!!VRz5&v3=6/y1=3:Sz144072;
+!!VRz5&v3=6/y1=4:Sz144073;
+
+!!VRz5&v3=7/y1=1:Sz144074;  [Growth]
+!!VRz5&v3=7/y1=2:Sz144075;
+!!VRz5&v3=7/y1=3:Sz144076;
+!!VRz5&v3=7/y1=4:Sz144077;
+
+!!VRz5&v3=8/y1=1:Sz144078;  [Shots]
+!!VRz5&v3=8/y1=2:Sz144079;
+!!VRz5&v3=8/y1=3:Sz144080;
+!!VRz5&v3=8/y1=4:Sz144081;
+
+!!VRz5&v3=9/y1=1:Sz144082;  [Spells]
+!!VRz5&v3=9/y1=2:Sz144083;
+!!VRz5&v3=9/y1=3:Sz144084;
+!!VRz5&v3=9/y1=4:Sz144085;
+
+!!VRz5&v5=1/y1=1:Sz144086;  [Flying]
+!!VRz5&v5=1/y1=2:Sz144087;
+!!VRz5&v5=1/y1=3:Sz144088;
+!!VRz5&v5=1/y1=4:Sz144089;
+
+!!VRz5&v5=2/y1=1:Sz144090;  [Extended Attack]
+!!VRz5&v5=2/y1=2:Sz144091;
+!!VRz5&v5=2/y1=3:Sz144092;
+!!VRz5&v5=2/y1=4:Sz144093;
+
+!!VRz5&v5=3/y1=1:Sz144094;  [Undead]
+!!VRz5&v5=3/y1=2:Sz144095;
+!!VRz5&v5=3/y1=3:Sz144096;
+!!VRz5&v5=3/y1=4:Sz144097;
+
+!!VRz5&v5=4/y1=1:Sz144098;  [No Morale]
+!!VRz5&v5=4/y1=2:Sz144099;
+!!VRz5&v5=4/y1=3:Sz144100;
+!!VRz5&v5=4/y1=4:Sz144101;
+
+!!VRz5&v5=5/y1=1:Sz144102;  [Two Attacks]
+!!VRz5&v5=5/y1=2:Sz144103;
+!!VRz5&v5=5/y1=3:Sz144104;
+!!VRz5&v5=5/y1=4:Sz144105;
+
+!!VRz5&v5=6/y1=1:Sz144106;  [Attack All Adjacent]
+!!VRz5&v5=6/y1=2:Sz144107;
+!!VRz5&v5=6/y1=3:Sz144108;
+!!VRz5&v5=6/y1=4:Sz144109;
+
+!!VRz5&v5=7/y1=1:Sz144110;  [No Retaliation]
+!!VRz5&v5=7/y1=2:Sz144111;
+!!VRz5&v5=7/y1=3:Sz144112;
+!!VRz5&v5=7/y1=4:Sz144113;
+
+!!VRz5&v5=8/y1=1:Sz144114;  [Immune to Mind Spells]
+!!VRz5&v5=8/y1=2:Sz144115;
+!!VRz5&v5=8/y1=3:Sz144116;
+!!VRz5&v5=8/y1=4:Sz144117;
+
+!!VRz5&v5=9/y1=1:Sz144118;  [Immune to Fire Spells]
+!!VRz5&v5=9/y1=2:Sz144119;
+!!VRz5&v5=9/y1=3:Sz144120;
+!!VRz5&v5=9/y1=4:Sz144121;
+
+!!VRz5&v5=10/y1=1:Sz144122;  [No Close Combat Penalty]
+!!VRz5&v5=10/y1=2:Sz144123;
+!!VRz5&v5=10/y1=3:Sz144124;
+!!VRz5&v5=10/y1=4:Sz144125;
+
+ [Set new names for species]
+!!VRzy2:S^%Z5 %Z6^; [Singular]
+!!UN:G1/v2/0/y2;
+!!VRzy3:S^%Z5 %Z7^; [Plural]
+!!UN:G1/v2/1/y3;
+
+-----------------------------------------------------------------------
+
+ [Remove creatures of specified type from hero's army for "payment"]
+ [v2=creature type, x1=number of creatures needed, x16=slot number]
+
+!?FU10911;
+
+!!HE-1:C0/x16/?y1/?y2; [y1=type, y2=number]
+
+!!HE-1&y1=v2/y2>0/y2<=x1:C0/x16/-1/0; [Remove entire stack if less than or equal to # needed]
+!!VRy4&y1=v2/y2>0/y2<=x1:Sx1 -y2; [Reduce x1 (y4) by amount in stack]
+
+!!VRy3&y1=v2/y2>x1:Sx1 *-1; [Store negative value of x1 in y3]
+!!HE-1&y1=v2/y2>x1:C0/x16/d/dy3/0/3; [Remove x1 (y3) troops from stack if more than # needed without changing exp.]
+!!VRy4&y1=v2/y2>x1:S0; [Reduce x1 (y4) to 0]
+
+!!VRx1&y1=v2/y2>0:Sy4; [Set x1 to y4]
+
+
+-----------------------------------------------------------------------
+
+ [Select a creature type for AI to buy a bonus for]
+ [based on highest AI value of a given stack: v2]
+
+!?FU10912;
+
+!!HE-1:C0/x16/?y1/?y2;   [Slot x16: y1=creature type, y2=number of creatures]
+!!VRy3:S0; [Initialize y3 to 0]
+!!MA&y1>=0/y2>0:Iy1/?y3; [AI value for creature type y1: y3]
+!!VRy4&y3>0:Sy3 *y2; [Total AI value for stack: y4]
+!!VRv2&y4>x1:Sy1; [Creature type with highest AI value: v2]
+!!VRx1&y4>x1:Sy4; [Highest AI value: x1]
+
+** End of Script **
+

@@ -1,0 +1,1681 @@
+ZVSE
+ERMS_ScriptName=script26
+ERMS_ScriptAuthor=Perfecto (idea by Dieter Averbeck)
+ERMS_ScriptVersion=2.2.3
+ERMS_ScriptDate=12.10(October).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=v154-164;v4101-4136
+ERMS_ScriptUsedTimers=2
+ERMS_ScriptUsedFunctions=160-175
+ERMS_ScriptUsedFlags=1-2
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+********************************************************************************
+** Script 26 - Artificer. Created by Andrei Adutskevich (alias Perfect0)      **
+** mailto: Perfecto@cosmostv.by                                               **
+********************************************************************************
+** v2.1.4: 12 October, 2006
+** v2.1.3: 26 August, 2005                                                    **
+** v2.1.2: 24 August, 2005                                                    **
+** v2.1.1: 28 January, 2005                                                   **
+** v2.1:   26 January, 2005                                                   **
+** v2.0:   14 September, 2004                                                 **
+********************************************************************************
+** Version 2.0 Created 14 September, 2004:                                    **
+** The Artificer upgrades artifacts a hero has equipped                        **
+** The Artificer can upgrade artifacts twice a day,                           **
+** but the second upgrade will cost twice.                                    **
+** The Artificer never upgrades to banned artifacts.                          **
+** The Artificer has correction of prices for boosted and enchanted artifacts.**
+********************************************************************************
+** Version 2.1 Updated 26 January, 2005:                                      **
+** Bug with non correct artifact numbers fixed (connected with AI upgrading)  **
+** AI will never upgrades to artifacts which he already has                   **
+** Still Eye of the Dragon => Pendant of Courage upgrade cost changed to 6000 **
+** Some get syntax changed with check syntax.                                 **
+** Switched to universal timer                                                **
+** If you have both Diplomacy and Estate secondary skills then you will have  **
+** reduced gold price according to the lowest skill level of these skills:    **
+** 0 (none): 100%                                                             **
+** 1 (basic): 90%                                                             **
+** 2 (advanced): 80%                                                          **
+** 3 (expert): 70%                                                            **
+** Gold price depends on day.                                                 **
+********************************************************************************
+** Version 2.1.1 Updated 28 January, 2005:                                    **
+** Bug with replacing objects on day one                                      **
+********************************************************************************
+** Version 2.1.2 Updated 24 August, 2005:                                     **
+** Bug with geting the highest skill level between Diplomacy and Estate       **
+** instead of the lowest.                                                     **
+** Diplomacy artifacts decrease cost of gold:                                 **
+** Statesman's Medal - 5%                                                     **
+** Diplomat's Ring - 10%                                                      **
+** Ambassador's Sash - 15%                                                    **
+********************************************************************************
+** Version 2.1.3 Updated 26 August, 2005:                                     **
+** Removed three "!" corresponding to new erm parser                          **
+********************************************************************************
+** Version 2.1.4 Updated 12 October, 2006 (by Timothy):                       **
+** Replaced HE:F "no artifact" command with $GetBasicPrim$ function           **
+********************************************************************************
+** List of upgradeable artifacts:
+** Centaur Axe => Blackshard of the Dead Knight => Greater Gnoll's Flail => Ogre's Club of Havoc => Sword of Hellfire => Titan's Gladius
+** Shield of the Dwarven Lords => Shield of the Yawning Dead => Buckler of the Gnoll King => Targ of the Rampaging Ogre => Shield of the Damned => Sentinel's Shield
+** Helm of the Alabaster Unicorn => Skull Helmet => Helm of Chaos => Crown of the Supreme Magi => Hellstorm Helmet => Thunder Helmet
+** Breastplate of Petrified Wood => Rib Cage => Scales of the Greater Basilisk => Tunic of the Cyclops King => Breastplate of Brimstone => Titan's Cuirass
+** Armor of Wonder => Sandals of the Saint => Celestial Necklace of Bliss => Lion's Shield of Courage => Sword of Judgement => Helm of Heavenly Enlightenment
+** Quiet Eye of the Dragon => Red Dragon Flame Tongue => Dragon Scale Shield => Dragon Scale Armor
+** Dragonbone Greaves =>  Dragon Wing Tabard => Necklace of Dragonteeth => Crown of Dragontooth
+** Still Eye of the Dragon => Pendant of Courage
+** Amulet of the Undertaker => Vampire's Cowl => Dead Man's Boots
+** Garniture of Interference => Surcoat of Counterpoise => Boots of Polarity
+** Bow of Elven Cherrywood => Bowstring of the Unicorn's Mane => Angel Feather Arrows
+** Bird of Perception => Stoic Watchman => Emblem of Cognizance
+** Statesman's Medal => Diplomat's Ring => Ambassador's Sash
+** Ring of the Wayfarer => Cape of Velocity
+** Equestrian's Gloves => Boots of Speed
+** Necklace of Ocean Guidance => Sea Captain's Hat
+** Charm of Mana => Talisman of Mana => Mystic Orb of Mana
+** Collar of Conjuring => Ring of Conjuring => Cape of Conjuring
+** Recanter's Cloak => Orb of Inhibition
+** Ring of Vitality => Vial of Lifeblood
+** Ring of Life => Vial of Lifeblood
+** Necklace of Swiftness => Cape of Velocity
+** Endless Sack of Gold => Endless Bag of Gold => Endless Purse of Gold
+** Legs of Legion => Loins of Legion => Torso of Legion => Arms of Legion => Head of Legion
+********************************************************************************
+** Ring of Vitality <=> Ring of Life
+** Clover of Fortune <=> Cards of Prophecy <=> Ladybird of Luck
+** Badge of Courage <=> Crest of Valor <=> Glyph of Gallantry
+** Speculum <=> Spyglass
+** Spirit of Oppression <=> Hourglass of the Evil Hour
+** Orb of the Firmament <=> Orb of Silt <=> Orb of Tempestuous Fire <=> Orb of Driving Rain
+** Tome of Fire Magic <=> Tome of Air Magic <=> Tome of Water Magic <=> Tome of Earth Magic
+** Everflowing Crystal Cloak <=> Ring of Infinite Gems <=> Everpouring Vial of Mercury <=> Eversmoking Ring of Sulfur
+** Inexhaustible Cart of Ore <=> Inexhaustible Cart of Lumber
+** Pendant of Life <=> Pendant of Death
+********************************************************************************
+** Quiet Eye of the Dragon + Still Eye of the Dragon => Dragon Eye Ring
+** Clover of Fortune + Cards of Prophecy + Ladybird of Luck + Badge of Courage + Crest of Valor + Glyph of Gallantry => Pendant of Courage
+** Orb of the Firmament + Orb of Silt + Orb of Tempestuous Fire + Orb of Driving Rain => Orb of Vulnerability
+********************************************************************************
+** To use this script, just copy and paste it into a                          **
+** timed event, that not will be shown. For example Day 500.                  **
+** Then place one or more of the object 63/52 on the map                      **
+** (It`s the 46th building after the towns).                                  **
+********************************************************************************
+**  Do not change:                                                            **
+**  FU160-176                                                                 **
+**  v154-164, v4101-4136,                                                     **
+**  z160-164                                                                  **
+**  PO:N                                                                      **
+********************************************************************************
+**  Used as temp:                                                             **
+**  z29-z44                                                                   **
+********************************************************************************
+**  v154 = starting percentage of price                                       **
+**  v155 = script variable (= 1 if script is enabled)                         **
+**  v156 = initialization for FU163-164                                       **
+**  v157 = x                                                                  **
+**  v158 = y                                                                  **
+**  v159 = lvl                                                                **
+**  v160 = Artificer's tiring (PO:N 0 - not tired, 2 - tired, 3 - very tired) **
+**  v161 = 1 if Artifact Boost is enabled                                     **
+**  v162 = bit value of choice                                                **
+**  v163 = numerical value of choice                                          **
+**  v164 = 1 if Enhanced Artifacts is enabled                                 **
+**  v4115 = cost of chosen artifact in Artraits.txt (AI)                      **
+**  v4116 = number of chosen artifact (AI)                                    **
+**  v4117 = correction if 11th-14th artifact was chosen (Human)               **
+**  v4117 = slot of upgraded artifact (AI)                                    **
+**  v4118 = bit value of chosen artificer's service                           **
+**  v4119 = upgradeable artifact counter                                      **
+**  v4120 = number of chosen artifact (Human)                                 **
+**  v4135 = Price                                                             **
+**  v4136 = upgraded art. (AI)                                                **
+**  PO:N = visit var                                                          **
+********************************************************************************
+
+!#UN:P26/=1;                    [Check if script is enabled]
+!#VRv155&1: S1;
+
+!#UN&v155=1:P102/?v161;             [Check if Artifact Boost is enabled in WoGify Options]
+!#UN&v155=1:P71/?v164;              [Check if Enhanced Artifacts is enabled in WoGify Options]
+
+!#VRv154&v155=1: S92;               [starting percentage of price = v154 - 1 ]
+
+** set hints **
+!#VRz160&v155=1:Sz126009;
+!#VRz163&v155=1:Sz126010;
+!#VRz164&v155=1:Sz126011;
+!#HT63/52&v155=1:P0/160;
+!#HT63/52&v155=1:P2/163;
+!#HT63/52&v155=1:P3/164;
+
+!?TM2&v155=1/$once$=1;
+
+!!VRv154:+$month$;
+
+
+!?TM2&v155=1/$once$=1;
+!!UN:U63/52/?y-2;                       [y-2 = quantity of 63/52]
+!!VRv1:S-1;
+!!DO162/1/y-2/1&y-2>0:P;                [reset visits]
+
+*!* OBJECT TRIGGER *!*
+!?OB63/52&v155=1;
+!!VRy-99:S0;                            [errors counter]
+!!VRv157:Sv998;
+!!VRv158:Sv999;
+!!VRv159:Sv1000;
+!!PO157:N?v160;                         {get visit-var)
+!!VRv160&v160=0:+1;                     (set to 1 if not tired)
+
+!!FU168:P;
+
+*!* FU168 MAIN FUNCTION *!******************************************************
+!?FU168&y-99=0;
+
+!!VRv4118:S2048;
+
+** questions of artificer **
+!!IF&1000/v160=1:G1/4118/2048/z126001/z126034/z126035/z126036/z126037////////z126038;
+!!IF&1000/v160=2:G1/4118/2048/z126002/z126034/z126035/z126036/z126037////////z126038;
+!!IF&1000/v160=3:M1/z126012;
+
+** AI = Upgrade **
+!!VRv4118&-1000:S1;
+
+!!FU166:P1;                  [call needed function]
+
+**!** FU160 to upgrade artifact **!*********************************************
+!?FU160&y-99=0;
+
+!!HE-1:A1/?v4101/0;                      [4101 = artifact number at head]
+!!HE-1:A1/?v4102/1;                      [4102 = artifact number at shoulders]
+!!HE-1:A1/?v4103/2;                      [4103 = artifact number at neck]
+!!HE-1:A1/?v4104/3;                      [4104 = artifact number at right hand]
+!!HE-1:A1/?v4105/4;                      [4105 = artifact number at left hand]
+!!HE-1:A1/?v4106/5;                      [4106 = artifact number at torso]
+!!HE-1:A1/?v4107/6;                      [4107 = artifact number at right ring]
+!!HE-1:A1/?v4108/7;                      [4108 = artifact number at left ring]
+!!HE-1:A1/?v4109/8;                      [4109 = artifact number at feet]
+!!HE-1:A1/?v4110/9;                      [4110 = artifact number at misc. slot 1]
+!!HE-1:A1/?v4111/10;                     [4111 = artifact number at misc. slot 2]
+!!HE-1:A1/?v4112/11;                     [4112 = artifact number at misc. slot 3]
+!!HE-1:A1/?v4113/12;                     [4113 = artifact number at misc. slot 4]
+!!HE-1:A1/?v4114/18;                     [4114 = artifact number at misc. slot 5]
+
+** head **
+!!VRv4121&v4101=19:S1;       [Helm of the Alabaster Unicorn]
+!!VRv4121&v4101=20:S1;       [Skull Helmet]
+!!VRv4121&v4101=21:S1;       [Helm of Chaos]
+!!VRv4121&v4101=22:S1;       [Crown of the Supreme Magi]
+!!VRv4121&v4101=23:S1;       [Hellstorm Helmet]
+
+** shoulders **
+!!VRv4122&v4102=42:S1;         [Dragon Wing Tabard]
+!!VRv4122&v4102=55:S1;         [Vampire's Cowl]
+!!VRv4122&v4102=58:S1;         [Surcoat of Counterpoise]
+!!UN:P167/=1;                  [check if Orb of Inhibition is banned]
+!!VRv4122&v4102=83/-1:S1;      [Recanter's Cloak]
+
+** neck **
+!!VRv4123&v4103=33:S1;          [Celestial Necklace of Bliss]
+!!VRv4123&v4103=43:S1;          [Necklace of Dragonteeth]
+!!VRv4123&v4103=54:S1;          [Amulet of the Undertaker]
+!!VRv4123&v4103=57:S1;          [Garniture of Interference]
+!!VRv4123&v4103=66:S1;          [Statesman's Medal]
+!!UN:P164/=1;                   [check if Sea Captain's Hat is banned]
+!!VRv4123&v4103=71/-1:S1;       [Necklace of Ocean Guidance]
+!!VRv4123&v4103=76:S1;          [Collar of Conjuring]
+!!VRv4123&v4103=97:S1;          [Necklace of Swiftness]
+
+** right hand **
+!!VRv4124&v4104=7:S1;   [Centaur Axe]
+!!VRv4124&v4104=8:S1;   [Blackshard of the Dead Knight]
+!!VRv4124&v4104=9:S1;   [Greater Gnoll's Flail]
+!!VRv4124&v4104=10:S1;  [Ogre's Club of Havoc]
+!!VRv4124&v4104=11:S1;  [Sword of Hellfire]
+!!VRv4124&v4104=35:S1;  [Sword of Judgement]
+!!VRv4124&v4104=38:S1;  [Red Dragon Flame Tongue]
+
+** left hand **
+!!VRv4125&v4105=13:S1;  [Shield of the Dwarven Lords]
+!!VRv4125&v4105=14:S1;  [Shield of the Yawning Dead]
+!!VRv4125&v4105=15:S1;  [Buckler of the Gnoll King]
+!!VRv4125&v4105=16:S1;  [Targ of the Rampaging Ogre]
+!!VRv4125&v4105=17:S1;  [Shield of the Damned]
+!!VRv4125&v4105=34:S1;  [Lion's Shield of Courage]
+!!VRv4125&v4105=39:S1;  [Dragon Scale Shield]
+
+** torso **
+!!VRv4126&v4106=25:S1;  [Breastplate of Petrified Wood]
+!!VRv4126&v4106=26:S1;  [Rib Cage]
+!!VRv4126&v4106=27:S1;  [Scales of the Greater Basilisk]
+!!VRv4126&v4106=28:S1;  [Tunic of the Cyclops King]
+!!VRv4126&v4106=29:S1;  [Breastplate of Brimstone]
+!!VRv4126&v4106=31:S1;  [Armor of Wonder]
+
+** right ring **
+!!VRv4127&v4107=37:S1;       [Quiet Eye of the Dragon]
+!!VRv4127&v4107=45:S1;       [Still Eye of the Dragon]
+!!VRv4127&v4107=67:S1;       [Diplomat's Ring]
+!!VRv4127&v4107=69:S1;       [Ring of the Wayfarer]
+!!VRv4127&v4107=70:S1;       [Equestrian's Gloves]
+!!VRv4127&v4107=77:S1;       [Ring of Conjuring]
+!!VRv4127&v4107=94:S1;       [Ring of Vitality]
+!!VRv4127&v4107=95:S1;       [Ring of Life]
+
+** left ring **
+!!VRv4128&v4108=37:S1;       [Quiet Eye of the Dragon]
+!!VRv4128&v4108=45:S1;       [Still Eye of the Dragon]
+!!VRv4128&v4108=67:S1;       [Diplomat's Ring]
+!!VRv4128&v4108=69:S1;       [Ring of the Wayfarer]
+!!VRv4128&v4108=70:S1;       [Equestrian's Gloves]
+!!VRv4128&v4108=77:S1;       [Ring of Conjuring]
+!!VRv4128&v4108=94:S1;       [Ring of Vitality]
+!!VRv4128&v4108=95:S1;       [Ring of Life]
+
+** feet **
+!!VRv4129&v4109=32:S1;  [Sandals of the Saint]
+!!VRv4129&v4109=41:S1;  [Dragonbone Greaves]
+
+** misc. slot 1 **
+!!VRv4130&v4110=60:S1;  [Bow of Elven Cherrywood]
+!!VRv4130&v4110=61:S1;  [Bowstring of the Unicorn's Mane]
+!!VRv4130&v4110=63:S1;  [Bird of Perception]
+!!VRv4130&v4110=64:S1;  [Stoic Watchman]
+!!VRv4130&v4110=73:S1;  [Charm of Mana]
+!!VRv4130&v4110=74:S1;  [Talisman of Mana]
+!!VRv4130&v4110=116:S1;  [Endless Bag of Gold]
+!!VRv4130&v4110=117:S1;  [Endless Purse  of Gold]
+!!VRv4130&v4110=118:S1;  [Legs of Legion]
+!!VRv4130&v4110=119:S1;  [Loins of Legion]
+!!VRv4130&v4110=120:S1;  [Torso of Legion]
+!!VRv4130&v4110=121:S1;  [Arms of Legion]
+
+** misc. slot 2 **
+!!VRv4131&v4111=60:S1;  [Bow of Elven Cherrywood]
+!!VRv4131&v4111=61:S1;  [Bowstring of the Unicorn's Mane]
+!!VRv4131&v4111=63:S1;  [Bird of Perception]
+!!VRv4131&v4111=64:S1;  [Stoic Watchman]
+!!VRv4131&v4111=73:S1;  [Charm of Mana]
+!!VRv4131&v4111=74:S1;  [Talisman of Mana]
+!!VRv4131&v4111=116:S1;  [Endless Bag of Gold]
+!!VRv4131&v4111=117:S1;  [Endless Purse  of Gold]
+!!VRv4131&v4111=118:S1;  [Legs of Legion]
+!!VRv4131&v4111=119:S1;  [Loins of Legion]
+!!VRv4131&v4111=120:S1;  [Torso of Legion]
+!!VRv4131&v4111=121:S1;  [Arms of Legion]
+
+** misc. slot 3 **
+!!VRv4132&v4112=60:S1;  [Bow of Elven Cherrywood]
+!!VRv4132&v4112=61:S1;  [Bowstring of the Unicorn's Mane]
+!!VRv4132&v4112=63:S1;  [Bird of Perception]
+!!VRv4132&v4112=64:S1;  [Stoic Watchman]
+!!VRv4132&v4112=73:S1;  [Charm of Mana]
+!!VRv4132&v4112=74:S1;  [Talisman of Mana]
+!!VRv4132&v4112=116:S1;  [Endless Bag of Gold]
+!!VRv4132&v4112=117:S1;  [Endless Purse  of Gold]
+!!VRv4132&v4112=118:S1;  [Legs of Legion]
+!!VRv4132&v4112=119:S1;  [Loins of Legion]
+!!VRv4132&v4112=120:S1;  [Torso of Legion]
+!!VRv4132&v4112=121:S1;  [Arms of Legion]
+
+** misc. slot 4 **
+!!VRv4133&v4113=60:S1;  [Bow of Elven Cherrywood]
+!!VRv4133&v4113=61:S1;  [Bowstring of the Unicorn's Mane]
+!!VRv4133&v4113=63:S1;  [Bird of Perception]
+!!VRv4133&v4113=64:S1;  [Stoic Watchman]
+!!VRv4133&v4113=73:S1;  [Charm of Mana]
+!!VRv4133&v4113=74:S1;  [Talisman of Mana]
+!!VRv4133&v4113=116:S1;  [Endless Bag of Gold]
+!!VRv4133&v4113=117:S1;  [Endless Purse  of Gold]
+!!VRv4133&v4113=118:S1;  [Legs of Legion]
+!!VRv4133&v4113=119:S1;  [Loins of Legion]
+!!VRv4133&v4113=120:S1;  [Torso of Legion]
+!!VRv4133&v4113=121:S1;  [Arms of Legion]
+
+** misc. slot 5 **
+!!VRv4134&v4114=60:S1;  [Bow of Elven Cherrywood]
+!!VRv4134&v4114=61:S1;  [Bowstring of the Unicorn's Mane]
+!!VRv4134&v4114=63:S1;  [Bird of Perception]
+!!VRv4134&v4114=64:S1;  [Stoic Watchman]
+!!VRv4134&v4114=73:S1;  [Charm of Mana]
+!!VRv4134&v4114=74:S1;  [Talisman of Mana]
+!!VRv4134&v4114=116:S1;  [Endless Bag of Gold]
+!!VRv4134&v4114=117:S1;  [Endless Purse  of Gold]
+!!VRv4134&v4114=118:S1;  [Legs of Legion]
+!!VRv4134&v4114=119:S1;  [Loins of Legion]
+!!VRv4134&v4114=120:S1;  [Torso of Legion]
+!!VRv4134&v4114=121:S1;  [Arms of Legion]
+
+** z31-z44 = names of appropriate artifacts **
+!!UN&v4121=1/1000:N0/31/v4101;   [get name of head]
+!!UN&v4122=1/1000:N0/32/v4102;   [get name of shoulders]
+!!UN&v4123=1/1000:N0/33/v4103;   [get name of neck]
+!!UN&v4124=1/1000:N0/34/v4104;   [get name of right hand]
+!!UN&v4125=1/1000:N0/35/v4105;   [get name of left hand]
+!!UN&v4126=1/1000:N0/36/v4106;   [get name of torso]
+!!UN&v4127=1/1000:N0/37/v4107;   [get name of right ring]
+!!UN&v4128=1/1000:N0/38/v4108;   [get name of left ring]
+!!UN&v4129=1/1000:N0/39/v4109;   [get name of feet]
+!!UN&v4130=1/1000:N0/40/v4110;  [get name of misc. slot 1]
+!!UN&v4131=1/1000:N0/41/v4111;  [get name of misc. slot 2]
+!!UN&v4132=1/1000:N0/42/v4112;  [get name of misc. slot 3]
+!!UN&v4133=1/1000:N0/43/v4113;  [get name of misc. slot 4]
+!!UN&v4134=1/1000:N0/44/v4114;  [get name of misc. slot 5]
+
+** add slot name to artifact name **
+!!VRz31&v4121=1/1000:+z126014;
+!!VRz32&v4122=1/1000:+z126015;
+!!VRz33&v4123=1/1000:+z126016;
+!!VRz34&v4124=1/1000:+z126017;
+!!VRz35&v4125=1/1000:+z126018;
+!!VRz36&v4126=1/1000:+z126019;
+!!VRz37&v4127=1/1000:+z126020;
+!!VRz38&v4128=1/1000:+z126021;
+!!VRz39&v4129=1/1000:+z126022;
+!!VRz40&v4130=1/1000:+z126023;
+!!VRz41&v4131=1/1000:+z126024;
+!!VRz42&v4132=1/1000:+z126025;
+!!VRz43&v4133=1/1000:+z126026;
+!!VRz44&v4134=1/1000:+z126027;
+
+!!VRz30:Sz126013;      [z30 = text of canceling]
+
+!!VRv4119:S0+v4121+v4122+v4123+v4124+v4125+v4126+v4127+v4128+v4129+v4130+v4131+v4132+v4133+v4134;  [v4119 = count of upgradeable artifacts]
+
+** Hero wears no artifact
+!!IF&v4119=0/1000:M1/z126004;
+
+!!VRv4118&v4119=0:S16;     [v4118 = 16]
+
+!!FU&v4119=0:E;
+
+!!VRv156:S31;          [v156 = index of z var]
+!!DO163/1/14/1:P;      [set up dialog]
+
+** message if hero wears one artifact
+!!VRz29&v4119=1:Sz126005;  [z29 = title, z30 = cancel]
+!!IF&1000/v4119=1:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/41/30;
+
+** message if hero wears 2-11 artifacts
+!!VRz29&v4119>1:Sz126006;  [z29 = title, z30 = cancel]
+!!IF&1000/v4119>1/v4119<12:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/41/30;
+
+!!VRv163:S0;                    [v163 = 0 - default numerical value of answer]
+!!DO161/1/12/1&1000/v4119<12:P; [get v163]
+
+** message if hero wears 12-14 artifacts
+!!VRv4117:S0;    [initialization for FU165]
+!!FU165&1000/v4119>11:P1/126028;
+
+!!VRv4118&v163=12:S16;
+!!FU&v163=12/1000:E;            [exit if cancel has been chosen from previous dialogs]
+
+!!VRv163&v4117=1:+10;           [correction if 11th-14th artifact was chosen]
+
+!!FU171&1000:P;
+
+* <AI  *
+!!VRv4115&-1000:S0;
+!!VRv4116&-1000:S0;
+!!VRv4117&-1000:S0;
+!!VRv4135&-1000:S0;  [initialization for FU171]
+
+!!DO171/1/14/1&-1000/v160<3:P;
+
+
+!!VRv4135&-1000/v4115>0:Sv4115;
+!!FU172&-1000/v4115>0:Pv4116/v4136/v4117;
+
+!!VRv4118&-1000:S2048;
+* AI/> *
+
+
+!?FU171&y-99=0;
+
+*** <AI  ***
+!!VRx15&-1000:S4120+x16;
+!!VRv163&-1000/vx15=1:Sx16;  [choose artifact]
+!!FU&-1000/vx15<>1:E;        [exit if not upgradeable]
+*** AI/> ***
+
+** var initialization **
+!!VRv156:S1;           [initialization for FU164]
+!!DO164/1/14/1:P;      [get artifact number in v4020]
+
+** var initialization **
+!!VRx1:Sv4120;         [x1 = number of disupgraded artifact]
+!!VRx2:Sx1+1;          [x2 = number of upgraded artifact]
+!!VRx2|x1=45:S108;     [correction for Still Eye of the Dragon]
+!!VRx2|x1=69:S99;      [correction for Ring of the Wayfarer]
+!!VRx2|x1=70:S98;      [correction for Equestrian's Gloves]
+!!VRx2|x1=71:S123;     [correction for Necklace of Ocean Guidance]
+!!VRx2|x1=83:S126;     [correction for Recanter's Cloak]
+!!VRx2|x1=94:S96;      [correction for Ring of Vitality]
+!!VRx2|x1=97:S99;      [correction for Necklace of Swiftness]
+!!VRx2|x1=116:S115;    [correction for Endless Bag of Gold]
+!!VRx2|x1=117:S116;    [correction for Endless Purse of Gold]
+
+*** <AI  ***
+!!HE-1&-1000: A2/x2/>0/d; (check if AI has such artifact)
+!!FU&-1000/1:E; (exit if AI already has upgraded artifact)
+*** AI/> ***
+
+!!UN:N0/161/x1;        [z161 = name of disupgraded artifact]
+!!UN:N0/162/x2;        [z162 = name of upgraded artifact]
+
+** get upgrade cost (v4135)**
+!!VRy3:S0;
+!!VRv4135|x1=7/x1=13/x1=19/x1=25/x1=46/x1=47/x1=48/x1=49/x1=50/x1=51/x1=76/x1=103/x1=104/x1=118:S1000;
+!!VRv4135|x1=8/x1=14/x1=20/x1=26/x1=54/x1=57/x1=60/x1=63/x1=66/x1=73/x1=119:S1500;
+!!VRv4135|x1=9/x1=15/x1=21/x1=27/x1=31/x1=37/x1=41/x1=77/x1=120:S2000;
+!!VRv4135|x1=10/x1=16/x1=22/x1=28/x1=117/x1=121:S2500;
+!!VRv4135|x1=38/x1=42/x1=55/x1=58/x1=61/x1=64/x1=67/x1=74/x1=116:S3000;
+!!VRv4135|x1=32/x1=39/x1=43/x1=94/x1=95:S4000;
+!!VRv4135|x1=71/x1=79/x1=80/x1=81/x1=82:S5000;
+!!VRv4135|x1=45/x1=33:S6000;
+!!VRv4135|x1=11/x1=17/x1=23/x1=29/x1=70:S7500;
+!!VRv4135|x1=34/x1=69/x1=97:S8000;
+!!VRv4135|x1=35/x1=83/x1=86/x1=87/x1=88/x1=89:S10000;
+** secondary resource (Mithril only now)**
+!!VRy3&x1>30/x1<36|x1=11/x1=17/x1=23/x1=29/x1=45/x1=70/x1=83:S7;     [y3 = number of secondary resource, 0 = not present]
+!!VRy2|x1=11/x1=17/x1=23/x1=29/x1=45:S1; [Sword of Hellfire, Shield of the Damned, Hellstorm Helmet, Breastplate of Brimstone, Still Eye of the Dragon]
+!!VRy2&x1=31:S2;           [Armor of Wonder]
+!!VRy2&x1=70:S3;           [Equestrian's Gloves]
+!!VRy2&x1=32:S4;           [Sandals of the Saint]
+!!VRy2&x1=83:S5;           [Recanter's Cloak]
+!!VRy2&x1=33:S6;           [Celestial Necklace of Bliss]
+!!VRy2&x1=34:S8;           [Lion's Shield of Courage]
+!!VRy2&x1=35:S10;          [Sword of Judgement]
+
+** change cost if  Enhanced Artifacts is enabled **
+!!VRv4135&x1=76/v164=1:S1500;    [Collar of Conjuring]
+!!VRv4135&x1=77/v164=1:S3000;    [Ring of Conjuring]
+!!VRy3&x1=103/v164=1:S7;     [y3 = number of secondary resource, 7 = mithril]
+!!VRy3&x1=104/v164=1:S7;     [y3 = number of secondary resource, 7 = mithril]
+
+
+** change cost if Artifact Boost is enabled **
+!!VRv4135&x1=57/v161=1:+1000;           [Garniture of Interference]
+!!VRv4135&x1=58/v161=1:+1000;           [Surcoat of Counterpoise]
+
+!!VRv4135:*v160;                        [double price if it is the second visit]
+!!VRy2&y3<>0:*v160;
+
+** reduce price if hero has Diplomacy and Estate **
+!!HE-1: A2/66/d/?y31;     [y31 = quantity of Statesman's Medals (equipped)]
+!!HE-1: A2/67/d/?y32;     [y32 = quantity of Diplomat's Rings (equipped)]
+!!HE-1: A2/68/d/?y33;     [y33 = quantity of Ambassador's Sashs (equipped)]
+!!VRy31:*5;               (Statesman's Medal decreases price in 5%)
+!!VRy32:*10;              (Diplomat's Ring decreases price in 10%)
+!!VRy33:*15;              (Ambassador's Sash decreases price in 15%)
+!!HE-1: S4/?y13;          (get Diplomacy skill level)
+!!HE-1: S13/?y14;         (get Estate skill level)
+!!VRy13&y14<y13: Sy14;    (set the worset skill level)
+!!VRy13: *-10-y31-y32-y33+100;
+!!VRv4135: *y13:100;      (set new price (v4135) according to skill level (y13) and artifacts)
+
+** set price according to the time percentage **
+!!VRv4135: *v154:100;
+
+!!VRy-42:S0-v4135-100000;             [set value to display negative amount]
+
+!!OW:R-1/6/?y11;                      [y11 = current gold]
+!!OW&y3>0:R-1/y3/?y12;                [y12 = current secondary resource]
+
+!!IF:V2/0;
+
+!!VRv4118:S2048;                                 [v4118 = 2048]
+
+!!IF&1000/y3=0:Q2/8/x1/6/y-42/8/x2/2/z126007;  [question for upgrade]
+!!IF&1000/y3>0:Q2/8/x1/6/y-42/8/x2/2/z126031;  [question for upgrade with secondary resource]
+
+*** <AI  ***
+!!IF&-1000/y11>v4135:V2/1;                     [if AI have enough money he agrees]
+!!UN&-1000:J2/?v1;                               [v1 = difficulty level]
+!!VRv1&v1=0/-1000:S1;                            [easy and normal have standard price]
+!!VRv4135&-1000::v1;                             [divide price on difficulty level (1-4) for AI]
+!!VRy2&-1000:S0;  [AI don't need mithril]
+!!VRy12&-1000/y12<y2:Sy2;
+*** AI/> ***
+
+!!VRv4118&-2/v4119=1:S16;                      [v4118 = 16]
+!!VRv4118&-2/v4119>1:S1;                       [v4118 = 1]
+
+!!FU&-2:E;                                     [exit if cancel pressed]
+
+!!IF&1000/y11<v4135/y12>=y2:Q1/36/v4135/1/z126008;              [message if not enough money]
+!!IF&1000/y12<y2/y3>0/y11>=v4135:Q1/y3/y2/1/z126032;            [message if not enough secondary resource]
+!!IF&1000/y12<y2/y3>0/y11<v4135:Q1/36/v4135/y3/y2/1/z126033;    [message if not enough resources]
+
+!!VRv4118&y11<v4135/v4119=1:S16;                          [v4118 = 16]
+!!VRv4118&y12<y2/v4119=1:S16;                             [v4118 = 16]
+!!VRv4118&y11<v4135/v4119>1:S1;                           [v4118 = 1]
+!!VRv4118&y12<y2/v4119>1:S1;                              [v4118 = 1]
+
+!!FU|y11<v4135/y12<y2:E;                          [exit if not enough money]
+
+!!FU172&1000:Px1/x2/y2;
+!!FU&1000:E; (break point for human because next lines for AI only)
+
+* <AI - finding the best artifact for upgrading *
+!!UN: Ax2/2/?x3;             [x3 = slot of x2 - upgraded art.]
+!!UN: Ax1/2/?x9;             [x9 = slot of x1 - disupgraded art.]
+
+!!VRx11: S0;                 [x11 = 0 if both (upgraded and disupgraded) art. have different slots]
+!!VRx11&x3=x9: S1;           [x11 = 1 if both (upgraded and disupgraded) art. have the same slot]
+
+
+*** finding the cost of art. which has the same slot as the upgraded ***
+!!VRx3&x11=0/x3>0/x3<7: -1; [correction for slots (1..6) because of difference between UN:A and HE:A1 commands]
+
+** x3 = 0..5, 7-9 -> (0 = head, 1 = shoulders, 2 = neck, 3 = right hand, 4 = left hand, 5 = torso,
+** 7 = left ring, 8 = feet, 9 = misc. slot 1)
+!!HE-1&x11=0: A1/?x4/x3;                [x4 = number of currently equipped artifact]
+!!VRy-99&x4<>-1/x4>170/x11=0:S1;        (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x4<7/x11=0:S1;          (if art. number out of range set error counter to 1)
+!!FU&y-99=1:E;                          (exit if errors found)
+!!VRx6&x4=-1/x11=0: S0;                 [if no artifact is present then x6 = 0]
+!!UN&x4<>-1/x11=0: Ax4/1/?x6;           [x6 = cost of x4 - eqiped art.]
+
+** x3 = 7 = left ring, check for another right ring **
+!!HE-1&x4<>-1/x3=7/x11=0: A1/?x7/6;          [x7 = number of currently equipped artifact (right ring)]
+!!VRy-99&x4<>-1/x7<>-1/x7>170/x11=0/x3=7:S1; (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x7<>-1/x7<7/x11=0/x3=7:S1;   (if art. number out of range set error counter to 1)
+!!FU&x4<>-1/y-99=1/x3=7:E;                   (exit if errors found)
+!!VRx6&x4<>-1/x7=-1/x11=0/x3=7: S0;          [if no artifact is present (free slot) then x6 = 0]
+!!VRx4&x4<>-1/x7=-1/x11=0/x3=7: S-1;         [if no artifact is present (free slot) then x4 = -1]
+!!UN&x4<>-1/x7<>-1/x3=7/x11=0: Ax7/1/?x8;    [x8 = cost of x7 - eqiped art.]
+!!VRx4&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx7;   [change if worse ->]
+!!VRx6&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx8;   [-> artifact finded]
+
+** x3 = 9 = misc. slot 1, check for another misc. slots **
+!!HE-1&x4<>-1/x3=9/x11=0: A1/?x7/10;               [x7 = number of currently equipped artifact (misc. slot 2)]
+!!VRy-99&x4<>-1/x7<>-1/x7>170/x11=0/x3=7:S1; (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x7<>-1/x7<7/x11=0/x3=7:S1;   (if art. number out of range set error counter to 1)
+!!FU&x4<>-1/y-99=1/x3=7:E;                   (exit if errors found)
+!!VRx6&x4<>-1/x7=-1/x11=0/x3=7: S0;          [if no artifact is present (free slot) then x6 = 0]
+!!VRx4&x4<>-1/x7=-1/x11=0/x3=7: S-1;         [if no artifact is present (free slot) then x4 = -1]
+!!UN&x4<>-1/x7<>-1/x3=7/x11=0: Ax7/1/?x8;    [x8 = cost of x7 - eqiped art]
+!!VRx4&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx7;   [change if worse ->]
+!!VRx6&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx8;   [-> artifact finded]
+
+!!HE-1&x4<>-1/x3=9/x11=0: A1/?x7/11;         [x7 = number of currently equipped artifact (misc. slot 3)]
+!!VRy-99&x4<>-1/x7<>-1/x7>170/x11=0/x3=7:S1; (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x7<>-1/x7<7/x11=0/x3=7:S1;   (if art. number out of range set error counter to 1)
+!!FU&x4<>-1/y-99=1/x3=7:E;                   (exit if errors found)
+!!VRx6&x4<>-1/x7=-1/x11=0/x3=7: S0;          [if no artifact is present (free slot) then x6 = 0]
+!!VRx4&x4<>-1/x7=-1/x11=0/x3=7: S-1;         [if no artifact is present (free slot) then x4 = -1]
+!!UN&x4<>-1/x7<>-1/x3=7/x11=0: Ax7/1/?x8;    [x8 = cost of x7 - eqiped art]
+!!VRx4&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx7;   [change if worse ->]
+!!VRx6&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx8;   [-> artifact finded]
+
+!!HE-1&x4<>-1/x3=9/x11=0: A1/?x7/12;         [x7 = number of currently equipped artifact (misc. slot 4)]
+!!VRy-99&x4<>-1/x7<>-1/x7>170/x11=0/x3=7:S1; (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x7<>-1/x7<7/x11=0/x3=7:S1;   (if art. number out of range set error counter to 1)
+!!FU&x4<>-1/y-99=1/x3=7:E;                   (exit if errors found)
+!!VRx6&x4<>-1/x7=-1/x11=0/x3=7: S0;          [if no artifact is present (free slot) then x6 = 0]
+!!VRx4&x4<>-1/x7=-1/x11=0/x3=7: S-1;         [if no artifact is present (free slot) then x4 = -1]
+!!UN&x4<>-1/x7<>-1/x3=7/x11=0: Ax7/1/?x8;    [x8 = cost of x7 - eqiped art]
+!!VRx4&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx7;   [change if worse ->]
+!!VRx6&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx8;   [-> artifact found]
+
+!!HE-1&x4<>-1/x3=9/x11=0: A1/?x7/18;         [x7 = number of currently equipped artifact (misc. slot 5)]
+!!VRy-99&x4<>-1/x7<>-1/x7>170/x11=0/x3=7:S1; (if art. number out of range set error counter to 1)
+!!VRy-99&x4<>-1/x7<>-1/x7<7/x11=0/x3=7:S1;   (if art. number out of range set error counter to 1)
+!!FU&x4<>-1/y-99=1/x3=7:E;                   (exit if errors found)
+!!VRx6&x4<>-1/x7=-1/x11=0/x3=7: S0;          [if no artifact is present (free slot) then x6 = 0]
+!!VRx4&x4<>-1/x7=-1/x11=0/x3=7: S-1;         [if no artifact is present (free slot) then x4 = -1]
+!!UN&x4<>-1/x7<>-1/x3=7/x11=0: Ax7/1/?x8;    [x8 = cost of x7 - eqiped art]
+!!VRx4&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx7;   [change if worse ->]
+!!VRx6&x4<>-1/x7<>-1/x3=7/x8<x6/x11=0:Sx8;   [-> artifact finded]
+***
+
+!!UN: Ax2/1/?x5;                  [x5 = cost of x2 - upgraded art.]
+!!UN: Ax1/1/?x7;                  [x7 = cost of x1 - disupgraded art.]
+** next artifact will have better chance to be chosen **
+!!VRx6&x1=35/x6<>0:-1500;               [correction for Sword of Judgement]
+!!VRx6&x1=34/x6<>0:-1500;               [correction for Lion's Shield of Courage]
+!!VRx6&x1=33/x6<>0:-1500;               [correction for Celestial Necklace of Bliss]
+!!VRx6&x1=32/x6<>0:-1500;               [correction for Sandals of the Saint]
+!!HE-1:B2/?x12; [x12 = hero class]
+!!VRx5&x12=8/x2=108:S0; [Necro never upgrade to Pendant of courage]
+!!VRx5&x12=9/x2=108:S0; [Necro never upgrade to Pendant of courage]
+
+!!VRx6&x11=1:Sx7;                 [x6 = x7(cost of disupgraded) if slots are equal]
+!!VRx6&x1<>x4/x3<>x9:+x7;
+* if cost of upgraded art.(x5) > cost of euiped art.(x6) and cost of upgrade more then previous then change upgraded art. *
+!!VRv4117&x5>x6/v4135>v4115:Sx3;     [v4117 = slot of upgraded art.]
+!!VRv4136&x5>x6/v4135>v4115:Sx2;     [v4136 = upgraded art.]
+!!VRv4116&x5>x6/v4135>v4115:Sx1;     [v4116 = disupgraded art.]
+!!VRv4115&x5>x6/v4135>v4115:Sv4135;  [v4115 = upgrade cost]
+* AI/> *
+
+
+!?FU172&y-99=0; [x1 = disupgraded art., x2 = upgraded art., x3 = cost of mithril]
+
+!!VRy3&x3>0:S7;                         [get mithril cost if present]
+!!VRy2&x3>0:Sx3;                        [get quantity of mithril if any]
+
+!!OW:R-1/6/?y11;                        [y11 = current gold]
+!!OW&y3>0:R-1/y3/?y12;                  [y12 = current secondary resource]
+
+!!HE-1:N?y58;                                [Hero's number: y58]
+!!FU$GetBasicPrim$:Py58/?y44/?y45/?y46/?y47; [y44-y47 = primary skills without artifacts before changes]
+!!HE-1:F?y54/?y55/?y56/?y57;                 [y54-y57 = primary skills with artifacts before changes]
+
+*** <AI  ***
+!!UN&-1000: Ax2/2/?x6;             [x6 = slot of x2 - upgraded art.]
+!!UN&-1000: Ax1/2/?x7;             [x7 = slot of x1 - disupgraded art.]
+!!VRx4&-1000/x6=x7:S1;             [x4 = check var for equal slots]]
+!!VRx4&-1000/x6<>x7:S0;
+!!HE-1&-1000/x4=0:      A1/?x5/x3;           [x5 = equipped art.]
+!!HE-1&-1000/x5>6/x4=0: A3/x5/1/1;           [move equipped art. ->]
+!!HE-1&-1000/x5>6/x4=0: Ax5;                 [-> to backpack]
+*** AI/> ***
+
+!!HE-1: A3/x1/1/1;                      [remove old artifact]
+!!HE-1: A4/x2;                          [put new artifact]
+
+!!HE-1:N?y-60;                                    [Hero's number: y-60]
+!!FU$GetBasicPrim$:Py-60/?y-44/?y-45/?y-46/?y-47; [y-44-y-47 = primary skills without artifacts after changes]
+!!HE-1:F?y-54/?y-55/?y-56/?y-57;                  [y-54-y-57 = primary skills with artifacts after changes]
+
+!!VRy-44:-y44;                          [y-44 = attack bonus of disupgraded artifact]
+!!VRy-45:-y45;                          [y-45 = defence bonus of disupgraded artifact]
+!!VRy-46:-y46;                          [y-46 = magic power bonus of disupgraded artifact]
+!!VRy-47:-y47;                          [y-46 = knowledge bonus of disupgraded artifact]
+
+!!VRy-54:-y54;                          [y-54 = attack bonus of upgraded artifact]
+!!VRy-55:-y55;                          [y-55 = defence bonus of upgraded artifact]
+!!VRy-56:-y56;                          [y-56 = magic power bonus of upgraded artifact]
+!!VRy-57:-y57;                          [y-56 = knowledge bonus of upgraded artifact]
+
+!!VRy54:+y-54-y-44;                     [y54 = new attack skill]
+!!VRy55:+y-55-y-45;                     [y55 = new defence skill]
+!!VRy56:+y-56-y-46;                     [y56 = new magic power skill]
+!!VRy57:+y-57-y-47;                     [y57 = new knowlege skill]
+
+!!HE-1:Fy54/y55/y56/y57;                [set right skills]
+
+** subtract movepoints **
+!!HE-1: W?x5;
+!!HE-1&x5>=100: Wd-100;
+!!HE-1&x5<100: W0;
+
+** subtract money **
+!!VRy11:-v4135;
+!!OW:R-1/6/y11;
+!!VRy12&y3>0:-y2;
+!!OW&y3>0:R-1/y3/y12;
+
+** show success message **
+!!IF&1000:Q1/8/x2/1/z126046;
+
+** set visit var **
+!!VRv160:+1;
+!!PO157&v160=2:N2;
+!!PO157&v160=3:N3;
+
+!!IF&1000/v160<3:Q1/z126030;
+!!FU&-1:E;
+
+!!VRv4118:S16;                              [v4118 = 16]
+!!FU166&1000:P;                             [call needed function]
+********************************************************************************
+
+
+
+
+*!* FU161 to get numerical value of answer *!***********************************
+!?FU161;
+!!VRv163&v162>0:+1;
+!!VRv162&v162>0::2;
+********************************************************************************
+
+
+
+
+*!* FU162 to reset visits *!****************************************************
+!?FU162&v155=1;
+!!UN:U63/52/-1/1;
+!!PO1:N0;
+!!PM1:V1;
+********************************************************************************
+
+
+
+
+*!* FU163 to set up dialog *!***************************************************
+!?FU163;
+!!VRx1:Sx16+4120;               [x1 = index of v var which is 1 if artifact is upgradeable]
+!!VRx2:Sx16+30;                 [x2 = index of z var]
+!!VRzv156&vx1=1/v156<>x2:Szx2;
+!!VRzx2&vx1=1/v156<>x2:S^^;
+!!VRv156&vx1=1:+1;
+********************************************************************************
+
+
+
+
+*!* FU164 to get number of chosen artifact *!***********************************
+!?FU164;
+!!VRx1:Sx16+4120;                [x1 = index of v var which is 1 if artifact is upgradeable]
+!!VRx2:Sx16+4100;                [x2 = index of v var = artifact number]
+!!VRv4120&vx1=1/v156=v163:Svx2;  [v4020 = chosen artifact number]
+!!VRv156&vx1=1/1000:+1;
+!!VRv156&-1000:+1;
+********************************************************************************
+
+
+
+
+*!* FU165 to give a question if hero wears 12-14 artifacts *!*******************
+!?FU165;
+
+!!VRz28:Szx2;       ["next/previous page"]
+
+** message if hero wears 12-14 artifacts
+!!VRz29&v4119>1:Sz126006;  ** z28 next/previous page, z29 title question, z30 cancel **
+!!IF&1000/x1=1:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/28/30;
+!!IF&1000/x1=2:G1/162/2048/29/41/42/43/44/0/0/0/0/0/0/28/30;
+!!VRv163:S0;           [v163 = 0 - numerical value of answer]
+!!DO161/1/12/1&1000:P; [get v163]
+!!FU&v163=12:E;        [exit if cancel has been chosen]
+!!VRv4117&x1=1:S0;
+!!VRv4117&x1=2:S1;
+!!FU165&v163=11/x1=1:P2/126029;
+!!FU165&v163=11/x1=2:P1/126028;
+********************************************************************************
+
+
+
+
+*!* FU166 to call needed function *!********************************************
+!?FU166&v160<3/v4118<>2048;
+
+!!FU175:P;                         [reset vars]
+
+*** <AI  ***
+!!FU175:P;                         [reset vars]
+!!FU160&-1000/v160<3/y-99=0:P;            [second upgrade for AI]
+!!FU175&-1000/v160<3/y-99=0:P;            [reset vars]
+!!FU167&-1000/v160<3/y-99=0:P;            [change for AI]
+!!FU175&-1000/v160<3/y-99=0:P;            [reset vars]
+!!FU167&-1000/v160<3/y-99=0:P;            [second change for AI]
+!!FU175&-1000/v160<3/y-99=0:P;            [reset vars]
+!!FU169&-1000/v160<3/y-99=0:P;            [group upgrade for AI]
+!!VRv4118&-1000:S2048;             [set choice to never upgrade today]
+*** AI/> ***
+
+!!FU160&v4118=1:P;         [to upgrade]
+!!FU167&v4118=2:P;         [to change]
+!!FU169&v4118=4:P;         [to upgrade group]
+!!FU170&v4118=8:P;         [help]
+!!FU168&v4118=16/1000:P;   [main]
+
+!!FU166&1000:P;
+********************************************************************************
+
+
+
+
+**!** FU167 to change artifact **!**********************************************
+!?FU167;
+
+* get numbers of equipped artifacts *
+!!HE-1:A1/?v4102/1;                      [4102 = artifact number at shoulders]
+!!HE-1:A1/?v4103/2;                      [4103 = artifact number at neck]
+!!HE-1:A1/?v4107/6;                      [4107 = artifact number at right ring]
+!!HE-1:A1/?v4108/7;                      [4108 = artifact number at left ring]
+!!HE-1:A1/?v4110/9;                      [4110 = artifact number at misc. slot 1]
+!!HE-1:A1/?v4111/10;                     [4111 = artifact number at misc. slot 2]
+!!HE-1:A1/?v4112/11;                     [4112 = artifact number at misc. slot 3]
+!!HE-1:A1/?v4113/12;                     [4113 = artifact number at misc. slot 4]
+!!HE-1:A1/?v4114/18;                     [4114 = artifact number at misc. slot 5]
+
+*** <AI  ***
+!!VRx1&-1000/v4107=94/v4108=94:S1;       [x1 = 1 -if have 2 equipped Ring of Vitality]
+!!HE-1&-1000/x1=1: A2/95/?x2/d;          [x2 > 0 -if have any Ring of Life]
+!!HE-1&-1000/x1=1: A3/94/1/1;            [remove second Ring of Vitality]
+!!HE-1&-1000/x1=1: A94;                  [put second Ring of Vitality to backpack]
+!!HE-1&-1000/x1=1/x2>0: A3/95/1/0;       [remove Ring of Life from backpack]
+!!HE-1&-1000/x1=1/x2>0: A4/95;           [equip Ring of Life]
+!!VRx1&-1000:S0;
+!!VRx1&-1000/v4107=95/v4108=95:S1;       [x1 = 1 -if have 2 equipped Ring of Life]
+!!HE-1&-1000/x1=1: A2/94/?x2/d;          [x2 > 0 -if have any Ring of Vitality]
+!!HE-1&-1000/x1=1: A3/95/1/1;            [remove second Ring of Life]
+!!HE-1&-1000/x1=1: A95;                  [put second Ring of Life to backpack]
+!!HE-1&-1000/x1=1/x2>0: A3/94/1/0;       [remove Ring of Vitality from backpack]
+!!HE-1&-1000/x1=1/x2>0: A4/94;           [equip Ring of Vitality]
+*** AI/> ***
+
+
+!!UN:P159/?v2;                 [check if Tome of Air Magic is banned]
+!!UN:P160/?v4;                 [check if Tome of Earth Magic is banned]
+!!UN:P161/?v1;                 [check if Tome of Fire Magic is banned]
+!!UN:P162/?v3;                 [check if Tome of Water Magic is banned]
+!!VRv5:S0+v1+v2+v3+v4;
+
+** shoulders **
+!!VRv4122&v4102=109:S1;  [Everflowing Crystal Cloak]
+
+** neck **
+!!VRv4123&v4103=103:S1;         [Pendant of Life]
+!!VRv4123&v4103=104:S1;         [Pendant of Death]
+
+** right ring **
+!!VRv4127&v4107=110:S1;  [Ring of Infinite Gems]
+!!VRv4127&v4107=113:S1;  [Eversmoking Ring of Sulfur]
+!!VRv4127&v4107=94:S1;   [Ring of Vitality]
+!!VRv4127&v4107=95:S1;   [Ring of Life]
+
+** left ring **
+!!VRv4128&v4108=110:S1;  [Ring of Infinite Gems]
+!!VRv4128&v4108=113:S1;  [Eversmoking Ring of Sulfur]
+!!VRv4128&v4108=94:S1;   [Ring of Vitality]
+!!VRv4128&v4108=95:S1;   [Ring of Life]
+
+** misc. slot 1 **
+!!VRv4130&v4110=46:S1;  [Clover of Fortune]
+!!VRv4130&v4110=47:S1;  [Cards of Prophecy]
+!!VRv4130&v4110=48:S1;  [Ladybird of Luck]
+!!VRv4130&v4110=49:S1;  [Badge of Courage]
+!!VRv4130&v4110=50:S1;  [Crest of Valor]
+!!VRv4130&v4110=51:S1;  [Glyph of Gallantry]
+!!VRv4130&v4110=52:S1;  [Speculum]
+!!VRv4130&v4110=53:S1;  [Spyglass]
+!!VRv4130&v4110=79:S1;  [Orb of the Firmament]
+!!VRv4130&v4110=80:S1;  [Orb of Silt]
+!!VRv4130&v4110=81:S1;  [Orb of Tempestuous Fire]
+!!VRv4130&v4110=82:S1;  [Orb of Driving Rain]
+!!VRv4130&v4110=84:S1;  [Spirit of Oppression]
+!!VRv4130&v4110=85:S1;  [Hourglass of the Evil Hour]
+!!VRv4130&v4110=86/v5<4:S1;                 [Tome of Fire Magic]
+!!VRv4130&v4110=86/v2=1/v3=1/v4=1/v5=3:S0;  [Tome of Fire Magic]
+!!VRv4130&v4110=87/v5<4:S1;                 [Tome of Air Magic]
+!!VRv4130&v4110=87/v1=1/v3=1/v4=1/v5=3:S0;  [Tome of Air Magic]
+!!VRv4130&v4110=88/v5<4:S1;                 [Tome of Water Magic]
+!!VRv4130&v4110=88/v1=1/v2=1/v4=1/v5=3:S0;  [Tome of Water Magic]
+!!VRv4130&v4110=89/v5<4:S1;                 [Tome of Earth Magic]
+!!VRv4130&v4110=89/v1=1/v2=1/v3=1/v5=3:S0;  [Tome of Earth Magic]
+!!VRv4130&v4110=111:S1;  [Everpouring Vial of Mercury]
+!!VRv4130&v4110=112:S1;  [Inexhaustible Cart of Ore]
+!!VRv4130&v4110=114:S1;  [Inexhaustible Cart of Lumber]
+
+** misc. slot 2 **
+!!VRv4131&v4111=46:S1;  [Clover of Fortune]
+!!VRv4131&v4111=47:S1;  [Cards of Prophecy]
+!!VRv4131&v4111=48:S1;  [Ladybird of Luck]
+!!VRv4131&v4111=49:S1;  [Badge of Courage]
+!!VRv4131&v4111=50:S1;  [Crest of Valor]
+!!VRv4131&v4111=51:S1;  [Glyph of Gallantry]
+!!VRv4131&v4111=52:S1;  [Speculum]
+!!VRv4131&v4111=53:S1;  [Spyglass]
+!!VRv4131&v4111=79:S1;  [Orb of the Firmament]
+!!VRv4131&v4111=80:S1;  [Orb of Silt]
+!!VRv4131&v4111=81:S1;  [Orb of Tempestuous Fire]
+!!VRv4131&v4111=82:S1;  [Orb of Driving Rain]
+!!VRv4131&v4111=84:S1;  [Spirit of Oppression]
+!!VRv4131&v4111=85:S1;  [Hourglass of the Evil Hour]
+!!VRv4131&v4111=86/v5<4:S1;                 [Tome of Fire Magic]
+!!VRv4131&v4111=86/v2=1/v3=1/v4=1/v5=3:S0;  [Tome of Fire Magic]
+!!VRv4131&v4111=87/v5<4:S1;                 [Tome of Air Magic]
+!!VRv4131&v4111=87/v1=1/v3=1/v4=1/v5=3:S0;  [Tome of Air Magic]
+!!VRv4131&v4111=88/v5<4:S1;                 [Tome of Water Magic]
+!!VRv4131&v4111=88/v1=1/v2=1/v4=1/v5=3:S0;  [Tome of Water Magic]
+!!VRv4131&v4111=89/v5<4:S1;                 [Tome of Earth Magic]
+!!VRv4131&v4111=89/v1=1/v2=1/v3=1/v5=3:S0;  [Tome of Earth Magic]
+!!VRv4131&v4111=111:S1;  [Everpouring Vial of Mercury]
+!!VRv4131&v4111=112:S1;  [Inexhaustible Cart of Ore]
+!!VRv4131&v4111=114:S1;  [Inexhaustible Cart of Lumber]
+
+** misc. slot 3 **
+!!VRv4132&v4112=46:S1;  [Clover of Fortune]
+!!VRv4132&v4112=47:S1;  [Cards of Prophecy]
+!!VRv4132&v4112=48:S1;  [Ladybird of Luck]
+!!VRv4132&v4112=49:S1;  [Badge of Courage]
+!!VRv4132&v4112=50:S1;  [Crest of Valor]
+!!VRv4132&v4112=51:S1;  [Glyph of Gallantry]
+!!VRv4132&v4112=52:S1;  [Speculum]
+!!VRv4132&v4112=53:S1;  [Spyglass]
+!!VRv4132&v4112=79:S1;  [Orb of the Firmament]
+!!VRv4132&v4112=80:S1;  [Orb of Silt]
+!!VRv4132&v4112=81:S1;  [Orb of Tempestuous Fire]
+!!VRv4132&v4112=82:S1;  [Orb of Driving Rain]
+!!VRv4132&v4112=84:S1;  [Spirit of Oppression]
+!!VRv4132&v4112=85:S1;  [Hourglass of the Evil Hour]
+!!VRv4132&v4112=86/v5<4:S1;                 [Tome of Fire Magic]
+!!VRv4132&v4112=86/v2=1/v3=1/v4=1/v5=3:S0;  [Tome of Fire Magic]
+!!VRv4132&v4112=87/v5<4:S1;                 [Tome of Air Magic]
+!!VRv4132&v4112=87/v1=1/v3=1/v4=1/v5=3:S0;  [Tome of Air Magic]
+!!VRv4132&v4112=88/v5<4:S1;                 [Tome of Water Magic]
+!!VRv4132&v4112=88/v1=1/v2=1/v4=1/v5=3:S0;  [Tome of Water Magic]
+!!VRv4132&v4112=89/v5<4:S1;                 [Tome of Earth Magic]
+!!VRv4132&v4112=89/v1=1/v2=1/v3=1/v5=3:S0;  [Tome of Earth Magic]
+!!VRv4132&v4112=111:S1;  [Everpouring Vial of Mercury]
+!!VRv4132&v4112=112:S1;  [Inexhaustible Cart of Ore]
+!!VRv4132&v4112=114:S1;  [Inexhaustible Cart of Lumber]
+
+** misc. slot 4 **
+!!VRv4133&v4113=46:S1;  [Clover of Fortune]
+!!VRv4133&v4113=47:S1;  [Cards of Prophecy]
+!!VRv4133&v4113=48:S1;  [Ladybird of Luck]
+!!VRv4133&v4113=49:S1;  [Badge of Courage]
+!!VRv4133&v4113=50:S1;  [Crest of Valor]
+!!VRv4133&v4113=51:S1;  [Glyph of Gallantry]
+!!VRv4133&v4113=52:S1;  [Speculum]
+!!VRv4133&v4113=53:S1;  [Spyglass]
+!!VRv4133&v4113=79:S1;  [Orb of the Firmament]
+!!VRv4133&v4113=80:S1;  [Orb of Silt]
+!!VRv4133&v4113=81:S1;  [Orb of Tempestuous Fire]
+!!VRv4133&v4113=82:S1;  [Orb of Driving Rain]
+!!VRv4133&v4113=84:S1;  [Spirit of Oppression]
+!!VRv4133&v4113=85:S1;  [Hourglass of the Evil Hour]
+!!VRv4133&v4113=86/v5<4:S1;                 [Tome of Fire Magic]
+!!VRv4133&v4113=86/v2=1/v3=1/v4=1/v5=3:S0;  [Tome of Fire Magic]
+!!VRv4133&v4113=87/v5<4:S1;                 [Tome of Air Magic]
+!!VRv4133&v4113=87/v1=1/v3=1/v4=1/v5=3:S0;  [Tome of Air Magic]
+!!VRv4133&v4113=88/v5<4:S1;                 [Tome of Water Magic]
+!!VRv4133&v4113=88/v1=1/v2=1/v4=1/v5=3:S0;  [Tome of Water Magic]
+!!VRv4133&v4113=89/v5<4:S1;                 [Tome of Earth Magic]
+!!VRv4133&v4113=89/v1=1/v2=1/v3=1/v5=3:S0;  [Tome of Earth Magic]
+!!VRv4133&v4113=111:S1;  [Everpouring Vial of Mercury]
+!!VRv4133&v4113=112:S1;  [Inexhaustible Cart of Ore]
+!!VRv4133&v4113=114:S1;  [Inexhaustible Cart of Lumber]
+
+** misc. slot 5 **
+!!VRv4134&v4114=46:S1;  [Clover of Fortune]
+!!VRv4134&v4114=47:S1;  [Cards of Prophecy]
+!!VRv4134&v4114=48:S1;  [Ladybird of Luck]
+!!VRv4134&v4114=49:S1;  [Badge of Courage]
+!!VRv4134&v4114=50:S1;  [Crest of Valor]
+!!VRv4134&v4114=51:S1;  [Glyph of Gallantry]
+!!VRv4134&v4114=52:S1;  [Speculum]
+!!VRv4134&v4114=53:S1;  [Spyglass]
+!!VRv4134&v4114=79:S1;  [Orb of the Firmament]
+!!VRv4134&v4114=80:S1;  [Orb of Silt]
+!!VRv4134&v4114=81:S1;  [Orb of Tempestuous Fire]
+!!VRv4134&v4114=82:S1;  [Orb of Driving Rain]
+!!VRv4134&v4114=84:S1;  [Spirit of Oppression]
+!!VRv4134&v4114=85:S1;  [Hourglass of the Evil Hour]
+!!VRv4134&v4114=86/v5<4:S1;                 [Tome of Fire Magic]
+!!VRv4134&v4114=86/v2=1/v3=1/v4=1/v5=3:S0;  [Tome of Fire Magic]
+!!VRv4134&v4114=87/v5<4:S1;                 [Tome of Air Magic]
+!!VRv4134&v4114=87/v1=1/v3=1/v4=1/v5=3:S0;  [Tome of Air Magic]
+!!VRv4134&v4114=88/v5<4:S1;                 [Tome of Water Magic]
+!!VRv4134&v4114=88/v1=1/v2=1/v4=1/v5=3:S0;  [Tome of Water Magic]
+!!VRv4134&v4114=89/v5<4:S1;                 [Tome of Earth Magic]
+!!VRv4134&v4114=89/v1=1/v2=1/v3=1/v5=3:S0;  [Tome of Earth Magic]
+!!VRv4134&v4114=111:S1;  [Everpouring Vial of Mercury]
+!!VRv4134&v4114=112:S1;  [Inexhaustible Cart of Ore]
+!!VRv4134&v4114=114:S1;  [Inexhaustible Cart of Lumber]
+
+** z31-z44 = names of appropriate artifacts **
+!!UN&v4122=1/1000:N0/32/v4102;   [get name of shoulders]
+!!UN&v4123=1/1000:N0/33/v4103;   [get name of neck]
+!!UN&v4127=1/1000:N0/37/v4107;   [get name of right ring]
+!!UN&v4128=1/1000:N0/38/v4108;   [get name of left ring]
+!!UN&v4130=1/1000:N0/40/v4110;  [get name of misc. slot 1]
+!!UN&v4131=1/1000:N0/41/v4111;  [get name of misc. slot 2]
+!!UN&v4132=1/1000:N0/42/v4112;  [get name of misc. slot 3]
+!!UN&v4133=1/1000:N0/43/v4113;  [get name of misc. slot 4]
+!!UN&v4134=1/1000:N0/44/v4114;  [get name of misc. slot 5]
+
+** add slot name to artifact name **
+!!VRz32&v4122=1/1000:+z126015;   [shoulders]
+!!VRz33&v4123=1/1000:+z126016;   [neck]
+!!VRz37&v4127=1/1000:+z126020;   [right ring]
+!!VRz38&v4128=1/1000:+z126021;   [left ring]
+!!VRz40&v4130=1/1000:+z126023;   [misc. slot 1]
+!!VRz41&v4131=1/1000:+z126024;   [misc. slot 2]
+!!VRz42&v4132=1/1000:+z126025;   [misc. slot 3]
+!!VRz43&v4133=1/1000:+z126026;   [misc. slot 4]
+!!VRz44&v4134=1/1000:+z126027;   [misc. slot 5]
+
+!!VRz30:Sz126013;      [z30 = text of canceling]
+
+!!VRv4119:S0+v4122+v4123+v4127+v4128+v4130+v4131+v4132+v4133+v4134;  [v4119 = count of changeable artifacts]
+
+** Hero wears no artifact
+!!IF&v4119=0/1000:M1/z126004;
+
+!!VRv4118&v4119=0:S16;     [v4118 = 16]
+
+!!FU&v4119=0:E;
+
+!!VRv156:S31;          [v156 = index of z var]
+!!DO163/1/14/1:P;      [set up dialog]
+
+** message if hero wears one artifact
+!!VRz29&v4119=1:Sz126044;  ** z29 title question, z30 cancel **
+!!IF&1000/v4119=1:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/41/30;
+
+** message if hero wears 2-11 artifacts
+!!VRz29&v4119>1:Sz126045;  ** z29 title question, z30 cancel **
+!!IF&1000/v4119>1/v4119<12:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/41/30;
+
+!!VRv163:S0;                    [v163 = 0 - numerical value of answer]
+!!DO161/1/12/1&1000/v4119<12:P; [get v163]
+
+!!VRv4118&v163=12:S16;     [v4118 = 16]
+
+!!FU&v163=12:E;            [exit if cancel has been chosen from previous dialogs]
+
+!!FU173&1000:P;
+
+*** <AI  ***
+!!DO173/1/14/1&-1000/v160<3:P;
+!!VRv4135&-1000/v4115>0:Sv4115;
+!!FU174&-1000/v4116>0:Pv4116/v4136;
+
+!!VRv4118&-1000:S2048;
+*** AI/> ***
+
+!?FU173&y-99=0;
+
+*** <AI  ***
+!!VRx15&-1000:S4120+x16;
+!!VRv163&-1000/vx15=1:Sx16;  [choose artifact]
+!!VRx13:Svx15;
+!!FU&-1000/vx15<>1:E;        [exit if not changeable]
+*** AI/> ***
+
+** var initialization **
+!!VRv156:S1;               [initialization for FU164]
+!!DO164/1/14/1:P;          [get artifact number in v4020]
+
+** var initialization **
+!!VRx1:Sv4120;             [x1 = number of artifact to change]
+!!VRx2:S0;
+!!VRx3:S0;
+!!VRx4:S0;
+!!VRx7:S0;
+
+!!VRx2&x1=46:S47;          [x2 = number of artifact to change into]
+!!VRx3&x1=46:S48;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=47:S46;          [x2 = number of artifact to change into]
+!!VRx3&x1=47:S48;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=48:S46;          [x2 = number of artifact to change into]
+!!VRx3&x1=48:S47;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=49:S50;          [x2 = number of artifact to change into]
+!!VRx3&x1=49:S51;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=50:S49;          [x2 = number of artifact to change into]
+!!VRx3&x1=50:S51;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=51:S49;          [x2 = number of artifact to change into]
+!!VRx3&x1=51:S50;          [x3 = number of artifact to change into]
+
+!!VRx2&x1=52:S53;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=53:S52;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=79:S80;          [x2 = number of artifact to change into]
+!!VRx3&x1=79:S81;          [x3 = number of artifact to change into]
+!!VRx4&x1=79:S82;          [x4 = number of artifact to change into]
+
+!!VRx2&x1=80:S79;          [x2 = number of artifact to change into]
+!!VRx3&x1=80:S81;          [x3 = number of artifact to change into]
+!!VRx4&x1=80:S82;          [x4 = number of artifact to change into]
+
+!!VRx2&x1=81:S79;          [x2 = number of artifact to change into]
+!!VRx3&x1=81:S80;          [x3 = number of artifact to change into]
+!!VRx4&x1=81:S82;          [x4 = number of artifact to change into]
+
+!!VRx2&x1=82:S79;          [x2 = number of artifact to change into]
+!!VRx3&x1=82:S80;          [x3 = number of artifact to change into]
+!!VRx4&x1=82:S81;          [x4 = number of artifact to change into]
+
+!!VRx2&x1=84:S85;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=85:S84;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=86/v2=0/v3=0/v4=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=86/v2=0/v3=0/v4=0:S88;          [x3 = number of artifact to change into]
+!!VRx4&x1=86/v2=0/v3=0/v4=0:S89;          [x4 = number of artifact to change into]
+!!VRx2&x1=86/v2=1/v3=0/v4=0:S88;          [x2 = number of artifact to change into]
+!!VRx3&x1=86/v2=1/v3=0/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=86/v2=0/v3=1/v4=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=86/v2=0/v3=1/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=86/v2=0/v3=0/v4=1:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=86/v2=0/v3=0/v4=1:S88;          [x3 = number of artifact to change into]
+!!VRx2&x1=86/v2=0/v3=1/v4=1:S87;          [x2 = number of artifact to change into]
+!!VRx2&x1=86/v2=1/v3=0/v4=1:S88;          [x2 = number of artifact to change into]
+!!VRx2&x1=86/v2=1/v3=1/v4=0:S89;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=87/v1=0/v3=0/v4=0:S86;          [x2 = number of artifact to change into]
+!!VRx3&x1=87/v1=0/v3=0/v4=0:S88;          [x3 = number of artifact to change into]
+!!VRx4&x1=87/v1=0/v3=0/v4=0:S89;          [x4 = number of artifact to change into]
+!!VRx2&x1=87/v1=1/v3=0/v4=0:S88;          [x2 = number of artifact to change into]
+!!VRx3&x1=87/v1=1/v3=0/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=87/v1=0/v3=1/v4=0:S86;          [x2 = number of artifact to change into]
+!!VRx3&x1=87/v1=0/v3=1/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=87/v1=0/v3=0/v4=1:S86;          [x2 = number of artifact to change into]
+!!VRx3&x1=87/v1=0/v3=0/v4=1:S88;          [x3 = number of artifact to change into]
+!!VRx2&x1=87/v1=0/v3=1/v4=1:S86;          [x2 = number of artifact to change into]
+!!VRx2&x1=87/v1=1/v3=0/v4=1:S88;          [x2 = number of artifact to change into]
+!!VRx2&x1=87/v1=1/v3=1/v4=0:S89;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=88/v2=0/v1=0/v4=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=88/v2=0/v1=0/v4=0:S86;          [x3 = number of artifact to change into]
+!!VRx4&x1=88/v2=0/v1=0/v4=0:S89;          [x4 = number of artifact to change into]
+!!VRx2&x1=88/v2=1/v1=0/v4=0:S86;          [x2 = number of artifact to change into]
+!!VRx3&x1=88/v2=1/v1=0/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=88/v2=0/v1=1/v4=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=88/v2=0/v1=1/v4=0:S89;          [x3 = number of artifact to change into]
+!!VRx2&x1=88/v2=0/v1=0/v4=1:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=88/v2=0/v1=0/v4=1:S86;          [x3 = number of artifact to change into]
+!!VRx2&x1=88/v2=0/v1=1/v4=1:S87;          [x2 = number of artifact to change into]
+!!VRx2&x1=88/v2=1/v1=0/v4=1:S86;          [x2 = number of artifact to change into]
+!!VRx2&x1=88/v2=1/v1=1/v4=0:S89;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=89/v2=0/v3=0/v1=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=89/v2=0/v3=0/v1=0:S88;          [x3 = number of artifact to change into]
+!!VRx4&x1=89/v2=0/v3=0/v1=0:S86;          [x4 = number of artifact to change into]
+!!VRx2&x1=89/v2=1/v3=0/v1=0:S88;          [x2 = number of artifact to change into]
+!!VRx3&x1=89/v2=1/v3=0/v1=0:S86;          [x3 = number of artifact to change into]
+!!VRx2&x1=89/v2=0/v3=1/v1=0:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=89/v2=0/v3=1/v1=0:S86;          [x3 = number of artifact to change into]
+!!VRx2&x1=89/v2=0/v3=0/v1=1:S87;          [x2 = number of artifact to change into]
+!!VRx3&x1=89/v2=0/v3=0/v1=1:S88;          [x3 = number of artifact to change into]
+!!VRx2&x1=89/v2=0/v3=1/v1=1:S87;          [x2 = number of artifact to change into]
+!!VRx2&x1=89/v2=1/v3=0/v1=1:S88;          [x2 = number of artifact to change into]
+!!VRx2&x1=89/v2=1/v3=1/v1=0:S86;          [x2 = number of artifact to change into]
+
+
+!!VRx2&x1=94:S95;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=95:S94;          [x2 = number of artifact to change into]
+
+!!VRx2&x1=103:S104;        [x2 = number of artifact to change into]
+!!VRx2&x1=104:S103;        [x2 = number of artifact to change into]
+
+!!FU&-1000/x1>108/x1<115:E;  [exit if it's an artifact which gives resources]
+
+!!VRx2&x1=112:S114;        [x2 = number of artifact to change into]
+
+!!VRx2&x1=114:S112;        [x2 = number of artifact to change into]
+
+!!VRx2&x1=109:S110;        [x2 = number of artifact to change into]
+!!VRx3&x1=109:S111;        [x3 = number of artifact to change into]
+!!VRx4&x1=109:S113;        [x4 = number of artifact to change into]
+
+!!VRx2&x1=110:S109;        [x2 = number of artifact to change into]
+!!VRx3&x1=110:S111;        [x3 = number of artifact to change into]
+!!VRx4&x1=110:S113;        [x4 = number of artifact to change into]
+
+!!VRx2&x1=111:S109;        [x2 = number of artifact to change into]
+!!VRx3&x1=111:S110;        [x3 = number of artifact to change into]
+!!VRx4&x1=111:S113;        [x4 = number of artifact to change into]
+
+!!VRx2&x1=113:S109;        [x2 = number of artifact to change into]
+!!VRx3&x1=113:S110;        [x3 = number of artifact to change into]
+!!VRx4&x1=113:S111;        [x4 = number of artifact to change into]
+
+
+!!UN:N0/161/x1;             [z161 = name of artifact to change]
+!!UN:N0/162/x2;             [z162 = name of artifact to change into]
+!!UN&x3<>0:N0/43/x3;        [z43 = name of artifact to change into]
+!!UN&x4<>0:N0/44/x4;        [z44 = name of artifact to change into]
+
+** get upgrade cost (v4135)**
+!!VRy3:S0;
+!!VRv4135|x1=46/x1=47/x1=48/x1=49/x1=50/x1=51/x1=52/x1=53/x1=103/x1=104:S1000;
+!!VRv4135|x1=84/x1=85/x1=112/x1=114:S1500;
+!!VRv4135|x1=79/x1=80/x1=81/x1=82/x1=94/x1=95/x1=109/x1=110/x1=111/x1=113:S2500;
+!!VRv4135|x1=86/x1=87/x1=88/x1=89:S10000;
+* increase price if enhanced artifacts option is turned on *
+!!VRv4135&x1=103/v164=1:S7500;   [Pendant of Life]
+!!VRv4135&x1=104/v164=1:S7500;   [Pendant of Death]
+** secondary resource (Mithril only now)**
+!!VRy3|x1=79/x1=80/x1=81/x1=82/x1=86/x1=87/x1=88/x1=89/x1=103/x1=104:S7;    [y3 = number of secondary resource, 0 = not present]
+!!VRy2|x1=79/x1=80/x1=81/x1=82:S1;          [Orbs if enhanced art. is off]
+!!VRy2&x1>78/x1<83/v164=1:S3;               [Orbs if enhanced art. is on]
+!!VRy2|x1=86/x1=87/x1=88/x1=89:S10;         [Tomes]
+!!VRy2|x1=103/x1=104:S1;                    [Pendant of Life, Pendant of Death]
+
+!!VRv4135&1000:*v160;                       [double price if it is the second visit (human only)]
+!!VRy2&1000/y3<>0:*v160;
+
+** set price according to the time percentage **
+!!VRv4135: *v154:100;
+
+!!VRy-42:S0-v4135-100000;
+
+!!OW:R-1/6/?y11;                           [y11 = current gold]
+!!OW&y3>0:R-1/y3/?y12;                     [y12 = current secondary resource]
+
+!!IF:V2/0;                                 [initialization]
+!!VRv162:S0;                               [initialization]
+
+!!VRv4118:S2048;                           [v4118 = 2048]
+
+!!VRx5:S1;
+!!VRx5&x3<>0:+1;
+!!VRx5&x4<>0:+1;                           [x5 = count of artifacts to change into]
+!!VRz29:Sz126039;                          [z29 = title]
+* questions *
+!!IF&1000/x5>1:G1/162/8/29/162/43/44/30;   [question to choose needed artifact]
+!!VRx2&v162=2:Sx3;                         [correction for chosen artifact]
+!!VRz162&v162=2:Sz43;                      [correction for chosen artifact]
+!!VRx2&v162=4:Sx4;                         [correction for chosen artifact]
+!!VRz162&v162=4:Sz44;                      [correction for chosen artifact]
+
+!!VRv4118&v162=8/v4119>1/1000:S2;                [v4118 = 2]
+!!VRv4118&v162=8/v4119=1/1000:S16;               [v4118 = 16]
+
+!!FU&v162=8:E;                                   [exit if cancel pressed]
+
+!!IF&1000/y3=0:Q2/8/x1/6/y-42/8/x2/2/z126040;    [question for upgrade without secondary resource]
+!!IF&1000/y3>0:Q2/8/x1/6/y-42/8/x2/2/z126041;    [question for upgrade with secondary resource]
+
+*** <AI  ***
+!!IF&-1000/y11>v4135:V2/1;                       [if AI have enough money he agrees]
+!!UN&-1000:J2/?v1;                               [v1 = difficulty level]
+!!VRv1&v1=0/-1000:S1;                            [easy and normal have standard price]
+!!VRv4135&-1000::v1;                             [divide price on difficulty level (1-4) for AI]
+!!VRy2&-1000:S0;             [AI doesn't need mithril]
+!!VRy12&-1000/y12<y2:Sy2;    [just for insuring]
+*** AI/> ***
+
+!!VRv4118&-2/v4119>1:S2;                 [v4118 = 2]
+!!VRv4118&-2/v4119=1:S16;                [v4118 = 16]
+
+!!FU&-2:E;                               [exit if cancel pressed]
+
+
+!!IF&1000/y11<v4135/y12>=y2:Q1/36/v4135/1/z126008;              [message if not enough money]
+!!IF&1000/y12<y2/y3>0/y11>=v4135:Q1/y3/y2/1/z126032;            [message if not enough secondary resource]
+!!IF&1000/y12<y2/y3>0/y11<v4135:Q1/36/v4135/y3/y2/1/z126033;    [message if not enough resources]
+
+!!VRv4118&y11<v4135/v4119=1/1000:S16;                             [v4118 = 16]
+!!VRv4118&y12<y2/v4119=1/1000:S16;                                [v4118 = 16]
+!!VRv4118&y11<v4135/v4119>1/1000:S2;                              [v4118 = 2]
+!!VRv4118&y12<y2/v4119>1/1000:S2;
+
+!!FU&y11<v4135/1000:E;                                  [exit if not enough money]
+!!FU&y12<y2/y3>0/1000:E;                                [exit if not enough mithril]
+
+!!FU174&1000:Px1/x2/y2;
+
+*** <AI choses art. ***
+!!HE-1&-1000: A2/x1/?x5/d;     [x5 = quantity of disupgraded art.]
+!!FU&-1000/x5<2:E;             [exit if only one art.]
+
+!!UN&-1000: Ax1/1/?x11;        [x11 = cost of x1 - disupgraded art.]
+!!FU&-1000/x11<=v4115:E;       [exit if have the same art.]
+
+!!HE-1&-1000/x2<>85/x2<>84: A2/x2/?x5/d;        [x5 = quantity of x2 = 1st upgraded art.]
+!!HE-1&-1000/x3>0/x5>0/x3>0: A2/x3/?x6/d;       [x6 = quantity of x3 = 2nd upgraded art.]
+!!VRx2&-1000/x3>0/x5>0/x3>0/x6=0:Sx3;           [x2 = x3]
+!!HE-1&-1000/x4>0/x4>0/x6>0: A2/x4/?x7/d;       [x7 = quantity of x4 = 3rd upgraded art.]
+!!VRx2&-1000/x4>0/x4>0/x6>0/x7=0:Sx4;           [x2 = x3]
+
+!!HE-1:B2/?x12; [x12 = hero class]
+!!HE-1&-1000/x1=85: A2/84/?x5/d;         [x5 = quantity of upgraded art.]
+!!VRx2&-1000/x1=85/x5=0/x12=8:S85;       [x2 = upgraded art. (Necro changes Hourglass of the Evil Hour with Spirit of Oppression =>)]
+!!VRx2&-1000/x1=85/x5=0/x12=9:S85;       [x2 = upgraded art. (=> if have more then one copy of Hourglass of the Evil Hour)]
+!!VRx7&-1000/x1=85/x5>0:S1;              [x7 = 1]
+!!VRx7&-1000/x1=85/x5>0:S1;              [x7 = 1]
+!!VRx7&-1000/x1=84:S1;                   [x7 = 1 = don't change Spirit of Oppression]
+
+!!FU&-1000/x3=0/x4=0/x5>0:E;             [exit if AI has all artifacts to change into]
+!!FU&-1000/x3>0/x4=0/x6>0:E;             [exit if AI has all artifacts to change into]
+!!FU&-1000/x3>0/x4>0/x7>0:E;             [exit if AI has all artifacts to change into]
+
+!!VRv4115&-1000:Sx11;     [v4115 = cost of chosen artifact in Artraits]
+!!VRv4116&-1000:Sx1;      [v4116 = disupgraded artifact]
+!!VRv4136&-1000:Sx2;      [v4136 = upgraded art.]
+*** AI/> ***
+
+
+!?FU174&y-99=0;  [x1 = changeable art., x2 = art. to change into, x3 = cost of mithril]
+
+!!VRy3&x3>0:S7;                         [get mithril cost if present]
+!!VRy2&x3>0:Sx3;                        [get quantity of mithril if any]
+
+!!OW:R-1/6/?y11;                        [y11 = current gold]
+!!OW&y3>0:R-1/y3/?y12;                  [y12 = current secondary resource]
+
+*** <AI  ***
+!!HE-1&-1000: A2/x1/d/?x8;
+!!HE-1&-1000/x8>1: A3/x1/1/1;
+!!HE-1&-1000/x8=1: A3/x1/1/0;                [remove old artifact]
+*** AI/> ***
+
+!!HE-1&1000: A3/x1/1/1;                 [remove old artifact]
+!!HE-1: A4/x2;                          [put new artifact]
+
+** subtract movepoints **
+!!HE-1: W?x5;
+!!HE-1&x5>=100: Wd-100;
+!!HE-1&x5<100: W0;
+
+** subtract money **
+!!VRy11:-v4135;
+!!OW:R-1/6/y11;
+!!VRy12&y3>0:-y2;
+!!OW&y3>0:R-1/y3/y12;
+
+** show success message **
+!!IF&1000:Q1/8/x2/1/z126046;
+
+** set visit var **
+!!VRv160:+1;
+!!PO157&v160=2:N2;
+!!PO157&v160=3:N3;
+
+!!IF&1000/v160<3/160:Q1/z126030;
+!!FU&-1:E;
+
+!!VRv4118:S16;                          [v4118 = 16]
+!!FU166:P;                [call needed function]
+********************************************************************************
+
+
+
+
+**!** FU169 to upgrade group of artifacts to one **!****************************
+!?FU169&y-99=0;
+* get numbers of equipped artifacts *
+!!HE-1:A2/37/?v4101/d;                      [4101 = quantity of Quiet Eye of the Dragon]
+!!HE-1:A2/45/?v4102/d;                      [4102 = quantity of Still Eye of the Dragon]
+!!HE-1:A2/46/?v4103/d;                      [4103 = quantity of Clover of Fortune]
+!!HE-1:A2/47/?v4104/d;                      [4104 = quantity of Cards of Prophecy]
+!!HE-1:A2/48/?v4105/d;                      [4105 = quantity of Ladybird of Luck]
+!!HE-1:A2/49/?v4106/d;                      [4106 = quantity of Badge of Courage]
+!!HE-1:A2/50/?v4107/d;                      [4107 = quantity of Crest of Valor]
+!!HE-1:A2/51/?v4108/d;                      [4108 = quantity of Glyph of Gallantry]
+!!UN:P168/=1;                               [check if Orb of Vulnerability is banned]
+!!VRv4109:S0;
+!!VRv4110:S0;
+!!VRv4111:S0;
+!!VRv4112:S0;
+!!HE-1&-1:A2/79/?v4109/d;                      [4109 = quantity of Orb of the Firmament]
+!!HE-1&-1:A2/80/?v4110/d;                      [4110 = quantity of Orb of Silt]
+!!HE-1&-1:A2/81/?v4111/d;                      [4111 = quantity of Orb of Tempestuous Fire]
+!!HE-1&-1:A2/82/?v4112/d;                      [4112 = quantity of Orb of Driving Rain]
+
+
+* v4121-v4132 check var (=1 if any) *
+!!VRv4121&v4101>0:S1;
+!!VRv4122&v4102>0:S1;
+!!VRv4123&v4103>0:S1;
+!!VRv4124&v4104>0:S1;
+!!VRv4125&v4105>0:S1;
+!!VRv4126&v4106>0:S1;
+!!VRv4127&v4107>0:S1;
+!!VRv4128&v4108>0:S1;
+!!VRv4129&v4109>0:S1;
+!!VRv4130&v4110>0:S1;
+!!VRv4131&v4111>0:S1;
+!!VRv4132&v4112>0:S1;
+
+!!VRx1:Sv4121+v4122;
+!!VRx2:Sv4123+v4124+v4125+v4126+v4127+v4128;
+!!VRx3:Sv4129+v4130+v4131+v4132;
+
+*** <AI  ***
+!!FU&-1000/x2<>6:E;                  [exit if hasn't all group]
+!!HE-1&-1000: A1/?x15/2;
+!!FU&-1000/x15>0:E;                  [exit if something equipped at neck slot]
+!!OW&-1000:R-1/6/?y11;               [y11 = current gold]
+!!VRv4135&-1000:S2500;               [v4135 = price]
+!!UN&-1000:J2/?v1;                   [v1 = difficulty level]
+!!VRv1&v1=0/-1000:S1;
+!!VRv4135&-1000::v1;                 [divide price on difficulty level (1-4) for AI]
+!!FU&-1000/v4135>y11:E;              [exit if not enough money]
+!!HE-1&-1000: A3/46/1/0 A3/47/1/0 A3/48/1/0 A3/49/1/0 A3/50/1/0 A3/51/1/0;  [remove artifacts of group upgrade]
+!!HE-1&-1000: A4/108;                [equip Pendant of Courage]
+!!FU&-1000:E;
+*** AI/> ***
+
+** z31-z42 = names of appropriate artifacts **
+
+!!UN&x1=2:N0/1/37;   [get name of Quiet Eye of the Dragon]
+!!UN&x1=2:N0/2/45;   [get name of Still Eye of the Dragon]
+!!VRz31&x1=2:S^%Z1 and %Z2^;
+
+!!UN&x2=6:N0/1/46;   [get name of Clover of Fortune]
+!!UN&x2=6:N0/2/47;   [get name of Cards of Prophecy]
+!!UN&x2=6:N0/3/48;   [get name of Ladybird of Luck]
+!!UN&x2=6:N0/4/49;   [get name of Badge of Courage]
+!!UN&x2=6:N0/5/50;   [get name of Crest of Valor]
+!!UN&x2=6:N0/6/51;   [get name of Glyph of Gallantry]
+!!VRz32&x2=6:S^%Z1, %Z2, %Z3, %Z4...^;
+
+!!UN&x3=4:N0/1/79;   [get name of Orb of the Firmament]
+!!UN&x3=4:N0/2/80;   [get name of Orb of Silt]
+!!UN&x3=4:N0/3/81;   [get name of Orb of Tempestuous Fire]
+!!UN&x3=4:N0/4/82;   [get name of Orb of Driving Rain]
+!!VRz33&x3=4:S^%Z1, %Z2, %Z3, %Z4^;
+
+!!VRv4119:S0;            [v4119 = quantity of upgradeable groups of artifacts]
+!!VRv4119&x1>=2:+1;
+!!VRv4119&x2>=6:+1;
+!!VRv4119&x3>=4:+1;
+
+** Hero wears no groups of artifacts
+!!IF&v4119=0/1000:M1/z126004;
+
+!!VRv4118&v4119=0:S16;     [v4118 = 16]
+
+!!FU&v4119=0:E;
+
+** message if hero wears needed artifacts **
+!!VRz30&v4119>0:Sz126013;  [z30 = text of canceling]
+!!VRz29&v4119>0:Sz126042;  [z29 = title question]
+!!IF&1000/v4119>0/v4119<12:G1/162/2048/29/31/32/33/34/35/36/37/38/39/40/41/30;
+
+!!VRv163:S0;                    [v163 = 0 - numerical value of answer]
+!!DO161/1/12/1&1000/v4119<12:P; [get v163]
+
+!!VRv4118&v163=12:S16;  [v4118 = 16]
+
+!!FU&v163=12/1000:E;    [exit if cancel has been chosen from previous dialogs]
+
+** var initialization **
+** x1-x6 = artifacts to remove **
+** x10 = artifact to add **
+!!VRx1:S0;
+!!VRx2:S0;
+!!VRx3:S0;
+!!VRx4:S0;
+!!VRx5:S0;
+!!VRx6:S0;
+
+!!VRx1&v163=1:S37;         [Quiet Eye of the Dragon]
+!!VRx2&v163=1:S45;         [Still Eye of the Dragon]
+!!VRx10&v163=1:S153;       [Dragon Eye Ring]
+
+!!VRx1&v163=2:S46;       [Clover of Fortune]
+!!VRx2&v163=2:S47;       [Cards of Prophecy]
+!!VRx3&v163=2:S48;       [Ladybird of Luck]
+!!VRx4&v163=2:S49;       [Badge of Courage]
+!!VRx5&v163=2:S50;       [Crest of Valor]
+!!VRx6&v163=2:S51;       [Glyph of Gallantry]
+!!VRx10&v163=2:S108;     [Pendant of Courage]
+
+!!VRx1&v163=3:S79;      [Orb of the Firmament]
+!!VRx2&v163=3:S80;      [Orb of Silt]
+!!VRx3&v163=3:S81;      [Orb of Tempestuous Fire]
+!!VRx4&v163=3:S82;      [Orb of Driving Rain]
+!!VRx10&v163=3:S93;     [Orb of Vulnerability]
+
+* z161 = name of artifacts to change     *
+* z162 = name of artifact to change into *
+!!VRz161&v163=1: S^%Z31^;
+!!VRz161&v163=2: S^%Z32^;
+!!VRz161&v163=3: S^%Z33^;
+!!UN&v163=1:N0/162/153;
+!!UN&v163=2:N0/162/108;
+!!UN&v163=3:N0/162/93;
+
+** get upgrade cost (v4135)**
+!!VRy3:S0;
+!!VRv4135&v163=2:S2500;
+!!VRv4135&v163=1:S5000;
+!!VRv4135&v163=1/v164=1:S7500;   [correction for enhanced artifact]
+!!VRv4135&v163=3:S10000;
+** secondary resource (Mithril only now)**
+!!VRy3|v163=1/v163=3:S7;      [y3 = number of secondary resource, 0 = not present]
+!!VRy2&v163=1:S5;             [Dragon Eye Ring]
+!!VRy2&v163=3:S10;            [Orb of Vulnerability]
+
+!!VRv4135&1000:*v160;                     [double price if it is the second visit (human only)]
+!!VRy2&1000/y3<>0:*v160;
+
+** set price according to the time percentage **
+!!VRv4135: *v154:100;
+
+!!VRy-1:S0-v4135-100000;
+!!VRy-2:S0-y2-100000;
+
+!!OW:R-1/6/?y11;                          [y11 = current gold]
+!!OW&y3>0:R-1/y3/?y12;                    [y12 = current secondary resource]
+
+!!IF:V2/0;
+
+!!VRv4118:S2048;                          [v4118 = 2048]
+
+!!IF&1000/y3=0:Q2/6/y-1/8/x10/2/z126040;        [question for upgrade without secondary resource]
+!!IF&1000/y3>0:Q2/6/y-1/7/y-2/8/x10/2/z126041;  [question for upgrade with secondary resource]
+
+!!VRv4118&-2/v4119>1:S4;                 [v4118 = 4]
+!!VRv4118&-2/v4119=1:S16;                [v4118 = 16]
+
+!!FU&-2:E;                               [exit if cancel pressed]
+
+!!IF&1000/y11<v4135/y12>=y2:Q1/36/v4135/1/z126008;              [message if not enough money]
+!!IF&1000/y12<y2/y3>0/y11>=v4135:Q1/y3/y2/1/z126032;            [message if not enough secondary resource]
+!!IF&1000/y12<y2/y3>0/y11<v4135:Q1/36/v4135/y3/y2/1/z126033;    [message if not enough resources]
+
+!!VRv4118&y11<v4135/v4119=1:S16;                             [v4118 = 16]
+!!VRv4118&y12<y2/v4119=1:S16;                             [v4118 = 16]
+!!VRv4118&y11<v4135/v4119>1:S4;                              [v4118 = 4]
+!!VRv4118&y12<y2/v4119>1:S4;                              [v4118 = 4]
+
+!!FU|y11<v4135/y12<y2:E;                                     [exit if not enough money]
+
+
+!!HE-1:F?y44/?y45/?y46/?y47/1;          [y44-y47 = primary skills without artifacts before changes]
+!!HE-1:F?y54/?y55/?y56/?y57;            [y54-y57 = primary skills with artifacts before changes]
+
+!!HE-1: A3/x1/1/1;                      [remove old artifact]
+!!HE-1: A3/x2/1/1;                      [remove old artifact]
+!!HE-1&x3<>0: A3/x3/1/1;                [remove old artifact]
+!!HE-1&x4<>0: A3/x4/1/1;                [remove old artifact]
+!!HE-1&x5<>0: A3/x5/1/1;                [remove old artifact]
+!!HE-1&x6<>0: A3/x6/1/1;                [remove old artifact]
+
+!!HE-1:F?y-44/?y-45/?y-46/?y-47/1;      [y-44-y-47 = primary skills without artifacts after cnhanges]
+!!HE-1:F?y-54/?y-55/?y-56/?y-57;        [y-54-y-57 = primary skills with artifacts after cnhanges]
+
+!!VRy-44:-y44;                          [y-44 = attack bonus of disupgraded artifact]
+!!VRy-45:-y45;                          [y-45 = defence bonus of disupgraded artifact]
+!!VRy-46:-y46;                          [y-46 = magic power bonus of disupgraded artifact]
+!!VRy-47:-y47;                          [y-46 = knowledge bonus of disupgraded artifact]
+
+!!VRy-54:-y54;                          [y-54 = attack bonus of upgraded artifact]
+!!VRy-55:-y55;                          [y-55 = defence bonus of upgraded artifact]
+!!VRy-56:-y56;                          [y-56 = magic power bonus of upgraded artifact]
+!!VRy-57:-y57;                          [y-56 = knowledge bonus of upgraded artifact]
+
+!!VRy54:+y-54-y-44;                     [y54 = new attack skill]
+!!VRy55:+y-55-y-45;                     [y55 = new defence skill]
+!!VRy56:+y-56-y-46;                     [y56 = new magic power skill]
+!!VRy57:+y-57-y-47;                     [y57 = new knowlege skill]
+
+!!HE-1:Fy54/y55/y56/y57;                [set right skills]
+
+!!HE-1: A4/x10;                         [put new artifact]
+
+** subtract movepoints **
+!!HE-1: W?x5;
+!!HE-1&x5>=100: Wd-100;
+!!HE-1&x5<100: W0;
+
+** subtract money **
+!!VRy11:-v4135;
+!!OW:R-1/6/y11;
+!!VRy12&y3>0:-y2;
+!!OW&y3>0:R-1/y3/y12;
+
+** show success message **
+!!IF&1000:Q1/8/x10/1/z126046;
+
+** set visit var **
+!!VRv160:+1;
+!!PO157&v160=2:N2;
+!!PO157&v160=3:N3;
+
+!!IF&1000/v160<3/160:Q1/z126030;
+!!FU&-1:E;
+
+!!VRv4118:S16;                          [v4118 = 16]
+!!FU166:P;                [call needed function]
+********************************************************************************
+
+
+
+
+*!* FU170 to describe services *!***********************************************
+!?FU170;
+
+!!VRv4118:S16;
+!!IF:M1/z126043;
+********************************************************************************
+
+
+
+
+*!* FU175 to reset vars *!******************************************************
+!?FU175;
+
+!!VRv4115&-1000:S0;  [initialization for FU173]
+!!VRv4116&-1000:S0;  [initialization for FU173]
+!!VRv4117&-1000:S0;  [initialization for FU173]
+!!VRv4135&-1000:S0;  [initialization for FU173]
+
+!!VRv4121:S0;                             [4121 = head]
+!!VRv4122:S0;                             [4122 = shoulders]
+!!VRv4123:S0;                             [4123 = neck]
+!!VRv4124:S0;                             [4124 = right hand]
+!!VRv4125:S0;                             [4125 = left hand]
+!!VRv4126:S0;                             [4126 = torso]
+!!VRv4127:S0;                             [4127 = right ring]
+!!VRv4128:S0;                             [4128 = left ring]
+!!VRv4129:S0;                             [4129 = feet]
+!!VRv4130:S0;                             [4130 = misc. slot 1]
+!!VRv4131:S0;                             [4131 = misc. slot 2]
+!!VRv4132:S0;                             [4132 = misc. slot 3]
+!!VRv4133:S0;                             [4133 = misc. slot 4]
+!!VRv4134:S0;                             [4134 = misc. slot 5]
+** set names of upgradeable artifact to NULL **
+!!VRz31:S^^;
+!!VRz32:S^^;
+!!VRz33:S^^;
+!!VRz34:S^^;
+!!VRz35:S^^;
+!!VRz36:S^^;
+!!VRz37:S^^;
+!!VRz38:S^^;
+!!VRz39:S^^;
+!!VRz40:S^^;
+!!VRz41:S^^;
+!!VRz42:S^^;
+!!VRz43:S^^;
+!!VRz44:S^^;
+********************************************************************************
+

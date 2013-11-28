@@ -1,0 +1,377 @@
+ZVSE
+ERMS_ScriptName=script93 Enhanced Grail
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=23.11(November).2013
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedFunctions=FU1620
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+TODO: should use new UX:G command
+
+***************** Grail script ***************** (includes "Disable usual Tower Grail")
+** Last Updated:   21.11(November).2006 new text for approaching to a Tower town with the grail
+** Last Updated:   20.7(July).2006 fixed Crash, with Tower-Grail at day 1 on maps without underground
+
+** Option 93 - Written by Thomas Franz (alias samot) script93
+** advance the grail buildings to give bonuses to all heros for some towns and siege bonuses to the others
+** Disable the overpowered Grails in Conflux (you'll receive the bonuses still)
+
+** If the Wog-Option 252 (Disable usual Tower Grail) is active, the grail in this town will work as the "dummygrail" in conflux
+
+** Tower: increases the Knowledge of each own hero by +3
+** Inferno: increases the Power of each own hero by +3
+** Dungeon: increases the Power of each own hero by +3
+** Stronghold: increases the Attack of each own hero by +3
+** Fortress: increases the Defense of each own hero by +3
+** Conflux: fill up the mana of each hero to its maximum every day
+
+** The bonuses will be added (or removed if you loose the town with the grail) at the next day
+
+** Under siege the following towns will get additional bonuses (spells cast at begin of battle):
+** Castle: bless L3 Duration 99; mirth 3/99
+** Rampart: Antimagic L1 Dur 2; misfortune 2/99 to attackers
+** Tower: Precision and Air Shield 3/99
+** Necropolis: Weakness 3/99 and light Sorrow (1 Power)
+** Conflux: Protection from one element 3/99, Disrupting Ray 3/99 vs attackers, Haste L1 Dur. 99
+
+** Caution: if the tower grail is build via Timed Event (town-event), the entire map will be shown
+** for one day and hide at next day
+
+** WOG-Option: 93, 252
+** Functions used: FU1625-1629, calls FU850 from script39 (HERO SPECIALIZATION BOOST (HSB))
+** v24-v31  : Flags for each player; not exclusive (may used by other scripts)
+** v8       : number of heroes
+** v9       : actual hero
+** w46      : Flags for hero (receives grail bonus for several towns); bits 1-9; exclusive MUSTN'T used by other scripts
+** Mapfield-Variables (PO:V): V3 for each entrace of a conflux or tower town (bit 6)
+
+** meaning of the Bits 1-9 in flagvars: Grail(bonus) in 0=none, 1 (1)=Castle, 2 (2)=Rampart, 3 (4)=Tower, 4 (8)=Inferno,
+** 5 (16)=Necro, 6 (32)=Dungeon, 7 (64)=Stronghold, 8 (128)=Fortress, 9 (256)=Conflux, 511=all
+** Bit 10 is used in script94 (Blacksmith sells Shackles of war)
+
+!?TM2; // Timer initialized in script00; every day / each player
+!!UN:P93/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!OW:C?y-1; // get the current player to y1
+!!OW:Wy-1/?y-2; // get the total number of towns owned by current player
+!!VRy-2:-1; !!VRv2:S0; // decrease y-2 because the town list is from 00..(y-2 -1) instead of 01..y-2
+!!DO1625/0/y-2/1&y-2>-1:Py-1; // calls 1625 for each of those towns; returns flagvar in v2
+!!OW:Hy-1/8/0; // count the number of all heroes of the current player; store the number in v8
+!!DO1626/1/v8/1&v8>-1:Pv2/y-1; // give grail bonuses for all owned heroes
+
+!!FU|$day$>1/$once$<>1:E; // exit after day 1
+!!UN:P252/?y10; // check for rule "Disable usual Tower Grail"
+!!UN&y10=1:H0/0/0/-1/144 R1; // hide map if rule is active (because it is possible, that there still was a tower grail)
+!!UN:X?y11/=1; // check for underground
+!!UN&y10=1/1:H0/0/1/-1/144 R1; // hide underground, redraw
+
+*** end function TM1 ***
+
+
+!?FU1625; // set the flags in v2 for each town type with a grail owned by player x1
+!!OW:Wx1/x16/?y1; // get the number of the x-th town owned by player x1
+!!CA0/y1:P?y97/?y98/?y99; // get coordinates
+!!CA0/y1:B3/26; // check if Grail is build
+!!CA0/y1:T?y2; // get type of town
+!!UN:P252/?y10; // check for rule "Disable usual Tower Grail"
+!!IF:V3/0; !!IF&y2=8:V3/1; !!IF&y2=2/y10=1:V3/1; // set flag 3 if town = conflux or tower (and option is on)
+!!FU1629&3/1:Py97/y98/y99/1; // build a "dummygrail" instead the normal grail
+!!FU1629&3:Py97/y98/y99/0;// check if dummygrail in conflux / tower is built
+!!OW-1&3/1:R-1/6/d5000; // give 5.000 gold to conflux / tower for dummygrail
+!!VRy2:+1; // increase town type by one (necessary for FU3333)
+!!FU3333:Py2; // get the integer value of the bit for the town type (return in y-100)
+!!VRv2&1:|y-100; // mark in the flag var that there is a grail in the towns of type y2
+**                  if there is a grail in a castle (bit 1, int 1 ) and Inferno (bit 4, int 8)
+**                  the bits 1 and 4 will be set so that v2 has now the intvalue 9 (1 + 8)
+
+** add spellpoints by Tower-Grail-Knowledge for visiting / garrison hero (if "Disable usual Tower Grail" is on
+!!UN:P252/?y99; // check if rule is on
+!!FU|y2<>3/y99=0/-1:E; // exit if not or if no tower (y2 was increased by 1 some lines above) or if no grail in this town
+!!CA0/y1:H0/?y3 H1/?y4; // get visiting / garrision hero
+!!HEy3&y3>-1:I?y5 Fd/d/d/?y6 S24/?y7; // get hero's current spellpoints, knowledge, intelligence level
+!!VRy8&y7=0:S100; !!VRy8&y7=1:S125; !!VRy8&y7=2:S150; !!VRy8&y7=3:S200; // set intelligence bonus
+!!VRy9:Sy6 +15 *10 *y8 :100; // calc max SP (divide by 100 because y6 is in percents), including 15 knowledge by the grail
+!!HEy3&y3>-1/y9>y5:Iy9; // set SPs to maxSP if there is a grail in a conflux town and current SP < maxSP
+
+!!HEy4&y4>-1:I?y5 Fd/d/d/?y6 S24/?y7; // get hero's current spellpoints, knowledge, intelligence level
+!!VRy8&y7=0:S100; !!VRy8&y7=1:S125; !!VRy8&y7=2:S150; !!VRy8&y7=3:S200; // set intelligence bonus
+!!VRy9:Sy6 +15 *10 *y8 :100; // calc max SP (divide by 100 because y6 is in percents), including 15 knowledge by the grail
+!!HEy4&y4>-1/y9>y5:Iy9; // set SPs to maxSP if there is a grail in a conflux town and current SP < maxSP
+
+
+*** end function FU1625 ***
+
+
+!?FU1626;
+** x1  : flagvar, set(ed) bit for each town type with a grail owned by the current player (511 for a grail in each towntype)
+** x2  : owner
+** x16 : loop counter
+** v9: hero number
+
+!!OW:Hx2/9/x16; // store the hero IDs in v9
+!!FU1627:Px1/v9; // calls FU1627, gives the flagvar and hero number
+
+*** end function FU1626 ***
+
+
+!?FU1627; // add / remove grail bonuses; bonuses that are already given and not included in the FlagVar (f.e. you loosed a Grail-town) will removed
+** x1  : flagvar, set(ed) bit for each town type with a grail owned by the current player
+**       should 511 for a grail in each town type or 0 to remove all bonuses
+** x2  : hero number
+** w46 : referenting flagvar of the hero
+** y3  : "workcopy" of the flagvar x1
+** y4  : "workcopy" of hero's flagvar w46
+** y5  : the value of the attibut that will get the grail bonus (f.e. value of knowledge for tower, power for dungeon ...)
+** y6  : bonus given by the grail
+** y7  : Magic Bann (script99) is active
+
+!!UN:P99/?y7; // check for Magic Bann (script99)
+!!IF:Wx2; // activate the w-variables for hero x2
+** check for tower (bit 3 (int 4))
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&4; // check if bit 4 (tower) is set; y3 will be 0 if not
+!!VRy4:S0 + w46; // "workcopy" of hero's flagvar
+!!VRy4:&4; // check if bit 4 (tower) is set; y4 will be 0 if not
+!!HEx2:Fd/d/d/?y5; // get hero's knowledge
+!!HEx2&y7=1:Fd/?y5/d/d; // get hero's defense if magic bann is active
+!!VRy6:Sy5 +3; // give 3 bonus
+!!VRy6&y3=0/y4>0:Sy5-3; // remove 3 bonus (if bonus was given but you haven't the grail anymore
+!!VRy6&y6<0:S0; !!VRy6&y6>99:S99; // min / max-Check
+!!HEx2&y3<>y4/y7=0:Fd/d/d/y6; // set / remove the new knowledge if owner has at least one grail in tower and the hero has no bonus received by an tower-grail yet (remove if bonus is given but no grail left)
+!!HEx2&y3<>y4/y7=1:Fd/y6/d/d; // set / remove the new defense (Magic Bann)
+!!VRw46&y3>0/y4=0:|4; // set flag 4 for hero to mark that he / she received the bonus for this town
+!!VRw46&y3=0/y4>0:&-5; // remove the flag if x3=0 to remove the bonus (fe if you loos the hero / the town with the grail)
+
+** check for Inferno (bit 8)
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&8; // check if bit 8 (Inferno) is set; y3 will be 0 if not
+!!VRy4:S0 +w46; // "workcopy" of hero's flagvar
+!!VRy4:&8; // check if bit 8 (Inferno) is set; y4 will be 0 if not
+!!HEx2:Fd/d/?y5/d; // get hero's power
+!!HEx2&y7=1:F?y5/d/d/d; // get hero's attack if magic bann is active
+!!VRy6:Sy5 +3; // give 3 bonus
+!!VRy6&y3=0/y4>0:Sy5-3; // remove 3 bonus (if bonus was given but you haven't the grail anymore
+!!VRy6&y6<0:S0; !!VRy6&y6>99:S99; // min / max-Check
+!!HEx2&y3<>y4/y7=0:Fd/d/y6/d; // set the new power if owner has at least one grail in Inferno and the hero has no bonus received by an Inferno-grail yet
+!!HEx2&y3<>y4/y7=1:Fy6/d/d/d; // set / remove the new attack (Magic Bann)
+!!VRw46&y3>0/y4=0:|8; // set flag 8 for hero to mark that he / she received the bonus for this town
+!!VRw46&y3=0/y4>0:&-9; // remove the flag if x3=0 to remove the bonus (fe if you loos the hero / the town with the grail)
+
+** check for Dungeon (bit 32)
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&32; // check if bit 32 (Dungeon) is set; y3 will be 0 if not
+!!VRy4:S0 +w46; // "workcopy" of hero's flagvar
+!!VRy4:&32; // check if bit 32 (Dungeon) is set; y4 will be 0 if not
+!!HEx2:Fd/d/?y5/d; // get hero's power
+!!HEx2&y7=1:F?y5/d/d/d; // get hero's attack if magic bann is active
+!!VRy6:Sy5 +3; // give 3 bonus
+!!VRy6&y3=0/y4>0:Sy5-3; // remove 3 bonus (if bonus was given but you haven't the grail anymore
+!!VRy6&y6<0:S0; !!VRy6&y6>99:S99; // min / max-Check
+!!HEx2&y3<>y4/y7=0:Fd/d/y6/d; // set the new power if owner has at least one grail in Dungeon and the hero has no bonus received by an Inferno-grail yet
+!!HEx2&y3<>y4/y7=1:Fy6/d/d/d; // set / remove the new attack (Magic Bann)
+!!VRw46&y3>0/y4=0:|32; // set flag 32 for hero to mark that he / she received the bonus for this town
+!!VRw46&y3=0/y4>0:&-33; // remove the flag if x3=0 to remove the bonus (fe if you loos the hero / the town with the grail)
+
+** check for Stronghold (bit 64)
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&64; // check if bit 64 (Stronghold) is set; y3 will be 0 if not
+!!VRy4:S0 +w46; // "workcopy" of hero's flagvar
+!!VRy4:&64; // check if bit 64 (Stronghold) is set; y4 will be 0 if not
+!!HEx2:F?y5/d/d/d; // get hero's attack
+!!VRy6:Sy5 +3; // give 3 bonus
+!!VRy6&y3=0/y4>0:Sy5-3; // remove 3 bonus (if bonus was given but you haven't the grail anymore
+!!VRy6&y6<0:S0; !!VRy6&y6>99:S99; // min / max-Check
+!!HEx2&y3<>y4:Fy6/d/d/d; // set the new attack if owner has at least one grail in Stronghold and the hero has no bonus received by an Stronghold-grail yet
+!!VRw46&y3>0/y4=0:|64; // set flag 64 for hero to mark that he / she received the bonus for this town
+!!VRw46&y3=0/y4>0:&-65; // remove the flag if x3=0 to remove the bonus (fe if you loos the hero / the town with the grail)
+
+** check for Fortress (bit 128)
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&128; // check if bit 128 (Fortress) is set; y3 will be 0 if not
+!!VRy4:S0 +w46; // "workcopy" of hero's flagvar
+!!VRy4:&128; // check if bit 128 (Fortress) is set; y4 will be 0 if not
+!!HEx2:Fd/?y5/d/d; // get hero's defense
+!!VRy6:Sy5 +3; // give 3 bonus
+!!VRy6&y3=0/y4>0:Sy5-3; // remove 3 bonus (if bonus was given but you haven't the grail anymore
+!!VRy6&y6<0:S0; !!VRy6&y6>99:S99; // min / max-Check
+!!HEx2&y3<>y4:Fd/y6/d/d; // set the new defense if owner has at least one grail in Fortress and the hero has no bonus received by an Fortress-grail yet
+!!VRw46&y3>0/y4=0:|128; // set flag 128 for hero to mark that he / she received the bonus for this town
+!!VRw46&y3=0/y4>0:&-129; // remove the flag if x3=0 to remove the bonus (fe if you loos the hero / the town with the grail)
+
+** check for Conflux (bit 256)
+!!VRy3:Sx1; // "workcopy" of the flagvar
+!!VRy3:&256; // check if bit 256 (Conflux) is set; y3 will be 0 if not
+
+!!HEx2:W?y5; // get heros moving points
+!!VRy5&y7=1:*133 :100; // give a bonus of 33 percent, if magic bann is active
+!!HEx2&y7=1/y3>0:Wy5; !!FU&y7=1:E; // set it back (if there is a grail) and exit (if magic bann is active)
+
+!!HEx2:I?y5 Fd/d/d/?y6 S24/?y17; // get hero's current spellpoints, Knowledge and Intelligence
+!!VRy8&y17=0:S100; !!VRy8&y17=1:S125; !!VRy8&y17=2:S150; !!VRy8&y17=3:S200; // set intelligence bonus
+!!VRy9:Sy6 *10 *y8 :100; // calc max SP (divide by 100 because y6 is in percents)
+!!HEx2&y3>0/y9>y5:Iy9; // set SPs to maxSP if there is a grail in a conflux town and current SP < maxSP
+** no need to set / remove the flag in the hero's w46-var because it is not a permanent bonus
+
+*** end function FU1627 ***
+
+
+!?BR0; // start of a battle; give bonuses to castle, rampart, tower, necropolis and conflux if the Grail-Town is under sieg
+!!UN:P93/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!BA:S?y-1; // get siege type of the battle
+!!FU&y-1=0:E; // exit if no siege
+!!BA:P?y-97/?y-98/?y-99; // get position of battle
+!!CAy-97/y-98/y-99:T?y-2; // get type of town
+!!FU|y-2=3/y-2=5/y-2=6/y-2=7:E; // exit if it is no Castle, Rampart, Tower, Necro or Conflux
+!!CAy-97/y-98/y-99:B3/26; // check for build grail in the town
+!!CAy-97/y-98/y-99&y-2=8:B3/27; // check for build dummygrail in Conflux
+!!FU&-1:E; // exit if there is no grail
+
+
+!!DO850/21/41/1&y-2=0:P41/3/99; // cast bless to all defending units if town = Castle
+!!DO850/21/41/1&y-2=0:P49/3/99; // cast mirth to all defending units if town = Castle
+!!DO850/21/41/1&y-2=1:P34/1/2; // cast Antimagic for 2 rounds at basic level to all defending units if town = Rampart
+!!DO850/0/20/1&y-2=1:P52/2/99; // cast misfortune (power 2) to all attacking units if town = Rampart
+!!DO850/21/41/1&y-2=2:P44/3/99; // cast Precision to all defending units if town = Tower
+!!DO850/21/41/1&y-2=2:P28/3/99; // cast Air Shield to all defending units if town = Tower
+!!DO850/0/20/1&y-2=4:P45/3/99; // cast Weakness (power 3) to all attacking units if town = Necropolis
+!!DO850/0/20/1&y-2=4:P50/1/99; // cast Sorrow (power 1) to all attacking units if town = Necropolis
+!!VRy-1:S0 R3 +30; // get random spell number (Protection from Air, Fire, Water, Earth)
+!!DO850/21/41/1&y-2=8:Py-1/3/99; // cast one of the protectiong spells to all defending units if town = Conflux
+!!DO850/21/41/1&y-2=8:P53/1/99; // cast basic haste to all defending units if town = Conflux
+!!DO850/0/20/1&y-2=8:P47/3/99; // cast Disrupting Ray to all attacking units if town = Conflux
+
+*** end function BA52 ***
+
+
+!?BA53; // after battle; remove grail bonuses if a hero looses the battle
+!!UN:P93/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!BA:H0/?y-1; // get attacking hero
+!!HEy-1&y-1>-1:O?y-2; // get his owner
+!!FU1627&y-2=-1:P0/y-1/0; //remove all grail bonuses (if any)
+!!VRy-2:S0;
+!!BA:H1/?y-1; // get defending hero
+!!HEy-1&y-1>-1:O?y-2; // get his owner
+!!FU1627&y-2=-1:P0/y-1/0; //remove all grail bonuses (if any)
+
+*** end function BA53 ***
+
+
+!?OB98; // when hero vistits a town
+!!UN:P93/?y-1; !!FU&y-1=0:E; // check if script is enabled; exit if not
+!!CAv998/v999/v1000:O?y-2 T?y-3; !!OW:C=y-2; // get type of town owner, check if the same as current player
+!!FU&y-3<>2/y-3<>8:E;  // exit if no conflux or tower
+!!UN:P252/?y-10; !!FU&y-10=0:E; // check if Tower-Grail script is enabled; exit if not
+!!FU1628&y-1=1/1:Pv998/v999/v1000/y-3; // if script is active and owner=player call FU1628
+
+*** end function OB98 ***
+
+!?CM1; // click on village hall (town screen)
+!!UN:P93/=1; !!FU&-1:E; // check if script is enabled; exit if not
+!!CM:I?y-2; // get clicked object
+!!CA-1:P?y-97/?y-98/?y-99 T?y-1; // get town position and type
+!!CA-1:O?y-3; !!OW:C?y-4; // get owner / current player
+!!FU&y-1<>2/y-1<>8:E;  // exit if no conflux or tower
+!!UN:P252/=1; !!FU&y-1=2/-1:E; // check if Tower-Grail script is enabled; exit if not but town = Tower
+!!FU1628&y-3=y-4/y-2>9/y-2<14:Py-97/y-98/y-99/y-1; // call function if script is active and player clicked at village hall .. capitol and town=conflux
+
+** dismantle the grail (get back into Inv.)
+!!FU&y-2<>149:E; // exit, if no click onto the Town name
+!!FU1629:Py-97/y-98/y-99; // check if dummy-grail is built
+!!FU&-1:E; // exit, if not
+!!OW:R-1/6/?y-1 R-1/7/?y-2; // get players gold and mithril
+!!IF|y-1<10000/y-2<4:Q1/6/-110000/7/-100004/8/2/1/z193003; // Msg: not enough gold
+!!FU|y-1<10000/y-2<4:E; // exit, if not enough gold
+!!IF:Q1/6/-110000/8/2/2/z193002; // ask to unmantle the grail for 10.000 gold
+!!FU&-1:E; // exit, if not wished
+
+** get gold and Mithril
+!!VRy-1:-10000; !!VRy-2:-4;
+!!OW:R-1/6/y-1 R-1/7/y-2;
+!!HE-1:A2; // give grail to player
+
+!!POy-97/y-98/y-99:V3/?y-1; // get Flagvar
+!!VRy-1:&-33; // set grail to unbuilt (remove bit 6)
+!!POy-97/y-98/y-99:V3/y-1; // set Flagvar (without built grail)
+
+!!CAy-97/y-98/y-99:N?z1; // get name of town
+!!VRz1:U^(Grail)^; // search for "(Grail)" in the town's name
+!!FU&-1:E; // exit, if not included
+!!VRz1:M4/?y-1; // get length of townname
+!!VRy-1:-8; // reduce lenght by 8 for " (Grail)"
+!!VRz2:M1/z1/0/y-1; // copy name without the (Grail) to z2
+!!CAy-97/y-98/y-99:Nz2; // set name of town
+
+*** end function CM1 ***
+
+
+!?FU1628;
+!!OW:A-1/?y10; // get choosen hero
+!!CA-1&y10<0:H0/?y1 H1/?y2; // if not: get heroes in the town
+!!FU&y10<0/y1<0/y2<0:E; // exit, if there is no visiting / stationed hero
+!!VRy10&y10<0/y2>-1:Sy2; !!VRy10&y10<0/y1>-1:Sy1; // set y10 to visiting hero;
+
+!!HEy10:A2/2/?y-1/?y-2; // check if Hero wears the grail
+!!FU&y-1=0/y-2=0:E; // exit if not
+
+!!CAx1/x2/x3:B3/26; // check if grail is already built
+!!FU1629&-1:Px1/x2/x3/0; // if not check for dummygrail
+!!IF&1:V2/0; // if build disable Flag 2 and show message:
+!!IF&1/1000:Q2/8/2/1^%Z193000^; // grail already built
+** otherwise show:
+!!IF&-1/1000/x4=8:Q2/8/2/2^%Z193001^; // ask to build or to drop the grail (conflux)
+!!IF&-1/1000/x4=2:Q2/8/2/2^%Z193004^; // ask to build or to drop the grail (tower)
+!!IF&-1000:V2/1; // AI build always
+!!HEy10:A3/2/1/0; // delete grail from hero (in both cases)
+
+!!FU1629&2:Px1/x2/x3/1; // hire mage to build dummy grail (if choosen)
+!!FU&2:E; // and exit
+
+** if already a grail or you choosed to leave the grail
+!!UN:X?y1/?y2; // get map size
+!!VRy98:Sx1; //set y98 to the x-Pos of the town
+!!VRy99:Sx2 +1; //set y99 to the y-Pos of the field in front of the town
+!!VRy99&y99>=y1:Sx2; // set y99 to the town's y-Pos if it is at the bottom of the map
+!!UN:Ey98/y99/x3; // check if there is an object before the town (Flag1=0 if empty)
+!!VRy98&1:Sx1 -1; // if yes get position left of town entrace
+!!TRy98/y99/x3&y99=x2:P1; // set field left of the town entrace passable if town is at the bottom of the map (and place grail there)
+!!UN&1/y98>-1:Ey98/y99/x3; // check if there is an object (Flag1=0 if empty) (if on map)
+!!VRy98&1:Sx1 +1; // if yes get position right of town entrace
+!!UN&1/y98<y2:Ey98/y99/x3; // check if there is an object (Flag1=0 if empty) (if on map)
+!!TRy98/y99/x3&1:P1; // if yes (all three fields blocked) set field to passable
+!!UN:Iy98/y99/v1000/5/2; // place grail in front of town doors
+
+*** end function FU1628 ***
+
+
+!?FU1629; // check / create dummygrail in conflux / tower town; return in Flag 1
+** x1 - x3 = x/y/l-Pos. of town
+** x4 - 0 = check for dummygrail, 1 = build dummygrail
+!!POx1/x2/x3:V3/?y1; // get Flagvar
+!!VRy1:&32; // check if Flag 6 (used for dummygrail) is set
+!!IF:V1/0; !!IF&y1=32:V1/1; // if yes set flag 1
+!!FU&x4=0:E; // exit if only check
+
+!!CAx1/x2/x3:T?y3 B3/26; // get type of town, check for grail
+!!UN&1/y3=2:H0/0/0/-1/254 R1; // hide map if there was a tower grail
+!!UN:X?y11/=1; // check for underground
+!!UN&1/y3=2/1:H0/0/1/-1/254 R1; // hide underground, redraw
+!!CAx1/x2/x3|y3=8/y3=2:B2/26; // demolish usual grail in conflux or tower
+
+!!POx1/x2/x3:V3/?y1; // get Flagvar
+!!VRy1:|32; // set grail to built (set bit 6)
+!!POx1/x2/x3:V3/y1; // set Flagvar (with built grail)
+
+!!VRy3:Sx1 +2; !!VRy4:Sx2 +2; // get pos. for magic plain
+!!UN:X?y5/?y6; // get map size
+!!VRy3&y3>=y5:Sy5 -1; !!VRy4&y4>=y5:Sy5 -1; // correction if out of map
+!!UN:Iy3/y4/x3/46/0; // create magic plain around the town
+
+!!CAx1/x2/x3:N?z1; // get name of town
+!!VRz1:U^(Grail)^; // search for "(Grail)" in the town's name
+!!VRz1&-1:S^%Z1 (Grail)^; // if not included add it
+!!CAx1/x2/x3:Nz1; // set name of town
+
+*** end function FU1629 ***
+

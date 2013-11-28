@@ -1,0 +1,11 @@
+Name$	Text$	ERM	Value	On	NoMP	Cosmetic	Hint$	LongHint$	(comment)-
+Enabled	Neutral Options						TODO: Proper text, hint and description
+
+
+FizzleFade	Replace fade-to-black animation with blending when entering/leaving a town or combat			true		true	TODO: Proper text, hint and description
+BrighterTrees	Better green trees, with less black in them			true		true	TODO: Proper text, hint and description
+SoftShadow	Soft shadows on adventure map (for use with brighter trees)			true		true	TODO: Proper text, hint and description
+SoftGridShadow	Soft combat grid shadow			true		true	TODO: Proper text, hint and description
+MonStandAnim	Enable "standing" animation of monsters			true		true	TODO: Proper text, hint and description
+ChooseRMGTemplate	Choose RMG template when starting a random map			true		true	TODO: Proper text, hint and description
+NewGrid	New battlefield grid look			true		true	TODO: Proper text, hint and description

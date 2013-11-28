@@ -1,0 +1,57 @@
+#	Text resource for "script73.erm" document		
+173000	%Z5's war machines	!?CM0 - click on Questlog	01.08.2004
+173001	War Machine Factory
+
+{Current available machines}	!?CM0 at WM-factory	01.08.2004
+173008	%Z1 has %Y-2 %Z3	!?CM2 - Hero screen	01.08.2004
+173009	{War Machine Factory}
+
+Would you like to purchase War Machines?	!?OB106 - WM-Factory	01.08.2004
+173014	Currently available: %Y1
+This one will cost {750} gold	!!CM1 - click on blacksmith	01.08.2004
+173015	Sorry, no %Z-1s left. Please come back next week.	!!CM1 - click on blacksmith	01.08.2004
+173025	At the Ballista Yard you can purchase additional %Z-1	!!CM1 - click on Ballista Yard	01.08.2004
+173026	Not enough gold	!!CM1 - click on blacksmith	01.08.2004
+173027	You have bought the last %Z-1.	!!CM1 - click on blacksmith	01.08.2004
+173028	How many %Z-1 to transfer from %Z-2 to %Z-3?	!?CM3 - Hero Meeting	01.08.2004
+173037	%Y-8 %Z-1 to transfer	!?CM3 - Hero Meeting	01.08.2004
+173038	Transfer all	!?CM3 - Hero Meeting	01.08.2004
+173039	Don't transfer	!?CM3 - Hero Meeting	01.08.2004
+173138	Which War Machine do you want to purchase?	!?OB106 - WM-Factory	22.12.2004
+173139	I changed my mind	!?OB106 - WM-Factory	22.12.2004
+173140	{War Machine Factory}
+
+Sorry, but currently we are out of War Machines. Please come back next week.	!?OB106 - WM-Factory	22.12.2004
+173141	{War Machine Factory}
+
+Sorry, but you don't have enough gold to buy at least one War Machine.	!?OB106 - WM-Factory	22.12.2004
+173142	all %Y-6 %Z1 you can buy,  will cost %Y-11 gold	!?OB106 - WM-Factory	22.12.2004
+173143	How many %Z1 do you want to purchase?	!?OB106 - WM-Factory	22.12.2004
+173144	Only the town's owner may buy here!	!?CM1 - town	22.12.2004
+173145	At the {Blacksmith} you can purchase an additional %Z-1	FU7803 (town)	22.12.2004
+173146	%Y-14 of %Y-15 killed creatures resurrected, new health %Y-17 of %Y-10 HPs (alltogether %Y-100 restored HPs)	!?BG - tents	01.01.2005
+173147	The Ammo Carts increase the damage by %Y-9	!?MF1 - carts	28.12.2004
+173148	Increase the damage of your shooters by %Y-7-%Y-8 (not more than the original damage).	!?MM1 - carts	28.12.2004
+173149	%Y-98 HPs healed (creature has now %Y-17 of %Y-10 HP)	!?BG - tents	01.01.2005
+173150	Critical hit: %Y-12 of %Y-13 %Z-2 killed	!?BG - catapults	01.01.2005
+173151	War Machines may only be transferred between heroes of the same owner (not between allies).	!?CM3 - hero meeting	02.01.2005
+173152	Sorry, but %Z-2 has no %Z-1, that can be transferred to %Z-3.	!?CM3 - hero meeting	02.01.2005
+173153	Sorry, but %Z-2 has no %Z-1, that can be transfered to %Z-3.
+
+Please remember, that every hero  has to carry at least one Catapult to be able to attack towns.	!?CM3 - hero meeting	02.01.2005
+173154	Double damage against fragile creatures.	!?BG - catapults	02.01.2005
+173155	Double damage due to Ballistic skill	!?BG - catapults	02.01.2005
+173156	Fourfold damage due to Ballistic skill and against fragile creatures.	!?BG - catapults	02.01.2005
+173157	%Z1 to buy, will cost %Y-11 gold	!?OB106 - WM-Factory	02.01.2005
+173158	Sorry, neither %Z-1 nor Catapults are available at the moment. Please come back next week.	!!CM1 - click on blacksmith	02.01.2005
+173159	Would you like to purchase {%Z-1s} or {Catapults}? 	!!CM1 - click on blacksmith	02.01.2005
+173160	You don't have enough gold to buy any further %Z-1s	!!CM1 - click on blacksmith	02.01.2005
+173161	buy 1 Ballista (750 gold)	!!OB106	25.07.2006
+173162	buy 1 Supply Cart (750 gold)	!!OB106	25.07.2006
+173163	buy 1 First Aid Tent (750 gold)	!!OB106	25.07.2006
+173164	buy 1 Catapult (750 gold)	!!OB106	25.07.2006
+173165	buy all %Y1 %Z-1 available (%Y11 gold total)	!!OB106	25.07.2006
+173166	buy all %Y2 %Z-2 available (%Y12 gold total)	!!OB106	25.07.2006
+173167	buy all %Y3 %Z-3 available (%Y13 gold total)	!!OB106	25.07.2006
+173168	buy all %Y4 %Z-4 available (%Y14 gold total)	!!OB106	25.07.2006
+173169	buy all %Y5 available War Machines (%Y15 gold total)	!!OB106	25.07.2006

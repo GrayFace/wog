@@ -1,0 +1,371 @@
+--------------------------------------------------------------------------------
+Build 1
+--------------------------------------------------------------------------------
+[+] Lua scripts support
+[+] Moving monsters in combat (should it be optional?)
+[+] Now there are no delays caused by waiting for sound to finish playing (tell me if you'd like to have it back in some cases)
+[+] CA:M3 command to set up monsters in Portal of Summoning
+[+] UN:A#/11/$ command to set pick up message for artifact
+[+] UN:G1 additional indexes to set def name & sound prefix
+[+] VR:R/$ command set/check/get random seed
+[!] y-1..y-100 and f-1..f-100 are still set to 0 when a trigger is started. This is done for backward compatibility. y1..y100 and f1..f100 are still set to 0 when function is first called (only on first DO iteration).
+[+] FU:E$ goto support
+[+] Now UN:A#/9-11/$, UN:G0, UN:G1, UN:G2, SS:W,N,D, HT:, OB:H, HO:H, UN:K2, QW:A, may take constant strings as parameters and store them
+[+] Now right mouse click in battle doesn't open a dialog with a button. Instead, Ctrl+Right click/Alt+Right click/Shift+Right click do that (should it be optional?)
+[+] IF:M now can take a z-string as parameter (!!IF:Mz1, !!IF:Mz-1)
+[+] TR:G - additional syntax lets you get terrain layout type and subtype. Type 40 subtypes 10000+ are for WoG terrain layouts.
+[+] HD trigger and reciever lets you change hint text (also lets you track mouse moves on map, but not over Uncharted Territory)
+[+] Work windowed in 32 bit colors mode
+[+] FU:X#/?$ get type of argument x#
+[+] !?TM#/#/#/# new syntax - automatic constant timer. The parameters are similar to TM:S.
+[+] if-el-en changes
+[+] z-1 - z-10 are now local variables for both functions and triggers
+[+] UX:K#/?$ - check if key is pressed right now
+[+] UX:M$1/$2 - get/check/set mouse coordinates
+[+] UX:T - get current time or show dialog with time delta
+[+] UX:S command to set/check/get various string constants
+[+] BM:V - extended syntax
+[+] BM:G - if you set duration to 0, now it removes the spell
+[+] New experimental parameters syntax to get memory address
+[+] MP new trigger and commands
+[+] SN trigger works with more sounds
+[+] New BG:X command - set/check/get second target of spell, changed BG:N
+[+] New TR:E command syntax - get/check object entrance position
+[+] Number of monsters extended to 255
+[+] Number of artifacts extended to 255
+[+] A bit improved errors reporting
+[+] New kind of macros - macros for numbers (and flags). For example, !!MC3410:S@GetFirstStack@; [no need for a v-variable anymore]
+[+] Macros length extended to 16 characters
+[+] UN:C now accepts any integer variable - v,y,x and even f..t :)
+[+] IF:M now can be used to display strings this way: IF:Mz1
+[+] MP reciever only accepted z1-z1000 strings, now it accepts any strings
+[+] MM:S and DL:H now accept constant and local strings
+[-] TR:T road subtype wasn't handled correctly
+[-] DO:P didn't restore z-1..z-10
+[-] FU:P and DO:P didn't set unspecified parameters to zero
+[-] DO:P ?y1 bug fixed
+[-] FUy1:P didn't work
+[-] Shortened delay on map start
+[-] HE:B not only deleted hint, but also deleted all object setup made by OB reciever, except OB:C,T,U
+[-] Check syntax didn't work properly (e.g. <> was taken for >)
+[-] In case of wrong OB trigger syntax it was still added to triggers list.
+[-] In case of !!FU:P?$macro$ call x1 didn't contain index of the macro variable
+[-] MR:N didn't work
+[-] SoD bug: monsters right-click dialog border color wasn't adjusted to fit current player color
+[-] SoD bug: garrison right-click dialog border color wasn't adjusted to fit it's owner
+[-] !?TL was called even after the game was finished and the player was in the main menu
+[-] After setting hint for some artifact it was used instead of artifact description
+[-] After an error in a script, the script was truncated. Script continued working, but after saving and loading game it didn't work.
+[-] Comparsion in & and | part worked with e-vars incorrectly
+[-] String !#VRv1:S$macro_1$ +$macro_2$; didn't work
+[-] Macros didn't work with w-vars. Now each w-var may have a macro associated with it. The macro is common for all heroes. That is, the macro translates to, say, "w10", not to "w10 of the hero for which it was defined".
+[*] Help additions (some information about already existing triggers)
+
+Savegames of previous versions are incompatible.
+
+
+Detailed Descriptions:
+
+
+
+CA:M3/$1/$2; - set up type and count of creatures in Portal of Summoning
+$1 - Type. -1 for no monster.
+$2 - Count. It may be anything if Type is -1.
+Note that the monster isn't defined on game start until you enter the town screen or the new week starts. This is a bug of SoD.
+For example, start a game with a couple of dwellings and a Portal of Summoning in one of your castles. Save game. Enter the castle to see which type of creature is summoned. Then load the game and do the same. You may see a different creature there.
+
+
+
+UN:G1/#1/#2/$; - additional indexes to set def name & sound prefix
+#2 can now be 3 and 4.
+   #1 - Number of Monster (see Creature Format)
+   #2 - Type of text
+         0 - Singular name
+         1 - Plural name
+         2 - Specialty text
+         3 - Def file name (in battle, e.g. 'CGTITA.DEF')
+         4 - Sound prefix (4 first letters in sounds, e.g. 'gtit')
+   $ - string constant, z variable or index of z variable that keep the new text
+         0 means restore original
+
+
+
+UN:A#/9-11/$, UN:G0, UN:G1, UN:G2, SS:W,N,D, HT:, OB:H, HO:H, UN:K2, MP:S, QW:A - new strings management syntax
+New syntax:
+If you pass a string constant (^hi!^) or a z-string (global or local), the value is copied into internal buffer (you don't need to use up a z variable for each object which hint you change).
+If you use get syntax for a string (?z1), it's set to the current value (even if the value wasn't customized).
+
+Usual syntax works the same:
+If you pass 0, the original value is restored.
+If you pass number, corresponding z-var is used and all changes made to z-var are reflected to the value. ERT strings are also supported.
+If you use get/check syntax with a number (?v1), z variable index is returned. 0 is returned if the value wasn't customized. Negative values are returned if the custom string is stored in internal buffer.
+
+Exceptions:
+1) UN:K2 doesn't retrieve a standard new week message.
+2) for QW:A you can pass -1 to restore original value, as before
+
+
+
+VR:R/$ - set/check/get random seed
+$ is random seed value.
+Examples:
+!!VR:R/?v1; will store current random seed in v1
+!!VR:R/v1; will set random seed to v1
+For a new chest you can set the seed to (X + (Y + L*256)*256) where X,Y,L are coordinates of the chest square:
+!!VRv1:Sv999 *256 +v998 *256 +v997 R/v1;
+This way you'll get good random numbers that depend on object position and don't change when you reload map.
+You can also generate a random number on map start and add it to such random seed, so you will get different numbers when map is restarted.
+Another example:
+(this problem was discussed somewhere in erm_help. Now this solution)
+On start of a battle random seed is set to some value that don't change if you load savegame and attack the same monsters again. So, if you need some real randomness in battle, use
+!!VRv1:S0 T2147483647 R/v1; randomize - use random seed based on current time
+It is also a good idea to restore the original random seed after all calculations are done:
+!!VR:R/?v10; store original random seed in v10
+!!VRv1:S0 T2147483647 R/v1; randomize - use random seed based on current time
+........... some calculations
+!!VR:Rv10; restore original random seed
+
+
+
+FU:E$ - GoTo
+Go $ triggers of same kind up or down. Triggers of same kind are those with the same 2 letters and the same parameters.
+!?OB5/5/0 and !?OB0/0/0 are different. !?OB5/5/0 and !$OB5/5/0 are different too. But !?OB5/5/0; and !?OB5/5/0&v1=0; are of the same kind.
+Examples:
+1)
+!?FU255; [1]
+....
+
+!?FU255; [2]
+(...)
+!!FU&1:E-1; [go to 2]
+!!FU&2:E-2; [go to 1]
+!!FU&3:E0; [usual FU:E - exit function]
+
+2)
+A single loop:
+!?FU255;
+!!VRy1:S0;
+
+!?FU255&y1<100;
+(...)
+!!VRy1:+1;
+!!FU:E-1;
+
+This is equivalent to  while y1<100 do { (...) y1 = y1 + 1; }
+You can also make one loop inside another and anything you could do with regular DO, but much faster and without a need for a free function number.
+
+You can place FU:G99999; at the end of a function and you would be able to insert it into multiple scripts - it would be executed only once anyway.
+
+
+
+TR:G$1/$2 - get type & subtype of topmost terrain overlay.
+$1 - type,
+$2 - subtype
+Type 40 subtypes starting with 10000 are recognized as new WoG terrain overlays. You can give them any effect with a script.
+
+
+
+HD trigger - Hint Display.
+!?HD triggers when the game needs to display a hint for an object. v998-v1000 keep coordinates of the square that was clicked by mouse.
+Use HD:M$ to get or set hint text
+Use HD:T$ to check if it's a right-click hint
+($ is 1 if it's a right-click hint, 0 if it's a mouseover hint to be displayed in status bar)
+Use HD:P$1/$2/$3/$4/$5/$6 to set pictures for the message (you can use less than 6 parameters if you don't need all 3 pictures)
+	$1 - picture 1 type,
+	$2 - picture 1 subtype,
+	$3 - picture 2 type,
+	$4 - picture 2 subtype,
+	$5 - picture 3 type,
+	$6 - picture 3 subtype
+	(if you use it in mouse over hint, it will be just ignored)
+Use HD:C to check if hint of the object was customized with HT reciever or with HO:H command. In many cases you shouldn't process hints for such objects.
+Example:
+!?HD;
+!!OB998:T?v1 U?v2; [get type and subtype of object to which the square belongs]
+!!HD&v1=5:P8/v2;
+!!HD&v1=93:P8/1;
+[Displays artifact picture in right-click message]
+
+
+
+FU:X#/?$ - get type of argument x# (stores it in $)
+Types are: -2 'd?', -1 'd', 0 (normal), 1?, 2=, 3<>, 4>, 5<, 6>=, 7<=
+Example:
+!?FU1;
+!!FU:X1/?y1 X2/?y2 X3/?y3 X4/?y4 X5/?y5;
+!!IF:M^%X1:%Y1 %X2:%Y2 %X3:%Y3 %X4:%Y4 %X5:%Y5^;
+!#FU1:P11/d22/?33/>=44; [show "11:0 22:-1 33:1 44:6 0:0"]
+Note 1: Type 'd' and checks are only hints for the function. They are handled like there was no such sign unless the function handles them differently based on FU:X value.
+Note 2: Type '=' have a special meaning in DO reciever.
+
+
+
+!?TM#/#/#/# new syntax - automatic constant timer. The parameters are similar to TM:S.
+You don't need to set up this kind of timers with TM reciever and their numbers are managed automatically. Once set up such timers cannot be changed with TM reciever.
+Example:
+!?TM1/-1/7/1; [timer every week for the first player]
+Note: the best way to set up an infinite timer (in TM:S as well) is to use -1 as ending day.
+
+
+
+if-el-en changes.
+Now ef, el, en work as instructions too. (They worked only in triggers before)
+You can use conditions in !!el now. You can use 'el' multiple times. This works like 'elseif' in Lua. The first one whose condition is true gets executed.
+Example:
+!#VRv5:S2;
+!#if&v5=0:;
+ !#IF:M^v5 = 0^;
+!#el&v5=1:;
+ !#IF:M^v5 = 1^;
+!#el&v5=2:;
+ !#IF:M^v5 = 2^;
+!#el&v5=3:;
+ !#IF:M^v5 = 3^;
+!#el&v5=4:;
+ !#IF:M^v5 = 4^;
+!#el:;
+ !#IF:M^other^;
+!#en:;
+[You will see the message "v5 = 2"]
+
+
+
+UX reciever - Universal Extended
+
+UX:S#/$ - reciever to get/check/set a big brunch of global strings
+# is string index
+$ is string or z variable or z variable index. 0 restores default. The new syntax explained above is used.
+The list of all strings is in UX_S.txt file.
+
+
+
+UX:K#/?$ - check if key is pressed right now
+# is key code. $ is a variable to store the key state (1 = pressed, 0 = released)
+Here are codes of some keys:
+Shift               16
+Control             17
+Alt                 18
+Left Mouse Button   1
+Right Mouse Button  2
+Mouse Wheel         4
+(you can use other keys codes, you can find them under name VK_* in programming languages)
+
+
+
+UX:M$1/$2 - get/check/set mouse coordinates
+$1 is X coordinate, $2 is Y coordinate.
+The coordinates may be negative or more than 800,600 if the mouse is outside the Heroes window.
+
+
+
+UX:T - get current time or show dialog with time delta
+Returns time that ellapsed after the Windows was started in milliseconds when used with get (or check) syntax.
+When used with set syntax it subtracts the valuse passed as parameter from the current time and shows the differance in a message.
+Example:
+!!UN:T?y10;
+[some calculations that take much time...]
+!!UN:Ty10;
+
+
+
+BM:V - extended syntax
+V#/$1 - Play animation #. $1 = bad effect. 
+  $1 = Bad effect
+    $1 = 0 - just show the animation (same as V#)
+    $1 = 1 - show monster getting hit at the time of animation
+V$1/$2/$3 - Play custom animation.
+  $1 = Type
+    0 - The bottom of animation is at the bottom of the creature (e.g. Prayer)
+    1 - Animation center is in the center of the creature (e.g. Air Shield)
+    2 - Animation is over the creature (e.g. Lightning)
+    4 - Animation is near the attacking hero (e.g Land Mine)
+    15 - Animation is in the center of battlefield (flying Desrupting Ray, Death Cloud)
+    Flag 256 - semi-transparent animation (add it to the type)
+  $2 = Bad effect (0 - just show the animation, 1 - show monster getting hit)
+  $3 = Name of def file with animation (this can be any existing def file) (any z-variable or a constant string)
+
+
+
+Moving monsters in combat (should it be optional?)
+Now monsters aren't just standing still in the combat, they always breath.
+However, some monsters have bad animation in the standing phase and need updating. For instance, Phoenixes don't have a selection on some cadres. Most WoG monsters have terrible standing animation.
+I've adjusted animation of some standard monsters. It's in h3wog.lod.
+
+
+
+New experimental parameters syntax to get memory address
+Now you can use d? to get address of an integer value. This is useful when working with UN:C command. If a command doen't support this, the value returned is 0. In Lua use ?ptr for this.
+Example:
+!#MA:P13/d?v1; [get Archangels hit points address in v1]
+!#IF:M^%V1^;
+
+
+
+MP new trigger and commands
+MP:N$1 - play MP3 file ($1 - index of file or filename in z-variable or ^^)
+!?MP - triggered when music starts to play
+MP:C$1 - set/check/get index of upcoming music ($1 - index) (0 is returned if the mp3 isn't in the list)
+MP:P$1 - set/check/get upcoming music ($1 - z-var or ^const string^)
+
+
+
+SN trigger works with more sounds
+Now it works when any sound is loaded (one of few exceptions is the buttons clicking sound that is loaded once before the map is started). Note that it works when sound is loaded, which doesn't always happen at the same time it is played.
+SN:S, SN:P now take both ^^ constants and Z-vars
+
+
+
+New BG:X command - set/check/get second target of spell
+BG:X gets/sets/checks additional parameter of a spell being cast. It's the second target of Teleport and Sacrifice spells. For teleport, BG:D is the position of monster to be teleported and BG:X is the place where it will move. For sacrifice, BG:D is position of the corpse and BG:X is the victim position.
+You can also use set syntax with BG:N command now.
+Here are additions to other commands descriptions:
+BG:A is 11 when Healing Tent heals
+BG:S depands on the action:
+	Action 1 Hero cast spell:      BG:S keeps spell number
+	Action 10 monster cast spell:  BG:S keeps spell number
+	Action 6 Walk and Attack:      BG:S keeps the position to which the monster will move. (BG:P keeps the enemy to attack)
+	Action 5 Surrender:            BG:S keeps the cost of surrender.
+	For other actions it's -1 or the value from the last action.
+
+Here is an example. You'll need a hero with a Pikeman in the first slot and Angels in the others (for example).
+ZVSE
+!#VRv100:S0;
+!?CM4&v100<3;
+!!CM:R0;
+!!BG&v100=0:N3 A6 S2 D1;
+!!BG&v100=1:A1 S40 D1 X2;
+!!BG&v100=2:A1 S63 D1 X93;
+!!VRv100:+1;
+
+
+
+New TR:E$1/$2/$3 command syntax - get/check object entrance position
+This command lets you get position of entrance of an object.
+	$1 - x
+	$2 - y
+	$3 - Level
+If there is no object at the position, the coordinates passed to TR reciever are returned. If you pass coordinates of a red square of an object to it, it would return croordinates of its entrance.
+Try this example:
+!?CM;
+!!CM:I?v5 P?v1/?v2/?v3;
+!!FU&v5<>37:E;
+!!TR1:E?v1/?v2/?v3;
+!!IF:Q1/-1/0/4^%V1 %V2 %V3^;
+!!CM:R0;
+
+
+
+Help additions:
+UN:G2 description in erm_help is wrong
+#2 = 0: Speciality name. It's "Griffins" for Edric
+#2 = 1: Long speciality name. It's "Creature Bonus: Griffins" for Edric
+However, I have no idea where these strings are used in the the game. :) (only know that speciality name is used in Advanced Options on map start, but maybe somewhere else too)
+Small speciality picture is always the same as the normal one.
+
+IF:M-1 doesn't exist anymore
+
+In addition to HE-1 for current hero, there are HE-10 for attacker and HE-20 for defender in battles.
+
+Help desn't mention that TR reciever and all recievers listed in "Other Objects" can take variable index as paramerer (like LE)
+PM reciever as well can take x/y/l or variable index, and its parameters arent mentioned at all
+OB reciever mentions the indirect syntax, but as a small note

@@ -1,0 +1,92 @@
+114000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Altar of Transformation version 1.3 script.} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+114001	Altar of Transformation	String type = <!#S>	07.06.2003
+114002	Altar of Transformation 
+ 
+(Visited)	String type = <!#S>	07.06.2003
+114003	Altar of Transformation 
+ 
+(Not Visited)	String type = <!#S>	07.06.2003
+114004	You have heard of these mysterious altars in old tales--their power can transform almost any creature to another one. Even a foolish peasant can use one, but you need a lot of magic knowledge to control the energies and get what you desire.
+
+Specifically, you need 100 spell points to have a 100 % chance, each point fewer will reduce the chance by 1 %. 
+
+Slowly you near the altar and stop a few steps away, close enough to manipulate the energy, but not so close that you risk transforming yourself.	String type = <!!Q>	07.06.2003
+114005	You climb to the top of the altar but the energy merely sputters around you as if it had recently been drained. Try again next week.	String type = <!!M>	07.06.2003
+114006	Attracted by the magical energies, the life essence
+of your troops fly towards the altar. 
+
+They whirl around for a while in a giant lightning
+storm and finally they consolidate themselves into 
+other shapes again.
+	String type = <!!M>	14.10.2004
+114007	The energies of the altar are gone and all around you is absolute quiet.
+
+After about 10 minutes, the first creatures slowly start to move. Some time later you are able to leave the altar with your newly transformed army.	String type = <!!M>	14.10.2004
+114008	The powerful dragons in your army resist the transformation!	String type = <!!M>	07.06.2003
+114009	The God's Representatives in your army resist the transformation!	String type = <!!M>	07.06.2003
+114010	The powerful dragons and the God's Representatives in your army resist the transformation!	String type = <!!M>	07.06.2003
+114011	Because they are pure life essence, the ghosts in your army keep their original form.	String type = <!!M>	14.10.2004
+114012	Altar of Transformation	String type	15.10.2004
+114013	How much mana will you invest to control the transformation?		
+114014	All of your mana (= %Y-20 spell points, giving a %Y-20 % chance) 	String type = <!!M>	22.10.2004
+114015	75 % of your mana (= %Y-21 spell points, giving a %Y-21 % chance) 	String type = <!!M>	22.10.2004
+114016	66 % of your mana (= %Y-22 spell points, giving a %Y-22 % chance) 	String type = <!!M>	22.10.2004
+114017	50 % of your mana (= %Y-23 spell points, giving a %Y-23 % chance) 	String type = <!!M>	22.10.2004
+114018	33 % of your mana (= %Y-24 spell points, giving a %Y-24 % chance) 	String type = <!!M>	22.10.2004
+114019	25 % of your mana (= %Y-25 spell points, giving a %Y-25 % chance) 	String type = <!!M>	22.10.2004
+114020	10 % of your mana (= %Y-26 spell points, giving a %Y-26 % chance) 	String type = <!!M>	22.10.2004
+114021	None of your mana (all transformations will be random)	String type = <!!M>	22.10.2004
+114022	Leave the altar without any transformations	String type = <!!M>	22.10.2004
+114023	Castle	String type = <!!M>	22.10.2004
+114024	Rampart	String type = <!!M>	22.10.2004
+114025	Tower	String type = <!!M>	22.10.2004
+114026	Inferno	String type = <!!M>
+
+
+
+	22.10.2004
+114027	Necropolis	String type = <!!M>
+
+
+
+	22.10.04
+114028	Dungeon	String type = <!!M>
+
+
+
+	22.10.04
+114029	Stronghold	String type = <!!M>
+
+
+
+	22.10.04
+114030	Fortress	String type = <!!M>
+
+
+
+	22.10.04
+114031	Conflux	String type = <!!M>
+
+
+
+	22.10.04
+114032	Neutral creatures	String type = <!!M>
+
+
+
+	22.10.04
+114033	While your armies approach the altar, you start to focus on 		
+114034	100 spell points (100 % chance)		
+114035	75 spell points (75 % chance)		
+114036	66 spell points (66 % chance)		
+114037	50 spell points (50 % chance)		
+114038	33 spell points (33 % chance)		
+114039	25 spell points (25 % chance)		
+114040	10 spell points (10 % chance)		
+114041			

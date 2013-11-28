@@ -1,0 +1,192 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=13.7(July).2006
+
+** Market of Time ERM Script Version 2.0 created by Timothy E. Pulver
+** WoGify Name: script09.erm
+
+** V1.3.3 update by Tobyn "Warfare support"
+** V1.3.2 update by Overlord "extended dialogue 3 + single skill check"
+** (changes v1.3.1 - bug found: 27 skill looping correction)
+** Version 1.3 adds compatibility with enhanced skills that have their name
+** shown in yellow text.
+** Version 2.0 is a rewritten version that adds future support for the
+** Unlimited Skills script option that will be in 3.59.
+
+** Last Updated: July 12, 2006
+** Previously Updated: July 18, 2004
+
+** This script sets up all Markets of Time on a map to function as locations
+** where heroes can forget skills they have learned for a cost of 2000 gold.
+** When a hero visits a Market of Time, the player is invited to choose which
+** skill he wants to forget. A hero can forget a maximum of one skill per
+** day and 500 movement points are deducted from the hero's move that turn
+** (it takes awhile to meditate).
+
+--------------------------------------------------------------------------------
+
+** ERM Option Number: 109
+** Variables: z241, w45
+** Function: FU450-FU451
+** PO numbers: PO:S for Markets of Time (type: 63, subtype: 51)
+** Temporary variables: v1, z1-z10
+** Temporary flags: F1-F3
+** Library Functions: FU$bit$
+
+--------------------------------------------------------------------------------
+
+ [Set hint for Market of Time if script is enabled]
+!#UN:P109/?v1;
+!#VRz241&v1=1:Sz109000;
+!#HT63/51&v1=1:T241;
+
+--------------------------------------------------------------------------------
+
+** Local trigger variables: y-1..y-14, y-21..y-30, y-100, z-1..z-10
+
+ [Activate if any Market of Time is visited by a human player]
+!?OB63/51&1000;
+!!UN:P109/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1 R2/?y-2 R2/?y-1 B0/?z1;  [Hero's owner (y-1), sex (y-2=0 if male), and name (z1)]
+!!PO998:S?y-3 S?y-4; [PO:S stores which players have visited already this game: y-3, y-4]
+!!FU$bit$:Py-1; [Convert hero owner to bit number: y-100]
+!!VRy-4:&y-100; [See if this player has visited a Market of Time before: y-3>0 if yes]
+
+ [Display message the first time each player visits the Market in a game]
+!!IF&y-3>0:M1/z109001;
+
+!!VRy-3&y-3>0:|y-100; [Add bit number for current player if it isn't already added]
+!!PO998&y-3>0:Sy-3; [Store new PO:S value: y-3]
+
+ [Check if hero has already forgotten a skill today]
+ [Set flag 2 to true if he/she has]
+!!IF:V2/0; [Initialize Flag 2 to false]
+!!IF:W-1; [Set w variables to current hero]
+!!VRy-11:Sc0; [Current date: y-11]
+!!IF&w45=y-11:V2/1; [Set Flag 2 to true if hero has already forgotten a skill today]
+!!IF&2:M1/z109002; [Display message if hero has already forgotten a skill today]
+!!FU&2:E; [Exit if hero has already forgotten a skill today]
+
+!!DO450/0/27/1:P1; [Loop through all skills 0..27: y-5=number of skills known]
+!!IF&y-5=0:M1/z109003; [Display message if hero has no skills]
+!!FU&y-5=0:E; [Exit if hero has no skills]
+
+!!VRz2:Sz109004; [Set variable to "Which skills do you wish to forget, %Z1?": z2]
+
+!!VRz-1:S^^;!!VRz-2:S^^;!!VRz-3:S^^;!!VRz-4:S^^;!!VRz-5:S^^;!!VRz-6:S^^;!!VRz-7:S^^;!!VRz-8:S^^;!!VRz-9:S^^;!!VRz-10:S^^; [Set z-1..z-10 to null]
+!!DO450/0/27/1:P2; [Loop through all skills 0..27: store first 10 skill numbers in y-21..y-30, first 10 skill names in z-1..z-10, 11th skill number in y-7]
+!!VRz4:Sz109005; [Dialog header: z1]
+!!VRz5:S^^; [Initialize z5 to null]
+!!VRz5&y-5>10:Sz109006; [Next page of skills: z5]
+!!VRz6:Sz109007; [I've changed my mind: z6]
+!!IF:G1/1/2048/4/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/5/6; [Display dialog box for skill choice, page 1]
+!!FU&v1=2048:E; [Exit if player changes mind]
+
+!!VRy-6:S0; [Reset y-6 to 0]
+!!VRz-1:S^^;!!VRz-2:S^^;!!VRz-3:S^^;!!VRz-4:S^^;!!VRz-5:S^^;!!VRz-6:S^^;!!VRz-7:S^^;!!VRz-8:S^^;!!VRz-9:S^^;!!VRz-10:S^^; [Set z-1..z-10 to null]
+!!DO450/y-7/27/1&v1=1024:P2; [Loop through skills y-7..27: store next 10 skill numbers in y-21..y-30, next 10 skill names in z-1..z-10, 21st skill number in y-7]
+!!VRz5:S^^; [Initialize z5 to null]
+!!VRz5&y-5>20:Sz109008; [Next page of skills: z5]
+!!IF&v1=1024:G1/1/2048/4/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/5/6; [Display dialog box for skill choice, page 2]
+!!FU&v1=2048:E; [Exit if player changes mind]
+
+!!VRy-6:S0; [Reset y-6 to 0]
+!!VRz-1:S^^;!!VRz-2:S^^;!!VRz-3:S^^;!!VRz-4:S^^;!!VRz-5:S^^;!!VRz-6:S^^;!!VRz-7:S^^;!!VRz-8:S^^;!!VRz-9:S^^;!!VRz-10:S^^; [Set z-1..z-10 to null]
+!!DO450/y-7/27/1&v1=1024:P2; [Loop through skills y-7..27: store next 10 skill numbers in y-21..y-30, next 10 skill names in z-1..z-10, 21st skill number in y-7]
+!!VRz5:S^^; [Initialize z5 to null]
+!!IF&v1=1024:G1/1/2048/4/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/5/6; [Display dialog box for skill choice, page 3]
+!!FU&v1=2048:E; [Exit if player changes mind]
+
+ [Assign skill number of skill chosen to forget to y-8]
+!!VRy-8&v1=1:Sy-21;
+!!VRy-8&v1=2:Sy-22;
+!!VRy-8&v1=4:Sy-23;
+!!VRy-8&v1=8:Sy-24;
+!!VRy-8&v1=16:Sy-25;
+!!VRy-8&v1=32:Sy-26;
+!!VRy-8&v1=64:Sy-27;
+!!VRy-8&v1=128:Sy-28;
+!!VRy-8&v1=256:Sy-29;
+!!VRy-8&v1=512:Sy-30;
+
+!!HE-1:Sy-8/?y-9; [Skill level of skill chosen to forget: y-9]
+!!VRy-10:Sy-8 *3 +2 +y-9; [Skill picture for IF subtype display: y-10]
+!!UN:N4/z3/y-8; [Store skill name in z3]
+
+ [Ask if player wishes to forget skill chosen, result in Flag 3]
+!!IF:Q3/20/y-10/36/2000/2/z109009;
+!!FU&-3:E; [End script if player doesn't wish to forget a skill after all]
+
+!!OW:R-1/6/?y-12; [Checks if player has enough money to afford this service, y-12=player's gold]
+!!IF&y-12<2000:Q1/6/2000/1/z109010; [Display message if player doesn't have enough gold]
+!!FU&y-12<2000:E; [End script if player doesn't have enough gold]
+
+ [Reduces player's gold by 2000 to pay for service]
+!!OW:R-1/6/d-2000;
+
+ [Generate random pithy message]
+!!VRz7&y-2=0:Sz109011; [he: z7]
+!!VRz7&y-2=1:Sz109012; [she: z7]
+!!VRz8&y-2=0:Sz109013; [man: z8]
+!!VRz8&y-2=1:Sz109014; [woman: z8]
+!!VRy-13:S1 R11; [Random number for pithy message (1..12): y-13]
+!!VRz9&y-13=1:Sz109015;
+!!VRz9&y-13=2:Sz109016;
+!!VRz9&y-13=3:Sz109017;
+!!VRz9&y-13=4:Sz109018;
+!!VRz9&y-13=5:Sz109019;
+!!VRz9&y-13=6:Sz109020;
+!!VRz9&y-13=7:Sz109021;
+!!VRz9&y-13=8:Sz109022;
+!!VRz9&y-13=9:Sz109023;
+!!VRz9&y-13=10:Sz109024;
+!!VRz9&y-13=11:Sz109025;
+!!VRz9&y-13=12:Sz109026;
+
+ [Show skill that's being forgotten along with message]
+!!IF:Q1/20/y-10/1/z109027;
+
+ [Remove hero's skill]
+!!UN:P193/?y-2; [Check if Warfare script enabled: y-2=1 if yes]
+!!VRy-14|y-8=10/y-8=20/y-8=27:S1; [Set y-14=1 if one of the Warfare skills is to be forgotten]
+!!HE-1&y-2=1/y-14=1:S10/0 S20/0 S27/0; [Remove all three Warfare skills from hero]
+!!HE-1:Sy-8/0; [Remove chosen skill from hero]
+
+!!HE-1:Wd-500; [Reduce hero's movement by 500]
+!!VRw45:Sc0; [Set hero's w45 variable to current day]
+
+--------------------------------------------------------------------------------
+
+ [Loop through skills: y-5=number of known skills, stores skills in y-10..y-37, z-1..z-10, y-7=11th/21st known skill]
+!?FU450;
+!!HE-1:Sx16/?y1; [Hero's level in skill x16: y1]
+!!VRy-5&x1=1/y1>0:+1; [Increment skill counter for each known skill: y-5]
+!!FU|x1=1/y1<1:E; [Exit if x1=1 or skill not known]
+
+!!VRy-6:+1; [Increment skill counter for each known skill: y-6]
+!!VRy2:S0 -y-6; [Index number for z- variable (-1..-10): y2]
+!!UN:N4/z3/x16; [Store skill name in z3]
+!!VRz3:M4/?y3; [Length of z3 string: y3]
+!!VRy3:-1; [Subtract 1 from length: y3]
+!!VRz10:S^^; [Initialize z10 to null]
+!!DO451/0/y3/1&y3>0:P; [Loop through z3 string and remove curly brackets: z10]
+!!VRzy2&y1=1/y-6<=10:Sz109028; [Store Basic+skill name in z-1..z-10 if hero has basic skill]
+!!VRzy2&y1=2/y-6<=10:Sz109029; [Store Advanced+skill name in z-1..z-10 if hero has advanced skill]
+!!VRzy2&y1>=3/y-6<=10:Sz109030; [Store Expert+skill name in z-1..z-10 if hero has expert skill]
+!!VRy4:Sy2 -20; [Index number for y- variable (-21..-30): y4]
+!!VRyy4&y-6<=10:Sx16; [Store skill numbers of up to 10 known skills in y-21..y-30]
+!!VRy-7&y-6=11:Sx16; [Store 11th/21st known skill in y-7]
+!!VRx16&y-6=11:S999; [Exit loop at 11th/21st known skill]
+
+--------------------------------------------------------------------------------
+
+ [Remove curly brackets from skill name stored in z3: z8]
+!?FU451;
+!!VRz7:M1/z3/x16/1; [Assign each character of z3 in turn to z7]
+!!VRz8:S^{^; [Store right curly bracket { in z8]
+!!VRz9:S^}^; [Store left curly bracket } in z9]
+!!VRz10&z7<>z8/z7<>z9:+z7; [Add z7 to z10 if not a curly bracket: z10]
+
+--------------------------------------------------------------------------------
+

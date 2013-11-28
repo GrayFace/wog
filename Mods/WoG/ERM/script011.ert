@@ -1,0 +1,67 @@
+#	Text resource for "Script11.erm" document		
+111000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Palace of Dreams version 1.4 script.} 
+ 
+Please update your files.	String type = <!#M>	7/14/03
+111001	Palace of Dreams	String type = <!#S>	7/14/03
+111002	The Palace of Dreams 
+welcomes you,  %Z1! 
+ 
+{Get three of a kind to WIN!}	String type = <!!Q>	7/14/03
+111003	Sorry %Z1, but you're too tired to gamble anymore today. 
+Come back tomorrow.	String type = <!!M>	7/14/03
+111004	Resources	String type = <!!S>	7/14/03
+111005	Play to win resources	String type = <!!S>	7/14/03
+111006	Artifacts	String type = <!!S>	7/14/03
+111007	Play to win artifacts	String type = <!!S>	7/14/03
+111008	Would you like to play for 
+{Artifacts} or {Resources}?	String type = <!!Q>	7/14/03
+111009	The slot machine costs 
+ 
+{100 gold coins per game.} 
+ 
+Do you insert the coins 
+and pull the handle?	String type = <!!Q>	7/14/03
+111010	Sorry, %Z1 but you only have %V1 gold. Please return when you're feeling richer.	String type = <!!M>	7/14/03
+111011		String type = <!!S>	7/14/03
+111012	{The Palace of Dreams} 
+ 
+Where dreams come true every day	String type = <!!S>	7/14/03
+111013	Come back again soon to 
+ 
+{The Palace of Dreams} 
+ 
+where dreams come 
+true every day.	String type = <!!Q>	7/14/03
+111014	The wheels spin, click and whir. 
+When they stop, you see...
+
+     {JACKPOT!!} 
+ 
+You scoop up your winnings 
+and load them into sacks.
+
+{Play again for 100 Gold?}	String type = <!!Q>	7/14/03
+111015	The wheels spin, click and whir. 
+When they stop, you see... no win.
+{Play again for 100 Gold?}	String type = <!!Q>	7/14/03
+111016	Sorry, %Z1 but you only have %V1 gold. Please return when you're feeling richer.	String type = <!!M>	7/14/03
+111017	You've played for hours. Don't you think it's time to go home?	String type = <!!M>	7/14/03
+111018		String type = <!!S>	7/14/03
+111019	The wheels spin, click and whir. 
+When they stop, you see...
+
+     {JACKPOT!!} 
+
+You take the artifact you won 
+and put it in your backpack.
+
+{Play again for 100 Gold?}	String type = <!!Q>	7/14/03
+111020	The wheels spin, click and whir. 
+When they stop, you see... no win.
+{Play again for 100 Gold?}	String type = <!!Q>	7/14/03
+111021	Sorry, %Z1 but you only have %V1 gold. Please return when you're feeling richer.	String type = <!!M>	7/14/03
+111022	You've played for hours. Don't you think it's time to go home?	String type = <!!M>	7/14/03

@@ -1,0 +1,1154 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Secondary Skill texts v1.0 by Hermann the Weird
+** Additions by Tobyn from June 29. 2004
+** Updated July 18. 2004 by Hermann the Weird
+
+** This contains the names and descriptions for all modified secondary skills
+** and short descriptions for all skills
+
+** Contains descriptions and names for artifacts enhanced with script02 and script71
+
+** Functions used: FU17, 19, 34-36
+
+** z vars used:
+
+** Eagle Eye: z318, z270-z272
+** Scouting: z319, z273-z275
+** Resistance: z390, z276-z278
+** Learning: z391, z279, z310, z311
+** Tactics: z904-z907
+** Artillery: z738, z719-z721
+** Estates: z739, z741-z743
+** First Aid: z740, z716-z718
+** Luck: z747, z726-z728
+** Mysticism: z748, z710-z712
+** Navigation: z749-z752
+** Pathfinding: z713, z732-z734
+** Scholar: z714, z735-z737
+** Sorcery: z715, z796-z798
+** Armorer: z744, z793-z795
+
+** Archery: z45, z46, z74
+** Logistics: z75-77
+** Diplomacy: z91-93
+** Leadership: z94-96
+** Wisdom: z97-99
+** Ballistics: z110-112
+** Necromancy: z113-115
+** Fire Magic: z116-118
+** Air Magic: z144-146
+** Water Magic: z147-149
+** Earth Magic: z150-152
+** Offense: z153-155
+** Intelligence: z156-158
+
+** z-vars used for Artifacts:
+** z410-z428, z920-z937
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+!?FU17;     [Function for normal skill descriptions]
+
+** y vars used (for checking WoG options):
+
+** Eagle Eye: y1, y2
+** Scouting: y3, y4, y24
+** Resistance: y5, y6
+** Learning: y7, y8
+** Tactics: y9
+** Artillery: y10
+** Estates: y11, y22 (y25-y27 for calculations)
+** First Aid: y12, y23
+** Luck: y13
+** Mysticism: y14, y20
+** Navigation: y15
+** Pathfinding: y16
+** Scholar: y17
+** Sorcery: y18, y21
+** Armorer: y19
+
+--------------------------------------------------------------------------------
+
+** Eagle Eye **
+
+!!UN:P103/?y1;  [Check for Eagle Eye I]
+!!UN:P202/?y2;  [Check for Eagle Eye II]
+
+!!VRz318|y1=1/y2=1:Sz175000;     [Set yellow skill name if one of them is enabled]
+
+!!VRz270&y1=1/y2=0:Sz175001;     [Set z vars for EE I]
+!!VRz271&y1=1/y2=0:Sz175002;
+!!VRz272&y1=1/y2=0:Sz175003;
+
+!!VRz270&y1=0/y2=1:Sz175004;     [Set z vars for EE II]
+!!VRz271&y1=0/y2=1:Sz175005;
+!!VRz272&y1=0/y2=1:Sz175006;
+
+!!VRz270&y1=1/y2=1:Sz175007;     [Set z vars for EE I and EE II]
+!!VRz271&y1=1/y2=1:Sz175008;
+!!VRz272&y1=1/y2=1:Sz175009;
+
+!!UN|y1=1/y2=1:G0/11/1/270 G0/11/2/271 G0/11/3/272;     [Set skill texts for EE]
+--------------------------------------------------------------------------------
+
+** Scouting **
+
+!!UN:P215/?y3;  [Check for Scouting I]
+!!UN:P212/?y4;  [Check for Scouting II]
+!!UN:P58/?y24;  [Check for Scouting III]
+
+!!VRz319|y3=1/y4=1/y24=1:Sz175010;     [Set yellow skill name if one of them is enabled]
+
+!!VRz273&y3=1/y4=0:Sz175011;     [Set z vars for Scouting I]
+!!VRz274&y3=1/y4=0:Sz175012;
+!!VRz275&y3=1/y4=0:Sz175013;
+
+!!VRz273&y3=0/y4=1:Sz175014;     [Set z vars for Scouting II]
+!!VRz274&y3=0/y4=1:Sz175015;
+!!VRz275&y3=0/y4=1:Sz175016;
+
+!!VRz273&y3=1/y4=1:Sz175017;     [Set z vars for Scouting I and II]
+!!VRz274&y3=1/y4=1:Sz175018;
+!!VRz275&y3=1/y4=1:Sz175019;
+
+!!VRz273&y24=1|y3=1/y4=1:+z175108;     [Set +text for Espionage]
+!!VRz274&y24=1|y3=1/y4=1:+z175108;
+!!VRz275&y24=1|y3=1/y4=1:+z175108;
+
+!!UN|y3=1/y4=1:G0/3/1/273 G0/3/2/274 G0/3/3/275;     [Set skill texts for Scouting]
+--------------------------------------------------------------------------------
+
+** Resistance **
+
+!!UN:P216/?y5;  [Check for Resistance I]
+!!UN:P210/?y6;  [Check for Resistance II]
+
+!!VRz390|y5=1/y6=1:Sz175020;     [Set yellow skill name if one of them is enabled]
+
+!!VRz276&y5=1/y6=0:Sz175021;     [Set z vars for Resistance I]
+!!VRz277&y5=1/y6=0:Sz175022;
+!!VRz278&y5=1/y6=0:Sz175023;
+
+!!VRz276&y5=0/y6=1:Sz175024;     [Set z vars for Resistance II]
+!!VRz277&y5=0/y6=1:Sz175025;
+!!VRz278&y5=0/y6=1:Sz175026;
+
+!!VRz276&y5=1/y6=1:Sz175027;     [Set z vars for Resistance I and II]
+!!VRz277&y5=1/y6=1:Sz175028;
+!!VRz278&y5=1/y6=1:Sz175029;
+
+!!UN|y5=1/y6=1:G0/26/1/276 G0/26/2/277 G0/26/3/278;     [Set skill texts for Resistance]
+--------------------------------------------------------------------------------
+
+** Learning **
+
+!!UN:P217/?y7;  [Check for Learning I]
+!!UN:P205/?y8;  [Check for Learning II]
+
+!!VRz391|y7=1/y8=1:Sz175030;     [Set yellow skill name if one of them is enabled]
+
+!!VRz279&y7=1/y8=0:Sz175031;     [Set z vars for Learning I]
+!!VRz310&y7=1/y8=0:Sz175032;
+!!VRz311&y7=1/y8=0:Sz175033;
+
+!!VRz279&y7=0/y8=1:Sz175034;     [Set z vars for Learning II]
+!!VRz310&y7=0/y8=1:Sz175035;
+!!VRz311&y7=0/y8=1:Sz175036;
+
+!!VRz279&y7=1/y8=1:Sz175037;     [Set z vars for Learning I and II]
+!!VRz310&y7=1/y8=1:Sz175038;
+!!VRz311&y7=1/y8=1:Sz175039;
+
+!!UN|y7=1/y8=1:G0/21/1/279 G0/21/2/310 G0/21/3/311;     [Set skill texts for Learning]
+--------------------------------------------------------------------------------
+
+** Tactics **
+
+!!UN:P218/?y9;  [Check for Tactics]
+
+!!VRz904&y9=1:Sz175040;     [Set yellow skill name if enabled]
+
+!!VRz905&y9=1:Sz175041;     [Set z vars for Tactics]
+!!VRz906&y9=1:Sz175042;
+!!VRz907&y9=1:Sz175043;
+
+!!UN&y9=1:G0/19/1/905 G0/19/2/906 G0/19/3/907;     [Set skill texts for Tactics]
+--------------------------------------------------------------------------------
+
+** Artillery **
+
+!!UN:P201/?y10;  [Check for Artillery]
+
+!!VRz738&y10=1:Sz175044;     [Set yellow skill name if enabled]
+
+!!VRz719&y10=1:Sz175045;     [Set z vars for Artillery]
+!!VRz720&y10=1:Sz175046;
+!!VRz721&y10=1:Sz175047;
+
+!!UN&y10=1:G0/20/1/719 G0/20/2/720 G0/20/3/721;     [Set skill texts for Artillery]
+--------------------------------------------------------------------------------
+
+** Estates **
+
+!!UN:P203/?y11;  [Check for Estates I]
+!!UN:P191/?y22;  [Check for Estates II]
+
+   [Check v2333, which is provided by script64.erm and represents Estates II gold factor. Never mind if zero *g*]
+!!VRy25&y22=1:Sv2333;  [set Expert Estates factor. Default normally 100 Gold/day/10000 Exp for Expert Estates]
+!!VRy26&y22=1:Sy25 :2; [set Advanced Estates factor (half of v2333). Default 50]
+!!VRy27&y22=1:Sy25 :4; [set Basic Estates factor (quarter of v2333). Default 25]
+
+
+!!VRz739|y11=1/y22=1:Sz175048;     [Set yellow skill name if enabled]
+
+!!VRz741&y11=1/y22=0:Sz175049;     [Set z vars for Estates I]
+!!VRz742&y11=1/y22=0:Sz175050;
+!!VRz743&y11=1/y22=0:Sz175051;
+
+!!VRz741&y11=0/y22=1:Sz175096;     [Set z vars for Estates II]
+!!VRz742&y11=0/y22=1:Sz175097;
+!!VRz743&y11=0/y22=1:Sz175098;
+
+!!VRz741&y11=1/y22=1:Sz175099;     [Set z vars for Estates I and II]
+!!VRz742&y11=1/y22=1:Sz175100;
+!!VRz743&y11=1/y22=1:Sz175101;
+
+!!UN|y11=1/y22=1:G0/13/1/741 G0/13/2/742 G0/13/3/743;     [Set skill texts for Estates]
+--------------------------------------------------------------------------------
+
+** First Aid **
+
+!!UN:P204/?y12;  [Check for First Aid I]
+!!UN:P190/?y23;  [Check for First Aid II]
+
+!!VRz740|y12=1/y23=1:Sz175052;     [Set yellow skill name if enabled]
+
+!!VRz716&y12=1/y23=0:Sz175053;     [Set z vars for First Aid I]
+!!VRz717&y12=1/y23=0:Sz175054;
+!!VRz718&y12=1/y23=0:Sz175055;
+
+!!VRz716&y12=0/y23=1:Sz175102;     [Set z vars for First Aid II]
+!!VRz717&y12=0/y23=1:Sz175103;
+!!VRz718&y12=0/y23=1:Sz175104;
+
+!!VRz716&y12=1/y23=1:Sz175105;     [Set z vars for First Aid I and II]
+!!VRz717&y12=1/y23=1:Sz175106;
+!!VRz718&y12=1/y23=1:Sz175107;
+
+!!UN|y12=1/y23=1:G0/27/1/716 G0/27/2/717 G0/27/3/718;     [Set skill texts for First Aid]
+--------------------------------------------------------------------------------
+
+** Luck **
+
+!!UN:P206/?y13;  [Check for Luck]
+
+!!VRz747&y13=1:Sz175056;     [Set yellow skill name if enabled]
+
+!!VRz726&y13=1:Sz175057;     [Set z vars for Luck]
+!!VRz727&y13=1:Sz175058;
+!!VRz728&y13=1:Sz175059;
+
+!!UN&y13=1:G0/9/1/726 G0/9/2/727 G0/9/3/728;     [Set skill texts for Luck]
+--------------------------------------------------------------------------------
+
+** Mysticism **
+
+!!UN:P35/?y20;  [Check for Mysticism I]
+!!UN:P207/?y14;  [Check for Mysticism II]
+
+!!VRz748|y14=1/y20=1:Sz175060;     [Set yellow skill name if enabled]
+
+!!VRz710&y14=0/y20=1:Sz175084;     [Set z vars for Mysticism I]
+!!VRz711&y14=0/y20=1:Sz175085;
+!!VRz712&y14=0/y20=1:Sz175086;
+
+!!VRz710&y14=1/y20=0:Sz175061;     [Set z vars for Mysticism II]
+!!VRz711&y14=1/y20=0:Sz175062;
+!!VRz712&y14=1/y20=0:Sz175063;
+
+!!VRz710&y14=1/y20=1:Sz175087;     [Set z vars for Mysticism I and II]
+!!VRz711&y14=1/y20=1:Sz175088;
+!!VRz712&y14=1/y20=1:Sz175089;
+
+!!UN|y14=1/y20=1:G0/8/1/710 G0/8/2/711 G0/8/3/712;     [Set skill texts for Mysticism]
+--------------------------------------------------------------------------------
+
+** Navigation **
+
+!!UN:P208/?y15;  [Check for Navigation]
+
+!!VRz749&y15=1:Sz175064;     [Set yellow skill name if enabled]
+
+!!VRz750&y15=1:Sz175065;     [Set z vars for Navigation]
+!!VRz751&y15=1:Sz175066;
+!!VRz752&y15=1:Sz175067;
+
+!!UN&y15=1:G0/5/1/750 G0/5/2/751 G0/5/3/752;     [Set skill texts for Navigation]
+--------------------------------------------------------------------------------
+
+** Pathfinding **
+
+!!UN:P209/?y16;  [Check for Pathfinding]
+
+!!VRz713&y16=1:Sz175068;     [Set yellow skill name if enabled]
+
+!!VRz732&y16=1:Sz175069;     [Set z vars for Pathfinding]
+!!VRz733&y16=1:Sz175070;
+!!VRz734&y16=1:Sz175071;
+
+!!UN&y16=1:G0/0/1/732 G0/0/2/733 G0/0/3/734;     [Set skill texts for Pathfinding]
+--------------------------------------------------------------------------------
+
+** Scholar **
+
+!!UN:P211/?y17;  [Check for Scholar]
+
+!!VRz714&y17=1:Sz175072;     [Set yellow skill name if enabled]
+
+!!VRz735&y17=1:Sz175073;     [Set z vars for Scholar]
+!!VRz736&y17=1:Sz175074;
+!!VRz737&y17=1:Sz175075;
+
+!!UN&y17=1:G0/18/1/735 G0/18/2/736 G0/18/3/737;     [Set skill texts for Scholar]
+--------------------------------------------------------------------------------
+
+** Sorcery **
+
+!!UN:P23/?y21;  [Check for Sorcery I]
+!!UN:P213/?y18;  [Check for Sorcery II]
+
+!!VRz715|y18=1/y21=1:Sz175076;     [Set yellow skill name if enabled]
+
+!!VRz796&y18=0/y21=1:Sz175090;     [Set z vars for Sorcery I]
+!!VRz797&y18=0/y21=1:Sz175091;
+!!VRz798&y18=0/y21=1:Sz175092;
+
+!!VRz796&y18=1/y21=0:Sz175077;     [Set z vars for Sorcery II]
+!!VRz797&y18=1/y21=0:Sz175078;
+!!VRz798&y18=1/y21=0:Sz175079;
+
+!!VRz796&y18=1/y21=1:Sz175093;     [Set z vars for Sorcery I and II]
+!!VRz797&y18=1/y21=1:Sz175094;
+!!VRz798&y18=1/y21=1:Sz175095;
+
+!!UN|y18=1/y21=1:G0/25/1/796 G0/25/2/797 G0/25/3/798;     [Set skill texts for Sorcery]
+--------------------------------------------------------------------------------
+
+** Armorer **
+
+!!UN:P214/?y19;  [Check for Armorer]
+
+!!VRz744&y19=1:Sz175080;     [Set yellow skill name if enabled]
+
+!!VRz793&y19=1:Sz175081;     [Set z vars for Armorer]
+!!VRz794&y19=1:Sz175082;
+!!VRz795&y19=1:Sz175083;
+
+!!UN&y19=1:G0/23/1/793 G0/23/2/794 G0/23/3/795;     [Set skill texts for Armorer]
+--------------------------------------------------------------------------------
+
+
+!d!FU:E;     [Remove the 'd' in this line to get white skill names]
+
+!!UN|y1=1/y2=1:G0/11/0/318;     [Set yellow skill name for EE]
+!!UN|y3=1/y4=1/y24=1:G0/3/0/319;     [Set yellow skill name for Scouting]
+!!UN|y5=1/y6=1:G0/26/0/390;     [Set yellow skill name for Resistance]
+!!UN|y7=1/y8=1:G0/21/0/391;     [Set yellow skill name for Learning]
+!!UN&y9=1:G0/19/0/904;     [Set yellow skill name for Tactics]
+!!UN&y10=1:G0/20/0/738;     [Set yellow skill name for Artillery]
+!!UN|y11=1/y22=1:G0/13/0/739;     [Set yellow skill name for Estates]
+!!UN|y12=1/y23=1:G0/27/0/740;     [Set yellow skill name for First Aid]
+!!UN&y13=1:G0/9/0/747;     [Set yellow skill name for Luck]
+!!UN|y14=1/y20=1:G0/8/0/748;    [Set yellow skill name for Mysticism]
+!!UN&y15=1:G0/5/0/749;     [Set yellow skill name for Navigation]
+!!UN&y16=1:G0/0/0/713;     [Set yellow skill name for Pathfinding]
+!!UN&y17=1:G0/18/0/714;     [Set yellow skill name for Scholar]
+!!UN|y18=1/y21=1:G0/25/0/715;   [Set yellow skill name for Sorcery]
+!!UN&y19=1:G0/23/0/744;     [Set yellow skill name for Armorer]
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+!?FU19;     [Function for short skill descriptions]
+
+** y vars used (for checking WoG options):
+
+** Pathfinding: y1
+** Scouting: y2, y3, y4
+** Navigation: y5
+** Mysticism: y6, y7
+** Luck: y8
+** Eagle Eye: y9, y10
+** Estates: y11, y12 (y25-y27 for calculations)
+** Scholar: y13
+** Tactics: y14
+** Artillery: y15
+** Learning: y16, y17
+** Armorer: y18
+** Sorcery: y19, y20
+** Resistance: y21, y22
+** First Aid: y23, y24
+
+--------------------------------------------------------------------------------
+
+** Pathfinding **
+
+!!VRz732:Sz175109;     [Set short description for standard skill]
+!!VRz733:Sz175110;
+!!VRz734:Sz175111;
+
+!!UN:P209/?y1;     [Check for Pathfinding I]
+
+!!VRz713&y1=1:Sz175068;     [Set yellow skill name if enabled]
+
+!!VRz732&y1=1:+^%Z175112^;     [+ short description for improved skill]
+!!VRz733&y1=1:+^%Z175113^;
+!!VRz734&y1=1:+^%Z175114^;
+
+!!UN:G0/0/1/732 G0/0/2/733 G0/0/3/734;     [Set skill texts for Pathfinding]
+
+--------------------------------------------------------------------------------
+
+** Archery **
+
+!!VRz45:Sz175115;     [Set short description for standard skill]
+!!VRz46:Sz175116;
+!!VRz74:Sz175117;
+
+!!UN:G0/1/1/45 G0/1/2/46 G0/1/3/74;     [Set skill texts for Archery]
+
+--------------------------------------------------------------------------------
+
+** Logistics **
+
+!!VRz75:Sz175118;     [Set short description for standard skill]
+!!VRz76:Sz175119;
+!!VRz77:Sz175120;
+
+!!UN:G0/2/1/75 G0/2/2/76 G0/2/3/77;     [Set skill texts for Logistics]
+
+--------------------------------------------------------------------------------
+
+** Scouting **
+
+!!VRz273:Sz175121;     [Set short description for standard skill]
+!!VRz274:Sz175122;
+!!VRz275:Sz175123;
+
+!!UN:P215/?y2;  [Check for Scouting I]
+!!UN:P212/?y3;  [Check for Scouting II]
+!!UN:P58/?y4;  [Check for Scouting III]
+
+!!VRz319|y2=1/y3=1/y4=1:Sz175010;     [Set yellow skill name if one of them is enabled]
+
+!!VRz273&y2=1:+^%Z175124^;     [+ short description for Scouting I]
+!!VRz274&y2=1:+^%Z175125^;
+!!VRz275&y2=1:+^%Z175126^;
+
+!!VRz273&y3=1:+^%Z175127^;     [+ short description for Scouting II]
+!!VRz274&y3=1:+^%Z175128^;
+!!VRz275&y3=1:+^%Z175129^;
+
+!!VRz273&y4=1:+^%Z175130^;     [+ short description for Scouting III]
+!!VRz274&y4=1:+^%Z175130^;
+!!VRz275&y4=1:+^%Z175130^;
+
+!!UN:G0/3/1/273 G0/3/2/274 G0/3/3/275;     [Set skill texts for Scouting]
+
+--------------------------------------------------------------------------------
+
+** Diplomacy **
+
+!!VRz91:Sz175131;     [Set short description for standard skill]
+!!VRz92:Sz175132;
+!!VRz93:Sz175133;
+
+!!UN:G0/4/1/91 G0/4/2/92 G0/4/3/93;     [Set skill texts for Diplomacy]
+
+--------------------------------------------------------------------------------
+
+** Navigation **
+
+!!VRz750:Sz175134;     [Set short description for standard skill]
+!!VRz751:Sz175135;
+!!VRz752:Sz175136;
+
+!!UN:P208/?y5;  [Check for Navigation I]
+
+!!VRz749&y5=1:Sz175064;     [Set yellow skill name if enabled]
+
+!!VRz750&y5=1:+^%Z175137^;     [+ short description for Navigation I]
+!!VRz751&y5=1:+^%Z175138^;
+!!VRz752&y5=1:+^%Z175139^;
+
+!!UN:G0/5/1/750 G0/5/2/751 G0/5/3/752;     [Set skill texts for Navigation]
+
+--------------------------------------------------------------------------------
+
+** Leadership **
+
+!!VRz94:Sz175140;     [Set short description for standard skill]
+!!VRz95:Sz175141;
+!!VRz96:Sz175142;
+
+!!UN:G0/6/1/94 G0/6/2/95 G0/6/3/96;     [Set skill texts for Leadership]
+
+--------------------------------------------------------------------------------
+
+** Wisdom **
+
+!!VRz97:Sz175143;     [Set short description for standard skill]
+!!VRz98:Sz175144;
+!!VRz99:Sz175145;
+
+!!UN:G0/7/1/97 G0/7/2/98 G0/7/3/99;     [Set skill texts for Wisdom]
+
+--------------------------------------------------------------------------------
+
+** Mysticism **
+
+!!VRz710:Sz175146;     [Set short description for standard skill]
+!!VRz711:Sz175147;
+!!VRz712:Sz175148;
+
+!!UN:P35/?y6;  [Check for Mysticism I]
+!!UN:P207/?y7;  [Check for Mysticism II]
+
+!!VRz748|y6=1/y7=1:Sz175060;     [Set yellow skill name if enabled]
+
+!!VRz710&y6=1:+^%Z175149^;     [+ short description for Mysticism I]
+!!VRz711&y6=1:+^%Z175150^;
+!!VRz712&y6=1:+^%Z175151^;
+
+!!VRz710&y7=1:+^%Z175152^;     [+ short description for Mysticism II]
+!!VRz711&y7=1:+^%Z175153^;
+!!VRz712&y7=1:+^%Z175154^;
+
+!!UN:G0/8/1/710 G0/8/2/711 G0/8/3/712;     [Set skill texts for Mysticism]
+
+--------------------------------------------------------------------------------
+
+** Luck **
+
+!!VRz726:Sz175155;     [Set short description for standard skill]
+!!VRz727:Sz175156;
+!!VRz728:Sz175157;
+
+!!UN:P206/?y8;  [Check for Luck I]
+
+!!VRz747&y8=1:Sz175056;     [Set yellow skill name if enabled]
+
+!!VRz726&y8=1:+^%Z175158^;     [+ short description for Luck]
+!!VRz727&y8=1:+^%Z175159^;
+!!VRz728&y8=1:+^%Z175160^;
+
+!!UN:G0/9/1/726 G0/9/2/727 G0/9/3/728;     [Set skill texts for Luck]
+
+--------------------------------------------------------------------------------
+
+** Ballistics **
+
+!!VRz110:Sz175161;     [Set short description for standard skill]
+!!VRz111:Sz175162;
+!!VRz112:Sz175163;
+
+!!UN:G0/10/1/110 G0/10/2/111 G0/10/3/112;     [Set skill texts for Ballistics]
+
+--------------------------------------------------------------------------------
+
+** Eagle Eye **
+
+!!VRz270:Sz175164;     [Set short description for standard skill]
+!!VRz271:Sz175165;
+!!VRz272:Sz175166;
+
+!!UN:P103/?y9;  [Check for Eagle Eye I]
+!!UN:P202/?y10;  [Check for Eagle Eye II]
+
+!!VRz318|y9=1/y10=1:Sz175000;     [Set yellow skill name if one of them is enabled]
+
+!!VRz270&y9=1:+^%Z175167^;     [+ short description for Eagle Eye I]
+!!VRz271&y9=1:+^%Z175168^;
+!!VRz272&y9=1:+^%Z175169^;
+
+!!VRz270&y10=1:+^%Z175170^;     [+ short description for Eagle Eye II]
+!!VRz271&y10=1:+^%Z175171^;
+!!VRz272&y10=1:+^%Z175172^;
+
+!!UN:G0/11/1/270 G0/11/2/271 G0/11/3/272;     [Set skill texts for Eagle Eye]
+
+--------------------------------------------------------------------------------
+
+** Necromancy **
+
+!!VRz113:Sz175173;     [Set short description for standard skill]
+!!VRz114:Sz175174;
+!!VRz115:Sz175175;
+
+!!UN:G0/12/1/113 G0/12/2/114 G0/12/3/115;     [Set skill texts for Necromancy]
+
+--------------------------------------------------------------------------------
+
+** Estates **
+
+!!VRz741:Sz175176;     [Set short description for standard skill]
+!!VRz742:Sz175177;
+!!VRz743:Sz175178;
+
+!!UN:P203/?y11;  [Check for Estates I]
+!!UN:P191/?y12;  [Check for Estates II]
+
+   [Check v2333, which is provided by script64.erm and represents Estates II gold factor. Never mind if zero *g*]
+!!VRy25&y12=1:Sv2333;  [set Expert Estates factor. Default normally 100 Gold/day/10000 Exp for Expert Estates]
+!!VRy26&y12=1:Sy25 :2; [set Advanced Estates factor (half of v2333). Default 50]
+!!VRy27&y12=1:Sy25 :4; [set Basic Estates factor (quarter of v2333). Default 25]
+
+!!VRz739|y11=1/y12=1:Sz175048;     [Set yellow skill name if enabled]
+
+!!VRz741&y11=1:+^%Z175179^;     [+ short description for Estates I]
+!!VRz742&y11=1:+^%Z175180^;
+!!VRz743&y11=1:+^%Z175181^;
+
+!!VRz741&y12=1:+^%Z175182^;     [+ short description for Estates II]
+!!VRz742&y12=1:+^%Z175183^;
+!!VRz743&y12=1:+^%Z175184^;
+
+!!UN:G0/13/1/741 G0/13/2/742 G0/13/3/743;     [Set skill texts for Estates]
+
+--------------------------------------------------------------------------------
+
+** Fire Magic **
+
+!!VRz116:Sz175185;     [Set short description for standard skill]
+!!VRz117:Sz175186;
+!!VRz118:Sz175187;
+
+!!UN:G0/14/1/116 G0/14/2/117 G0/14/3/118;     [Set skill texts for Fire Magic]
+
+--------------------------------------------------------------------------------
+
+** Air Magic **
+
+!!VRz144:Sz175188;     [Set short description for standard skill]
+!!VRz145:Sz175189;
+!!VRz146:Sz175190;
+
+!!UN:G0/15/1/144 G0/15/2/145 G0/15/3/146;     [Set skill texts for Air Magic]
+
+--------------------------------------------------------------------------------
+
+** Water Magic **
+
+!!VRz147:Sz175191;     [Set short description for standard skill]
+!!VRz148:Sz175192;
+!!VRz149:Sz175193;
+
+!!UN:G0/16/1/147 G0/16/2/148 G0/16/3/149;     [Set skill texts for Water Magic]
+
+--------------------------------------------------------------------------------
+
+** Earth Magic **
+
+!!VRz150:Sz175194;     [Set short description for standard skill]
+!!VRz151:Sz175195;
+!!VRz152:Sz175196;
+
+!!UN:G0/17/1/150 G0/17/2/151 G0/17/3/152;     [Set skill texts for Earth Magic]
+
+--------------------------------------------------------------------------------
+
+** Scholar **
+
+!!VRz735:Sz175197;     [Set short description for standard skill]
+!!VRz736:Sz175198;
+!!VRz737:Sz175199;
+
+!!UN:P211/?y13;  [Check for Scholar I]
+
+!!VRz714&y13=1:Sz175072;     [Set yellow skill name if enabled]
+
+!!VRz735&y13=1:+^%Z175200^;     [+ short description for Scholar I]
+!!VRz736&y13=1:+^%Z175201^;
+!!VRz737&y13=1:+^%Z175202^;
+
+!!UN:G0/18/1/735 G0/18/2/736 G0/18/3/737;     [Set skill texts for Scholar]
+
+--------------------------------------------------------------------------------
+
+** Tactics **
+
+!!VRz905:Sz175203;     [Set short description for standard skill]
+!!VRz906:Sz175204;
+!!VRz907:Sz175205;
+
+!!UN:P218/?y14;  [Check for Tactics I]
+
+!!VRz904&y14=1:Sz175040;     [Set yellow skill name if enabled]
+
+!!VRz905&y14=1:Sz175206;     [Short description for Tactics I]
+!!VRz906&y14=1:Sz175207;
+!!VRz907&y14=1:Sz175208;
+
+!!UN:G0/19/1/905 G0/19/2/906 G0/19/3/907;     [Set skill texts for Tactics]
+
+--------------------------------------------------------------------------------
+
+** Artillery **
+
+!!VRz719:Sz175209;     [Set short description for standard skill]
+!!VRz720:Sz175210;
+!!VRz721:Sz175211;
+
+!!UN:P201/?y15;  [Check for Artillery I]
+
+!!VRz738&y15=1:Sz175044;     [Set yellow skill name if enabled]
+
+!!VRz719&y15=1:+^%Z175212^;     [+ short description for Artillery I]
+!!VRz720&y15=1:+^%Z175213^;
+!!VRz721&y15=1:+^%Z175214^;
+
+!!UN:G0/20/1/719 G0/20/2/720 G0/20/3/721;     [Set skill texts for Artillery]
+
+--------------------------------------------------------------------------------
+
+** Learning **
+
+!!VRz279:Sz175215;     [Set short description for standard skill]
+!!VRz310:Sz175216;
+!!VRz311:Sz175217;
+
+!!UN:P217/?y16;  [Check for Learning I]
+!!UN:P205/?y17;  [Check for Learning II]
+
+!!VRz391|y16=1/y17=1:Sz175030;     [Set yellow skill name if one of them is enabled]
+
+!!VRz279&y16=1:+^%Z175218^;     [+ short description for Learning I]
+!!VRz310&y16=1:+^%Z175219^;
+!!VRz311&y16=1:+^%Z175220^;
+
+!!VRz279&y17=1:+^%Z175221^;     [+ short description for Learning II]
+!!VRz310&y17=1:+^%Z175222^;
+!!VRz311&y17=1:+^%Z175223^;
+
+!!UN:G0/21/1/279 G0/21/2/310 G0/21/3/311;     [Set skill texts for Learning]
+
+--------------------------------------------------------------------------------
+
+** Offense **
+
+!!VRz153:Sz175224;     [Set short description for standard skill]
+!!VRz154:Sz175225;
+!!VRz155:Sz175226;
+
+!!UN:G0/22/1/153 G0/22/2/154 G0/22/3/155;     [Set skill texts for Offense]
+
+--------------------------------------------------------------------------------
+
+** Armorer **
+
+!!VRz793:Sz175227;     [Set short description for standard skill]
+!!VRz794:Sz175228;
+!!VRz795:Sz175229;
+
+!!UN:P214/?y18;  [Check for Armorer I]
+
+!!VRz744&y18=1:Sz175080;     [Set yellow skill name if enabled]
+
+!!VRz793&y18=1:Sz175230;     [Short description for Armorer I]
+!!VRz794&y18=1:Sz175231;
+!!VRz795&y18=1:Sz175232;
+
+!!UN:G0/23/1/793 G0/23/2/794 G0/23/3/795;     [Set skill texts for Armorer]
+
+--------------------------------------------------------------------------------
+
+** Intelligence **
+
+!!VRz156:Sz175233;     [Set short description for standard skill]
+!!VRz157:Sz175234;
+!!VRz158:Sz175235;
+
+!!UN:G0/24/1/156 G0/24/2/157 G0/24/3/158;     [Set skill texts for Intelligence]
+
+--------------------------------------------------------------------------------
+
+** Sorcery **
+
+!!VRz796:Sz175236;     [Set short description for standard skill]
+!!VRz797:Sz175237;
+!!VRz798:Sz175238;
+
+!!UN:P23/?y19;  [Check for Sorcery I]
+!!UN:P213/?y20;  [Check for Sorcery II]
+
+!!VRz715|y19=1/y20=1:Sz175076;     [Set yellow skill name if enabled]
+
+!!VRz796&y20=1:Sz175239;     [Short description for Sorcery II]
+!!VRz797&y20=1:Sz175240;
+!!VRz798&y20=1:Sz175241;
+
+!!VRz796&y19=1:+^%Z175242^;     [+ short description for Sorcery I]
+!!VRz797&y19=1:+^%Z175243^;
+!!VRz798&y19=1:+^%Z175244^;
+
+!!UN:G0/25/1/796 G0/25/2/797 G0/25/3/798;     [Set skill texts for Sorcery]
+
+--------------------------------------------------------------------------------
+
+** Resistance **
+
+!!VRz276:Sz175245;     [Set short description for standard skill]
+!!VRz277:Sz175246;
+!!VRz278:Sz175247;
+
+!!UN:P216/?y21;  [Check for Resistance I]
+!!UN:P210/?y22;  [Check for Resistance II]
+
+!!VRz390|y21=1/y22=1:Sz175020;     [Set yellow skill name if one of them is enabled]
+
+!!VRz276&y22=1:Sz175248;     [Short description for Resistance II]
+!!VRz277&y22=1:Sz175249;
+!!VRz278&y22=1:Sz175250;
+
+!!VRz276&y21=1:+^%Z175251^;     [+ short description for Resistance I]
+!!VRz277&y21=1:+^%Z175252^;
+!!VRz278&y21=1:+^%Z175253^;
+
+!!UN:G0/26/1/276 G0/26/2/277 G0/26/3/278;     [Set skill texts for Resistance]
+
+--------------------------------------------------------------------------------
+
+** First Aid **
+
+!!VRz716:Sz175254;     [Set short description for standard skill]
+!!VRz717:Sz175255;
+!!VRz718:Sz175256;
+
+!!UN:P204/?y23;  [Check for First Aid I]
+!!UN:P190/?y24;  [Check for First Aid II]
+
+!!VRz740|y23=1/y24=1:Sz175052;     [Set yellow skill name if enabled]
+
+!!VRz716&y23=1:+^%Z175257^;     [+ short description for First Aid I]
+!!VRz717&y23=1:+^%Z175258^;
+!!VRz718&y23=1:+^%Z175259^;
+
+!!VRz716&y24=1:+^%Z175260^;     [+ short description for First Aid II]
+!!VRz717&y24=1:+^%Z175261^;
+!!VRz718&y24=1:+^%Z175262^;
+
+!!UN:G0/27/1/716 G0/27/2/717 G0/27/3/718;     [Set skill texts for First Aid]
+
+--------------------------------------------------------------------------------
+
+
+!d!FU:E;     [Remove the 'd' in this line to get white skill names]
+
+!!UN|y9=1/y10=1:G0/11/0/318;     [Set yellow skill name for EE]
+!!UN|y2=1/y3=1/y4=1:G0/3/0/319;     [Set yellow skill name for Scouting]
+!!UN|y21=1/y22=1:G0/26/0/390;     [Set yellow skill name for Resistance]
+!!UN|y16=1/y17=1:G0/21/0/391;     [Set yellow skill name for Learning]
+!!UN&y14=1:G0/19/0/904;     [Set yellow skill name for Tactics]
+!!UN&y15=1:G0/20/0/738;     [Set yellow skill name for Artillery]
+!!UN|y11=1/y12=1:G0/13/0/739;     [Set yellow skill name for Estates]
+!!UN|y23=1/y24=1:G0/27/0/740;     [Set yellow skill name for First Aid]
+!!UN&y8=1:G0/9/0/747;     [Set yellow skill name for Luck]
+!!UN|y6=1/y7=1:G0/8/0/748;    [Set yellow skill name for Mysticism]
+!!UN&y5=1:G0/5/0/749;     [Set yellow skill name for Navigation]
+!!UN&y1=1:G0/0/0/713;     [Set yellow skill name for Pathfinding]
+!!UN&y13=1:G0/18/0/714;     [Set yellow skill name for Scholar]
+!!UN|y19=1/y20=1:G0/25/0/715;   [Set yellow skill name for Sorcery]
+!!UN&y18=1:G0/23/0/744;     [Set yellow skill name for Armorer]
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+!?FU34;     [Artifact text function for script02 enabled]
+
+!!VRz416:Sz175263;     [dead man's boots]
+!!UN:A56/10/416;
+
+!!VRz417:Sz175264;     [garniture of interference]
+!!UN:A57/10/417;
+
+!!VRz418:Sz175265;     [surcoat]
+!!UN:A58/10/418;
+
+!!VRz419:Sz175266;     [boots of polarity]
+!!UN:A59/10/419;
+
+!!VRz420:Sz175267;     [bird of perception]
+!!UN:A63/10/420;
+
+!!VRz421:Sz175268;     [stoic watchman]
+!!UN:A64/10/421;
+
+!!VRz422:Sz175269;     [emblem of cognizance]
+!!UN:A65/10/422;
+
+!!VRz423:Sz175270;     [statesman's medal]
+!!UN:A66/10/423;
+
+!!VRz424:Sz175271;     [diplomat's ring]
+!!UN:A67/10/424;
+
+!!VRz924:Sz175272;     [sphere of permanence]
+!!UN:A92/10/924;
+
+!!VRz925:Sz175273;     [orb of vulnerability]
+!!UN:A93/10/925;
+
+!!VRz926:Sz175274;     [pendant of dispassion]
+!!UN:A100/10/926;
+
+!!VRz928:Sz175275;     [pendant of second sight]
+!!UN:A101/10/928;
+
+!!VRz929:Sz175276;     [pendant of holiness]
+!!UN:A102/10/929;
+
+!!VRz930:Sz175277;     [pendant of life]
+!!UN:A103/10/930;
+
+!!VRz931:Sz175278;     [pendant of death]
+!!UN:A104/10/931;
+
+!!VRz932:Sz175279;     [pendant of free will]
+!!UN:A105/10/932;
+
+!!VRz934:Sz175280;     [pendant of total recall]
+!!UN:A107/10/934;
+
+!!VRz936:Sz175281;     [orb of inhibition]
+!!UN:A126/10/936;
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+!?FU35;     [Artifact text function for script71 enabled]
+
+!!VRz410:Sz175282;     [centaur's axe]
+!!UN:A7/10/410;
+
+!!VRz411:Sz175283;     [shield of the dwarven lords]
+!!UN:A13/10/411;
+
+!!VRz412:Sz175284;     [helm of the alabaster unicorn]
+!!UN:A19/10/412;
+
+!!VRz413:Sz175285;     [breastplate of petrified wood]
+!!UN:A25/10/413;
+
+!!VRz414:Sz175286;     [amulet of the undertaker]
+!!UN:A54/10/414;
+
+!!VRz415:Sz175287;     [vampire's cowl]
+!!UN:A55/10/415;
+
+!!VRz416:Sz175288;     [dead man's boots]
+!!UN:A56/10/416;
+
+!!VRz423:Sz175289;     [statesman's medal]
+!!UN:A66/10/423;
+
+!!VRz424:Sz175290;     [diplomat's ring]
+!!UN:A67/10/424;
+
+!!VRz425:Sz175291;     [ambassador's sash]
+!!UN:A68/10/425;
+
+!!VRz426:Sz175292;     [collar of conjuring]
+!!UN:A76/10/426;
+
+!!VRz427:Sz175293;     [ring of conjuring]
+!!UN:A77/10/427;
+
+!!VRz428:Sz175294;     [cape of conjuring]
+!!UN:A78/10/428;
+
+!!VRz920:Sz175295;     [orb of firmament]
+!!UN:A79/10/920;
+
+!!VRz921:Sz175296;     [orb of silt]
+!!UN:A80/10/921;
+
+!!VRz922:Sz175297;     [orb of tempestous fire]
+!!UN:A81/10/922;
+
+!!VRz923:Sz175298;     [orb of driving rain]
+!!UN:A82/10/923;
+
+!!VRz924:Sz175299;     [sphere of permanence]
+!!UN:A92/10/924;
+
+!!VRz925:Sz175300;     [orb of vulnerability]
+!!UN:A93/10/925;
+
+!!VRz926:Sz175301;     [pendant of dispassion]
+!!VRz927:Sz175302;
+!!UN:A100/10/926;
+!!UN:A100/9/927;
+
+!!VRz928:Sz175303;     [pendant of second sight]
+!!UN:A101/10/928;
+
+!!VRz929:Sz175304;     [pendant of holiness]
+!!UN:A102/10/929;
+
+!!VRz930:Sz175305;     [pendant of life]
+!!UN:A103/10/930;
+
+!!VRz931:Sz175306;     [pendant of death]
+!!UN:A104/10/931;
+
+!!VRz932:Sz175307;     [pendant of free will]
+!!VRz933:Sz175308;
+!!UN:A105/10/932;
+!!UN:A105/9/933;
+
+!!VRz934:Sz175309;     [pendant of total recall]
+!!VRz935:Sz175310;
+!!UN:A107/10/934;
+!!UN:A107/9/935;
+
+!!VRz937:Sz175311;     [ring of the magi]
+!!UN:A139/10/937;
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+!?FU36;     [Artifact text function for script02 and script71 enabled]
+
+!!VRz410:Sz175282;     [centaur's axe]
+!!UN:A7/10/410;
+
+!!VRz411:Sz175283;     [shield of the dwarven lords]
+!!UN:A13/10/411;
+
+!!VRz412:Sz175284;     [helm of the alabaster unicorn]
+!!UN:A19/10/412;
+
+!!VRz413:Sz175285;     [breastplate of petrified wood]
+!!UN:A25/10/413;
+
+!!VRz414:Sz175286;     [amulet of the undertaker]
+!!UN:A54/10/414;
+
+!!VRz415:Sz175287;     [vampire's cowl]
+!!UN:A55/10/415;
+
+!!VRz416:Sz175312;     [dead man's boots]
+!!UN:A56/10/416;
+
+!!VRz417:Sz175264;     [garniture of interference]
+!!UN:A57/10/417;
+
+!!VRz418:Sz175265;     [surcoat]
+!!UN:A58/10/418;
+
+!!VRz419:Sz175266;     [boots of polarity]
+!!UN:A59/10/419;
+
+!!VRz420:Sz175267;     [bird of perception]
+!!UN:A63/10/420;
+
+!!VRz421:Sz175268;     [stoic watchman]
+!!UN:A64/10/421;
+
+!!VRz422:Sz175269;     [emblem of cognizance]
+!!UN:A65/10/422;
+
+!!VRz423:Sz175313;     [statesman's medal]
+!!UN:A66/10/423;
+
+!!VRz424:Sz175314;     [diplomat's ring]
+!!UN:A67/10/424;
+
+!!VRz425:Sz175291;     [ambassador's sash]
+!!UN:A68/10/425;
+
+!!VRz426:Sz175292;     [collar of conjuring]
+!!UN:A76/10/426;
+
+!!VRz427:Sz175293;     [ring of conjuring]
+!!UN:A77/10/427;
+
+!!VRz428:Sz175294;     [cape of conjuring]
+!!UN:A78/10/428;
+
+!!VRz920:Sz175295;     [orb of firmament]
+!!UN:A79/10/920;
+
+!!VRz921:Sz175296;     [orb of silt]
+!!UN:A80/10/921;
+
+!!VRz922:Sz175297;     [orb of tempestous fire]
+!!UN:A81/10/922;
+
+!!VRz923:Sz175298;     [orb of driving rain]
+!!UN:A82/10/923;
+
+!!VRz924:Sz175315;     [sphere of permanence]
+!!UN:A92/10/924;
+
+!!VRz925:Sz175316;     [orb of vulnerability]
+!!UN:A93/10/925;
+
+!!VRz926:Sz175317;     [pendant of dispassion]
+!!VRz927:Sz175302;
+!!UN:A100/10/926;
+!!UN:A100/9/927;
+
+!!VRz928:Sz175318;     [pendant of second sight]
+!!UN:A101/10/928;
+
+!!VRz929:Sz175319;     [pendant of holiness]
+!!UN:A102/10/929;
+
+!!VRz930:Sz175320;     [pendant of life]
+!!UN:A103/10/930;
+
+!!VRz931:Sz175321;     [pendant of death]
+!!UN:A104/10/931;
+
+!!VRz932:Sz175322;     [pendant of free will]
+!!VRz933:Sz175308;
+!!UN:A105/10/932;
+!!UN:A105/9/933;
+
+!!VRz934:Sz175323;     [pendant of total recall]
+!!VRz935:Sz175310;
+!!UN:A107/10/934;
+!!UN:A107/9/935;
+
+!!VRz936:Sz175281;     [orb of inhibition]
+!!UN:A126/10/936;
+
+!!VRz937:Sz175311;     [ring of the magi]
+!!UN:A139/10/937;
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+!#UN:P75/?y-1;     [Check for short skill text option]
+
+!#FU17&y-1=0:P;     [Launch normal skill text function]
+!#FU19&y-1=1:P;     [Launch short skill text function]
+
+!#UN:P102/?y-2;     [Check for Artifact Boost]
+!#UN:P71/?y-3;     [Check for Enhanced Artifacts]
+
+!#FU34&y-2=1/y-3=0:P;     [Launch artifact text function for script02 enabled]
+!#FU35&y-2=0/y-3=1:P;     [Launch artifact text function for script71 enabled]
+!#FU36&y-2=1/y-3=1:P;     [Launch artifact text function for script02 and script71 enabled]
+

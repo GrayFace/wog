@@ -1,0 +1,55 @@
+#	Text resource for "script45.erm" document		
+145000	{%Z-9 Troop Recruitment}
+
+An upgrade of this {Level %Y-6 creature dwelling} will increase the 
+growth rate of the %Z-10 in this town by %Y-10 per week. 
+
+This dwelling now recruits {%Y-9} extra {%Z-10} per week. 
+ 	<!!S>	01.08.2004
+145001	
+{Dwelling Cost}: %V7 gold 	<!!S>	01.08.2004
+145002	+ %V1 wood  	<!!S>	01.08.2004
+145003	+ %V3 ore  	<!!S>	01.08.2004
+145004	+ %V2 mercury  	<!!S>	01.08.2004
+145005	+ %V4 sulfur  	<!!S>	01.08.2004
+145006	+ %V5 crystals  	<!!S>	01.08.2004
+145007	+ %V6 gems  	<!!S>	01.08.2004
+145008	
+
+You've already improved a structure in this town today.	<!!S>	01.08.2004
+145009	
+
+Would you like to increase weekly troop production?	<!!S>	01.08.2004
+145010	
+
+You can't afford a further upgrade at this time.	<!!S>	01.08.2004
+145011	{Gold Reserve} 
+ 
+The Gold Reserve currently gives you {%Y4 gold coins} every day. 
+ 
+	<!!S>	01.08.2004
+145012	You've already improved a structure in this town today.
+
+	<!!S>	01.08.2004
+145013	Would you like to increase your income by {1000 gold coins}?	<!!S>	01.08.2004
+145014	Sorry, {City Hall} must be built before you can build a Gold Reserve. 
+
+	<!!S>	01.08.2004
+145015	You can't afford a further upgrade at this time.
+
+	<!!S>	01.08.2004
+145016	It will cost %Y5 Gold and %Y6 Mithril to upgrade this {Gold Reserve}.
+
+	<!!S>	01.08.2004
+145017	Select an upgraded creature dwelling to be further upgraded.	<!!S>	01.08.2004
+145018	No, thanks. I've changed my mind.	<!!S>	01.08.2004
+145019	Level %X16   ( %Z-10, current growth bonus: +%Y99 )	<!!S>	01.08.2004
+145020	{Dwelling Upgrading}
+
+You don't have any upgraded dwellings built yet. Only upgraded dwellings can be further upgraded to increase troop production.	<!!M>	01.08.2004
+145021	Build or Improve Gold Reserve	<!!S>	01.08.2004
+145022	Increase Weekly Troop Growth (must have upgraded dwelling built first)	<!!S>	01.08.2004
+145023	
+
+You can only upgrade the Gold Reserve on your turn.		
+145024	You can only upgrade a dwelling on your own turn.		

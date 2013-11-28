@@ -1,0 +1,261 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Chest ERM script v1.0 - Donald X. Vaccarino
+** Updated: Apr. 27. 2004 by Hermann the Weird
+** Updated August 24, 2004 by Fnord to disable chest poison trap in network battles
+** Requires WOG version 3.56 or later
+** Adds functionality to a new chest subtype
+** WoGify Name: script29.erm
+
+** To use this code, put it into a Global Event, set to never happen,
+** and add some new chests to your map.
+** The chest used is the first one after the original chest in the editor.
+
+** Variables Used: w63, w80, z326, v550-v559, v600-v646
+** Flags Used: 2
+** v550-v559 are a bit table used by several of my scripts. It must not be changed but may be used.
+** w63 is from the Adventure Cave script and may not otherwise be modified.
+** w80 must not be modified by other scripts.
+** The other variables may be used elsewhere, but get trashed by this code.
+** Functions Used: 840-848
+
+** Initialization code
+
+!#UN:P29/?v1;     [Check for WoG option]
+
+!?FU845; [function to clear w80 for hero x16]
+
+!!IF:Wx16; [use hero x16's w variables]
+!!VRw80:S0; [no trap penalties]
+
+!#UN&v1=1:B1/1; [set chest to do nothing except ERM]
+!#IF&v1=1:V604/1; [set flag 604 to true to indicate chest script in use]
+!#VRv550&v1=1:C1/2/4/8/16/32/64/128/256/512; [bit table]
+!#DO845/0/155/1&v1=1:P; [clear trap penalties for all heroes]
+
+** end of initialization
+
+
+** Chest object trigger
+
+!?OB101/1&-875;
+!!UN:P29/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!VRv600:Sv998 %4; [x mod 4]
+!!VRv601:Sv999 %4; [y mod 4]
+!!VRv602:Sv601 *4 +v600; [now we have map position 0-15]
+!!VRv603:S840; [assume gold/upgrade chest]
+!!VRv603|v602=2/v602=5/v602=7/v602=9/v602=12/v602=15:S841; [resource/skill pt chest]
+!!VRv603&v602=0:S842; [trapped chest]
+
+!!VRv604:S2 R2; [random gold value 2-4 -> 1000, 1500, 2000]
+!!VRv605:S0 R99; [roll % dice]
+!!VRv604&v605>92:S5; [8% are 2500]
+!!VRv604&v605<2:S6; [2% are 3000]
+
+!!IF:W-1; [look at this hero's w variables]
+!!VRv604&w64=3:*2; [double value if have Adventure Cave hermit wealth skill]
+
+!!FUv603:Pv604; [call function to handle chest]
+
+** end of chest trigger
+
+
+** function to handle gold/upgrade chest, x1 = chest gold amt 0-15
+
+!?FU840;
+
+!!VRy2:Sx1 *500; [gold amt to offer]
+
+!!VRv610:Sx1 *750; [max gold amt for upgrade]
+!!VRv611:S0; [highest usable gold amt found]
+!!VRv612:S-1; [hero slot # of best value upgrade]
+[v613 holds upgraded creature type]
+[v614 holds qty of creatures to upgrade]
+!!DO843/0/6/1:P; [check each slot for upgrade value]
+
+!!FU841&v612=-1:Px1; [treat as resource/skill chest if upgrade not possible]
+
+!!IF:V2/1; [assume AI picks left]
+!!IF&v611>=1000:V2/0; [AI picks right if upgrade value >= 1000 gold]
+
+!!VRi:Sv614 *65536 + v613; [# to show number of upgraded monsters in dialog]
+
+!!IF&1000/v612<>-1:Q2/6/y2/21/i/7/z129000;
+
+!!HE-1:O?y3; [get hero owner]
+!!OW&v612<>-1/2:Ry3/6/dy2; [give gold if chosen]
+!!HE-1&v612<>-1/-2:C0/v612/v613/v614/0/5; [upgrade creatures if chosen, experience loss according to upgrade multiplier]
+
+** end of function
+
+
+** function to handle resource/skill point chest, x1 = chest gold amt 0-15
+
+!?FU841;
+
+!!VRy1:Sx1 *2; [2 resources per 500 gold - normally 4, 6, 8]
+!!VRy6:S2 R3; [random resource #2-5]
+!!VRy6&y6=2:S1; [replace ore with mercury]
+
+!!VRy2&x1<=2:S34; [knowledge for 1000 gold]
+!!VRy2&x1=3:S32; [defense for 1500 gold]
+!!VRy10:S0 R99; [roll % dice]
+!!VRy2&x1=4/y10<50:S31; [attack 50% for 2000 gold]
+!!VRy2&x1=4/y10>=50:S33; [spell power 50% for 2000 gold]
+!!VRy2&x1>=5:S31 R3; [random for 2500 gold or more]
+!!VRy3:S1; [normally add 1 to skill]
+!!VRy3&x1>=5:S2; [if 2500 gold or more, add 2]
+
+!!HE-1:E?y4/?y5; [get hero's y4 exp h5 level]
+
+!!IF:V2/1; [assume AI picks left = resources]
+!!IF&y5>=5:V2/0; [AI picks skill pts if 5th level or higher]
+
+!!VRz326&y6=1:Sz129001;
+!!VRz326&y6=3:Sz129002;
+!!VRz326&y6=4:Sz129003;
+!!VRz326&y6=5:Sz129004;
+
+!!IF&1000:Q2/y6/y1/y2/y3/7/z129005;
+
+!!HE-1:O?y11; [get hero owner]
+!!OW&2:Ry11/y6/dy1; [give resources if chosen]
+
+!!HE-1&-2/y2=31:Fdy3/d/d/d; [give attack]
+!!HE-1&-2/y2=32:Fd/dy3/d/d; [give defense]
+!!HE-1&-2/y2=33:Fd/d/dy3/d; [give spell power]
+!!HE-1&-2/y2=34:Fd/d/d/dy3; [give knowledge]
+
+** end of function
+
+
+** function to handle trapped chest, x1 = chest gold amt 0-15
+
+!?FU842;
+
+!!VRy1:S0 R3; [random trap type]
+!!HE-1:S9/?y2 S24/?y3; [get luck and intelligence levels]
+
+!!IF:V2/1; [assume trap will go off]
+!!IF|y2=3/y3=3:V2/0; [no trap if maximum luck or intelligence]
+
+!!VRz326&2/y1=0:Sz129006;
+!!VRz326&2/y1=1:Sz129007;
+!!VRz326&2/y1=2:Sz129008;
+!!VRz326&2/y1=3:Sz129009;
+
+!!VRz326&-2/y3=3:Sz129010;
+!!VRz326&-2/y3<>3:Sz129011;
+
+!!UN:J6/2/?y5; [get a random treasure to y5]
+
+!!UN:J6/4/?y6; [get a random minor to y6]
+
+!!IF:W-1; [use this hero's w variables]
+!!VRy4:S550 +y1; [get index of bit value]
+!!VRw80&2:|vy4; [set bit for trap penalty]
+
+!!HE-1:A4/y5 A4/y6; [give the artifacts]
+
+!!IF&1000:Q2/8/y5/8/y6/1/z129012;
+
+** end of function
+
+
+** function to check slot x16 for upgrade value
+
+!?FU843;
+
+!!HE-1:C0/x16/?y1/?y2; [get y1 type y2 qty]
+!!MA&y1<>-1:Cy1/6/?y3; [get gold cost of base unit]
+!!VRy3:*y2; [times qty for total value now]
+!!FU844&y1<>-1:Py1; [get upgraded creature type in v609]
+!!MA&y1<>-1/v609<>-1:Cv609/6/?y4; [get gold cost of upgraded unit]
+!!VRy4:*y2; [times qty for total upgraded value]
+!!VRy4:-y3; [difference is value of upgrading]
+!!IF:V1/0; [assume this isn't the slot for us]
+!!IF&y1<>-1/v609<>-1/y4>v611/y4<=v610:V1/1; [this slot is an improvement]
+!!VRv612&1:Sx16; [use slot]
+!!VRv611&1:Sy4; [store value of upgrade]
+!!VRv613&1:Sv609; [store upgraded type]
+!!VRv614&1:Sy2; [store qty]
+
+** end of function
+
+
+** function to find upgraded creature # for creature x1, return in v609
+
+!?FU844;
+
+!!VRv609:Sx1 +1; [normally that's just creature type +1]
+!!VRv609&v609=113:S127; [handle elementals]
+!!VRv609&v609=114:S125;
+!!VRv609&v609=115:S129;
+!!VRv609&v609=116:S123;
+!!VRv609&v609>111/v609<>123/v609<>125/v609<>127/v609<>129/v609<>119/v609<>121/v609<>131:S-1;
+!!VRy1:Sv609 &1; [check even/odd]
+!!VRv609&v609<111/y1=0:S-1; [even monsters were already upgraded]
+
+** end of function
+
+
+** Combat round trigger
+
+!?BR&-998;
+!!UN:P29/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!FU846&v997=-1:P0 P1; [handle trap penalties prior to battle]
+
+** end of trigger
+
+
+** function to handle trap effects for battle side x1
+
+!?FU846;
+
+!!BHx1:N?y2; [get hero number if any]
+!!IF&y2<>-1:Wy2; [use that hero's w variables]
+!!DO847/0/41/1&y2<>-1/w80>0:Pw80/x1; [place trap effects]
+!!VRw80&y2<>-1:S0; [clear trap effects]
+
+** end of function
+
+
+** function to place effects x1 on stack x16 if it's on side x2
+
+!?FU847;
+
+!!VRy5:S0;
+
+!!BMx16:I?y1 N?y3 T?y4; [get stack side, qty, type]
+!!VRy5&y4>=145/y4<=149:S99; [if it's a war machine or arrow tower, set y5 to 99]
+
+!!FU848&y1=x2/y3>0/y5<>99:Px1/1/73/x16 Px1/2/71/x16 Px1/4/45/x16 Px1/8/54/x16;
+
+** end of function
+
+
+** function for placing one spell on a stack
+** x1 = effects, x2 = bit value, x3 = spell, x4 = stack
+
+!?FU848;
+
+!!VRy2:Sx1 &x2; [check for this penalty]
+!!BMx4&y2<>0:Mx3/255/1; [place 255-round spell at basic level]
+
+** end of function
+
+** function to check for existence of this script - just sets flag 1
+
+!?FU849;
+
+!!IF:V1/1; [flag set will mean this script exists]
+
+** end of function
+

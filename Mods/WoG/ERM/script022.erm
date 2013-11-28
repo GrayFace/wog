@@ -1,0 +1,218 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Monster Mutterings 1.3 created by Timothy E. Pulver
+**   Converted to ERT format by Anders Jonsson
+**   Requires WoG version 3.57f or later using ERM version 2.4 or later.
+**   Updated: August 16, 2003
+
+** This script adds random text and dialogue to all monster stacks when
+** they're attacked. Most of it is quite silly and all of it is just for fun. It works
+** equally well with random monsters as it does with specifically-placed
+** monsters.  If a monster has customized text, this text will appear first,
+** followed by the customized text after.
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 500 or later to avoid the ERM script
+** popping up as if it were a regular event message. The title of the event
+** is unimportant, but I would suggest something like "Monster Mutterings".
+** And of course, you'll also need to have some monster stacks on the map.
+** Enjoy those muttering monsters! :-)
+
+---------------------------------------------------------------------------------------------
+
+Variables used: v1212-v1214, z119-z141, z469,z480-z492,[z122000-z122670]
+Flags used: 2,57,173-174
+Functions used: 2826
+
+---------------------------------------------------------------------------------------------
+
+ [If Mutterings is enabled in WoGify options set flag 57 to true]
+!#UN:P22/?v1;
+!#IF&v1=1:V57/1;
+
+---------------------------------------------------------------------------------------------
+
+ [Post monster trigger to reset v1212/v1213/v1214]
+!$OB54&57;
+
+!!VRv1212:S0;
+!!VRv1213:S0;
+!!VRv1214:S0;
+
+---------------------------------------------------------------------------------------------
+
+ [Monster trigger - only if flag 57 is true - set in Map Enhancement dialogue box]
+!?OB54&57/1000;
+
+ [Check if this Monster has muttered recently]
+!!FU&v1212=v998/v1213=v999/v1214=v1000:E; [Exit if it has muttered recently]
+
+ [Store coordinates of Monster in v1212-v1214]
+!!VRv1212:Sv998;
+!!VRv1213:Sv999;
+!!VRv1214:Sv1000;
+
+ [Check if Monster Muttering messages are disabled]
+!!OW:C?y-1; [Current player: y-1]
+!!VRy-1:+1; [Add 1 to y-1]
+!!FU$bit$:Py-1; [Convert to bit number: y-100]
+!!VRy-2:Sv3322; [Set y11 to v3322]
+!!VRy-2:&y-100; [Check if message is disabled for current player: y-2]
+!!FU&y-2=y-100:E; [Exit if messages are disabled for current player]
+
+ [Call function 2826]
+!!FU2826:P;
+
+---------------------------------------------------------------------------------------------
+
+ [Start of function 2826]
+!?FU2826;
+
+ [Get subtype (monster type) of current monster]
+!!OB998:U?y1;
+
+ [Get name of monster - store plural in z120 and singular in z469]
+!!UN:N3/120/y1/1;
+!!UN:N3/469/y1/0;
+
+ [Generate random hero name - store in z121]
+!!VRy2:S0 R155;
+!!HEy2:B0/?z121;
+
+ [Generate random artifact name - store in z122]
+!!VRy2:S0 R143;
+!!UN:N0/122/y2;
+
+ [Generate random monster name 1 - store in z123]
+!!VRy2:S0 R173;
+!!VRy2|y2=122/y2=124/y2=126/y2=128/y2=149:S0 R121;
+!!UN:N3/123/y2/1;
+
+ [Generate random monster name 2 - store in z124]
+!!VRy2:S0 R173;
+!!VRy2|y2=122/y2=124/y2=126/y2=128/y2=149:S0 R121;
+!!UN:N3/124/y2/1;
+
+ [Generate random monster name 3 (singular) - store in z131]
+!!VRy2:S0 R173;
+!!VRy2|y2=122/y2=124/y2=126/y2=128/y2=149:S0 R121;;
+!!VRz119:Sz122000;
+!!VRz119|y2=2/y2=12/y2=13/y2=33/y2=35/y2=42/y2=52/y2=53/y2=55/y2=71:Sz122001;
+!!VRz119|y2=75/y2=88/y2=89/y2=90/y2=91/y2=97/y2=112/y2=123/y2=129/y2=132:Sz122001;
+!!VRz119|y2=136/y2=148/y2=153/y2=160/y2=161/y2=162/y2=163/y2=165/y2=166/y2=170:Sz122001;
+!!UN:N3/131/y2/0;
+
+ [Generate random monster name 4 (singular) - store in z136]
+!!VRy2:S0 R173;
+!!VRy2|y2=122/y2=124/y2=126/y2=128/y2=149:S0 R121;
+!!VRz141:Sz122000;
+!!VRz141|y2=2/y2=12/y2=13/y2=33/y2=35/y2=42/y2=52/y2=53/y2=55/y2=71:Sz122001;
+!!VRz141|y2=75/y2=88/y2=89/y2=90/y2=91/y2=97/y2=112/y2=123/y2=129/y2=132:Sz122001;
+!!VRz141|y2=136/y2=148/y2=153/y2=160/y2=161/y2=162/y2=163/y2=165/y2=166/y2=170:Sz122001;
+!!UN:N3/136/y2/0;
+
+ [Generate random resource name - store in z125]
+!!VRy2:S122010 R14;
+!!VRz125:Szy2;
+
+ [Generate random hero class name - store in z126]
+!!VRy2:S122050 R17;
+!!VRz126:Szy2;
+
+ [Generate random hero class name 2 - store in z480]
+!!VRy2:S122068 R31;
+!!VRz480:Szy2;
+
+ [Generate random town name - store in z127]
+!!VRy2:S122040 R8;
+!!VRz127:Szy2;
+
+ [Generate random object name - store in z128]
+!!VRy2:S122100 R67;
+!!VRz128:Szy2;
+
+ [Generate weird stuff name - store in z132]
+!!VRy2:S122200 R21;
+!!VRz132:Szy2;
+
+ [Generate weird stuff name 2 - store in z137]
+!!VRy2:S122200 R21;
+!!VRz137:Szy2;
+
+ [Generate weird stuff name 3 - store in z481]
+!!VRy2:S122200 R21;
+!!VRz481:Szy2;
+
+ [Generate weird stuff name 4 - store in z489]
+!!VRy2:S122250 R21;
+!!VRz489:Szy2;
+
+ [Generate body parts - store in z133]
+!!VRy2:S122300 R8;
+!!VRz133:Sy2;
+
+ [Generate body parts - store in z485]
+!!VRy2:S122300 R8;
+!!VRy2&y2=122308:+1; ("head" should be in singular)
+!!VRz485:Sy2;
+
+ [Generate ordinary (strange) object - store in z134]
+!!VRy2:S122330 R11;
+!!VRz134:Szy2;
+
+ [Generate adjective - store in z135]
+!!VRy2:S122350 R9;
+!!VRz135:Szy2;
+
+ [Generate adjective 2 - store in z484]
+!!VRy2:S122350 R9;
+!!VRz484:Szy2;
+
+ [Generate colour - store in z138]
+!!VRy2:S122370 R14;
+!!VRz138:Szy2;
+
+ [Generate verb - store in z139]
+!!VRy2:S122400 R14;
+!!VRz139:Szy2;
+
+ [Generate noun - store in z140]
+!!VRy2:S122430 R10;
+!!VRz140:Szy2;
+
+ [Generate noun 2 - store in z483]
+!!VRy2:S122430 R10;
+!!VRz483:Szy2;
+
+ [Generate adjective for monster or body part - store in z482]
+!!VRy2:S122460 R11;
+!!VRz482:Szy2;
+
+ [Generate music - store in z486]
+!!VRy2:S122500 R8;
+!!VRz486:Szy2;
+
+ [Generate weird phrase 1 - store in z487]
+!!VRy2:S122530 R11;
+!!VRz487:Szy2;
+
+ [Generate weird phrase 2 - store in z488]
+!!VRy2:S122530 R11;
+!!VRz488:Szy2;
+
+ [Generate first part of sentence - store in z129]
+!!VRy2:S122600 R20;
+!!VRz129:Szy2;
+
+ [Generate second part of sentence - store in z130]
+!!VRy2:S122650 R20;
+!!VRz130:Szy2;
+
+ [Display monster text from z129 and z130 along with a question to disable mutterings]
+!!IF:M1/z122002;
+

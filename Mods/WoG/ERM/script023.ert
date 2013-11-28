@@ -1,0 +1,230 @@
+123004	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Sorcery Skill Enhancement version 1.1 script.} 
+ 
+Please update your files.	String type = <!#M>	07.06.2003
+123005	%Z2 
+ 
+{Guarded by:} %Z3	String type = <!!S>	07.06.2003
+123006	Combat Scholar 
+ 
+{Teaches:}	String type = <!!S>	07.06.2003
+123007	Arcane Scholar 
+ 
+{Teaches:}	String type = <!!S>	07.06.2003
+123008	Wise Scholar 
+ 
+{Teaches:}	String type = <!!S>	07.06.2003
+123009	Academic Scholar 
+ 
+{Teaches:}	String type = <!!S>	07.06.2003
+123010	Wizardly Scholar 
+ 
+{Teaches:}	String type = <!!S>	07.06.2003
+123011	Treasure Chest 
+ 
+{Choice of:}	String type = <!!Q>	07.06.2003
+123012	Treasure Chest	String type = <!!Q>	07.06.2003
+123013	Campfire	String type = <!!Q>	07.06.2003
+123014	%Z-1Scroll of %Z2 
+ 
+{Guarded by:} %Z3	String type = <!!S>	07.06.2003
+123015	%Z-1Scroll of %Z2	String type = <!!S>	07.06.2003
+123016	Nothing of value	String type = <!!S>	07.06.2003
+123017	Lean To 
+ 
+{%Z2}	String type = <!!S>	07.06.2003
+123018	Wagon contains 
+ 
+{%Z2}	String type = <!!S>	07.06.2003
+123019	Wagon contains 
+a %Z2	String type = <!!S>	07.06.2003
+123020	Wagon contains nothing of value.	String type = <!!S>	07.06.2003
+123021	Skeleton has nothing of value.	String type = <!!S>	07.06.2003
+123022	Skeleton has a 
+%Z2	String type = <!!S>	07.06.2003
+123023	(Visited)	String type = <!!S>	07.06.2003
+123024	Upgraded 	String type = <!!S>	07.06.2003
+123025	%Z3Windmill 
+ 
+%Z2	String type = <!!S>	07.06.2003
+123026	Upgraded 	String type = <!!S>	07.06.2003
+123027	{%Z3 Windmill} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+%Z3Windmill from afar?	String type = <!!Q>	07.06.2003
+123028	{%Z3Windmill} 
+ 
+The keeper of the mill announces: 
+"Milord, I have been working very 
+hard to provide you with these 
+resources, come back next week 
+for more."	String type = <!!Q>	07.06.2003
+123029	(cannot be read with magic)	String type = <!!S>	07.06.2003
+123030	free	String type = <!!S>	07.06.2003
+123031	2000 gold	String type = <!!S>	07.06.2003
+123032	10 gems	String type = <!!S>	07.06.2003
+123033	 
+ 
+{(already visited)}	String type = <!!S>	07.06.2003
+123034	Tree of Knowledge 
+ 
+{+1 level for} {%Z2}{%Z3}	String type = <!!S>	07.06.2003
+123035	(visited)	String type = <!!S>	07.06.2003
+123036	Mystical Garden 
+ 
+%Z2	String type = <!!S>	07.06.2003
+123037	Mystical Garden	String type = <!!S>	07.06.2003
+123038	{Mystical Garden} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+Mystical Garden from afar?	String type = <!!Q>	07.06.2003
+123039	{Mystical Garden} 
+ 
+The sound of music brings you to a small garden, 
+where you are able to sneak up on a leprechaun who is happily dancing about in the clearing. You 
+capture him, and in exchange for his freedom he 
+guides you to a small pot filled with precious things.	String type = <!!Q>	07.06.2003
+123040	Warrior's Tomb 
+contains a %Z2	String type = <!!S>	07.06.2003
+123041	Warrior's Tomb is empty.	String type = <!!S>	07.06.2003
+123042	{Learning Stone} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+Learning Stone from afar?	String type = <!!Q>	07.06.2003
+123043	{Learning Stone} 
+ 
+A smooth stone on the face of this pillar begins to 
+swirl as you approach. Looking into it, you are 
+amazed to see answers to questions you have 
+pondered for years. The stone suddenly goes still, 
+but you realize you have learned much.	String type = <!!Q>	07.06.2003
+123044	%Z2 
+ 
+{(already known)}	String type = <!!S>	07.06.2003
+123045	(visited)	String type = <!!S>	07.06.2003
+123046	Pyramid 
+ 
+{%Z2}	String type = <!!S>	07.06.2003
+123047	%Z2 
+ 
+{Guarded by:} %Z3	String type = <!!S>	07.06.2003
+123048	Shipwreck Survivor 
+has a %Z2	String type = <!!Q>	07.06.2003
+123049	{Log} {of} {Wood}	String type = <!!S>	07.06.2003
+123050	{Logs} {of} {Wood}	String type = <!!S>	07.06.2003
+123051	{Pot} {of} {Mercury}	String type = <!!S>	07.06.2003
+123052	{Pots} {of} {Mercury}	String type = <!!S>	07.06.2003
+123053	{Ingot} {of} {Ore}	String type = <!!S>	07.06.2003
+123054	{Ingots} {of} {Ore}	String type = <!!S>	07.06.2003
+123055	{Sack} {of} {Sulfur}	String type = <!!S>	07.06.2003
+123056	{Sacks} {of} {Sulfur}	String type = <!!S>	07.06.2003
+123057	{Sparkling} {Crystal}	String type = <!!S>	07.06.2003
+123058	{Sparkling} {Crystals}	String type = <!!S>	07.06.2003
+123059	{Glittering} {Gem}	String type = <!!S>	07.06.2003
+123060	{Glittering} {Gems}	String type = <!!S>	07.06.2003
+123061	{Gold} {Coin}	String type = <!!S>	07.06.2003
+123062	{Gold} {Coins}	String type = <!!S>	07.06.2003
+123063	{Bar} {of} {Mithril}	String type = <!!S>	07.06.2003
+123064	{Bars} {of} {Mithril}	String type = <!!S>	07.06.2003
+123065	Nothing of value	String type = <!!S>	07.06.2003
+123066	5 Logs of Wood	String type = <!!S>	07.06.2003
+123067	{5 Logs of Wood} 
+{& 200 Gold Coins}	String type = <!!S>	07.06.2003
+123068	{10 Logs of Wood} 
+{& 500 Gold Coins}	String type = <!!S>	07.06.2003
+123069	Flotsam 
+ 
+{%Z2}	String type = <!!S>	07.06.2003
+123070	Sea Chest 
+ 
+	String type = <!!S>	07.06.2003
+123071	%Z1{Empty}	String type = <!!Q>	07.06.2003
+123072	%Z1{1500 Gold Coins}	String type = <!!Q>	07.06.2003
+123073	%Z1{1000 Gold Coins} 
+{and a %Z2}	String type = <!!Q>	07.06.2003
+123074	University 
+ 
+For 2000 gold per skill, will teach:	String type = <!!S>	07.06.2003
+123075	Advanced	String type = <!!S>	07.06.2003
+123076	Expert	String type = <!!S>	07.06.2003
+123077	bar	String type = <!!S>	07.06.2003
+123078	bars	String type = <!!S>	07.06.2003
+123079	%Z5's %Z1 Sorcery skill increases the pile 
+by %Z2.
+
+({Right-click System Options
+{to disable further messages})	String type = <!!Q>	07.06.2003
+123080	%Z5's %Z1 Sorcery skill increases the pile of Mithril by %Y3 %Z-1 to a total of %Y1 bars of Mithril. 
+ 
+{You now have %Y8 sparkling bars of Mithril.} 
+ 
+(To check your total Mithril at any time, right-click on the Kingdom Overview button.)	String type = <!!Q>	07.06.2003
+123081	Advanced	String type = <!!S>	07.06.2003
+123082	Expert	String type = <!!S>	07.06.2003
+123083	{Chest} 
+ 
+After scouring the area, you fall 
+upon a hidden treasure cache. 
+Your %Z1 Sorcery skill enhances 
+the gold by %Y4 coins. You may take the 
+gold or distribute it to the peasants for 
+experience. Which do you choose?	String type = <!!Q>	07.06.2003
+123084	Upgraded 	String type = <!!S>	07.06.2003
+123085	%Z3Water Wheel 
+ 
+{%Y3} {gold} {coins}	String type = <!!S>	07.06.2003
+123086	Upgraded 	String type = <!!S>	07.06.2003
+123087	{%Z3Water Wheel} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+%Z3Water Wheel from afar?	String type = <!!Q>	07.06.2003
+123088	{%Z3Water Wheel} 
+ 
+The keeper of the mill announces: 
+"Milord, I have been working very 
+hard to provide you with this gold, 
+come back next week for more."	String type = <!!Q>	07.06.2003
+123089	{Star Axis} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+Star Axis from afar?	String type = <!!Q>	07.06.2003
+123090	{Star Axis} 
+ 
+You've found several of the best astrologers of the 
+land gathered at a Star Axis. Happy to have some 
+company, they teach you how to use the Sun, Moon, 
+and Stars to enhance your spell casting ability.	String type = <!!Q>	07.06.2003
+123091	{Garden of Revelation} 
+ 
+Do you use your powers of 
+Expert Sorcery to visit the 
+Garden of Revelation from afar?	String type = <!!Q>	07.06.2003
+123092	{Garden of Revelation} 
+ 
+A monk sitting in the center of a 
+garden invites you to meditate with him. You do, and after a short time 
+you feel enlightened.	String type = <!!Q>	07.06.2003
+123093	Artifact	String type = <!!S>	07.06.2003
+123094	Spell Book	String type = <!!S>	07.06.2003
+123095	Holy Grail	String type = <!!S>	07.06.2003
+123096	War Machine	String type = <!!S>	07.06.2003
+123097	Treasure Artifact	String type = <!!S>	07.06.2003
+123098	Minor Artifact	String type = <!!S>	07.06.2003
+123099	Major Artifact	String type = <!!S>	07.06.2003
+123100	Relic	String type = <!!S>	07.06.2003
+123101	Commander Artifact	String type = <!!S>	07.06.2003
+123102	Treasure Chest 
+ 
+{TRAPPED!}	String type = <!!Q>	07.06.2003
+123103	Treasure Chest 
+ 
+{Not Trapped}	String type = <!!Q>	07.06.2003
+123104	Living 		

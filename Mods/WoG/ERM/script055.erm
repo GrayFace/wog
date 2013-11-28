@@ -1,0 +1,290 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** ENHANCED WAR MACHINES  -  ERM script 55
+
+** By Arstahd
+** Version: 1.12   updated November 3, 2004
+** Special thanks to Fnord for help with bug fixing and script maintenance
+
+** rebalances and improves war machines
+
+** ballista base damage doubled
+** first aid tent now resurrects [(1-25) x (first aid skill +1) + defense skill] worth of troops after normal healing
+** no more than 1 extra Ballista/First Aid tent can appear on battlefield (from commanders, etc...)
+** ammo cart gives +10 movement points per step
+** all war machines cost 1000 gold
+** first aid tent has 150 health
+** ammo cart has 150 health
+** heroes with Ballistics skill can use them during normal combat, siege combat use is unchanged
+**   number of catapults equals Ballistics skill level
+**   catapults can now target creatures
+**   catapults deal 5 - (10 + Att + Def) damage
+**   catapults can inflict a "critical hit" which slays one unit (chance = 5% per catapult + hero level - capped at 50%)
+**     "critical hit"  chance is halved when targeting a commander
+**   catapults have 250 health
+**   catapults have no range penalty
+**   catapults ignore 50% of enemy defense
+
+
+
+** Variables used:
+** V variables:    v7180 v7220-v7236
+** Z variables:    z790-z791
+** Y Variables:    y1-y10
+** Functions used: 7120-7126
+** Flags Used:     79  74(from S-50)
+
+
+!#UN:P55/?v7180;                                 [check if Enhanced Warmachines is enabled in WoGify Options]
+
+*#VRv7180:S1;             [enable for stand-alone use]
+
+!#MA&v7180=1:M146/4;      Ballista Dam Low 4
+!#MA&v7180=1:E146/6;      Ballista Dam High 6
+!#MA&v7180=1:C146/6/1000; Ballista Cost 1000
+!#MA&v7180=1:P147/150;    First Aid Tent HP 150
+!#MA&v7180=1:C147/6/1000; First Aid Tent Cost 1000
+!#MA&v7180=1:P148/150;    Ammo Cart HP 150
+!#MA&v7180=1:C148/6/1000; Ammo Cart Cost 1000
+
+!#VRz790&v7180=1:Sz155000;
+!#VRz791&v7180=1:Sz155001;
+!#UN&v7180=1:G1/124/0/790; [NU2 single]
+!#UN&v7180=1:G1/124/1/791; [NU2 plural]
+!#MA&v7180=1:X124/132201;  set NU2 flags {catapult flags (132197) + shooter (4)}
+!#MA&v7180=1:M124/650;     NU2 Fight Value 650
+!#MA&v7180=1:A124/10;      NU2 Attack 10
+!#MA&v7180=1:D124/10;      NU2 Defense 10
+!#MA&v7180=1:P124/250;     NU2 HP 250
+!#MA&v7180=1:N124/24;      NU2 Shots 24
+
+!#EA124&v7183=1:F105/?y-5;                                         [NU2 (catapult) - get bonus line index]
+!#EA124&v7183=1:By-5/1/105/61/1/1/1/1/1/1/1/1/1/1/1;               [set no range penalty]
+!#EA124&v7183=1:F98/?y-5;                                          [NU2 (catapult) - get bonus line index]
+!#EA124&v7183=1:By-5/1/98/61/50/50/50/50/50/50/50/50/50/50/50;     [set ignore defense to 50%]
+
+!#VRz645&v7180=1:Sz155002;
+!#UN&v7180=1:G1/145/2/645;      [catapult]
+*#VRz646&v7180=1:S^^;
+*#UN&v7180=1:G1/146/2/646;      [ballista]
+!#VRz647&v7180=1:Sz155003;
+!#UN&v7180=1:G1/147/2/647;      [first aid tent]
+!#VRz648&v7180=1:Sz155004;
+!#UN&v7180=1:G1/148/2/648;      [ammo cart]
+
+** start of movement trigger
+!?HM-1&v7180=1;                               [continue if  enabled]
+
+!!HE-1:N?y-1;                                 [get # of hero]
+!!HEy-1:P?y-2/?y-3/?y-4;                      [get hero's position]
+!!TRy-2/y-3/y-4:T?y-5/d/d/d/d/d/d/d;          [get terrain type]
+!!HEy-1&y-5<>8:A2/5/?y-9/?y-6;                [if on land check if hero has ammo cart]
+!!HEy-1&y-5<>8/y-6>0:Wd10;                    [if on land add 10 movement if hero has ammo cart]
+** end of movement trigger
+
+
+** start of battlefield trigger **
+!?BF&v7180=1;                                 [continue if enabled]
+
+!!UN:P900/?y-4;                          [check if creature experience is enabled]
+!!IF&y-4=0:V74/1;                        [set flag 74 to true if not enabled]
+!!UN&y-4=0:P900/1;                       [enable creature experience if not enabled]
+
+!!FU7123:P;                                   [do battlefield setup function]
+** end of battlefield trigger
+
+
+** pre-action trigger
+!?BG&v7180=1;                                 [continue if enabled]
+!!FU7120:P;                                   [do pre-action function]
+** end of pre-action trigger **
+
+** start of pre-damage trigger
+!?MF1&v7180=1;
+!!BMv7227&v7236=0/v7226=124/v7225=7:N?y-10 T?y-13;                       [if catapult (NU2) is shooting, get target quantity, type]
+!!BMv7224&v7236=0/v7226=124/v7225=7/y-10>0:I?y-11 N?y-12;                [if catapult (NU2) is shooting, get side, quantity]
+!!FU7125&v7236=0/v7226=124/v7225=7/y-10>0/y-11=0:Pv7232/y-12/y-10/y-13;  [do critical hit function - attacker]
+!!FU7125&v7236=0/v7226=124/v7225=7/y-10>0/y-11=1:Pv7233/y-12/y-10/y-13;  [do critical hit function - defender]
+** end of pre-damage trigger **
+
+
+** post-action trigger
+!?BG1&v7180=1;                                [continue if enabled]
+!!FU7124:P;                                   [do post-action function]
+
+** end of post-action trigger **
+
+** function for pre-action trigger **
+!?FU7120;
+
+!!VRv7224:C-1/-1/-1/-1/-1/-1;     [reset variables]
+
+!!BG:N?v7224 A?v7225 E?v7227;                      [get current stack #, action type, destination stack]
+!!BMv7224&v7224>0:T?v7226 I?y1;                    [get acting monster type, side]
+!!BMv7227&v7227>0:N?v7229;                         [get target quantity]
+
+** tent
+!!BU&y1=0:E153/?y4;                                [check for tent stack - attacker]
+!!BMy4&v7226=147/v7225=11/y1=0:N?y2;               [if First Aid Tent is healing get # of tents - attacker]
+!!VRy3&v7226=147/v7225=11/y1=0:Sv7220 +1;          [first aid skill level - attacker]
+!!VRy12&v7226=147/v7225=11/y1=0:Sv7234;            [set to defense - attacker]
+
+!!BU&y1=1:E168/?y4;                                [check for tent stack - defender]
+!!BMy4&v7226=147/v7225=11/y1=1:N?y2;               [if First Aid Tent is healing get # of tents - defender]
+!!VRy3&v7226=147/v7225=11/y1=1:Sv7220 +1;          [first aid skill level - defender]
+!!VRy12&v7226=147/v7225=11/y1=1:Sv7235;            [set to defense - defender]
+
+!!VRv7228&v7226=147/v7225=11:S1 T24 *y3 +y12 *y2;  [set healing: 1-25 x (first aid skill +1) +defense x # of tents]
+
+** catapult
+!!BMv7224&v7236=0/v7226=124/v7225=9:T145;          [if NU2 and attacking wall, set to catapult]
+**   end of function
+
+**   function to heal if less than or equal to damage
+!?FU7121;
+!!VRy1:Sx2 -v7228;                                 [if healing <= damage subtract healing from damage]
+!!BMv7227:Ly1 ;                                    [set health lost]
+!!VRz2:Sz155005;
+!!MM:Sz2;
+**   end of function
+
+**   function to heal if more than damage
+!?FU7122;      x1=health  x2=damage
+!!VRy6:Sv7228 -x2;                 [subtract damage from healing]
+!!BMv7227:L0;                      [remove damage]
+!!VRy7:Sy6 :x1 +1;                 [divide healing by health, add 1]
+!!VRy8:Sy6 %x1;                    [get remainder of division]
+!!VRy5:Sx1 -y8;                    [calculate missing health]
+!!BMv7227:Ndy7 Ly5;                [add units with health missing]
+!!BMv7227:N?y1 B?y2;               [get quantities (current/initial)]
+!!VRy2&v7229>y2:Sv7229;            [reset original size to pre-action size if needed]
+!!BMv7227&y1>y2:Ny2 L0;            [limit stack to original size]
+!!VRz2:Sz155006;
+!!MM:Sz2;
+**   end of function
+
+**   function to place warmachines on battlefield
+!?FU7123;
+
+!!VRv7230:C-1/-1;                    [reset variables]
+
+!!BA:S?v7236;                        [check for siege combat]
+!!BU:E2/?y15;                        [check for defending creature at position 2 to test for banks]
+
+!!BA:H0/?y1;                         [get attacking hero #]
+!!HEy1&y1>-1:E?y9/?v7232/1 S27/?v7220 S10/?y10 A2/6/?y9/?y6 A2/4/?y9/?y7 F?y11/?v7234/?y13/?y14;   [get levels: hero, first aid, ballistics, check for Tent, Ballista, get stats]
+
+!!BU:E153/?y4;                       [check for tent stack - attacker]
+!!BMy4&y1>-1/y4>0:N?y5;              [get quantity of tents - attacker]
+!!BMy4&y1>-1/y4>0/y5>1:N2 B2;        [set quantity of tents to 2 if more than 1 - attacker]
+!!BMy4&y1>-1/y4>0/y5>1/y6<1:N1 B1;   [set quantity of tents to 1 if more than 1 but hero has no tent - attacker]
+!!BMy4&y1>-1/y4>0/y5>1/y15>20:N1 B1; [set quantity of tents to 1 if in bank - attacker]
+
+!!BU:E51/?y4;                        [check for ballista stack - attacker]
+!!BMy4&y1>-1/y4>0:N?y5;              [get quantity of ballistas - attacker]
+!!BMy4&y1>-1/y4>0/y5>1:N2 B2;        [set quantity of ballistas to 2 if more than 1 - attacker]
+!!BMy4&y1>-1/y4>0/y5>1/y7<1:N1 B1;   [set quantity of ballistas to 1 if more than 1 but hero has no ballista - attacker]
+!!BMy4&y1>-1/y4>0/y5>1/y15>20:N1 B1; [set quantity of ballistas to 1 if in bank - attacker]
+
+
+
+!!BU&v7236=0/y1>-1/y10>0/y15<21:S145/y10/119/0/-1/0;              [add catapults  - attacker]
+!!BU&v7236=0/y1>-1/y10>0/y15<21:E119/?v7230;                      [get stack # ]
+
+!!BMv7230&v7236=0/y1>-1/v7230>-1/y10>0/y15<21:T124;               [set to NU2]
+!!VRy13&v7236=0/y1>-1/v7230>-1/y10>0/y15<21:Sy11 +v7234 +10;      [max damage = attack + defense +10]
+!!BMv7230&v7236=0/y1>-1/v7230>-1/y10>0/y15<21:U1/5;               [set min damage]
+!!BMv7230&v7236=0/y1>-1/v7230>-1/y10>0/y15<21:U2/y13;             [set max damage]
+!!BMv7230&v7236=0/y1>-1/v7230>-1/y10>0/y15<21:H250;               [set health to 250]
+
+
+
+
+!!BA:H1/?y1;                                       [get defending hero #]
+!!HEy1&y1>-1:E?y9/?v7233/1 S27/?v7221 S10/?y10 A2/6/?y9/?y6 A2/4/?y9/?y7 F?y11/?v7235/?y13/?y14;   [get levels: hero, first aid, ballistics, check for Tent, Ballista, get stats]
+
+!!BU:E168/?y4;                       [check for tent stack - defender]
+!!BMy4&y1>-1/y4>0:N?y5;              [get quantity of tents - defender]
+!!BMy4&y1>-1/y4>0/y5>1:N2 B2;        [set quantity of tents to 2 if more than 1 - defender]
+!!BMy4&y1>-1/y4>0/y5>1/y6<1:N1 B1;   [set quantity of tents to 1 if more than 1 but hero has no tent - defender]
+
+!!BU:E66/?y4;                        [check for ballista stack - defender]
+!!BMy4&y1>-1/y4>0:N?y5;              [get quantity of ballistas - defender]
+!!BMy4&y1>-1/y4>0/y5>1:N2 B2;        [set quantity of ballistas to 2 if more than 1 - defender]
+!!BMy4&y1>-1/y4>0/y5>1/y7<1:N1 B1;   [set quantity of ballistas to 1 if more than 1 but hero has no ballista - defender]
+
+
+!!BU&v7236=0/y1>-1/y10>0:S145/y10/135/1/-1/0;              [add catapults  - defender]
+!!BU&v7236=0/y1>-1/y10>0:E135/?v7231;                      [get stack # ]
+
+
+!!BMv7231&v7236=0/y1>-1/v7231>-1/y10>0:T124;               [set to NU2]
+!!VRy13&v7236=0/y1>-1/v7231>-1/y10>0:Sy11 +v7235 +10;      [max damage = attack + defense +10]
+!!BMv7231&v7236=0/y1>-1/v7231>-1/y10>0:U1/5;               [set min damage]
+!!BMv7231&v7236=0/y1>-1/v7231>-1/y10>0:U2/y13;             [set max damage]
+!!BMv7231&v7236=0/y1>-1/v7231>-1/y10>0:H250;               [set health to 250]
+
+** end of function
+
+
+
+**   function for post-action trigger
+!?FU7124;
+
+!!BMv7227&v7226=147/v7225=11:H?y1 L?y2 ;           [if Tent is healing, get target health, health lost]
+!!FU7121&v7226=147/v7225=11/v7228<=y2:Py1/y2;      [if healing <= damage do function]
+!!FU7122&v7226=147/v7225=11/v7228>y2:Py1/y2;       [if healing > damage do function]
+
+
+!!FU7126&v7236=0/v7230>-1:P1/120/103/121/136/137/119;  [check for adjacent enemies - attacker]
+!!BMv7230&v7236=0/79/v7230>-1:T145;                    [if catapult is adjacent to enemy, set to catapult]
+!!BMv7230&v7236=0/-79/v7230>-1:T124;                   [if catapult is not adjacent to enemy, set to NU2]
+!!FU7126&v7236=0/v7231>-1:P0/116/117/133/150/151/135;  [check for adjacent enemies - defender]
+!!BMv7231&v7236=0/79/v7231>-1:T145;                    [if catapult is adjacent to enemy, set to catapult]
+!!BMv7231&v7236=0/-79/v7231>-1:T124;                   [if catapult is not adjacent to enemy, set to NU2]
+
+!!BU:C?y12;                                         [check for end of battle]
+!!UN&y12=1/74:P900/0;                               [re-disable stack experience if needed]
+** end of function
+
+**   function to handle critical hit - catapult
+!?FU7125;                               x1= hero level  x2= # of catapults  x3= target quantity  x4= target type
+
+!!VRy1:S0 T99;                        [random roll - 1% chance per level]
+!!VRy2:S5 *x2 +x1;                    [chance = 5 per catapult + hero level]
+!!VRy2&y2>50:S50;                     [cap at 50%]
+!!VRy2&x4>173/x4<192::2;              [halve chance if targeting commander]
+!!VRy3&y2>y1:Sx3 -1;                  [reduce target quantity by 1]
+!!BMv7227&y2>y1:V82 Ny3;              [show animation, set target quantity]
+!!VRz2&y2>y1:Sz155007;
+!!MM&y2>y1:Sz2;
+
+
+** end of function
+
+**   function to check fo adjacent enemies - catapult
+!?FU7126;                               x1= enemy side  x2= pos 1  x3= pos 2  x4= pos 3  x5= pos 4  x6= pos 5 x7= catapult pos
+
+!!IF:V79/0;                     [reset flag 79 to false]
+!!BU:Ex7/?y3;                   [check if catapult is alive]
+!!IF&y3=-1:V79/1;               [if dead set flag 79 to true]
+!!FU&y3=-1:E;                   [exit if dead]
+!!BU:Ex2/?y3;                   [check if living monster at position 1]
+!!BMy3&y3>-1:I?y1;              [get side of monster stack]
+!!IF&y3>-1/x1=y1:V79/1;         [if enemy set flag 79 to true]
+!!BU:Ex3/?y3;                   [check if living monster at position 2]
+!!BMy3&y3>-1:I?y1;              [get side of monster stack]
+!!IF&y3>-1/x1=y1:V79/1;         [if enemy set flag 79 to true]
+!!BU:Ex4/?y3;                   [check if living monster at position 3]
+!!BMy3&y3>-1:I?y1;              [get side of monster stack]
+!!IF&y3>-1/x1=y1:V79/1;         [if enemy set flag 79 to true]
+!!BU:Ex5/?y3;                   [check if living monster at position 4]
+!!BMy3&y3>-1:I?y1;              [get side of monster stack]
+!!IF&y3>-1/x1=y1:V79/1;         [if enemy set flag 79 to true]
+!!BU:Ex6/?y3;                   [check if living monster at position 5]
+!!BMy3&y3>-1:I?y1;              [get side of monster stack]
+!!IF&y3>-1/x1=y1:V79/1;         [if enemy set flag 79 to true]
+** end of function
+

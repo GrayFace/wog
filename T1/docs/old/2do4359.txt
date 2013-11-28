@@ -1,0 +1,81 @@
+*1. Переделать часть default для !!OB приемника, чтобы он не создавал объекты при синтаксисе с проверкой.
+*************
+  I checked the old enough Perfecto's report that right mouse click on
+a map start giving you "Cannot add more objects." later in the game.
+  Here is a reason why it happens.
+  The next !!OB command: H,M,D,E,S,R add another object in the ERM
+internal structures anyway EVEN if you use a check syntax
+(!!OB...:H?v10;). So later in the game, the internal table is
+overflowed and a player gets the message. This is how it works now.
+  I will fix the problem with checking syntax in 3.59 or earlier (if
+we make a new executable for the patch), but now I think that it is
+quite important to check all scripts that uses mentioned !!OB command
+to make sure that they are not used with checking syntax too often.
+  If you have something to say here, I am listening :-)
+*************
+
+2. Поменять алгоритм работы защиты карт
+*************
+Доброго времени суток.
+Подробнее по поводу защиты карт.
+Файл SD.exe -73728 байт от 20.07.01 ver.1.0
+Create by A_K_ZyZop.
+Запускаем на файл h3m. Получаем защищенный файл.
+Переименовываем в *.gz и запускаем gzip -d FName.gz
+Полученный файл FName открываем в Hex редакторе. Пропускаем 200 с лишним байт какой-то свёртки (я не смотрел ни в SD
+, ни в MAPED, ни в H3WOG, что за свёртка) . Находим
+начало (формат его известен - тип, имя, описание).
+Подменяем тип на 0x33 или 0x0E (другие мне не попадались) и удаляем мусор.
+Далее gzip -n9 -S.h3m FName
+Вот и всё.
+Мои рассуждения по поводу возможной защиты карт.
+Можно изменить загрузчик в H3WOG c поддержкой обратной процедуры в defendere. Это, возможно,
+сильно снизит доступ очумелых ручек к чужим картам.
+Со своей стороны, если это задевает вашу команду,
+готов принять на себя добровольное обязательство не
+распространять описание вышеизложенного метода.
+Сообщите об этом дополнительно в ПМ.
+С пожеланием всяческих успехов и здоровья.
+Василий.
+*************
+
+*3. Фикс краха при переносе новых артов в кампании RoE
+Fix set
+0x4875F5: byte 83h
+*************
+
+*4. передавать опыт башен со стороны атакующего.
+*************
+  Also Tower Experience may work incorrect (different damage) if:
+- it is the first day of a week;
+- you attack another human player who's turn is after yours.
+  The problem appears because for you the enemy towers get experience
+bonus of a new week but for your opponent they did not yet.
+  This may be fixed with hard coded changes only.
+*************
+
+*5. Добавить проверку на включение опыта башен в
+void SetTowerBunus(_CastleSetup_ *Castle,Byte *MonStr)
+
+6. Пофиксить десинхронизацию Ьастер Гремлинов с Land Mine кастом.
+
+*7. Не возвращает уровень когда можно было бы, а всегда просто опыт
+TP> Here's an example:
+TP> !!HE-1:C0/0/d/d/?y1/12;
+TP> I believe y1 returns stack 0's experience and not the rank,
+
+*8. Пофиксить синтакс в строке 6740 и 6742 (ERM.CPP)
+  If you use in the third parameter in HE:C0 any variable index -1 or
+-2 (in your case y-1 or y-2) it is interpreted as -1 and -2 (some old
+code left) and so works as an upgrade/downgrade syntax.
+  So until it is fixed in the next EXE, you may not use a negative
+indexes of variables in HE:C0 command at a third place.
+  Example:
+!!HE-1:C0/0/?y-1/?y-4; incorrect (assumed C0/0/-1...)
+!!HE-1:C0/0/?y-2/?y-4; incorrect (assumed C0/0/-2...)
+!!HE-1:C0/0/?y-3/?y-4; correct
+!!HE-1:C0/0/?y-4/?y-1; correct
+!!HE-1:C0/0/?y-4/?y-2; correct
+!!HE-1:C0/0/?y-4/?y-3; correct
+
+*9. В дилоге выбрать арт на положить проверять, что число элементов не больше 64.

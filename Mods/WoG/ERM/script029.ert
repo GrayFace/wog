@@ -1,0 +1,15 @@
+129000	You find a chest overflowing with gold! You can keep the gold, or give it to your troops to improve them.	String type = <!!Q>	08.06.2003
+129001	mercury	String type = <!!S>	08.06.2003
+129002	sulfur	String type = <!!S>	08.06.2003
+129003	crystal	String type = <!!S>	08.06.2003
+129004	gems	String type = <!!S>	08.06.2003
+129005	You find a chest overflowing with %Z326! You can keep the %Z326, or spend it on lessons.	String type = <!!Q>	08.06.2003
+129006	Your troops breathed some gas, and feel ill. Hopefully it will wear off soon.	String type = <!!S>	08.06.2003
+129007	Your troops breathed some gas, and feel poisoned. Hopefully it will wear off soon.	String type = <!!S>	08.06.2003
+129008	Your troops breathed some gas, and feel weak. Hopefully it will wear off soon.	String type = <!!S>	08.06.2003
+129009	Your troops breathed some gas, and feel lethargic. Hopefully it will wear off soon.	String type = <!!S>	08.06.2003
+129010	Fortunately, you suspected something was up, and avoid harm.	String type = <!!S>	08.06.2003
+129011	Luckily, you and your troops are unharmed.	String type = <!!S>	08.06.2003
+129012	When you open the chest, gas pours out - it's trapped! %Z326 
+ 
+After the gas clears, you look in the chest, and find two artifacts!	String type = <!!Q>	08.06.2003

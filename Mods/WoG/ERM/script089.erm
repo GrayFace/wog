@@ -1,0 +1,196 @@
+ZVSE
+ERMS_ScriptDate=16.6(June).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+
+**  Enhanced Necromancy
+**  option 89 by Arstahd - script89
+**  version 1.01
+**  Last updated  16.6(June).2006 (change to Option 89)
+**  Prev. updated 21.12(December).2004
+**  Replaces functionality of Necromancy skill for human players (AI remains unchanged).
+
+**  Heroes with Necromancy skill can raise slain living creatures (from either side) as Skeletons, Walking Dead or Wights.
+**    Click on skill icon to select creture type (defaults to skeletons).  Each has it's own cost to raise.
+**    Skeleton         :  2 points
+**    Skeleton Warrior :  3 points
+**    Walking Dead     :  4 points
+**    Zombie           :  6 points
+**    Wight            :  8 points
+**    Wraith           : 12 points
+
+**  Necromancy Points are calculated to the following formula:
+**    (Spell Power x Skill level) + 5
+**    +10 per Necro Amplifier
+**    + Artifact Bonuses (5/10/15)
+**  Necromancy specialist heroes have a +1 bonus to thier Necromancy skill level when calculating Necro Points.
+**  Cloak of the Undead King grants a +60 point bonus and raises 30% of slain enemy as skeletons.
+
+**  If any dragons were slain, and the hero has 75 or more Necro Points, you can choose to spend those 75 points to raise a single Bone Dragon.
+**    Any remaining points will be used to raise the standard troops.
+
+**  No more than 50% of fallen troops may be raised.
+
+
+
+** V vars used:   v7140-v7144, v7201
+** W vars used:   w19
+** Functions used:  7116-7119
+
+
+***********************************************************************************************************************
+!#UN:P89/?v7201; // check, if script is active
+
+
+** start of hero screen mouse trigger **
+!?CM2&v7201=1;                                      [continue if enabled]
+
+!!CM:I?y-3 F?y-4 S?y-5;                             [get mouse click, flag, subtype]
+!!FU|y-3<79/y-3>86/y-4<>0/y-5<>12:E;                [continue if skill icon (79-86) was left clicked only, else exit]
+!!FU2345&y-3>78/y-3<87:Py-3/-1/?y-13/?y-14/?y-15;   [use Tobyn's library function to get skill of clicked icon]
+!!CM&y-3>78/y-3<87/y-13=12:R0;                      [if Necromancy, disable standard skill click reaction]
+!!FU7119&y-3>78/y-3<87/y-13=12:P;                   [if Necromancy, show creture selection dialog]
+
+** end of hero screen mouse trigger **
+
+
+** start of battle-start trigger
+!?BA52&v7201=1;  [Continue trigger if enabled]
+
+!!BA:H0/?y-1;                                       [get attacking hero's #]
+!!HEy-1&y-1>=0:S12/?v7140 O?y-3;                    [get attackers necromancy level, owner]
+!!OW&y-3>-1:Iy-3/?y-4;                              [check if AI]
+!!HEy-1&y-1>=0/v7140>0/y-4=0:S12/-4;                [set to -4 (to disable) if human]
+!!BA:H1/?y-2;                                       [get defending hero's #]
+!!HEy-2&y-2>=0:S12/?v7141 O?y-3;                    [get defenders necromancy level, owner]
+!!OW&y-3>-1:Iy-3/?y-4;                              [check if AI]
+!!HEy-2&y-2>=0/v7141>0/y-4=0:S12/-4;                [set to -4 (to disable) if human]
+
+** end of battle-start trigger
+
+
+** start of post-action trigger
+!?BG1&v7201=1;                                      [Continue trigger if enabled]
+** reset skill levels
+!!BU:C?y-9;                                         [check for end of battle]
+!!VRv7142&y-9=1:S0;                                 [initialize]
+!!VRv7143&y-9=1:S0;                                 [initialize]
+!!DO7117/0/41/1&y-9=1:P;                            [do dead count]
+
+** end of post-action trigger
+
+
+** start of post-battle trigger
+!?BA53&v7201=1;                                     [Continue trigger if enabled]
+
+!!BA:H0/?y-1;                                       [get attacking hero's #]
+!!FU7116&y-1>=0/v7140>0:Py-1/v7140;                 [do necromancy function - attacker]
+!!BA:H1/?y-2;                                       [get defending hero's #]
+!!FU7116&y-2>=0/v7141>0:Py-2/v7141;                 [do necromancy function - defender]
+** end of post-battle trigger
+
+
+
+** function for necromancy **    x1 hero  x2 skill level
+!?FU7116;
+
+!!HEx1:O?y-5;                                       [get owner]
+!!OW&y-5>-1:Iy-5/?y-1;                              [check if AI]
+!!FU&y-1=1:E;                                       [exit if hero is  AI controlled]
+!!HEx1:S12/x2 F?y-1/?y-2/?y-3/?y-4;                 [restore necromancy level, get primary skills]
+!!FU&y-5=-1:E;                                      [exit if hero is unowned (dead)]
+
+!!VRv7144:S0;                                       [initialize]
+!!HEx1:A2/54/?y-1/?y-6 A2/55/?y-1/?y-7 A2/56/?y-1/?y-8 A2/130/?y-1/?y-9; [see if hero has Amulet of the Undertaker, Vampires Cowl, Dead Man's Boots, Cloak of the Undead King]
+!!VRv7144&y-6>0:+5;                                 [add 5 for Amulet of the Undertaker]
+!!VRv7144&y-7>0:+10;                                [add 10 for Vampires Cowl]
+!!VRv7144&y-8>0:+15;                                [add 15 for Dead Man's Boots]
+!!VRv7144&y-9>0:+60;                                [add 60 for Cloak of the Undead King]
+!!UN:U98/-1/?y-2;                                   [count number of towns]
+!!VRy-2:-1;                                         [reduce by 1]
+!!DO7118/0/y-2/1&y-2>0:Py-5;                        [add necro amp bonus]
+
+!!VRy-11&y-3>0:Sy-3 *x2 +5 +v7144;                  [calculate raise points]
+!!HEx1&y-3>0:X?y-12/?y-13/?y-1/?y-1/?y-1/?y-1/?y-1; [check for necromancy hero specialty]
+!!VRy-11&y-3>0/y-12=0/y-13=12:+y-3;                 [if yes, add an additional 1x spell power]]
+
+*!VRv7143:S1;
+!!HEx1:B0/?z1;
+!!VRz2&v7143>0/y-11>74:S^%Z1's has the means to animate the remains of one of the fallen dragons. Do you wish to do so?^;
+!!IF&1000/v7143>0/y-11>74:Q2/21/68/2/z2;
+!!HEx1&1000/2/v7143>0/y-11>74:C2/68/1/1;            [if yes give bone dragon]
+!!VRy-11&2/v7143>0/y-11>74:-75;                     [adjust raise points by -75]
+
+!!IF:Wx1;                                           [enable hero variables]
+!!FU&w19=999:E;                                     [exit if raise creature set to NONE]
+!!VRy-10&w19=0:S2;                                  [skeleton]
+!!VRy-10&w19=1:S3;                                  [skeleton warrior]
+!!VRy-10&w19=2:S4;                                  [walking dead]
+!!VRy-10&w19=3:S6;                                  [zombie]
+!!VRy-10&w19=4:S8;                                  [wight]
+!!VRy-10&w19=5:S12;                                 [wraith]
+!!VRy-11&y-3>0::y-10;                               [calculate raised units]
+!!VRy-12&y-3>0:Sv7142 +1 :2;                        [halve total units killed, round up]
+!!VRy-11&y-11>y-12:Sy-12;                           [limit to 1/2 units killed]
+!!VRz2&y-11>0:S^Practicing the foul arts of necromancy, %Z1 is able to raise {%Y-11} of the fallen as undead.^;
+!!VRy-12&y-11>0:S56 +w19;                           [set creature type]
+!!IF&1000/y-11>0:Q2/21/y-12/1/z2;                   [display message]
+!!HEx1&1000/y-11>0:C2/y-12/y-11/1;                  [give creatures]
+!!UN&y-11>0:R1;                                     [redraw screen]
+
+** end of function **
+
+
+** function for dead count **
+!?FU7117;
+!!VRy-5:S-1;                                        [initialize]
+!!BMx16:F?i F?j B?y-1 N?y-2 T?y-5;                  [get flags (twice), start quantity, current quantity, type]
+!!VRi:&16;                                          [just look at alive bit]
+!!VRj:&2147483648;                                  [just look at dragon bit]
+!!VRy-3&y-5>-1/i<>0/j=0:Sy-1 -y-2;                  [calculate quantity killed]
+!!VRv7142&y-5>-1/i<>0/j=0:+y-3;                     [add to dead count]
+!!VRy-4&y-5>-1/i<>0/j<>0:Sy-1 -y-2;                 [calculate quantity killed]
+!!VRv7143&y-5>-1/i<>0/j<>0:+y-4;                    [add to dead dragon count]
+
+*!IF:M^units killed = %V7142
+dragons killed = %V7143^;
+
+** end of function **
+
+** function for necro amplifiers **       x1=owner
+!?FU7118;
+
+!!CA0/x16:O?y-1 T?y-2 B3/21;                        [get owner, town type, check for necro amp]
+!!VRv7144&1/x1=y-1/y-2=4:+10;                       [add ten for each owned necro amp]
+*!IF&1/x1=y-1/y-2=4:M^+10 %V7144
+town %X16
+owner= %X1 / %Y-1   type= %Y-2^;
+
+** end of function **
+
+
+** function for choosing creature type **
+!?FU7119;
+!!VRz1:S^Choose the creature type to raise through Necromancy.^;
+!!VRz2:S^Skeleton                                                                                                         2^;
+!!VRz3:S^Skeleton Warrior                                                                                             3^;
+!!VRz4:S^Walking Dead                                                                                                4^;
+!!VRz5:S^Zombie                                                                                                           6^;
+!!VRz6:S^Wight                                                                                                             8^;
+!!VRz7:S^Wraith                                                                                                           12^;
+!!VRz8:S^NONE^;
+!!IF&1000:G1/1/0/1/2/3/4/5/6/7/8;                   [give choice to human]
+!!VRy2&v1=1:S0;                                     [set offset]
+!!VRy2&v1=2:S1;                                     [set offset]
+!!VRy2&v1=4:S2;                                     [set offset]
+!!VRy2&v1=8:S3;                                     [set offset]
+!!VRy2&v1=16:S4;                                    [set offset]
+!!VRy2&v1=32:S5;                                    [set offset]
+!!VRy2&v1=64:S999;                                  [set to 999]
+!!HE-1:N?y3;                                        [get hero number]
+!!IF&y3>-1:Wy3;                                     [enable hero variable]
+!!VRw19&y3>-1:Sy2;                                  [set creature type]
+
+** end of function **
+

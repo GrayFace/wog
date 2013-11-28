@@ -1,0 +1,332 @@
+ZVSE
+ERMS_ScriptName=script14
+ERMS_ScriptAuthor=Timothy E. Pulver (fnord); modified Thomas Franz (samot)
+ERMS_ScriptVersion=1.8.0
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Altar of Tranformation Script Version 1.8 created by Timothy E. Pulver
+**   Modified by Thomas Franz (alias samot)
+**   - rewritten and optimized transfer routine, general optimizations (freed some variables etc.)
+**   - ghosts can't be transfered and can't be get by transfer
+**   - added: trolls, mummies and nomads to neutral creatures
+**   - it will cost up to 100 spell points to control the result of the transformation, each spell point
+**     lesser increase the chance to get another town instead of your selected by 1 %
+**   Requires WoG version 3.58 or later using ERM version 2.8 or later.
+**   WoGify Name: script14.erm
+**   Updated: October 14, 2004
+
+** This script makes all "Lightning Altars" on a map function as transformation
+** devices. When a hero climbs the altar, his or her army will be transformed
+** into different creatures, while maintaining approximately the same level of
+** power. This version differs from previous versions in that all creatures
+** after transformation will be of the same town type, which will either be
+** the hero's native town type, or if the hero already has all native creatures,
+** it will be a random town type instead.
+
+** All creatures are subject to transformation with the following exceptions:
+** powerful neutral dragons will not be affected *except* for the Faerie
+** Dragon, which may change into a WoG 8th level monster matching the
+** new chosen town type, and God's Representatives (Emissaries) won't
+** be affected either.
+
+** If the town type is the Necropolis, there's a 50% chance that any non-upgraded
+** level 3 creatures will become Mummies. Rampart has also a 50% chance to get Sylvan Centaurs
+** instead of Grand Elves.
+
+** Most creatures in the game have a chance of appearing from the
+** altar if the right level (plus upgraded or non-upgraded) troops are in the
+** hero's army. The exceptions are powerful neutral dragons (except for the
+** Faerie Dragon), God's Representatives and the four elemental
+** Messengers. Except the Messengers these creatures also will not be transformed.
+
+** Each Transformation Altar on the map can only be visited once per week.
+
+
+Flags Used in this Script: 1,209-211
+Variables Used in this Script: v1-v9, x16,z451-z453
+Functions Used in this Script: 18001-18005
+Function Variables Used in this Script: x1-x5,x16,y1-y5, y-1, y-2
+Timers Used in this Script: TM2 (script00)
+
+Variables that MUST be preserved outside this script: z451-z453
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v8/?v9;
+!#IF&v8<358:V1/1;
+!#IF&v9<280:V1/1;
+!#IF&1:M1/z114000;
+
+ [Check if script is enabled: v1]
+!#UN:P14/?v1;
+
+ [Set up right-click hint text for Altar objects]
+!#VRz451&v1=1:Sz114001;
+!#VRz452&v1=1:Sz114002;
+!#VRz453&v1=1:Sz114003;
+!#HT63/20&v1=1:P0/451;
+!#HT63/20&v1=1:P1/452;
+!#HT63/20&v1=1:P2/453;
+
+----------------------------------------------------------------------------------------
+
+!?TM2&$weekday$=$monday$/$once$=1; [Timer triggers on day 1 each week]
+
+!!UN:P14/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+
+ [Store number of Altars of Transformation on map in y-2]
+!!UN:U63/20/?y-2;
+
+ [Call function 18002 to reset all Altar text]
+!!VRv2:S-1; [Initialize v2 to -1 to work correctly with new faster UN:U syntax]
+!!DO18002/1/y-2/1:P;
+
+----------------------------------------------------------------------------------------
+
+
+ [Start of function to reset all Altar of Transformation right-click text]
+ [This function also sets PM commands to attract AI to Altar objects]
+ [This function also resets the Alter's control word to allow visiting]
+!?FU18002;
+
+ [Get coordinates of next Altar into v2/v3/v4]
+!!UN:U63/20/-1/2;
+
+ [Reset Altar text unless Altar hasn't yet been visited]
+ [The N number is also used to determine if the Altar may be visited]
+!!PO2:N?y1;
+!!PO2&y1>0:N2;
+
+ [Set Altar to attract AI]
+!!PM2:V1;
+
+----------------------------------------------------------------------------------------
+
+!?OB63/20;  [Triggers when any "Lightning Altar" is visited]
+** vars used
+** v1 - answer for radioboxes
+** y-19 : current number of spell points
+** y-20 - y25: invested spell points
+** y-1 : chance to get what you want
+** y-2 : selected town type
+** y-3 : random town type
+
+!!UN:P14/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+!!VRv1:S0;
+
+!!PO998:N?y-90;  // get current PO:N value to y-90;
+!!IF&y-90=1/1000:M1/z114005; // show message that already visited
+!!FU&y-90=1:E; // Exit function if altar has been visited yet
+
+!!IF:V209/0 V210/0 V211/0;  [Sets flags 209, 210 and 211 to false]
+
+ [Ask if hero wishes to visit the altar and how much of his mana he want to invest, return in v1]
+
+!!HE-1:I?y-19; // get number of spell points
+!!VRy-20:Sy-19; !!VRy-20&y-19>99:S100; // set y-20 to act. spell points but max. to 100
+!!VRy-21:Sy-20 *3 :4; !!VRy-22:Sy-20 *2 :3; !!VRy-23:Sy-20 :2; !!VRy-24:Sy-20 :3;
+!!VRy-25:Sy-20 *3 :4; !!VRy-26:Sy-20 :10;
+!!IF&1000:M1/z114004;
+!!IF&1000/y-20>99:G1/1/0/114013/114034/114035/114036/114037/114038/114039/114040/114021/114022;
+!!IF&1000/y-20<100:G1/1/0/114013/114014/114015/114016/114017/114018/114019/114020/114021/114022;
+!!FU&v1=256:E; // exit if No Transformation is selected
+
+!!VRy-1&v1=1:Sy-20; !!VRy-1&v1=1/y-20>99:S100; // 100 SP or max Mana
+!!VRy-1&v1=2:Sy-21; !!VRy-1&v1=4:Sy-22; !!VRy-1&v1=8:Sy-23; !!VRy-1&v1=16:Sy-24; !!VRy-1&v1=32:Sy-25;
+!!VRy-1&v1=64:Sy-26; !!VRy-1&v1=128:S0; // invested mana = chance
+
+!!VRy-98:Sy-19 -y-1; // get new mana (total - invested)
+!!HE-1&1000:Iy-98; // decrease mana of visiting hero if he is no AI
+
+!!VRy-1&-1000:S100; // AI has a 100 % chance to convert without mana costs
+
+
+ [Set Altar right-click text to show it has been visited this week]
+ [This value also determines if the Altar may be visited or not]
+!!PO998:N1;
+
+** ask for the town type you want
+!!IF&1000/y-1>0:G1/1/0/114033/114023/114024/114025/114026/114027/114028/114029/114030/114031/114032;
+!!VRy-2&v1=1:S0; !!VRy-2&v1=2:S1; !!VRy-2&v1=4:S2; !!VRy-2&v1=8:S3; !!VRy-2&v1=16:S4; !!VRy-2&v1=32:S5;
+!!VRy-2&v1=64:S6; !!VRy-2&v1=128:S7; !!VRy-2&v1=256:S8; !!VRy-2&v1=512:S9;
+
+!!HE-1&-1000:B2/?y-99; !!VRy-2&-1000:Sy-99 :2; // set town to hero's native town if AI visits
+
+ [If hero visits altar, display this message]
+!!VRz-1:Sz114006; // visting altar text
+!!VRz-5:Sz114012; // "Altar of transformation"
+!!VRz-2:S^..\data\p\s014_altar.jpg^;
+!!UN:J8/2/-2; [Check if file z-2 is present in Data\s folder: Flag 1=0 if file missing]
+!!IF:D7/-1/0/0/-2/0/0/0/-5/0/0/0/0/0/0/0; [Set up custom dialogue box]
+!!IF:F7/0/0/0/0/0; [Disable Cancel button]
+!!IF&1/1000:E1/7; [Display Custom Dialogue]
+!!IF&-1/1000:M1/z114006; // if picture not exists show usual message
+
+!!HE-1&1000:Pv998/v999/v1000; // make teleport sound
+
+!!VRy-3:S0 R9; !!VRy-3&y-3=y-2:S0 R9; // random town type (second dice if random town = selected town)
+
+!!DO18003/0/6/1:Py-2/y-1/y-3; // call transform-routine for each slot
+
+ [After transformation, display this message plus second message if appropriate]
+!!IF&1000:M1/z114007;
+!!IF&210:M1/z114011; // show no-ghost-transformation message
+!!IF&209/-211/1000:M1/z114008;
+!!IF&211/-209/1000:M1/z114009;
+!!IF&209/211/1000:M1/z114010;
+!!PM998:V0;  [Set Altar to tell AI it has been visited this week]
+
+----------------------------------------------------------------------------------------
+
+ [Start of function to convert each creature stack to new town type (x1)]
+!?FU18003;
+** x1  = desired town
+** x2  = chance to convert to target town
+** x3  = random town
+** x16 = current stack
+** y1  = old monster type
+** y2  = level
+** y3  = number of monsters
+
+ [Stores monster type found in hero's slot x16 in variable y1, number in y3]
+!!HE-1:C0/x16/?y1/?y3;
+!!FU&y1<0:E; // exit if slot is empty
+
+
+!!MA:Ly1/?y2; // Store creature's level in y2
+
+ [Set correct level for higher-level creatures]
+!!VRy2&y1>=150/y1<=158|y1=134:S7; [Level 8 WoG creatures and Faerie Dragons]
+!!VRy2|y1=132/y1=133/y1=135/y1=160/y1=161/y1=162/y1=163/y1=196:S99; [Neutral dragons & Emissaries]
+!!VRy2&y1=159:S99; // do not convert ghosts
+!!UN:P67/?y10; // check if neutral town is activated
+!!VRy2&y10=1/y1=135:S6; // if yes set monster Level for Rust dragon to L7
+
+ [If creature is level 8 or less, convert it with Function 18004]
+!!FU18004&y2<=7:Py1/y2/y3/x16/x1/x2/x3; // give old type / level / number / slot / new town type / chance to convert correct / random town
+
+ [If creature is powerful neutral dragon (except Faerie), set flag 209 to true]
+!!IF|y1=132/y1=133/y1=135/y1=196:V209/1;
+!!IF&y10=1/y1=135:V209/0; // not if neutral town activated and creature = rust dragon
+
+ [If creature is a God's Representative (level 12), set flag 211 to true]
+!!IF&y1>=160/y1<=163:V211/1;
+
+ [If creature is a ghost]
+!!IF&y1=159:V210/1; // ghosts must not be transfered
+
+
+----------------------------------------------------------------------------------------
+
+
+ [Start of function to convert level 7 or lower creatures]
+!?FU18004;
+** x1=old type
+** x2=level
+** x3=number
+** x4=slot number
+** x5=new town type (desired)
+** x6=chance for new town type
+** x7=random town
+** y3=upgraded (1) or not (0)
+** y4 = health of one old creature
+** y5 = type for new creature
+** y6 = health of one new creature
+** y7 = total health of old creatures
+** y8 = number of new creatures
+** y9 = real town (random or desired if it has a good chance)
+
+
+ [Check if creature is upgraded - store result in y3 - odd numbers are upgraded]
+ [A value of 1 means upgraded]
+!!VRy3:Sx1 %2;
+
+ [Fix upgrade exceptions (Neutrals plus Elementals) - store in y3]
+ [This is what the creature is counted as for purposes of]
+ [converting to another creature type of the same level]
+
+ [Switch to Non-Upgraded: Earth Elementals(113),Water Elementals(115),Diamond Golems(117)]
+ [Sharpshooters(137),Peasants(139),Mummies(141),Rogues(143),Ghosts(159)]
+ [Earth Messengers(165),Air Messengers(167),Lava Sharpshooters(171),Sorceress(193)]
+!!VRy3|x1=113/x1=115/x1=117/x1=137/x1=139/x1=141/x1=143/x1=159/x1=165/x1=167/x1=171/x1=193:S0;
+
+ [Switch to Upgraded: Halflings(138),Boars(140),Nightmares(172),Gorynyches(168)]
+ [Sylvan Centaurs(192),Werewolves(194),Enchanter(136)]
+!!VRy3|x1=138/x1=140/x1=172/x1=168/x1=192/x1=194/x1=136:S1;
+
+!!UN:P67/?y10; // check if neutral town is activated in Wog-Options; if yes:
+!!VRy3&y10=1/x1=138|x1=140/x1=194/x1=193/x1=195:S0;// Switch to Non-Upgraded: Halflings(138),Boars(140),Werewolves(194),Sorceress(193),Hell Steed(195)
+!!VRy3&y10=1/x1=167|x1=143/x1=135/x1=142/x1=144:S1; // Switch to Upgraded: Air Messengers(167),Rogues(143),Nomad(142),Troll(144),Rust Dragons(135)
+
+** get real new town
+!!VRy99:S0 R100; // random 0-100
+!!VRy9:Sx5; !!VRy9&y99>x6:Sx7; // set y9 to wanted new town type; set it to the random if odds are bad
+
+** get new type
+!!VRy3|y3<0/y3>1:S0; // correction for upgraded: may be only 0 or 1 (sometime - whyever - it isn't set correct)
+!!UN&y9<9/x2<7:Ty9/x2/y3/?y5; // get new monster type to y5 (town y9, Lvl x2, upgr. y3) (if no neutral creature and Level 1-7)
+!!VRy5&x2=7:Sy9 +150;  // L8-Units (town typ + 150)
+!!FU18005&y9=9:Px2/y3; // If town type is 9 (Neutral), calculate creature with function 18008; return in v1
+!!VRy5&y9=9:Sv1; // set new monster type to v1 (if neutral)
+
+
+!!VRy1:S0 R1; // random number
+!!VRy5&y5=60/y1=1:S141;  [For Necropolis, 50% chance of a Mummy instead of a Wight]
+!!VRy5&y5=19/y1=1:S192;  [For Rampart, 50% chance of a Sylvan Centaur instead of a Grand Elf]
+
+****** conversion by health again disabled by samot ************
+*!MA:Px1/?y4; // get Health of original monsters to y4
+*!MA:Py5/?y6; // get Health of new monsters to y6
+
+*!VRy7:Sy4 *x3; // calculate total health of original creature (health * number)
+*!VRy8:Sy7 :y6; // calculate number of new monsters (total org. health : new health)
+*!VRy9:Sy7 %y6; // calculate reminder of division
+*!VRy10:Sy6 :2; // half of new health
+*!VRy8&y9>y10:+1; // if reminder > half of new health add 1 (mathem. round at 0,5)
+
+!!HE-1:C0/x4/y5/d/0/3; // change creatures in slot x4 to type y5 number y8, don't change their experience
+
+
+----------------------------------------------------------------------------------------
+
+ [Start of function to calculate Neutral creatures, Return in v1]
+!?FU18005;
+** x1 = Level
+** x2 = upgr. (1) or non upgr (0)
+ [Calculate Neutral creature]
+!!VRy2:S1 R1;           [Random number 1..2: y2]
+!!VRy3:S1 R2;           [Random number 1..3: y3]
+!!VRv1&x1=0/x2=0:S138;       [Halfling]            - Level 1
+!!VRv1&x1=0/x2=1:S138;       [Halfling]            - Level 1 Upgraded
+!!VRv1&x1=1/x2=0:S143;       [Rogue]               - Level 2
+!!VRv1&x1=1/x2=1:S140;       [Boar]                - Level 2 Upgraded
+!!VRv1&x1=2/x2=0:S141;       [Mummy]               - Level 3
+!!VRv1&x1=2/x2=1/y2=1:S142;  [Nomad]               - Level 3 Upgraded
+!!VRv1&x1=2/x2=1/y2=2:S173;  [Santa Gremlin]       - Level 3 Upgraded
+!!VRv1&x1=3/x2=0:S137;       [Sharpshooter]        - Level 4
+!!VRv1&x1=3/y2=1/x2=1:S194;  [Werewolf]            - Level 4 Upgraded
+!!VRv1&x1=3/y2=2/x2=1:S144;  [Troll]               - Level 4 Upgraded
+!!VRv1&x1=4/y3=1/x2=0:S170;  [Arctic Sharpshooter] - Level 5
+!!VRv1&x1=4/y3=2/x2=0:S171;  [Lava Sharpshooter]   - Level 5
+!!VRv1&x1=4/y3=3/x2=0:S116;  [Gold Golems]         - Level 5
+!!VRv1&x1=4/x2=1:S169;       [War Zealot]          - Level 5 Upgraded
+!!VRv1&x1=5/y3=1/x2=0:S136; [Enchanter]            - Level 6
+!!VRv1&x1=5/y3=2/x2=0:S193; [Sorceress]            - Level 6
+!!VRv1&x1=5/y3=3/x2=0:S117; [Diamond Golems]       - Level 6
+!!VRv1&x1=5/y2=1/x2=1:S172; [Nightmare]            - Level 6 Upgraded
+!!VRv1&x1=5/y2=2/x2=1:S195; [Hell Steed]           - Level 6 Upgraded
+!!VRv1&x1=6/x2=0:S168;      [Gorynych]             - Level 7
+!!VRv1&x1=6/x2=1:S168;      [Gorynych]             - Level 7 Upgraded
+!!VRv1&x1=7:S134;           [Faerie Dragon]        - Level 8
+
+
+** End of Script **
+

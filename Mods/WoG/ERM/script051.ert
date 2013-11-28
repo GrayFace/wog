@@ -1,0 +1,59 @@
+#	Text resource for "script51.erm" document		
+151000	Ignore 50% Defense	<!!S>	01.08.2004
+151001	Fear	<!!S>	01.08.2004
+151002	Maximum Damage	<!!S>	01.08.2004
+151003	No Retaliation	<!!S>	01.08.2004
+151004	Shooting	<!!S>	01.08.2004
+151005	Endless Retaliation	<!!S>	01.08.2004
+151006	Radius Attack	<!!S>	01.08.2004
+151007	Magic Mirror	<!!S>	01.08.2004
+151008	Blocking	<!!S>	01.08.2004
+151009	Strike Twice	<!!S>	01.08.2004
+151010	Paralysis	<!!S>	01.08.2004
+151011	Regeneration	<!!S>	01.08.2004
+151012	Poison	<!!S>	01.08.2004
+151013	Charge Attack	<!!S>	01.08.2004
+151014	Flying	<!!S>	01.08.2004
+151015	The Opal has infused %Z1 with its energy.
+
+Gained {%Z2} ability	<!!M>	01.08.2004
+151016	The Opal has no effect upon %Z1.	<!!M>	01.08.2004
+151017	The Ruby has infused %Z1 with its energy.
+
++1 to {Damage} Skill level	<!!M>	01.08.2004
+151018	The Ruby has infused %Z1 with its energy.
+
++1 to {Attack} Skill level	<!!M>	01.08.2004
+151019	The Ruby has infused %Z1 with its energy.
+
++1 to {Damage} Skill level	<!!M>	01.08.2004
+151020	The Ruby has infused %Z1 with its energy.
+
++1 to {Attack} Skill level	<!!M>	01.08.2004
+151021	The Ruby has no effect upon %Z1.	<!!M>	01.08.2004
+151022	The Sapphire has infused %Z1 with its energy.
+
++1 to {Hit Points} Skill level	<!!M>	01.08.2004
+151023	The Sapphire has infused %Z1 with its energy.
+
++1 to {Defense} Skill level	<!!M>	01.08.2004
+151024	The Sapphire has infused %Z1 with its energy.
+
++1 to {Hit Points} Skill level	<!!M>	01.08.2004
+151025	The Sapphire has infused %Z1 with its energy.
+
++1 to {Defense} Skill level	<!!M>	01.08.2004
+151026	The Sapphire has no effect upon %Z1.	<!!M>	01.08.2004
+151027	The Emerald has infused %Z1 with its energy.
+
++1 to {Speed} Skill level	<!!M>	01.08.2004
+151028	The Emerald has infused %Z1 with its energy.
+
++1 to {Magic Power} Skill level	<!!M>	01.08.2004
+151029	The Emerald has infused %Z1 with its energy.
+
++1 to {Speed} Skill level	<!!M>	01.08.2004
+151030	The Emerald has infused %Z1 with its energy.
+
++1 to {Magic Power} Skill level	<!!M>	01.08.2004
+151031	The Emerald has no effect upon %Z1.	<!!M>	01.08.2004

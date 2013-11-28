@@ -1,0 +1,606 @@
+ZVSE
+
+ERMS_ScriptDate=13.10(October).2006
+
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+
+
+** Secondary Skills Boost ERM script v1.7 - Donald X. Vaccarino. Right-click hint text added by Timothy Pulver for v1.6.
+** Requires WOG version 3.58
+
+** Last Updated: October 13, 2006 by Timothy to replace "you" with the hero's name in Eagle Eye messages.
+** Updated Jan. 6. 2005 by Hermann the Weird
+**  Improves weak secondary skills.
+** Updated Feb. 5. 2005 by ZVS v 1.7
+**  Network MP support for Resistance I
+**  Network MP support for Tactics I
+** WoGify Name: script03.erm
+
+** eagle eye - gain a choice of spell when going up a level (1-2, 2-3, 3-4)
+** scouting - gain rogues every day (1, 3, 5)
+** resistance - lowers 1-3 defending enemy creature stacks to unupgraded form
+** learning - chance of extra primary skill point each level - 20%/35%/50%
+** tactics - gives +1/+2/+3 speed per skill level, disables normal tactics
+
+** eagle eye offers lower level spells instead of higher ones if you don't have enough wisdom
+** the speculum and spyglass increase the number of rogues gained with scouting
+** resistance's effect wears off if defenders aren't beaten
+
+** To use this code, put it into a Global Event, set to never happen.
+
+** Variables Used: v487-v489, v587-v589, v900-v916, v920-v934, v35, v36
+** Strings Used: z470-z472, z430-z431, z70-73
+** Flags Used: 2, 270-271
+** Hero variables: 43
+** v487-v489, v587-v589, v35, v36 and z430-z431 must not be modified elsewhere!
+
+** Flags 270-271 are shared with other scripts that use Fnord's network detection function.
+** The other variables may be used elsewhere but will be trashed by this code.
+** Use caution; this code may take place in the middle of another script, if a hero gains a level or a battle is provoked
+
+** Functions Used: 649-661
+** Timers Used: 74
+
+** ERM numbers: Eagle Eye: 103
+**              Scouting: 215
+**              Resistance: 216
+**              Learning: 217
+**              Tactics: 218
+
+
+!?FU652;     [Initialization function]
+
+** Hint text for spyglass/speculum
+!!UN:P215/?v1;     [Check if Scouting is enabled in WoGify Options]
+!!VRz430&v1=1:Sz103024;
+!!UN&v1=1:A52/10/430;
+!!VRz431&v1=1:Sz103025;
+!!UN&v1=1:A53/10/431;
+
+!#UN:P215/?v1;     [Check if Scouting is enabled in WoGify Options]
+!#TM74&v1=1:S1/999/1/255; [once/day for all players]
+!#FU652:P;     [Set strings for spyglass/speculum if active]
+
+** End of Initialization Code
+-------------------------------------------------------------------------
+
+
+*************************************************************************
+     Scouting
+*************************************************************************
+
+!?TM74;     [Timer routine for scouting]
+
+!!UN:P215/?y-1;     [Check if Scouting is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!OW:C?v907;     [get current player]
+!!DO650/0/155/1:P;     [iterate through all heroes]
+
+** End of timer routine
+
+
+!?FU650;     [Function to handle scouting for hero #x16]
+
+!!HEx16:O?v900;     [get hero's owner]
+
+!!VRv901:S0;     [assume no Rogues]
+!!HEx16&v900=v907:S3/?v901;     [get scouting level if hero owned by current player]
+!!VRv901&v901=3:S5;     [5 Rogues at expert]
+!!VRv901&v901=2:S3;     [3 Rogues at advanced (and 1 at basic)]
+!!HEx16:A2/52/0/?y1;     [check for Speculums]
+!!HEx16:A2/53/0/?y2;     [check for Spyglasses]
+!!VRv901&v901>0:+y1;     [plus a Rogue per Speculum, if hero has Scouting]
+!!VRv901&v901>0:+y2;     [plus a Rogue per Spyglass, if hero has Scouting]
+!!IF:Wx16;     [w vars refer to hero x16]
+!!OW:Iv900/?y-1;     [check for AI]
+!!HEx16&y-1=0/v901>0/w43=0:C2/143/v901/1;     [Give rogues to a free or rogue slot, else ask player]
+!!HEx16&y-1=1/v901>0:C2/143/v901/0;     [Same for AI]
+
+** End of function to handle scouting for hero #x16
+
+
+!?CM2;     [Right click trigger for rogue enabling/disabling]
+
+!!UN:P215/?y-1;     [Check if scouting enabled]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!IF:W-1;     [w vars refer to current hero]
+
+!!CM:I?y-1 S?y-5;     [Get click location and type]
+
+!!FU&y-5<>14:E;     [Exit if no r-click]
+!!FU|y-1<87/y-1>102:E;     [Exit if not on skill Names or skill Levels]
+
+!!VRy-1|y-1=87/y-1=95:S1;     [Translate r-click location to skill number]
+!!VRy-1|y-1=88/y-1=96:S2;
+!!VRy-1|y-1=89/y-1=97:S3;
+!!VRy-1|y-1=90/y-1=98:S4;
+!!VRy-1|y-1=91/y-1=99:S5;
+!!VRy-1|y-1=92/y-1=100:S6;
+!!VRy-1|y-1=93/y-1=101:S7;
+!!VRy-1|y-1=94/y-1=102:S8;
+
+!!HE-1:Sy-1/?y-2/1;     [Ask what skill occupies this slot]
+!!FU&y-2<>3:E;     [Exit if it isn't scouting]
+!!CM:R0;     [Disable standard r-click info]
+!!HE-1:S3/?y-3;     [Check for scouting level]
+
+!!VRz-1:Sz103035+^.^;     [Set strings]
+!!VRz-1&w43=1:Sz103036+^.^;
+!!VRz-2:Sz103036;
+!!VRz-2&w43=1:Sz103035;
+
+** Ask for enabling/disabling rogues
+
+** Basic scouting
+!!IF&y-3=1:Q2/20/12/2/z103037;
+
+** Advanced scouting
+!!IF&y-3=2:Q2/20/13/2/z103038;
+
+** Expert scouting
+!!IF&y-3=3:Q2/20/14/2/z103039;
+
+!!FU&-2:E;     [Exit if "no" answered]
+
+!!VRy-4:Sw43;
+!!VRw43&y-4=1:S0;     [set w var for enabling/disabling daily rogues, 0=enabled (default)]
+!!VRw43&y-4=0:S1;
+
+** End of right click trigger for rogue enabling/disabling
+-------------------------------------------------------------------------
+
+
+*************************************************************************
+     Eagle Eye
+*************************************************************************
+
+!?HL-1;     [Start of level-up trigger for EE]
+
+!!UN:P103/?y-1;     [Check if Eagle Eye is enabled in WoGify Options]
+!!FU&y-1=0:E;     [Exit if it isn't]
+
+!!HE-1:S11/?v901;     [get eagle eye level]
+!!FU&v901=0:E;     [Exit if no eagle eye]
+
+!!HE-1:A2/0/?y-2/?y-3;     [see if hero has a spell book]
+!!HE-1:B0/?z70;            [Get hero name: z70]
+!!HE-1:R2/?y-1;            [Get hero's sex: y-1]
+!!VRz-3&y-1=0:Sz103040;    [If hero is male, set z-3 to "he"]
+!!VRz-3&y-1=1:Sz103042;    [If hero is female, set z-3 to "she"]
+!!IF&y-3=0:M1/z103026;     [Message if no spell book]
+!!FU&y-3=0:E;     [exit if no spell book]
+
+!!VRv903:S0;     [reset]
+!!VRv904:S0;
+
+!!HE-1:O?v908;     [get owner of this hero]
+!!OW&v908<>-1:Iv908/?v909;     [get AI (1) or human (0)]
+!!VRv910:S0;     [assume AI]
+!!VRv910&v908<>-1/v909=0:S1;     [human if has owner and that owner is human]
+
+** prepare strings for male/female
+!!VRz71&y-1=0:Sz103040; [he: z71]
+!!VRz72&y-1=0:Sz103041; [He: z72]
+!!VRz71&y-1=1:Sz103042; [she: z71]
+!!VRz72&y-1=1:Sz103043; [She: z72]
+!!VRz73&y-1=0:Sz103044; [his: z73]
+!!VRz73&y-1=1:Sz103045; [her: z73]
+
+!!HE-1:S7/?y-4;     [get wisdom skill level]
+!!VRy-5:Sv901;     [assume right-hand spell will be skill level +1]
+!!VRy-5:+1;
+!!VRy-5&y-5=4/y-4<2:S3;     [bump it down to 3rd level if 4th level without advanced wisdom]
+!!VRy-5&y-5=3/y-4<1:S2;     [bump it down to 2nd level if 3rd level without basic wisdom]
+
+
+!!FU654&y-5=2:P1/903;     [get a 1st level spell into v903]
+!!FU654&y-5=3:P2/903;     [get a 2nd level spell into v903]
+!!FU654&y-5=4:P3/903;     [get a 3rd level spell into v903]
+
+!!FU654&y-5=2:P2/904;     [get a 2nd level spell into v904]
+!!FU654&y-5=3:P3/904;     [get a 3rd level spell into v904]
+!!FU654&y-5=4:P4/904;     [get a 4th level spell into v904]
+
+!!FU656&v903=999/v904=999/y-5=4:P;     [launch remove function if all spells known]
+!!FU&v903=999/v904=999/y-5=4:E;     [exit if all spells known]
+
+!!FU655&y-5=2:P1;     [Functions for passing spells and displaying messages]
+!!FU655&y-5=3:P2;
+!!FU655&y-5=4:P3;
+
+** End of level-up trigger for EE
+
+
+!?FU654;     [Function for launching spell loop]
+
+!!VRv1:S0;     [reset counter]
+!!DO657/2/2/1:Px1;     [launch loop - x1: spell level]
+
+!!VRvx2&v1>99:S999;     [hope there's no new spell after 200 loops, so mark it as "full" (999) - x2: v-var index]
+!!VRvx2&v1<99:Sy-99;     [if a spell's found in 200 loops, remember it in the correct v-var - x2: v-var index]
+
+** End of Function for launching spell loop
+
+
+!?FU655;     [Function for passing spells and displaying messages]
+
+** prepare strings
+!!VRz-1&x1=1:S^1st^;
+!!VRz-2&x1=1:S^2nd^;
+!!VRz-1&x1=2:S^2nd^;
+!!VRz-2&x1=2:S^3rd^;
+!!VRz-1&x1=3:S^3rd^;
+!!VRz-2&x1=3:S^4th^;
+
+** left and right available
+!!IF&v910=1/v903<>999/v904<>999:Q2/9/v903/9/v904/7/z103027;
+!!IF&v910<>1/v903<>999/v904<>999:V2/0;     [AI picks higher level spell and hopes for the best]
+!!HE-1&2/v903<>999/v904<>999:Mv903/1;     [learn left spell]
+!!HE-1&-2/v903<>999/v904<>999:Mv904/1;     [learn right spell]
+
+** only left available
+!!IF&v910=1/v903<>999/v904=999:Q2/9/v903/1/z103047;
+!!HE-1&v903<>999/v904=999:Mv903/1;     [learn spell]
+
+** only right available
+!!IF&v910=1/v903=999/v904<>999:Q2/9/v904/1/z103048;
+!!HE-1&v903=999/v904<>999:Mv904/1;     [learn spell]
+
+** none available
+!!IF&v910=1/v903=999/v904=999:Q2/20/36/1/z103049;
+
+** End of Function for passing spells and displaying messages
+
+
+!?FU656;     [function for removing EE]
+
+!!UN:P202/?y1;     [check for EE II]
+!!IF&v910=1/y1<>1:Q2/20/38/1/z103055;
+!!HE-1&y1<>1:S11/0;     [Remove eagle eye if EE II not active]
+
+** End of function for removing EE
+
+
+!?FU657;     [Spell loop]
+
+!!FU$spell$:Px1/x1/0/0/1/0;
+!!HE-1:M=y-99/1;
+!!VRx16&1:-1;
+!!VRv1:+1;
+!!VRx16&v1>100:+1;
+
+** End of Spell loop
+-------------------------------------------------------------------------
+
+
+*************************************************************************
+     Learning
+*************************************************************************
+
+!?HL-1;     [Level up trigger for learning]
+
+!!UN:P217/?y-1;     [Check if Learning is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!HE-1:S21/?v901; [get learning level]
+!!VRv902&v901>0:Sv901; [convert bonus to percentage - 20, 35, 50]
+!!VRv902&v901>0:*15;
+!!VRv902&v901>0:+5;
+!!VRv911&v901>0:S0 R99; [roll percentile dice...]
+!!FU649&v901>0/v911<v902:P; [handle learning bonus]
+
+** End of level up trigger for learning
+
+
+!?FU649;     [Function to give learning bonus to hero -1]
+
+!!VRv911:S0 R3;     [random primary skill]
+!!VRv903:S31 +v911;     [picture of skill]
+!!HE-1&v911=0:Fd1/d/d/d;     [give appropriate bonus]
+!!HE-1&v911=1:Fd/d1/d/d;
+!!HE-1&v911=2:Fd/d/d1/d;
+!!HE-1&v911=3:Fd/d/d/d1;
+!!HE-1:B0/?z470;     [get hero name]
+
+!!HE-1:O?v908;     [get owner of this hero]
+!!OW&v908<>-1:Iv908/?v909;     [get AI (1) or human (0)]
+!!VRv910:S0;     [assume AI]
+!!VRv910&v908<>-1/v909=0:S1;     [human if has owner and that owner is human]
+
+!!IF&v910=1:Q2/v903/1/1/z103034;
+
+** End of function to give learning bonus to hero -1
+-------------------------------------------------------------------------
+
+
+*************************************************************************
+     Resistance
+*************************************************************************
+
+!?BA0;     [Pre-battle trigger for resistance]
+!!UN:P216/?y-1;     [Check if Resistance is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+** Now network MP is supported
+!!FU661:P;     [set flag 270 to true if a human vs. human network battle or AI attacks a distant human]
+
+!!BA:H0/?v900;         [get # of attacking hero]
+!!HEv900:B0/?z470;     [get name of that hero]
+!!HEv900:R2/?v911;     [get sex of that hero]
+!!VRz471&v911=0:Sz103028; [Strings for hero sex]
+!!VRz471&v911=1:Sz103029;
+!!HEv900:O?v911;       [get A hero owner]
+!!OW:Iv911/?v912;      [get AI (1) or human (0)]
+!!IF:V5/0;
+!!IF&v912=0:V5/1;      [set flag 5 if attacker is human...]
+!!BA:H1/?v911;         [get # of defending hero]
+!!HEv911&v911>=0:B0/?z-1; [get name of that hero]
+!!VRz-1&v911>=0:+z103056;
+!!VRz-1&v911<0:Sz103057;
+!!HEv911&v911>=0:O?v912;  [get owner of defender if any]
+ !!VRy-99:Sv912;       [ZVS: get a player to send info to]
+!!OW&v911>=0:Iv912/?v913; [get AI/human of defender]
+!!IF&v911>=0/v913=0/-270:V5/1; [set flag 5 if (attacker) OR defender (not MP) is human]
+
+!!HEv900:S26/?v901; [get resistance skill level]
+!!VRv911:S7;
+!!FU658&v901>=1:P0/1/7; [call function once per skill level]
+!!VRv589:Sv911;     [remember slot changed if any]
+!!VRv911:S7;
+!!FU658&v901>=2:P0/1/7;
+!!VRv588:Sv911;     [remember slot changed if any]
+!!VRv911:S7;
+!!FU658&v901=3:P0/1/7;
+!!VRv587:Sv911;     [remember slot changed if any]
+!!BA&v589<7:M1/v589/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v588<7:M1/v588/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v587<7:M1/v587/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!VRz472:Sz103030;
+ !!IP&270:Dy-99; !!IP&270:V587/589; [ZVS: send info to defender]
+!!IF&5/v589<7/v588=7:Q2/21/v902/1^%Z472^;
+!!IF&5/v588<7/v587=7:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&5/v587<7:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+
+** Alexis Koz
+!!VRv911:S0;
+!!BA:H1/?v900;     [get # of defending hero]
+!!HEv900&v900>=0:B0/?z470; [get name of that hero]
+!!HEv900&v900>=0:R2/?v911; [get sex of that hero]
+!!VRz471&v911=0:Sz103028;  [Strings for hero sex]
+!!VRz471&v911=1:Sz103029;
+!!HEv900&v900>=0:O?v911;   [get hero owner]
+!!OW&v900>=0:Iv911/?v912;  [get AI (1) or human (0)]
+! !IF:V5/0;
+! !IF&v900>=0/v912=0:V5/1;  [set flag 5 if defender is human...]
+!!BA:H0/?v911;             [get # of attacking hero]
+!!HEv911&v911>=0:B0/?z-2;  [get name of that hero]
+!!VRz-2&v911>=0:+z103056;
+!!VRz-2&v911<0:Sz103057;
+!!HEv911:O?v912;      [get owner of attacking if any]
+!!OW:Iv912/?v913;     [get AI/human of attacker]
+! !IF&v913=0:V5/1;     [set flag 5 if attacker is human]
+
+!!HEv900&v900>=0:S26/?v901;     [get resistance skill level]
+!!VRv911:S28;
+!!FU658&v900>=0/v901>=1:P1/0/28;     [call function once per skill level]
+!!VRv489:Sv911;     [remember slot changed if any]
+!!VRv911:S28;
+!!FU658&v900>=0/v901>=2:P1/0/28;
+!!VRv488:Sv911;     [remember slot changed if any]
+!!VRv911:S28;
+!!FU658&v900>=0/v901=3:P1/0/28;
+!!VRv487:Sv911;     [remember slot changed if any]
+!!BA&v489<28:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v488<28:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v487<28:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!VRz472:Sz103033;
+ !!IP&270:Dy-99; !!IP&270:V487/489; [ZVS: send info to defender]
+!!IF&5/v489<28/v488=28:Q2/21/v902/1^%Z472^;
+!!IF&5/v488<28/v487=28:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&5/v487<28:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+** Alexis Koz end
+
+!?BA50;     [ZVS: Pre-battle trigger for resistance (defender side)]
+!!UN:P216/?y-1;     [Check if Resistance is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!BA:H0/?v900;     [get # of attacking hero]
+!!HEv900:B0/?z470; [get name of that hero]
+!!HEv900:R2/?v911; [get sex of that hero]
+!!VRz471&v911=0:Sz103028;     [Strings for hero sex]
+!!VRz471&v911=1:Sz103029;
+!!HEv900:O?v911;   [get hero owner]
+!!OW:Iv911/?v912;  [get AI (1) or human (0)]
+!!BA:H1/?v911;     [get # of defending hero]
+!!HEv911&v911>=0:B0/?z-1;     [get name of that hero]
+!!VRz-1&v911>=0:+z103056;
+!!VRz-1&v911<0:Sz103057;
+!!HEv911&v911>=0:O?v912;  [get owner of defender if any]
+!!OW&v911>=0:Iv912/?v913; [get AI/human of defender]
+
+!!HEv900:S26/?v901;     [get resistance skill level]
+** ZVS: v587,v588,v589 are transfered from the attacker side
+!!BA&v589<7:M1/v589/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v588<7:M1/v588/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v587<7:M1/v587/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!VRz472:Sz103030;
+!!IF&v589<7/v588=7:Q2/21/v902/1^%Z472^;
+!!IF&v588<7/v587=7:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&v587<7:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+
+!!VRv911:S0;
+!!BA:H1/?v900;     [get # of defending hero]
+!!HEv900&v900>=0:B0/?z470;     [get name of that hero]
+!!HEv900&v900>=0:R2/?v911;     [get sex of that hero]
+!!VRz471&v911=0:Sz103031;     [Strings for hero sex]
+!!VRz471&v911=1:Sz103032;
+!!HEv900&v900>=0:O?v911;     [get hero owner]
+!!OW&v900>=0:Iv911/?v912;     [get AI (1) or human (0)]
+!!BA:H0/?v911;     [get # of attacking hero]
+!!HEv911&v911>=0:B0/?z-2;     [get name of that hero]
+!!VRz-2&v911>=0:+z103056;
+!!VRz-2&v911<0:Sz103057;
+!!HEv911:O?v912;     [get owner of attacking if any]
+!!OW:Iv912/?v913;     [get AI/human of attacker]
+
+!!HEv900&v900>=0:S26/?v901;     [get resistance skill level]
+** ZVS: v487,v488,v489 are transfered from the attacker side
+!!BA&v489<28:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v488<28:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v487<28:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!VRz472:Sz103033;
+!!IF&v489<28/v488=28:Q2/21/v902/1^%Z472^;
+!!IF&v488<28/v487=28:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&v487<28:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+
+** End of pre-battle trigger for resistance for Attacker
+
+
+!?BA1;     [Post-battle trigger for resistance]
+
+!!UN:P216/?y-1;     [Check if Resistance is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!VRv901:Sv587;
+!!FU660&v587<7:P0/1;     [re-upgrade creatures if need be]
+!!VRv587:S7;
+!!VRv901:Sv588;
+!!FU660&v588<7:P0/1;
+!!VRv588:S7;
+!!VRv901:Sv589;
+!!FU660&v589<7:P0/1;
+!!VRv589:S7;
+
+** Alexis Koz
+!!VRv901:Sv487;
+!!FU660&v487<28:P1/0;     [re-upgrade creatures if need be]
+!!VRv487:S28;
+!!VRv901:Sv488;
+!!FU660&v488<28:P1/0;
+!!VRv488:S28;
+!!VRv901:Sv489;
+!!FU660&v489<28:P1/0;
+!!VRv489:S28;
+** Alexis Koz
+
+** End of post-battle trigger for resistance
+
+
+!?FU658;     [Function to downgrade one defending troop stack in battle]
+
+!!VRv902:Sx2 *20 R6;     [random slot # to start search from]
+!!DO659/0/6/1:Px1/x2/x3;     [check 7 slots for stack to downgrade]
+
+** End of function to downgrade one defending troop stack in battle
+
+
+!?FU659;     [Function to check one stack for downgrading]
+
+!!VRv912:Sv902 %7;     [get an actual slot number]
+!!VRv912&x2=1: +21;
+!!BA:Mx2/v912/?v913/?v914;     [get v913 type and v914 qty in slot]
+!!VRv915:S1;     [assume creature is upgraded]
+!!VRv915&v913<0:S0;     [treat no creature as a downgraded one]
+!!VRv916:Sv913 %2;
+!!VRv915&v916=0:S0;     [even creatures are always non-upgraded]
+!!VRv915&v913>=112/v913<=117:S0;     [elementals and golems]
+!!VRv915&v913>=132:S0;     [other neutral creatures]
+!!VRv913:-1;     [get type of unupgraded version]
+!!VRv913&v913=122:S115;     [special cases for elementals]
+!!VRv913&v913=124:S113;
+!!VRv913&v913=126:S112;
+!!VRv913&v913=128:S114;
+!!BA&v911=x3/v915=1:Mx2/v912/v913/v914;     [set new downgraded type if we haven't yet]
+!!VRv911&v911=x3/v915=1:Sv912;     [note we changed a slot]
+!!VRv902:+1;     [next slot]
+
+** End of function to check one stack for downgrading
+
+
+!?FU660;     [Function to reupgrade creatures in defender's slot v901]
+
+!!BA:Mx2/v901/?v913/?v914;     [get v913 type and v914 qty in slot]
+!!VRv913:+1;     [usually this gets us upgraded version]
+!!VRv913&v913=113:S127;     [handle elementals]
+!!VRv913&v913=114:S125;
+!!VRv913&v913=115:S129;
+!!VRv913&v913=116:S123;
+!!BA&v913>0/v914>0:Mx2/v901/v913/v914;     [set the old, upgraded type, if creatures survived]
+
+** End of function to reupgrade creatures in defender's slot v901
+-------------------------------------------------------------------------
+
+
+*************************************************************************
+     Tactics
+*************************************************************************
+
+!?BA0;     [Pre-battle trigger for tactics]
+
+!!FU661:P;     [set flag 270 to true if a human vs. human network battle or AI attacks a distant human]
+!!FU653:P;
+
+** End of pre-battle trigger for tactics
+
+!?FU653;     [Pre-battle function to remove tactics]
+
+ !!VRv35:S0; !!VRv36:S0; [ZVS: initialize values]
+!!UN:P218/?y-1;     [Check if tactics is enabled in WoG options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!BA:H0/?y-1;     [get attacking hero number]
+!!BA:H1/?y-2;     [get defending hero number]
+ !!HEy-2&y-2>=0:O?y-99;   [get defending hero owner]
+!!HEy-1:S19/?v35;     [get attackers tactics]
+!!HEy-2&y-2>=0:S19/?v36;     [get defenders tactics - if any]
+ !!IP&270/y-2>=0:Dy-99; !!IP&270/y-2>=0:V35/36; [ZVS: send info to defender]
+!!FU&v35=0/v36=0:E;     [Exit if no one has tactics]
+
+!!HEy-1&v35>0:R4/0;     [remove attackers tactics]
+!!HEy-2&y-2>=0/v36>0:R4/0;     [remove defenders tactics - if any]
+
+** End of pre-battle function to remove tactics
+
+
+!?BR;     [Battle round trigger for tactics, before tactics phase]
+
+!!UN:P218/?y-1;     [Check if tactics is enabled in WoG options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+!!FU&v997<>-1:E;     [Exit if not tactics round]
+
+!!BH0:N?y-1;     [attacking hero #]
+!!BH1:N?y-2;     [defending hero #]
+
+!!FU&v35=0/v36=0:E;     [Exit if no one has tactics]
+!!FU&v35=v36:E;     [Exit if equal tactics level]
+
+!!VRy-5&v35>v36:S0 +v35 -v36;     [Set bonus for attacker - if attackers tactics superior]
+!!VRy-5&v35<v36:S0;     [Set bonus for attacker - if defenders tactics superior]
+
+!!VRy-6&v35>v36:S0;     [Set bonus for defender - if attackers tactics superior]
+!!VRy-6&v35<v36:S0 +v36 -v35;     [Set bonus for defender - if defenders tactics superior]
+
+!!DO651/0/41/1:Py-5/0;     [give +speed via tactics, attacker]
+!!DO651/0/41/1&y-2>=0:Py-6/1;     [give +speed via tactics, defender - if any]
+
+** End of battle round trigger for tactics, before tactics phase
+
+
+!?FU651;     [Function to give +speed via tactics]
+
+!!BMx16:I?y1 T?y2 N?y3;     [get side, type, qty]
+!!BMx16&y3>0/y1=x2/y2<>145/y2<>146/y2<>147/y2<>148/y2<>149:Sdx1;     [add bonus to speed]
+
+** End of function to give +speed via tactics
+
+
+!?FU661;     [Function to set flag 270 if this is a human vs. human network battle or AI attack distant Human]
+!!IF:V270/0;     [assume not a network hero battle]
+!!BA:E?y1;     [Check state of battle: y1>0 means network battle]
+!!IF&y1>0:V270/1;     [Set flag 270 to true if network battle]
+** End of function to set flag 270 if this is a human vs. human network battle
+

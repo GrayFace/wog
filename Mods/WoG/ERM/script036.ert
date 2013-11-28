@@ -1,0 +1,270 @@
+#	Text resource for "SCRIPT36.ERM" document		
+136000	Upgraded Water Wheel		09/02/03
+136001	Upgraded Windmill		09/02/03
+136002	Upgraded Water Wheel (Visited)		09/02/03
+136003	Upgraded Windmill (Visited)		09/02/03
+136004	bars		09/02/03
+136005	bar		09/02/03
+136006	{Mithril} 
+ 
+%Y-5 sparkling %Z-1. 
+ 
+Press CTRL+K
+for the price list.		09/02/03
+136007	a		09/02/03
+136008	{Mithril} 
+ 
+%Z1 picks up %Z4 sparkling %Z3of magical Mithril. 
+ 
+{You now have %V2 %Z2of Mithril altogether.} 
+ 
+(To check your total Mithril at any time, right-click on the Kingdom Overview button.)		09/02/03
+136009	{%Z3 Dwelling} 
+ 
+The teachers that train young %Z2 at this dwelling claim that they could train them to %Z1 instead, but they need %Y6 bars of Mithril to make new training equipment first. 
+ 
+You have %Y7 bars of Mithril. 
+
+Do you wish to give them the %Y6 bars of Mithril they want?		09/02/03
+136010	{%Z3 Dwelling} 
+ 
+The teachers that train young %Z2 at this dwelling claim that they could train them to %Z1 instead, but they need a bar of Mithril to make new training equipment first. 
+ 
+You have %Y7 bars of Mithril. 
+
+Do you wish to give them the bar of Mithril they want?		09/02/03
+136011	{Elemental Conflux} 
+ 
+The teachers that train young Air, Water, Fire and Earth Elementals at this Elemental Conflux claim that they could train Storm, Ice, Energy and Magma Elementals instead, but they need 4 bars of Mithril to make new training equipment first. 
+ 
+You have %Y7 bars of Mithril. 
+
+Do you wish to give them the 4 bars of Mithril they want?		09/02/03
+136012	{Sawmill} 
+ 
+The Woodcutters working at this Sawmill claim that by sacrificing %Y5 Mithril to the God of Sawmills, they can double the production of wood for one week. 
+ 
+You have %Y7 Mithril. 
+
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136013	{Alchemist lab} 
+The Alchemist working at this lab has heard that you possess some Mithril, and he claims that it can be used in the process of purifying Mercury. If he gets %Y5 bars of Mithril, he could use it to produce twice as much Mercury as normal for one week. 
+ 
+You have %Y7 Mithril. 
+ 
+Do you wish to give him the %Y5 bars of Mithril he wants?		09/02/03
+136014	{Ore Mine} 
+ 
+The Miners at this Ore Mine claim that by placing some Mithril (%Y5 bars would be enough) among the Ore they produce, they can fool some treasure hunters into mining Ore for free, and double Ore production for an entire week. 
+ 
+You have %Y7 Mithril. 
+
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136015	{Sulfur Dune} 
+ 
+Imps love smelly Sulfur almost as much as magical Mithril, and love playing in Sulfur Dunes. However, their love for mischief disturbs the workers so much that Sulfur production is halved. Imps are harder to get rid of than rats or cockroaches but can be bribed to go away for a week for %Y5 Mithril. 
+ 
+You have %Y7 Mithril.
+
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136016	{Crystal Cavern} 
+ 
+The Miners at work in this Crystal Cavern know how to combine the small useless crystal shards into larger crystals and thus double production. %Y5 Mithril would be enough to do this for one week. 
+ 
+You have %Y7 Mithril. 
+ 
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136017	{Gem Pond} 
+ 
+The divers fishing up Gems from the bottom of this Gem Lake claim that they can use Mithril to ensnare some water spirits to help them in their work in order to double production. %Y5 Mithril would snare the spirits for one full week. 
+ 
+You have %Y7 Mithril. 
+
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136018	{Gold Mine} 
+ 
+A group of Dwarves with strange contraptions, large as behemoths, have gathered outside your Gold mine. They ask you for %Y5 Mithril to power up the strange things, which they claim can double production for one full week. 
+ 
+You have %Y7 Mithril. 
+
+Do you wish to give them the %Y5 bars of Mithril they want?		09/02/03
+136019	Sawmill		09/02/03
+136020	Alchemist Lab		09/02/03
+136021	Ore Mine		09/02/03
+136022	Sulfur Dune		09/02/03
+136023	Crystal Cavern		09/02/03
+136024	Gem Pond		09/02/03
+136025	Gold Mine		09/02/03
+136026	{%Z1} 
+You can protect the %Z1 from the unnatural weekly change of what it produces by paying %Y5 Mithril for one week's protection.
+ 
+You have %Y7 Mithril. 
+Do you wish to do it?		09/02/03
+136027	{Shrine of Magic Incantation} 
+The Acolytes tending to this shrine complain that they are tired of teaching %Z1 to every hero that passes by, but if they were to sacrifice a bar of Mithril to their god, they will surely be blessed with the knowledge of a new spell they could teach instead. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to donate a bar to the Acolytes?		09/02/03
+136028	{Shrine of Magic Gesture} 
+The Rotund Friars tending to this shrine complain that they are tired of teaching %Z1 to every hero that passes by, but if they were to sacrifice 2 bars of Mithril to their god, they will surely be blessed with the knowledge of a new spell they could teach instead. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to donate 2 bars to the Friars?		09/02/03
+136029	{Shrine of Magic Thought} 
+ 
+The High Priests tending to this shrine complain that they are tired of teaching %Z1 to every hero that passes by, but if they were to sacrifice 3 bars of Mithril to their god, they will surely be blessed with the knowledge of a new spell they could teach instead. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to donate 3 bars to the High Priests?		09/02/03
+136030	The Mayor of %Z1 says that his friend the enchanter has gone to study the Magic Plains that seems to pop up everywhere and he doesn't know when he'll return to his normal buisness of strengthening town defenses.		09/02/03
+136031	The Mayor of %Z1 claims that he knows of a powerful enchanter who can strengthen a town's defenses in various ways, and that he charges no more than a small amount of Mithril. For 1 bar, he can enhance %Z1 with Holy Ground, a Clover Field, Evil Fog, Fiery Fields, Lucid Pools, Magic Clouds or Rocklands, or he can, for 3 bars of Mithril, enhance it with Magic Plains or Cursed Grounds. 
+ 
+You have %Y2 %Z-5 of Mithril. 
+
+Do you wish to hire the Enchanter?		09/02/03
+136032	The Mayor of %Z1 claims that he knows of a powerful enchanter who can strengthen a town's defenses in various ways, and that he charges no more than a small amount of Mithril. For 1 bar, he can enhance %Z1 with Holy Ground, a Clover Field, Evil Fog, Fiery Fields, Lucid Pools, Magic Clouds or Rocklands. 
+ 
+You have %Y2 %Z-5 of Mithril. 
+
+Do you wish to hire the Enchanter?		09/02/03
+136033	Holy Ground     (1 Mithril)		09/02/03
+136034	Clover Field      (1 Mithril)		09/02/03
+136035	Evil Fog            (1 Mithril)		09/02/03
+136036	Fiery Fields       (1 Mithril)		09/02/03
+136037	Lucid Pools      (1 Mithril)		09/02/03
+136038	Magic Clouds   (1 Mithril)		09/02/03
+136039	Rocklands        (1 Mithril)		09/02/03
+136040	Magic Plains     (3 Mithril)		09/02/03
+136041	Cursed Ground (3 Mithril)		09/02/03
+136042	Choose which special terrain you want:		09/02/03
+136043	{Witch Hut} 
+ 
+The old Witch that lives in this hut tells you that she has been teaching %Z1 for as long as she can remember, and she is getting bored. She knows of a way to learn something else she then can teach, but it requires 2 bars of Mithril. You wisely don't ask what she wants it for. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to give her the 2 bars of Mithril she needs?		09/02/03
+136044	{Water Wheel} 
+ 
+The man tending to the Water Wheel informs you that if it would be known that he owns some Mithril, he would get many more customers, since many would come out of pure curiosity. Five bars would be enough to double his weekly production. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to give him the 5 bars of Mithril he asks for?		09/02/03
+136045	{Windmill} 
+ 
+The Miller tells you that he knows how to use Mithril to double the amount he produces but the five bars he owned were stolen some time ago. He wonders, "Do you have any you could spare?" 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to give him the 5 bars of Mithril he asks for?		09/02/03
+136046	{Shipyard} 
+ 
+The workers working at the shipyard say that they can construct a lighthouse close to the shipyard, but they need 3 Mithril for the mirror. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to give him the 3 bars of Mithril they ask for?		09/02/03
+136047	{One-Way Monolith}		09/02/03
+136048	{Two-Way Monolith}		09/02/03
+136049	he		09/02/03
+136050	she		09/02/03
+136051	%Z1 
+ 
+%Z2 knows of a way to see what lies beyond this Monolith, but %Z3 needs 1 Mithril. 
+ 
+You have %Y2 bars of Mithril. 
+
+Do you wish to see what lies on the other side of the Monolith?		09/02/03
+136052	Sawmill		09/02/03
+136053	Alchemist's Lab		09/02/03
+136054	Ore Pit		09/02/03
+136055	Sulfur Dune		09/02/03
+136056	Crystal Cavern		09/02/03
+136057	Gem Pond		09/02/03
+136058	Gold Mine		09/02/03
+136059	{Mithril} 
+ 
+%Y-5 sparkling %Z-1. 		
+136060	Advanced University
+
+(Learn basic secondary skills for 2000 gold or improve a basic secondary skill for 3000 gold.)	String type = <!#S>	2003-08-08
+136061	{University} 
+
+The professors eagerly study the Mithril you brought and claim that %Y9 bars would finally allow them to teach Advanced lessons.
+ 
+You have %Y7 Mithril. 
+
+Do you wish to give them the %Y9 bars of Mithril they want?	String type = <!!Q>	2003-08-08
+136062	{Advanced University}
+
+When you are about to leave, the clerk approaches you and tells you there are also Advanced lessons, but they require 3000 Gold (which you currently lack).	String type = <!!Q>	2003-08-08
+136063	{Advanced University}
+
+When you are about to leave, the clerk approaches you and offers to bring you Advanced lessons. Would you like to improve your knowledge in secondary skills for 3000 gold?	String type = <!!S>	2003-08-08
+136064	{Advanced University}
+
+Which lesson would you like to attend--the one in Advanced %Z1 or in Advanced %Z2?	String type = <!!Q>	2003-08-08
+136065	{Advanced University}
+
+You attend the lesson in %Z1, and thanks to the excellent tutors, you soon master Advanced %Z1.	String type = <!!Q>	2003-08-08
+136066	Upgraded 		
+136067	Protected 		
+136068	red		
+136069	blue		
+136070	tan		
+136071	green		
+136072	orange		
+136073	purple		
+136074	teal		
+136075	pink		
+136076	Wood		
+136077	Mercury		
+136078	Ore		
+136079	Sulfur		
+136080	Crystal		
+136081	Gems		
+136082	Gold		
+136083	%Z-2%Z-1
+Owned by %Z-3 player
+(%Z-4)		
+136084	%Z-2%Z-1 (%Z-4)		
+136085	Abandoned Mine		
+136086	no		
+136087	{Mithril Enhancements Price List}
+
+Mithril may be used to improve many structures on the adventure map.
+To improve a structure, right-click on its entrance. For mines, towns, 
+creature dwellings and shipyards, you must own the structure.
+For windmills, witchhuts, water wheels, liths and universities, you 
+must have a hero standing adjacent to the structure when you right-click.
+
+		
+136088	1. Upgrade Gold Mine - Doubles production for 1 week: 7 Mithril
+2. Upgrade any other Mine - Doubles production for 1 week: 4 Mithril
+3. Upgrade Windmill or Water Wheel - Doubles production: 5 Mithril
+4. Upgrade Creature Dwelling - Offers upgraded creatures: 1 to 3 Mithril
+5. Place Magical Terrain to Protect a Town you Own: 1 or 3 Mithril
+6. Build a Lighthouse near a Shipyard: 3 Mithril
+		
+136089	7. Change Spell offered at Magic Shrine: 1 to 3 Mithril
+8. Change Skill offered at Witch Hut: 2 Mithril
+9. Check what's around a Monolith's Possible Exits: 1 Mithril
+10. Protect a Mine from Changing if the "Mines Change Every Week"
+  Map Rule is in effect (for one week's protection):
+  - Wood & Ore: 1 Mithril
+  - Gem, Crystal, Mercury & Sulfur: 3 Mithril
+  - Gold: 5 Mithril
+11. Upgrade University - May improve a hero's Basic skills: 4 Mithril		
+136090	Mithril Enhancements		
+136091	{MITHRIL ENHANCEMENTS: IMPORTANT UPDATE!!}
+
+Hold down {Ctrl} and {Left-click} an object to enhance it with Mithril. Right-clicking will no longer work.
+
+To acknowledge that you've read this message, please click one of the mithril pictures below (either one) and then click the checkmark button to continue.
+
+Note: This message will not repeat. Remember, {Ctrl-click}, not {Right-click}.		
+136092	message shown		

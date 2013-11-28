@@ -1,0 +1,52 @@
+ZVSE
+ERMS_ScriptDate=26.7(July).2006
+
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Berserker Fly script by Timothy Pulver
+** Version 2.2 for WoG 3.58
+** Variables used: v295-v296, z940-z941
+** Last Updated: July 26, 2006
+** Previously Updated: May 1, 2004
+
+--------------------------------------------------------------------------------
+
+!#UN:P46/?v295; [Check if Berserker Fly script is active: v295]
+!#VRz940&v295=1:Sz146000;
+!#VRz941&v295=1:Sz146001;
+!#UN&v295=1:G1/105/0/940; [Set Dragon Fly name (singular) to "Berserker Fly"]
+!#UN&v295=1:G1/105/1/941; [Set Dragon Fly name (plural) to "Berserker Flies"]
+
+!#UN&v295=1:P900/?v296; [Check if Stack Experience is enabled: v296]
+!#UN&v295=1:P900/1; [Enable Stack Experience]
+!#EA105&v295=1:F102/82/?v2; [Check for No Retaliation/next available bonus line: v2]
+!#EA105&v295=1/v2>=0:Bv2/1/102/82/1/1/1/1/1/1/1/1/1/1/1; [Give Dragon Flies No Retaliation]
+!#EA105&v295=1:F102/98/?v2; [Check for Strike & Return/next available bonus line: v2]
+!#EA105&v295=1/v2>=0:Bv2/1/102/98/1/1/1/1/1/1/1/1/1/1/1; [Give Dragon Flies Strike & Return]
+!#EA105&v295=1:F99/59/?v2; [Check for Berserk casting/next available bonus line: v2]
+!#EA105&v295=1/v2>=0:Bv2/1/99/59/25/25/25/25/25/25/25/25/25/25/25; [Give Dragon Flies Berserk Casting: 25% chance]
+!#UN&v295=1:P900/v296; [Restore Stack Experience status: v296]
+!#UN&v295=1/v296=0:P906/1; [Disable gaining of Stack Experience from battles if Stack Experience is disabled]
+
+--------------------------------------------------------------------------------
+
+ [Start of Battle]
+!?BA0&v295=1;
+!!UN:P900/1; [Enable Stack Experience]
+
+!?BA50&v295=1;
+!!UN:P900/1; [Enable Stack Experience]
+
+--------------------------------------------------------------------------------
+
+ [End of Battle]
+!?BA1&v295=1;
+!!UN:P900/v296; [Restore Stack Experience status]
+
+!?BA51&v295=1;
+!!UN:P900/v296; [Restore Stack Experience status]
+
+--------------------------------------------------------------------------------
+
+** End of Script **
+

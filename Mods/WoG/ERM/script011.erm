@@ -1,0 +1,304 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**   Palace of Dreams Version 1.4a created by Timothy E. Pulver
+**   with message box optimization by Tobyn (version 1.4a)
+**   Requires WoG version 3.57 or later using ERM version 2.6 or later.
+**   WoGify Name: script11.erm
+**   Updated: June 16, 2004
+
+** This script lets any "Big Turreted Palace" on a map function as a casino
+** named "The Palace of Dreams", which is filled with slot machines. The
+** cost to play is 100 gold coins per game. The game simulates slot machines
+** with three wheels that spin around randomly. There are two types of
+** machine to choose from -- On the wheels of one are images of the
+** standard seven Heroes resources (including gold). If all three of the
+** wheels come up the same picture, the player wins resources of that type.
+** The prizes get higher later in the game as a balancing factor. The
+** slot machines in the Palace of Dreams casino can be played as often
+** as the player wishes, or at least until he or she runs out of money...
+
+** The other type of machine is artifacts - randomly chosen. The chances
+** of getting three of the same type from over 100 artifacts is very small
+** so the game is rigged in the player's favour -- he or she can expect
+** to win (on average) about 1 random artifact for every 4,000 gold spent.
+
+** Each time the Palace of Dreams is visited (or revisited), 400 movement
+** points are removed from the hero, however, once playing one type of
+** slot machine or the other, he or she can continue to play until he/she
+** runs out of gold.
+
+** This version of the script also adds AI support -- the AI can visit
+** the casino and gamble a bit (random response to dialogs) but won't
+** often visit because it's not a standard object. In fact, the AI may
+** not visit at ALL unless forced to travel through the entrance square
+** to reach something of value, but the code's in there just in case.
+
+** Version 1.2 also restricts artifacts to those that are enabled.
+** This means that combination artifacts will *not* normally show up,
+** but will show up if the mapmaker has enabled them. Also, relics
+** have a reduced chance of showing up. The new WoG artifacts will
+** show up only if enabled with ERM code. The chance of winning
+** resources has been slightly increased in this version as well,
+** but the amounts have been slightly lowered.
+
+** Version 1.3 adds support for Commander artifacts and fixes a
+** bug that was sometimes causing the game to crash during extended
+** visits to the Palace of Dreams.
+
+** Version 1.4 makes a minor adjustment to the chance of getting a
+** resource prize (it's slightly less likely but not much change) and
+** changes the recursive function call to a non-recursive DO function loop.
+
+** Version 1.4a (Tobyn mod) uses same messagebox where wheel results are
+** displayed to ask if player wants to play again.
+
+** The "Big Turreted Palace" is a new WoG object that can be found in the
+** WoG Heroes map editor in the Town Objects section. It's the 9th object
+** below the Random Town and immediately below a big purple mushroom.
+** It appears as a large palace with turrets (not to be confused with the other
+** new large palaces, which may or may not have turrets).
+
+** To install this script in a map, simply copy & paste the code into a global
+** (timed) event. Copy the entire code, from ZVSE to the end. Make sure
+** that you disable ALL colours from receiving the event and/or change
+** the event day to something like 500 or later to avoid the ERM script
+** popping up as if it were a regular event message. The title of the event
+** is unimportant, but I would suggest something like "Palace of Dreams".
+** And of course, you'll also need to put one or more "Big Turreted Palaces"
+** on your map for the heroes to visit. Get three and WIN! :-)
+
+Flags Used in this Script: 1-3
+Variables Used in this Script: v1-v2,v101-v111,z1,z3-z6,z450
+Functions Used in this Script: 777-779
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v110/?v111;
+!#IF&v110<357:V1/1;
+!#IF&v111<260:V1/1;
+!#IF&1:M1/z111000;
+
+ [Set object's hint text]
+!#UN:P11/?v1; [Check if script is enabled: v1]
+!#VRz450&v1=1:Sz111001;
+!#HT63/33&v1=1:T450;
+
+!?OB63/33;  [Triggers when any object type 63, subtype 33 is visited]
+
+!!UN:P11/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!HE-1:B0/?z1;  [Store hero's name in z1]
+
+ [Welcome hero]
+!!IF&1000:Q1/4/0/4/0/4/0/1/z111002;
+
+ [Check if hero has enough movement left to play]
+!!HE-1:W>0;
+!!IF&1:V3/0;
+!!IF&-1:V3/1;
+!!IF&3/1000:M1/z111003;
+
+ [Remove 400 movement points from hero]
+!!HE-1&-3:Wd-400;
+
+ [Alter artifact names/descriptions of two artifacts for use in dialogue box]
+!!VRz3:Sz111004; !!VRz4:Sz111005;
+!!VRz5:Sz111006; !!VRz6:Sz111007;
+!!UN:A112/9/3 A112/10/4 A79/9/5 A79/10/6;
+
+ [Ask if hero wants to play for artifacts or resources]
+!!IF&1000/-3:Q1/8/79/8/112/7/z111008;
+
+!!VRv106&1:S2; [Artifacts Slot Machine]
+!!VRv106&-1:S1;  [Resource Slot Machine]
+
+[Restore artifact names/descriptions to original values]
+!!UN:A112/9/0 A112/10/0 A79/9/0 A79/10/0;
+
+---------------------------------------------------------------------------------
+
+ [Ask if hero wants to play slot machine]
+!!IF&1000/-3:Q1/36/100/2/z111009;
+
+ [Generate AI Response - number from 0 to 1]
+!!VRv105&-1000:S0 R1;
+!!IF&v105=0/-1000:V1/0;
+!!IF&v105=1/-1000:V1/1;
+
+ [IF hero doesn't have enough movement, don't let him/her play]
+!!IF&3:V1/0;
+
+ [Check if player has enough gold to play]
+!!OW:R-1/6/?v1;
+!!IF&1/v1<100/1000:M1/z111010;
+
+ [If player plays slot machine, call function loops 777 or 778]
+ [Maximum of 100 games each]
+!!DO777/1/100/1&1/v1>99/v106=1:P;
+!!DO778/1/100/1&1/v1>99/v106=2:P;
+
+ [Alter artifact names/descriptions of magic gold artifacts]
+!!VRz3:Sz111011; !!VRz4:Sz111012;
+!!UN:A115/9/3 A115/10/4 A116/9/3 A116/10/4 A117/9/3 A117/10/4;
+
+ [If player doesn't play, display this message]
+!!IF&1000:Q1/8/117/8/116/8/115/1/z111013;
+
+ [Restore magic gold artifact text]
+!!UN:A115/9/0 A115/10/0 A116/9/0 A116/10/0 A117/9/0 A117/10/0;
+
+---------------------------------------------------------------------------------
+
+!?FU777;  [Start of main function - Resources]
+
+!!OW:R-1/6/d-100;  [Reduce player's gold by 100]
+
+ [Set flag 2 (win flag) to false and generate 3 random numbers 0 - 6]
+!!IF:V2/0;
+!!VRv101:S0 R6;
+!!VRv102:S0 R7;
+!!VRv102&v102=7:S6; [Increases chance of getting GOLD in middle slot]
+!!VRv103:S0 R6;
+
+ [Chance of ever getting 3 resources the same is low so this increases it a bit]
+!!VRv107:S0 R30;
+!!VRv101&v107=30:Sv103;
+!!VRv107:S0 R30;
+!!VRv102&v107=30:Sv101;
+!!VRv107:S0 R30;
+!!VRv103&v107=30:Sv102;
+
+
+* Tobyn mod: optimized to use same box where wheels are displayed for question to play again
+
+ [If all resource pictures are the same, hero WON! :-)  -- set flag 2 to true]
+!!IF&v101=v102/v101=v103:V2/1;
+
+ [If hero won, determine prize -- prizes are higher later in the game]
+!!VRv104&2/v101<6:Sc0 :7 +4 R4;
+!!VRv104&2/v101=6:Sc0 *100 +4000 R100;
+
+ [Give prize winning player his or her prize]
+!!OW&2:R-1/v101/dv104;
+
+ [Show what came up if won -- 3 resource pictures]
+!!IF&2/1000:Q1/v101/0/v102/v104/v103/0/2/z111014;
+
+
+ [Show what came up if not won -- 3 resource pictures]
+!!IF&-2/1000:Q1/v101/0/v102/0/v103/0/2/z111015;
+
+
+ [Generate AI Response - number from 0 to 1]
+!!VRv105&-1000:S0 R1;
+!!IF&v105=0/-1000:V1/0;
+!!IF&v105=1/-1000:V1/1;
+
+ [Check if player has enough gold to play again]
+!!OW:R-1/6/?v1;
+!!IF&1/v1<100/1000:M1/z111016;
+!!VRx16&1/v1<100:S101; [Exit DO loop]
+
+ [If player has played 100 games, display this instead]
+!!IF&1/v1>=100/x16>=100/1000:M1/z111017;
+
+ [If player doesn't play again, exit function loop 777]
+!!VRx16&-1:S101; [Exit DO loop]
+
+---------------------------------------------------------------------------------
+
+!?FU778;  [Start of main function - Artifacts]
+
+!!OW:R-1/6/d-100;  [Reduce player's gold by 100]
+
+ [Set flag 2 (win flag) to false and generate 3 random numbers 7 - 143
+  disabled artifacts are skipped]
+!!IF:V2/0;
+!!VRv2:S0;
+!!FU779:P;
+!!VRv101:Sv108;
+!!VRv2:S0;
+!!FU779:P;
+!!VRv102:Sv108;
+!!VRv2:S0;
+!!FU779:P;
+!!VRv103:Sv108;
+
+ [Chance of getting 3 artifacts the same is miniscule so this increases it a bit]
+!!VRv107:S0 R10;
+!!VRv101&v107=10:Sv103;
+!!VRv107:S0 T10;
+!!VRv102&v107=10:Sv101;
+!!VRv107:S0 R10;
+!!VRv103&v107=10:Sv102;
+
+ [Temporarily remove names from artifact pictures]
+!!VRz3:Sz111018;
+!!UN:Av101/9/3 Av102/9/3 Av103/9/3;
+
+
+* Tobyn mod: optimized to use same box where wheels are displayed for question to play again
+
+ [If all artifact pictures are the same, hero WON! :-)  -- set flag 2 to true]
+!!IF&v101=v102/v101=v103:V2/1;
+
+ [Give prize winning player his or her prize]
+!!HE-1&2:Av101;
+
+
+ [If player won, give this message]
+!!IF&2/1000:Q1/8/v101/8/v102/8/v103/2/z111019;
+
+
+ [Show what came up with no win -- 3 artifact pictures]
+!!IF&-2/1000:Q1/8/v101/8/v102/8/v103/2/z111020;
+
+
+ [Restore names of artifact pictures]
+!!UN:Av101/9/0 Av102/9/0 Av103/9/0;
+
+
+ [Generate AI Response - number from 0 to 1]
+!!VRv105&-1000:S0 R1;
+!!IF&v105=0/-1000:V1/0;
+!!IF&v105=1/-1000:V1/1;
+
+ [Check if player has enough gold to play again]
+!!OW:R-1/6/?v1;
+!!IF&1/v1<100/1000:M1/z111021;
+!!VRx16&1/v1<100:S101; [Exit DO loop]
+
+ [If player has played 100 games, display this instead]
+!!IF&1/v1>=100/x16>=100/1000:M1/z111022;
+
+ [If player doesn't play again, exit function loop 778]
+!!VRx16&-1:S101; [Exit DO loop]
+
+---------------------------------------------------------------------------------
+
+!?FU779; [Start of artifact-check function - skips disabled artifacts]
+
+!!VRv2:+1; [Increment counter: v2]
+!!VRv108:S7 R153; [Random number from 7 to 160]
+!!UN:Av108/=1;    [Test enabled/disabled value of artifact]
+!!VRv108|1/v108=144/v108=145:S7 R119;  [If disabled or invalid, try again]
+*                                      [with a smaller range of 7 to 126]
+
+!!UN:P900/?y2;       [Check if stack experience is enabled: y2=0 if not enabled]
+!!UN&1:Av108/=1;     [Test enabled/disabled value of artifact]
+!!VRv108&v2>25:S7;   [If too many loops, make it a Centaur's Axe]
+!!FU779&1/v2<=25:P;  [If artifact is disabled, call function again]
+*                    [unless it's already looped too many times]
+!!FU779&v108=157/y2=0/v2<=25:P; [reroll if banner and stack experience disabled]
+
+!!UN:Av108/3/=16;            [Test if artifact is a relic]
+!!VRv109&1:S0 R1;            [Random number from 0 to 1]
+!!FU779&1/v109=1/v2<=25:P;   [50% chance of relic being "rerolled"]
+
+** End of Script **
+

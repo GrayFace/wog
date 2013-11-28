@@ -1,0 +1,123 @@
+124000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Enhanced Hint Text version 1.3 script.} 
+ 
+Please update your files.	String type = <!#M>	08.06.2003
+124001	
+Owned by %Z2 player	String type = <!!S>	08.06.2003
+124002	 {%Z3}	String type = <!!S>	08.06.2003
+124003	 {%Z3}	String type = <!!S>	08.06.2003
+124004	 {%Z3}	String type = <!!S>	08.06.2003
+124005	 {%Z3}	String type = <!!S>	08.06.2003
+124006	Guardhouse	String type = <!!S>	08.06.2003
+124007	Archers' Tower	String type = <!!S>	08.06.2003
+124008	Griffin Tower	String type = <!!S>	08.06.2003
+124009	Barracks	String type = <!!S>	08.06.2003
+124010	Monastery	String type = <!!S>	08.06.2003
+124011	Training Grounds	String type = <!!S>	08.06.2003
+124012	Portal of Glory	String type = <!!S>	08.06.2003
+124013	Portal of Splendor	String type = <!!S>	08.06.2003
+124014	Centaur Stables	String type = <!!S>	08.06.2003
+124015	Dwarf Cottage	String type = <!!S>	08.06.2003
+124016	Homestead	String type = <!!S>	08.06.2003
+124017	Enchanted Spring	String type = <!!S>	08.06.2003
+124018	Dendroid Arches	String type = <!!S>	08.06.2003
+124019	Unicorn Glade	String type = <!!S>	08.06.2003
+124020	Dragon Cliffs	String type = <!!S>	08.06.2003
+124021	Dragon Peaks	String type = <!!S>	08.06.2003
+124022	Workshop	String type = <!!S>	08.06.2003
+124023	Parapet	String type = <!!S>	08.06.2003
+124024	Mage Tower	String type = <!!S>	08.06.2003
+124025	Altar of Wishes	String type = <!!S>	08.06.2003
+124026	Golden Pavilion	String type = <!!S>	08.06.2003
+124027	Cloud Temple	String type = <!!S>	08.06.2003
+124028	Storm Temple	String type = <!!S>	08.06.2003
+124029	Imp Crucible	String type = <!!S>	08.06.2003
+124030	Hall of Sins	String type = <!!S>	08.06.2003
+124031	Kennels	String type = <!!S>	08.06.2003
+124032	Demon Gate	String type = <!!S>	08.06.2003
+124033	Hell Hole	String type = <!!S>	08.06.2003
+124034	Fire Lake	String type = <!!S>	08.06.2003
+124035	Forsaken Palace	String type = <!!S>	08.06.2003
+124036	Unholy Palace	String type = <!!S>	08.06.2003
+124037	Cursed Temple	String type = <!!S>	08.06.2003
+124038	Graveyard	String type = <!!S>	08.06.2003
+124039	Tomb of Souls	String type = <!!S>	08.06.2003
+124040	Estate	String type = <!!S>	08.06.2003
+124041	Mausoleum	String type = <!!S>	08.06.2003
+124042	Hall of Darkness	String type = <!!S>	08.06.2003
+124043	Dragon Vault	String type = <!!S>	08.06.2003
+124044	Spectral Vault	String type = <!!S>	08.06.2003
+124045	Warren	String type = <!!S>	08.06.2003
+124046	Harpy Loft	String type = <!!S>	08.06.2003
+124047	Pillar of Eyes	String type = <!!S>	08.06.2003
+124048	Chapel of Stilled Voices	String type = <!!S>	08.06.2003
+124049	Labyrinth	String type = <!!S>	08.06.2003
+124050	Manticore Lair	String type = <!!S>	08.06.2003
+124051	Dragon Cave	String type = <!!S>	08.06.2003
+124052	Cave of Darkness	String type = <!!S>	08.06.2003
+124053	Goblin Barracks	String type = <!!S>	08.06.2003
+124054	Wolf Pen	String type = <!!S>	08.06.2003
+124055	Orc Tower	String type = <!!S>	08.06.2003
+124056	Ogre Fort	String type = <!!S>	08.06.2003
+124057	Cliff Nest	String type = <!!S>	08.06.2003
+124058	Cyclops Cave	String type = <!!S>	08.06.2003
+124059	Behemoth Crag	String type = <!!S>	08.06.2003
+124060	Behemoth Tomb	String type = <!!S>	08.06.2003
+124061	Gnoll Hut	String type = <!!S>	08.06.2003
+124062	Lizard Den	String type = <!!S>	08.06.2003
+124063	Serpent Fly Hive	String type = <!!S>	08.06.2003
+124064	Basilisk Pit	String type = <!!S>	08.06.2003
+124065	Gorgon Lair	String type = <!!S>	08.06.2003
+124066	Wyvern Nest	String type = <!!S>	08.06.2003
+124067	Hydra Pond	String type = <!!S>	08.06.2003
+124068	Chaos Pool	String type = <!!S>	08.06.2003
+124069	Magic Lantern	String type = <!!S>	08.06.2003
+124070	Air Elemental Conflux	String type = <!!S>	08.06.2003
+124071	Altar of Air	String type = <!!S>	08.06.2003
+124072	Water Elemental Conflux	String type = <!!S>	08.06.2003
+124073	Altar of Water	String type = <!!S>	08.06.2003
+124074	Fire Elementals Conflux	String type = <!!S>	08.06.2003
+124075	Altar of Fire	String type = <!!S>	08.06.2003
+124076	Earth Elemental Conflux	String type = <!!S>	08.06.2003
+124077	Altar of Earth	String type = <!!S>	08.06.2003
+124078	Altar of Thought	String type = <!!S>	08.06.2003
+124079	Pyre	String type = <!!S>	08.06.2003
+124080	Spirit Pyre	String type = <!!S>	08.06.2003
+124081	Hovel	String type = <!!S>	08.06.2003
+124082	Thatched Hut	String type = <!!S>	08.06.2003
+124083	Boar Glen	String type = <!!S>	08.06.2003
+124084	Rogue Cavern	String type = <!!S>	08.06.2003
+124085	Nomad Tent	String type = <!!S>	08.06.2003
+124086	Tomb of Curses	String type = <!!S>	08.06.2003
+124087	Treetop Tower	String type = <!!S>	08.06.2003
+124088	Troll Bridge	String type = <!!S>	08.06.2003
+124089	Enchanter's Hollow	String type = <!!S>	08.06.2003
+124090	Magic Forest	String type = <!!S>	08.06.2003
+124091	Sulfurous Lair	String type = <!!S>	08.06.2003
+124092	Crystal Cavern	String type = <!!S>	08.06.2003
+124093	Frozen Cliffs	String type = <!!S>	08.06.2003
+124094	Rock Covered Position	String type = <!!S>	08.06.2003
+124095	Snow Covered Position	String type = <!!S>	08.06.2003
+124096	Vast Cavern	String type = <!!S>	08.06.2003
+124097	Dream Horse-shoe	String type = <!!S>	08.06.2003
+124098	Natural Calamity	String type = <!!S>	08.06.2003
+124099	Lost Friary	String type = <!!S>	08.06.2003
+124100	Snowman	String type = <!!S>	08.06.2003
+124101	Golem Factory	String type = <!!S>	08.06.2003
+124102	Elemental Conflux	String type = <!!S>	08.06.2003
+124103	red	String type = <!!S>	08.06.2003
+124104	blue	String type = <!!S>	08.06.2003
+124105	tan	String type = <!!S>	08.06.2003
+124106	green	String type = <!!S>	08.06.2003
+124107	orange	String type = <!!S>	08.06.2003
+124108	purple	String type = <!!S>	08.06.2003
+124109	teal	String type = <!!S>	08.06.2003
+124110	pink	String type = <!!S>	08.06.2003
+124111	Sylvan Homestead		
+124112	Enchanted Tower		
+124113	Howling Hollow		
+124114	Hellfire Rift		
+124115	Dragon Graveyard		

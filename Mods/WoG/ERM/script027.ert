@@ -1,0 +1,38 @@
+127000	You stumble over a spellbook, looking as if it has just been purchased. 
+ 
+You are pleased to learn that it contains the basic spells %Z1, %Z2 and %Z3 and the advanced spells %Z4, %Z5 and %Z6!	Basic Spellbook	09/02/03
+127001	You stumble over a spellbook, looking as if it has seen some use. 
+ 
+You are happy to discover that it contains the basic spells %Z1, %Z2 and %Z3, the advanced spells %Z4, %Z5 and %Z6 and the expert spells %Z7 and %Z8!	Advanced Spellbook	09/02/03
+127002	You stumble over a spellbook, looking as if it has been around for a very long time. 
+ 
+You are delighted to find that it contains the basic spells %Z1, %Z2 and %Z3, the advanced spells %Z4, %Z5 and %Z6, the expert spells %Z7 and %Z8 and the master spells %Z9 and %Z-1!	Expert spellbook	09/02/03
+127003	You stumble over a spellbook, looking as if it would be older than the hills. 
+ 
+You are ecstatic when you realize that it contains the basic spells %Z1, %Z2 and %Z3, the advanced spells %Z4, %Z5 and %Z6, the expert spells %Z7 and %Z8, the master spells %Z9 and %Z-1 and even the grandmaster spell %Z-2!	Master spellbook	09/02/03
+127004	Spellbook error!
+
+Fifth Level spells:
+y-2 has value: %Y-2		
+127005	Spellbook error!
+
+Fourth Level spells:
+y-2 has value: %Y-2
+y-3 has value: %Y-3		
+127006	Spellbook error!
+
+Third Level spells:
+y-2 has value: %Y-2
+y-3 has value: %Y-3		
+127007	Spellbook error!
+
+Second Level spells:
+y-2 has value: %Y-2
+y-3 has value: %Y-3
+y-4 has value: %Y-4		
+127008	Spellbook error!
+
+First Level spells:
+y-2 has value: %Y-2
+y-3 has value: %Y-3
+y-4 has value: %Y-4		

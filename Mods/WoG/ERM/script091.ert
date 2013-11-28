@@ -1,0 +1,51 @@
+191000	You have stored all 5 parts of the {Legion Statue} in this town. Do you want to get the statue instead?
+
+Remember: it will give you a 50% higher growth rate for all creatures in {all} of your towns if one of your heroes wears it.
+
+(Don't forgot to equip it if you answer with yes)		27.10.2004
+191001	You have found the {%Z-1}. Do you want to store it in this town to get the growing bonus without the need to have a hero in the town at weekend?
+
+(Remind: You can get it back when you leftclick on the slot of the L%Y4 creature in the lower left corner of the town screen. If you haven't build the dwelling for this creature you can click on the 8th field (used for the Portal of Summoning in Dungeon towns).		
+191002	
+
+You have stored the {%Z-4} in this town. Do you want to get it back?		
+191003	The {%Z1} / {%Z2}
+grows in this town:
+
+  %Vf basic growth
+		
+191004	+ %Vg for citatel / castle
+		
+191005	+ %Vh from special buildings
+		
+191006	+ %Vi for stored parts of the Legion Statue
+		
+191007	+ %Vj for equipped parts of the Legion Statue
+		
+191008	+ %Vl for equipped assembled Legion Statue
+		
+191009	+ %Vk for external dwellings (%Y2 without improved external bonus)
+		
+191010	+ %Vm for dwelling upgrade (see Wog-Option Castle Upgrade)
+		
+191011	+ %Vn for grail
+		
+191012	= %Vo total		
+191013	{Tree of Knowledge}
+
+As you approach the tree, it opens its delighted eyes: "Ahh, an adventurer. I would be glad to teach you a little bit of the knowledge I have learned over the ages."	Bugfix Tree of Knowledge	20.12.2004
+191014	{Tree of Knowledge}
+
+As you approach the tree, it opens it's delighted eyes: "Ahh, an adventurer. I would be glad to teach you for only 10 gems a little bit of the knowledge I have learned over the ages." (Just bury it around my roots.)	Bugfix Tree of Knowledge	20.12.2004
+191015	{Tree of Knowledge}
+
+As you approach the tree, it opens its delighted eyes: "Ahh, an adventurer. I would be glad, to teach you for only 2000 gold a little bit of the knowledge I have learned over the ages." (Just bury it around my roots.)	Bugfix Tree of Knowledge	20.12.2004
+191016	{Tree of Knowledge}
+
+Tears shimmer in the eyes of the tree. "I need 10 gems.", it whispers (*sniff*). "Well, come back when you can pay me."	Bugfix Tree of Knowledge	20.12.2004
+191017	{Tree of Knowledge}
+
+Tears shimmer in the eyes of the tree. "I need 2000 gold.", it whispers (*sniff*). "Well, come back when you can pay me."	Bugfix Tree of Knowledge	20.12.2004
+191018	{Tree of Knowledge}
+
+As you approach the tree, it opens its delighted eyes: "It's good to see you, my alumni. I hope, my teachings had helped you."	Bugfix Tree of Knowledge	20.12.2004

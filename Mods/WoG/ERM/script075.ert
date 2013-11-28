@@ -1,0 +1,964 @@
+175000	{Eagle} {Eye}	EE I	Last updated
+175001	{Basic} {Eagle} {Eye}
+
+Basic Eagle Eye gives your hero a 40%% chance to learn any 1st or 2nd level spells used in combat and the hero will gain a bonus 1st or 2nd level spell when gaining a level.	EE I	October 22 2004
+175002	{Advanced} {Eagle} {Eye}
+
+Advanced Eagle Eye gives your hero a 50%% chance to learn any spell up to 3rd level used in combat and the hero will gain a bonus 2nd or 3rd level spell when gaining a level. Lower level spells will be offered if the hero doesn't have the required Wisdom.	EE I	by Arstahd
+175003	{Expert} {Eagle} {Eye}
+
+Expert Eagle Eye gives your hero a 60%% chance to learn any spell up to 4th level used in combat and the hero will gain a bonus 3rd or 4th level spell when gaining a level. Lower level spells will be offered if the hero doesn't have the required Wisdom.	EE I	
+175004	{Basic} {Eagle} {Eye}
+
+Basic Eagle Eye gives your hero a 40%% chance to learn any 1st or 2nd level spell used in combat and gives a 10%% chance to counter a beneficial spell cast by the enemy.		
+175005	{Advanced} {Eagle} {Eye}
+
+Advanced Eagle Eye gives your hero a 50%% chance to learn any spell up to 3rd level used in combat and gives a 20%% chance to counter a beneficial spell cast by the enemy.		
+175006	{Expert} {Eagle} {Eye}
+
+Expert Eagle Eye gives your hero a 60%% chance to learn any spell up to 4th level used in combat and gives a 30%% chance to counter a beneficial spell cast by the enemy.		
+175007	{Basic} {Eagle} {Eye}
+
+Basic Eagle Eye gives your hero a 40%% chance to learn any 1st or 2nd level spells used in combat and a 10%% chance to counter a beneficial spell cast by the enemy.
+The hero will also gain a bonus 1st or 2nd level spell when gaining a level.		
+175008	{Advanced} {Eagle} {Eye}
+
+Advanced Eagle Eye gives your hero a 50%% chance to learn any spell up to 3rd level used in combat and a 20%% chance to counter a beneficial spell cast by the enemy. The hero will also gain a bonus 2nd or 3rd level spell when gaining a level. Lower level spells will be offered if the hero doesn't have the required Wisdom.		
+175009	{Expert} {Eagle} {Eye}
+
+Expert Eagle Eye gives your hero a 60%% chance to learn any spell up to 4th level used in combat and a 30%% chance to counter a beneficial spell cast by the enemy. The hero will also gain a bonus 3rd or 4th level spell when gaining a level. Lower level spells will be offered if the hero doesn't have the required Wisdom.		
+175010	{Scouting}		
+175011	{Basic} {Scouting}
+
+Basic Scouting allows your hero to see 1 square further into the shroud and gain 1 Rogue each day if an army slot is available.		
+175012	{Advanced} {Scouting}
+
+Advanced Scouting allows your hero to see 2 squares further into the shroud and gain 3 Rogues each day if an army slot is available.		
+175013	{Expert} {Scouting}
+
+Expert Scouting allows your hero to see 3 squares further into the shroud and gain 5 Rogues each day if an army slot is available.		
+175014	{Basic} {Scouting}
+
+Basic Scouting allows your hero to see 1 square further into the shroud and gives a 2%% chance per step of finding a random encounter.		
+175015	{Advanced} {Scouting}
+
+Advanced Scouting allows your hero to see 2 squares further into the shroud and gives a 3%% chance per step of finding a random encounter.		
+175016	{Expert} {Scouting}
+
+Expert Scouting allows your hero to see 3 squares further into the shroud and gives a 4%% chance per step of finding a random encounter.		
+175017	{Basic} {Scouting}
+
+Basic Scouting allows your hero to see 1 square further into the shroud, gain 1 Rogue each day if an army slot is available, and gives a 2%% chance per step of finding a random encounter.		
+175018	{Advanced} {Scouting}
+
+Advanced Scouting allows your hero to see 2 squares further into the shroud, gain 3 Rogues each day if an army slot is available, and gives a 3%% chance per step of finding a random encounter.		
+175019	{Expert} {Scouting}
+
+Expert Scouting allows your hero to see 3 squares further into the shroud, gain 5 Rogues each day if an army slot is available, and gives a 4%% chance per step of finding a random encounter.		
+175020	{Resistance}		
+175021	{Basic} {Resistance}
+
+Basic Resistance endows a hero's troops with 5%% magic resistance and downgrades 1 enemy creature stack to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175022	{Advanced} {Resistance}
+
+Advanced Resistance endows a hero's troops with 10%% magic resistance and downgrades 2 enemy creature stacks to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175023	{Expert} {Resistance}
+
+Expert Resistance endows a hero's troops with 20%% magic resistance and downgrades 3 enemy creature stacks to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175024	{Basic} {Resistance}
+
+Basic Resistance endows a hero's troops with 10%% magic resistance.		
+175025	{Advanced} {Resistance}
+
+Advanced Resistance endows a hero's troops with 20%% magic resistance.		
+175026	{Expert} {Resistance}
+
+Expert Resistance endows a hero's troops with 30%% magic resistance.		
+175027	{Basic} {Resistance}
+
+Basic Resistance endows a hero's troops with 10%% magic resistance and downgrades 1 enemy creature stack to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175028	{Advanced} {Resistance}
+
+Advanced Resistance endows a hero's troops with 20%% magic resistance and downgrades 2 enemy creature stacks to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175029	{Expert} {Resistance}
+
+Expert Resistance endows a hero's troops with 30%% magic resistance and downgrades 3 enemy creature stacks to non-upgraded form prior to the start of combat. The troops of the victorious army will regain their upgraded status after the battle.		
+175030	{Learning}		
+175031	{Basic} {Learning}
+
+Basic Learning increases a hero's earned experience by 5%% and gives the hero a 20% chance of receiving an extra primary skill point when gaining a level.		
+175032	{Advanced} {Learning}
+
+Advanced Learning increases a hero's earned experience by 10%% and gives the hero a 35% chance of receiving an extra primary skill point when gaining a level.		
+175033	{Expert} {Learning}
+
+Expert Learning increases a hero's earned experience by 15%% and gives the hero a 50% chance of receiving an extra primary skill point when gaining a level.		
+175034	{Basic} {Learning}
+
+Basic Learning increases a hero's earned experience by 5%% and gives the hero 100 experience points per day.		
+175035	{Advanced} {Learning}
+
+Advanced Learning increases a hero's earned experience by 10%% and gives the hero 200 experience points per day.		
+175036	{Expert} {Learning}
+
+Expert Learning increases a hero's earned experience by 15%% and gives the hero 300 experience points per day.		
+175037	{Basic} {Learning}
+
+Basic Learning increases a hero's earned experience by 5%%, gives the hero a 20% chance of receiving an extra primary skill point when gaining a level, and gives the hero 100 experience points per day.		
+175038	{Advanced} {Learning}
+
+Advanced Learning increases a hero's earned experience by 10%%, gives the hero a 35% chance of receiving an extra primary skill point when gaining a level, and gives the hero 200 experience points per day.		
+175039	{Expert} {Learning}
+
+Expert Learning increases a hero's earned experience by 15%%, gives the hero a 50% chance of receiving an extra primary skill point when gaining a level, and gives the hero 300 experience points per day.		
+175040	{Tactics}		
+175041	{Basic} {Tactics}
+
+Basic Tactics gives +1 Speed to a hero's troops.		
+175042	{Advanced} {Tactics}
+
+Advanced Tactics gives +2 Speed to a hero's troops.		
+175043	{Expert} {Tactics}
+
+Expert Tactics gives +3 Speed to a hero's troops.		
+175044	{Artillery}		
+175045	{Basic} {Artillery}
+
+Basic Artillery gives control of the ballista to the hero, allowing one shot with a 50%% chance of doing double damage in combat and allows the ballista to deal an additional 100% damage to an enemy unit prior to a battle. It also lets a defending hero control arrow towers during a castle siege.		
+175046	{Advanced} {Artillery}
+
+Advanced Artillery gives control of the ballista to the hero, allowing two shots with a 75%% chance of doing double damage in combat and allows the ballista to deal an additional 200% damage to an enemy unit prior to a battle. It also lets a defending hero control arrow towers during a castle siege.		
+175047	{Expert} {Artillery}
+
+Expert Artillery gives control of the ballista to the hero, allowing two shots which inflict double damage in combat and allows the ballista to deal an additional 300%% damage to an enemy unit prior to a battle. It also lets a defending hero control arrow towers during a castle siege.		
+175048	{Estates}		
+175049	{Basic} {Estates}
+
+Basic Estates allows your hero to contribute 125 + (5 x level) gold per day to your cause and generates 1 resource per week.		
+175050	{Advanced} {Estates}
+
+Advanced Estates allows your hero to contribute 250 + (10 x level) gold per day to your cause and generates 2 resources per week.		
+175051	{Expert} {Estates}
+
+Expert Estates allows your hero to contribute 500 + (15 x level) gold per day to your cause and generates 3 resources per week.		
+175052	{First} {Aid}		
+175053	{Basic} {First} {Aid}
+
+Basic First Aid gives control of the first aid tent to the hero, healing up to 50 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 100%%.		
+175054	{Advanced} {First} {Aid}
+
+Advanced First Aid gives control of the first aid tent to the hero, healing up to 75 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 200%%.		
+175055	{Expert} {First} {Aid}
+
+Expert First Aid gives control of the first aid tent to the hero, healing up to 100 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 300%%.		
+175056	{Luck}		
+175057	{Basic} {Luck}
+
+Basic Luck increases your hero's luck by 1, and provides a chance that one stack will gain +2 Attack, +2 Defense and Fortune for a battle (each stack has a 10%% chance).		
+175058	{Advanced} {Luck}
+
+Advanced Luck increases your hero's luck by 2, and provides a chance that up to two stacks will gain +2 Attack, +2 Defense and Fortune for a battle (each stack has a 20%% chance).		
+175059	{Expert} {Luck}
+
+Expert Luck increases your hero's luck by 3, and provides a chance that up to three stacks will gain +2 Attack, +2 Defense and Fortune for a battle (each stack has a 30%% chance).		
+175060	{Mysticism}		
+175061	{Basic} {Mysticism}
+
+Basic Mysticism allows your hero to regenerate 2 spell points per day and reduces an opponent's spell points by 20%% for the duration of the battle.		
+175062	{Advanced} {Mysticism}
+
+Advanced Mysticism allows your hero to regenerate 3 spell points per day and reduces an opponent's spell points by 30%% for the duration of the battle.		
+175063	{Expert} {Mysticism}
+
+Expert Mysticism allows your hero to regenerate 4 spell points per day and reduces an opponent's spell points by 40%% for the duration of the battle.		
+175064	{Navigation}		
+175065	{Basic} {Navigation}
+
+Basic Navigation increases your hero's movement points at sea by 50%% and gives the hero's troops +1 Attack and Defense during naval battles.		
+175066	{Advanced} {Navigation}
+
+Advanced Navigation increases your hero's movement points at sea by 100%% and gives the hero's troops +2 Attack and Defense during naval battles.		
+175067	{Expert} {Navigation}
+
+Expert Navigation increases your hero's movement points at sea by 150%% and gives the hero's troops +3 Attack and Defense during naval battles.		
+175068	{Pathfinding}		
+175069	{Basic} {Pathfinding}
+
+Basic Pathfinding reduces the movement penalty for rough terrain by 25%% and increases the minimum movement rate of your hero's army (equivalent to speed 6).		
+175070	{Advanced} {Pathfinding}
+
+Advanced Pathfinding reduces the movement penalty for rough terrain by 50%% and increases the minimum movement rate of your hero's army (equivalent to speed 7).		
+175071	{Expert} {Pathfinding}
+
+Expert Pathfinding reduces the movement penalty for rough terrain by 75%% and increases the minimum movement rate of your hero's army (equivalent to speed 8).		
+175072	{Scholar}		
+175073	{Basic} {Scholar}
+
+Basic Scholar allows heroes to teach each other 1st and 2nd level spells, effectively trading spells between spell books. It also allows a hero to attempt to learn a new spell up to 2nd level once a week with a 40%% chance of success.		
+175074	{Advanced} {Scholar}
+
+Advanced Scholar allows heroes to teach each other any spell up to 3rd level, effectively trading spells between spell books. It also allows a hero to attempt to learn a new spell up to 3rd level once a week with a 50%% chance of success.		
+175075	{Expert} {Scholar}
+
+Expert Scholar allows heroes to teach each other any spell up to 4th level, effectively trading spells between spell books. It also allows a hero to attempt to learn a new spell up to 4th level once a week with a 60%% chance of success.		
+175076	{Sorcery}		
+175077	{Basic} {Sorcery}
+
+Basic Sorcery causes a hero's spells to inflict an additional 10%% damage in combat.		
+175078	{Advanced} {Sorcery}
+
+Advanced Sorcery causes a hero's spells to inflict an additional 20%% damage in combat.		
+175079	{Expert} {Sorcery}
+
+Expert Sorcery causes a hero's spells to inflict an additional 30%% damage in combat.		
+175080	{Armorer}		
+175081	{Basic} {Armorer}
+
+Basic Armorer reduces all physical damage inflicted against the hero's troops by 10%%.		
+175082	{Advanced} {Armorer}
+
+Advanced Armorer reduces all physical damage inflicted against the hero's troops by 15%%.		
+175083	{Expert} {Armorer}
+
+Expert Armorer reduces all physical damage inflicted against the hero's troops by 20%%.		
+175084	{Basic} {Mysticism}
+
+Basic Mysticism allows your hero to regenerate up to 10%% of the normal maximum spell points per day and learn what the next "Week of" will be on day 2 of each week.		
+175085	{Advanced} {Mysticism}
+
+Advanced Mysticism allows your hero to regenerate up to 20%% of the normal maximum spell points per day, learn what the next "Week of" will be on day 2 of each week, and learn which spells a Mage guild will contain when fully built (by right-clicking on it).		
+175086	{Expert} {Mysticism}
+
+Expert Mysticism allows your hero to regenerate up to 30%% of the normal maximum spell points per day, learn what the next "Week of" will be on day 2 of each week, learn which spells a Mage guild will contain when fully built (by right-clicking on it), and learn all about an enemy hero's skills, artifacts, troops and more by right-clicking on the hero.		
+175087	{Basic} {Mysticism}
+
+Basic Mysticism allows your hero to regenerate up to 10%% of the normal maximum spell points per day and learn what the next "Week of" will be on day 2 of each week. It also reduces an opponent's spell points by 20%% for the duration of the battle.		
+175088	{Advanced} {Mysticism}
+
+Advanced Mysticism allows your hero to regenerate up to 20%% of the normal maximum spell points per day, learn what the next "Week of" will be on day 2 of each week, and learn which spells a Mage guild will contain when fully built (by right-clicking on it). It also reduces an opponent's spell points by 30%% for the duration of the battle.		
+175089	{Expert} {Mysticism}
+
+Expert Mysticism allows your hero to regenerate up to 30%% of the normal maximum spell points per day, learn what the next "Week of" will be on day 2 of each week, learn which spells a Mage guild will contain when fully built (by right-clicking on it), and learn all about an enemy hero's skills, artifacts, troops and more by right-clicking on the hero. It also reduces an opponent's spell points by 40%% for the duration of the battle.		
+175090	{Basic} {Sorcery}
+
+Basic Sorcery causes a hero's spells to inflict an additional 5%% damage in combat, and lets the hero learn additional information when right-clicking on many objects that give resources, artifacts, teach skills or spells. Object range is hero's level + 4.		
+175091	{Advanced} {Sorcery}
+
+Advanced Sorcery causes a hero's spells to inflict an additional 10%% damage in combat, lets the hero learn additional information about objects when right-clicking them (range is hero's level + 6), and increases the value of resource piles and standard treasure chests that the hero picks up. Resource piles are increased by 1/4 of the hero's level for gold, ore and wood, and by 1/6 the hero's level for precious resources. The value of treasure chests are increased by 500 gold.		
+175092	{Expert} {Sorcery}
+
+Expert Sorcery causes a hero's spells to inflict an additional 15%% damage in combat, lets the hero learn additional information about objects when right-clicking them, increases the value of resource piles, and boosts treasure chest value by 1000 gold. In addition, it lets the hero visit the Star Axis, Garden of Revelation and Learning Stone from a distance, and resources may be collected at a distance from Windmills, Water Wheels and Mystical Gardens. Range is hero's level + 8.		
+175093	{Basic} {Sorcery}
+
+Basic Sorcery causes a hero's spells to inflict an additional 10%% damage in combat, and lets the hero learn additional information when right-clicking on many objects that give resources, artifacts, teach skills or spells. Object range is hero's level + 4.		
+175094	{Advanced} {Sorcery}
+
+Advanced Sorcery causes a hero's spells to inflict an additional 20%% damage in combat, lets the hero learn additional information about objects when right-clicking them (range is hero's level + 6), and increases the value of resource piles and standard treasure chests that the hero picks up. Resource piles are increased by 1/4 of the hero's level for gold, ore and wood, and by 1/6 the hero's level for precious resources. The value of treasure chests are increased by 500 gold.		
+175095	{Expert} {Sorcery}
+
+Expert Sorcery causes a hero's spells to inflict an additional 30%% damage in combat, lets the hero learn additional information about objects when right-clicking them, increases the value of resource piles, and boosts treasure chest value by 1000 gold. In addition, it lets the hero visit the Star Axis, Garden of Revelation and Learning Stone from a distance, and resources may be collected at a distance from Windmills, Water Wheels and Mystical Gardens. Range is hero's level + 8.		
+175096	{Basic} {Estates}
+
+Basic Estates gives another daily %Y27 gold per 10,000 experience.       
+Also gives additional resources, depending on weekday and hero level:
+lvl 1-9: first {(lvl)} days each week give the same random resource.       
+lvl 10+: daily changes resource bonus: 1 Wood + 1 Ore each monday,  
+         1 Mercury (tuesday) .. 1 Gem (friday), 350 Gold (saturday),
+         1 Mithril (sunday). Expert Estates lets you choose resource.
+
+Click on the Estates icon in the hero screen to learn more.		
+175097	{Advanced} {Estates}
+
+Advanced Estates gives another daily %Y26 gold per 10,000 experience.
+Also gives additional resources, depending on weekday and hero level:
+lvl 1-9: first {(lvl)} days each week give the same random resource.       
+lvl 10+: daily changes resource bonus: 1 Wood + 1 Ore each monday,  
+         1 Mercury (tuesday) .. 1 Gem (friday), 350 Gold (saturday),
+         1 Mithril (sunday). Expert Estates lets you choose resource.
+
+Click on the Estates icon in the hero screen to learn more.		
+175098	{Expert} {Estates}
+
+Expert Estates gives another daily %Y25 gold per 10,000 experience.     
+Also gives additional resources, depending on weekday and hero level:
+lvl 1-9: first {(lvl)} days each week give the same random resource.       
+lvl 10+: daily changes resource bonus: 1 Wood + 1 Ore each monday,  
+         1 Mercury (tuesday) .. 1 Gem (friday), 350 Gold (saturday),
+         1 Mithril (sunday). Expert Estates lets you choose resource.
+
+Click on the Estates icon in the hero screen to learn more.		
+175099	{Basic} {Estates}
+
+Basic Estates allows your hero to contribute 125 + (5 x level) gold per day to your cause and generates 1 resource per week.
+
+Basic Estates also gives another daily %Y27 gold per 10,000 experience and gives additional resources, depending on weekday and hero level. Click on the Estates icon in the hero screen to learn more.		
+175100	{Advanced} {Estates}
+
+Advanced Estates allows your hero to contribute 250 + (10 x level) gold per day to your cause and generates 2 resources per week.
+
+Advanced Estates also gives another daily %Y26 gold per 10,000 experience and gives additional resources, depending on weekday and hero level. Click on the Estates icon in the hero screen to learn more.		
+175101	{Expert} {Estates}
+
+Expert Estates allows your hero to contribute 500 + (15 x level) gold per day to your cause and generates 3 resources per week.
+
+Expert Estates also gives another daily %Y25 gold per 10,000 experience and gives additional resources, depending on weekday and hero level. Click on the Estates icon in the hero screen to learn more.		
+175102	{Basic} {First} {Aid}
+
+Basic First Aid gives control of the first aid tent to the hero, healing up to 50 points of damage to the first unit of the selected stack. Basic First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Basic Cure spell along with each healing; spellpower is equal to the number of tents.		
+175103	{Advanced} {First} {Aid}
+
+Advanced First Aid gives control of the first aid tent to the hero, healing up to 75 points of damage to the first unit of the selected stack. Advanced First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Advanced Cure spell along with each healing; spellpower is equal to the number of tents.		
+175104	{Expert} {First} {Aid}
+
+Expert First Aid gives control of the first aid tent to the hero, healing up to 100 points of damage to the first unit of the selected stack. Expert First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Expert Cure spell along with each healing; spellpower is equal to the number of tents.		
+175105	{Basic} {First} {Aid}
+
+Basic First Aid gives control of the first aid tent to the hero, healing up to 50 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 100%%. Basic First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Basic Cure spell along with each healing; spellpower is equal to the number of tents.		
+175106	{Advanced} {First} {Aid}
+
+Advanced First Aid gives control of the first aid tent to the hero, healing up to 75 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 200%%. Advanced First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Advanced Cure spell along with each healing; spellpower is equal to the number of tents.		
+175107	{Expert} {First} {Aid}
+
+Expert First Aid gives control of the first aid tent to the hero, healing up to 100 points of damage to the first unit of the selected stack in combat, and increases the first aid tent's ability to resurrect a damaged unit after a battle by 300%%. Expert First Aid also summons additional tents onto the battlefield (# of tents = hero level) and tents apply the Expert Cure spell along with each healing, spellpower is equal to the number of tents.		
+175108	 For details about {Espionage} click on the Scouting Skill Icon in the Hero Screen.		
+175109	{Basic} {Pathfinding}
+
+{»} 25% rough terrain penalty		
+175110	{Advanced} {Pathfinding}
+
+{»} 50% rough terrain penalty		
+175111	{Expert} {Pathfinding}
+
+{»} 75% rough terrain penalty		
+175112	
+{»} Minimum army map speed of 6		
+175113	
+{»} Minimum army map speed of 7		
+175114	
+{»} Minimum army map speed of 8		
+175115	{Basic} {Archery}
+
+{»} +10% ranged damage		
+175116	{Advanced} {Archery}
+
+{»} +25% ranged damage		
+175117	{Expert} {Archery}
+
+{»} +50% ranged damage		
+175118	{Basic} {Logistics}
+
+{»} +10% land movement		
+175119	{Advanced} {Logistics}
+
+{»} +20% land movement		
+175120	{Expert} {Logistics}
+
+{»} +30% land movement		
+175121	{Basic} {Scouting}
+
+{»} +1 square view radius		
+175122	{Advanced} {Scouting}
+
+{»} +2 squares view radius		
+175123	{Expert} {Scouting}
+
+{»} +3 squares view radius		
+175124	
+{»} Gain 1 rogue per day		
+175125	
+{»} Gain 3 rogues per day		
+175126	
+{»} Gain 5 rogues per day		
+175127	
+{»} 1% chance per step of random encounter		
+175128	
+{»} 1.5% chance per step of random encounter		
+175129	
+{»} 2% chance per step of random encounter		
+175130	
+{»} Can send spies: right-click scouting icon		
+175131	{Basic} {Diplomacy}
+
+{»} Negotiate with weaker monsters
+{»} -20% surrendering cost		
+175132	{Advanced} {Diplomacy}
+
+{»} Negotiate with weaker monsters
+{»} -40% surrendering cost		
+175133	{Expert} {Diplomacy}
+
+{»} Negotiate with weaker monsters
+{»} -60% surrendering cost		
+175134	{Basic} {Navigation}
+
+{»} +50% water movement		
+175135	{Advanced} {Navigation}
+
+{»} +100% water movement		
+175136	{Expert} {Navigation}
+
+{»} +150% water movement		
+175137	
+{»} +1 Attack and Defense for naval combat		
+175138	
+{»} +2 Attack and Defense for naval combat		
+175139	
+{»} +3 Attack and Defense for naval combat		
+175140	{Basic} {Leadership}
+
+{»} +1 Morale		
+175141	{Advanced} {Leadership}
+
+{»} +2 Morale		
+175142	{Expert} {Leadership}
+
+{»} +3 Morale		
+175143	{Basic} {Wisdom}
+
+{»} Learn up to 3rd level spells		
+175144	{Advanced} {Wisdom}
+
+{»} Learn up to 4th level spells		
+175145	{Expert} {Wisdom}
+
+{»} Learn up to 5th level spells		
+175146	{Basic} {Mysticism}
+
+{»} Regain 2 spell points per day		
+175147	{Advanced} {Mysticism}
+
+{»} Regain 3 spell points per day		
+175148	{Expert} {Mysticism}
+
+{»} Regain 4 spell points per day		
+175149	
+{»} Regain 10% of maximum spell points daily
+{»} Learn next "week of" week on day 2		
+175150	
+{»} Regain 20% of maximum spell points daily
+{»} Learn next "week of" week on day 2
+{»} Learn future mage guild spells		
+175151	
+{»} Regain 30% of maximum spell points daily
+{»} Learn next "week of" week on day 2
+{»} Learn future mage guild spells
+{»} Learn enemy hero details		
+175152	
+{»} -20% to enemy spell points for battle		
+175153	
+{»} -30% to enemy spell points for battle		
+175154	
+{»} -40% to enemy spell points for battle		
+175155	{Basic} {Luck}
+
+{»} +1 luck		
+175156	{Advanced} {Luck}
+
+{»} +2 luck		
+175157	{Expert} {Luck}
+
+{»} +3 luck		
+175158	
+{»} 10% chance of +2 Attack, +2 Defense and Fortune for 1 stack		
+175159	
+{»} 20% chance of +2 Attack, +2 Defense and Fortune for 2 stacks		
+175160	
+{»} 30% chance of +2 Attack,+2 Defense and Fortune for 3 stacks		
+175161	{Basic} {Ballistics}
+
+{»} Control of catapult
+{»} 1 aimed shot
+{»} Increased damage		
+175162	{Advanced} {Ballistics}
+
+{»} Control of catapult
+{»} 2 aimed shots
+{»} Increased damage		
+175163	{Expert} {Ballistics}
+
+{»} Control of catapult
+{»} 2 aimed shots
+{»} Maximum damage		
+175164	{Basic} {Eagle} {Eye}
+
+{»} 40% chance to learn 1st or 2nd level spells used in combat		
+175165	{Advanced} {Eagle} {Eye}
+
+{»} 50% chance to learn up to 3rd level spells used in combat		
+175166	{Expert} {Eagle} {Eye}
+
+{»} 60% chance to learn up to 4th level spells used in combat		
+175167	
+{»} Bonus 1st or 2nd level spell when gaining a level		
+175168	
+{»} Bonus 2nd or 3rd level spell when gaining a level		
+175169	
+{»} Bonus 3rd or 4th level spell when gaining a level		
+175170	
+{»} 10% chance to counter enemy beneficial spell		
+175171	
+{»} 20% chance to counter enemy beneficial spell		
+175172	
+{»} 30% chance to counter enemy beneficial spell		
+175173	{Basic} {Necromancy}
+
+{»} Animate 10% of combat casualties		
+175174	{Advanced} {Necromancy}
+
+{»} Animate 20% of combat casualties		
+175175	{Expert} {Necromancy}
+
+{»} Animate 30% of combat casualties		
+175176	{Basic} {Estates}
+
+{»} +125 Gold per day		
+175177	{Advanced} {Estates}
+
+{»} +250 Gold per day		
+175178	{Expert} {Estates}
+
+{»} +500 Gold per day		
+175179	
+{»} +(5 x level) Gold per day
+{»} +1 resource per week		
+175180	
+{»} +(10 x level) Gold per day
+{»} +2 resources per week		
+175181	
+{»} +(15 x level) Gold per day
+{»} +3 resources per week		
+175182	
+{»} +%Y27 Gold per 10000 experience
+{»} +Resources depending on level
+     and weekday (click skill icon
+     in hero screen for more info)		
+175183	
+{»} +%Y26 Gold per 10000 experience
+{»} +Resources depending on level
+     and weekday (click skill icon
+     in hero screen for more info)		
+175184	
+{»} +%Y25 Gold per 10000 experience
+{»} +Resources depending on level
+     and weekday (click skill icon
+     in hero screen for more info)		
+175185	{Basic} {Fire} {Magic}
+
+{»} Reduces cost of fire spells		
+175186	{Advanced} {Fire} {Magic}
+
+{»} Reduces cost of fire spells
+{»} Increased effect of fire spells		
+175187	{Expert} {Fire} {Magic}
+
+{»} Reduces cost of fire spells
+{»} Maximum effect of fire spells		
+175188	{Basic} {Air} {Magic}
+
+{»} Reduces cost of air spells		
+175189	{Advanced} {Air} {Magic}
+
+{»} Reduces cost of air spells
+{»} Increased effect of air spells		
+175190	{Expert} {Air} {Magic}
+
+{»} Reduces cost of air spells
+{»} Maximum effect of air spells		
+175191	{Basic} {Water} {Magic}
+
+{»} Reduces cost of water spells		
+175192	{Advanced} {Water} {Magic}
+
+{»} Reduces cost of water spells
+{»} Increased effect of water spells		
+175193	{Expert} {Water} {Magic}
+
+{»} Reduces cost of water spells
+{»} Maximum effect of water spells		
+175194	{Basic} {Earth} {Magic}
+
+{»} Reduces cost of earth spells		
+175195	{Advanced} {Earth} {Magic}
+
+{»} Reduces cost of earth spells
+{»} Increased effect of earth spells		
+175196	{Expert} {Earth} {Magic}
+
+{»} Reduces cost of earth spells
+{»} Maximum effect of earth spells		
+175197	{Basic} {Scholar}
+
+{»} Teach/Learn 1st and 2nd level spells		
+175198	{Advanced} {Scholar}
+
+{»} Teach/Learn up to 3rd level spells		
+175199	{Expert} {Scholar}
+
+{»} Teach/Learn up to 4th level spells		
+175200	
+{»} 40% chance to learn a new spell up to 2nd level each week		
+175201	
+{»} 50% chance to learn a new spell up to 3rd level each week		
+175202	
+{»} 60% chance to learn a new spell up to 4th level each week		
+175203	{Basic} {Tactics}
+
+{»} Arrange troops within 3 hexes of edge		
+175204	{Advanced} {Tactics}
+
+{»} Arrange troops within 5 hexes of edge		
+175205	{Expert} {Tactics}
+
+{»} Arrange troops within 7 hexes of edge		
+175206	{Basic} {Tactics}
+
+{»} +1 speed to troops		
+175207	{Advanced} {Tactics}
+
+{»} +2 speed to troops		
+175208	{Expert} {Tactics}
+
+{»} +3 speed to troops		
+175209	{Basic} {Artillery}
+
+{»} Control of ballista
+{»} 1 shot per round
+{»} 50% chance of double damage
+{»} Control of arrow towers		
+175210	{Advanced} {Artillery}
+
+{»} Control of ballista
+{»} 2 shots per round
+{»} 75% chance of double damage
+{»} Control of arrow towers		
+175211	{Expert} {Artillery}
+
+{»} Control of ballista
+{»} 2 shots per round
+{»} 100% chance of double damage
+{»} Control of arrow towers		
+175212	
+{»} Ballista does (1-50 + hero level) x 2 damage before battle		
+175213	
+{»} Ballista does (1-50 + hero level) x 3 damage before battle		
+175214	
+{»} Ballista does (1-50 + hero level) x 4 damage before battle		
+175215	{Basic} {Learning}
+
+{»} +5% experience		
+175216	{Advanced} {Learning}
+
+{»} +10% experience		
+175217	{Expert} {Learning}
+
+{»} +15% experience		
+175218	
+{»} 20% chance of +1 skill point each level		
+175219	
+{»} 35% chance of +1 skill point each level		
+175220	
+{»} 50% chance of +1 skill point each level		
+175221	
+{»} +100 experience per day		
+175222	
+{»} +200 experience per day		
+175223	
+{»} +300 experience per day		
+175224	{Basic} {Offense}
+
+{»} +10% melee damage		
+175225	{Advanced} {Offense}
+
+{»} +20% melee damage		
+175226	{Expert} {Offense}
+
+{»} +30% melee damage		
+175227	{Basic} {Armorer}
+
+{»} -5% damage to friendly troops		
+175228	{Advanced} {Armorer}
+
+{»} -10% damage to friendly troops		
+175229	{Expert} {Armorer}
+
+{»} -15% damage to friendly troops		
+175230	{Basic} {Armorer}
+
+{»} -10% damage to friendly troops		
+175231	{Advanced} {Armorer}
+
+{»} -15% damage to friendly troops		
+175232	{Expert} {Armorer}
+
+{»} -20% damage to friendly troops		
+175233	{Basic} {Intelligence}
+
+{»} +25% spell points		
+175234	{Advanced} {Intelligence}
+
+{»} +50% spell points		
+175235	{Expert} {Intelligence}
+
+{»} +100% spell points		
+175236	{Basic} {Sorcery}
+
+{»} +5% spell damage		
+175237	{Advanced} {Sorcery}
+
+{»} +10% spell damage		
+175238	{Expert} {Sorcery}
+
+{»} +15% spell damage		
+175239	{Basic} {Sorcery}
+
+{»} +10% spell damage		
+175240	{Advanced} {Sorcery}
+
+{»} +20% spell damage		
+175241	{Expert} {Sorcery}
+
+{»} +30% spell damage		
+175242	
+{»} Extra right-click info. Range = hero level +4		
+175243	
+{»} Extra right-click info. Range = hero level +6
+{»} +25% value to gold, wood, and ore piles
+{»} +16% value to precious resource piles
+{»} +500 gold value to treasure chests		
+175244	
+{»} Extra right-click info. Range = hero level +8
+{»} +25% value to gold (+100), wood (+1), and ore (+1) piles
+{»} +16% value to precious resource piles (+1)
+{»} +1000 gold value to treasure chests
+{»} Visit from distance: Star Axis, Garden of Revelation, Learning Stone, Windmill, Water Wheel, Mystical Garden		
+175245	{Basic} {Resistance}
+
+{»} 5% magic resistance		
+175246	{Advanced} {Resistance}
+
+{»} 10% magic resistance		
+175247	{Expert} {Resistance}
+
+{»} 20% magic resistance		
+175248	{Basic} {Resistance}
+
+{»} 10% magic resistance		
+175249	{Advanced} {Resistance}
+
+{»} 20% magic resistance		
+175250	{Expert} {Resistance}
+
+{»} 30% magic resistance		
+175251	
+{»} Downgrades 1 enemy stack		
+175252	
+{»} Downgrades 2 enemy stacks		
+175253	
+{»} Downgrades 3 enemy stacks		
+175254	{Basic} {First} {Aid}
+
+{»} Control of first aid tent
+{»} Up to 50 health healed		
+175255	{Advanced} {First} {Aid}
+
+{»} Control of first aid tent
+{»} Up to 75 health healed		
+175256	{Expert} {First} {Aid}
+
+{»} Control of first aid tent
+{»} Up to 100 health healed		
+175257	
+{»} First aid tents resurrect (1-50 + hero level) x 2 HPs after battle		
+175258	
+{»} First aid tents resurrect (1-50 + hero level) x 3 HPs after battle		
+175259	
+{»} First aid tents resurrect (1-50 + hero level) x 4 HPs after battle		
+175260	
+{»} Additional tents = hero level
+{»} Casts Basic Cure on target		
+175261	
+{»} Additional tents = hero level
+{»} Casts Advanced Cure on target		
+175262	
+{»} Additional tents = hero level
+{»} Casts Expert (Mass) Cure on army		
+175263	{Dead Man's Boots} 
+ 
+Worn on the feet, these boots increase your Necromancy skill by 15 percent, and produce a copy of themselves at the start of each week.		
+175264	{Garniture Of Interference} 
+ 
+Worn about the neck, this item increases your Magic Resistance by 5 percent, and at the start of a week may be traded to learn a Magic skill.		
+175265	{Surcoat Of Counterpoise} 
+ 
+Worn about the shoulders, this item increases your Magic Resistance by 10 percent, and doubles the effects of some of your other strange new artifacts.		
+175266	{Boots Of Polarity} 
+ 
+Worn on the feet, this item increases your Magic Resistance by 15 percent, and at the start of a week may be traded for extra movement.		
+175267	{Bird Of Perception} 
+ 
+This figurine increases your Eagle Eye skill by 5 percent, and gives you 6 Royal Griffins at the start of each week.		
+175268	{Stoic Watchman} 
+ 
+This figurine increases your Eagle Eye skill by 10 percent, and reveals a large area around you at the start of each week.		
+175269	{Emblem Of Cognizance} 
+ 
+This item increases your Eagle Eye skill by 15 percent, and gives you 15 gold per troop at the start of each week.		
+175270	{Statesman's Medal} 
+ 
+Worn about the neck, the Statesman's Medal reduces the cost of surrenduring, and may be traded at a town to build a few structures.		
+175271	{Diplomat's Ring} 
+ 
+Worn on the finger, the Diplomat's Ring reduces the cost of surrenduring, and at the start of a week may be traded to double your number of first-level troops.		
+175272	{Sphere Of Permanence} 
+ 
+Wielding this sphere renders your units immune to the Dispel Magic spell, and gives you a Mighty Gorgon, plus a Mighty Gorgon per 10 Defense, at the start of each week.		
+175273	{Orb Of Vulnerability} 
+ 
+During combat, this orb negates the natural magic resistance of all creatures on the battlefield. At the start of each week, this Orb gives you an Archmage, plus an additional one for each level of Wisdom skill.		
+175274	{Pendant Of Dispassion} 
+ 
+Wearing this item renders your units immune to the Berserk spell, and gives you +1 Knowledge at the start of each week.		
+175275	{Pendant Of Second Sight} 
+ 
+Wearing this item renders your units immune to the Blind spell, and upgrades your low-level shooting troops at the start of each week.		
+175276	{Pendant Of Holiness} 
+ 
+Wearing this item renders your units immune to the Curse spell, and gives you a random holy spell at the start of each week.		
+175277	{Pendant Of Life} 
+ 
+Wearing this item renders your units immune to the Death Ripple spell, and gives you 24 Sprites at the start of each week.		
+175278	{Pendant Of Death} 
+ 
+Wearing this item renders your units immune to the Destroy Undead spell, and gives you 12 Zombies at the start of each week.		
+175279	{Pendant Of Free Will} 
+ 
+Wearing this item renders your units immune to the Hypnotize spell, and upgrades your Golems and Peasants at the start of each week.		
+175280	{Pendant Of Total Recall} 
+ 
+Wearing this item renders your units immune to the Forgetfulness spell, and gives you 1000 experience at the start of each week.		
+175281	{Orb Of Inhibition} 
+ 
+This powerful orb prevents all spell casting in combat... and holds a djinn trapped inside it.		
+175282	{Centaur's Axe} 
+ 
+This right-handed weapon increases your attack skill by +2, and upgrades centaurs at the start of each week.		
+175283	{Shield of the Dwarven Lords} 
+ 
+This left-handed item increases your defense skill by +2, and upgrades dwarves at the start of each week.		
+175284	{Helm of the Alabaster Unicorn} 
+ 
+Worn on the head, this helm increases your knowledge skill by +1, and upgrades unicorns at the start of each week.		
+175285	{Breastplate of Petrified Wood} 
+ 
+Worn on the torso, this armor increases your power skill by +1, and upgrades dendroids at the start of each week.		
+175286	{Amulet of the Undertaker} 
+ 
+Worn about the neck, this amulet increases your Necromancy skill by 5 percent, and upgrades walking dead at the start of each week.		
+175287	{Vampire's Cowl} 
+ 
+Worn about the shoulders, this cowl increases your Necromancy skill by 10 percent, and upgrades vampires at the start of each week.		
+175288	{Dead Man's Boots} 
+ 
+Worn on the feet, these boots increase your Necromancy skill by 15 percent and upgrade skeletons at the start of each week.		
+175289	{Statesman's Medal} 
+ 
+Worn about the neck, the Statesman's Medal reduces the cost of surrenduring by 10%% and reduces monster aggression by 1.		
+175290	{Diplomat's Ring} 
+ 
+Worn on the finger, the Diplomat's Ring reduces the cost of surrenduring by 10%% and reduces monster aggression by 1.		
+175291	{Ambassador's Sash} 
+ 
+Worn about the shoulders, the Ambassador's Sash reduces the cost of surrenduring by 10%% and reduces monster aggression by 1.		
+175292	{Collar of Conjuring} 
+ 
+Worn about the neck, this item increases the duration of all your spells by 1 or increases their damage by 5%%.		
+175293	{Ring of Conjuring} 
+ 
+Worn on a finger, this item increases the duration of all your spells by 2 or increases their damage by 10%%.		
+175294	{Cape of Conjuring} 
+ 
+Worn about the shoulders, this item increases the duration of all your spells by 3 or increases their damage by 15%%.		
+175295	{Orb of the Firmament} 
+ 
+This powerful orb causes your Air spells to do an additional 50%% damage and grants your units Protection from Air.		
+175296	{Orb of Silt} 
+ 
+This powerful orb causes your Earth spells to do an additional 50%% damage and grants your units Protection from Earth.		
+175297	{Orb of Tempestuous Fire} 
+ 
+This powerful orb causes your Fire spells to do an additional 50%% damage and grants your units Protection from Fire.		
+175298	{Orb of Driving Rain} 
+ 
+This powerful orb causes your Water spells to do an additional 50%% damage and grants your units Protection from Water.		
+175299	{Sphere Of Permanence} 
+ 
+Wielding this sphere renders your units immune to the Dispel Magic spell and adds 10 health to your non-living, non-undead troops.		
+175300	{Orb Of Vulnerability} 
+ 
+During combat, this orb negates the natural magic resistance of all creatures on the battlefield and afflicts enemy troops with a magical Disease for 50 rounds.		
+175301	{Pendant Of Focused Rage} 
+ 
+Wearing this item renders your units immune to the Berserk spell and fills them with Bloodlust for 50 rounds.		
+175302	Pendant of Focused Rage		
+175303	{Pendant Of Second Sight} 
+ 
+Wearing this item renders your units immune to the Blind spell and grants them Air Shield for 50 rounds.		
+175304	{Pendant Of Holiness} 
+ 
+Wearing this item renders your units immune to the Curse spell and Blesses them for 50 rounds.		
+175305	{Pendant Of Life} 
+ 
+Wearing this item renders your units immune to the Death Ripple spell and increases the health of your living units based on their creature level.
+(+1,+3,+6,+10,+15,+25,+50)		
+175306	{Pendant Of Death} 
+ 
+Wearing this item renders your units immune to the Destroy Undead spell and gives your undead units +5 attack, +5 defense, +1 speed.		
+175307	{Pendant Of Resolve} 
+ 
+Wearing this item renders your units immune to the Hypnotize spell and grants them Stoneskin for 50 rounds.		
+175308	Pendant of Resolve		
+175309	{Pendant Of True Aim} 
+ 
+Wearing this item renders your units immune to the Forgetfulness spell and grants them Precision for 50 rounds.		
+175310	Pendant of True Aim		
+175311	{Ring of the Magi} 
+ 
+The Ring of the Magi further increases the duration of all your spells by 50 or further increases their damage by 20%%.		
+175312	{Dead Man's Boots} 
+ 
+Worn on the feet, these boots increase your Necromancy skill by 15 percent, produce a copy of themselves at the start of each week and upgrade skeletons at the start of each week.		
+175313	{Statesman's Medal} 
+ 
+Worn about the neck, the Statesman's Medal reduces the cost of surrenduring, may be traded at a town to build a few structures and reduces monster aggression by 1.		
+175314	{Diplomat's Ring} 
+ 
+Worn on the finger, the Diplomat's Ring reduces the cost of surrenduring, may be traded at the start of the week to double your number of first-level troops and reduces monster aggression by 1.		
+175315	{Sphere Of Permanence} 
+ 
+Wielding this sphere renders your units immune to the Dispel Magic spell, gives you a Mighty Gorgon plus one Mighty Gorgon per 10 Defense at the start of each week and adds 10 health to your non-living, non-undead troops.		
+175316	{Orb Of Vulnerability} 
+ 
+During combat, this orb negates the natural magic resistance of all creatures on the battlefield, gives you an Archmage plus an additional one for each level of Wisdom skill at the start of each week and afflicts enemy troops with a magical Disease for 50 rounds.		
+175317	{Pendant Of Focused Rage} 
+ 
+Wearing this item renders your units immune to the Berserk spell, gives you +1 Knowledge at the start of each week and fills your units with Bloodlust for 50 rounds.		
+175318	{Pendant Of Second Sight} 
+ 
+Wearing this item renders your units immune to the Blind spell, upgrades your low-level shooting troops at the start of each week and grants your units Air Shield for 50 rounds.		
+175319	{Pendant Of Holiness} 
+ 
+Wearing this item renders your units immune to the Curse spell, gives you a random holy spell at the start of each week and Blesses your units for 50 rounds.		
+175320	{Pendant Of Life} 
+ 
+Wearing this item renders your units immune to the Death Ripple spell, gives you 24 Sprites at the start of each week and increases the health of your living units based on their creature level.
+(+1,+3,+6,+10,+15,+25,+50)		
+175321	{Pendant Of Death} 
+ 
+Wearing this item renders your units immune to the Destroy Undead spell, gives you 12 Zombies at the start of each week and gives your undead units +5 attack, +5 defense, +1 speed.		
+175322	{Pendant Of Resolve} 
+ 
+Wearing this item renders your units immune to the Hypnotize spell, upgrades your Golems and Peasants at the start of each week and grants your units Stoneskin for 50 rounds.		
+175323	{Pendant Of True Aim} 
+ 
+Wearing this item renders your units immune to the Forgetfulness spell, gives you 1000 experience at the start of each week and grants your units Precision for 50 rounds.		
+175324			

@@ -1,0 +1,403 @@
+ZVSE
+ERMS_ScriptName=script96 - Diplomacy Boost
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+ERMS_ScriptUsedFunctions=
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Diplomacy Boost
+** option 96 by Thomas Franz (alias samot) - script96
+**
+** diplomacy reduces the costs to hire creatures by 5 / 10 / 15% if the hero who
+** visits the dwelling / town has basic / advanced / expert diplomacy
+**
+** If he has Estates too, it will reduce the costs by another 2 / 4 / 6 % (Synergie)
+**
+** Each of the three Diplo-Artifacts reduces the costs by additional 3%  (even if you have no
+** Diplo-Skill), if you have all three equipped it will give 5% additional set bonus
+** (-> max 17%, 4*3% by artifacts (2 rings) + 5% set bonus)
+**
+** So you can reduce the costs for creatures by max. 15% (diplo) + 6% (estates) + 17% (artifacts) = 38 %
+**
+** If the map rule that monsters are half price at day 7 is on, this script will reduce the reduced
+** costs (means that monsters are reduced to 31 % of their origin value if you get the 38 % mentioned above)
+**
+** Script does not support Hill Forts and Freelancers guilds, but upgrading heros as Gelu.
+**
+** CAUTION: if this script is on, all monsters on the map are set to savage (except they are compliant)
+** to prevent the usual diplomacy-function (means no monster on the map will join you,
+** except the few that are placed only for this reason on the map by the mapmaker)
+
+** Functions used: FU6132 - FU6134, FU6136
+** vars: v148 / v149 - EXCLUSIVE, must not be changed in other scripts
+** strings: reuse of z91-93, z741-z743, z423-z425 (Descriptions for diplomacy, estates and diplo-artifacts) from script75
+** Wog-Option 96
+
+!#VRv148:C-1/-1; // initialize v148 - v149
+
+
+
+!?OB17; // visit creature generator
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+!!HE-1:N?y-1; // get hero's number
+!!FU6132:Py-1; // calc reducement to y-100% (return in y-100)
+!!FU&y-100=100:E; // exit if there is no reduction
+
+!!DWv998/v999/v1000:M0/?y-4/d; // get creature in slot 1
+!!FU6133:Py-4/y-100; // calc new costs
+!!DWv998/v999/v1000:M1/?y-5/d; // get creature in slot 2
+!!FU6133&y-4<>y-5:Py-5/y-100; // calc new if it is not the same (f.e. boar if the boar-rule is on)
+!!DWv998/v999/v1000:M2/?y-6/d; // get creature in slot 3
+!!FU6133:Py-6/y-100;
+!!DWv998/v999/v1000:M3/?y-7/d; // get creature in slot 4
+!!FU6133:Py-7/y-100;
+
+********** end OB17 (visit) ***********
+
+
+!$OB17; // after visit creature generator
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+!!HE-1:N?y-1; // get hero's number
+!!FU6132:Py-1; // calc reducement to y-100 % (return in y-100)
+!!FU&y-100=100:E; // exit if there is no reduction
+
+!!UN:P113/?y-8; // check for map rule "Monsters are half price at day 7"
+
+!!DWv998/v999/v1000:M0/?y-4/d; // get creature in slot 1
+!!FU6134:Py-4/y-100/y-8; // restore old costs
+!!DWv998/v999/v1000:M1/?y-5/d; // get creature in slot 2
+!!FU6134&y-4<>y-5:Py-5/y-100/y-8; // restore old costs if it is not the same (f.e. boar if the boar-rule is on)
+!!DWv998/v999/v1000:M2/?y-6/d; // get creature in slot 3
+!!FU6134:Py-6/y-100/y-8;
+!!DWv998/v999/v1000:M3/?y-7/d; // get creature in slot 4
+!!FU6134:Py-7/y-100/y-8;
+
+********** end OB17 (post visit) ***********
+
+!?OB20; // visit creature generator (golem factory / elementar conflux)
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+!!HE-1:N?y-1; // get hero's number
+!!FU6132:Py-1; // calc reducement to y-100% (return in y-100)
+!!FU&y-100=100:E; // exit if there is no reduction
+
+!!DWv998/v999/v1000:M0/?y-4/d; // get creature in slot 1
+!!FU6133:Py-4/y-100; // calc new costs
+!!DWv998/v999/v1000:M1/?y-5/d; // get creature in slot 2
+!!FU6133&y-4<>y-5:Py-5/y-100; // calc new if it is not the same (f.e. boar if the boar-rule is on)
+!!DWv998/v999/v1000:M2/?y-4/d; // get creature in slot 3
+!!FU6133:Py-6/y-100;
+!!DWv998/v999/v1000:M3/?y-4/d; // get creature in slot 4
+!!FU6133:Py-7/y-100;
+
+********** end OB20 (visit) ***********
+
+
+!$OB20; // after visit creature generator (golem factory / elementar conflux)
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+!!HE-1:N?y-1; // get hero's number
+!!FU6132:Py-1; // calc reducement to y-100 % (return in y-100)
+!!FU&y-100=100:E; // exit if there is no reduction
+
+!!UN:P113/y-7; // check for map rule "Monsters are half price at day 7"
+
+!!DWv998/v999/v1000:M0/?y-4/d; // get creature in slot 1
+!!FU6134:Py-4/y-100/y-7; // restore old costs
+!!DWv998/v999/v1000:M1/?y-5/d; // get creature in slot 2
+!!FU6134&y-4<>y-5:Py-5/y-100/y-7; // restore old costs if it is not the same (f.e. boar if the boar-rule is on)
+!!DWv998/v999/v1000:M2/?y-4/d; // get creature in slot 3
+!!FU6134:Py-4/y-100/y-7;
+!!DWv998/v999/v1000:M3/?y-4/d; // get creature in slot 4
+!!FU6134:Py-4/y-100/y-7;
+
+********** end OB20 (post visit) ***********
+
+
+!?OB54; // visiting a monster (prevent joining)
+!!UN:P96/=1; !!FU&-1:E; // exit, if script is not active
+!!MO998:R?y-1/1; // get agression
+!!MO998&y-1>0:R10/1; // set to never join (except, they are already compliant);
+********** end OB54 ***********
+
+
+
+!?CM1; // click in town screen
+** y-1 = garrision hero
+** y-2 = visiting hero
+** y-3 = state of map rule "Monsters are half price at day 7"
+** y-4 = clicked object in the town screen
+** y-5 = monster level of the dwelling you clicked
+** y-6 = town type
+** y-7 = not upgr. monster (fort / citatel / castle-part)
+** y-8 = upgr. monster (fort / citatel / castle-part)
+** y-99 / y-100 = diplo bonuses
+
+!!VRy-100:S100; // initialize
+
+!!UN:P96/?y-1; // check if script is active
+!!CM:S?y-2; // check for mouse action
+!!FU|y-1=0/y-2=14:E; // exit if script is not active or right mouseclick
+
+!!CA-1:H0/?y-1; !!CA-1:H1/?y-2; // get garrision / visting hero
+!!FU6132&y-1>0:Py-1; // get diplo bonus for garrision hero, return in y-100
+!!VRy-99:Sy-100; // buffers the bonus in y-99
+!!FU6132&y-2>0:Py-2; // get diplo bonus for visting hero, return in y-100
+!!VRy-100&y-99<y-100/y-99<>0:Sy-99; // use the garrision-hero-bonus if it is better
+!!FU|y-100=0/y-100=100:E; // exit if there are no diplo bonuses
+
+** reset origin creature prices
+!!UN:P113/y-3; // check for map rule "Monsters are half price at day 7"
+!!FU6134&v148>-1/v148<999:Pv148/y-100/y-3; // restore prices for monsters that are reduced still
+!!FU6134&v149>-1/v148<999:Pv149/y-100/y-3; // restore prices for monsters that are reduced still
+
+!!CA-1:T?y-6;
+** reset after a visit of a fort / citatel / castle
+!!UN:Ty-6/0/0/?y-7; !!UN:Ty-6/0/1/?y-8; // get L1-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/1/0/?y-7; !!UN:Ty-6/1/1/?y-8; // get L2-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/2/0/?y-7; !!UN:Ty-6/2/1/?y-8; // get L3-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/3/0/?y-7; !!UN:Ty-6/3/1/?y-8; // get L4-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/4/0/?y-7; !!UN:Ty-6/4/1/?y-8; // get L5-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/5/0/?y-7; !!UN:Ty-6/5/1/?y-8; // get L6-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/6/0/?y-7; !!UN:Ty-6/6/1/?y-8; // get L7-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+
+!!VRv148:C-1/-1; // set v148 / v149 to -1;
+
+!!CM:I?y-4; // get the field you clicked
+!!VRy-5:S-1; // initialize
+!!CA-1:T?y-6; // get town type
+
+!!VRy-5&y-4>29/y-4<37:Sy-4 -30; // calc level depending of the dwelling you clicked on (non upgr.)
+!!VRy-5&y-4>36/y-4<44:Sy-4 -37; // calc level depending of the dwelling you clicked on (upgr)
+
+** garrision creature (upgrade)
+!!VRy-9&y-4>114/y-4<122:Sy-4 -115; // set to the garrision slot you clicked on
+!!CA-1&y-4>114/y-4<122:M2/y-9/?y-10/d; // get creatures in this slot
+!!MA&y-4>114/y-4<122/y-10>-1:Oy-10/?y-11 Ly-10/?y-5; // get its allignement and level
+!!VRy-5&y-4>114/y-4<122/y-11<>y-6/y-10>-1:S-1; // no changes if creature is not from the town
+
+** visiting hero's creatures (upgrade)
+!!VRy-9&y-4>139/y-4<147:Sy-4 -140; // set to the visiting hero's creature slot you clicked on
+!!HE-1&y-4>139/y-4<147/y-2>-1:C0/y-9/?y-10/d; // get creatures in this slot (if there is a visiting hero)
+!!MA&y-4>139/y-4<147/y-2>-1/y-10>-1:Oy-10/?y-11 Ly-10/?y-5; // get its allignement and level
+!!VRy-5&y-4>139/y-4<147/y-11<>y-6/y-2>-1/y-10>-1:S-1; // no changes if creature is not from the town
+
+
+!!VRy-5|y-4=18/y-4=19/y-4=24/y-4=25:S0; // L0 for horde buildings (f.e. cages, Mushroom Rings ...)
+!!VRy-5|y-4=7/y-4=8/y-4=9:S99; // dummy Level 99 for fort, citatel, castle
+
+!!FU&y-5=-1:E; // exit if neighter clicked on a dwelling nor on a horde building
+
+** Level correction for horde buildings
+!!VRy-5&y-6=0/y-4=18:S2; !!VRy-5&y-6=0/y-4=19:S2; // level 3 for griffin bastion (not upgr. / upgr.)
+!!VRy-5&y-6=1/y-4=18:S1; !!VRy-5&y-6=1/y-4=19:S1; // level 2 for Miner's Guild Rampart (not upgr. / upgr.)
+!!VRy-5&y-6=2/y-4=18:S1; !!VRy-5&y-6=2/y-4=19:S1; // level 2 for Sculptor's Wings Tower (not upgr. / upgr.)
+!!VRy-5&y-6=1/y-4=24:S4; !!VRy-5&y-6=1/y-4=25:S4; // level 5 for Dendroid Saplings Rampart (not upgr. / upgr.)
+!!VRy-5&y-6=3/y-4=24:S2; !!VRy-5&y-6=3/y-4=25:S2; // level 3 for Cages (Inferno) (not upgr. / upgr.)
+
+!!UN&y-5<7:Ty-6/y-5/0/?v148; !!UN&y-5<7:Ty-6/y-5/1/?v149; // get not upgraded / upgraded creature of this town to v148/v149
+!!FU6133&y-5<7:Pv148/y-100; !!FU6133&y-5<7:Pv149/y-100; // reduce the costs for both
+!!FU&y-5<7:E; // exit except you clicked on fort, citatel or castle
+
+!!UN:Ty-6/0/0/?y-7; !!UN:Ty-6/0/1/?y-8; // get L1-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/1/0/?y-7; !!UN:Ty-6/1/1/?y-8; // get L2-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/2/0/?y-7; !!UN:Ty-6/2/1/?y-8; // get L3-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/3/0/?y-7; !!UN:Ty-6/3/1/?y-8; // get L4-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/4/0/?y-7; !!UN:Ty-6/4/1/?y-8; // get L5-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/5/0/?y-7; !!UN:Ty-6/5/1/?y-8; // get L6-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/6/0/?y-7; !!UN:Ty-6/6/1/?y-8; // get L7-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!VRv148:S999; // set v148 to a dummy value (to know that all 7 levels has to been reset)
+
+********** end CM1 ***********
+
+
+!?CM2; // click in hero information screen (upgrading creatures)
+** y-1 = hero number
+** y-2 = speciality type
+** y-3 = creature 1 (upgradeable)
+** y-4 = creature 2 (upgradeable)
+** y-5 = creature (upgrade destination)
+** y-6 = the field you clicked on
+** y-7 = upgraded basic creature 1 (f.e. if y-3=archer -> y-7=marksmen)
+** y-8 = upgraded basic creature 2 (f.e. if y-3=archer -> y-7=marksmen)
+
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+!!HE-1:X?y-2/?y-3/d/d/d/?y-4/?y-5; // get hero's speciality
+!!FU&y-2<>6:E; // exit if it is no upgrade-speciality
+
+!!HE-1:N?y-1; // get hero's number
+!!FU6132:Py-1; // calc reducement to y-100% (return in y-100)
+!!FU&y-100=100:E; // exit if there is no reduction
+
+** restore original prices (changed creatures saved in v148-v149)
+!!UN:P113/y-3; // check for map rule "Monsters are half price at day 7"
+!!VRy-7:Sy-3 +1; !!VRy-8:Sy-4 +1;
+!!FU6134&v148=900:Py-3/y-100/y-3; // restore prices for monsters that are reduced still
+!!FU6134&v148=900:Py-7/y-100/y-3; // restore prices for monsters that are reduced still (upgr. creature)
+!!FU6134&v148=900:Py-4/y-100/y-3; // restore prices for monsters that are reduced still
+!!FU6134&v148=900:Py-8/y-100/y-3; // restore prices for monsters that are reduced still (upgr. creature)
+!!FU6134&v118=900:Py-5/y-100/y-3; // restore prices for monsters that are reduced still (destination creature)
+!!VRv148:C-1/-1; // set v148 - v149 back to -1
+
+!!CM:I?y-6; // get field you clicked
+!!FU|y-6<68/y-6>74:E; // exit if no troop field
+
+** reduce prices
+!!VRy-7:Sy-3 +1; !!VRy-8:Sy-4 +1;
+!!FU6133:Py-3/y-100;
+!!FU6133:Py-7/y-100; // upgraded basic creature (f.e. if y-3=archer -> y-7=marksmen)
+!!FU6133&y-3<>y-4:Py-4/y-100;
+!!FU6133&y-3<>y-4:Py-8/y-100; // upgraded basic creature (f.e. if y-3=archer -> y-7=marksmen)
+!!FU6133&y-3<>y-5/y-4<>y-5:Py-5/y-100;
+!!VRv148:S900; // marker for hero-screen-changes
+
+********** end CM2 ***********
+
+!?FU6132; // calc the percentage to which the prices are reduced (f.e. 85 for expert diplomacy); return in y-100
+** x1 = hero number
+!!HEx1:S4/?y2; // check if hero has diplomacy
+!!VRy2:*5; // multiply rank by 5 -> 5 / 10 / 15
+!!HEx1:S13/?y3; // check if hero has Estates
+!!VRy3:*2; // multiply rank by 2 -> 0 / 2 / 4 / 6 (synergie to diplomacy)
+!!VRy3&y2=0:S0; // no estates bonus if hero has no diplomacy (because it is a synergie effect)
+!!HEx1:A2/66/d/?y4; // get number of equipped Statesman's Medals
+!!HEx1:A2/67/d/?y5; // get number of equipped Diplomat's Ring
+!!HEx1:A2/68/d/?y6; // get number of equipped Ambassador's Sashs
+!!VRy7:Sy4 +y5 +y6 *3; // add it and give another 3 % for each equipped Diplo-Artifact
+!!VRy7&y4>0/y5>0/y6>0:+5; // get another 5 % if all three artifacts are equipped (set bonus)
+
+!!VRy-100:S100 -y2 -y3 -y7; // reduce costs to r (f.e. 85 for expert diplomacy with no other bonuses)
+
+********** end FU6132 ***********
+
+
+!?FU6133; // calc new costs
+** x1 = Monster
+** x2 = reduce to x2 %
+** y1 = costs in gold
+!!FU&x1<0:E;
+!!MA:Cx1/6/?y1; // get cost of creature
+!!VRy1:*x2 :100; // calc new cost
+!!MA:Cx1/6/y1; // set new cost
+
+
+********** end FU6133 ***********
+
+
+!?FU6134; // restore costs;
+** x1 = Monster
+** x2 = prices was reduced to x2 %
+** x3 = State of Wog-Option 113 (monsters are half price at day 7)
+** y1 = costs in gold
+** y2 = reminder of division costs by 5, needed to cancel the rounding differences
+
+!!FU&x1<0:E;
+!!MA:Cx1/6/?y1; // get cost of creature
+!!VRy1:*100 :x2; // calc new cost
+!!VRy1&x3=1/$weekday$=$sunday$:*2; // double if half-price-rule is on
+!!VRy2:Sy1 %5; // set to modulo (reminder of division) of 5
+!!VRy1&y2>0:+5 -y2; // add it to the price (to cancel the rounding differences); remind: all monster prices are divisible by 5
+!!VRy1&x3=1/$weekday$=$sunday$::2; // halve the costs again
+!!MA:Cx1/6/y1; // set new cost
+
+********** end FU6134 ***********
+
+
+!?TM2&$day$=1/$once$=1; // set all monsters to savage
+!!UN:P96/?y-1; // check if script is active
+!!FU&y-1=0:E; // exit if not
+
+** modify Skill and Artifact descriptions
+!!VRz91:Sz196001; // set short skill description for diplomacy (see script75)
+!!VRz92:Sz196002;
+!!VRz93:Sz196003;
+
+!!VRz741:+z196007; // add description to Estates
+!!VRz742:+z196008;
+!!VRz743:+z196009;
+
+!!VRz423:Sz196004; // description of Statesmans Medal
+!!VRz424:Sz196005; // description of Diplomat's Ring
+!!VRz425:Sz196006; // description of Ambassador's Sash
+
+!!UN:P102/?y-1; // check for Option Artifact Boost (script02)
+!!VRz423&y-1=1:Sz196010; // if yes other description for Statesmans Medal
+!!VRz424&y-1=1:Sz196011; // if yes other description for Diplomat's Ring
+
+********** end TM2 ***********
+
+
+
+
+!?FU6136; // function is called only from CM1 in script25 (Buy all button), reduces the prices for all L1-L7
+!!CA-1:H0/?y-1; !!CA-1:H1/?y-2; // get garrision / visting hero
+!!FU6132&y-1>-1:Py-1; // get diplo bonus for garrision hero, return in y-100
+!!VRy-99:Sy-100; // buffers the bonus in y-99
+!!FU6132&y-2>-1:Py-2; // get diplo bonus for visting hero, return in y-100
+!!VRy-100&y-99<y-100/y-99<>0:Sy-99; // use the garrision-hero-bonus if it is better
+!!FU|y-100=0/y-100=100:E; // exit if there are no diplo bonuses
+
+** reset origin creature prices
+!!CA-1:T?y-6; // get town type
+!!UN:P113/y-3; // check for map rule "Monsters are half price at day 7"
+!!FU6134&v148>-1/v148<999:Pv148/y-100/y-3; // restore prices for monsters that are reduced still
+!!FU6134&v149>-1/v148<999:Pv149/y-100/y-3; // restore prices for monsters that are reduced still
+** reset after a visit of a fort / citatel / castle
+!!UN:Ty-6/0/0/?y-7; !!UN:Ty-6/0/1/?y-8; // get L1-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/1/0/?y-7; !!UN:Ty-6/1/1/?y-8; // get L2-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/2/0/?y-7; !!UN:Ty-6/2/1/?y-8; // get L3-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/3/0/?y-7; !!UN:Ty-6/3/1/?y-8; // get L4-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/4/0/?y-7; !!UN:Ty-6/4/1/?y-8; // get L5-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/5/0/?y-7; !!UN:Ty-6/5/1/?y-8; // get L6-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+!!UN:Ty-6/6/0/?y-7; !!UN:Ty-6/6/1/?y-8; // get L7-creature
+!!FU6134&v148=999:Py-7/y-100/y-3; !!FU6134&v148=999:Py-8/y-100/y-3; // calc new costs
+
+** reduces the costs
+!!UN:Ty-6/0/0/?y-7; !!UN:Ty-6/0/1/?y-8; // get L1-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/1/0/?y-7; !!UN:Ty-6/1/1/?y-8; // get L2-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/2/0/?y-7; !!UN:Ty-6/2/1/?y-8; // get L3-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/3/0/?y-7; !!UN:Ty-6/3/1/?y-8; // get L4-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/4/0/?y-7; !!UN:Ty-6/4/1/?y-8; // get L5-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/5/0/?y-7; !!UN:Ty-6/5/1/?y-8; // get L6-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!UN:Ty-6/6/0/?y-7; !!UN:Ty-6/6/1/?y-8; // get L7-creature
+!!FU6133:Py-7/y-100; !!FU6133:Py-8/y-100; // calc new costs
+!!VRv148:S999; // set v148 to a dummy value (to know that all 7 levels has to been reset)
+

@@ -1,0 +1,3720 @@
+
+0	Previous Page
+1	Turn to the previous page
+2	Next Page
+3	Turn to the next page
+4	Adventure Map Spells
+5	Turn to view adventure map spells
+6	Combat Spells
+7	Turn to view combat spells
+8	Air Spells
+9	Turn to view Air spells
+10	Fire Spells
+11	Turn to view Fire spells
+12	Water Spells
+13	Turn to view Water spells
+14	Earth Spells
+15	Turn to view Earth spells
+16	All Spells
+17	Show all spell schools
+18	Spell Points
+19	Hero's remaining spell points
+20	Exit
+21	Close the Spell Book
+
+23	{Good Luck}
+
+Good luck sometimes lets your armies get lucky attacks (double damage) in combat.
+24	{Neutral Luck}
+
+With neutral luck your armies will never have lucky or unlucky attacks on the enemy.
+25	{Bad Luck}
+
+Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage.
+26	%s
+
+
+{Current Luck Modifiers:}
+27	
+Still Eye of the Dragon +1
+28	
+Clover of Fortune +1
+29	
+Cards of Prophecy +1
+30	
+Ladybird of Luck +1
+31	
+Swan Pond Visited +2
+32	
+Idol of Fortune Visited +1
+33	
+Fountain of Fortune Visited %s
+34	
+Pyramid Visited -2
+35	
+Faerie Ring Visited +1
+36	
+Mermaid Visited +1
+37	
+Rally Flag Visited +1
+38	
+Basic Luck +1
+39	
+Advanced Luck +2
+40	
+Expert Luck +3
+41	
+None
+42	
+-%d Temporary until next battle
+43	
++%d Temporary until next battle
+44	
+Pendant of Courage +3
+45	
+No luck effects on cursed ground
+46	
+%s suppresses all luck
+47	
+Creature of neutral town alignment on Clover Field +2
+48	Attack Skill
+49	Defense Skill
+50	Spell Power
+51	Knowledge
+
+
+
+54	Trade
+55	
+56	Maximum
+57	
+58	Trade Resources
+59	
+60	Buy artifacts
+61	
+62	Exit
+63	
+
+65	Lighthouse
+66	Griffin Bastion
+67	Griffin Bastion
+68	Shipyard
+69	Stables
+70	Brotherhood of the Sword
+71	
+72	
+73	
+74	Colossus
+75	Resource Silo
+76	Mystic Pond
+77	Miners' Guild
+78	Miners' Guild
+79	
+80	Fountain of Fortune
+81	Treasury
+82	
+83	Dendroid Saplings
+84	Dendroid Saplings
+85	Spirit Guardian
+86	Resource Silo
+87	Artifact Merchants
+88	Sculptor's Wings
+89	Sculptor's Wings
+90	
+91	Lookout Tower
+92	Library
+93	Wall of Knowledge
+94	
+95	
+96	Skyship
+97	Resource Silo
+98	
+99	Birthing Pools
+100	Birthing Pools
+101	
+102	Brimstone Stormclouds
+103	Castle Gate
+104	Order of Fire
+105	Cages
+106	Cages
+107	Deity of Fire
+108	Resource Silo
+109	Cover of Darkness
+110	Unearthed Graves
+111	Unearthed Graves
+112	Shipyard
+113	Necromancy Amplifier
+114	Skeleton Transformer
+115	
+116	
+117	
+118	Soul Prison
+119	Resource Silo
+120	Artifact Merchants
+121	Mushroom Rings
+122	Mushroom Rings
+123	
+124	Mana Vortex
+125	Portal of Summoning
+126	Battle Scholar Academy
+127	
+128	
+129	Guardian of Earth
+130	Resource Silo
+131	Escape Tunnel
+132	Mess Hall
+133	Mess Hall
+134	
+135	Freelancer's Guild
+136	Ballista Yard
+137	Hall of Valhalla
+138	
+139	
+140	Warlords' Monument
+141	Resource Silo
+142	Cage of Warlords
+143	Captain's Quarters
+144	Captain's Quarters
+145	Shipyard
+146	Glyphs of Fear
+147	Blood Obelisk
+148	
+149	
+150	
+151	Carnivorous Plant
+152	Resource Silo
+153	Artifact Merchants
+154	Garden of Life
+155	Garden of Life
+156	Shipyard
+157	Magic University
+158	
+159	
+160	
+161	
+162	Aurora Borealias
+163	Resource Silo
+164	Artifact Merchants
+165	Level 1 Creature Horde
+166	Level 2 Creature Horde
+167	Shipyard
+168	
+169	
+170	Level 3 Creature Horde
+171	Level 4 Creature Horde
+172	Level 5 Creature Horde
+173	Grail
+174	Resource Silo
+175	Cursed
+176	Awful
+177	Bad
+178	Normal
+179	Good
+180	Great
+181	Irish
+182	Return to Game
+183	{Return to Game}
+
+Exit combat options
+184	Restore Default Values
+185	{Default}
+
+Restores combat option default values
+186	MUSIC_VOLUME_0_ID,
+187	Turn off music
+188	MUSIC_VOLUME_1_ID,
+189	Set music volume to 1
+190	MUSIC_VOLUME_2_ID,
+191	Set music volume to 2
+192	MUSIC_VOLUME_3_ID,
+193	Set music volume to 3
+194	MUSIC_VOLUME_4_ID,
+195	Set music volume to 4
+196	MUSIC_VOLUME_5_ID,
+197	Set music volume to 5
+198	MUSIC_VOLUME_6_ID,
+199	Set music volume to 6
+200	MUSIC_VOLUME_7_ID,
+201	Set music volume to 7
+202	MUSIC_VOLUME_8_ID,
+203	Set music volume to 8
+204	MUSIC_VOLUME_9_ID,
+205	Set music volume to 9
+206	EFFECTS_VOLUME_0_ID,
+207	Turn off sound effects
+208	EFFECTS_VOLUME_1_ID,
+209	Set sound effects volume to 1
+210	EFFECTS_VOLUME_2_ID,
+211	Set sound effects volume to 2
+212	EFFECTS_VOLUME_3_ID,
+213	Set sound effects volume to 3
+214	EFFECTS_VOLUME_4_ID,
+215	Set sound effects volume to 4
+216	EFFECTS_VOLUME_5_ID,
+217	Set sound effects volume to 5
+218	EFFECTS_VOLUME_6_ID,
+219	Set sound effects volume to 6
+220	EFFECTS_VOLUME_7_ID,
+221	Set sound effects volume to 7
+222	EFFECTS_VOLUME_8_ID,
+223	Set sound effects volume to 8
+224	EFFECTS_VOLUME_9_ID,
+225	Set sound effects volume to 9
+226	MUSIC_TYPE_NONE_ID,
+227	MUSIC_TYPE_NONE_ID,
+228	MUSIC_TYPE_CD_ID,
+229	MUSIC_TYPE_CD_ID,
+230	MUSIC_TYPE_MIDI_ID,
+231	MUSIC_TYPE_MIDI_ID,
+232	AUTO_CREATURES_ID,
+233	{Creatures}
+
+Gives control of your units to auto combat
+234	AUTO_SPELLS_ID,
+235	{Spells}
+
+During auto combat your hero will cast spells
+236	AUTO_CATAPULT_ID,
+237	{Catapult}
+
+When laying siege to an enemy's castle, your catapult troops will decide which part of the fortifications to target.  If your Ballistics skill is high enough, you will be able to direct the catapult's fire yourself.
+
+If your hero has the Ballistics skill, this option will give that control to the computer during auto combat.
+238	AUTO_BALLISTA_ID,
+239	{Ballista}
+
+During combat, your ballista troops will decide which  enemy units to target.  If your Artillery skill is high enough, you will be able to direct the ballista's fire yourself.
+
+If your hero has the Artillery skill, this option will give that control to the computer during auto combat.
+240	AUTO_FIRST_AID_TENT_ID,
+241	{First Aid Tent}
+
+During combat, your first aid troops will choose who needs to be healed.  If your First Aid skill is high enough, you will be able to direct the first aid tent yourself.
+
+If your hero has the First Aid skill, this option will give that control to the computer during auto combat.
+242	ANIMATION_SPEED_0_ID,
+243	Set animation speed to slow
+244	ANIMATION_SPEED_1_ID,
+245	Set animation speed to medium
+246	ANIMATION_SPEED_2_ID,
+247	Set animation speed to fast
+248	CREATURE_INFO_STATS_ID,
+249	{All Statistics}
+
+Right clicking on a unit will display all statistics about the unit, including any spells that are currently in effect.
+250	CREATURE_INFO_SPELLS_ID,
+251	{Spells Only}
+
+Right clicking on a unit will only display any spells that are currently affecting the unit.
+252	VIEW_HEX_ID,
+253	{View Hex Grid}
+
+Displays a hex grid over the battlefield.
+254	MOVEMENT_SHADOW_ID,
+255	{Movement Shadow}
+
+Displays a shadow on the battlefield which shows where a unit can currently move to.
+256	SHADOW_CURSOR_ID,
+257	{Cursor Shadow}
+
+Places a hex shadow under the mouse cursor.
+258	ANIMATE_SPELLBOOK_ID,
+259	{Animate Spell Book}
+
+Shows page turning animation in the spell book.
+260	World Map
+261	This is a zoomed out view of the world.  Clicking anywhere in this window will center the adventure map on that location, or you can drag the outline box to scroll the adventure map.
+262	Status Window
+263	SELECTION WINDOW
+264	Kingdom Overview
+265	{Kingdom Overview}
+
+Displays an overview of your Kingdom's towns and heroes
+266	Surface/Underworld View
+267	{Surface/Underworld View}
+
+Switches the adventure map between map levels
+268	Quest Log
+269	{Quest Log}
+
+Displays a list of all current quests
+270	Sleep/Wake Hero
+271	{Sleep/Wake Hero}
+
+Sleeps the selected hero or wakes a sleeping hero.  Any sleeping heroes will be ignored by the Next Hero button.
+272	Move Hero
+273	{Move Hero}
+
+Moves the current hero along its selected path
+274	Cast Spell
+275	{Cast Spell}
+
+Cast a non-combat spell
+276	Adventure Options
+277	{Adventure Options}
+
+Allows you to dig for the Grail, view the current Grail Puzzle, World Map, or Scenario Briefing.  In multiplayer games you will also be allowed to view your opponents' last turn.
+278	System Options
+279	{System Options}
+
+Allows you to view and change the current game options
+280	Next Hero
+281	{Next Hero}
+
+Selects the next hero with remaining movement points.  Any sleeping heroes will be ignored.
+282	End Turn
+283	{End Turn}
+
+Ends the current turn
+284	Scroll Hero List
+285	{Scroll Hero List}
+
+Scroll up through available heroes
+286	Scroll Hero List
+287	{Scroll Hero List}
+
+Scroll down through available heroes
+288	Hero Portrait
+289	{Hero Portrait}
+
+Click once to select this hero and center the adventure map on their location.  Click again to enter and view the Hero Screen.
+290	Scroll Town List
+291	{Scroll Town List}
+
+Scroll up through available towns
+292	Scroll Town List
+293	{Scroll Town List}
+
+Scroll down through available towns
+294	Town Portrait
+295	{Town Portrait}
+
+Click once to select this town and center the adventure map on its location.  Click again to enter and view the Town Screen.
+296	Gold
+297	Amount of gold in your treasury
+298	Wood
+299	Your total available wood
+300	Mercury
+301	Your total available mercury
+302	Ore
+303	Your total available ore
+304	Sulfur
+305	Your total available sulfur
+306	Crystal
+307	Your total available crystal
+308	Gems
+309	Your total available gems
+310	Date
+311	{Date}
+
+Current Month, Week, and Day
+312	ROLLOVER
+313	ROLLOVER
+
+315	{Good Morale}
+
+Good morale may give your armies extra attacks in combat.
+316	{Neutral Morale}
+
+Neutral morale means your armies will neither be blessed with extra attacks or freeze in combat.
+317	{Bad Morale}
+
+Bad morale may cause your armies to freeze in combat.
+318	%s
+
+
+{Current Morale Modifiers:}
+319	
+Still Eye of the Dragon +1
+320	
+Badge of Courage +1
+321	
+Crest of Valor +1
+322	
+Glyph of Gallantry +1
+323	
+Idol of Fortune Visited +1
+324	
+Buoy Visited +1
+325	
+Oasis Visited +1
+326	
+Temple Visited +1
+327	
+Temple Visited on Sunday +2
+328	
+Sepulcher Visited -1
+329	
+Shipwreck Visited -1
+330	
+Watering Hole Visited +1
+331	
+Derelict Ship Visited -1
+332	
+Rally Flag Visited +1
+333	
+Fountain of Youth Visited +1
+334	
+Warrior Tomb Visited -3
+335	
+Basic Leadership +1
+336	
+Advanced Leadership +2
+337	
+Expert Leadership +3
+338	
+None
+339	
+-%d Temporary until next battle
+340	
++%d Temporary until next battle
+341	
+Pendant of Courage +3
+342	
+No morale effects on cursed ground
+343	
+Unaffected by morale
+344	
+Troops of %d alignments %d
+345	
+All troops of one alignment +1
+346	
+Undead in group -1
+347	
+%s in group +1
+348	
+Facing %s -1
+349	
+%s suppresses good morale
+350	
+%s always have positive morale
+351	
+Spells %+d
+352	
+On native terrain +1
+353	
+Creature of good town alignment on Holy Ground +1
+354	
+Creature of evil town alignment on Holy Ground -1
+355	
+Creature of evil town alignment on Evil Fog +1
+356	
+Creature of good town alignment on Evil Fog -1
+
+358	Trade
+359	
+360	Maximum
+361	
+362	Give resources to another player
+363	
+364	Buy artifacts
+365	
+366	Sell creatures
+367	
+368	Exit
+369	
+370	Owned by red player
+371	Owned by blue player
+372	Owned by tan player
+373	Owned by green player
+374	Owned by orange player
+375	Owned by purple player
+376	Owned by teal player
+377	Owned by pink player
+378	{First Aid Tent}
+
+Your starting hero will begin with a First Aid Tent
+379	{Pikemen}
+
+Your starting hero will begin with 14 additional Pikemen
+380	{Rare Resources}
+
+Your treasury will receive an additional 5 mercury, sulfur, crystal, and gems
+381	{Angel}
+
+Your starting hero will begin with 1 Angel
+382	{Zealots}
+
+Your starting hero will begin with 3 Zealots
+383	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Prayer
+384	{Golden Bow}
+
+The Golden Bow allows your troops to shoot through any obstacle or at any range without penalty
+385	{Lion's Shield of Courage}
+
+The Lion's Shield of Courage increases all four primary skills by +4
+386	{Endless Sack of Gold}
+
+The Endless Sack of Gold increases your income by 1000 gold per day
+387	{Gold}
+
+Begin with an extra 10,000 gold
+388	{Archangels}
+
+Begin with 2 Archangels
+(will be placed in garrison)
+389	{Titans}
+
+Begin with 2 Titans
+(will be placed in garrison)
+390	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Protection from Fire
+391	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Ice Bolt
+392	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Precision
+393	{Expert Logistics}
+
+Your starting hero will begin with Expert Logistics
+394	{Shield of the Dwarven Lords}
+
+The Shield of the Dwarven Lords increases your Defense skill by +2
+395	{Centaur's Axe}
+
+The Centaur's Axe increases your Attack skill by +2
+396	{Expert Navigation}
+
+Your starting hero will begin with Expert Navigation
+397	{Three Level 1 Mage Guilds}
+
+Your three starting towns will each receive a Level 1 Mage Guild
+398	{One Level 3 Mage Guild}
+
+Your central town will receive a Level 3 Mage Guild
+399	{Boots of Speed}
+
+The Boots of Speed increase hero's movement rate over land
+400	{Basic Logistics}
+
+Your starting hero will begin with Basic Logistics
+401	{Gold}
+
+Begin with an extra 2,500 gold
+402	{Royal Griffins}
+
+Begin with 35 Royal Griffins
+(will be placed in garrison)
+403	{Iron Golems}
+
+Begin with 35 Iron Golems
+(will be placed in garrison)
+404	{Grand Elves}
+
+Begin with 35 Grand Elves
+(will be placed in garrison)
+405	{Helm of Heavenly Enlightenment}
+
+The Helm of Heavenly Enlightenment increases all four primary skills by +6
+406	{Tome of Earth Magic}
+
+This heavy book contains all spells in the School of Earth Magic
+407	{Spellbinder's Hat}
+
+When worn, this hat allows you to cast all 5th level spells
+408	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Slayer
+409	{Armor of Wonder}
+
+The Armor of Wonder increases all four primary skills by +1
+410	{Imps}
+
+Your starting hero will begin with 100 additional Imps
+411	{Pillar of Eyes}
+
+Your starting town will receive a Pillar of Eyes
+(Beholder dwelling)
+412	{Level 1 Mage Guild}
+
+Your starting town will receive a Level 1 Mage Guild
+413	{Battle Scholars' Academy}
+
+Your starting town will receive a Battle Scholars' Academy
+(a one-time bonus of 1000 experience to any visiting hero)
+414	{Eeofol Heroes}
+
+Begin with your Heroes used in the 'A Devilish Plan' scenario
+415	{Nighon Heroes}
+
+Begin with your Heroes used in the 'Groundbreaking' scenario
+416	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Death Ripple
+417	{Black Knight}
+
+Your starting hero will begin with 1 Black Knight
+418	{Skeleton Transformer}
+
+Your starting town will receive a Skeleton Transformer
+(converts any creature into a Skeleton)
+419	{Vampire's Cowl}
+
+The Vampire's Cowl increases your Necromancy skill by 10%
+420	{Necromancy Amplifier}
+
+Your starting town will receive a Necromancy Amplifier
+(adds to existing necromancy skill of all allied heroes)
+421	{Unearthed Graves}
+
+Your starting town will receive Unearthed Graves
+(increases skeleton production)
+422	{Pendant of Death}
+
+The Pendant of Death renders your units immune to the Destroy Undead spell
+423	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Protection from Earth
+424	{Zombies}
+
+Your starting hero will begin with 25 Zombies
+425	{Spell Scroll}
+
+Your starting hero will receive a Scroll of Death Ripple
+426	{Dead Man's Boots}
+
+The Dead Man's Boots increase your Necromancy skill by 15%
+427	{Ghost Dragons}
+
+Your starting hero will begin with 3 Ghost Dragons
+428	[substitute hero right-click info here]
+429	[substitute hero right-click info here]
+430	{Fortress Hero}
+
+Begin with a random Fortress Hero
+(Beastmaster or Witch)
+431	{Thunderbirds}
+
+Your starting hero will begin with 3 Thunderbirds
+432	{Cyclops Kings}
+
+Your starting hero will begin with 2 Cyclops Kings
+433	{Ancient Behemoth}
+
+Your starting hero will begin with 1 Ancient Behemoth
+434	{Choose Tatalia}
+
+Choose to fight for Tatalia, using heroes from the 'Borderlands' scenario
+435	{Choose Krewlod}
+
+Choose to fight for Krewlod, using heroes from the 'Gold Rush' scenario
+436	{Boots of Speed}
+
+The Boots of Speed increase hero's movement rate over land
+437	{Gold}
+
+Begin with an extra 5,000 gold
+438	{Pegasi}
+
+Your starting hero will begin with 4 Pegasi
+439	{One Level 3 Mage Guild}
+
+Your starting town will receive a Level 3 Mage Guild
+440	{Gold}
+
+Begin with an extra 5,000 gold
+441	{Dendroid Soldiers}
+
+Your starting hero will begin with 3 Dendroid Soldiers
+442	{Dendroid Soldiers}
+
+Your starting hero will begin with 3 Dendroid Soldiers
+443	{Dendroid Guards}
+
+Your starting hero will begin with 6 Dendroid Guards
+444	{Wood}
+
+Begin with an additional 12 Wood
+
+446	
+447	
+448	CAMPAIGN_NAME
+449	CAMPAIGN_NAME
+450	CAMPAIGN_DESCRIPTION
+451	CAMPAIGN_DESCRIPTION
+452	MAP_NAME
+453	MAP_NAME
+454	MAP_DESCRIPTION
+455	MAP_DESCRIPTION
+456	HERO_FACE
+457	HERO_FACE
+458	Change Hero
+459	Click to change your starting hero
+460	Change Hero
+461	Click to change your starting hero
+462	Artifact Bonus
+463	Choose to start with an artifact
+464	Gold Bonus
+465	Choose to start with extra gold
+466	Resource Bonus
+467	Choose to start with extra resources
+468	Restart
+469	{Restart}
+
+Restart the current campaign
+470	View Campaign Intro
+471	{View Campaign Intro}
+
+Show the intro movie for this campaign
+472	ALLY_FLAG1_ID
+473	This is your color
+474	ALLY_FLAG2_ID
+475	This color is allied with you
+476	ALLY_FLAG3_ID
+477	This color is allied with you
+478	ALLY_FLAG4_ID
+479	This color is allied with you
+480	ALLY_FLAG5_ID
+481	This color is allied with you
+482	ALLY_FLAG6_ID
+483	This color is allied with you
+484	ALLY_FLAG7_ID
+485	This color is allied with you
+486	ALLY_FLAG8_ID
+487	This color is allied with you
+488	ENEMY_FLAG1_ID
+489	This color is your enemy
+490	ENEMY_FLAG2_ID
+491	This color is your enemy
+492	ENEMY_FLAG3_ID
+493	This color is your enemy
+494	ENEMY_FLAG4_ID
+495	This color is your enemy
+496	ENEMY_FLAG5_ID
+497	This color is your enemy
+498	ENEMY_FLAG6_ID
+499	This color is your enemy
+500	ENEMY_FLAG7_ID
+501	This color is your enemy
+502	ENEMY_FLAG8_ID
+503	This color is your enemy
+504	WHICHMAP_ID
+505	This is the size of the Map you're about to play
+506	MAP_AREA_1
+507	MAP_AREA_1
+508	MAP_AREA_2
+509	MAP_AREA_2
+510	MAP_AREA_3
+511	MAP_AREA_3
+512	MAP_AREA_4
+513	MAP_AREA_4
+514	MAP_AREA_5
+515	MAP_AREA_5
+516	MAP_AREA_6
+517	MAP_AREA_6
+518	MAP_AREA_7
+519	MAP_AREA_7
+520	MAP_AREA_8
+521	MAP_AREA_8
+522	MAP_AREA_9
+523	MAP_AREA_9
+524	MAP_AREA_10
+525	MAP_AREA_10
+526	MAP_AREA_11
+527	MAP_AREA_11
+528	MAP_AREA_12
+529	MAP_AREA_12
+530	MAP_AREA_13
+531	MAP_AREA_13
+532	MAP_AREA_14
+533	MAP_AREA_14
+534	MAP_AREA_15
+535	MAP_AREA_15
+536	MAP_AREA_16
+537	MAP_AREA_16
+538	MAP_AREA_17
+539	MAP_AREA_17
+540	MAP_AREA_18
+541	MAP_AREA_18
+542	MAP_AREA_19
+543	MAP_AREA_19
+544	MAP_AREA_20
+545	MAP_AREA_20
+546	MAP_AREA_21
+547	MAP_AREA_21
+548	MAP_AREA_22
+549	MAP_AREA_22
+550	MAP_AREA_23
+551	MAP_AREA_23
+552	MAP_AREA_24
+553	MAP_AREA_24
+554	MAP_AREA_25
+555	MAP_AREA_25
+556	MAP_AREA_26
+557	MAP_AREA_26
+558	MAP_AREA_27
+559	MAP_AREA_27
+560	MAP_AREA_28
+561	MAP_AREA_28
+562	MAP_AREA_29
+563	MAP_AREA_29
+564	MAP_AREA_30
+565	MAP_AREA_30
+566	MAP_AREA_31
+567	MAP_AREA_31
+568	MAP_AREA_32
+569	MAP_AREA_32
+570	Few
+571	A few
+572	a few
+573	Several
+574	Several
+575	several
+576	Pack
+577	A pack of
+578	a pack of
+579	Lots
+580	Lots of
+581	lots of
+582	Horde
+583	A Horde of
+584	a horde of
+585	Throng
+586	A Throng of
+587	a throng of
+588	Swarm
+589	A Swarm of
+590	a swarm of
+591	Zounds
+592	Zounds...
+593	zounds of
+594	Legion
+595	A Legion of
+596	a legion of
+
+598	Attack Skill
+599	Defense Skill
+600	Damage per Attack
+601	Health
+602	Speed
+603	Growth per Week
+604	Exit %s
+
+606	northern
+607	northeastern
+608	eastern
+609	southeastern
+610	southern
+611	southwestern
+612	western
+613	northwestern
+614	central
+615	Immobile
+616	Super Slow
+617	Ultra Slow
+618	Very Slow
+619	Extra Slow
+620	Slow
+621	Swift
+622	Extra Swift
+623	Very Swift
+624	Ultra Swift
+625	Super Swift
+626	Quick
+627	Extra Quick
+628	Very Quick
+629	Ultra Quick
+630	Super Quick
+631	Fast
+632	Extra Fast
+633	Very Fast
+634	Ultra Fast
+635	Super Fast
+636	Our initial landing has captured a devastated outpost.  Information is scarce and unreliable at best.  Neighboring citizens have fled their villages.  Remaining survivors tell conflicting stories.  Evidence points to a Nighon invasion.  Rally local militia and train them quickly.  Destroy all hostile forces you encounter.  Assume the worst.  Assume we are at war.
+637	Pressing toward Erathia’s capitol of Steadwick, we have encountered peasants talking of Fair Feather, a town to the north. Though surrounded, it has withstood the Nighon invasion.  Reports are unconfirmed, but these peasants believe 'angels' watch over the town.  Angels have been spotted in Erathia before. During the Kreegan infestation, scattered reports told of winged beings massacring large Kreegan forces. Either the angels have returned, or they never left. How long Fair Feather can last against the Nighon and Kreegan onslaught is unknown.  If Fair Feather falls, a potential ally may be lost.
+638	Each year, griffins from around the world migrate to Griffin Cliff.  Armies of King Gryphonheart the First tamed the griffins and trained them for war. With these great beasts, King Gryphonheart unified the divergent human colonies and formed Erathia. King Gryphonheart felt the land’s native griffins were key to any Erathian war. To secure Steadwick, we need the griffins.
+639	Early intelligence reports forces from Nighon and Eeofol have barricaded themselves inside Steadwick. All land access to the capitol has been blocked. Their reinforcements arrive via underground tunnels. Armies from the west will meet us on the field of battle. There is little else to say. We do not stop until Steadwick is liberated.
+640	My name is Dorrell, ambassador from AvLee. I bring a message from Queen Catherine. After the liberation of Steadwick, a Kreegan envoy appeared before the royal court. He claims they have captive, King Roland Ironfist of Enroth. They are asking for one million gold ransom. We cannot validate this claim. True or not, Queen Catherine is unwilling to pay.  After interrogating the envoy, we learned Roland is held deep inside Eeofol by Clan Kreelah. Locate Clan Kreelah's base of operations and rescue Roland.  In addition to your Erathian army, we will support you from AvLee. This mission is of utmost seriousness. You may rescue Roland, or find yourself the victim of a trap.
+641	My name is Winstan Langer, ambassador from Bracada, ruled by Grand Vizier Gavin Magnus. Forces from Tatalia and Krewlod are fighting in west Erathia. After months of conflict, the battle still rages.  Though weary of yet another war, my king sends reinforcements to aid your efforts.  Brilliant tactics will not win this battle. Body count will determine the victor. Good luck.
+642	We now know how Erathia fell to Nighon and Eeofol. Through an extensive network of underground tunnels dug by the Overlord’s armies, they struck simultaneously in many areas with overwhelming numbers. Credit the military for holding the invasion to half the country.  We have discovered the main artery for transporting forces from Nighon to Erathia; it is under the ocean, connecting the Nighon underworld to the Erathian mainland. Bracada and Avlee have sent armies to join the fight.  First we must eliminate the remaining Kreegans and Nighon forces from the mainland, then pursue them underground, and drive them back to the shores of Nighon.
+643	As you foresaw milord, King Gryphonheart’s death brings many opportunities for your mercenary skills.  A messenger from Tatalia, on behalf of King Tralossk, has contacted us.  Twenty years ago, following numerous border skirmishes along the western shore of Erathia, Tatalia signed an agreement to cease hostilities. King Gryphonheart is dead.  Their agreement has died with him.  Aggressive tactics have never been part of Tatalia's military character.  Their ranks are vast, and once they possess Erathian land, they will hold it.  However, they need generals to guide their heroes to expand their borders and accommodate their growing population.
+644	Your abilities have been brought to the attention of the barbarian nation of Krewlod. Their skirmishes with the Erathian military on their eastern border are legendary. Many credit them for hardening Erathian soldiers. Recently, a border raid resulted in victory, and uncharacteristically, a large numbers of prisoners. Upon interrogation, their suspicions were confirmed. Without King Gryphonheart, Erathia has lost its soul.  Your goal is to quickly plunder the Erathian land within Krewlod’s immediate reach. Once they have the resources they need... war will be discussed. Until then, your independent participation is needed.  Should you be captured, Krewlod will claim you were an over zealous clan leader, acting outside the interests of the nation.
+645	Representatives from both Tatalia and Krewlod seek your services... again. Both nations claim the last strip of Erathian land between their countries. Few Erathian castles remain in the area.  They are nothing more than token resistance.  The most ferocious battles will occur between Tatalia and Krewlod.  Ironically, this land has little value. This is a border war. Tatalia seeks to further extend its reach from the lowlands to the hills. Krewlod wants to halt Tatalia’s march before it reaches their northern border. No matter which side you fight for, the other will perceive you as a traitor. Choose wisely.  Choose the winning side.  Your life depends upon it.
+646	Upon liberating Steadwick, my fears were confirmed.  My father did not die of natural causes.  He was poisoned. Investigations conducted by General Morgan Kendal prior to the war yielded no suspects. Now I learn the necromancers, seeking a military tactician equal to myself, have resurrected my father, King Gryphonheart. After killing King Vilmar, he took command of their military and their throne.  Now they come to us.  They cannot stop the monster they have created.  As a gesture of good faith, they send a messenger to speak only to me. He will tell me who killed my father. Find this hero and deliver him to me safely.
+647	I grow weary of this war. So do the necromancers. We have agreed to co-operate in the destruction of King Gryphonheart. I never thought I would fight alongside the necromancers, but today we forge weapons for both our armies. With their help, along with the forces from Bracada and AvLee, we should be able to repel all undead from Erathia.
+648	What remains of my father's undead army is the Necropolis where he resides. His last legions of undead are significant.  I will join this difficult battle, but you will command the field.  There is one more order you must follow without question. Lord Haart must not die. He is our traitor. We have confirmed the information the necromancers gave to us. Lord Haart was part of King Vilmar's necromantic cult. With Lord Haart's access to Steadwick, poisoning King Gryphonheart's food was a simple task. Acting on orders from King Vilmar, he sought to avenge the banishment of the necromancers from Erathia. I have special plans for Lord Haart.
+649	A large elvish population inhabits Erathia’s southeastern coast.  Green and gold dragons, native to the region, augment their military strength.  Before we conquer this region, and detour our forces to Steadwick, we must annihilate these dragons.  Our Kreegan allies from Eeofol requested the honor of this mission.  The Kreegans are fierce warriors.  They will enjoy the slaughter.
+650	Reports claim a fleet of Enrothian warships have landed on the southern coast of Erathia. We do not know who commands this force, or its size. Through sources in Eeofol, we know Roland Ironfist cannot lead this fleet. Regardless, our plans remain unchanged.  We start the last phase of our underground invasion and solidify our position along the southeastern coast.  Afterwards, we can transport more reinforcements from Nighon.  We have dug the last tunnels to this area.  You will have the tactical advantage.
+651	Catherine Ironfist has enlisted aid from Bracada and AvLee.  She knows we are close to Steadwick.  We must occupy Steadwick before she arrives.  Once we own Erathia's capitol, not even Catherine Ironfist will wrench it from our hands.
+652	Our nation's goal was to kill the man who banished us from Erathia. However, Nighon and Eeofol's subsequent invasion has done us an unexpected favor.  Erathia is strewn with the dead.  For the necromancers, this is a season of harvest. This is a season for war.  Queen Catherine is a formidable foe. To defeat Erathia's remaining military, we need a tactician greater than her. We have a plan... an ironic plan. While Catherine organizes the last stages of her war with Nighon and Eeofol, you will sneak into Erathia and locate King Gryphonheart’s grave. Be wary. The region is occupied by scattered Erathian. When the gravesite is found, we will resurrect the dead king and make him our pawn. With King Gryphonheart commanding our armies, his former home will become our land of the dead.
+653	Before we begin our large scale invasion of Erathia, we must fill our ranks. Erathia’s populous will provide the recruits we need. Invade the local region and resurrect the needed troops.
+654	A Death Knight named Mot, refuses to obey King Gryphonheart’s orders.  An example must be made so others will not contemplate such traitorous action.  Mot has insulated himself with his armies.  Infiltrate his troops, kill him, and take his command.  When he is dead, resurrect his corpse and employ him in your ranks.
+655	Erathia's military lies before us. It is time to make a bold strike. King Gryphonheart has trained their generals and knows their tactics. Morale will decide this battle.  Morale is not a factor for the undead.  Once we fill our ranks with their dead, our horde will grow and their morale will falter.  Then we will swarm over them. Soon King Gryphonheart will rule Erathia once again.
+656	For the first time in the history of the Contested Lands, humans and elves have fought alongside one another to defend the region from invaders. When the celebration is over, old hatreds will return and we will be citizens of a land in conflict. We must think about the future of the Contested Lands.  It is time to shape its future.  If our fight for independence is to succeed, we need something greater than our armies to motivate the populous. We need a symbolic cornerstone. Seek out the Grail in the enchanted lands where the Unicorns converse with the trees.
+657	Our cause is public.  Ironically, many humans have joined the elfin population in our vision of an independent state. Already, factions loyal to Erathia and AvLee organize to stop us. We cannot continue without a strong base of operations. Faruk Welnin, mayor of the town of Welnin, has sent a messenger.  He offers his protection and support. Our war for independence begins now. We must fight our way to Welnin and establish the Grail. When we have accomplished this, Welnin will become our foundation.
+658	We have come far very quickly. Armies from Erathia and AvLee have arrived to 'restore order.' This jeopardizes our quest for independence, and such hostile elements could ignite a larger war. It is our duty to establish Welnin as the capitol of the Contested Lands and the drive rule of Erathia and AvLee from this territory. If we do not, we will lose all we have fought for and two great nations may once again re-enact the carnage of the Timber Wars.  Today we declare our independence from the nations of Erathia and AvLee.
+659	While resurrecting King Gryphonheart from the dead, former King Vilmar met with an unfortunate accident. King Gryphonheart has taken command of the military... and the throne. His control over the dead is beyond anything we have seen. This bodes well for our invasion. However, our lords watch their new king, searching for a sign of weakness.
+
+661	in the dirt.
+662	under a desert drift.
+663	on a grassy plain.
+664	in the driven snow.
+665	in a murky swamp.
+666	in a parched wasteland.
+667	in an underground cavern
+668	buried in barren lava.
+669	in the murky depths of the ocean.
+670	under a rock.
+671	Bas
+672	Adv
+673	Exp
+
+
+676	Moat
+677	Bramble Hedge
+678	Land Mines
+679	Lava
+680	Boneyard
+681	Boiling Oil
+682	Spike Barrier
+683	Boiling Tar
+684	Moat
+685	Split %s army
+686	Cannot combine hero's last army
+687	Combine %s armies
+688	Split army
+689	View %s
+690	Cannot move last army to garrison
+691	Move %s
+692	Exchange %s with %s
+693	Exit town
+694	Cannot move allied heroes to garrison.
+695	Kingdom Overview
+696	Empty
+697	Select %s (in garrison)
+698	View Hero
+699	Mage Guild
+700	Thieves' Guild
+701	Tavern
+702	Shipyard
+703	Castle
+704	Blacksmith
+705	Village Hall
+706	Recruit %s
+707	Town Hall
+708	City Hall
+709	Capitol
+710	
+711	Marketplace
+712	Resource Silo
+713	Fort
+714	Citadel
+715	An external creature dwelling must be flagged to summon creatures through the portal.
+716	%s purchased
+717	Select %s (visiting)
+718	Select %s (discarded creatures)
+719	Select %s (hero's army)
+
+721	Artifact
+722	Gold
+723	Resource
+724	{Sawmill}
+
+You gain control of a Sawmill. It will provide you with two units of wood per day.
+725	{Alchemist Lab}
+
+You gain control of an Alchemist Lab. It will provide you with one unit of mercury per day.
+726	{Ore Pit}
+
+You gain control of an Ore Pit. It will provide you with two units of ore per day.
+727	{Sulfur Dune}
+
+You gain control of a Sulfur Dune. It will provide you with one unit of sulfur per day.
+728	{Crystal Cavern}
+
+You gain control of a Crystal Cavern. It will provide you with one unit of crystal per day.
+729	{Gem Pond}
+
+You gain control of a Gem Pond. It will provide you with one unit of gems per day.
+730	{Gold Mine}
+
+You gain control of a Gold Mine. It will provide you with 1000 gold per day.
+731	{Abandoned Mine}
+
+You gain control of an Abandoned Gold Mine. It will provide you with 1000 gold per day.
+732	Cannot afford a Hero
+733	Cannot recruit. You already have %d Heroes.
+734	Cannot recruit. You already have a Hero in this town.
+735	Recruit %s the %s
+736	Select %s
+737	Thieves' Guild
+738	Hiring price
+739	Exit tavern
+
+741	Wood
+742	Mercury
+743	Ore
+744	Sulfur
+745	Crystal
+746	Gems
+747	Gold
+748	Mithril
+749	Dirt
+750	Desert
+751	Grass
+752	Snow
+753	Swamp
+754	Rough
+755	Subterranean
+756	Lava
+757	Water
+758	Rock
+
+760	Treason
+761	Awful
+762	Poor
+763	Normal
+764	Good
+765	Great
+766	Blood!
+767	Fafner
+768	Song for the Father
+769	500
+770	1000
+771	Gretchin
+772	Long Live the King
+773	550
+774	875
+775	Gundula
+776	Spoils of War
+777	600
+778	750
+779	Drakon
+780	Liberation
+781	650
+782	625
+783	Ingham
+784	Dungeons and Devils
+785	700
+786	500
+787	Tamika
+788	Long Live the Queen
+789	750
+790	375
+791	Nymus
+792	Seeds of Discontent
+793	800
+794	250
+795	Malcom
+796	Liberation
+797	850
+798	225
+799	Sorsha
+800	Seeds of Discontent
+801	900
+802	200
+803	Zydar
+804	Long Live the King
+805	1000
+806	175
+807	Your Name
+808	Just play a Map
+809	2000
+810	1
+
+812	
+813	
+814	Long Live the Queen
+815	Long Live the Queen
+816	Liberation
+817	Liberation
+818	Spoils of War
+819	Spoils of War
+820	Song for the Father
+821	Song for the Father
+822	Dungeons and Devils
+823	Dungeons and Devils
+824	Long Live the King
+825	Long Live the King
+826	Seeds of Discontent
+827	Seeds of Discontent
+828	Armageddon's Blade
+829	Armageddon's Blade
+830	Dragon's Blood
+831	Dragon's Blood
+832	Dragon Slayer
+833	Dragon Slayer
+834	Festival of Life
+835	Festival of Life
+836	Foolhardy Waywardness
+837	Foolhardy Waywardness
+838	Playing With Fire
+839	Playing With Fire
+840	A Life of A-d-v-e-n-t-u-r-e
+841	A Life of A-d-v-e-n-t-u-r-e
+842	Evil Way Home
+843	Evil Way Home
+844	In the Wake of Gods
+845	In the Wake of Gods
+846	The Samaritan
+847	The Samaritan
+848	Rise of the Necromancer
+849	Rise of the Necromancer
+850	Unholy Alliance
+851	Unholy Alliance
+852	Spectre of Power
+853	Spectre of Power
+854	
+855	
+856	
+857	
+858	ROLLOVER
+859	ROLLOVER
+
+
+862	Castellatus
+863	Cornerstone
+864	Kanan
+865	Highcastle
+866	Whitemoon
+867	Transom
+868	Middleheim
+869	Brettonia
+870	Alexandretta
+871	Whitestone
+872	Claxton
+873	Armitage
+874	Whistledale
+875	Gateway
+876	Dunwall
+877	Kildare
+878	Wise Oak
+879	Forest
+880	Fortune Keep
+881	Still Water
+882	Elfwind
+883	Serenity
+884	Ceiliedgh
+885	Gladeroot
+886	Forest Glen
+887	Rainhaven
+888	Strongglen
+889	Marishen
+890	Bath'iere
+891	Green Falls
+892	Emerald Moor
+893	Wild Willow
+894	Machina
+895	Stronggale
+896	Corona
+897	Silverwing
+898	Facture
+899	Cloudfire
+900	Cloudspire
+901	Equinox
+902	Athenaeum
+903	Valtara
+904	Tirith
+905	Fallen Star
+906	Mystos
+907	Ayer
+908	Silverspire
+909	Manufactury
+910	Abaddon
+911	Acheron
+912	Ashden
+913	Brimstone
+914	Candent
+915	Cinderspire
+916	Daemon Gate
+917	Enkindle
+918	Gehenna
+919	Firebrand
+920	Ashcombe
+921	Hellwind
+922	Stygius
+923	Styx
+924	Tartaros
+925	Blackburn
+926	Haunt's Wind
+927	Cessacioun
+928	Agony
+929	Sanctum
+930	Terminus
+931	Blackquarter
+932	Death's Gate
+933	Grave Raven
+934	Dark Cloud
+935	Coldsoul
+936	Coldreign
+937	Dark Eternal
+938	Ghostwind
+939	Blight
+940	Shadow Keep
+941	Worm Warren
+942	Veks
+943	Sorrow Crown
+944	Chillwater
+945	Deepshadow
+946	Darkhold
+947	Blindroot
+948	Shadowden
+949	Scar
+950	Malev
+951	Castigare
+952	Dragonnade
+953	Shade
+954	Evernight
+955	Darkburrow
+956	Lost Hold
+957	Coldshadow
+958	Kragg
+959	Drago Breach
+960	Hartgrim
+961	Sandflash
+962	Morganheim
+963	Cragmoor
+964	Dragonspire
+965	Battlement
+966	Bocc
+967	Slau
+968	Tormina
+969	Dolere
+970	Rockwarren
+971	Strongglen
+972	Kruber
+973	Rovener
+974	Marshank
+975	Deadfall
+976	Coolmire
+977	Backwater
+978	Marshchoke
+979	Lostmoor
+980	Silt
+981	Deadwood
+982	Edgewater
+983	Stillbog
+984	Drakenmoor
+985	Hermit Cove
+986	Mosswood
+987	Marshwall
+988	Mossden
+989	Mudshire
+990	Elementon
+991	Styriam
+992	Fenderen
+993	Lagumoor
+994	Wazzar
+995	Lanting
+996	Vluchton
+997	Solium
+998	Massein
+999	Magmetin
+1000	Ventu
+1001	Fleogan Mills
+1002	Electrising
+1003	Ceald
+1004	Igne
+1005	Froisan
+
+
+
+1009	Village
+1010	Town
+1011	City
+1012	Capitol
+
+1014	Guardhouse
+1015	Archers' Tower
+1016	Griffin Tower
+1017	Barracks
+1018	Monastery
+1019	Training Grounds
+1020	Portal of Glory
+1021	Upg. Guardhouse
+1022	Upg. Archers' Tower
+1023	Upg. Griffin Tower
+1024	Upg. Barracks
+1025	Upg. Monastery
+1026	Upg. Training Grounds
+1027	Upg. Portal of Glory
+1028	Centaur Stables
+1029	Dwarf Cottage
+1030	Homestead
+1031	Enchanted Spring
+1032	Dendroid Arches
+1033	Unicorn Glade
+1034	Dragon Cliffs
+1035	Upg. Centaur Stables
+1036	Upg. Dwarf Cottage
+1037	Upg. Homestead
+1038	Upg. Enchanted Spring
+1039	Upg. Dendroid Arches
+1040	Upg. Unicorn Glade
+1041	Upg. Dragon Cliffs
+1042	Workshop
+1043	Parapet
+1044	Golem Factory
+1045	Mage Tower
+1046	Altar of Wishes
+1047	Golden Pavilion
+1048	Cloud Temple
+1049	Upg. Workshop
+1050	Upg. Parapet
+1051	Upg. Golem Factory
+1052	Upg. Mage Tower
+1053	Upg. Altar of Wishes
+1054	Upg. Golden Pavilion
+1055	Upg. Cloud Temple
+1056	Imp Crucible
+1057	Hall of Sins
+1058	Kennels
+1059	Demon Gate
+1060	Hell Hole
+1061	Fire Lake
+1062	Forsaken Palace
+1063	Upg. Imp Crucible
+1064	Upg. Hall of Sins
+1065	Upg. Kennels
+1066	Upg. Demon Gate
+1067	Upg. Hell Hole
+1068	Upg. Fire Lake
+1069	Upg. Forsaken Palace
+1070	Cursed Temple
+1071	Graveyard
+1072	Tomb of Souls
+1073	Estate
+1074	Mausoleum
+1075	Hall of Darkness
+1076	Dragon Vault
+1077	Upg. Cursed Temple
+1078	Upg. Graveyard
+1079	Upg. Tomb of Souls
+1080	Upg. Estate
+1081	Upg. Mausoleum
+1082	Upg. Hall of Darkness
+1083	Upg. Dragon Vault
+1084	Warren
+1085	Harpy Loft
+1086	Pillar of Eyes
+1087	Chapel of Stilled Voices
+1088	Labyrinth
+1089	Manticore Lair
+1090	Dragon Cave
+1091	Upg. Warren
+1092	Upg. Harpy Loft
+1093	Upg. Pillar of Eyes
+1094	Upg. Stilled Voices
+1095	Upg. Labyrinth
+1096	Upg. Manticore Lair
+1097	Upg. Dragon Cave
+1098	Goblin Barracks
+1099	Wolf Pen
+1100	Orc Tower
+1101	Ogre Fort
+1102	Cliff Nest
+1103	Cyclops Cave
+1104	Behemoth Lair
+1105	Upg. Goblin Barracks
+1106	Upg. Wolf Pen
+1107	Upg. Orc Tower
+1108	Upg. Ogre Fort
+1109	Upg. Cliff Nest
+1110	Upg. Cyclops Cave
+1111	Upg. Behemoth Lair
+1112	Gnoll Hut
+1113	Lizard Den
+1114	Serpent Fly Hive
+1115	Basilisk Pit
+1116	Gorgon Lair
+1117	Wyvern Nest
+1118	Hydra Pond
+1119	Upg. Gnoll Hut
+1120	Upg. Lizard Den
+1121	Upg. Serpent Fly Hive
+1122	Upg. Basilisk Pit
+1123	Upg. Gorgon Lair
+1124	Upg. Wyvern Nest
+1125	Upg. Hydra Pond
+1126	Magic Lantern
+1127	Altar of Air
+1128	Altar of Water
+1129	Altar of Fire
+1130	Altar of Earth
+1131	Altar of Thought
+1132	Pyre
+1133	Upg. Magic Lantern
+1134	Upg. Altar of Air
+1135	Upg. Altar of Water
+1136	Upg. Altar of Fire
+1137	Upg. Altar of Earth
+1138	Upg. Altar of Thought
+1139	Upg. Pyre
+1140	Level 1 Creature Generator
+1141	Level 2 Creature Generator
+1142	Level 3 Creature Generator
+1143	Level 4 Creature Generator
+1144	Level 5 Creature Generator
+1145	Level 6 Creature Generator
+1146	Level 7 Creature Generator
+1147	Upg. Level 1 Creature Generator
+1148	Upg. Level 2 Creature Generator
+1149	Upg. Level 3 Creature Generator
+1150	Upg. Level 4 Creature Generator
+1151	Upg. Level 5 Creature Generator
+1152	Upg. Level 6 Creature Generator
+1153	Upg. Level 7 Creature Generator
+1154	 (+1 level)
+1155	 (+1 level for 2000 gold)
+1156	 (+1 level for 10 gems)
+1157	Mage Guild Level 1
+1158	Mage Guild Level 2
+1159	Mage Guild Level 3
+1160	Mage Guild Level 4
+1161	Mage Guild Level 5
+1162	Tavern
+1163	Shipyard
+1164	Fort
+1165	Citadel
+1166	Castle
+1167	Village Hall
+1168	Town Hall
+1169	City Hall
+1170	Capitol
+1171	Marketplace
+1172	
+1173	Blacksmith
+1174	Moat
+1175	Shipyard with ship
+1176	View World
+1177	{View World}
+
+See a bird's eye view of the world
+1178	View Puzzle
+1179	{View Puzzle}
+
+See the map of the buried object
+1180	View Scenario Info
+1181	{View Scenario Info}
+
+View information about the current scenario
+1182	Dig
+1183	{Dig}
+
+Search the area for the buried Grail
+1184	Replay Opponent Turn
+1185	{Replay Opponent Turn}
+
+Replays events since your last turn
+1186	ROLLOVER
+1187	ROLLOVER
+1188	Okay
+1189	{Okay}
+
+Return to the Adventure Map
+
+
+1192	
+1193	
+1194	Online Service
+1195	{Online Service}
+
+Allows you to play over an Online Service
+1196	Hot Seat
+1197	{Hot Seat}
+
+Allows multiple people to play different players on the same computer
+1198	IPX
+1199	{IPX}
+
+Allows multiple people to play on their own computers across a local area network
+1200	TCP/IP
+1201	{TCP/IP}
+
+Allows multiple people to play on their own computers across a local area network or via the internet
+1202	Modem
+1203	{Modem}
+
+Allows two people to connect via modem
+1204	Direct Connect
+1205	{Direct Connect}
+
+Allows two people to connect via a direct serial connection
+1206	Host a Game
+1207	{Host Game}
+
+Allows you to set up and create the game that others will join
+1208	Join a Game
+1209	{Join Game}
+
+Displays a list of available games for you to join
+1210	Search for a Game
+1211	{Search for Game}
+
+Allows you to enter a specific IP address to connect to
+1212	GAMENAME 1
+1213	GAMENAME 1
+1214	GAMENAME 2
+1215	GAMENAME 2
+1216	GAMENAME 3
+1217	GAMENAME 3
+1218	GAMENAME 4
+1219	GAMENAME 4
+1220	GAMENAME 5
+1221	GAMENAME 5
+1222	GAMENAME 6
+1223	GAMENAME 6
+1224	GAMENAME 7
+1225	GAMENAME 7
+1226	GAMENAME 8
+1227	GAMENAME 8
+1228	GAMENAME 9
+1229	GAMENAME 9
+1230	GAMENAME 10
+1231	GAMENAME 10
+1232	GAMENAME 11
+1233	GAMENAME 11
+1234	GAMENAME 12
+1235	GAMENAME 12
+1236	Scroll through available games
+1237	Scroll through available games
+1238	
+1239	
+1240	Cancel
+1241	Return to previous menu
+1242	Exit (nothing will be sacrificed).
+1243	Leave the Altar.  All items currently on the Altar will be returned to you.
+1244	Currently held artifact
+1245	
+1246	Place all artifacts in backpack on altar
+1247	Move items in your hero's backpack on to the Altar.
+1248	Place all artifacts on the altar
+1249	Move all artifacts, both equipped and in your hero's backpack, on to the Altar.
+1250	Sacrifice creatures
+1251	Switch to Sacrifice Creatures.  Only available for Evil and Neutral heroes.
+1252	Number of creatures / Experience value
+1253	
+1254	Currently selected creatures
+1255	
+1256	Number of creatures / Experience value
+1257	
+1258	Number of creatures to sacrifice
+1259	
+1260	Set number of creatures to sacrifice
+1261	
+1262	Sacrifice maximum number of creatures
+1263	Move the maximum number of creatures on to the Altar.
+1264	Sacrifice all creatures in your hero's army
+1265	Move all but one creature on to the Altar.
+1266	Sacrifice artifacts
+1267	Switch to Sacrifice Artifacts screen.  Only available for Good and Neutral heroes.
+1268	Number of creatures / Experience value
+1269	
+1270	Place artifact to sacrifice here
+1271	
+1272	Experience value of artifact
+1273	
+1274	Sacrifice artifacts currently on the altar
+1275	Sacrifice anything currently on the Altar, and gain experience.
+1276	Sacrifice creatures currently on the altar
+1277	Sacrifice anything currently on the Altar, and gain experience.
+1278	
+1279	Search through backpack
+1280	
+1281	Search through backpack
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1446	Surrender
+1447	{Surrender}
+
+Offer to surrender to your enemy.  Your hero must pay to leave combat, but may be immediately recruited at a tavern along with any troops and artifacts currently in his possession.
+1448	Retreat
+1449	{Retreat}
+
+Your hero will flee the combat, but may be immediately recruited at a tavern along with any artifacts currently in his possession.
+1450	Combat Options
+1451	{Combat Options}
+
+Allows you to view or change the current combat options
+1452	Auto Combat
+1453	{Auto Combat}
+
+Allows the computer to conduct the combat for you.  Click anywhere during auto combat to take control of your own troops.  You will be given control on your next unit's move phase.
+1454	
+1455	Combat text appears in this window
+1456	
+1457	Scroll through text displayed during combat
+1458	Cast Spell
+1459	{Cast Spell}
+
+Opens your hero's spell book, allowing you to cast a spell
+1460	Wait
+1461	{Wait}
+
+Delay this unit's turn until after all troops have had the opportunity to move
+1462	Defend
+1463	{Defend}
+
+Increases this unit's defense value by sacrificing its move this turn
+1464	Phase Wait
+1465	Phase Wait
+1466	End Tactics Phase
+1467	{End Tactics Phase}
+
+Ends the Tactics Phase and commences combat.
+
+1469	The Guardhouse allows you to recruit Pikemen.
+1470	The Archers' Tower allows you to recruit Archers.
+1471	The Griffin Tower allows you to recruit Griffins.
+1472	The Barracks allow you to recruit Swordsmen.
+1473	The Monastery allows you to recruit Monks.
+1474	The Training Grounds allow you to recruit Cavaliers.
+1475	The Portal of Glory allows you to recruit Angels.
+1476	The Guardhouse allows you to recruit Halberdiers.
+1477	The Archers' Tower allows you to recruit Marksmen.
+1478	The Griffin Tower allows you to recruit Royal Griffins.
+1479	The Barracks allow you to recruit Crusaders.
+1480	The Monastery allows you to recruit Zealots.
+1481	The Training Grounds allow you to recruit Champions.
+1482	The Portal of Glory allows you to recruit Arch Angels.
+1483	The Centaur Stables allow you to recruit Centaurs.
+1484	The Dwarf Cottage allows you to recruit Dwarves.
+1485	The Homestead allows you to recruit Wood Elves.
+1486	The Enchanted Spring allows you to recruit Pegasi.
+1487	The Dendroid Arches allow you to recruit Dendroid Guards.
+1488	The Unicorn Glade allows you to recruit Unicorns.
+1489	The Dragon Cliffs allow you to recruit Green Dragons.
+1490	The Centaur Stables allow you to recruit Centaur Captains.
+1491	The Dwarf Cottage allows you to recruit Battle Dwarves.
+1492	The Homestead allows you to recruit Grand Elves.
+1493	The Enchanted Spring allows you to recruit Silver Pegasi.
+1494	The Dendroid Arches allow you to recruit Dendroid Soldiers.
+1495	The Unicorn Glade allows you to recruit War Unicorns.
+1496	The Dragon Cliffs allow you to recruit Gold Dragons.
+1497	The Workshop allows you to recruit Gremlins.
+1498	The Parapet allows you to recruit Stone Gargoyles.
+1499	The Golem Factory allows you to recruit Stone Golems.
+1500	The Mage Tower allows you to recruit Magi.
+1501	The Altar of Wishes allows you to recruit Genies.
+1502	The Golden Pavilion allows you to recruit Nagas.
+1503	The Cloud Temple allows you to recruit Giants.
+1504	The Workshop allows you to recruit Master Gremlins.
+1505	The Parapet allows you to recruit Obsidian Gargoyles.
+1506	The Golem Factory allows you to recruit Iron Golems.
+1507	The Mage Tower allows you to recruit Arch Magi.
+1508	The Altar of Wishes allows you to recruit Master Genies.
+1509	The Golden Pavilion allows you to recruit Naga Queens.
+1510	The Cloud Temple allows you to recruit Titans.
+1511	The Imp Crucible allows you to recruit Imps.
+1512	The Hall of Sins allows you to recruit Gogs.
+1513	The Kennels allow you to recruit Hell Hounds.
+1514	The Demon Gate allows you to recruit Demons.
+1515	The Hell Hole allows you to recruit Pit Fiends.
+1516	The Fire Lake allows you to recruit Efreet.
+1517	The Forsaken Palace allows you to recruit Devils.
+1518	The Imp Crucible allows you to recruit Familiars.
+1519	The Hall of Sins allows you to recruit Magogs.
+1520	The Kennels allow you to recruit Cerberi.
+1521	The Demon Gate allows you to recruit Horned Demons.
+1522	The Hell Hole allows you to recruit Pit Lords.
+1523	The Fire Lake allows you to recruit Efreet Sultans.
+1524	The Forsaken Palace allows you to recruit Arch Devils.
+1525	The Cursed Temple allows you to recruit Skeletons.
+1526	The Graveyard allows you to recruit Walking Dead.
+1527	The Tomb of Souls allows you to recruit Wights.
+1528	The Estate allows you to recruit Vampires.
+1529	The Mausoleum allows you to recruit Liches.
+1530	The Hall of Darkness allows you to recruit Black Knights.
+1531	The Dragon Vault allows you to recruit Bone Dragons.
+1532	The Cursed Temple allows you to recruit Skeleton Warriors.
+1533	The Graveyard allows you to recruit Zombies.
+1534	The Tomb of Souls allows you to recruit Wraiths.
+1535	The Estate allows you to recruit Vampire Lords.
+1536	The Mausoleum allows you to recruit Power Liches.
+1537	The Hall of Darkness allows you to recruit Dread Knights.
+1538	The Dragon Vault allows you to recruit Ghost Dragons.
+1539	The Warren allows you to recruit Troglodytes.
+1540	The Harpy Loft allows you to recruit Harpies.
+1541	The Pillar of Eyes allows you to recruit Beholders.
+1542	The Chapel of Stilled Voices allows you to recruit Medusas.
+1543	The Labyrinth allows you to recruit Minotaurs.
+1544	The Manticore Lair allows you to recruit Manticores.
+1545	The Dragon Cave allows you to recruit Red Dragons.
+1546	The Warren allows you to recruit Infernal Troglodytes.
+1547	The Harpy Loft allows you to recruit Harpy Hags.
+1548	The Pillar of Eyes allows you to recruit Evil Eyes.
+1549	The Chapel of Stilled Voices allows you to recruit Medusa Queens.
+1550	The Labyrinth allows you to recruit Minotaur Kings.
+1551	The Manticore Lair allows you to recruit Scorpicores.
+1552	The Dragon Cave allows you to recruit Black Dragons.
+1553	The Goblin Barracks allow you to recruit Goblins.
+1554	The Wolf Pen allows you to recruit Wolf Riders.
+1555	The Orc Tower allows you to recruit Orcs.
+1556	The Ogre Fort allows you to recruit Ogres.
+1557	The Cliff Nest allows you to recruit Rocs.
+1558	The Cyclops Cave allows you to recruit Cyclopses.
+1559	The Behemoth Lair allows you to recruit Behemoths.
+1560	The Goblin Barracks allow you to recruit Hobgoblins.
+1561	The Wolf Pen allows you to recruit Wolf Raiders.
+1562	The Orc Tower allows you to recruit Orc Chieftains.
+1563	The Ogre Fort allows you to recruit Ogre Magi.
+1564	The Cliff Nest allows you to recruit Thunderbirds.
+1565	The Cyclops Cave allows you to recruit Cyclops Kings.
+1566	The Behemoth Lair allows you to recruit Ancient Behemoths.
+1567	The Gnoll Hut allows you to recruit Gnolls.
+1568	The Lizard Den allows you to recruit Lizardmen.
+1569	The Serpent Fly Hive allows you to recruit Serpent Flies.
+1570	The Basilisk Pit allows you to recruit Basilisks.
+1571	The Gorgon Lair allows you to recruit Gorgons.
+1572	The Wyvern Nest allows you to recruit Wyverns.
+1573	The Hydra Pond allows you to recruit Hydras.
+1574	The Gnoll Hut allows you to recruit Gnoll Marauders.
+1575	The Lizard Den allows you to recruit Lizard Warriors.
+1576	The Serpent Fly Hive allows you to recruit Dragon Flies.
+1577	The Basilisk Pit allows you to recruit Greater Basilisks.
+1578	The Gorgon Lair allows you to recruit Mighty Gorgons.
+1579	The Wyvern Nest allows you to recruit Wyvern Monarchs.
+1580	The Hydra Pond allows you to recruit Chaos Hydras.
+1581	The Magic Lantern allows you to recruit Pixies.
+1582	The Altar of Air allows you to recruit Air Elementals.
+1583	The Altar of Water allows you to recruit Water Elementals.
+1584	The Altar of Fire allows you to recruit Fire Elementals.
+1585	The Altar of Earth allows you to recruit Earth Elementals.
+1586	The Altar of Thought allows you to recruit Psychic Elementals.
+1587	The Pyre allows you to recruit Fire Birds.
+1588	The Magic Pool allows you to recruit Sprites.
+1589	The Temple of Thunder allows you to recruit Storm Elementals.
+1590	The Temple of Ice allows you to recruit Ice Elementals.
+1591	The Temple of Energy allows you to recruit Energy Elementals.
+1592	The Temple of Magma allows you to recruit Magma Elementals.
+1593	The Temple of Magic allows you to recruit Magic Elementals.
+1594	The Funeral Pyre allows you to recruit Pheonixes .
+1595	Allows you to recruit Level 1 Creatures.
+1596	Allows you to recruit Level 2 Creatures.
+1597	Allows you to recruit Level 3 Creatures.
+1598	Allows you to recruit Level 4 Creatures.
+1599	Allows you to recruit Level 5 Creatures.
+1600	Allows you to recruit Level 6 Creatures.
+1601	Allows you to recruit Level 7 Creatures.
+1602	Allows you to recruit Upgraded Level 1 Creatures.
+1603	Allows you to recruit Upgraded Level 2 Creatures.
+1604	Allows you to recruit Upgraded Level 3 Creatures.
+1605	Allows you to recruit Upgraded Level 4 Creatures.
+1606	Allows you to recruit Upgraded Level 5 Creatures.
+1607	Allows you to recruit Upgraded Level 6 Creatures.
+1608	Allows you to recruit Upgraded Level 7 Creatures.
+
+1610	
+1611	{Single Scenario}
+
+Play a single scenario.
+1612	
+1613	{Campaign}
+
+Play a campaign.
+1614	
+1615	{Multiplayer}
+
+Play a multiplayer single scenario.
+1616	
+1617	{Tutorial}
+
+Play a tutorial scenario teaching the basics needed to play Heroes III.
+1618	
+1619	{Back}
+
+Return to the previous screen.
+1620	
+1621	{New Game}
+
+Start a new game.
+1622	
+1623	{Load Game}
+
+Load a saved game.
+1624	
+1625	{High Scores}
+
+View the legendary Heroes of Might and Magic.
+1626	
+1627	{Credits}
+
+View game credits.
+1628	
+1629	{Quit}
+
+Return to Windows.
+
+
+1632	Trade
+1633	
+1634	Trade resources
+1635	
+1636	Give resources to another player
+1637	
+1638	Buy artifacts
+1639	
+1640	Exit
+1641	
+
+
+1644	
+1645	
+1646	SCENARIO_BACKGROUND 
+1647	Choose a scenario
+1648	ADVANCED_BACKGROUND 
+1649	Set advanced options
+1650	Background for random map menu
+1651	Customize and create a random map
+1652	SCENARIO_NAME 
+1653	Scenario Name
+1654	Description Title
+1655	Displays scenario briefing
+1656	Description text
+1657	Displays scenario briefing
+1658	EASY 
+1659	{Easy Difficulty}
+
+The player starts with a large advantage in resources, and the computer plays poorly.
+1660	NORMAL 
+1661	{Normal Difficulty}
+
+The player starts with a moderate advantage in resources, and the computer plays reasonably well.
+1662	HARD 
+1663	{Hard Difficulty}
+
+The player and the computer start with the same resources, and the computer plays to the best of its ability.
+1664	EXPERT 
+1665	{Expert Difficulty}
+
+The player starts with a handicap in resources, and the computer plays to the best of its ability.
+1666	IMPOSSIBLE 
+1667	{Impossible Difficulty}
+
+The player starts with no resources, and the computer plays to the best of its ability.
+1668	ALLY_FLAG1 
+1669	This is your color
+1670	ALLY_FLAG2 
+1671	This color is allied with you
+1672	ALLY_FLAG3 
+1673	This color is allied with you
+1674	ALLY_FLAG4 
+1675	This color is allied with you
+1676	ALLY_FLAG5 
+1677	This color is allied with you
+1678	ALLY_FLAG6 
+1679	This color is allied with you
+1680	ALLY_FLAG7 
+1681	This color is allied with you
+1682	ALLY_FLAG8 
+1683	This color is allied with you
+1684	ENEMY_FLAG1 
+1685	This color is your enemy
+1686	ENEMY_FLAG2 
+1687	This color is your enemy
+1688	ENEMY_FLAG3 
+1689	This color is your enemy
+1690	ENEMY_FLAG4 
+1691	This color is your enemy
+1692	ENEMY_FLAG5 
+1693	This color is your enemy
+1694	ENEMY_FLAG6 
+1695	This color is your enemy
+1696	ENEMY_FLAG7 
+1697	This color is your enemy
+1698	ENEMY_FLAG8 
+1699	This color is your enemy
+1700	SCENARIO_OPTIONS 
+1701	View/hide scenario list
+1702	ADVANCED_OPTIONS 
+1703	View/hide advanced options
+1704	random map button
+1705	Play a randomly created map
+1706	CHAT_DESC 
+1707	Toggle between Scenario Description and Chat Window
+1708	MAP_DIFFICULTY 
+1709	These allow you to modify the overall difficulty of the scenario
+1710	RATING 
+1711	Displays overall difficulty based on Map and Player difficulty settings
+1712	MAP_SIZE 
+1713	Map difficulty can be Easy, Normal, Hard, Expert or Impossible
+1714	VICTORY_CONDITION 
+1715	Victory Conditions for the current scenario
+1716	LOSS_CONDITION 
+1717	Loss Conditions for the current scenario
+1718	SMALL_FILTER 
+1719	View all small maps
+1720	MEDIUM_FILTER 
+1721	View all medium maps
+1722	LARGE_FILTER 
+1723	View all large maps
+1724	EXTRALARGE_FILTER 
+1725	View all extra large maps
+1726	ALL_FILTER 
+1727	View all maps
+1728	SCENARIO_NAME_1 
+1729	SCENARIO_NAME_1 
+1730	SCENARIO_NAME_2 
+1731	SCENARIO_NAME_2 
+1732	SCENARIO_NAME_3 
+1733	SCENARIO_NAME_3 
+1734	SCENARIO_NAME_4 
+1735	SCENARIO_NAME_4 
+1736	SCENARIO_NAME_5 
+1737	SCENARIO_NAME_5 
+1738	SCENARIO_NAME_6 
+1739	SCENARIO_NAME_6 
+1740	SCENARIO_NAME_7 
+1741	SCENARIO_NAME_7 
+1742	SCENARIO_NAME_8 
+1743	SCENARIO_NAME_8 
+1744	SCENARIO_NAME_9 
+1745	SCENARIO_NAME_9 
+1746	SCENARIO_NAME_10 
+1747	SCENARIO_NAME_10 
+1748	SCENARIO_NAME_11 
+1749	SCENARIO_NAME_11 
+1750	SCENARIO_NAME_12 
+1751	SCENARIO_NAME_12 
+1752	SCENARIO_NAME_13 
+1753	SCENARIO_NAME_13 
+1754	SCENARIO_NAME_14 
+1755	SCENARIO_NAME_14 
+1756	SCENARIO_NAME_15 
+1757	SCENARIO_NAME_15 
+1758	SCENARIO_NAME_16 
+1759	SCENARIO_NAME_16 
+1760	SCENARIO_NAME_17 
+1761	SCENARIO_NAME_17 
+1762	SCENARIO_NAME_18 
+1763	SCENARIO_NAME_18 
+1764	ENTRY_SCENARIO_NAME_1 
+1765	ENTRY_SCENARIO_NAME_1 
+1766	ENTRY_SCENARIO_NAME_2 
+1767	ENTRY_SCENARIO_NAME_2 
+1768	ENTRY_SCENARIO_NAME_3 
+1769	ENTRY_SCENARIO_NAME_3 
+1770	ENTRY_SCENARIO_NAME_4 
+1771	ENTRY_SCENARIO_NAME_4 
+1772	ENTRY_SCENARIO_NAME_5 
+1773	ENTRY_SCENARIO_NAME_5 
+1774	ENTRY_SCENARIO_NAME_6 
+1775	ENTRY_SCENARIO_NAME_6 
+1776	ENTRY_SCENARIO_NAME_7 
+1777	ENTRY_SCENARIO_NAME_7 
+1778	ENTRY_SCENARIO_NAME_8 
+1779	ENTRY_SCENARIO_NAME_8 
+1780	ENTRY_SCENARIO_NAME_9 
+1781	ENTRY_SCENARIO_NAME_9 
+1782	ENTRY_SCENARIO_NAME_10 
+1783	ENTRY_SCENARIO_NAME_10 
+1784	ENTRY_SCENARIO_NAME_11 
+1785	ENTRY_SCENARIO_NAME_11 
+1786	ENTRY_SCENARIO_NAME_12 
+1787	ENTRY_SCENARIO_NAME_12 
+1788	ENTRY_SCENARIO_NAME_13 
+1789	ENTRY_SCENARIO_NAME_13 
+1790	ENTRY_SCENARIO_NAME_14 
+1791	ENTRY_SCENARIO_NAME_14 
+1792	ENTRY_SCENARIO_NAME_15 
+1793	ENTRY_SCENARIO_NAME_15 
+1794	ENTRY_SCENARIO_NAME_16 
+1795	ENTRY_SCENARIO_NAME_16 
+1796	ENTRY_SCENARIO_NAME_17 
+1797	ENTRY_SCENARIO_NAME_17 
+1798	ENTRY_SCENARIO_NAME_18 
+1799	ENTRY_SCENARIO_NAME_18 
+1800	TURN_DURATION 
+1801	Turn Duration
+1802	CHAT_TEXT 
+1803	Chat Messages
+1804	CHAT_ENTRY 
+1805	CHAT_ENTRY 
+1806	CHAT_PLUG 
+1807	CHAT_PLUG 
+1808	CHAT_PLAYER 
+1809	Players
+1810	CHAT_PLAYER_SLIDER,
+1811	CHAT_PLAYER_SLIDER,
+1812	ROLLOVER 
+1813	ROLLOVER 
+1814	NEXT 
+1815	Save the currently selected game
+1816	BEGIN 
+1817	Start the selected scenario
+1818	BACK 
+1819	BACK 
+1820	SSEXIT 
+1821	Close this window
+(no action taken)
+1822	WHICHMAP 
+1823	Current Map Size
+(Small, Medium, Large, Extra Large)
+1824	SORT_NUMBER 
+1825	Sorts maps by number of players
+1826	SORT_SIZE 
+1827	Sorts maps by size of maps
+1828	k_sort_version
+1829	Sort maps by map version
+1830	SORT_ALPHA 
+1831	Sorts maps alphabetically by name
+1832	SORT_VICTORY 
+1833	Sorts maps by victory conditions
+1834	SORT_LOSS 
+1835	Sorts maps by loss conditions
+1836	BRIEFING 
+1837	BRIEFING 
+1838	SSHERO 
+1839	SSHERO 
+1840	GOLDPIC 
+1841	GOLDPIC 
+1842	HUMAN_CPU1 
+1843	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1844	HUMAN_CPU2 
+1845	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1846	HUMAN_CPU3 
+1847	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1848	HUMAN_CPU4 
+1849	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1850	HUMAN_CPU5 
+1851	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1852	HUMAN_CPU6 
+1853	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1854	HUMAN_CPU7 
+1855	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1856	HUMAN_CPU8 
+1857	Human or CPU means that this color can be played by a human or the computer.  CPU only means that only the computer can control this color.
+1858	HANDICAP1 
+1859	Allows you to handicap this player by diminishing their starting resources
+1860	HANDICAP2 
+1861	Allows you to handicap this player by diminishing their starting resources
+1862	HANDICAP3 
+1863	Allows you to handicap this player by diminishing their starting resources
+1864	HANDICAP4 
+1865	Allows you to handicap this player by diminishing their starting resources
+1866	HANDICAP5 
+1867	Allows you to handicap this player by diminishing their starting resources
+1868	HANDICAP6 
+1869	Allows you to handicap this player by diminishing their starting resources
+1870	HANDICAP7 
+1871	Allows you to handicap this player by diminishing their starting resources
+1872	HANDICAP8 
+1873	Allows you to handicap this player by diminishing their starting resources
+1874	TOWN_LEFT1 
+1875	Allows you to choose a starting town type
+1876	TOWN_LEFT2 
+1877	Allows you to choose a starting town type
+1878	TOWN_LEFT3 
+1879	Allows you to choose a starting town type
+1880	TOWN_LEFT4 
+1881	Allows you to choose a starting town type
+1882	TOWN_LEFT5 
+1883	Allows you to choose a starting town type
+1884	TOWN_LEFT6 
+1885	Allows you to choose a starting town type
+1886	TOWN_LEFT7 
+1887	Allows you to choose a starting town type
+1888	TOWN_LEFT8 
+1889	Allows you to choose a starting town type
+1890	TOWN_RITE1 
+1891	Allows you to choose a starting town type
+1892	TOWN_RITE2 
+1893	Allows you to choose a starting town type
+1894	TOWN_RITE3 
+1895	Allows you to choose a starting town type
+1896	TOWN_RITE4 
+1897	Allows you to choose a starting town type
+1898	TOWN_RITE5 
+1899	Allows you to choose a starting town type
+1900	TOWN_RITE6 
+1901	Allows you to choose a starting town type
+1902	TOWN_RITE7 
+1903	Allows you to choose a starting town type
+1904	TOWN_RITE8 
+1905	Allows you to choose a starting town type
+1906	HERO_LEFT1 
+1907	Allows you to choose a starting hero based on your town type
+1908	HERO_LEFT2 
+1909	Allows you to choose a starting hero based on your town type
+1910	HERO_LEFT3 
+1911	Allows you to choose a starting hero based on your town type
+1912	HERO_LEFT4 
+1913	Allows you to choose a starting hero based on your town type
+1914	HERO_LEFT5 
+1915	Allows you to choose a starting hero based on your town type
+1916	HERO_LEFT6 
+1917	Allows you to choose a starting hero based on your town type
+1918	HERO_LEFT7 
+1919	Allows you to choose a starting hero based on your town type
+1920	HERO_LEFT8 
+1921	Allows you to choose a starting hero based on your town type
+1922	HERO_RITE1 
+1923	Allows you to choose a starting hero based on your town type
+1924	HERO_RITE2 
+1925	Allows you to choose a starting hero based on your town type
+1926	HERO_RITE3 
+1927	Allows you to choose a starting hero based on your town type
+1928	HERO_RITE4 
+1929	Allows you to choose a starting hero based on your town type
+1930	HERO_RITE5 
+1931	Allows you to choose a starting hero based on your town type
+1932	HERO_RITE6 
+1933	Allows you to choose a starting hero based on your town type
+1934	HERO_RITE7 
+1935	Allows you to choose a starting hero based on your town type
+1936	HERO_RITE8 
+1937	Allows you to choose a starting hero based on your town type
+1938	RES_LEFT1 
+1939	Allows you to choose a starting bonus for your hero
+1940	RES_LEFT2 
+1941	Allows you to choose a starting bonus for your hero
+1942	RES_LEFT3 
+1943	Allows you to choose a starting bonus for your hero
+1944	RES_LEFT4 
+1945	Allows you to choose a starting bonus for your hero
+1946	RES_LEFT5 
+1947	Allows you to choose a starting bonus for your hero
+1948	RES_LEFT6 
+1949	Allows you to choose a starting bonus for your hero
+1950	RES_LEFT7 
+1951	Allows you to choose a starting bonus for your hero
+1952	RES_LEFT8 
+1953	Allows you to choose a starting bonus for your hero
+1954	RES_RITE1 
+1955	Allows you to choose a starting bonus for your hero
+1956	RES_RITE2 
+1957	Allows you to choose a starting bonus for your hero
+1958	RES_RITE3 
+1959	Allows you to choose a starting bonus for your hero
+1960	RES_RITE4 
+1961	Allows you to choose a starting bonus for your hero
+1962	RES_RITE5 
+1963	Allows you to choose a starting bonus for your hero
+1964	RES_RITE6 
+1965	Allows you to choose a starting bonus for your hero
+1966	RES_RITE7 
+1967	Allows you to choose a starting bonus for your hero
+1968	RES_RITE8 
+1969	Allows you to choose a starting bonus for your hero
+1970	HERO_SETTING_1 
+1971	Click here to play this color
+1972	HERO_SETTING_2 
+1973	Click here to play this color
+1974	HERO_SETTING_3 
+1975	Click here to play this color
+1976	HERO_SETTING_4 
+1977	Click here to play this color
+1978	HERO_SETTING_5 
+1979	Click here to play this color
+1980	HERO_SETTING_6 
+1981	Click here to play this color
+1982	HERO_SETTING_7 
+1983	Click here to play this color
+1984	HERO_SETTING_8 
+1985	Click here to play this color
+1986	TOWN_SETTING_1 
+1987	TOWN_SETTING_1 
+1988	TOWN_SETTING_2 
+1989	TOWN_SETTING_2 
+1990	TOWN_SETTING_3 
+1991	TOWN_SETTING_3 
+1992	TOWN_SETTING_4 
+1993	TOWN_SETTING_4 
+1994	TOWN_SETTING_5 
+1995	TOWN_SETTING_5 
+1996	TOWN_SETTING_6 
+1997	TOWN_SETTING_6 
+1998	TOWN_SETTING_7 
+1999	TOWN_SETTING_7 
+2000	TOWN_SETTING_8 
+2001	TOWN_SETTING_8 
+2002	const_create_map,
+2003	
+2004	const_map_size_label,
+2005	Select a map size
+2006	const_small_map,
+2007	Create a small map
+2008	const_medium_map,
+2009	Create a medium map
+2010	const_large_map,
+2011	Create a large map
+2012	const_huge_map,
+2013	Create a huge map
+2014	const_map_levels,
+2015	Select single or two level map
+2016	const_human_positions_label,
+2017	Select number of human-playable positions
+2018	const_1_human,
+2019	Create 1 human player
+2020	const_2_humans,
+2021	Create 2 human players
+2022	const_3_humans,
+2023	Create 3 human players
+2024	const_4_humans,
+2025	Create 4 human players
+2026	const_5_humans,
+2027	Create 5 human players
+2028	const_6_humans,
+2029	Create 6 human players
+2030	const_7_humans,
+2031	Create 7 human players
+2032	const_8_humans,
+2033	Create 8 human players
+2034	const_random_humans,
+2035	Create 1-8 human players
+2036	const_human_teams_label,
+2037	Select the number of teams for human-playable positions
+2038	const_no_human_teams,
+2039	No teams
+2040	const_1_human_team,
+2041	Create 1 human team
+2042	const_2_human_teams,
+2043	Create 2 human teams
+2044	const_3_human_teams,
+2045	Create 3 human teams
+2046	const_4_human_teams,
+2047	Create 4 human teams
+2048	const_5_human_teams,
+2049	Create 5 human teams
+2050	const_6_human_teams,
+2051	Create 6 human teams
+2052	const_7_human_teams,
+2053	Create 7 human teams
+2054	const_random_human_teams,
+2055	Create a random number of human teams
+2056	const_computer_positions_label,
+2057	Select the number of computer-only positions
+2058	const_no_computers,
+2059	Create no computer players
+2060	const_1_computer,
+2061	Create 1 computer position
+2062	const_2_computers,
+2063	Create 2 computer positions
+2064	const_3_computers,
+2065	Create 3 computer positions
+2066	const_4_computers,
+2067	Create 4 computer positions
+2068	const_5_computers,
+2069	Create 5 computer positions
+2070	const_6_computers,
+2071	Create 6 computer positions
+2072	const_7_computers,
+2073	Create 7 computer positions
+2074	const_random_computers,
+2075	Create a random number of computer positions
+2076	const_computer_teams_label,
+2077	Select the number of computer teams
+2078	const_no_computer_teams,
+2079	No computer teams
+2080	const_1_computer_team,
+2081	Create 1 computer team
+2082	const_2_computer_teams,
+2083	Create 2 computer teams
+2084	const_3_computer_teams,
+2085	Create 3 computer teams
+2086	const_4_computer_teams,
+2087	Create 4 computer teams
+2088	const_5_computer_teams,
+2089	Create 5 computer teams
+2090	const_6_computer_teams,
+2091	Create 6 computer teams
+2092	const_random_computer_teams,
+2093	Create a random number of computer teams
+2094	const_water_label,
+2095	Select the amount of water on the map
+2096	const_no_water,
+2097	Minimum or no water
+2098	const_normal_water,
+2099	Create a continent surrounded by water
+2100	const_islands,
+2101	Create many small land masses created by water
+2102	const_random_water,
+2103	Include a random amount of water
+2104	const_monster_strength_label,
+2105	Select the relative strength of guardian monsters
+2106	const_weak_monsters,
+2107	Make monsters weaker than normal
+2108	const_normal_monsters,
+2109	Normal strength guardians
+2110	const_strong_monsters,
+2111	Create strong guardians
+2112	const_random_monsters,
+2113	Choose a random overall strength for guardian monsters
+2114	const_show_saved_random_maps,
+2115	Show recently generated random maps
+2116	SLIDER_CHATWINDOW 
+2117	Scroll through chat text
+2118	SLIDER_FILEMENU 
+2119	Scroll through scenario or save game list
+2120	SLIDER_DURATION 
+2121	Allows you to change player turn duration
+2122	PLAYER_HANDICAP_HEADER_ID,
+2123	{Player Name / Handicap Type}
+
+Each potential slot a human player can occupy is marked with an adjacent banner.  Click the banner to change position.  You may also click inside the name field to change your player name.
+
+Each player may be 'handicapped' by clicking the 'handicap' button.  There are three settings: No Handicap, Mild Handicap, and Severe Handicap.  Mild and Severe diminish a player's starting resources.
+
+2124	TURN_DURATION_HEADER_ID,
+2125	{Player Turn Duration}
+
+Using the slider, you may set 'soft' player turn durations.  By 'soft', a timer counts down a player's turn when not in combat.  When in combat, the timer is paused.
+
+Turn durations are 1, 2, 4, 6, 8, 10, 15, 20, 25, and 30 minutes.
+'Unlimited' is the default setting.
+
+2126	STARTING_TOWN_HEADER_ID,
+2127	{Starting Town}
+
+Each player may, or may not, start with a town.  Choices may be Random, Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, and Fortress.
+
+When you do not start with a town, these settings may be used to help choose the alignment of a potential starting hero.
+
+2128	STARTING_TOWN_HEADER_W_CONFLUX_ID,
+2129	{Starting Town}
+
+Each player may, or may not, start with a town.  Choices may be Random, Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, Fortress, and Conflux.
+
+When you do not start with a town, these settings may be used to help choose the alignment of a potential starting hero.
+
+2130	STARTING_HERO_HEADER_ID,
+2131	{Starting Hero}
+
+Each player may, or may not, start with a Hero.  At times, this option may be locked, or absent.  At other times, you may cycle through up to sixteen different hero choices.  If the Starting Town option is enabled, you can change the hero classes for a different set of hero choices.
+
+To see a hero's name, class, and specialty, right click the hero's portrait.
+
+2132	STARTING_BONUS_HEADER_ID,
+2133	{Starting Bonus}
+
+With a Starting Bonus, you may choose a random artifact, 500-1000 gold, or 5-10 wood and ore.
+
+2134	Cannot build more than one Capitol
+2135	This town is not near water
+2136	This town can not build this structure
+2137	Add another level to Mage Guild
+2138	%s is already built
+2139	Cannot build %s
+2140	Cannot afford %s
+2141	Build %s
+2142	Exit Hall
+2143	Hall Options
+
+
+2146	Creature Name
+2147	Creature Name
+2148	Number of creatures
+2149	Number of creatures in the unit
+2150	Attack skill
+2151	Attack skill
+2152	Defense skill
+2153	Defense skill
+2154	Shots remaining
+2155	Number of shots remaining
+2156	Damage per attack
+2157	Damage per attack
+2158	Hit points
+2159	Hit points
+2160	Hit points remaining
+2161	Hit points remaining
+2162	Speed
+2163	Speed
+2164	Morale
+2165	Morale
+2166	Luck
+2167	Luck
+2168	Spells affecting the army
+2169	Spells affecting the army
+2170	Dismiss unit
+2171	{Dismiss Unit}
+
+Dismisses the current unit from your army
+2172	Upgrade unit
+2173	{Upgrade Unit}
+
+Upgrades the current unit
+2174	Okay
+2175	{Okay}
+
+Return to previous window
+2176	Sawmill
+2177	Alchemist's Lab
+2178	Ore Pit
+2179	Sulfur Dune
+2180	Crystal Cavern
+2181	Gem Pond
+2182	Gold Mine
+2183	Abandoned Mine
+2184	Neutral
+2185	Castle
+2186	Rampart
+2187	Tower
+2188	Inferno
+2189	Necropolis
+2190	Dungeon
+2191	Stronghold
+2192	Fortress
+2193	Conflux
+
+
+2196	Light blue
+2197	Green
+2198	Red
+2199	Dark blue
+2200	Brown
+2201	Purple
+2202	White
+2203	Black
+2204	{Attack}
+
+Attack skill is a bonus added to the attack skill of any troops your hero commands, allowing them to inflict more damage in combat.
+2205	{Defense}
+
+Defense skill is a bonus added to the defense skill of any troops your hero commands, allowing them to resist more damage in combat.
+2206	{Spell Power}
+
+Spell power determines the duration or strength of a spell.
+2207	{Knowledge}
+
+Knowledge determines how many spell points your hero may have.  Under normal circumstances, a hero is limited to 10 spell points per level of Knowledge.
+
+
+2210	Maximum
+2211	
+2212	Recruit
+2213	
+2214	Cancel
+2215	
+2216	Basic
+2217	Advanced
+2218	Expert
+
+2220	Main Menu
+2221	{Main Menu}
+
+Abandon game and return to the main menu
+2222	Load Game
+2223	{Load Game}
+
+Load a saved game
+2224	Save Game
+2225	{Save Game}
+
+Save the current game
+2226	Restart Scenario
+2227	{Restart Scenario}
+
+Restart the current scenario
+2228	Quit to Desktop
+2229	{Quit to Desktop}
+
+Quit Heroes of Might and Magic III
+2230	Return
+2231	{Return to Game}
+
+Return to the Adventure Map!
+2232	MUSIC_VOLUME_0_ID,
+2233	Turn off music
+2234	MUSIC_VOLUME_1_ID,
+2235	Set music volume to 1
+2236	MUSIC_VOLUME_2_ID,
+2237	Set music volume to 2
+2238	MUSIC_VOLUME_3_ID,
+2239	Set music volume to 3
+2240	MUSIC_VOLUME_4_ID,
+2241	Set music volume to 4
+2242	MUSIC_VOLUME_5_ID,
+2243	Set music volume to 5
+2244	MUSIC_VOLUME_6_ID,
+2245	Set music volume to 6
+2246	MUSIC_VOLUME_7_ID,
+2247	Set music volume to 7
+2248	MUSIC_VOLUME_8_ID,
+2249	Set music volume to 8
+2250	MUSIC_VOLUME_9_ID,
+2251	Set music volume to 9
+2252	EFFECTS_VOLUME_0_ID,
+2253	Turn off sound effects
+2254	EFFECTS_VOLUME_1_ID,
+2255	Set sound effects volume to 1
+2256	EFFECTS_VOLUME_2_ID,
+2257	Set sound effects volume to 2
+2258	EFFECTS_VOLUME_3_ID,
+2259	Set sound effects volume to 3
+2260	EFFECTS_VOLUME_4_ID,
+2261	Set sound effects volume to 4
+2262	EFFECTS_VOLUME_5_ID,
+2263	Set sound effects volume to 5
+2264	EFFECTS_VOLUME_6_ID,
+2265	Set sound effects volume to 6
+2266	EFFECTS_VOLUME_7_ID,
+2267	Set sound effects volume to 7
+2268	EFFECTS_VOLUME_8_ID,
+2269	Set sound effects volume to 8
+2270	EFFECTS_VOLUME_9_ID,
+2271	Set sound effects volume to 9
+2272	MUSIC_TYPE_NONE_ID,
+2273	MUSIC_TYPE_NONE_ID,
+2274	MUSIC_TYPE_CD_ID,
+2275	MUSIC_TYPE_CD_ID,
+2276	MUSIC_TYPE_MIDI_ID,
+2277	MUSIC_TYPE_MIDI_ID,
+2278	HERO_SPEED_WALK_ID,
+2279	Set hero speed to walk
+(slowest)
+2280	HERO_SPEED_CANTER_ID,
+2281	Set hero speed to canter
+2282	HERO_SPEED_GALLOP_ID,
+2283	Set hero speed to gallop
+2284	HERO_SPEED_JUMP_ID,
+2285	Set hero speed to jump
+(no animation - fastest)
+2286	AI_SPEED_CANTER_ID,
+2287	Set enemy hero speed to canter
+(slowest)
+2288	AI_SPEED_GALLOP_ID,
+2289	Set enemy hero speed to gallop
+2290	AI_SPEED_JUMP_ID,
+2291	Set enemy hero speed to jump
+(no animation - fastest)
+2292	AI_SPEED_NONE_ID,
+2293	Do not show enemy movement
+2294	WINDOW_SCROLL_SLOW,
+2295	Set map scroll speed to slow
+2296	WINDOW_SCROLL_MEDIUM,
+2297	Set map scroll speed to medium
+2298	WINDOW_SCROLL_FAST,
+2299	Set map scroll speed to fast
+2300	SHOW_PATH_ID,
+2301	{Show Move Path}
+
+When checked, will display a hero's movement path without moving the hero.
+2302	MOVE_REMINDER_ID,
+2303	{Show Hero Reminder}
+
+When a player has any heroes with movement points remaining, they will asked to confirm an End Turn order.
+2304	QUICK_COMBAT_ID,
+2305	{Quick Combat}
+
+This option allows the computer to handle all combat calculations, and the player will only be shown the Combat Results screen.
+2306	VIDEO_SUBTITLES_ID,
+2307	{Video Subtitles}
+
+This option will display subtitles on any of the animated cutscenes.
+2308	VIDEO_QUALITY_LOW
+2309	{Low Quality Video}
+
+This option is reccommended for slower computers which have difficulty running the videos at full screen.
+2310	VIDEO_QUALITY_HIGH
+2311	{High Quality Video}
+
+Faster machines can handle more data, and this this option allows those machines to view the videos at their highest quality.
+2312	TOWN_OUTLINES_ID,
+2313	{Town Outlines}
+
+In the town screen, any accessible building will display an outline when the mouse cursor is placed over it.
+2314	ANIMATE_SPELLBOOK_ID,
+2315	{Animate Spell Book}
+
+Shows page turning animation in the spell book.
+2316	{All in Alphabetical} {order}
+
+
+{Copyright:}
+The Ubi Soft Company
+
+{Created By:}
+Jon Van Caneghem
+
+
+{ERM Idea:}
+Slava Salnikov
+
+
+{Programmers:}
+Alexander Karpeko
+Alexander Trifonov
+Slava Salnikov
+
+
+{Lead Artists:}
+Alexey Pischoulin
+Alexey Vasiliev (Darkloke)
+Bruno Veran
+Dieter Averbeck
+Mathias Launhardt
+Pete Alekseyev (Arstahd)
+
+
+{Artists:}
+Alexander Karpeko
+Artem Garanin
+Bianor
+Jerry Kowalczyk (Treupp)
+Jonas Gustafsson
+Konstantin Nochev (Dutch)
+Mandi (Kitten Angel)
+Sergey Vahrameev
+Slava Salnikov
+Viktoria Kalinina (Candy)
+
+{ERM Programmers} {and/or}
+{Level Designers:}
+Alexander Karpeko
+Alexander Trifonov
+Alexandru Balahura
+Alexey Pischoulin
+Alexis Koz
+Anders Jonsson
+Bruno Veran
+COX
+Dieter Averbeck
+Dmitry Lelikov
+Donald X.Vaccarino
+Jack Stebaev (AsPiN)
+Marc Lasch
+Pete Alekseyev (Arstahd)
+Petyo Georgiev (Petronius)
+Qurqirish Dragon
+Rich Reed (Space8999)
+Robert Bergerfjall (Overlord)
+Sir Four
+Slava Salnikov
+Steven Lynch
+Timothy Pulver
+Tobyn
+Thomas Franz (samot)
+
+{WoG & ERM} {Documentation:}
+Alexey Pischoulin
+Bruno Veran
+George Toganel 
+(Pushtiu')
+Jack Stebaev (AsPiN)
+Kamil Belau (Acid Dragon)
+Nick Weber (Marcus the Red)
+Yuriy Metelyov (Ennin)
+Slava Salnikov
+Timothy Pulver
+
+{Lead ERM Testers:}
+Donald X.Vaccarino
+Gangrail
+Jonas Gustafsson
+Marc Lasch
+Roland Röllig (Rasputin)
+Steve Hanna (ByteBandit)
+Timothy Pulver
+
+{Testers:}
+All of us
+and
+WakeOfGods fan group
+wakeofgods@...
+...@yahoogroups.com
+
+{Webmaster:}
+Alexey Pischoulin
+
+
+{Web Artists:}
+Alexey Pischoulin
+Dmitry Lelikov
+
+
+{Some objects from}
+Disciples:Sacred Lands
+and
+Cossacks
+made by
+Strategy First Inc.
+www.strategyfirst.com
+
+{Special Thanks:}
+Alex 2k
+Alexander the Artist
+Alexander Bass
+Alexey Kruchkov (GreyMage)
+Andrew Svietlichnyy
+Andrew Yang
+Angelspit
+Bernd & Jan Schunk
+Dan Lind
+Glover
+Hildegunst
+Paul Lipka (Lipa)
+Psycomonkee
+Sergey Gorbanyov
+Simon Mooncalf
+Slaim Master
+Ste
+Theo van Bekkum
+Xerobull
+
+{Visit us on the Web}
+{and in person:}
+Alexander Karpeko
+cool@home.ru
+Alexander Trifonov
+craghack@bk.ru
+Alexandru Balahura 
+alexandru_balahura@..
+..@yahoo.com
+Alexey Pischoulin
+liquidsky@mail.ru
+Alexey Vasiliev 
+(Darkloke) 
+darkloke@mail.ru
+Alexis Koz
+ax222home@...
+...@mtu-net.ru
+Anders Jonsson
+andejons@...
+...@dd.chalmers.se
+Bianor
+bianor@yandex.ru
+Bruno Veran
+mamour@freesurf.fr
+COX
+be.sfh@wanadoo.fr
+Dieter Averbeck
+dieter@byteware.de
+Dmitry Lelikov
+1981dim@mail.ru
+Ennin
+ennin@rambler.ru
+Gangrail
+Gangrail32@aol.com
+George Toganel 
+(Pushtiu')
+geo_gt@rdslink.ro
+Jack Stebaev
+aspin@inbox.lv
+Jerry Kowalczyk 
+(Treupp)
+treupp@duke.org.pl
+Jonas Gustafsson
+smurfnisse@telia.com
+Kamil Belau 
+(Acid Dragon) 
+kamelair2@wp.pl
+Konstantin Nochev 
+(Dutch) 
+nochev@yahoo.com
+Mandi (Kitten Angel)
+kittenangel25@...
+...@yahoo.com
+Marc Lasch 
+marc.lasch@gmx.de
+Mathias Launhardt
+Launi666@aol.com
+Nick Weber 
+(Marcus the Red)
+marcus_the_red@..
+..@hotmail.com
+Pete Alekseyev 
+(Arstahd) 
+Arstahd@aol.com
+Petyo Georgiev 
+(Petronius) 
+petroniussss@...
+...@yahoo.co.uk
+Qurqirish Dragon
+qurqirishd@aol.com
+Rich Reed 
+(Space8999) 
+space8999@yahoo.com 
+Robert Bergerfjall 
+(Overlord) 
+one_overlord@...
+...@hotmail.com
+Roland Röllig
+Rasputin@...
+.@medianet-world.de
+Sergey Vahrameev
+ssvahr@mail.ru
+Sir Four 
+tavern@list.ru
+Slava Salnikov
+zvs@mail.ru
+Steve Hanna 
+(ByteBandit)
+lightmage55@...
+...@yahoo.com
+Steven Lynch
+steven_aus@yahoo.com
+Timothy Pulver
+fnord100@telus.net
+Tobyn 
+tobyn@gmx.de
+Thomas Franz
+samot-dwarf@gmx.net
+Treupp 
+jarek@grako.com.pl
+Viktoria Kalinina 
+(Candy) 
+_russia2000_@mail.ru
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2317	New Life of Heroes, 2001-2004
+http://strategyplanet.com/homm/wog/
+
+
+
+2320	Squirrel
+2321	Rabbit
+2322	Gopher
+2323	Badger
+2324	Rat
+2325	Eagle
+2326	Weasel
+2327	Raven
+2328	Mongoose
+2329	Dog
+2330	Aardvark
+2331	Lizard
+2332	Tortoise
+2333	Hedgehog
+2334	Condor
+
+2336	Check Box
+2337	Click this to enable/disable name
+2338	Enter Player Name
+2339	Enter Player Name
+2340	OK
+2341	
+2342	Back
+2343	
+2344	Enter Session Name
+2345	
+2346	Enter Password
+2347	
+2348	Session Name
+2349	
+2350	Enter IP Address
+2351	
+
+2353	Warrior
+2354	Builder
+2355	Explorer
+2356	Human
+
+2358	%s, you only have %d days left to capture a town or you will be banished from this land.
+2359	%s, this is your last day to capture a town or you will be banished from this land.
+2360	Astrologers proclaim month of the %s.
+
+All dwellings increase population.
+2361	Astrologers proclaim month of the %s.
+
+%s population doubles!
+
+All dwellings increase population.
+2362	Astrologers proclaim month of the PLAGUE!
+
+All populations are halved.
+2363	Astrologers proclaim week of the %s.
+
+All dwellings increase population.
+2364	Astrologers proclaim week of the %s.
+
+%s growth +5.
+
+All dwellings increase population.
+2365	Astrologers proclaim week of the %s.
+
+%s growth %+d.
+%s growth %+d.
+
+All dwellings increase in population.
+
+
+2368	Place all creatures in the transformer
+2369	Move all creatures into the transformer
+2370	Change creatures in the transformer into undead
+2371	Change creatures in the Transformer into undead
+2372	Exit transfomer
+2373	Leave the transformer.  No more creatures will become undead
+
+2375	Easy
+2376	Normal
+2377	Hard
+2378	Expert
+2379	Impossible
+2380	No Handicap
+2381	Mild Handicap
+2382	Severe Handicap
+2383	The lighthouse grants additional mobility to any ships you control.
+2384	The Griffin Bastion increases Griffin production by 3 per week.
+2385	The Griffin Bastion increases Royal Griffin production by 3 per week.
+2386	The Shipyard allows you to purchase ships.
+2387	The Stables increase the land movement rate of any visiting hero.
+2388	During a siege, the Brotherhood of the Sword increases troop morale by +2.
+2389	
+2390	
+2391	
+2392	The presence of the Colossus increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and increases the morale of all allied heroes by +2.
+2393	The Resource Silo provides you with an additional +1 wood and +1 ore each day.
+2394	The Mystic Pond produces a small random number of resources each week.
+2395	The Miners' Guild increases Dwarf production by 4 per week.
+2396	The Miners' Guild increases Battle Dwarf production by 4 per week.
+2397	
+2398	The Fountain of Fortune increases the luck of the garrison hero by +2 when defending against a siege.
+2399	The Treasury earns you 10% interest on any gold you have at the start of each week.
+2400	
+2401	The Dendroid Saplings increase Dendroid Guard production by 2 per week.
+2402	The Dendroid Saplings increase Dendroid Soldier production by 2 per week.
+2403	The presence of the Spirit Guardian increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and increases the luck of all allied heroes by +2.
+2404	The Resource Silo provides you with an additional +1 crystal each day.
+2405	For a nominal fee, you can purchase artifacts from the Artifact Merchants.
+2406	The Sculptor's Wings increase Stone Gargoyle production by 4 per week.
+2407	The Sculptor's Wings increase Obsidian Gargoyle production by 4 per week.
+2408	
+2409	The lookout tower extends the visible distance around your city.
+2410	The library provides your mage guild with additional spells.
+2411	The Wall of Knowledge increases the Knowledge skill of any visiting hero by +1.
+2412	
+2413	
+2414	The presence of the Skyship increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, reveals the entire world map, and increases the knowledge of any defending hero by +15 (these spell points do not follow a hero who leaves the town).
+2415	The Resource Silo provides you with an additional +1 gems each day.
+2416	
+2417	The Birthing Pools increase Imp production by 8 per week.
+2418	The Birthing Pools increase Familiar production by 8 per week.
+2419	
+2420	The Brimstone Stormclouds boost a garrison hero's power by +2 during any siege defense.
+2421	Allows travel between Inferno towns containing Castle Gates. Destination town must be unoccupied.
+2422	The Order of Fire increases the Power skill of any visiting hero by +1.
+2423	The Cages increase Hell Hound production by 3 per week.
+2424	The Cages increase Cerberus production by 3 per week.
+2425	The presence of the Deity of Fire increases weekly creature generation by 50% and provides your empire with an additional 5000 gold each day.  Every week hereafter will be a Week of the Imp.
+2426	The Resource Silo provides you with an additional +1 mercury each day.
+2427	The Cover of Darkness covers your city with a permanent shroud to all other players.
+2428	The Unearthed Graves increase Skeleton production by 6 per week.
+2429	The Unearthed Graves increase Skeleton Warrior production by 6 per week.
+2430	The Shipyard allows you to purchase ships.
+2431	The Necromancy Amplifier increases the Necromancy skill of all heroes you control (with the Necromancy skill) by 10%.
+2432	The Skeleton Transformer allows you to convert any creature into a skeleton.
+2433	
+2434	
+2435	
+2436	The presence of the Soul Prison increases weekly creature generation by 50%, provides your empire with an additional 5000 gold each day, and boosts the Necromancy skill of all allied heroes (who possess the skill) by 20%.
+2437	The Resource Silo provides you with an additional +1 wood and +1 ore each day.
+2438	For a nominal fee, you can purchase artifacts from the Artifact Merchants.
+2439	The Mushroom Rings increase Troglodyte production by 7 per week.
+2440	The Mushroom Rings increase Infernal Troglodyte production by 7 per week.
+2441	
+2442	The Mana Vortex temporarily doubles spell points for any garrison or visiting hero.
+2443	With the Portal of Summoning, you can recruit creatures from an externally flagged dwelling.
+2444	The Academy of Battle Scholars teaches new skills to any hero (+1000 experience) once.
+2445	
+2446	
+2447	The presence of the Guardian of Earth increases weekly creature generation by 50%, provides your empire with an additional 5000 gold each day, and increases the Power of a garrison hero by +12 when defending against a siege.
+2448	The Resource Silo provides you with an additional +1 sulfur each day.
+2449	The Escape Tunnel allows a garrison hero to flee from defending against a siege.
+2450	The Mess Hall increases Goblin production by 8 per week.
+2451	The Mess Hall increases Hobgoblin production by 8 per week.
+2452	
+2453	The Freelancer's Guild allows you to trade creatures for resources.
+2454	This Blacksmith upgrade provides your armies with ballistas.
+2455	The Hall of Valhalla increases the Attack skill of any visiting hero by +1.
+2456	
+2457	
+2458	The presence of the Warlords' Monument increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and increases the Attack strength of a garrison hero by +20 when defending against a siege.
+2459	The Resource Silo provides you with an additional +1 wood and +1 ore each day.
+2460	The Cage of Warlords increases the Defense strength of any visiting hero by +1.
+2461	The Captain's Quarters increase Gnoll production by 6 per week.
+2462	The Captain's Quarters increase Gnoll Marauder production by 6 per week.
+2463	The Shipyard allows you to purchase ships.
+2464	The Glyphs of Fear add +2 to a garrison hero's defense skill when defending against a siege.
+2465	The presence of a Blood Obelisk adds +2 to a garrison hero's attack skill when defending against a siege.
+2466	
+2467	
+2468	
+2469	The presence of the Carnivorous Plant increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and increases the Attack and Defense strength of a garrison hero by +10 each when defending against a siege.
+2470	The Resource Silo provides you with an additional +1 wood and +1 ore each day.
+2471	For a nominal fee, you can purchase artifacts from the Artifact Merchants.
+2472	This structure increases weekly production of Pixies by 10 per week.
+2473	This structure increases weekly production of Sprites 10 per week.
+2474	The Shipyard allows you to purchase ships.
+2475	At the Magic University, you can pay to learn any, or all, of the four schools of magic.
+2476	
+2477	
+2478	
+2479	
+2480	The presence of the Aurora Borealias increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and places all spells in your mage guild.
+2481	The Resource Silo provides you with an additional 1 Mercury each day.
+2482	For a nominal fee, you can purchase artifacts from the Artifact Merchants.
+2483	This structure increases weekly production of Level 1 Creatures.
+2484	This structure increases weekly production of Level 2 Creatures.
+2485	The Shipyard allows you to purchase ships.
+2486	
+2487	
+2488	This structure increases weekly production of Level 3 Creatures.
+2489	This structure increases weekly production of Level 4 Creatures.
+2490	This structure increases weekly production of Level 5 Creatures.
+2491	The presence of the Grail increases weekly creature generation by 50%, provides your kingdom with an additional 5000 gold each day, and provides an additional bonus unique to each town type.
+2492	The Resource Silo provides you with an additional resource ore each day.
+2493	Grasshopper
+2494	Ant
+2495	Ladybug
+2496	Spider
+2497	Butterfly
+2498	Bumblebee
+2499	Locust
+2500	Earthworm
+2501	Hornet
+2502	Beetle
+2503	Nothing
+2504	
+2505	Altar of Sacrifice
+2506	Anchor Point
+2507	Arena
+2508	Artifact
+2509	Pandora's Box
+2510	Black Market
+2511	Boat
+2512	Border Guard
+2513	Keymaster's Tent
+2514	Buoy
+2515	Campfire
+2516	Cartographer
+2517	Swan Pond
+2518	Cover of Darkness
+2519	Creature Bank
+2520	Creature Generator 1
+2521	Creature Generator 2
+2522	Creature Generator 3
+2523	Creature Generator 4
+2524	Cursed Ground
+2525	Corpse
+2526	Marletto Tower
+2527	Derelict Ship
+2528	Dragon Utopia
+2529	Event
+2530	Eye of the Magi
+2531	Faerie Ring
+2532	Flotsam
+2533	Fountain of Fortune
+2534	Fountain of Youth
+2535	Garden of Revelation
+2536	Garrison
+2537	Hero
+2538	Hill Fort
+2539	Grail
+2540	Hut of the Magi
+2541	Idol of Fortune
+2542	Lean To
+2543	Decorative Object
+2544	Library of Enlightenment
+2545	Lighthouse
+2546	Monolith One Way Entrance
+2547	Monolith One Way Exit
+2548	Monolith Two Way
+2549	Magic Plains
+2550	School of Magic
+2551	Magic Spring
+2552	Magic Well
+2553	Market of Time
+2554	Mercenary Camp
+2555	Mermaids
+2556	Mine
+2557	Monster
+2558	Mystical Garden
+2559	Oasis
+2560	Obelisk
+2561	Redwood Observatory
+2562	Ocean Bottle
+2563	Pillar of Fire
+2564	Star Axis
+2565	Prison
+2566	Object
+2567	Rally Flag
+2568	Random Artifact
+2569	Random Treasure Artifact
+2570	Random Minor Artifact
+2571	Random Major Artifact
+2572	Random Relic
+2573	Random Hero
+2574	Random Monster
+2575	Random Monster 1
+2576	Random Monster 2
+2577	Random Monster 3
+2578	Random Monster 4
+2579	Random Resource
+2580	Random Town
+2581	Refugee Camp
+2582	Resource
+2583	Sanctuary
+2584	Scholar
+2585	Sea Chest
+2586	Seer's Hut
+2587	Crypt
+2588	Shipwreck
+2589	Shipwreck Survivor
+2590	Shipyard
+2591	Shrine of Magic Incantation
+2592	Shrine of Magic Gesture
+2593	Shrine of Magic Thought
+2594	Sign
+2595	Sirens
+2596	Spell Scroll
+2597	Stables
+2598	Tavern
+2599	Temple
+2600	Den of Thieves
+2601	Town
+2602	Trading Post
+2603	Learning Stone
+2604	Treasure Chest
+2605	Tree of Knowledge
+2606	Subterranean Gate
+2607	University
+2608	Wagon
+2609	War Machine Factory
+2610	School of War
+2611	Warrior's Tomb
+2612	Water Wheel
+2613	Watering Hole
+2614	Whirlpool
+2615	Windmill
+2616	Witch Hut
+2617	Brush
+2618	Bush
+2619	Cactus
+2620	Canyon
+2621	Crater
+2622	Dead Vegetation
+2623	Flowers
+2624	Frozen Lake
+2625	Hedge
+2626	Hill
+2627	Hole
+2628	Kelp
+2629	Lake
+2630	Lava Flow
+2631	Lava Lake
+2632	Mushrooms
+2633	Log
+2634	Mandrake
+2635	Moss
+2636	Mound
+2637	Mountain
+2638	Oak Trees
+2639	Outcropping
+2640	Pine Trees
+2641	Plant
+2642	
+2643	
+2644	
+2645	
+2646	River Delta
+2647	
+2648	
+2649	
+2650	Rock
+2651	Sand Dune
+2652	Sand Pit
+2653	Shrub
+2654	Skull
+2655	Stalagmite
+2656	Stump
+2657	Tar Pit
+2658	Trees
+2659	Vine
+2660	Volcanic Vent
+2661	Volcano
+2662	Willow Trees
+2663	Yucca Trees
+2664	Reef
+2665	Random Monster 5
+2666	Random Monster 6
+2667	Random Monster 7
+2668	Brush
+2669	Bush
+2670	Cactus
+2671	Canyon
+2672	Crater
+2673	Dead Vegetation
+2674	Flowers
+2675	Frozen Lake
+2676	Hedge
+2677	Hill
+2678	Hole
+2679	Kelp
+2680	Lake
+2681	Lava Flow
+2682	Lava Lake
+2683	Mushrooms
+2684	Log
+2685	Mandrake
+2686	Moss
+2687	Mound
+2688	Mountain
+2689	Oak Trees
+2690	Outcropping
+2691	Pine Trees
+2692	Plant
+2693	River Delta
+2694	Rock
+2695	Sand Dune
+2696	Sand Pit
+2697	Shrub
+2698	Skull
+2699	Stalagmite
+2700	Stump
+2701	Tar Pit
+2702	Trees
+2703	Vine
+2704	Volcanic Vent
+2705	Volcano
+2706	Willow Trees
+2707	Yucca Trees
+2708	Reef
+2709	Desert Hills
+2710	Dirt Hills
+2711	Grass Hills
+2712	Rough Hills
+2713	Subterranean Rocks
+2714	Swamp Foliage
+2715	Border Gate
+2716	Freelancer's Guild
+2717	Hero Placeholder
+2718	Quest Guard
+2719	Random Dwelling
+2720	
+2721	
+2722	Garrison
+2723	Mine
+2724	Trading Post
+2725	Clover Field
+2726	Cursed Ground
+2727	Evil Fog
+2728	Favorable Winds
+2729	Fiery Fields
+2730	Holy Ground
+2731	Lucid Pools
+2732	Magic Clouds
+2733	Magic Plains
+2734	Rocklands
+
+
+2737	Small
+2738	Medium
+2739	Large
+2740	Extra Large
+
+2742	Trade
+2743	
+2744	Trade resources
+2745	
+2746	Give resources to another player
+2747	
+2748	Sell artifacts
+2749	
+2750	Exit
+2751	
+
+
+2754	Cancel
+2755	Return to skill selection
+2756	Leave the university
+2757	Leave the university
+2758	
+2759	Learn %s %s for %d gold.
+2760	Not used...  filthy bug.
+2761	
+2762	Red
+2763	Blue
+2764	Tan
+2765	Green
+2766	Orange
+2767	Purple
+2768	Teal
+2769	Pink
+2770	Human
+or CPU
+2771	Human
+2772	CPU
+2773	Entering the Mage Guild will allow a visiting hero to learn the spells kept within.
+2774	Entering the Mage Guild will allow a visiting hero to learn the spells kept within.
+2775	Entering the Mage Guild will allow a visiting hero to learn the spells kept within.
+2776	Entering the Mage Guild will allow a visiting hero to learn the spells kept within.
+2777	Entering the Mage Guild will allow a visiting hero to learn the spells kept within.
+2778	The Tavern increases morale for troops defending the city.
+2779	The Shipyard allows you to purchase ships.
+2780	The Fort provides your town with defensive walls.
+2781	Including a 50% increase to base creature growth, the Citadel adds a keep, and other terrain obstacles, to a town's defenses.
+2782	The Castle adds two arrow towers, fortifies your town's defenses, and doubles base creature growth.
+2783	The Village Hall allows you to purchase town structures and earns your kingdom 500 gold per day.
+2784	The Town Hall allows you to purchase town structures and earns your kingdom 1000 gold per day.
+2785	The City Hall allows you to purchase town structures and earns your kingdom 2000 gold per day.
+2786	The Capitol earns your kingdom 4000 gold per day.
+2787	With the Marketplace, you can buy and sell resources (exchange rates increase with each Marketplace you own).
+2788	
+2789	The Blacksmith provides your armies with %s.
+2790	The Moat slows attacking units.  Any unit entering the moat must end its turn there and becomes more vulnerable to attack.
+2791	The Shipyard allows you to purchase ships.
+2792	The Blacksmith provides your armies with Ballistas.
+2793	The Blacksmith provides your armies with First Aid Tents.
+2794	The Blacksmith provides your armies with Ammo Carts.
+2795	The Blacksmith provides your armies with Ammo Carts.
+2796	The Blacksmith provides your armies with First Aid Tents.
+2797	The Blacksmith provides your armies with Ballistas.
+2798	The Blacksmith provides your armies with Ammo Carts.
+2799	The Blacksmith provides your armies with First Aid Tents.
+2800	The Blacksmith provides your armies with Ballistas.
+
+2802	Trade
+2803	
+2804	Maximum
+2805	
+2806	Trade Resources
+2807	
+2808	Give resources to another player
+2809	
+2810	Exit
+2811	
+2812	Hero/Stats
+2813	Skills
+2814	Artifacts
+2815	Town
+2816	Garrison Hero
+2817	Visiting Hero
+2818	{View Heroes}
+
+View the heroes currently under your command.
+2819	{View Towns}
+
+View the towns you control.
+2820	{Equipped}
+
+Displays the artifacts that the hero currently has equipped.
+2821	{Miscellaneous}
+
+Displays items which are in effect but do not need to be equipped.
+2822	{Backpack}
+
+Displays items that are currently in the hero's backpack.
+2823	View Heroes
+2824	View Towns
+2825	View Equipped Artifacts
+2826	View Miscellaneous Items
+2827	View Hero's Backpack
+
+
+2830	Sandro
+2831	Dead and Buried
+2832	75
+2833	200
+2834	Astral
+2835	All for One
+2836	100
+2837	190
+2838	Oris
+2839	Knee Deep in the Dead
+2840	125
+2841	180
+2842	Lord Haart
+2843	Titan's Winter
+2844	150
+2845	170
+2846	Alamar
+2847	Dragon Orb
+2848	175
+2849	160
+2850	Styg
+2851	Emerald Isles
+2852	200
+2853	150
+2854	Yog
+2855	Overthrow Thy Neighbors
+2856	250
+2857	140
+2858	Ajit
+2859	Search for the Grail
+2860	500
+2861	130
+2862	Iona
+2863	The Mandate of Heaven
+2864	750
+2865	120
+2866	Tazar
+2867	Myth and Legend
+2868	1000
+2869	100
+2870	Your Name
+2871	Just play a Map
+2872	2000
+2873	1
+2874	{Southport}
+
+Queen Catherine has departed to elicit military support from King Gavin Magnus of Bracada. Other generals are fanning through the region. Establish a base of operations, rally local militia, determine the extent of the Nighon occupation, and find their invasion route.
+2875	{Angelgate}
+
+Reports of Angels near the town of Fair Feather deserve our investigation. If the rumors are true, then we must ensure the safety of this town, and perhaps convince the Angels to ally with us.
+2876	{Griffin Cliff}
+
+The region of Griffin Cliff, the annual breeding grounds from which nearly all of Erathia's Griffin population comes from, is currently under the control of the combined Nighon and Kreegan forces. Generations ago, the Griffins were key to building Erathia, and today they are key to reclaiming it.
+2877	{Battlestead}
+
+The first step in our fight to free Erathia is to liberate the capital of Steadwick from Nighon occupation. This will not be an easy task, as the Dungeon Overlords have blocked the mountain passes leading into the Steadwick Valley.
+2878	{Eeofol}
+
+A letter from Lucifer Kreegan III, Lord High Commander of Eeofol, arrives at the palace for Queen Catherine. In it he claims that he holds a captive, Catherine's husband, Roland Ironfist of Enroth, and that only a one million gold ransom can save him.
+2879	{Marshland & Hillbridge}
+
+An ambassador from Bracada brings a message from his leader, Gavin Magnus, offering aid in reclaiming Western Erathia from the marauding Tatalian and Krewlish forces. It is time to remind your neighbors of where their borders belong.
+2880	{Grainrich & Firecoast}
+
+We now know how Erathia fell to Nighon and Eeofol. They literally tunneled their way under the Nighon Straits, breaking into the Dwarven Tunnels along Erathia's coast. We must now force them to use the tunnels again - this time as an escape route as we drive them from Erathia's lands forever!
+2881	{Marshland}
+
+You are offered a mercenary contract with King Tralossk of Tatalia, who once and for all wishes for his nation to be made up of something more than just swampland. With Erathia distracted, he has decided that now is the time to expand Tatalia's borders.
+2882	{Minewell}
+
+Duke Winston Boragus, leader of Krewlod, has offered you a mercenary contract which will require you to make a series of raids into Erathian territory. The plan is to plunder enough gold to allow the armies of Krewlod to purchase what it would need for... other things.
+2883	{Hillbridge}
+
+Both King Tralossk of Tatalia and Duke Boragus of Krewlod are seeking your services. Both nations are poised to claim the last strip of land between their countries. Ironically, this land has little value. You must decide which nation to serve. The choice is yours alone.
+2884	{Forestlow}
+
+A Necromancer is attempting to reach an Erathian outpost with proof of who killed King Gryphonheart. He is currently safe, but his way is blocked by undead loyal to their new King. You must escort him on the last leg of the journey.
+2885	{Emerald Hills to Woodgrove}
+
+You command the combined armies of Erathia, AvLee, and Bracada, plus the Necromancers that have chosen to fight with you against King Gryphonheart. The undead presence is strong, but you must prevail!
+2886	{Marble Garden}
+
+This is the final battle. Our presence has already begun to restore life to the land, but we must destroy this last fortress of death that King Gryphonheart has retreated to. It is time to return the dead to their graves.
+2887	{Rionpoint}
+
+Before Erathia has a chance to call upon the elves of AvLee for assistance, we have decided to strike at the heart of AvLee's strength - the Gold Dragon Queen. By eliminating the elves' strongest ally, they will be unable to lend aid to Erathia.
+2888	{Grainrich}
+
+Our forces will cover most of the distance to the Erathian capitol by using underground tunnels. To maintain the element of surprise, you must attack any Erathian settlement you find. Use the vast network of caves in this area to accomplish this goal.
+2889	{Battlestead}
+
+Assault the Erathian capital of Steadwick. This won't be easy, as the capital is easily and well defended. To make matters worse, the force led by Queen Catherine is on the move. We must capture Steadwick before she arrives!
+2890	{Marble Garden}
+
+King Gryphonheart, the man who banished us from Erathia, is dead. The Nighon and Eeofol invasion has given us the gift of death. At last we can build our armies and invade Erathia ourselves. First, however, we need a tactician. You must find the tomb of King Gryphonheart.
+2891	{Emerald Hills}
+
+We have found a perfect area along Erathia's border from which we can harvest enough creatures for our armies without attracting much notice from the Erathian Military. Build an army, but be quick - we need those troops immediately.
+2892	{Strongwillow & Woodgrove}
+
+A rogue Death Knight does not wish to take part in the glory that will be our invasion of Erathia. He believes that by remaining out of the fighting, his lands will be spared from any counterattack by the Erathians. It is time we taught him a small lesson regarding obedience.
+2893	{Forestbury}
+
+The time has come. The lich King Gryphonheart has chosen this as the moment of attack. Forces from across Deyja will pour into Erathia and overwhelm them. The point of your attack was chosen by King Gryphonheart himself. You have vowed not to fail.
+2894	{Cloverfield}
+
+Before we can declare our independence we will need a symbol. That symbol is the Grail, which was lost in this area centuries ago. We must find it, or our plan will dissolve even before we can set it in motion. You have but three months to locate the Grail.
+2895	{Forestdale}
+
+The journey to Welnin has not been easy, but it is the last leg of the journey that will be the most difficult. The Ranger, Ryland, has the Grail, and must elude the forces loyal to Erathia and AvLee to reach Welnin. Once there, he must order the construction of a permanent home for the Grail.
+2896	{Mosswood}
+
+The Grail has reached Welnin, but now we must build this city into a capital. Armies from Erathia and AvLee shall attack us from all directions. Soon we shall prove that the Contested Lands are theirs no more!
+2897	View Quest Log
+2898	View %s Info
+2899	Additional Hero Characteristics
+2900	View Good Morale Info
+2901	View Neutral Morale Info
+2902	View Bad Morale Info
+2903	View Good Luck Info
+2904	View Neutral Luck Info
+2905	View Bad Luck Info
+2906	View Experience Info
+2907	Select %s
+2908	Empty
+2909	Move %s
+2910	Exchange %s with %s
+2911	View Spells
+2912	View %s Info
+2913	Dismiss %s the %s
+2914	Exit Hero Screen
+2915	Hero Screen
+2916	Combine %s
+2917	Split %s
+2918	View %s %s Info
+2919	View Spell Points Info
+2920	Set army combat formation to 'Loose'
+2921	Set army combat formation to 'Tight'
+2922	Disable Tactics formation
+2923	Enable Tactics formation
+2924	View Special Ability Info
+2925	Click to dismiss this hero
+2926	Setting combat formation to 'Loose' will spread your troops across your side of the battlefield at the start of combat
+2927	Setting combat formation to 'Tight' will group your troops together on your side of the battlefield at the start of combat
+2928	Enabling Tactics formation will allow you to arrange your troops prior to combat (must have the Tactics skill)
+2929	Click to divide these creatures into two stacks
+2930	Select a Scenario to Play
+2931	Load a Saved Game
+2932	Save the Current Game

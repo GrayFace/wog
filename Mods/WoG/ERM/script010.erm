@@ -1,0 +1,171 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+Script: Magic Mushrooms
+WoGify name: script10.erm
+Last Updated: July 29, 2004
+Updated: Feb. 7, 2005 by Thomas Franz (samot)
+
+************************
+*** Magic Mushrooms  ***
+***     By Bruno     ***
+***       V1.10g     ***
+************************
+
+- AI support 10e
+- This version is working well 10.d
+- Thanks To Donald for his suggestions and his help
+
+Modified by Thomas Franz (samot):
+- freeing usage of w24-27, FU10 and TM10
+- replaced FU11 by FU48
+- added check, if hero forgot his Magic skill (Market of Time / Advanced Witchhut) to
+  prevent, that the hero gets more skills as allowed
+
+When you visit the Mushroom, your hero gains Expert level in
+one of the four schools of magic for the rest of the week.
+This works even if your hero has all eight skill slots filled.
+
+Usage:
+FU48
+w20-w23 to track hero visits to mushrooms and previous skill levels (31 = not visited, <4 = previous skill level)
+z11-z17 and z159 for hint texts
+
+
+
+!?PI; // post instruction trigger
+!!UN:P110/?v1; check if Magic Mushrooms are enabled
+!!FU&v1=0:E; // exit, if not
+
+*** Init for Magic Water Mushroom
+!!VRz159:Sz110000;
+!!VRz11:Sz110001;
+!!HT63/18:W20/31/159;  Rename all Magic Water mushrooms
+!!HT63/18:W20/0/11;  call z11 string if mushroom was visited
+!!HT63/18:W20/1/11;  call z11 string if mushroom was visited
+!!HT63/18:W20/2/11;  call z11 string if mushroom was visited
+*** Init for Magic Fire Mushroom
+!!VRz12:Sz110002;
+!!VRz13:Sz110003;
+!!HT63/29:W21/31/12;  Rename all Magic Fire mushrooms
+!!HT63/29:W21/0/13;  call z11 string if mushroom was visited
+!!HT63/29:W21/1/13;  call z11 string if mushroom was visited
+!!HT63/29:W21/2/13;  call z11 string if mushroom was visited
+*** Init for Magic Earth Mushroom
+!!VRz14:Sz110004;
+!!VRz15:Sz110005;
+!!HT63/23:W22/31/14;  Rename all Magic Earth mushrooms
+!!HT63/23:W22/0/15;  call z11 string if mushroom was visited
+!!HT63/23:W22/1/15;  call z11 string if mushroom was visited
+!!HT63/23:W22/2/15;  call z11 string if mushroom was visited
+*** Init for Magic Air Mushroom
+!!VRz16:Sz110006;
+!!VRz17:Sz110007;
+!!HT63/14:W23/31/16;  Rename all Magic Air mushrooms
+!!HT63/14:W23/0/17;  call z11 string if mushroom was visited
+!!HT63/14:W23/1/17;  call z11 string if mushroom was visited
+!!HT63/14:W23/2/17;  call z11 string if mushroom was visited
+
+
+*** Timer
+!?TM2&$weekday$=$monday$;
+!!UN:P110/?y-1; [check if script is enabled: y-1]
+!!DO48/0/155/1&y-1=1:P;
+
+*** Function to reset variable (loop through all heroes)
+!?FU48;
+!!IF:Wx16; // enable hero's w-vars
+
+!!VRw20&$day$=1:S31; !!VRw21&$day$=1:S31; !!VRw22&$day$=1:S31; !!VRw23&$day$=1:S31; // init w-vars at day 1
+!!FU&$day$=1:E; // exit at day one
+
+*** water
+!!HEx16:S16/?y1; // get his water-skill
+!!HEx16&w20<4/y1>0:S16/w20; // set water skill, if hero has visited an mushroom and still knows the skill (did not forgot it in a Market of Time / Advanced Witchhut)
+!!VRw20:S31; [reinstate old skill level if visited mushroom]
+*** Fire
+!!HEx16:S14/?y1; // get his skill
+!!HEx16&w21<4/y1>0:S14/w21; // set skill
+!!VRw21:S31; [reinstate old skill level if visited mushroom]
+*** Earth
+!!HEx16:S17/?y1; // get his skill
+!!HEx16&w22<4/y1>0:S17/w22; // set skill
+!!VRw22:S31; [reinstate old skill level if visited mushroom]
+*** Air
+!!HEx16:S15/?y1; // get his skill
+!!HEx16&w23<4/y1>0:S15/w23; // set skill
+!!VRw23:S31; [reinstate old skill level if visited mushroom]
+
+
+*** Magic Water Mushroom ***
+!?OB63/18;
+!!UN:P110/?y-1; [check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1; // activate hero's w-vars
+!!IF&w20<>31/1000:M1/z110009; // message already visited this week
+!!FU&w20<>31:E; // and exit
+
+!!HE-1:S16/?v1; ask skill
+!!IF&v1=3/1000:Q1/20/53/1/z110008; // msg: already expert
+!!FU&v1=3:E; // exit if already expert
+
+!!VRw20:Sv1; w20 stock the level of the skill
+!!IF&1000:Q1/20/53/1/z110010; // show message (give skill)
+!!HE-1:S16/3; put skill in expert
+
+
+*** Magic Fire Mushrooms ***
+!?OB63/29;
+!!UN:P110/?y-1; [check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+!!IF:W-1; // activate hero's w-vars
+!!IF&w21<>31/1000:M1/z110012; // message already visited this week
+!!FU&w21<>31:E; // and exit
+
+!!HE-1:S14/?v1; ask skill
+!!IF&v1=3/1000:Q1/20/47/1/z110011; // msg: already expert
+!!FU&v1=3:E; // exit if already expert
+
+!!VRw21:Sv1; w21 stock the level of the skill
+!!IF&1000:Q1/20/47/1/z110013; // show message (give skill)
+!!HE-1:S14/3; put skill in expert
+
+
+*** Magic Earth Mushrooms ***
+!?OB63/23;
+!!UN:P110/?y-1; [check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1; // activate hero's w-vars
+!!IF&w22<>31/1000:M1/z110015; // message already visited this week
+!!FU&w22<>31:E; // and exit
+
+!!HE-1:S17/?v1; ask skill
+!!IF&v1=3/1000:Q1/20/56/1/z110014; // msg: already expert
+!!FU&v1=3:E; // exit if already expert
+
+!!VRw22:Sv1; w22 stock the level of the skill
+!!IF&1000:Q1/20/56/1/z110016; // show message (give skill)
+!!HE-1:S17/3; put skill in expert
+
+
+*** Magic Air Mushrooms ***
+!?OB63/14;
+!!UN:P110/?y-1; [check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1; // activate hero's w-vars
+!!IF&w23<>31/1000:M1/z110018; // message already visited this week
+!!FU&w23<>31:E; // and exit
+
+!!HE-1:S15/?v1; ask skill
+!!IF&v1=3/1000:Q1/20/50/1/z110017; // msg: already expert
+!!FU&v1=3:E; // exit if already expert
+
+!!VRw23:Sv1; w23 stock the level of the skill
+!!IF&1000:Q1/20/50/1/z110019; // show message (give skill)
+!!HE-1:S15/3; put skill in expert
+

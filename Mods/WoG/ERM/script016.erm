@@ -1,0 +1,316 @@
+ZVSE
+ERMS_ScriptDate=12.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+Battle Academy script 1.41 by Anders Jonsson
+
+Last Updated: October 12, 2006 - now uses GetBasicPrim function to correct errors from certain artifacts (mostly Enhanced Commander Artifacts)
+Previously Updated: September 15, 2004 to change local y variables in trigger sections to y- variables.
+
+This script uses
+Flags: (1-10)
+Variables: (v1-v2), v320-v342, v381-v383, v388
+(z1-z4), z382, [z116000-z116039]
+w38
+Timers: TM30
+Functions: FU3610-FU3619
+
+To use this script, copy all of it and place it in a timed event that will never happen. You'll also need to place
+one or more Academies on your map(it's the Fort-looking thing nine steps below the Conflux in the castle screen.)
+Of course, you'll also need WoG.
+
+The Battle academy does three things: it can improve your Attack and Defense skills, it can improve or teach you a
+new secondary skill for 3000 gold, or for some extra gold teach you a new one if your skill slots are full! It also
+sells artifacts. The skills and artifacts are choosen randomly at the start of each players turn, and there's only
+one of each availible each turn. Each hero can only buy one thing a day.
+Caution! This location is fairly powerful, and should have a decent stack of monsters guarding it. It should not be
+placed anywere close to an arcane tower, as you can get skill points very cheap if you don't have many of them.
+
+!#UN:P16/?v2;
+!#TM30&v2=1:S1/999/1/255; (Timer for drawing random artifact and skill)
+!#VRz382&v2=1:Sz116000;
+!#HT63/32&v2=1:Tz382;
+
+!?FU3619;
+!!VRy1&x16<6:Sx16 +6;
+!!VRy1&x16>5/x16<11:Sx16 +12;
+!!VRy1&x16=11:S31;
+!!VRy1&x16=12:S38;
+!!VRy1&x16=13:S39;
+!!VRy1&x16=14:S40;
+!!VRy1&x16=15:S60;
+!!VRy1&x16=16:S91;
+!!VRy1&x16=17:S146;
+!!VRy1&x16=18:S147;
+!!VRy1&x16=19:S148;
+!!VRy1&x16=20:S152;
+!!VRy1&x16=21:S154; (Get right artifact)
+!!UN:Ay1/?y2; (Get whether disabled or not)
+!!VRv1&y2=0:+1; (add one to counter variable)
+!!VRvv1&y2=0:Sy1; (Store artifact in table)
+
+!#VRv1&v2=1:S319; (setup start variable for table)
+!#DO319/1/21/1&v2=1:P; (Loop through artifacts)
+!#VRv342&v2=1:Sv1 -320; (Get number of artifacts in table)
+
+*** Main Menu ***
+!?OB63/32;
+!!UN:P16/?v1;
+
+!?OB63/32&v1=1;
+!!IF:W-1; (specify current hero for hero variable checking and setting)
+!!VRv1:Sw38;
+!!VRv1:%2;
+!!IF:V10/0;
+!!IF&v1=0:V10/1;
+!!IF&v1=1:V4/0;
+!!IF&10/1000:M1/z116001;
+
+!!UN:P16/?y-1;
+!!IF&y-1=0:V10/1; (abort if script is deactivated)
+
+!!IF&-10/1000/v342>2:Q4/z116002;
+!!IF&-10/1000/v342<3:Q4/z116039;  (Two different messages depending on whether there is more than 3 artifacts availible)
+!!IF&-4/v1<>0/1000:M1/z116003;
+
+!!UN&4/1000:A128/9/?y-1;
+!!UN&4/1000:A91/9/?y-2;
+!!UN&4/1000:A128/10/?y-3;
+!!UN&4/1000:A91/10/?y-4; (Get index number of description strings)
+
+!!VRz1:Sz116004;
+!!VRz2:Sz116005;
+!!VRz3:Sz116006;
+!!VRz4:Sz116007;
+
+!!UN&4/1000:A128/9/1;
+!!UN&4/1000:A91/9/2;
+!!UN&4/1000:A128/10/3;
+!!UN&4/1000:A91/10/4; (setup temporary artifact names and descriptions)
+
+!!IF&4/1000/v342>3:Q6/8/128/8/91/7/z116008;
+
+!!UN&4/1000:A128/9/y-1;
+!!UN&4/1000:A91/9/y-2;
+!!UN&4/1000:A128/10/y-3;
+!!UN&4/1000:A91/10/y-4; (restore artifact names and descriptions)
+
+!!IF&v342<3:V6/1; (If not enough artifacts, go directly to primary/secondary skills)
+
+!!FU3617&4/6/1000:P1; (Go to Primary/Secondary Skill chooser)
+!!FU3616&4/-6/1000:P1; (Go to Artifact)
+
+!!VRv2:S0;
+!!VRv2:T3; (Do a random number to see what AI will pick)
+!!FU3611&-1000/v2=0:P1;
+!!FU3612&-1000/v2=1:P1;
+!!FU3613&-1000/v2=2:P1;
+!!FU3616&-1000/v2=3:P1; (AI script chooser)
+
+!!IF:A0000000000; (Resets the ten first flags at the end of the script)
+
+*** Primary/Secondary skill ***
+!?FU3617;
+
+!!UN:G0/22/0/?y1;
+!!UN:G0/22/3/?y2;
+!!UN:G0/19/0/?y3;
+!!UN:G0/19/3/?y4; (setup name and Hint text)
+
+!!VRz1:Sz116009;
+!!VRz2:Sz116010;
+!!VRz3:Sz116011;
+!!VRz4:Sz116012;
+
+!!UN:G0/22/0/1;
+!!UN:G0/22/3/2;
+!!UN:G0/19/0/3;
+!!UN:G0/19/3/4;
+
+!!IF:Q6/20/71/20/62/7/z116013;
+
+!!UN:G0/22/0/y1;
+!!UN:G0/22/3/y2;
+!!UN:G0/19/0/y3;
+!!UN:G0/19/3/y4;  (Reset name and Hint text)
+
+!!FU3611&-6/1000:P1; (Go to Secondary Skill)
+!!FU3610&6/1000:P1;  (Go to Primary Skill chooser)
+
+*** Primary skill Menu ***
+!?FU3610;
+!!IF:Q2/31/1/32/1/7/z116014;
+!!FU3613&-2:P1;  (Defense)
+!!FU3612&2:P1;   (Attack)
+
+*** Secondary Skills ***
+!?FU3611;
+!!IF:A0000000000;  (reset ten first flags)
+!!VRv1:Sv381;
+!!VRv1:+1;
+!!VRv1:*3;
+!!VRv1:+2;  (v1 now contain picture of expert level of today's random skill)
+!!VRv2:S0;
+!!DO3614/0/27/1:P;          (Check if hero has free slots)
+!!UN:N4/1/v381;             (Set z1 to contain skill name)
+
+!!UN:G0/v381/0/?y1;
+!!UN:G0/v381/3/?y2;
+
+!!VRz8:Sz116015 +z1 +z116038;
+!!VRz9:Sz1 +z116016;
+
+!!UN:G0/v381/0/z9;
+!!UN:G0/v381/3/z8;
+
+!!VRv10:S0;   (variable for checking what player have choosen)
+
+!!VRy7:S3000;  (Set Basic cost)
+!!VRy6:S5000;  (set cost for each extra level)
+
+!!VRv10&-1000:S1;
+!!IF&v10=0:Q3/20/v1/2/z116017;
+
+!!VRv10&-3/v10=0:S3;
+
+!!UN:G0/v381/0/y1;
+!!UN:G0/v381/3/y2;
+
+!!HE-1:Sv381/?y2;   (Check hero's level of skill)
+!!VRv1&y2=1:-1;
+!!VRv1&y2=0:-2;  (y1 now contain picture of known level +1 of today's random skill)
+!!VRv10&y2=3/v10<2:S2; (abort if already knows skill(even for AI))
+
+!!VRy5:S0;
+!!IF&v10=0/y2=2:Q4/20/v1/6/y7/2/z116018;
+
+!!IF&v10=0/y2=1:Q4/20/v1/6/y7/2/z116019;
+!!VRy5&4:S1;
+!!VRv10&-4/y2>0/v10=0:S3;
+!!IF&v10=0/y2=0:Q5/20/v1/6/y7/2/z116020;
+!!VRy5&5:S2;
+!!VRv10&-5/v10=0/-4:S3;
+!!VRy5&y5=2/-9/-10/v2>7:S3;
+!!VRy3&y5=3:S0;
+!!VRy3&y5=3:Sv2;
+!!VRy3&y5=3:-7;
+!!VRy3&y5=3:*y6;
+!!VRy4&y5=3:Sy3;
+!!VRy4&y5=3:+y7;
+!!IF:V6/1;
+!!IF&v10=0/y5=3:Q6/20/v1/6/y4/2/z116021;
+!!VRy3:+3000;
+!!VRv10&-6/y5=3/v10=0:S3;
+
+!!IF:V1/0;
+!!FU3615&v10<2/y5>0:Py3;       (check and take gold)
+!!HE-1&1/v10<2:Sv381/d1;             (Teach Skill)
+!!IF&1/v10=0:Q1/20/v1/1/z116022;
+
+!!IF&v10=3:M1/z116034;
+
+
+!!IF&v10=2:Q1/20/v1/1/z116023;
+
+!!IF:A0000000000;  (reset ten first flags)
+
+
+*** Check for number of skill slots filled ***
+!?FU3614;
+!!HE-1:S=x16/?y1;  (Check if skill number x16 is present)
+!!VRv2&y1>0:+1;  (if it is, add 1 to v2)
+
+*** Attack ***
+!?FU3612;
+!!HE-1:N?y6; [Hero number: y6]
+!!FU$GetBasicPrim$:Py6/?y1/d/d/d; (Get attack skill without artifact bonuses: y1]
+!!IF&1000/y1=0:Q1/31/1/1/z116024;
+!!IF&y1=0:V1/1;    (Gives +1 attack for free if attack=1)
+!!VRy5:S500;       (cost for each point)
+!!VRy2:Sy5 *y1;    (Sets cost to attack level*y5)
+!!IF&1000/y1<10/y1>0:Q1/31/1/6/y2/2/z116025;
+!!IF&1000/y1<25/y1>9:Q1/31/1/6/y2/2/z116026;
+!!IF&1000/y1>24:Q1/31/1/6/y2/2/z116027;
+!!IF&-1000:V1/1;
+!!IF&-1:M1/z116003;
+!!FU3615&1/1000:Py2;    (paytime)
+!!IF&-1000:V1/1;        (AI get it for free)
+!!HE-1&1:Fd1/d0/d0/d0;  (adds Attack)
+!!IF&1/1000/y1<>0:Q1/31/1/1/z116028;
+
+*** Defense ***
+!?FU3613;
+!!HE-1:N?y6; [Hero number: y6]
+!!FU$GetBasicPrim$:Py6/d/?y1/d/d; (Get defense skill without artifact bonuses: y1]
+!!IF&1000/y1=0:Q1/32/1/1/z116029;
+!!IF&y1=0:V1/1;
+!!VRy5:S500;   (cost for 1 level)
+!!VRy2:Sy5 *y1; (sets cost to defense level*y5)
+!!IF&1000/y1<10/y1>0:Q1/32/1/6/y2/2/z116030;
+!!IF&1000/y1<25/y1>9:Q1/32/1/6/y2/2/z116031;
+!!IF&1000/y1>24:Q1/32/1/6/y2/2/z116032;
+!!IF&-1000:V1/1;
+!!IF&-1:M1/z116003;
+!!FU3615&1/1000:Py2;    (paytime)
+!!IF&-1000:V1/1;        (AI get it for free)
+!!HE-1&1:Fd0/d1/d0/d0;
+!!IF&1/1000/y1<>0:Q1/32/1/1/z116033;
+
+*** Artifacts ***
+!?FU3616;
+!!UN:N0/1/v382;       (Set z1 to contain artifact name)
+!!IF&1000:Q1/8/v382/6/v383/2/z116035;
+!!IF&-1/1000:M1/z116003;
+!!IF&-1000:V1/1;    (AI always buys)
+!!FU3615&1:Pv383;   (Check if enough gold)
+!!IF&1/1000:Q1/8/v382/1/z116036;
+!!HE-1&1:Av382;   (Add artifact)
+
+
+*** Random Skill ***
+
+!?TM30;
+!!IF:V10/0;
+!!VRy-1:Sc0;
+!!IF&y-1=v388:V10/1;
+!!VRv388&-10:Sc0;   (only done once/turn)
+
+!!VRv1:S0 T7;       (Draws random number, which decides skill)
+!!VRv1&10:S8;       (Do nothing if already done)
+!!VRv381&v1=0:S1;   (Archery)
+!!VRv381&v1=1:S6;   (Leadership)
+!!VRv381&v1=2:S9;   (Luck)
+!!VRv381&v1=3:S10;  (Ballistics)
+!!VRv381&v1=4:S19;  (Tactics)
+!!VRv381&v1=5:S20;  (Artillery)
+!!VRv381&v1=6:S22;  (Offence)
+!!VRv381&v1=7:S23;  (Armorer)
+
+!!VRv1:S320 Tv342; (Draws random number, which decides artifact)
+!!VRv382&-10:Svv1; (Get artifact from table)
+
+!!UN:Av382/1/?v383;
+!!VRv383:*3;    (Set v383 to contain artifact cost(60% of cost in Artifact Merchant with no additional marketplace))
+!!VRv383&v382>143:S15000; (Cost is 15000 for Commander artifacts)
+
+!!DO3618/0/155/1&-10:P; (Reset hero variables)
+
+*** Reset variables ***
+!?FU3618;
+!!IF:Wx16;
+!!VRw38&w38=0:S1; (set if not set before)
+!!VRy1:Sw38;
+!!VRy1:%2;
+!!VRw38&y1=0::2; (reset if set)
+
+*** Payment ***
+!?FU3615;
+!!IF:V1/0;
+!!OW:R-1/6/?y1;    (Checks if color has enough gold)
+!!IF&1000/y1<x1:M1/z116037;
+!!IF&y1=>x1:V1/1;  (If color has enough gold, set flag 1 to 1 to show this)
+!!VRx1&1:*-1;      (multiply with -1 to take gold)
+!!OW&1:R-1/6/dx1;  (Takes gold)
+!!VRw38&1:*2;        (multiply hero variable with 2 to indicate it has been visited)
+

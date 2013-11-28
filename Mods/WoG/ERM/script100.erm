@@ -1,0 +1,103 @@
+ZVSE
+ERMS_ScriptDate=23.11(November).2013
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+**
+**                         EXP BOOST by Ishmael the Beholder
+**                         Version: 1.2
+**                         Last update: 3rd of June 2005
+**--------------------------------------------------------------------------------------------------------------------
+**Variables used:
+**
+** V: v309 EXCLUSIVE; v1, v9, v600-v645 not exclusive
+** hero variable: w121 EXCLUSIVE
+** FU669
+**--------------------------------------------------------------------------------------------------------------------
+** This script gives heros experience boost after level 29.
+** I made this script to speed up leveling on higher levels. This script simply gives hero a bonus of
+** (by default) 30% of the experience, he/she needs for the next level.
+**
+** For instance if you need 50.000 exp to level up (I don`t know if you do, but that`s not
+** the point) you`ll get a bonus of 15.000 exp. This makes you spend only about 2/3 of the
+** Exp. you usually need and level 30% faster.
+**
+** You will not get the experience-bonus, if you visit a Tree of Knowledge.
+**
+** So generally: after level 29 you don`t learn so slowly - still slowly, but not so much.
+** Your commander will also receive additional exp, but two conditions must be met: both your hero and commander lvl
+** must be at least 30.
+**
+** Mapmakers can modify the bonus by setting / modifying the variable v309.
+** 1 means 10% bonus, 2 = 20%, 3 = 30% and so on. Do not set it negativ or above 9,
+** it would be ignored and reset to default in this case!
+**-------------------------------------------------------------------------------------------------------------------
+**Version 1.2 (modified by Thomas Franz (samot))
+**            - strictly seperation between commander and hero because their level may be different (if a high-level
+**              hero hires a new commander or if commander is a paladin (learns faster);
+**            - gives correct bonus, even if you level up more than once
+**            - no bonus for Tree of Knowledge
+**            - the routine, that gives the bonus was moved from the HL-trigger to TM2
+**Version 1.1
+**Script starts to work :)
+**
+**Version 1.0
+**Finished making script.
+**-------------------------------------------- MAIN ------------------------------------------------------------------
+
+!#UN:P300/=1; // check, if script is activated
+!#VRv309&1/v309<1:S3; // init v309 (bonus multiplicator)
+
+
+!?TM2; // timer every day, every color
+!!UN:P300/=1; !!FU&-1:E; // check for WOG-Option; exit if not activated
+!!OW:H-1/1/0; // get number of heroes the current player has
+!!DO669/1/v1/1:P; // loop through the heroes
+*********** end TM2 ***********
+
+
+!?FU669;
+!!OW:H-1/9/x16; // get the number of the next hero to v9
+!!IF:Wv9; // activate hero's w-vars
+!!HEv9:E?y-10/?y-11;              y-10 = hero exp, y-11= lvl
+!!VRw121&$day$=1:Sy-11; // init w121 at day one
+!!FU&w121=y-11:E; // exit, if not leveled up the day before (or if it is day one)
+
+!!VRy-30:Sw121; // copy old level to y-30
+!!VRw121:+1; // add one level to w-var
+
+!!UN:P3/=0; // check, if commanders are enabled (set flag 1, if enabled)
+!!COv9&1:X1/?y-20 X2/?y-21 D?y-1 E?y-3; // y-20 = commander exp, y-21 = lvl, y-1=alive (0) or dead (1), y-3 - commander is enabled (1) or not
+!!FU&w121<30/y-21<30:E; // no bonuses if hero and commander are below L30
+!!FU&w121>74/y-21>74:E; // no bonuses if hero and commander are above L74
+
+** set v600-v645 to the 10 % exp-bonus from L30-L75
+!!VRv600:C8248/9898/11878/14253/17104/20525/24630/29556/35467/42561/51073/61287/73545/88254/105905/127086;
+!!VRv616:C152503/183004/219604/263525/316230/379476/455372/546446/655735/786883/944259/1133111/1359733/1631680/1958016/2349619;
+!!VRv632:C2819543/3383452/4060143/4872171/5846605/7015927/8419112/10102934/12123521/14548226/17457871/20949445/25139334/30167201;
+
+!!VRv1:Sw121 +570; !!VRv2:Sy-21 +570; // get the correct v-index for indirect variables-usage (L30=600, L31=601 ...)
+!!VRv309|v309<1/v309>9:S3; // correct bonus-multiplikator if <10% or >90%
+!!VRy-12:Svv1 *v309; // get bonus for hero from the v600-v645, multiply with the bonus-var
+!!VRy-22:Svv2 *v309; // get the bonus for Commander
+
+!!HEv9:B0/?z-1 R2/?y-4; // get name and sex of the hero
+!!VRz-2&y-4=0:Sz200000; !!VRz-2&y-4=1:Sz200001; !!VRz-3&y-4=0:Sz200002; !!VRz-3&y-4=1:Sz200003;
+!!IF&1000:Q1/17/y-12/1/z200004;
+
+!!COv9&y-1=0/y-21>29/y-21<75/1/y-3=1:X1/dy-22; // give exp to commander (if enabled, alive and >L29 and <L75),
+!!COv9&1:D1; // kill commander (to prevent double exp.)
+!!HEv9&w121>29/w121<75:Edy-12 E?y-13; // give exp-bonus to hero (change exp to 1x0% exp)
+!!UN:P3/=0; // check again, if commanders are enabled (set flag 1, if enabled), necessary, because the Flag could be modified in another HL-trigger
+!!COv9&1:Dy-1; // revive your commander again (if he wasn't dead before)
+!!FU669&w121<y-11:Px1/x2/x3/x4/x5/x6/x7/x8/x9/x10/x11/x12/x13/x14/x15/x16; // call function again, if you leveled up more as once the day before
+
+*********** end FU669 ***********
+
+
+!$OB102; // after visiting a tree of knowledge
+!!UN:P300/=1; !!FU&-1:E; // check for WOG-Option; exit if not activated
+!!IF:W-1; // activate hero's w-vars
+!!KTv998/v999/v1000:N?y-1; // get number of the tree
+!!HE-1:V5/y-1/=1; // check, if hero has visited the tree (and got the level-up)
+!!VRw121&1:+1; // if yes: increase his level-counter to prevent, that hero gets an exp-bonus, if he has only visited trees
+

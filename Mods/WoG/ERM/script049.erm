@@ -1,0 +1,453 @@
+ZVSE
+ERMS_ScriptDate=5.12(December).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** HENCHMEN  -  ERM script 49
+
+** By Arstahd
+** Version: 1.19
+** Thanks to Hermann the Weird for bug fixing and script maintenance
+
+** Updated 5.12(December).2006 by Thomas (samot) - new formular for Henchmens Stack Experience and only if WOG-Option 290 is set
+**                                                 fixed calls of FU7102 (choose Henchmen)
+** Updated 18.9(September).2006 by Thomas (samot) - Henchmen gets Stack Experience (Rank = half of his Level)
+** Updated August 20, 2006 by Fnord - AI now keeps the same Henchman after it
+** first selects one and always resurrects its Henchman for free at its towns.
+** Also, Henchman reminder for Human players modified to use BA0 trigger instead
+** of object triggers.
+
+** modified by Thomas Franz (samot) at 06.01.2005 (changes are commented with //)
+** FU7101: set BM:B for all henchmens to prevent death of henchmen, if healed with
+** a First-Aid-Tent; also resurrection works now on henchmens
+
+** Variables used:
+** V variables:    v7206-v7217 v7181
+** Z variables:    z1-z9
+** W variables:    w117-w119
+** Functions used: 7100-7109
+** Timers used:    19 (copy of T19 used in script00)
+
+
+** Allows you to select one of your creatures to act as a Henchman, and fight with your army
+** left click on player-color flag in upper right corner of hero screen to select a new henchman or check status
+** right click on player-color flag in upper right corner of hero screen to view help page
+
+** henchmen gain status for each battle fought and gain levels (indicated by increased stack quantity)
+** henchmen have a status bonus based on hero level and current day
+** lower level/un-upgraded creatures level up faster than higher level/upgraded creatures
+** dead henchmen can be resurrected in a town for a fee based on creature cost and level
+** AI heroes have a (good) chance of having a henchman of random level (based on hero level)
+
+** henchmen gain +1 attack, +1 defense, +1 speed
+** henchmen gain an additional +1 speed for every 10 levels
+** henchmen gain an additional +1 attack and +1 defense for every 3 levels
+** henchmen gain +2-5 to base damage
+** henchmen gain +10 to base health
+
+** henchmen have a "dummy spell" (disguise) applied to color their quantity tag to help separate them from normal creatures
+** henchmen will die after one of the stack is lost, they may offer one last retaliation before doing so
+
+
+
+
+!#VRv7206:S0;                                        [initialize "done" flag]
+!#UN:P49/?v7181;                                     [check if Henchmen is enabled in WoGify Options]
+
+** Timer routines
+!?TM19&v7181=1;                                      [continue if enabled   day 1 only ]
+!!DO7105/0/155/1&v7206=0:P;                          [iterate through all heroes]
+
+
+** start of hero screen mouse trigger **
+!?CM2&v7181=1;                                       [continue if enabled]
+
+!!CM:I?y-3 F?y-4 S?y-5;                              [get mouse click, flag, subtype]
+!!IF&y-3=141/y-4=512:Q2/-1/-1/1/z149000;
+
+!!FU|y-3<>141/y-4<>0/y-5<>12:E;                      [continue if player banner (141) was left clicked only, else exit]
+
+!!CM:H?y-1/?y-2;                                     [get hero number]
+!!IF&y-1>-1:Wy-1;                                    [enable hero variable]
+
+!!FU7106&w118>-1:Py-1;                               [if a henchman, display henchman info]
+!!FU7102&w118<0:Py-1;                                [if no henchman, select one] -  // added y-1 (hero number)
+!!UN:R3/-1;                                          [redraw]
+
+** end of hero screen mouse trigger **
+
+** start of object trigger - towns **
+!?OB98&v7181=1;
+!!OW:I-1/?y-2;                                        [check if human hero]
+!!CA998:O?y-4;                                        [get town owner]
+!!HE-1:N?y-1 O?y-3;                                   [get hero number, owner]
+!!IF&y-1>-1:Wy-1;                                     [enable hero variable]
+!!FU7108&y-2=0/w118>-1/w119=0/y-3=y-4:Py-1;           [if dead henchman, display resurrection info for human]
+!!VRw119&y-2=1/w118>-1/w119=0/y-3=y-4:S1;             [AI always resurrects henchman for free]
+
+*!FU7109&y-2=0/w118=-1/y-3<>y-4:P;                    [function for reminder message]
+** end of object trigger - towns **
+
+** start of battle trigger **
+!?BA0&v7181=1;
+!!BA:H0/?y-1 H1/?y-2;                                 [Attacker: y-1, Defender: y-2]
+!!FU7109&y-1>=0:Py-1/0;                               [function for reminder message for attacker]
+!!FU7109&y-2>=0:Py-2/1;                               [function for reminder message for defender]
+
+** start of object trigger - banks **
+**?OB16&v7181=1;                                      [object trigger - monsters]
+*!FU7109:P;                                           [function for reminder message]
+** end of object trigger - banks **
+
+** start of object trigger - monsters **
+*?OB54&v7181=1;                                       [object trigger - monsters]
+*!FU7109:P;                                           [function for reminder message]
+** end of object trigger - monsters **
+
+!?FU7109;  *x1=hero number, x2=0 for attacker, 1 for defender
+
+!!HEx1:O?y-3;                                        [hero owner: y-3]
+!!OW:Iy-3/?y-4;                                      [check if human hero: y-4]
+!!IF&y-4=0/y-1>-1:Wx1;                               [enable hero variable]
+
+!!IF&y-4=0/w118=-1:Q2/10/y-3/2/z149001;
+
+!!FU7102&2/y-4=0/w118=-1:Px1/x2;                     [if yes, select henchman]
+!!VRw118&-2/y-4=0/w118=-1:S-2;                       [if no set to disable future messages]
+** end of function **
+
+
+** start of battlefield trigger **
+!?BF&v7181=1;                                        [continue if enabled]
+
+!!VRv7207:C-1/-1/-1/-1/-1/-1;                        [initialize variables]
+!!VRy-1:S-2;                                         [initialize variable]
+
+!!BU:E2/?y-7;                                        [check for enemy creature at position 2 for banks]
+
+!!BA:H0/?y-1;                                        [get hero number - attacker]
+!!HEy-1&y-1>-1:O?y-3;                                [get attacker's owner]
+!!OW:Iy-3/?y-6;                                      [check if AI]
+!!FU7103&y-6=1/y-1>-1:Py-1;                          [choose henchman for AI]
+!!IF&y-1>-1:Wy-1;                                    [enable hero variable - attacker]
+!!VRy-8&y-7<21:S20;                                  [set position - normal]
+!!VRy-8&y-7>20:S25;                                  [set position - bank]
+!!BU&w118>-1/w119=1/y-1>-1:Sw118/1/y-8/0/-1/0;       [add a creature to attacker's army at position y-8]
+!!BU&w118>-1/w119=1/y-1>-1:Ey-8/?v7207;              [get stack]
+!!FU7101&w118>-1/w119=1/y-1>-1/v7207>-1:Pv7207/0/y-1;[add stat increases - attacker]
+
+!!VRy-2:S-2;                                         [initialize variable]
+!!BA:H1/?y-2;                                        [get hero number - defender]
+!!HEy-2&y-2>-1:O?y-3;                                [get defender's owner]
+!!OW:Iy-3/?y-6;                                      [check if AI]
+!!FU7103&y-6=1/y-2>-1:Py-2;                          [choose henchman for AI]
+!!IF&y-2>-1:Wy-2;                                    [enable hero variable - defender]
+!!BU&w118>-1/w119=1/y-2>-1:Sw118/1/30/1/-1/0;        [add a creature to defender's army at position 30]
+!!BU&w118>-1/w119=1/y-2>-1:E30/?v7208;               [get stack]
+!!FU7101&w118>-1/w119=1/y-2>-1/v7208>-1:Pv7208/1/y-2;[add stat increases - defender]
+** end of battlefield trigger **
+
+
+** pre-action trigger
+!?BG&v7181=1;                                        [continue if enabled]
+
+
+!!BMv7207&v7207>-1:N?v7211 H?v7216;                  [get quantity and health of henchman - attacker]
+!!BMv7208&v7208>-1:N?v7212 H?v7217;                  [get quantity and health of henchman - defender]
+!!BG&v7207=v7210/v7211=0:A3;                         [if dead henchman is next set to defend - attacker]
+!!BG&v7208=v7210/v7212=0:A3;                         [if dead henchman is next set to defend - defender]
+
+
+** end of pre-action trigger
+
+** post-action trigger
+!?BG1&v7181=1;                                       [continue if enabled]
+
+!!BG:N?v7210;                                        [get current stack #]
+
+!!BMv7207&v7207>-1:N?y-2 T?y-3;                      [get quantity, type of henchman stack - attacker]
+!!BMv7207&v7207>-1/y-2<v7211:K100000;                [kill henchman stack if any were killed - attacker]
+!!FU7107&v7207>-1/y-2<v7211:P0/0;                    [set dead - attacker]
+!!BMv7207&v7207>-1/y-2>v7211/y-3<>159:Nv7213 L0;     [reset quantity of henchman stack if resurrected (unless ghost) - attacker]
+!!FU7107&v7207>-1/y-2>v7211/y-3<>159:P0/1;           [set alive (unless ghost) - attacker]
+!!BU&v7207>-1/y-2<v7211/y-3<>159:R;                  [redraw screen (unless ghost)]
+
+!!BMv7208&v7208>-1:N?y-2 T?y-3;                      [get quantity, type of henchman stack - defender]
+!!BMv7208&v7208>-1/y-2<v7212:K100000;                [kill henchman stack if any were killed - defender]
+!!FU7107&v7208>-1/y-2<v7212:P1/0;                    [set dead - defender]
+!!BMv7208&v7208>-1/y-2>v7212/y-3<>159:Nv7214 L0;     [reset quantity of henchman stack if resurrected (unless ghost) - defender]
+!!FU7107&v7208>-1/y-2<v7212/y-3<>159:P1/1;           [set alive (unless ghost) - defender]
+!!BU&v7208>-1/y-2<v7212/y-3<>159:R;                  [redraw screen (unless ghost)]
+
+** end of post-action trigger
+
+
+
+** function to get monster names
+!?FU7100;             x1=hero number
+!!HEx1:C0/x16/?y1/?y2;                               [get monster in slot x16 type, quantity]
+!!UN&x16=0/y1>-1:N3/2/y1/0;                          [get monster name]
+!!UN&x16=1/y1>-1:N3/3/y1/0;                          [get monster name]
+!!UN&x16=2/y1>-1:N3/4/y1/0;                          [get monster name]
+!!UN&x16=3/y1>-1:N3/5/y1/0;                          [get monster name]
+!!UN&x16=4/y1>-1:N3/6/y1/0;                          [get monster name]
+!!UN&x16=5/y1>-1:N3/7/y1/0;                          [get monster name]
+!!UN&x16=6/y1>-1:N3/8/y1/0;                          [get monster name]
+** end of function
+
+
+** function to give stat increases    x1=stack  x2=attacker/defender  x3=hero number
+!?FU7101;
+
+!!BMx1:T?y6;                                         [get stack type]
+!!FU7104&y6>-1:Py6;                                  [get monster level]
+!!VRy7&y6>-1:Sv7215;                                 [copy monster level]
+!!IF&y6>-1:Wx3;                                      [enable hero variable]
+!!HEx3:E?y1/?y2/1;                                   [get hero exp, level]
+!!VRy10:Sy2 -1 *10 +w117 +c;                         [experience points = (hero level -1) x10  +earned xp + current day]
+!!VRv7213&x2=0/y6>-1:Sy10 :y7 +1;                    [level = experience points / monster level + 1 - attacker]
+!!VRv7214&x2=1/y6>-1:Sy10 :y7 +1;                    [level = experience points / monster level + 1 - defender]
+!!VRy8&x2=0/y6>-1:Sv7213;                            [copy attacker level to y8]
+!!VRy8&x2=1/y6>-1:Sv7214;                            [copy defender level to y8]
+
+!!VRy4&y6>-1:Sy8 :10 +1;                             [bonus = level / 10 + 1]
+!!BMx1&y6>-1:Sdy4;                                   [give +1 speed per 10 levels]
+
+!!BMx1&y6>-1:U1/d2;                                  [give +2 min damage]
+!!BMx1&y6>-1:U2/d5;                                  [give +5 max damage]
+
+!!VRy4&y6>-1:Sy8 :3 +1;                              [bonus = level / 3 + 1]
+!!BMx1&y6>-1:Ady4 Ddy4;                              [give +1 attack and +1 defense per 3 levels]
+
+!!BMx1&y6>-1:H?y4;                                   [get health]
+!!VRy5&y6>-1:Sy4 +10 *y8;                            [health - add 10, multiply by level]
+!!BMx1&y6>-1:Hy5;                                    [set health]
+!!BMx1&y6>-1:Ny8;                                    [set quantity to level]
+
+*!BMx1|y6=63/y6=154:By8;                             [if vampire lord or blood dragon set starting quantity to level]
+!!BMx1:By8; // modified by Thomas Franz: always set max. number (prevents bug by healing the henchmen)
+
+
+* Stack experience for the henchmen:
+* new formular Rank = Hechmen Level (HL) * Creature-Level (CL)-depending-Faktor (or Rank = (HL * (0.11166667 * CL)) + 0.33 where CL is 0..6)
+* means, that a Pikemen (CL = 0) needs HL 4 for Rank 1, 7 for Rank 2, 16 for Rank 5, 31 for Rank 10
+*             a Orc     (CL = 2) needs HL 2 for Rank 1, 4 for Rank 2, 10 for Rank 5, 31 for Rank 19
+*             an Angel  (CL = 6) needs HL 2 for Rank 1, 3 for Rank 2, 6 for Rank 5,  11 for Rank 19
+* this will be prevent, that you use only low-level creatures, becaus they get their ranks very fast
+!!VRy99:S-1 -x1;  // get stack number for EA-Syntax (-1 - -42)
+!!MA:Ly6/?y97;    // creature level (0..6)
+!!VRe-1:S1 :3;    // base 0.333
+!!VRe-2:S1 :1800; // 0.0005555
+!!VRe-3:S1 :9;    // 0.1111111
+!!VRe-4:Se-2 + e-3; // 0.111666666 additional per creature level (0..6)
+!!VRe-5:Sy97 *e-4 + e-1; // multiplicator 0.33 base  + 0.1116 Ranks per Creature Level  (0.33 for L1-creatures .. 1 for L7-creatures)
+!!VRe-6:Sy8 *e-5; // rank = Henchmen-Level * multiplicator
+!!VRy98:Se-6;
+!!VRy98&y98>10:S10; // max rank 10
+!!UN:P290/=1; // option for enabeling stack experience
+!!EAy99&1:Ey98/4/d/d; // set rank (if option is set)
+
+!!BMx1&y6>-1:M4/100/1;                               [give disguise dummy spell to make tag yellow]
+
+!!VRw117&y6>-1:+6 T4;                                [experience counter - gain 6-10 points per battle]
+
+
+*tactics speed boost if enabled*
+
+!!UN:P218/?y1;                                       [check if tactics is enabled in WoG options]
+!!FU&y1<>1:E;                                        [exit if it isn't]
+!!VRy3:S0;                                           [initialize y3]
+!!VRy4:S0;                                           [initialize y4]
+!!BH0:N?y1;                                          [attacking hero #]
+!!BH1:N?y2;                                          [defending hero #]
+!!HEy1&y1>=0:S19/?y3;                                [get attacker's tactics]
+!!HEy2&y2>=0:S19/?y4;                                [get defender's tactics]
+!!FU&y3=0/y4=0:E;                                    [exit if no one has tactics]
+!!FU&y3=y4:E;                                        [exit if equal tactics level]
+!!FU&y3<y4/x2=0:E;                                   [exit if defender's tactics superior - attacker]
+!!FU&y3>y4/x2=1:E;                                   [exit if attacker's tactics superior - defender]
+!!VRy5&y3>y4/x2=0:S0 +y3 -y4;                        [set bonus if attackers tactics superior - attacker]
+!!VRy5&y3<y4/x2=1:S0 +y4 -y3;                        [set bonus if defenders tactics superior - defender]
+!!BMx1&y6>-1:Sdy5;                                   [give tactics speed boost]
+
+** end of function
+
+
+** function to pick henchman
+!?FU7102;             x1=hero number, x2=0 for attacker, 1 for defender
+
+!!VRz1:Sz149002;
+!!VRz2:S^^;
+!!VRz3:S^^;
+!!VRz4:S^^;
+!!VRz5:S^^;
+!!VRz6:S^^;
+!!VRz7:S^^;
+!!VRz8:S^^;
+!!VRz9:Sz149003;
+!!VRz10:Sz149004;
+!!DO7100/0/6/1:Px1;
+!!IF&1000:G1/1/256/1/2/3/4/5/6/7/8/9/10;                [give choice to human]
+!!VRy2&v1=1:S0;
+!!VRy2&v1=2:S1;
+!!VRy2&v1=4:S2;
+!!VRy2&v1=8:S3;
+!!VRy2&v1=16:S4;
+!!VRy2&v1=32:S5;
+!!VRy2&v1=64:S6;
+!!HEx1&v1<128:C0/y2/?y1/?y4;                         [get monster type, quantity]
+!!EXx1/y2:R?y5/?y6;                                  [get artifact number, option]
+!!HEx1&v1<128/y4=1/y5=156:A156;                      [if only 1 left give banner to hero]
+!!HEx1&v1<128:C0/y2/?y1/d-1;                         [get monster type, reduce quantity by 1]
+!!VRy7&x2=0:S7040 +y2;                               [index number for Attacker's First Aid Boost quantity info.: y7]
+!!VRy7&x2=1:S7047 +y2;                               [index number for Defender's First Aid Boost quantity info.: y7]
+!!UN:P204/?y8;                                       [check if Enhanced First Aid is enabled: y8=1 if yes]
+!!VRvy7&y8=1/v1<128:-1;                              [subtract one from First Aid stack quantity info.: vy7]
+!!IF&v1<256/y3>-1:Wx1;                               [enable hero variable]
+!!VRw117&v1<256:S0;                                  [reset experience]
+!!VRw118&v1<128:Sy1;                                 [store monster type]
+!!VRw118&v1=128:S-2;                                 [reset monster type if dismissed]
+!!VRw119&v1<128:S1;                                  [set to alive]
+
+
+
+** end of function
+
+
+** function to pick henchman for AI
+!?FU7103;             x1= hero #  x16= slot #
+
+!!IF:Wx1;                                            [enable hero variable]
+!!FU&w118>=0:E;                                      [exit if AI already has a Henchman]
+!!VRy1:S0 T7;                                        [random roll: 0-6 = use slot number, 7 = choose random creature]
+!!HEx1&y1<7:C0/y1/?y2/?y3;                           [get monster type, quantity in slot y1]
+!!VRy2&y1>6:S0 T199;                                 [random 0 to 199]
+!!VRy2&y1>6/y2>=132/y2<=135:S0 T173;                 [random 0 to 173 (reroll if super dragons were selected)]
+!!VRy2&y1>6/y2>=150/y2<=158:S0 T173;                 [random 0 to 173 (reroll if 8th levels were selected)]
+!!VRy2&y1>6/y2>=145/y2<=149:S0 T131;                 [random 0 to 131 (reroll if war machines were selected)]
+!!VRy2&y1>6/y2>=160/y2<=163:S0 T131;                 [random 0 to 131 (reroll if emissaries were selected)]
+!!VRy2&y1>6/y2>173:S-1;                              [if >173, set to -1]
+!!VRy2&y1>6/y2=122:S192;                             [set NOT USED 1 to sylvan centaur]
+!!VRy2&y1>6/y2=124:S193;                             [set NOT USED 2 to sorceress]
+!!VRy2&y1>6/y2=126:S194;                             [set NOT USED 3 to werewolf]
+!!VRy2&y1>6/y2=128:S195;                             [set NOT USED 4 to hell steed]
+
+!!HEx1&y2>-1:E?y6/?y7/1;                             [get hero exp, level]
+!!VRy4&y2>-1:S25 T10 *y7;                            [random # 25-35 x hero level]
+!!VRw118&y2>-1:Sy2;                                  [set henchman type]
+!!VRw117&y2>-1/w118>-1/y4>w117:Sy4;                  [set AI experience if greater than previous]
+!!VRw119&y2>-1:S1;                                   [set to alive]
+!!VRw119&y2=-1:S0;                                   [set to dead]
+** end of function
+
+** function to get creature level    x1=type
+!?FU7104;
+
+!!MA:Lx1/?y7;                                        [get monster level (0-6)]
+
+!!VRy8:S0;                                           [set to 0]
+!!VRy8&x1<112:Sx1 %2;                                [check if upgraded]
+
+!!VRv7215&y7=0/y8=0:S20;                             [if level 1 = 20]
+!!VRv7215&y7=1/y8=0:S25;                             [if level 2 = 25]
+!!VRv7215&y7=2/y8=0:S35;                             [if level 3 = 35]
+!!VRv7215&y7=3/y8=0:S50;                             [if level 4 = 50]
+!!VRv7215&y7=4/y8=0:S75;                             [if level 5 = 75]
+!!VRv7215&y7=5/y8=0:S115;                            [if level 6 = 115]
+!!VRv7215&y7=6/y8=0:S180;                            [if level 7 = 180]
+
+!!VRv7215&y7=0/y8=1:S22;                             [if level 1 = 22 (upgrade)]
+!!VRv7215&y7=1/y8=1:S28;                             [if level 2 = 28 (upgrade)]
+!!VRv7215&y7=2/y8=1:S40;                             [if level 3 = 40 (upgrade)]
+!!VRv7215&y7=3/y8=1:S58;                             [if level 4 = 58 (upgrade)]
+!!VRv7215&y7=4/y8=1:S88;                             [if level 5 = 88 (upgrade)]
+!!VRv7215&y7=5/y8=1:S136;                            [if level 6 = 136 (upgrade)]
+!!VRv7215&y7=6/y8=1:S250;                            [if level 7 = 250 (upgrade)]
+
+
+!!VRv7215&x1=112:S35;                                [make air elemental = 35]
+!!VRv7215&x1=127:S40;                                [make storm elemental = 40]
+!!VRv7215&x1=113:S50;                                [make earth elemental = 50]
+!!VRv7215&x1=121:S58;                                [make magma elemental = 58]
+!!VRv7215&x1=119:S22;                                [make sprite = 22]
+!!VRv7215&x1=121:S136;                               [make magic elemental = 136]
+!!VRv7215&x1=123:S40;                                [maker ice elemental = 40]
+!!VRv7215&x1=129:S58;                                [make energy elemental = 58]
+!!VRv7215&x1=131:S225;                               [make phoenix = 225]
+
+!!VRv7215&x1=132:S550;                               [make azure dragon = 550]
+!!VRv7215&x1=133:S450;                               [make crystal dragon = 450]
+!!VRv7215&x1=134:S350;                               [make faerie dragon = 350]
+!!VRv7215&x1=135:S400;                               [make rust dragon = 400]
+!!VRv7215&x1>=150/x1<=158:S400;                      [make level 8 creatures = 400]
+
+!!VRv7215&x1=63:S80;                                 [make vampire lord = 80]
+*!VRv7215&x1=159:S25;                                [make ghost = 25]
+!!VRv7215&x1=172:S136;                               [make nightmare = 136]
+!!VRv7215&x1=196:S500;                               [make dracolich = 500]
+
+** end of function
+
+** function to initialize hero variable w118
+!?FU7105;
+!!IF:Wx16;                                           [enable hero variable]
+!!VRw118:S-1;                                        [set to -1]
+!!VRv7206:S1;                                        [set "done" flag]
+** end of function
+
+** function to display henchman    x1 = hero number
+!?FU7106;
+!!IF&x1>-1:Wx1;                                      [enable hero variable]
+!!VRz1:S^^;
+!!VRz1&w119=0:Sz149005;
+!!FU7104&w118>-1:Pw118;                              [function to get monster level]
+!!HEx1:E?y1/?y2/1;                                   [get hero exp, level]
+!!VRy2:-1 *10 +c -1;                                 [bonus status = (hero level -1) x10  + current day -1]
+!!VRy11:Sw117 +y2;                                   [total status points = earned status + bonus status]
+!!VRy3:Sy11 :v7215 +1;                               [henchman level = status points / level rate + 1]
+!!VRy4:Sy11 %v7215 -v7215 *-1;                       [calculate status needed for next level]
+
+
+!!MA&w118>-1:Aw118/?y1;                              [get base attack]
+!!VRy5:Sy3 :3 +1 +y1;                                [attack = level / 10 + 1 + base]
+!!MA&w118>-1:Dw118/?y1;                              [get base defense]
+!!VRy6:Sy3 :3 +1 +y1;                                [defense = level / 3 + 1 + base]
+!!MA&w118>-1:Pw118/?y1;                              [get base health]
+!!VRy7:Sy1 +10 *y3;                                  [health = base + 2 x level]
+!!MA&w118>-1:Mw118/?y1;                              [get base damage min]
+!!VRy8:Sy1 +2 *y3;                                   [damage min = base + 2 x level]
+!!MA&w118>-1:Ew118/?y1;                              [get base damage max]
+!!VRy9:Sy1 +5 *y3;                                   [damage max = base + 5 x level]
+!!MA&w118>-1:Sw118/?y1;                              [get base speed]
+!!VRy10:Sy3 :10 +1 +y1;                              [speed = level / 3 + 1 + base]
+
+
+!!IF:Q2/21/w118/2/z149006;
+!!FU7102&2:Py-1;                                     [if yes, select henchman] -  // added y-1 (hero number)
+** end of function
+
+** function to handle dead/alive status
+!?FU7107;               x1=attacker/defender    x2= dead/alive
+!!BA&x1=0:H0/?y1;                                    [get hero number - attacker]
+!!BA&x1=1:H1/?y1;                                    [get hero number - defender]
+!!IF:Wy1;                                            [enable hero variable]
+!!VRw119:Sx2;                                        [set to x2 0=dead,1=alive]
+** end of function
+
+** function to resurrect dead henchman
+!?FU7108;
+!!IF&x1>-1:Wx1;                                      [enable hero variable]
+!!FU7104&w118>-1:Pw118;                              [get monster level]
+!!HEx1:E?y6/?y7/1;                                   [get hero exp, level]
+!!IF&x1>-1:Wx1;                                      [enable hero variable]
+!!VRy10:Sy7 -1 *10 +w117 +c;                         [experience points = (hero level -1) x10  +earned xp + current day]
+!!VRy3:Sy10 :v7215 +1;                               [henchman level = experience points / level rate + 1]
+!!MA:Cw118/6/?y8;                                    [get base creature cost]
+!!VRy4:Sy8 *y3 :5;                                   [resurrection cost = base cost x henchman level / 5]
+!!IF:Q2/21/w118/2/z149007;
+!!OW:R-1/6/?y5;                                      [get current gold amount]
+!!VRy8&2/y5>=y4:Sy5 -y4;                             [calculate gold transaction]
+!!OW&2/y5>=y4:R-1/6/y8;                              [if yes and player has enough gold,set new gold amount]
+!!VRw119&2/y5>=y4:S1;                                [if yes and player has enough gold, set to alive]
+!!IF&2/y5<y4:M1/z149008; [if yes and player does not have enough gold, display message]
+** end of function
+

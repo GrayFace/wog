@@ -1,0 +1,10 @@
+#	Text resource for "script92.erm" document		
+192000	Horn of Bad Luck	!#S	21.02.2005
+192001	When you wear this horn the luck of your opponent's units is decreased by 1. It will not touch your own luck.	!#S	21.02.2005
+192003	In addition, if you initiate combat, you have the option of summoning a powerful demon lord to fight the battle instead of you (with your troops). However, there is a price -- a permanent piece of your soul (1 point of Power) is forfeit for each summoning.	!#S	21.02.2005
+192004	This item negates all luck bonuses during combat for you and set the luck of your opponent to -1. %Z1	!#S	21.02.2005
+192005	By bad luck the %Z-1 hurts themselves and loses %Y-98 of their max. hitpoints.	!!S	21.02.2005
+192006	By bad luck the %Z-1 make only their minimal Damage	!!S	21.02.2005
+192007	By bad luck your %Z-1 make only 75%% of their usual Damage 	!!S	21.02.2005
+192008	By bad luck are the %Z-1 not able to defend them right if their enemys retaliate (-50%% defense).	!!S	21.02.2005
+192009	By bad luck the %Z-1 loses 3 shots.	!!S	21.02.2005

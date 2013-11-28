@@ -1,0 +1,82 @@
+195000	{Water Wheel}
+
+The owner of this Water Wheel indicates to you: "I'm a very peaceful man. If you guarantee my security and slay all the terrible creatures around, I'll give you all my gold and send you more each week.
+
+By the way: you can start with this giant spider behind the oven."
+
+You squash the little, harmless spider and take the gold from the "peaceful" man.	First time Water Wheel	20.10.2004
+195001	This week the carriers of the %Y-98 {Water Wheels} under your protection send you %Y-3 gold (%Y-99 of the Water Wheels are enhanced with Mithril).	Weekly Water Wheel	25.10.2004
+195002	The leader of the Wind Millers Guild visits you and presents a bag with the collected resources from %Y-98 windmills (%Y-97 thereof are enchanted with Mithril).	Weekly Windmill	25.10.2004
+195003	As you awake this morning, you find the %Y-98 pots that you once got from the Kobolds you caught in the Mystical Gardens, filled again.	Weekly Garden	25.10.2004
+195004	{Windmill}
+
+Submissively the owner of this Windmiill speaks to you:
+
+"My lord, it is a hard time, but I was able to put some resources aside. I beg you to take these resources, but let me do my business without any suppressions.
+
+I'll speak with our guild master too and he will bring you my surpluses next week."	First time Windmill	25.10.2004
+195005	The bag handed out by the miller contains:	Resources by Windmil	25.10.2004
+195006	{Mystical garden}
+
+Slowly you tiptoe to the clearing of this Mystical Garden. With a little bit of luck you manage to catch the Kobold with a net.
+
+He starts to cry and struggle, but you hold him down.
+
+After a while he calms down and exchanges a magical pot filled with gold and gems for his freedom. He remarks, that the pot will refill itself each week, until he is caught by someone else.	First time Garden	25.10.2004
+195010	As you near the Water Wheel, you hear a horrific cry. You rush forward and find the owner huddled in a corner of his kitchen, while a baby Gremlin pokes its fingers in the face of the scared man.
+
+You grab the Gremlin by its neck and throw it out the window.
+
+About 5 minutes later the carrier of the Water Wheel is able to speak again: "I paid lots of gold every week to the governor of this district for my certainty, but as you see, he is not able to defend me against these monstrosities. 
+
+I think, it is better to give my gold to you as you proved your worth already."	New owner Water Wheel	25.10.2004
+195011	With a wide and false smile the miller meets you halfway:
+
+ "Oh! So you're the new Lord of this land!!! Of course I've heard of you and, believe it or not, I sent my apprentice to our guild master yesterday. 
+
+I gave him strict orders to pay my surpluses to you now, instead of this foolish so-called 'Lord' who was your predecessor."	New owner Windmill	25.10.2004
+195012	Slowly you tiptoe to the clearing of this Mystical Garden. With a little bit of luck you manage to catch the Kobold in a cage.
+
+"Hey, why do you bother me? I gave you my pot already. Wait, you're not those rowdy vagabonds, are you? Ok, than you can have my magical pot." 
+
+The Kobold starts to dance, faster and faster. With a loud blow he vanishes and leaves a nice - but empty - black pot. You decide to take it with you.	New owner Garden	25.10.2004
+195013	As you near the Water Wheel its carrier approaches you:
+
+"Hey! I paid you for my security! For three days a huge monster has been besieging my kitchen! Go and kill it!"
+
+You enter the kitchen and slay the only creature you find: a little mouse. 
+
+The carrier is satisfied and you decide to avoid too much visiting in the future.	Revisit Water Wheel	25.10.2004
+195014	Wrathfully the miller rushs towards you:
+
+"I have already paid you for this week. Do not try to cheat me - I have a quittance and can prove it."	Revisit Windmill	25.10.2004
+195015	As you near the clearing of this Mystical Garden, you find yourself suddenly face to face (or knee to face) with the Kobold.
+
+"You can't catch me again, because I feel {my} gold in {your} money bag and can determine your exact position at a moments notice."	Revisit Garden	25.10.2004
+195016	Water Wheel (not owned by a player)		25.10.2004
+195017	Water Wheel (owned by red player)		25.10.2004
+195018	Water Wheel (owned by blue player)		25.10.2004
+195019	Water Wheel (owned by tan player)		25.10.2004
+195020	Water Wheel (owned by green player)		25.10.2004
+195021	Water Wheel (owned by orange player)		25.10.2004
+195022	Water Wheel (owned by purple player)		25.10.2004
+195023	Water Wheel (owned by teal player)		25.10.2004
+195024	Water Wheel (owned by pink player)		25.10.2004
+195025	Windmill (not owned by a player)		25.10.2004
+195026	Windmill (owned by red player)		25.10.2004
+195027	Windmill (owned by blue player)		25.10.2004
+195028	Windmill (owned by tan player)		25.10.2004
+195029	Windmill (owned by green player)		25.10.2004
+195030	Windmill (owned by orange player)		25.10.2004
+195031	Windmill (owned by purple player)		25.10.2004
+195032	Windmill (owned by teal player)		25.10.2004
+195033	Windmill (owned by pink player)		25.10.2004
+195034	Mystical Garden (not owned by a player)		25.10.2004
+195035	Mystical Garden (owned by red player)		25.10.2004
+195036	Mystical Garden (owned by blue player)		25.10.2004
+195037	Mystical Garden (owned by tan player)		25.10.2004
+195038	Mystical Garden (owned by green player)		25.10.2004
+195039	Mystical Garden (owned by orange player)		25.10.2004
+195040	Mystical Garden (owned by purple player)		25.10.2004
+195041	Mystical Garden (owned by teal player)		25.10.2004
+195042	Mystical Garden (owned by pink player)		25.10.2004

@@ -1,0 +1,217 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=21.6(June).2006
+
+** Dwarven Treasury Banks version 0.2
+** Script116 by Timothy Pulver
+** ERM Option Number: 316
+** Last Updated: June 21, 2006
+** Previously Updated: March 3, 2006
+
+** This script enhances Dwarven Treasuries by allowing a player to deposit gold
+** there to earn 25% interest for each full week or more for longer deposit
+** periods. The gold can be withdrawn at any time from any Dwarven Treasury and must be
+** withdrawn before a new deposit can be made.
+
+** Interest Rates are as follows:
+**   First 7 day period: 25%
+**   Each subsequent 7 day period: +3% more
+
+** Variables:
+** v variables: v285-v292, v390-v397
+** Dialog Box: 1
+** Temporary Flags: 1-3
+** Temporary v variables: v1
+** Temporary z variables: z1-z4
+
+ [Calculate and give interest on player's deposit every 7 days]
+!?TM1; [Daily Timer Trigger]
+!!UN:P316/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!OW:C?y-1; [Current player: y-1]
+!!VRy-2:S285 +y-1; [Index # for date player deposited gold: y-2]
+!!VRy-3:Svy-2; [Date gold was deposited -- <1 = no deposit: y-3]
+!!FU&y-3<1:E; [Exit if no current deposit for this player]
+!!VRy-4:Sc0; [Current date: y-4]
+!!VRy-5:Sy-4 -y-3; [Number of days gold has been deposited: y-5]
+!!VRy-6:Sy-5 :7 -1; [Divide by 7 to determine number of full weeks of deposit minus one: y-6]
+!!VRy-7:Sy-5 %7; [Remainder of division by 7 to determine if it's time to pay interest: y-7]
+!!FU&y-7<>0:E; [Exit if y-7 <> 0 -- means not time to pay interest]
+!!VRy-8:S390 +y-1; [Index # for player's deposited gold: y-8]
+!!VRy-9:Svy-8; [Player's deposited gold: y-9]
+!!VRe-1:S1 :4; [0.25: e-1]
+!!VRe-2:S3 :100; [0.03: e-2]
+!!VRe-3:Sy-6 *e-2 +e-1; [Interest rate for this week: 25% +3% : e-3]
+!!VRe-4:Sy-9 *e-3; [Interest for this week: e-4]
+!!VRy-10:Sy-9 +e-4; [Deposit plus interest: y-10]
+!!VRvy-8:Sy-10; [Store deposit plus interest: vy-8]
+
+ [Dwarven Treasury Bank]
+!?OB16/1&1000; [Dwarven Treasury Trigger for Human players]
+!!UN:P316/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!CB998:T?y-16; [Check if Dwarven Treasury has been taken: y-16=1 if taken]
+!!IF&y-16=1:M^{Dwarven Treasury Bank}
+
+This branch of the Dwarven Treasury Bank has been ransacked and cleaned out. There's nobody here to conduct business with you.
+
+If you have money deposited with the Dwarves, you'll need to locate a working bank branch before you can withdraw it.^;
+!!FU&y-16=1:E; [Exit if branch is closed]
+
+!!OW:C?y-1; [Current player: y-1]
+!!VRy-2:S285 +y-1; [Index # for date player deposited gold: y-2]
+!!VRy-3:Svy-2; [Date gold was deposited -- <1 = no deposit: y-3]
+!!VRy-4:Sc0; [Current date: y-4]
+!!VRy-5:Sy-4 -y-3; [Number of days gold has been deposited: y-5]
+!!VRy-6:Sy-5 :7; [Divide by 7 to determine number of full weeks of deposit: y-6]
+!!VRy-7:Sy-5 %7; [Remainder of division by 7 to determine if it's time to pay interest: y-7]
+!!VRy-8:S390 +y-1; [Index # for player's deposited gold: y-8]
+!!VRy-9:Svy-8; [Player's deposited gold: y-9]
+!!VRe-1:S1 :4; [0.25: e-1]
+!!VRe-2:S3 :100; [0.03: e-2]
+!!VRe-3:Sy-6 *e-2 +e-1; [Interest rate for this week: 25% +3% : e-3]
+!!VRe-4:Sy-9 *e-3; [Interest for this week: e-4]
+!!VRy-10:Sy-9 +e-4; [Deposit plus interest: y-10]
+
+!!VRy1:S1 R1; [Random number 1..2]
+!!FU-1&y1=1:P; [Generate random male name: z3]
+!!FU-2&y1=2:P; [Generate random female name: z3]
+!!HE-1:B0/?z2; [Hero's name: z2]
+
+!!VRy-11:S7 -y-7; [Next payment in x days: y-11]
+!!VRe-6:Se-3 *100; [Interest rate percent as a whole number: e-5]
+!!VRy-14:Se-6; [Convert interest rate percent to an integer number: y-14]
+!!VRy-15:Se-4; [Convert interest to an integer: y-15]
+
+!!UN:G1/16/1/3; [Temporarily change name of Dwarves to random banker name: z3]
+
+!!IF&y-3>0/y-9>0:Q2/21/16/6/y-9/36/e-4/2^{Dwarven Treasury Bank}
+
+I am %Z3 and will be your banker for today. Our records show that you have %Y-9 gold deposited in your account. The current interest rate on your money is %Y-14%% and the next payment of %Y-15 gold will be in %Y-11 days.
+
+Would you like to withdraw all your money?^;
+!!IF&y-3>0/y-9>0/2:Q1/21/16/36/y-9/1^{Dwarven Treasury Bank}
+
+Thank you for doing business with us %Z2. Here's your money and we hope you will deposit with us again.^;
+!!IF&y-3>0/y-9>0/-2:Q1/21/16/1^{Dwarven Treasury Bank}
+
+Thank you for doing business with us %Z2. Please return when you wish to withdraw your money. Until then, we will keep it safe.^;
+!!OW&y-3>0/y-9>0/2:R-1/6/dy-9; [Give player their gold]
+!!VRvy-2&y-3>0/y-9>0/2:S0; [Set date of deposit back to 0: vy-2]
+!!VRvy-8&y-3>0/y-9>0/2:S0; [Set amount of deposit back to 0: vy-8]
+!!UN&y-3>0/y-9>0:G1/16/1/0; [Restore name of Dwarves]
+!!FU&y-3>0/y-9>0:E; [Exit if player has money or withdrew money]
+
+!!IF:V3/0; [Initialize Flag 3 to false]
+!!IF&y-3<1|y-9<1:Q3/21/16/36/0/2^{Dwarven Treasury Bank}
+
+I am %Z3 and will be your banker for today. Our records show that you don't have an account with us right now. We pay 25% interest for each full week plus 3% more for each subsequent week thereafter. You may withdraw your money at any time but must close out your account before depositing more. This policy simplifies our bookkeeping.
+
+Do you wish to open an account and make a deposit?^;
+!!IF&-3:Q3/21/16/36/0/1^{Dwarven Treasury Bank}
+
+I hope you will do business with us another day.^;
+!!UN&-3:G1/16/1/0; [Restore name of Dwarves]
+!!FU&-3:E; [Exit if player isn't making a deposit]
+
+!!VRz4:S^^; [Null string: z4]
+!!VRz-1:S^Dwarven Treasury Bank^;
+!!VRz-2:S^How much do you want to deposit?^;
+!!IF:D1/-1/-2/4/4/4/4/4/4/4/4/4/4/4/4/4; [Set up input dialog for entering deposit amount]
+!!IF:E1/1; [Display input dialog and store result in v1, amount player wishes to deposit is stored in z1]
+!!VRy-12:Vz1; [Convert deposit amount text entered (z1) to a number: y-12]
+!!OW:R-1/6/?y-17; [Player's current gold: y-17]
+!!IF&y-12>y-17:Q3/21/16/36/y-12/1^{Dwarven Treasury Bank}
+
+I'm sorry but you can't deposit more gold than you own. Please return when you have sorted out your financial records.
+
+We look forward to doing business with you soon. Have a good day.^;
+!!IF&y-12<1:Q3/21/16/1^{Dwarven Treasury Bank}
+
+You are depositing nothing at this time? Well then, we look forward to doing business with you soon. Have a good day.^;
+!!UN&y-12<1|y-12>y-17:G1/16/1/0; [Restore name of Dwarves]
+!!FU&y-12<1|y-12>y-17:E; [Exit if player isn't making a deposit or is trying to deposit more gold than he or she has]
+
+!!VRe-5:Sy-12 *e-1; [Calculate Interest amount on new deposit for one week (25%): e-5]
+!!VRy-13:Se-5; [Convert interest to an integer: y-13]
+!!IF:Q2/21/16/36/y-12/1^{Dwarven Treasury Bank}
+
+Thank you for your deposit of %Y-12 gold, %Z2. In one full week it will earn %Y-13 additional gold for you.
+
+We hope to see you again soon.^;
+!!VRy-15:Sy-12 *-1; [Convert deposit to a negative value: y-15]
+!!OW:R-1/6/dy-15; [Remove gold from player]
+!!VRvy-2:Sc; [Set date of deposit back to current date: vy-2]
+!!VRvy-8:Sy-12; [Set amount of deposit back to deposit amount: vy-8]
+
+--------------------------------------------------------------------------------
+
+ [Generate Male Name: z3]
+!?FU-1;
+!!VRy1:S0 T51; [First part of name: y1]
+!!VRy2:S0 R51; [Second part of name: y2]
+!!VRz1&y1=0:S^Goth^; !!VRz1&y1=1:S^Woob^; !!VRz1&y1=2:S^Grond^; !!VRz1&y1=3:S^Gorg^;
+!!VRz1&y1=4:S^Ming^; !!VRz1&y1=5:S^Gind^; !!VRz1&y1=6:S^Lard^; !!VRz1&y1=7:S^Rand^;
+!!VRz1&y1=8:S^Ping^; !!VRz1&y1=9:S^Boll^; !!VRz1&y1=10:S^Nath^; !!VRz1&y1=11:S^Crab^;
+!!VRz1&y1=12:S^Ax^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Till^; !!VRz1&y1=15:S^Jon^;
+!!VRz1&y1=16:S^Jim^; !!VRz1&y1=17:S^Morg^; !!VRz1&y1=18:S^Glib^; !!VRz1&y1=19:S^Zam^;
+!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Ick^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Laft^;
+!!VRz1&y1=24:S^Ard^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Drip^; !!VRz1&y1=27:S^Slik^;
+!!VRz1&y1=28:S^Dorp^; !!VRz1&y1=29:S^Noil^; !!VRz1&y1=30:S^Arv^; !!VRz1&y1=31:S^Parb^;
+!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Ryl^; !!VRz1&y1=34:S^Velp^; !!VRz1&y1=35:S^Varg^;
+!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Hilt^; !!VRz1&y1=38:S^Pet^; !!VRz1&y1=39:S^Rent^;
+!!VRz1&y1=40:S^Swift^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Corn^;
+!!VRz1&y1=44:S^Clad^; !!VRz1&y1=45:S^Than^; !!VRz1&y1=46:S^Bald^; !!VRz1&y1=47:S^Oog^;
+!!VRz1&y1=48:S^Simp^; !!VRz1&y1=49:S^Bong^; !!VRz1&y1=50:S^Wazz^; !!VRz1&y1=51:S^Hal^;
+
+!!VRz2&y2=0:S^weed^; !!VRz2&y2=1:S^wort^; !!VRz2&y2=2:S^alar^; !!VRz2&y2=3:S^ant^;
+!!VRz2&y2=4:S^taran^; !!VRz2&y2=5:S^elan^; !!VRz2&y2=6:S^wump^; !!VRz2&y2=7:S^abot^;
+!!VRz2&y2=8:S^pong^; !!VRz2&y2=9:S^woval^; !!VRz2&y2=10:S^nack^; !!VRz2&y2=11:S^creen^;
+!!VRz2&y2=12:S^ellan^; !!VRz2&y2=13:S^smith^; !!VRz2&y2=14:S^ofex^; !!VRz2&y2=15:S^athan^;
+!!VRz2&y2=16:S^orfin^; !!VRz2&y2=17:S^nelp^; !!VRz2&y2=18:S^wert^; !!VRz2&y2=19:S^ifan^;
+!!VRz2&y2=20:S^ylart^; !!VRz2&y2=21:S^rasp^; !!VRz2&y2=22:S^alig^; !!VRz2&y2=23:S^alot^;
+!!VRz2&y2=24:S^varkan^; !!VRz2&y2=25:S^weird^; !!VRz2&y2=26:S^ingan^; !!VRz2&y2=27:S^glick^;
+!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^parth^; !!VRz2&y2=30:S^erly^; !!VRz2&y2=31:S^oomp^;
+!!VRz2&y2=32:S^ivore^; !!VRz2&y2=33:S^and^; !!VRz2&y2=34:S^untor^; !!VRz2&y2=35:S^islarg^;
+!!VRz2&y2=36:S^astin^; !!VRz2&y2=37:S^ernie^; !!VRz2&y2=38:S^doggoth^; !!VRz2&y2=39:S^ispade^;
+!!VRz2&y2=40:S^onent^; !!VRz2&y2=41:S^enclark^; !!VRz2&y2=42:S^sore^; !!VRz2&y2=43:S^doggel^;
+!!VRz2&y2=44:S^blackin^; !!VRz2&y2=45:S^atoth^; !!VRz2&y2=46:S^hair^; !!VRz2&y2=47:S^isploog^;
+!!VRz2&y2=48:S^son^; !!VRz2&y2=49:S^isgon^; !!VRz2&y2=50:S^itfore^; !!VRz2&y2=51:S^nowk^;
+
+!!VRz3:S^%Z1%Z2^; [Male name: z1]
+
+--------------------------------------------------------------------------------
+
+ [Generate Female Name: z3]
+!?FU-2;
+!!VRy1:S0 T51; [First part of name: y1]
+!!VRy2:S0 R51; [Second part of name: y2]
+!!VRz1&y1=0:S^Jen^; !!VRz1&y1=1:S^Pink^; !!VRz1&y1=2:S^Selip^; !!VRz1&y1=3:S^Perr^;
+!!VRz1&y1=4:S^Jinn^; !!VRz1&y1=5:S^Tin^; !!VRz1&y1=6:S^Sand^; !!VRz1&y1=7:S^Bett^;
+!!VRz1&y1=8:S^Nymph^; !!VRz1&y1=9:S^Sab^; !!VRz1&y1=10:S^Grace^; !!VRz1&y1=11:S^Lean^;
+!!VRz1&y1=12:S^Jess^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Amber^; !!VRz1&y1=15:S^Lemon^;
+!!VRz1&y1=16:S^Tess^; !!VRz1&y1=17:S^Liz^; !!VRz1&y1=18:S^Mari^; !!VRz1&y1=19:S^Zam^;
+!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Hir^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Kar^;
+!!VRz1&y1=24:S^Flor^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Cath^; !!VRz1&y1=27:S^Silk^;
+!!VRz1&y1=28:S^Petal^; !!VRz1&y1=29:S^Daph^; !!VRz1&y1=30:S^Tar^; !!VRz1&y1=31:S^Zir^;
+!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Rion^; !!VRz1&y1=34:S^Merb^; !!VRz1&y1=35:S^Lov^;
+!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Felt^; !!VRz1&y1=38:S^Lin^; !!VRz1&y1=39:S^Ren^;
+!!VRz1&y1=40:S^Sweet^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Con^;
+!!VRz1&y1=44:S^Clov^; !!VRz1&y1=45:S^Nan^; !!VRz1&y1=46:S^Christ^; !!VRz1&y1=47:S^Jil^;
+!!VRz1&y1=48:S^Dar^; !!VRz1&y1=49:S^Bint^; !!VRz1&y1=50:S^Wuzz^; !!VRz1&y1=51:S^Hil^;
+
+!!VRz2&y2=0:S^ie^; !!VRz2&y2=1:S^aling^; !!VRz2&y2=2:S^ina^; !!VRz2&y2=3:S^nine^;
+!!VRz2&y2=4:S^eena^; !!VRz2&y2=5:S^elane^; !!VRz2&y2=6:S^ephine^; !!VRz2&y2=7:S^ily^;
+!!VRz2&y2=8:S^a^; !!VRz2&y2=9:S^amth^; !!VRz2&y2=10:S^whip^; !!VRz2&y2=11:S^grass^;
+!!VRz2&y2=12:S^elia^; !!VRz2&y2=13:S^iris^; !!VRz2&y2=14:S^ena^; !!VRz2&y2=15:S^ina^;
+!!VRz2&y2=16:S^wood^; !!VRz2&y2=17:S^lin^; !!VRz2&y2=18:S^iper^; !!VRz2&y2=19:S^ifan^;
+!!VRz2&y2=20:S^ine^; !!VRz2&y2=21:S^sel^; !!VRz2&y2=22:S^issy^; !!VRz2&y2=23:S^appla^;
+!!VRz2&y2=24:S^virka^; !!VRz2&y2=25:S^wirda^; !!VRz2&y2=26:S^ing^; !!VRz2&y2=27:S^ette^;
+!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^etta^; !!VRz2&y2=30:S^spice^; !!VRz2&y2=31:S^locki^;
+!!VRz2&y2=32:S^ivora^; !!VRz2&y2=33:S^andi^; !!VRz2&y2=34:S^rose^; !!VRz2&y2=35:S^puff^;
+!!VRz2&y2=36:S^asti^; !!VRz2&y2=37:S^erni^; !!VRz2&y2=38:S^dogga^; !!VRz2&y2=39:S^ispa^;
+!!VRz2&y2=40:S^onenti^; !!VRz2&y2=41:S^enlara^; !!VRz2&y2=42:S^orenna^; !!VRz2&y2=43:S^ispi^;
+!!VRz2&y2=44:S^eela^; !!VRz2&y2=45:S^atothi^; !!VRz2&y2=46:S^haira^; !!VRz2&y2=47:S^isplooga^;
+!!VRz2&y2=48:S^ily^; !!VRz2&y2=49:S^isgona^; !!VRz2&y2=50:S^itfora^; !!VRz2&y2=51:S^nowkee^;
+
+!!VRz3:S^%Z1%Z2^; [Female name: z3]
+

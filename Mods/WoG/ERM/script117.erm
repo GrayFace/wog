@@ -1,0 +1,374 @@
+ZVSE
+ERMS_ScriptDate=21.6(June).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Ginko's Training Facility version 0.2
+** Script117.erm
+** Last Updated: June 21, 2006
+** Previously Updated: April 18, 2006
+
+** This script enhances Schools of War when Stack Experience is enabled,
+** allowing them to be used to train troops for gold.
+
+*** ERM WoG Option Number: 317
+
+** Variables
+** v variables: v151
+** z variables: z187 (hint text)
+** PO variables: O, V1 for School of War
+** Temporary flags and variables: f2, v1-v5, z1-z9
+
+--------------------------------------------------------------------------------
+
+!#UN:P900/?v1; [Check if Stack Experience is enabled: v1]
+!#UN:P317/?v2; [Check if Ginko's script is enabled: v2]
+!#VRz187&v1=1/v2=1:S^Ginko's Training Facility^;
+!#HT107/-1&v1=1/v2=1:T187; [Set hint text to z187]
+
+--------------------------------------------------------------------------------
+
+ [School of War is trigger for human player]
+!?OB107&1000;
+!!UN:P900/?y-1; [Check if Stack Experience is enabled: y-1]
+!!UN:P317/=1; [Check if Ginko script enabled: Flag 1=True if yes]
+!!FU|y-1<>1/-1:E; [Exit if Stack Experience or Ginko script NOT enabled]
+
+!!HE-1:O?y-14; [Visiting hero owner (0..7): y-14]
+!!PO998:O?y-15 V0/?y-16; [Read PO:O into y-15 and last date training facility used into y-16]
+!!VRy-17:Sc0; [Current game day: y-17]
+!!VRy-18:S0; [Initialize y-18 to 0]
+!!VRy-18&y-15=y-14/y-16=y-17:S1; [If this player has already visited this training facility, set y-18 to 1]
+
+ [Display intro text after initial visit]
+!!VRy-2:Sy-14 +1; [Copy player number to y-2 and add 1]
+!!FU$bit$:Py-2; [Convert to bit number. Result in y-100]
+!!VRy-3:Sv151; [Copy v151 to y-3]
+!!VRy-3:&y-100; [See if player's bit number is stored in v151: y-3]
+
+!!IF&y-3>0/y-18=0:M^{Ginko's Training Facility}
+
+When you enter the admissions building, the facility's director, rushes over to greet you and pumps your hand vigorously.
+
+"Welcome, welcome, welcome, my friend, it's great to see you here again!  I'm Ginko Baloba and I'm sure you'll love our new courses.  I can't stay and chat this morning but all you have to do is fill in these registration forms and Bob's your uncle!  Have a wonderful day and don't forget to try our complimentary tea.  The instructors will be in shortly."^;
+
+ [Display intro text first time visited]
+!!IF&y-3=0/y-18=0:M^{Ginko's Training Facility}
+
+When you enter the admissions building you note the exquisitely crafted door handles, expensive furniture and finely woven tapestries on the wall, as well as a display case filled with various awards and trophies.
+
+A bright and boisterous young man sitting at a mahogany desk leaps to his feet when you enter, and effortlessly bounds towards you, grabbing your hand and pumping it vigorously.  He's dressed very well, impeccably groomed and his perfectly straight teeth are so white they're almost blinding.
+
+"Welcome to Ginko's Training Facility.  Baloba's the name, Ginko Baloba--I'm the director of this world renowned educational institution--{world} {renowned} I say!  We offer fast and complete training with hand-picked instructors from the far corners of the land, complete with a money-back guarantee if you're not {completely} satisified--100% guaranteed, I assure you!"
+
+"My facility has trained literally millions of soliders from every part of the world--millions I tell you!  We have an incredible 148% success rate (independently verified) and can teach your young men (and women) combat tricks they've never even dreamed of in a million years--a million years I say!"
+
+Well, it all sounds a bit too good to be true but you {have} actually heard positive things about the place.  The director's obviously a bit of a twerp but since you're here now you might as well give the training a go--god knows, in this war you can use every little advantage you can get.^;
+!!VRv151&y-3=0:|y-100; [Add player's bit number to v151 so intro message won't repeat]
+
+!!FU-5:P; [Hero training (+1 to Attack or Defense once per hero for 1000 gold]
+
+!!IF&y-18=1:M^Ginko Baloba informs you that the troop instructors need to rest and so there will be no more classes available today.
+
+"But be sure to come back bright and early tomorrow!" he calls as he cheerfully waves and vanishes into his office.^;
+!!FU&y-18=1:E; [Exit if no more Training available for today]
+
+!!VRy-21:S0; [Initialize y-21 to 0]
+!!VRy-25:Sc-1 :28; [Maximum training rank increases each month: y-25]
+!!VRy-25:+5; [Add 5 to maximum training rank: y-25]
+!!VRy-25&y-25>10:S10; [Maximum training rank of 10 regardless: y-25]
+!!DO-1/0/6/1:P; [Build text strings for dialogue box: y-21=0 if no creatures]
+!!IF&y-21=0:M^You study the available courses but don't see anything for the troops you have with you.
+
+The Director suddenly reappears beside you and announces, "I see you don't have any soldiers my instructors can train.  That's too bad, too bad I say!"
+
+Ginko looks a little miffed that you don't have any business for him today, but it only lasts for a moment.  His face breaks out into a broad grin and he enthuses "Just remember, our doors are always open...so do hurry back with some young lads and ladies or seasoned veterans if you wish--we'll train them all.  We have lessons for your pikemen and halberdiers, tips and pointers for your archers and marksmen, strategy and tactics for your swordsmen and crusaders, obstacles and tournaments for your cavaliers and champions, and plenty of arrows for your sharpshooters to lose (just kidding).  Well, I'm sure we'll do business soon!"
+
+Ginko ushers you out and waves goodbye as you head off down the road.^;
+!!FU&y-21=0:E; [Exit if no creatures to train]
+
+!!VRz-1:S^G i n k o ' s   T r a i n i n g   F a c i l i t y
+
+Select stacks to train to the next rank. Current maximum rank is %Y-25.^;
+!!HE-1:R2/?y-12; [Hero's sex: 0=male, 1=female]
+!!VRz-7&y-12=0:S^sir^;
+!!VRz-7&y-12=1:S^lady^;
+!!VRz-2:S^Train all stacks listed above for %Y-24 gold.^;
+!!IF:G0/1/0/-1/1/2/3/4/5/6/7/-2/0/0/0/0; [Display dialogue box: checkboxes chosen stored in v1]
+!!IF&v1=0:M^The ever-bubbly director, Mr Ginko Baloba, pokes his head out when he sees you leaving.  "Now I know what you're thinking," he says, "You're thinking that this is too great a deal and you can't possibly take advantage of me and my low low rates by enrolling more troops in my classes.  Well let me tell you, good %Z-7, that's what we're here for!  Set your mind at ease and we'll do our best to please."
+
+Ginko chuckles at his catchy rhyme and then hastily adds before you're out of earshot, "Think it over and come back soon--we're open all day and most nights too!"^;
+!!VRv1&v1>=128:Sy-19; [Set v1 (checkboxes selected) to value for all of them selected if "train all stacks" option is chosen]
+!!FU&v1=0:E; [Exit if player didn't choose any stacks to train]
+
+!!HE-1:C0/y-10/?v2/?v3/?v4/2; [v2=type, v3=number, v4=exp]
+
+!!VRy-8:S0; [Initialize y-8 to 0]
+!!VRy-38:S0; [Initialize y-38 to 0]
+!!DO-6/1/7/1:Pv1; [Determine total cost for all stack training: y-8]
+
+!!VRz-8&y-12=0:S^man^;
+!!VRz-8&y-12=1:S^woman^;
+!!OW:R-1/6/?y-11; [Player's gold: y-11]
+!!VRy-26:Sy-8; [Copy y-8 to y-26]
+!!VRy-26&y-11>=y-8:*-1 -100000; [Convert gold to negative number for IF:N display if player can afford cost: y-26]
+!!IF:N36/y-26/y-40/y-50/y-41/y-51/y-42/y-52/y-43/y-53/y-44/y-54/y-45/y-55/y-46/y-56; [Set up IF:N display dialog]
+!!IF&y-11<y-8:N^"Oh dear oh dear oh dear oh dear oh dear!" cries Mr. Ginko Baloba, obviously perplexed. "I'm sooooooo sorry, but it seems you don't have the required class fees.  If it were just myself I would be happy to give you a discount--{more} than happy I say, but I'm duty-bound to pay these talented and hard-working instructors so that they can support their families, care for their sick and elderly relations and eke out an existence in these most troubled of times.  Well, I'm sure you understand, for you seem like a very understanding %Z-8.  Please do hurry back when you've sorted out your  finances." Ginko shakes your hand and quickly shoos you out the door.^;
+!!FU&y-11<y-8:E; [Exit if player doesn't have enough gold]
+
+!!VRy-13:Sy-11 -y-8; [Player's new gold: y-13]
+!!OW:R-1/6/y-13; [Set player's new gold: y-13]
+!!IF:N^You hand over the {gold} (all %Y-8 of it) and the troops begin their training classes while you take a break to relax, eat a meal and drink some herbal tea ("Supplied at no extra charge and imported from exotic lands far to the east.").
+
+Before you know it, your army returns, a bit tired but excited to begin using their new found skills--these classes really work!^;
+
+!!DO-8/1/7/1:Pv1; [Add one rank to each trained stack]
+
+!!HE-1:W?y-22; [Hero's current movement points: y-22]
+!!VRy-23:Sy-22 -500; [Remove 500 movement points]
+!!HE-1&y-23<0:W0; [Set hero's movement to 0 if hero had fewer than 500 movement points left]
+!!HE-1&y-23<0:Y65/y-23/1/2; [Set negative one day movement "curse" on hero for remaining movement points]
+!!HE-1&y-23>=0:Wy-22; [Set hero's movement -500 points if hero had 500 or more movement points left]
+
+!!PO998:Oy-14 V0/c0; [Set PO:O to player's number and V0 to current game day]
+
+--------------------------------------------------------------------------------
+
+ [Determine total cost for all selected stack training: y-8]
+ [Store IF:Q type/subtype for IF:N display]
+ [x1=checkboxes selected]
+!?FU-6;
+!!FU$bit$:Px16; [Convert to bit number: y-100]
+!!VRy1:Sx1; [Copy x1 to y1]
+!!VRy1:&y-100; [See if this checkbox was selected: y1>0 if selected: y1]
+!!FU&y1<1:E; [Exit if checkbox wasn't selected]
+
+!!VRy2:S-30 -x16; [Index for y- variable used for storing gold cost (y-31..y-37): y2]
+!!VRy-8:+yy2; [Add total of stored gold cost for each stack from y-31..y-37]
+
+!!VRy4:S-40 -y-38; [Index for y- variable used for storing IF:Q type (21 for monster)]
+!!VRy5:S-50 -y-38; [Index for y- variable used for storing IF:Q type (21 for monster)]
+!!VRy3:Sx16 -1; [Stack number (0..6): y3]
+!!HE-1:C0/y3/?y6/?y7/?y8/2; [y6=type, y7=number, y8=experience]
+!!VRyy4&y6>=0/y7>0:S21; [Store IF:Q type for IF:N display: yy4 (y-40..y-46)]
+!!VRyy5&y6>=0/y7>0:Sy7 *65536 +y6; [Store IF:Q subtype for IF:N display: yy5 (y-50..y-56)]
+
+!!VRy-38&y6>=0/y7>0:+1; [Increment index counter: y-38]
+!!VRy4:S-40 -y-38; [Index for y- variable used for storing IF:Q type (21 for monster)]
+!!VRy5:S-50 -y-38; [Index for y- variable used for storing IF:Q type (21 for monster)]
+!!VRyy4:S-1; [Store IF:Q number of -1 (nothing) for IF:N display: yy4 (y-40..y-46)]
+!!VRyy5:S-1; [Store IF:Q number of -1 (nothing) for IF:N display: yy5 (y-50..y-56)]
+
+--------------------------------------------------------------------------------
+
+ [Set new ranks for trained troops]
+!?FU-8;
+!!FU$bit$:Px16; [Convert to bit number: y-100]
+!!VRy1:Sx1; [Copy x1 to y1]
+!!VRy1:&y-100; [See if this checkbox was selected: y1>0 if selected: y1]
+!!FU&y1<1:E; [Exit if checkbox wasn't selected]
+
+!!VRy2:Sx16 -1; [Stack number (0..6): y2]
+!!HE-1:C0/y2/d/d/1/4; [Add 1 Rank to stack]
+
+--------------------------------------------------------------------------------
+
+ [Build text strings for dialogue box: z1..z7]
+!?FU-1;
+!!HE-1:C0/x16/?y1/?y2/?y3/2; [y1=type, y2=number, y3=experience]
+!!VRy4:Sx16 +1; [Index for z variable to store text strings (z1..z7)]
+!!VRzy4:S^^; [Initialize z variables to empty strings]
+
+!!VRy10:S1; [Initialize y10 to 1]
+!!VRy10|y1<0/y2<1:S0; [Set y10 to 0 if slot is empty]
+!!FU&y10<>1:E; [Skip if no trainable monster in this slot]
+
+!!VRy-21:S1; [Set y-21 to 1 if any trainable monsters found]
+!!FU-7:Py1/y2/y3/y4/x16; [Determine monster's rank and cost and create text string]
+
+--------------------------------------------------------------------------------
+
+ [Determine monster's rank and cost and create text string]
+ [x1=type, x2=number, x3=experience, x4=index for z variable, x5=stack number]
+!?FU-7;
+!!UN&x2=1:N3/8/x1/0; [Monster name (singular): z8]
+!!UN&x2>1:N3/8/x1/1; [Monster name (plural): z8]
+!!MA:Lx1/?y6; [Monster level (0..6): y6]
+!!VRy6:+1; [Add 1 to monster level: y6]
+!!FU-2:Py6/x3/x1; [Get rank: y-20]
+!!VRy5:Sy-20 +1; [Next rank to train creatures to: y5]
+!!FU&y5>y-25:E; [Skip if stack is higher than maximum training rank]
+
+!!VRy7:Sy6; [Copy of monster level: y7]
+!!VRy9:Sx1 :2 *2; [Check if monster is upgraded: y9]
+!!VRy7&y9<>x1/x1<=131:+1; [Add 1 more to monster level if upgraded: y7]
+!!VRy7&x1>=150/x1<=158:+2; [Add 2 more if monster is level 8: y7]
+!!VRy7&x1>=160/x1<=163:+2; [Add 2 more if monster is an Emissary: y7]
+!!VRy7&x1>=133/x1=135:+2; [Add 2 more if monster is a Faerie, Rust or Crystal Dragon: y7]
+!!VRy7&x1=132/x1=196:+3; [Add 3 more if monster is an Azure Dragon or Dracolich: y7]
+!!VRy8:Sx2 *y5 *y6 *y7; [Calculate cost: y8]
+!!VRy8:*1; [Final cost multiplier: currently unchanged: y8]
+!!VRy8&y8<1:S1; [Minimum cost: 1 gold: y8]
+!!VRy9:S-31 -x5; [Index for y- variable for storing gold cost: y9]
+!!VRyy9:Sy8; [Store gold cost for each stack in y-31..y-37]
+!!VRy10:Sx5 +1; [Change stack number from 0..6 to 1..7: y10]
+!!FU$bit$:Py10; [Convert stack number to a bit value: y-100]
+!!VRy-19:+y-100; [Add total bit values for each "checkbox" (trainable) stack: y-19]
+!!VRy-24:+y8; [Add total gold cost for training all trainable stacks: y-24]
+!!VRzx4:S^Train  %X2  %Z8  to  Rank  %Y5  for  %Y8  gold.^;
+
+--------------------------------------------------------------------------------
+
+ [Get rank of stack: y-20]
+ [x1=monster level (1..7), x2=current experience, x3=monster number]
+!?FU-2;
+!!VRe1:S2 :5 +8; [e1=8.4]
+!!VRy1:Sx2 :x1; [Base experience for level 1..7 creatures: y1]
+!!VRy1&x3>=150/x3<=158:Sx2 :e1; [Base exp. for level 8 creatures: y1]
+!!VRy1&x3>=132/x3<=135:Sx2 :e1; [Base exp. for powerful neutral dragons: y1]
+!!VRy1&x3>=160/x3<=163:Sx2 :e1; [Base exp. for Emissaries: y1]
+!!VRy1&x3=196:Sx2 :e1; [Base exp. for Dracolich: y1]
+!!VRy-20&y1<1000:S0; [Rank 0]
+!!VRy-20&y1>=1000/y1<2000:S1; [Rank 1]
+!!VRy-20&y1>=2000/y1<3200:S2; [Rank 2]
+!!VRy-20&y1>=3200/y1<4600:S3; [Rank 3]
+!!VRy-20&y1>=4600/y1<6200:S4; [Rank 4]
+!!VRy-20&y1>=6200/y1<8000:S5; [Rank 5]
+!!VRy-20&y1>=8000/y1<10000:S6; [Rank 6]
+!!VRy-20&y1>=10000/y1<12200:S7; [Rank 7]
+!!VRy-20&y1>=12200/y1<14700:S8; [Rank 8]
+!!VRy-20&y1>=14700/y1<17500:S9; [Rank 9]
+!!VRy-20&y1>=17500:S10; [Rank 10]
+
+--------------------------------------------------------------------------------
+
+ [Hero Training for human player]
+!?FU-5;
+!!HE-1:O?y1; [Visiting hero's owner: y1]
+!!OB998:Dy1 C?y2; [Disable object for this player, School of War's number: y2]
+!!HE-1:V9/y2/?y3; [Check if hero has gained a bonus at this school yet: y3]
+!!FU&y3=1:E; [Exit if hero has already gained a bonus here]
+!!IF:Q2/31/1/32/1/10^{Hero Training}
+
+"While your troops are busy training, how about we give you some top-notch instruction too?" suggests Ginko Baloba, smiling broadly.
+
+"For a mere 1000 gold coins, our incredible instructors can train you in either Attack or Defense.  What do you say?"^;
+
+!!IF&v2=0:M^"No? That's too bad, too bad, too bad indeed. Troops need to see their leader training too you know," chides Ginko, shaking his head sadly.
+
+"Well, if you change your mind, we're always ready to teach willing pupils a lesson or two.  Think it over and come back soon!"^;
+!!OW:R-1/6/?y4; [Player's gold: y4]
+!!HE-1:R2/?y5; [Hero's sex: y5]
+!!VRz1&y5=0:S^man^;
+!!VRz1&y5=1:S^woman^;
+!!IF&v2>0/y4<1000:Q1/6/1000/1^"Ah," says Ginko Baloba looking a little perplexed. "I'm terribly sorry but it seems you don't have the required fee."
+
+"Please come back again when you've sorted out your finances.  After all, we're always ready to teach paying pupils a lesson or two!"^;
+!!IF&v2=1/y4>=1000:Q1/31/1/6/-101000/1^"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your attack training's completed!"
+
+"Of course, you do realize that this is a one-time deal? Our instructors here can only teach a seasoned hero like yourself so much you know."
+
+"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"^;
+!!IF&v2=2/y4>=1000:Q1/32/1/6/-101000/1^"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your defense training's completed!"
+
+"Of course you do realize that this is a one-time deal. Our instructors here can only teach a seasoned hero like yourself so much you know."
+
+"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"^;
+!!OW&v2>0/y4>=1000:R-1/6/d-1000; [Remove 1000 gold from player]
+!!HE-1&v2=1/y4>=1000:Fd1/d/d/d; [Give hero +1 Attack]
+!!HE-1&v2=2/y4>=1000:Fd/d1/d/d; [Give hero +1 Defense]
+!!HE-1&v2>0/y4>=1000:V9/y2/1; [Set hero's status to "visited" for this school]
+
+--------------------------------------------------------------------------------
+
+ [Right-click on adventure map is trigger: display object hint text]
+!?CM0;
+!!UN:P900/?y-1; [Check if Stack Experience is enabled: y-1]
+!!UN:P317/=1; [Check if Ginko script enabled: Flag 1=True if yes]
+!!FU|y-1<>1/-1:E; [Exit if Stack Experience or Ginko script NOT enabled]
+
+!!CM:I?y-1; [Click location: y-1]
+!!FU&y-1<>37:E; [Exit if click isn't on Adventure Map]
+!!CM:P?y-1/?y-2/?y-3; [Click location: y-1/y-2/y-3]
+!!OBy-1/y-2/y-3:T?y-4; [Object type at click location: y-4]
+!!FU&y-4<>107:E; [Exit if not School of War]
+!!UN:V?y-9/?y-10/?y-11/?y-12/?y-13; [Check type of game: y-9]
+!!DO-3/0/7/1&y-13>0/y-13<>3:P; [For non-Hotseat MP game, determine which player is clicking: y-5]
+!!OW|y-13=0/y-13=3:C?y-5; [For Single player or Hotseat game, player clicking is current player: y-5]
+!!OW:Ay-5/?y-6; [Active hero: y-6]
+!!OBy-1/y-2/y-3:C?y-7; [Control word for School of War (School number): y-7]
+!!FU-4&y-7<0:P; [If School of War number is less than 0, locate the yellow trigger square]
+!!OBy-1/y-2/y-3&y-7<0:C?y-7; [Control word for School of War (School number): y-7]
+!!FU&y-7<0:E; [Exit if Control word is still <0 (may happen if a Hero is currently visiting)]
+!!VRy-8:S-1; [Initialize y-8 to -1]
+!!HEy-6&y-6>=0:V9/y-7/?y-8; [Check if hero has visited this School of War yet: y-8=1 if visited]
+!!HEy-6&y-6>=0:B0/?z1; [Hero name: z1]
+!!POy-1/y-2/y-3:O?y-15 V0/?y-16; [Read PO:O into y-15 and last date training facility used into y-16]
+!!VRy-17:Sc0; [Current game day: y-17]
+!!VRy-18:S0; [Initialize y-18 to 0]
+!!VRy-18&y-15=y-5/y-16=y-17:S1; [If this player has already visited this training facility, set y-18 to 1]
+
+!!VRz3&y-8=0:S^Training is available here for %Z1.
+^;
+!!VRz3&y-8<>0:S^No additional hero training is available here for %Z1.
+^;
+!!VRz3&y-6<0:S^^;
+!!VRz4&y-18=0:S^Instructors are available for troop training.^;
+!!VRz4&y-18=1:S^Instructors are unavailable for troop training until tomorrow.^;
+!!VRz2:S^{Ginko's Training Facility}
+
+%Z3
+%Z4^;
+!!IF&y-8=0/y-6>=0:Q1/31/1/17/0/32/1/4^%Z2^; [Display right-click hint message for Training Facility]
+!!IF|y-8=1/y-6<0:Q1/31/0/17/0/32/0/4^%Z2^; [Display right-click hint message for Training Facility]
+!!CM:R0; [Disable standard right-click response]
+
+--------------------------------------------------------------------------------
+
+ [Determine which player is clicking: y-5]
+!?FU-3;
+!!OW:Gx16/?y1; [Check if player x16 is the one clicking: y1=1 if yes]
+!!VRy-5&y1=1:Sx16; [Set y-5 to x16 if that player is the one clicking: y-5]
+!!VRx16&y1=1:S999; [Exit loop if player x16 is the one clicking]
+
+--------------------------------------------------------------------------------
+
+ [Find the yellow trigger square for School of War]
+!?FU-4;
+!!VRy1:Sy-1 +1; [Set x one square to the right: y1]
+!!TRy1/y-2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-1&y4=0:Sy1; [Set y-1 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy2:Sy-2 +1; [Set y one square down: y2]
+!!TRy1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-1&y4=0:Sy1; [Set y-1 to yellow square location if found]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy2:Sy-2 +2; [Set y two squares down: y2]
+!!TRy1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-1&y4=0:Sy1; [Set y-1 to yellow square location if found]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy1:Sy-1 +2; [Set x two squares to the right: y1]
+!!VRy2:Sy-2 +1; [Set y one square down: y2]
+!!TRy1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-1&y4=0:Sy1; [Set y-1 to yellow square location if found]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy1:Sy-1 -1; [Set x one square to the left: y1]
+!!VRy2:Sy-2 +1; [Set y one square down: y2]
+!!TRy1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-1&y4=0:Sy1; [Set y-1 to yellow square location if found]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy2:Sy-2 +1; [Set y one square down: y2]
+!!TRy-1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+!!VRy2:Sy-2 +2; [Set y two squares down: y2]
+!!TRy-1/y2/y-3:E?y4; [Check for yellow square: y4=0 if yellow]
+!!VRy-2&y4=0:Sy2; [Set y-2 to yellow square location if found]
+!!FU&y4=0:E; [Exit if yellow trigger square found]
+
+--------------------------------------------------------------------------------
+

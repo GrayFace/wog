@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<title>Dialog Tutorials</title>
+</head>
+<body>
+	<h1>Setting up tests environment.</h1>
+	<p>Let's start by setting up the environment for simple tests. Create <i>ModTest</i> folder.
+		Copy the <i>Maps</i> folder from this tutorial into the game folder.
+		Start the the game on <i>!ModTest! Ascension</i> map. Save the game as <i>ModTest</i>.
+		Now you'll quickly get into it when you need to test something out.
+		The script in the map will run <i>ModTest\Test.lua</i> script whenever you click the right button.
+		The file will be reloaded each time, so you won't need to restart the map when you change it.
+		The <i>Code</i> folder contains <i>Test.lua</i> files that should be copied into <i>ModTest</i> folder.</p>
+
+
+	<h1>Tutorial 1. Quest Log with custom content.</h1>
+	<p>Do you remember the Papyrus (<i>!!QW</i>)? It's an old custom quest log for ERM.
+		In this tutorial we will test out creation of a prettier custom quest log and play with aligning rules.</p>
+		
+	<h3><u>Step 1.</u> Quest Log picture with a few static controls.</h3>
+	<p>So, <i>QuestLog.pcx</i> is the background picture. Size of the dialog is derived from the picture.
+		On it we create a few controls, setting their coordinates explicitely. 
+		<i>CloseDialog = true</i> attribute of the button, naturally, makes it close the dialog when pressed.
+		Note that <i>HotKey = 28</i> stands for Enter key, as seen on <i>HeroesKeys.png</i>.
+		Eventhough we've only created a few controls, you can see that coordinates calculation got a bit messy.
+		In complex dialogs this may get far worse.</p>
+	<div class="img"><img src="./img/T1S1.png" /></div>
+	
+	<h3><u>Step 2.</u> Using Align controls.</h3>
+	<p>Now, to avoid dealing with coordinates directly each time we'll use horizontal Align control.
+		<br/><i>Margin</i> is the space around its contents, SpaceX is the space between items in it.
+		<br/><i>ExpandWidth = 1</i> makes the text occupy all free space horizontally.
+		<br/><i>ExpandHeight = 1</i> makes it occupy the whole height of Align control, 
+		which would be equal to height of the biggest control, Archer portrait.
+		<br/>The result of this step looks identical to <i>Step 1</i> result.</p>
+	
+	<h3><u>Step 3.</u> Adding more stuff.</h3>
+	<p>Now we're gonna put a vertical list. For this we would put a number of horizontal Align controls into a vertical Align control.
+		<br/>Again, <i>ExpandWidth = 1</i> on AlignH controls makes them occupy whole width of the list.
+		The content of AlignH controls is pretty random and serves to show different ways to align stuff.
+		<br/>The third AlignH control has <i>AlignX = 0.5</i> attribute. It makes the contents centered horizontally.
+		You can also use <i>AlignX = 1</i> value to align the contents to the right 
+		or you can use any other value between <i>0</i> and <i>1</i>.</p>
+	<div class="img"><img src="./img/T1S3.png" /></div>
+	
+	<h3><u>Step 4.</u> Scrolling.</h3>
+	<p>Here I simply duplicated contents of the list and added <i>Shaded = true</i> attribute to the duplicates to make them distinct.
+		<br/>To make the list scroll I moved the scrollbar into <i>ScrollBar</i> attribute of the vertical Align control.
+		Scrolling is supported by the control out of the box.
+		<br/>Additionally, I added <i>CatchKeys = true</i> attribute to the scrollbar, so it reacts Up, Down, Page&nbsp;Up and Page&nbsp;Down keys.
+		<br/>One unfortunate thing is that you can't see part of the row at the bottom of the list, instead there's empty space.
+		You can set <i>ShowPartialRow = true</i> attribute for the vertical Align control to make that row visible.
+		To make it partially visible you can place a picture with the bottom part of the dialog on top of it.
+		<br/>Note: controls are placed in order in which they are added to the dialog,
+		i.e. each control is placed on top of controls that go before it.</p>
+	<div class="img"><img src="./img/T1S4.png" /></div>
+
+
+	<h1>Tutorial 2. Pick one of many items.</h1>
+	<p>As you know, <i>IF:Q</i> only offers a dialog in which you can choose between 2 options.
+		In this tutorial we'll create a dialog for any number of options, specifically 3.</p>
+	
+	<h3><u>Step 1.</u> Simply 3 pictures.</h3>
+	<p>We start with something simple, just a row of 3 pictures, a caption and a button.
+		The dialog itself has automatic border and again automatic size calculation works right for us.</p>
+	<div class="img"><img src="./img/T2S1.png" /></div>
+	
+	<h3><u>Step 2.</u> Adding captions, making it pretty.</h3>
+	<p>Now we're making it prettier by adding captions, using proper font size and color and adding a box around the button.
+		The numbers between controls in AlignV add space between them. I've even removed <i>SpaceY</i> attribute, because all spaces are different.
+		<br/>The box aroung the button is placed using <i>AlignLayers</i> control. It places contained controls on top of each other.
+		<i>AlignX = 0.5</i> and <i>AlignX = 0.5</i> attributes place the button in the center of the box.</p>
+	<div class="img"><img src="./img/T2S2.png" /></div>
+	
+	<h3><u>Step 3.</u> Just playng with different pictures.</h3>
+	<p>Not much to learn here, except the fact that we're using Pcx control the first time.</p>
+	<div class="img"><img src="./img/T2S3.png" /></div>
+	
+	<h3><u>Step 4.</u> Cancel button.</h3>
+	<p>Here we add Cancel button which is there when <i>AllowCancel</i> variable is <i>true</i>.
+		We use a few Align controls for this.</p>
+	<div class="img"><img src="./img/T2S4.png" /></div>
+	
+	<h3><u>Step 5.</u> Selection frames and automated list creation.</h3>
+	<p>There are 2 ways to go. We could make one selection frame and move it between the pictures, 
+		or we could use a separate frame for each of them, but show only the active frame.
+		I chose the letter because at first I wanted the frames to surround both picture and text, so
+		invisible frames played extra role of denoting the clickable area around each option.
+		<br/>As we want this test to become a library function in the end, we're making options creation dynamic.
+		<i>choices</i> table containing just the pictures is used as the input.
+		<i>Caption</i> is not a standard attribute, so we can give it our meaning, i.e. text under the pictue.
+		We loop through the pictures and populate the list with proper display.
+		Also note that frame color is taken from <i>game.pal</i>, as it is in the standard <i>IF:Q</i> dialog.</p>
+	<div class="img"><img src="./img/T2S5.png" /></div>
+	
+	<h3><u>Step 6.</u> Picking one.</h3>
+	<p>Adding the OnClick event to all frames that shows the selection frame and enables OK button.</p>
+	<div class="img"><img src="./img/T2S6.png" /></div>
+	
+	<h3><u>Step 7.</u> Right click hints, returning dialog result.</h3>
+	<p>Here we're adding right-click hints for the options. <i>ShowLongHints = true</i> makes the 
+		dialog show <i>LongHint</i> of control on right click. When <i>LongHint</i> is <i>nil</i>, <i>Hint</i> is used instead.
+		<br/>The last thing is the result of future library function. If OK was clicked we'll return chosen option number, otherwise we'll return 0.
+		<i>Show()</i> method returns chosen item id, or <i>30721</i> if the dialog was closed by other means.
+		<br/>Note: <i>30722</i> and <i>30721</i> are standard OK and Cancel ids in the game, we use them for the sake of tradition.</p>
+	<div class="img"><img src="./img/T2S7.png" /></div>
+
+
+	<h1>Tutorial 3. Context Menu.</h1>
+	<p>In this tutorial we will create a context menu.</p>
+		
+	<h3><u>Step 1.</u> Basic menu.</h3>
+	<p>CheckGroup control would help us with the menu. Normally it's used to create a list of check boxes or radio buttons.
+		We use check boxes with <i>States = 1</i> to get them to act as buttons.</p>
+	<div class="img"><img src="./img/T3S1.png" /></div>
+
+	<h3><u>Step 2.</u> Area outside of the menu and caption.</h3>
+	<p>Context menus disappear when you click outside the menu or press Esc. We'll do it as well.
+		Esc key is simple, the only important detail is that it has to go in <i>OnKeyUp</i> event instead of <i>OnKeyDown</i>,
+		otherwise pressing Esc will close the dialog under ours if there is one.
+		Clicking outside of the dialog is a bit tricky. Click events only fire when a dialog control is clicked.
+		Custom dialogs have their area covered with control named "DialogArea", so clicks inside the dialog fire click events.
+		To catch clicks outside of the dialog we create a transparent <i>Area</i> control, making sure it covers whole screen.
+		The dialog size is then set manually to that of actual contents. In <i>OnClick</i> and <i>OnRightClick</i> events
+		we close the dialog if the click occured outside of its area. We'll also add a caption, just in case.</p>
+	<div class="img"><img src="./img/T3S2.png" /></div>
+
+	<h3><u>Step 3.</u> Appearing at mouse position and returning chosen item index.</h3>
+	<p>To open the menu at the place of mouse click we use new reciever <i>UX:M</i> which gets us mouse coordinates.
+		CheckGroup control sets ItemIndex property of contained check boxes (counting is done from 1, as always in Lua), so
+		that's what we need as the result from context menu.</p>
+	
+	<h3><u>Step X.</u> ScrollBar Example.</h3>
+	<p>This step shows a scroll bar outside of Align control (CheckGroup is a descendant of Align control).
+		When scroll bar is outside, you can assign its name to <i>ScrollBar</i> property.
+		There's no use for scroll bar when there are 6 menu items and I don't think someone would need a menu with a lot of items,
+		so this step is just educational.</p>
+	<div class="img"><img src="./img/T3SX.png" /></div>
+	
+	<h3><u>Step Y.</u> Hand-Made Dialog Box.</h3>
+	<p>Before I figured I can simply add a big invisible control to capture clicks outside of dialog area I tried another approach.
+		Here we have an invisible dialog that occupies whole screen and manually created dialog box, layered under the content.
+		This is a good example of Align controls use. It also demonstrates <i>Tile</i> property of Def and Pcx controls.</p>
+	
+</body>
+</html>

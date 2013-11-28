@@ -1,0 +1,113 @@
+#	Text resource for "script58.erm" document		
+158000	Choose mission:	<!#S>	01.08.2004
+158001	Assassination	<!#S>	01.08.2004
+158002	Enemy status report	<!#S>	01.08.2004
+158003	Theft	<!#S>	01.08.2004
+158004	Sabotage building	<!#S>	01.08.2004
+158005	Withdraw spy	<!#S>	01.08.2004
+158006	Choose the town you want to be infiltrated.	<!#S>	01.08.2004
+158007	Type in the name of a discovered town:	<!#S>	01.08.2004
+158008	Steal wood.	<!#S>	01.08.2004
+158009	Steal mercury.	<!#S>	01.08.2004
+158010	Steal ore.	<!#S>	01.08.2004
+158011	Steal sulfur.	<!#S>	01.08.2004
+158012	Steal crystal.	<!#S>	01.08.2004
+158013	Steal gems.	<!#S>	01.08.2004
+158014	Steal gold.	<!#S>	01.08.2004
+158015	Steal mithril.	<!#S>	01.08.2004
+158016	Assassinate creatures in garrison.	<!#S>	01.08.2004
+158017	Assassinate creatures in dwelling.	<!#S>	01.08.2004
+158018	level 1	<!#S>	01.08.2004
+158019	level 2	<!#S>	01.08.2004
+158020	level 3	<!#S>	01.08.2004
+158021	level 4	<!#S>	01.08.2004
+158022	level 5	<!#S>	01.08.2004
+158023	level 6	<!#S>	01.08.2004
+158024	level 7	<!#S>	01.08.2004
+158025	Spy	<!#S>	01.08.2004
+158026	Steal spells.	<!#S>	01.08.2004
+158027	Type in the name of a town of yours:	<!#S>	01.08.2004
+158028	Type in the name of the desired spell:	<!#S>	01.08.2004
+158029	Enemy town infiltration	<!#S>	01.08.2004
+158030	Organize counter-spy network	<!#S>	01.08.2004
+158031	Your spy will reach  
+{%Z200} in {%Vp} day(s).	<!!M>	01.08.2004
+158032	{%Z200} will have effective counter-spy network tomorrow.	<!!M>	01.08.2004
+158033	You do not have a spy ready for field operations at the moment.
+
+{In} {order} {to} {train} {a} {spy,} {the} {hero} {has} {to} {learn} {the} {scouting} {skill} {and} {gain} {a} {level} {up.} {If} {the} {spy} {is} {exposed} {and} {executed,} {another} {one} {will} {be} {trained} {with} {the} {next} {level} {up.}	<!!Q>	01.08.2004
+158034	This is one of your towns. You have to target an enemy town.	<!!M>	01.08.2004
+158035	Your spy can't find 
+{%Z1} on your maps. Maybe you've entered a wrong name?	<!!M>	01.08.2004
+158036	Your spy has left for 
+{%Z200}. Information should be available in three days.	<!!Q>	01.08.2004
+158037	The spy has not recieved the proper training yet. Only an {expert} {scout} can teach the ways of counter-espionage.	<!!M>	01.08.2004
+158038	{%Z1} is not a town under your rule. You have to target one of your towns for counter-espionage.	<!!M>	01.08.2004
+158039	{%Z200} already has a counter-spy network managed by another of your spies. More operatives will only obstruct its work.	<!!Q>	01.08.2004
+158040	Your spy enters {%Z200}
+ and will begin building a counter-spy network.	<!!Q>	01.08.2004
+158041	Do you really want to withdraw your spy? If you do this you will lose your counter-spy network in {%Z200}.	<!!Q>	01.08.2004
+158042	{%Z200} is under your rule. As not needed for operations here, yours spy leaves it and is available for new orders.	<!!Q>	01.08.2004
+158043	{%W55} successful operation(s)	<!!S>	01.08.2004
+158044	Your spy is on a mision in
+{%Z200}. Do you want to give orders?	<!!Q>	01.08.2004
+158045	Your spy leaves 
+{%Z200} and is now available for new orders.	<!!Q>	01.08.2004
+158046	Yor spy is in a neutral town. Generally, these towns are poor and have nothing of value to steal.	<!!Q>	01.08.2004
+158047	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158048	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158049	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158050	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158051	This mission will be too risky for your spy. The missing resources will be easily noticed, so the operative decides not to attempt the theft.	<!!M>	01.08.2004
+158052	There is nothing to be stolen. The spy aborts the mission.	<!!M>	01.08.2004
+158053	The theft mission was successful.	<!!Q>	01.08.2004
+158054	The assassination mission was successful. %Y3 monsters of lvl %Y4 have been eliminated.	<!!M>	01.08.2004
+158055	The assassination failed bacause there were no creatures at the target location.	<!!M>	01.08.2004
+158056	The assassination mission has been foiled by the enemy. Hopefully your spy got away unnoticed.	<!!M>	01.08.2004
+158057	The assassination mission was successful. %Y3 monster(s) left.	<!!Q>	01.08.2004
+158058	The assassination mission has been foiled by the enemy. Hopefully your spy got away unnoticed.	<!!M>	01.08.2004
+158059	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158060	The sabotage mission was foiled by the enemy. Hopefully your spy was not suspected for the act.	<!!M>	01.08.2004
+158061	The sabotage mission was successful.	<!!Q>	01.08.2004
+158062	The sabotage mission was foiled by the enemy. Hopefully your spy was not suspected for the act.	<!!M>	01.08.2004
+158063	The enemy has the following resources 
+{%V2200} wood 
+{%V2201} mercury 
+{%V2202} ore 
+{%V2203} sulfur 
+{%V2204} crystal 
+{%V2205} gems 
+{%V2206} gold 
+{%V2207} mithril 	<!!M>	01.08.2004
+158064	The following buildings are completed in {%Z775}:	<!!M>	01.08.2004
+158065	The mage guild offers knowledge of these spells:	<!!M>	01.08.2004
+158066	The garrison hero {%Z775} is level {%Vl}. The {Primary} {Skill} values are: 
+attack - {%Vm} 
+defence - {%Vn} 
+sp.power - {%Vo} 
+knowledge - {%Vp}.	<!!M>	01.08.2004
+158067	The {Secondary} {Skills} are:	<!!M>	01.08.2004
+158068	The following {Artifacts} are equipped:	<!!M>	01.08.2004
+158069	The visiting hero {%Z775} is level {%Vl}. The {Primary} {Skill} values are: 
+attack - {%Vm} 
+defence - {%Vn} 
+sp.power - {%Vo} 
+knowledge - {%Vp}.	<!!M>	01.08.2004
+158070	The {Secondary} {Skills} are:	<!!M>	01.08.2004
+158071	The following {Artifacts} equipped:	<!!M>	01.08.2004
+158072	Basic %Z775	<!!M>	01.08.2004
+158073	Advanced %Z775	<!!M>	01.08.2004
+158074	Expert %Z775	<!!M>	01.08.2004
+158075	{Level} {1} spells: %Z2, %Z3, %Z4, %Z5, %Z6	<!!M>	01.08.2004
+158076	{Level} {1} spells: %Z2, %Z3, %Z4, %Z5, %Z6, %Z7	<!!M>	01.08.2004
+158077	{Level} {2} spells: %Z2, %Z3, %Z4, %Z5	<!!M>	01.08.2004
+158078	{Level} {2} spells: %Z2, %Z3, %Z4, %Z5, %Z6	<!!M>	01.08.2004
+158079	{Level} {3} spells: %Z2, %Z3, %Z4	<!!M>	01.08.2004
+158080	{Level} {3} spells: %Z2, %Z3, %Z4, %Z5	<!!M>	01.08.2004
+158081	{Level} {4} spells: %Z2, %Z3	<!!M>	01.08.2004
+158082	{Level} {4} spells: %Z2, %Z3, %Z4	<!!M>	01.08.2004
+158083	{Level} {5} spell: %Z2	<!!M>	01.08.2004
+158084	{Level} {5} spells: %Z2, %Z3	<!!M>	01.08.2004
+158085	Your spy is unable to provide you with the desired spell. Either you gave a wrong spell name, or there is no such spell in the mage guild.	<!!M>	01.08.2004
+158086	Your spy has been exposed and executed during an attempt to fulfill the assigned mission.	<!!M>	01.08.2004
+158087	Your spy successfully copies the desired spell and sends you the scroll	<!!Q>	01.08.2004

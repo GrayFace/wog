@@ -1,0 +1,474 @@
+ZVSE
+ERMS_ScriptDate=21.6(June).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Sphinx Monster Riddle v0.4 by Timothy Pulver
+** Wogify name: script098.erm
+** Last Updated: June 21, 2006
+** Previously Updated: May 30, 2004
+
+** For human players, Sphinxes now work differently. They will think of a random
+** monster and the hero must try to guess which creature it is. To aid in this
+** endeavour, the hero may choose to ask three questions about the monster's
+** characteristics (chosen from a list) and then may make up to three guesses
+** as to the identity of the monster.
+
+** If the hero guesses correctly, monsters of that type join his army for free
+** (the number increases each week), but if the hero guesses wrong, three times
+** that number of creatures attack the hero instead.
+
+--------------------------------------------------------------------------------
+
+Variables: (v1-v2), (z1), (z22-z44), v3331-v3332, v3337-v3338
+Flags: 1-3
+Functions: FU3305-FU3321
+
+--------------------------------------------------------------------------------
+
+ [Sphinx is trigger]
+!?OB63/10&1000;
+!!UN:P98/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!FU3305:P;
+
+!?OB63/11&1000;
+!!UN:P98/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!FU3305:P;
+
+!?OB63/12&1000;
+!!UN:P98/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!FU3305:P;
+
+!?OB63/13&1000;
+!!UN:P98/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!FU3305:P;
+
+--------------------------------------------------------------------------------
+
+ [Main Function]
+!?FU3305;
+
+!!HE-1:O?y1 W?y6; [Hero's owner: y1, Hero's movement points: y6]
+!!OB998:Dy1; [Disable normal Sphinx function for this player]
+
+!!IF&y6<1:M^You are weary from travelling!
+
+Return in the morning.^;
+!!FU&y6<1:E; [Exit if no movement left]
+
+!!IF:Q2^{Wise and Mighty Sphinx}
+
+"Would you like to play a game?"^;
+
+!!IF&-2:M^{Wise and Mighty Sphinx}
+
+THEN BEGONE, MORTAL!^;
+
+!!FU&-2:E; [Exit if Hero doesn't want to play]
+
+!!HE-1&y6>=2000:Wd-2000; [Remove 2000 movement points from hero]
+!!HE-1&y6<2000:W0; [If hero has less than 2000 movement points, set to 0 instead]
+
+!!IF:Q2^{Wise and Mighty Sphinx}
+
+"I shall think of a creature and you must guess what it is. You may choose three questions to ask about this creature and I will answer truthfully."
+
+"After I answer your questions, you may make three guesses. If you guess right, these creatures will join your army. But if you guess wrong, they will fight you to the death!"
+
+"Are you ready to play?"^;
+
+!!IF&-2:M^{Wise and Mighty Sphinx}
+
+"No, you are not ready?"
+
+"Too bad -- we shall begin at once!"^;
+
+!!IF&2:M^{Wise and Mighty Sphinx}
+
+"Good! We shall begin immediately."^;
+
+ [Sphinx chooses random monster: v3332]
+!!VRv3332:S0 R165;
+!!VRv3332&v3332>=122:+1; [Skip unused monsters]
+!!VRv3332&v3332>=124:+1; [Skip unused monsters]
+!!VRv3332&v3332>=126:+1; [Skip unused monsters]
+!!VRv3332&v3332>=128:+1; [Skip unused monsters]
+!!VRv3332&v3332>=145:+5; [Skip war machines]
+!!VRv3332&v3332>=160:+4; [Skip Emissaries]
+!!VRv3332&v3332>=174:+18; [Skip Commanders]
+
+ [Calculate number of creatures: v3337 (reward), v3338 (for attacking)]
+!!MA:Pv3332/?y5; [Health of 1 creature: y5]
+!!VRy2:Sc0; [Current day: y2]
+!!VRy3:Sy2 *50; [Total health for reward: y3]
+!!VRv3337:Sy3 :y5; [Number of creatures for reward: v3337]
+!!VRv3337&v3337=0:S1; [Minimum 1 creature: v3337]
+!!VRy4:Sy2 *150; [Total health for attacking creatures: y4]
+!!VRv3338:Sy4 :y5; [Number of attacking creatures: v3338]
+!!VRv3338&v3338=0:S1; [Minimum 1 creature: v3338]
+
+ [Picture display for IF:Q for creatures: y-5 (reward), y-6 (attacking)]
+!!VRy-5:Sv3337 *65536 +v3332; [Reward picture: y-5]
+!!VRy-6:Sv3338 *65536 +v3332; [Attacking picture: y-6]
+
+ [Store monster's name in z39]
+!!UN:N3/39/v3332/0; [Monster's name (singular): z39]
+!!UN:N3/40/v3332/1; [Monster's name (plural): z40]
+
+ [Set up Questions in z23..z34]
+!!VRz23:S^Does this monster carry a WEAPON?^;
+!!VRz24:S^Does this creature have WINGS?^;
+!!VRz25:S^Does this beast have a TAIL?^;
+!!VRz26:S^Is this monster ALIVE?^;
+!!VRz27:S^How FAST is this beast?^;
+!!VRz28:S^Does this creature cast SPELLS?^;
+!!VRz29:S^Does this monster have a RANGED ATTACK?^;
+!!VRz30:S^Does this beast have any IMMUNITIES TO MAGIC?^;
+!!VRz31:S^How many LEGS does this creature possess?^;
+!!VRz32:S^What LEVEL is this monster?^;
+!!VRz33:S^Is this an UPGRADED creature?^;
+!!VRz34:S^How is this beast ALIGNED?^;
+
+ [Question Dialogue and Answers]
+!!DO3306/1/3/1:P;
+
+ [Input Dialogue for Guess -- Dialogue 4: answer in z1]
+!!VRz36:S^"What creature am I thinking of?"^;
+!!DO3319/1/3/1:P; [Display Guess Dialogue and check for a match]
+
+--------------------------------------------------------------------------------
+
+ [Display Guess Dialogue and check for a match]
+!?FU3319;
+!!VRz37&x16=1:S^What is your first guess?^;
+!!VRz37&x16=2:S^What is your second guess?^;
+!!VRz37&x16=3:S^What is your final guess?^;
+!!IF:D4/36/37/0/0/0/0/0/0/0/0/0/0/0/0/0; [Set up dialogue 4]
+!!IF:F4/0/0/0/0/0; [Disable ESC/Cancel button]
+!!IF:E2/4; [Display dialogue 4]
+!!VRz38:S^%Z1^; [Store z1 in z38]
+
+ [Display "correct guess" message if correct guess and gives creatures to hero]
+!!IF|z38=z39/z38=z40:Q1/21/y-5/1^{Wise and Mighty Sphinx}
+
+"Congratulations, mortal, you have guessed correctly. It seems you got lucky..this time!"^;
+!!HE-1|z38=z39/z38=z40:C2/v3332/v3337/1; [Give troops won to hero]
+!!VRx16|z38=z39/z38=z40:S99; [Set x16 to 99 to exit loop if correct guess]
+!!FU|z38=z39/z38=z40:E; [Exit Function if correct guess]
+
+ [Check for a null string guess: Flag 3 = False if null]
+!!VRz38:H3;
+!!IF&-3:M^{Wise and Mighty Sphinx}
+
+Do not try my patience, mortal!^;
+
+ [See if incorrect answer matches any monster's name]
+!!VRy-2:S-1;
+!!DO3320/0/196/1&3:P;
+
+ [If no match for any monster name, reduce loop value so player can guess again]
+!!IF&y-2<0/3:M^{Wise and Mighty Sphinx}
+
+"There is no monster in this land called %Z38!"
+
+"Perhaps you would care
+to try again..."^;
+
+!!VRx16&y-2<0:-1; [Reduce loop by one if not a valid guess]
+
+ [If it was a valid wrong guess but not the final guess,]
+ [display this message and attack hero with creatures]
+!!IF&x16<3/y-2>=0:Q1/21/y-2/1^{Wise and Mighty Sphinx}
+
+"That is NOT the creature I am thinking of. Guess again!"^;
+
+ [If it was a valid final guess (but wrong), display "wrong guess" message]
+!!VRz43&v3338=1:S39; [Singular name: z43]
+!!VRz43&v3338>1:S40; [Plural name: z43]
+!!IF&x16=3/y-2>=0:Q1/21/y-6/1^{Wise and Mighty Sphinx}
+
+"You guessed wrong, mortal!"
+
+"Now face the wrath of %V3338
+angry %Z43!"^;
+!!VRv3331&x16=3/y-2>=0:S99; [Set v3331 to 99 to adjust creatures in battle]
+!!HE-1&x16=3/y-2>=0:Tv998/v999/v1000/v3332/v3338; [Attack hero with creatures]
+!!VRv3331:S0; [Reset v3331]
+
+--------------------------------------------------------------------------------
+
+ [Check for a match for any monster name]
+!?FU3320;
+!!UN:N3/41/x16/0; [Monster x16's name (singular): z41]
+!!UN:N3/42/x16/1; [Monster x16's name (plural): z42]
+!!FU|x16=122/x16=124/x16=126/x16=128:E; [Skip unused monsters]
+!!FU&x16>=145/x16<=149:E; [Skip war machines]
+!!FU&x16>=174/x16<=191:E; [Skip Commanders]
+!!VRy-2|z38=z41/z38=z42:Sx16; [Set y-2 to x16 if match found]
+!!VRx16|z38=z41/z38=z42:S999; [Exit loop if match found]
+
+--------------------------------------------------------------------------------
+
+!?FU3306;
+!!VRz22&x16=1:S^Your first question.  Choose wisely!^;
+!!VRz22&x16=2:S^Your second question.  Choose carefully!^;
+~~VRz22&x16=3:S^Your third question.  Consider your options!^;
+!!VRz22&x16=3:S^Your final question.  Make it count!^;
+!!IF:G1/1/0/22/23/24/25/26/27/28/29/30/31/32/33/34;
+
+ [Look up Answer to Questions: answer in z35]
+!!FU3307&v1=1:P;    [Question 1: Weapon]
+!!VRz23&v1=1:S^^; [Set option string to null once chosen]
+!!FU3308&v1=2:P;    [Question 2: Wings]
+!!VRz24&v1=2:S^^; [Set option string to null once chosen]
+!!FU3309&v1=4:P;    [Question 3: Tail]
+!!VRz25&v1=4:S^^; [Set option string to null once chosen]
+!!FU3310&v1=8:P;    [Question 4: Alive]
+!!VRz26&v1=8:S^^; [Set option string to null once chosen]
+!!FU3311&v1=16:P;   [Question 5: Speed]
+!!VRz27&v1=16:S^^; [Set option string to null once chosen]
+!!FU3312&v1=32:P;   [Question 6: Spells]
+!!VRz28&v1=32:S^^; [Set option string to null once chosen]
+!!FU3313&v1=64:P;   [Question 7: Ranged]
+!!VRz29&v1=64:S^^; [Set option string to null once chosen]
+!!FU3314&v1=128:P;  [Question 8: Immunity]
+!!VRz30&v1=128:S^^; [Set option string to null once chosen]
+!!FU3315&v1=256:P;  [Question 9: Legs]
+!!VRz31&v1=256:S^^; [Set option string to null once chosen]
+!!FU3316&v1=512:P;  [Question 10: Level]
+!!VRz32&v1=512:S^^; [Set option string to null once chosen]
+!!FU3317&v1=1024:P; [Question 11: Upgraded]
+!!VRz33&v1=1024:S^^; [Set option string to null once chosen]
+!!FU3318&v1=2048:P; [Question 12: Alignment]
+!!VRz34&v1=2048:S^^; [Set option string to null once chosen]
+
+ [Display Answer: z35]
+!!IF:M^{Wise and Mighty Sphinx}
+
+"The answer to your question is..."
+
+%Z35^;
+
+--------------------------------------------------------------------------------
+ [Weapon]
+!?FU3307;
+!!VRy1:S0;
+
+!!VRy1|v3332=0/v3332=1/v3332=2/v3332=3/v3332=6/v3332=7:S1;
+!!VRy1&v3332>=10/v3332<=21:S1;
+!!VRy1|v3332=28/v3332=29/v3332=34/v3332=35/v3332=38/v3332=39/v3332=40/v3332=41:S1;
+!!VRy1|v3332=50/v3332=51/v3332=54/v3332=55/v3332=56/v3332=57/v3332=58/v3332=59:S1;
+!!VRy1|v3332=64/v3332=65/v3332=66/v3332=67/v3332=70/v3332=71/v3332=76/v3332=77:S1;
+!!VRy1|v3332=78/v3332=79/v3332=84/v3332=85/v3332=86/v3332=87/v3332=88/v3332=89:S1;
+!!VRy1|v3332=90/v3332=91/v3332=94/v3332=95/v3332=98/v3332=99/v3332=100/v3332=101:S1;
+!!VRy1&v3332>=137/v3332<=144:S1;
+!!VRy1|v3332=150/v3332=152/v3332=153/v3332=170/v3332=171/v3332=173/v3332=192:S1;
+
+
+!!VRz35&y1=0:S^{This creature has no}
+{need of a weapon!}^;
+!!VRz35&y1=1:S^{This creature carries}
+{a weapon into battle!}^;
+
+--------------------------------------------------------------------------------
+
+ [Wings]
+!?FU3308;
+!!VRy1:S0;
+
+!!VRy1|v3332=4/v3332=5/v3332=12/v3332=13/v3332=20/v3332=21/v3332=26/v3332=27/v3332=30/v3332=31:S1;
+!!VRy1|v3332=42/v3332=43/v3332=68/v3332=69/v3332=72/v3332=73/v3332=80/v3332=81/y1=82/v3332=83:S1;
+!!VRy1|v3332=92/v3332=93/v3332=104/v3332=105/v3332=108/v3332=109/v3332=118/v3332=119/v3332=130:S1;
+!!VRy1|v3332=131/v3332=132/v3332=134/v3332=135/v3332=150/v3332=151/v3332=154/v3332=155/v3332=158:S1;
+!!VRy1|v3332=168/v3332=196:S1;
+
+!!VRz35&y1=0:S^{This creature has}
+{no wings at all!}^;
+!!VRz35&y1=1:S^{This creature does}
+{indeed have wings!}^;
+
+--------------------------------------------------------------------------------
+
+ [Tail]
+!?FU3309;
+!!VRy1:S0;
+
+!!VRy1|v3332=4/v3332=5/v3332=10/v3332=11/v3332=14/v3332=15/v3332=20/v3332=21:S1;
+!!VRy1|v3332=24/v3332=25/v3332=31/v3332=26/v3332=27/v3332=38/v3332=39/v3332=66:S1;
+!!VRy1&v3332>=42/v3332<=49:S1;
+!!VRy1|v3332=67/v3332=68/v3332=69/v3332=70/v3332=71/v3332=72/v3332=73/v3332=76:S1;
+!!VRy1|v3332=77/v3332=80/v3332=81/v3332=82/v3332=83/v3332=86/v3332=87/v3332=92:S1;
+!!VRy1|v3332=93/v3332=115/v3332=123/v3332=140/v3332=142/v3332=151/v3332=154:S1;
+!!VRy1&v3332>=100/v3332<=111:S1;
+!!VRy1&v3332>=130/v3332<=135:S1;
+!!VRy1|v3332=155/v3332=157/v3332=158/v3332=168/v3332=172/v3332=192/v3332=194/v3332=195:S1;
+!!VRy1&v3332=196:S1;
+
+!!VRz35&y1=0:S^{Alas, this creature}
+{has no tail!}^;
+!!VRz35&y1=1:S^{This creature has}
+{a lovely tail!}^;
+
+--------------------------------------------------------------------------------
+
+ [Alive]
+!?FU3310;
+!!MA:Xv3332/?y1; [Read flags: y1]
+!!VRy1:&16; [Check if monster has "alive" flag set: y1]
+
+!!VRz35&y1=0:S^{This creature has no}
+{life within it!}^;
+!!VRz35&y1=16:S^{This creature is}
+{very much alive!}^;
+
+--------------------------------------------------------------------------------
+
+ [Speed]
+!?FU3311;
+!!MA:Sv3332/?y1; [Read speed: y1]
+
+!!VRz-1&y1<=5:S^along slowly^;
+!!VRz-1&y1>=6/y1<=9:S^at a moderate pace^;
+!!VRz-1&y1>=10/y1<=15:S^quite rapidly^;
+!!VRz-1&y1>=16:S^extremely fast^;
+
+!!VRz35:S^{This creature moves}
+{%Z-1!}^;
+
+--------------------------------------------------------------------------------
+
+ [Spells]
+!?FU3312;
+!!MA:Bv3332/?y1; [Number of spells creature can cast: y1]
+!!VRy1|v3332=136/v3332=193:S1; [Enchanter and Sorceress]
+
+!!VRz35&y1=0:S^{This creature knows no magic!}^;
+!!VRz35&y1>0:S^{This creature can cast}
+{magic spells in combat!}^;
+
+--------------------------------------------------------------------------------
+
+ [Ranged Attack]
+!?FU3313;
+!!MA:Xv3332/?y1; [Read flags: y1]
+!!VRy1:&4; [Check if monster has "shooter" flag set: y1]
+
+!!VRz35&y1=0:S^{This creature has}
+{no ranged attack!}^;
+!!VRz35&y1=4:S^{This creature has a}
+{potent ranged attack!}^;
+
+--------------------------------------------------------------------------------
+
+ [Magic Immunity]
+!?FU3314;
+!!VRy1:S0;
+
+!!VRy1|v3332=16/v3332=17/v3332=26/v3332=27/v3332=32/v3332=33/v3332=40/v3332=41:S1;
+!!VRy1&v3332>=56/v3332<=69:S1;
+!!VRy1|v3332=52/v3332=53/v3332=70/v3332=71/v3332=82/v3332=141/v3332=152/v3332=154:S1;
+!!VRy1&v3332>=112/v3332<=117:S1;
+!!VRy1&v3332>=120/v3332<=134:S1;
+!!VRy1|v3332=158/v3332=159/v3332=164/v3332=165/v3332=166/v3332=167/v3332=169:S1;
+!!VRy1|v3332=170/v3332=172/v3332=195;
+
+!!VRy1|v3332=83/v3332=121/v3332=151/v3332=155/v3332=160/v3332=161/v3332=162/v3332=163:S2;
+
+!!VRz35&y1=0:S^{This creature is completely}
+{vulnerable to magic!}^;
+!!VRz35&y1=1:S^{This creature has some}
+{natural immunity to magic!}^;
+!!VRz35&y1=2:S^{This creature cannot be}
+{affected by magic in any way!}^;
+
+--------------------------------------------------------------------------------
+
+ [Legs]
+!?FU3315;
+!!VRy1:S2; [Default of two legs: y1]
+
+!!VRy1|v3332=8/v3332=9/v3332=36/v3332=37/v3332=38/v3332=39/v3332=52/v3332=53/v3332=60/v3332=61:S0;
+!!VRy1|v3332=76/v3332=77/v3332=104/v3332=105/v3332=112/v3332=115/v3332=120/v3332=121/v3332=123:S0;
+!!VRy1|v3332=127/v3332=159/v3332=162/v3332=163/v3332=169:S0;
+!!VRy1|v3332=10/v3332=11/v3332=14/v3332=15/v3332=20/v3332=21/v3332=24/v3332=25/v3332=46/v3332=47:S4;
+!!VRy1|v3332=66/v3332=67/v3332=80/v3332=81/v3332=86/v3332=87/v3332=102/v3332=103/v3332=110/v3332=111:S4;
+!!VRy1|v3332=140/v3332=142/v3332=157/v3332=168/v3332=172/v3332=192/v3332=195:S4;
+!!VRy1|v3332=74/v3332=75/v3332=106/v3332=107:S6;
+
+!!VRz35&y1=0:S^{This creature appears}
+{to be legless!}^;
+!!VRz35&y1=2:S^{This creature stands}
+{on its own two legs!}^;
+!!VRz35&y1=4:S^{This creature has}
+{four legs!}^;
+!!VRz35&y1=6:S^{This creature has at least}
+{half a dozen legs!}^;
+
+--------------------------------------------------------------------------------
+
+ [Level]
+!?FU3316;
+!!MA:Lv3332/?y1; [Level: y1]
+!!VRy1:+1; [Add 1 to get real level]
+!!VRy1&v3332>=132/v3332<=135:S8; [Powerful neutral dragons]
+!!VRy1&v3332>=150/v3332<=158:S8; [Level 8 creatures]
+!!VRy1&v3332=196:S8; [Dracolich]
+
+!!VRz-1&y1<=2:S^low^;
+!!VRz-1&y1>=3/y1<=5:S^medium^;
+!!VRz-1&y1>=6/y1<=7:S^high^;
+!!VRz-1&y1>=8:S^very high^;
+
+!!VRz35:S^{This creature is considered}
+{a %Z-1 level monster!}^;
+
+--------------------------------------------------------------------------------
+
+ [Upgraded]
+!?FU3317;
+!!VRy1:S0;
+!!VRy1&y1<=111:Sv3332 %2; [Remainder of division by 2: y1]
+!!VRy1|v3332=119/v3332=121/v3332=123/v3332=125/v3332=127/v3332=129/v3332=131:S1;
+!!VRy1&v3332>=150/v3332<=158:S1;
+!!VRy1|v3332=136/v3332=137/v3332=168/v3332=169/v3332=170/v3332=171/v3332=172/v3332=192/v3332=193/v3332=196:S2;
+
+!!VRz35&y1=0:S^{This is not considered an}
+{upgraded creature!}^;
+!!VRz35&y1=1:S^{This is considered an}
+{upgraded creature!}^;
+!!VRz35&y1=2:S^{This might be considered an}
+{upgraded creature!}^;
+
+--------------------------------------------------------------------------------
+
+ [Alignment]
+!?FU3318;
+!!MA:Ov3332/?y1; [Town type: y1]
+!!VRy2&y1<0:S0; [Neutral creature]
+!!VRy2|y1=0/y1=1/y1=2:S1; [Good town alignment]
+!!VRy2|y1=3/y1=4/y1=5:S2; [Evil town alignment]
+!!VRy2|y1=6/y1=7/y1=8:S3; [Neutral town alignment]
+
+!!VRz35&y2=0:S^{This creature has no}
+{alliance and is neutral!}^;
+!!VRz35&y2=1:S^{This creature allies}
+{itself with good towns!}^;
+!!VRz35&y2=2:S^{This creature allies}
+{itself with evil towns!}^;
+!!VRz35&y2=3:S^{This creature allies}
+{itself with neutral towns!}^;
+
+--------------------------------------------------------------------------------
+
+ [Battle setup to make sure there's no upgraded creatures if they attack]
+!?BA0&v3331=99;
+!!VRv3331:S0; [Reset v3331]
+!!DO3321/0/6/1:P;
+
+--------------------------------------------------------------------------------
+
+ [Set all defending creatures to chosen creature]
+!?FU3321;
+!!BA:M1/x16/?y1/?y2; [Type: y1, Number: y2]
+!!BA&y1>=0/y2>0:M1/x16/v3332/d;
+

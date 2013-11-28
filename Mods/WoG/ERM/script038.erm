@@ -1,0 +1,216 @@
+ZVSE
+ERMS_ScriptDate=15.1(January).2007
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** Last Updated: 15.1(January).2007 by Thomas Franz (samot) - the battle counter increases faster at higher game difficulties (up to +3 for impossible)
+** Last Updated: September 16, 2006
+** Previously Updated: July 29, 2004
+** Karmic Battles Script version 1.3 by Dieter Averbeck  for WoG 3.58
+** (Version 1.2 updated by Bonizag and Timothy Pulver)
+** (Version 1.3 updated by Timothy to correct AI hero XP)
+
+** This script summons for every battle against wandering monster
+** some additional stacks of creatures. This Script can`t be used
+** as predone. If you want to, just send me a mail:
+** dieter@byteware.de
+
+** Version 1.1 will work with script54.erm (War Machines) and fixes a bug
+** with stacks appearing on top of obstacles. It also corrects a potential
+** problem with human vs. human online battles where the script sometimes
+** activated when it shouldn't have.
+
+** Here's how the number of Karmic creatures is calculated:
+** The first battle, the Karmic Battle Counter for a hero starts at two.
+** Each additional Karmic Battle that hero fights adds 1 to his or her Karmic
+** Battle Counter.
+** 1. A random number between 0 and 9 (inclusive) is generated for each battle.
+** 2. If the number isn't 0, 1 is added to this hero's Karmic Battle count which
+** starts the game at 1 (so the first Karmic Battle is always at 2).
+** 3. The number and type of stacks is determined at follows:
+**  a) If the number is 0 there's no Karmic stacks.
+**  b) If the number is 1..3, there's 6 random stacks.
+**  c) If the number is 4..5, there's 3 random stacks.
+**  d) If the number is 6..7, there's 1 random stack.
+**  e) If the number is 8..9, there's 2 *calculated* stacks.
+** 3. The number in each stack is determined as follows:
+**  a) If there's 6 random stacks, it's 1 times the Karmic Battle Count
+**  b) If there's 3 random stacks, it's 2 times the Karmic Battle Count
+**  c) If there's 1 random stack, it's 4 times the Karmic Battle Count
+**  d) If it's 2 calculated stacks, it's 1 times the Karmic Battle Count
+
+** Calculated stacks determine the monster type depending on the hero's Karmic
+** Battle Count with a random choice of two types for each Karmic Battle Count
+** range, whereas random stacks are determined more randomly but level is based
+** on the hero's Karmic Battle Count.
+
+
+** Variables Used: v490-v492, w49
+** Flags Used: 490
+** Functions Used: FU491-FU494
+** Variables v490, v491 and Flag 490 must not be modified by other programs!
+
+** check wogify options
+!#UN:P38/?v491; ** v491=1 if Karmic Battles is enabled
+
+** monster stack trigger
+!?OB54&v491=1;
+!!IF:V490/1;  ** set Flag 490 to True to show that a monster stack is visited
+
+!$OB54&v491=1;
+!!IF:V490/0; ** reset Flag 490 to False after the monster stack visit is done
+
+
+** before battle
+!?BA0&1000/490/v491=1;
+!!VRv490:S0 T9;  ** set random parameter for battle script (0-9): v490
+!!IF:W-1;
+!!BA:H0/?v492;      ** store hero's number: v492
+!!VRw49&w49=0:S1;   ** prevent 0-stacks if hero gets attacked by Tim`s WM
+!!UN:J2/?y-1;       // get game difficulty
+!!VRy-1::2 +1;      // increasing value for the counter - 1 for easy and normal, 2 for hard and expert, 3 for inpossible
+!!VRw49&v490<>0:+y-1; ** count w49 up, if battlescript called
+
+** battle modify - v490=1: summon 6 random creatures
+!?BR&490/v491=1/v997<1;
+!!BU:T?v1; ** Check for Tactics Phase: v1=0 if No
+!!FU&v1=0/v997<0:E; ** Exit trigger if no Tactics Phase and v997 is less than 0
+!!IF:Wv492; ** all the function calls below will use w49
+**  x1=multiplier x2=startPos x3=increase
+!!DO491/1/6/1&v490>=1/v490<=3:P1/5/34;     ** summon 6 random stacks
+!!DO491/1/3/1&v490>=4/v490<=5:P2/39/34;    ** summon 3 random stacks
+!!DO491/1/1/1&v490>=6/v490<=7:P4/91/0;     ** summon 1 random stack
+!!FU493&v490>=8:P;                         ** summon 2 calculated stacks
+!!IF:V490/0;  ** set Flag 490 to False so this only happens once per combat
+
+** summon random stacks
+
+!?FU491;
+!!VRy1:Sw49;        ** number per stack
+!!VRy1:*x1;         ** multiplier
+
+!!VRy2:Sw49;        ** set Level
+!!VRy2::10;         ** set multiplier for level
+!!VRy2&y2>13:S13;
+!!VRy3:S0 R7;       ** calculate creature
+!!VRy3:*14;
+!!VRy3:+y2;
+
+!!VRy5:S-1; [Initialize y5 to -1]
+!!VRy5&y3=102:S104; [Correct Serpent Fly number: y5]
+!!VRy5&y3=103:S105; [Correct Dragon Fly number: y5]
+!!VRy5&y3=104:S106; [Correct Basilisk number: y5]
+!!VRy5&y3=105:S107; [Correct Greater Basilisk number: y5]
+!!VRy5&y3=106:S102; [Correct Gorgon number: y5]
+!!VRy5&y3=107:S103; [Correct Mighty Gorgon number: y5]
+!!VRy3&y5>100:Sy5; [Set corrected monster number: y3]
+
+!!MA:Xy3/?y4;  ** Check monster Flags: y4
+!!VRy4:&1;     ** Check for 2-hex creature: y4>0 if Yes
+
+!!DO492/1/200/1:Px2/y4; ** find a position with no obstacles: v1
+
+!!BU:Sy3/y1/v1/1/-1/0;
+!!VRx2:+x3;          ** increase position number: x2
+
+
+** find a position with no obstacles
+
+!?FU492;
+!!VRv1:S0 R7;
+!!VRv1:+x1;         ** x1 is offset position
+!!BU:Ov1/?y1;       ** check for obstacle: y1=0 if no obstacle
+!!BU:Ev1/?y2;       ** check for monster: y2<0 if no monster
+
+!!VRy3&x2>0:Sv1 -1;    ** check for 2-hex creature. Position=y3
+!!BU&x2>0/y1=0:Oy3/?y1;     ** check for obstacle: y1=0 if no obstacle
+!!BU&x2>0/y2<0:Ey3/?y2;     ** check for monster: y2<0 if no monster
+
+!!VRv1&y1>0/x16=100:Sx1 +8; [Alternate position 1 if others not clear]
+!!BU&x16=100:Ov1/?y1;       ** check for obstacle: y1=0 if no obstacle
+!!BU&x16=100:Ev1/?y2;       ** check for monster: y2<0 if no monster
+!!VRv1&y2>=0/x16=100:Sx1 -1; [Alternate position 2 if others not clear]
+!!BU&x16=100:Ov1/?y1;       ** check for obstacle: y1=0 if no obstacle
+!!BU&x16=100:Ev1/?y2;       ** check for monster: y2<0 if no monster
+
+!!VRx16&y1=0/y2<0:S1000;  ** exit loop if valid position is found
+
+** summon calculated stacks
+
+!?FU493;
+!!VRy1:S0 T1;
+!!VRy1&w49>0/w49<10/y1=0:S139; **Peasant
+!!VRy1&w49>0/w49<10/y1=1:S118; **Pixie
+
+!!VRy1&w49>=10/w49<20/y1=0:S119; **Sprite
+!!VRy1&w49>=10/w49<20/y1=1:S138; **Halfling
+
+!!VRy1&w49>=20/w49<30:S0 R2;
+!!VRy1&w49>=20/w49<30/y1=0:S112;  **Air Elemental
+!!VRy1&w49>=20/w49<30/y1=1:S140;  **Boar
+!!VRy1&w49>=20/w49<30/y1=2:S143;  **Rogue
+
+!!VRy1&w49>=30/w49<40/y1=0:S127; **Storm Elemantal
+!!VRy1&w49>=30/w49<40/y1=1:S159; **Ghost
+
+!!VRy1&w49>=40/w49<50:S0 R2;
+!!VRy1&w49>=40/w49<50/y1=0:S115; **Water Elemental
+!!VRy1&w49>=40/w49<50/y1=1:S141; **Mummy
+!!VRy1&w49>=40/w49<50/y1=2:S142; **Nomad
+
+!!VRy1&w49>=50/w49<110:S0 R2; **Random number 0..2
+
+!!VRy1&w49>=50/w49<60/y1=0:S123; **Ice Elemental
+!!VRy1&w49>=50/w49<60/y1=1:S166; **Air Messenger
+!!VRy1&w49>=50/w49<60/y1=2:S192; **Sylvan Centaur
+
+!!VRy1&w49>=60/w49<70/y1=0:S114; **Fire Elemental
+!!VRy1&w49>=60/w49<70/y1=1:S164; **Fire Messenger
+!!VRy1&w49>=60/w49<70/y1=2:S137; **Sharpshooter
+
+!!VRy1&w49>=70/w49<80/y1=0:S129; **Energy Elemental
+!!VRy1&w49>=70/w49<80/y1=1:S165; **Earth Messenger
+!!VRy1&w49>=70/w49<80/y1=2:S167; **Water Messenger
+
+!!VRy1&w49>=80/w49<90/y1=0:S113; **Earth Elemental
+!!VRy1&w49>=80/w49<90/y1=1:S170; **Arctic Sharpshooter
+!!VRy1&w49>=80/w49<90/y1=2:S194; **Werewolf
+
+!!VRy1&w49>=90/w49<100/y1=0:S125; **Magma Elemental
+!!VRy1&w49>=90/w49<100/y1=1:S171; **Lava Sharpshooter
+!!VRy1&w49>=90/w49<100/y1=2:S144; **Troll
+
+!!VRy1&w49>=100/w49<110/y1=0:S120; **Psychic Elemental
+!!VRy1&w49>=100/w49<110/y1=1:S169; **War Zealot
+!!VRy1&w49>=100/w49<110/y1=2:S193; **Sorceress
+
+!!VRy1&w49>=110/w49<120:S0 R3;
+!!VRy1&w49>=110/w49<120/y1=0:S121; **Magic Elemental
+!!VRy1&w49>=110/w49<120/y1=1:S172; **Nightmare
+!!VRy1&w49>=110/w49<120/y1=2:S136; **Enchanter
+!!VRy1&w49>=110/w49<120/y1=3:S195; **Hell Steed
+
+!!VRy1&w49>=120/w49<130/y1=0:S130; **Firebird
+!!VRy1&w49>=120/w49<130/y1=1:S168; **Gorynych
+
+!!VRy1&w49>=130/w49<140/y1=0:S130; **Phoenix
+!!VRy1&w49>=130/w49<140/y1=1:S168; **Gorynych (Guthllu)
+
+!!VRy1&w49>=140/y1=0:S150 R8; **Random Level 8
+!!VRy1&w49>=140/y1=1:S132 R4; **Random Powerful Neutral Dragon
+!!VRy1&w49>=140/y1=136:S196;  **Dracolich
+
+!!DO492/1/200/1:P73; ** find a position with no obstacles: v1
+!!BU:Sy1/w49/v1/1/-1/0;
+!!DO492/1/200/1:P107; ** find a position with no obstacles: v1
+!!BU:Sy1/w49/v1/1/-1/0;
+
+
+** after battle - give AI bonus experience equal to 50 x number of Karmic Battles fought]
+!?BA1&-1000/490/v491=1;
+!!BA:H0/?v492; [Get AI hero number: v492]
+!!IF:Wv492; [Enable w variables for AI hero]
+!!VRw49:+1; [Increment Karmic Battle counter for AI hero]
+!!VRy-1:Sw49 *50; [Multiply w49 by 50: y-1]
+!!HEv492:Edy-1; [Give AI hero (v492) experience (y-1)]
+!!IF:V490/0; [Reset Flag 490 to False]
+

@@ -1,0 +1,200 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=21.6(June).2006
+
+** Frozen Food version 0.5
+** script101.erm by Timothy Pulver
+** WoG Option number: 301
+** Last Updated: June 21, 2006
+** Previously Updated: December 25, 2005
+
+** This script stocks each previously visited Lean To with one Frozen Food
+** ration at the start of each week. If a Lean To hasn't yet been visited it
+** won't have any Frozen Food.
+
+** Each hero may collect any number of Frozen Food rations and use them at any
+** time to gain additional movement for their army. Each Frozen Food ration
+** used gives 300-600 extra movement points for that hero's army for the day.
+
+** To use a Frozen Food ration, select the hero and right-click on the
+** ADVENTURE MAP Quest button (NOT the hero screen Quest button). Any number
+** of rations may be used in a given day until the hero runs out.
+** Note: Frozen Food rations cannot be traded between heroes.
+
+** The AI cannot be programmed to collect and use Frozen Food rations, so
+** instead it is compensated with 100 movement points for each Frozen Food
+** ration collected by any hero in the previous week. For example, if Red and
+** Blue are human players and Green and Orange are AI players, let's say that
+** Red and Blue heroes collect a total of 5 Frozen Food rations between them
+** in week 4. In week 5, the Green and Orange AI heroes would ALL gain 500
+** movement points every day. However, if no Frozen Food rations were collected
+** by Red and Blue in week 5, the Green and Orange AI heroes wouldn't gain ANY
+** bonus in week 6. While it may seem that the AI gains a better overall bonus
+** than the human players, remember that the human players can choose to use
+** their bonuses as the best possible times and may use it to outrun an AI hero
+** or sneakily take an AI town when the AI believe them to be out of range.
+
+** Variables Used:
+**   v37-v38, w109
+**   FU-1..FU-3
+**   Dialog Box 12
+
+ [Initialize variables to 0]
+!#UN:P301/=1; [Check if script is enabled]
+!#VRv37&1:S0;
+!#VRv38&1:S0;
+
+ [Clear w109 variable for all heroes at start of game]
+!?PI;
+!!UN:P301/=1; !!FU&-1:E; [Exit if script is disabled]
+!!DO-2/0/155/1:P; [Loop through all heroes]
+
+ [Loop through all heroes and clear w109 variable]
+!?FU-2;
+!!IF:Wx16;   [Set w variables for each hero]
+!!VRw109:S0; [Set w109 variable to 0]
+
+ [Timer is every Day 1 starting at 2nd week]
+!?TM2&$day$>7/$weekday$=1/$once$=1;
+!!UN:P301/=1; !!FU&-1:E; [Exit if script is disabled]
+!!UN:U39/-1/?y-1; [Number of Lean To's on map: y-1]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U loop: v1]
+!!DO-1/1/y-1/1&y-1>0:P; [Loop through all Lean To's]
+!!VRv38:Sv37 *100; [Bonus movement for AI this week: v38]
+!!VRv37:S0; [Reset weekly total Frozen Food rations counter to 0: v37]
+
+ [Loop through all Lean To's and restock *visited* ones with Frozen Food (set PO number)]
+!?FU-1;
+!!UN:U39/-1/-1/1; [Get coordinates of Lean To into v1/v2/v3]
+!!LNv1/v2/v3:B?y-1/?y-2; [Check value of Lean To..y-2 is 0 if already visited]
+!!POv1/v2/v3&y-2=0:S1; [If Lean To has been visited already, set PO:S to 1 to indicate Lean To has food]
+
+ [Daily Timer for AI players if they get bonus movement]
+!?TM2&$day$>7/$AI$=1/v38>0;
+!!UN:P301/=1; !!FU&-1:E; [Exit if script is disabled]
+!!OW:H-1/1/0; [Number of heroes owned by this AI player: v1]
+!!DO-3/1/v1/1&v1>0:P; [Loop through all heroes and give them bonus movement]
+
+ [Loop through all heroes and give them bonus movement]
+!?FU-3;
+!!OW:H-1/1/x16; [Store each AI hero number in v1]
+!!HEv1:Wdv38 Gdv38; [Give bonus movement to AI hero]
+!!HEv1:B0/?z1;
+
+ [Lean To is post-visit trigger]
+!?OB39;
+!!UN:P301/=1; !!FU&-1:E; [Exit if script is disabled]
+!!PO998:S?y-1; [Check if there's any Frozen Food: y-1=1 if yes]
+!!FU|y-1<>1/-999:E; [Exit if no Frozen Food or not current Human player]
+!!OB998:M-1/1/0; [Disable standard message]
+!!VRz1:S^At the back of the Lean To you find some frozen food.
+If your army eats it, they'll have the energy to travel further.
+You can thaw it for use at any time.
+
+To see how much frozen food you have or to thaw and eat the food,
+right-click the ADVENTURE screen Quest Log button.^;
+!!VRz2:S^^; [Set z2 to null]
+!!VRz3:S^..\data\p\s101_frozen.jpg^;
+!!VRz4:S^Frozen Food^;
+!!IF:D12/1/2/2/3/2/2/2/4/2/2/2/2/2/2/2; [Set up dialog box]
+!!IF:E1/12; [Display Dialog]
+
+!!IF:W-1; [Set w variables for current hero]
+!!VRw109:+1; [Add 1 to Hero's Frozen Food counter: w109]
+!!VRv37:+1; [Add 1 to weekly total Frozen Food rations counter: v37]
+!!PO998:S0; [Set Frozen Food to 0]
+
+ [Right-click on Adventure Map Quest Log button is trigger]
+!?CM0;
+!!UN:P301/=1; !!FU&-1:E; [Exit if script is disabled]
+!!CM:I?y-1; [Location clicked: y-1]
+!!OW:A-1/?y-2; [Active hero: y-2]
+!!FU|y-1<>5/y-2<0/-999:E; [Exit if not Quest Log button, no Active Hero or not current player]
+!!CM:R0; [Disable standard click response]
+!!HEy-2:B0/?z-1 R2/?y-7; [Name of active hero: z-1, Sex of hero: y-7]
+!!VRz-7&y-7=0:S^he^;
+!!VRz-7&y-7=1:S^she^;
+!!VRz-8&y-7=0:S^his^;
+!!VRz-8&y-7=1:S^her^;
+!!IF:Wy-2; [Set w variables for current hero]
+!!IF&w109<1:M^%Z-1 doesn't have any frozen food. Try looking for some at an abandoned Lean To.^;
+!!IF&w109=1:Q2^%Z-1 has %W109 ration of
+frozen food.
+
+Would %Z-7 like to thaw it for %Z-8 army to eat so they can travel a bit further today?^;
+!!IF&w109>1:Q2^%Z-1 has %W109 rations of
+frozen food.
+
+Would %Z-7 like to thaw one for %Z-8 army to eat so they can travel a bit further today?^;
+!!FU|-2/w109<1:E; [Exit if player chooses No or has no food]
+
+ [Generate Adjective 1: z-1]
+!!VRy-4:S1 R10;
+!!VRz-1&y-4=1:S^mouth watering^; !!VRz-1&y-4=2:S^succulent^;  !!VRz-1&y-4=3:S^delicious^;
+!!VRz-1&y-4=4:S^irresistable^;   !!VRz-1&y-4=5:S^aromatic^;   !!VRz-1&y-4=6:S^delectable^;
+!!VRz-1&y-4=7:S^delightful^;     !!VRz-1&y-4=8:S^juicy^;      !!VRz-1&y-4=9:S^scrumptious^;
+!!VRz-1&y-4=10:S^yummy^;         !!VRz-1&y-4=11:S^fragrant^;
+
+ [Generate Creature type: z-2]
+!!VRy-5:S0 R187;
+!!VRy-5&y-5>=122:+1; [Skip unused]
+!!VRy-5&y-5>=124:+1; [Skip unused]
+!!VRy-5&y-5>=126:+1; [Skip unused]
+!!VRy-5&y-5>=128:+1; [Skip unused]
+!!VRy-5&y-5>=145:+5; [Skip war machines]
+!!UN:N3/-2/y-5/0; [Creature name (singular) in z-2]
+
+ [Generate Type of Cut: z-3]
+!!VRy-4:S1 R11;
+!!VRz-3&y-4=1:S^chops^;     !!VRz-3&y-4=2:S^burgers^; !!VRz-3&y-4=3:S^rib roast^;
+!!VRz-3&y-4=4:S^cutlets^;   !!VRz-3&y-4=5:S^steaks^;  !!VRz-3&y-4=6:S^thighs^;
+!!VRz-3&y-4=7:S^breasts^;   !!VRz-3&y-4=8:S^stew^;    !!VRz-3&y-4=9:S^casserole^;
+!!VRz-3&y-4=10:S^stir fry^; !!VRz-3&y-4=11:S^legs^;   !!VRz-3&y-4=12:S^pie^;
+
+ [Generate Adjective 2: z-4]
+!!VRy-4:S1 R35;
+!!VRz-4&y-4=1:S^white^;   !!VRz-4&y-4=2:S^black^;     !!VRz-4&y-4=3:S^red^;      !!VRz-4&y-4=4:S^blue^;
+!!VRz-4&y-4=5:S^green^;   !!VRz-4&y-4=6:S^purple^;    !!VRz-4&y-4=7:S^orange^;   !!VRz-4&y-4=8:S^pink^;
+!!VRz-4&y-4=9:S^brown^;   !!VRz-4&y-4=10:S^yellow^;   !!VRz-4&y-4=11:S^gray^;    !!VRz-4&y-4=12:S^sour^;
+!!VRz-4&y-4=13:S^salty^;  !!VRz-4&y-4=14:S^spicy^;    !!VRz-4&y-4=15:S^hot^;     !!VRz-4&y-4=16:S^sweet^;
+!!VRz-4&y-4=17:S^cold^;   !!VRz-4&y-4=18:S^buttery^;  !!VRz-4&y-4=19:S^stinky^;  !!VRz-4&y-4=20:S^pungent^;
+!!VRz-4&y-4=21:S^sticky^; !!VRz-4&y-4=22:S^barbeque^; !!VRz-4&y-4=23:S^peppery^; !!VRz-4&y-4=24:S^sweet and sour^;
+!!VRz-4&y-4=25:S^greasy^; !!VRz-4&y-4=26:S^bubbly^;   !!VRz-4&y-4=27:S^rich^;    !!VRz-4&y-4=28:S^creamy^;
+!!VRz-4&y-4=29:S^lumpy^;  !!VRz-4&y-4=30:S^smooth^;   !!VRz-4&y-4=31:S^thin^;    !!VRz-4&y-4=32:S^thick^;
+!!VRz-4&y-4=33:S^oily^;   !!VRz-4&y-4=34:S^tangy^;    !!VRz-4&y-4=35:S^tart^;    !!VRz-4&y-4=36:S^watery^;
+
+ [Generate Noun: z-5]
+!!VRy-4:S1 R17;
+!!VRz-5&y-4=1:S^wine^;      !!VRz-5&y-4=2:S^terriyaki^; !!VRz-5&y-4=3:S^basil^;   !!VRz-5&y-4=4:S^cheese^;
+!!VRz-5&y-4=5:S^apple^;     !!VRz-5&y-4=6:S^lemon^;     !!VRz-5&y-4=7:S^curry^;   !!VRz-5&y-4=8:S^garlic^;
+!!VRz-5&y-4=9:S^olive oil^; !!VRz-5&y-4=10:S^tomato^;   !!VRz-5&y-4=11:S^ragu^;   !!VRz-5&y-4=12:S^meat^;
+!!VRz-5&y-4=13:S^parsley^;  !!VRz-5&y-4=14:S^mint^;     !!VRz-5&y-4=15:S^onion^;  !!VRz-5&y-4=16:S^fish^;
+!!VRz-5&y-4=17:S^cream^;    !!VRz-5&y-4=18:S^plum^;
+
+ [Generate Other Effect: z-6]
+!!VRy-4:S1 R19;
+!!VRz-6&y-4=1:S^a hunger for more^; !!VRz-6&y-4=2:S^the hiccups^; !!VRz-6&y-4=3:S^terrible bad breath^;
+!!VRz-6&y-4=4:S^puts a smile on their faces^; !!VRz-6&y-4=5:S^causes them break out in song^;
+!!VRz-6&y-4=6:S^itchy toes^; !!VRz-6&y-4=7:S^a raspy throat^; !!VRz-6&y-4=8:S^a swollen tongue^;
+!!VRz-6&y-4=9:S^watery eyes^; !!VRz-6&y-4=10:S^a feeling of euphoria^; !!VRz-6&y-4=11:S^a thirst for blood^;
+!!VRz-6&y-4=12:S^causes a brief (but powerful) sneezing fit^; !!VRz-6&y-4=13:S^an incredible thirst^;
+!!VRz-6&y-4=14:S^grows hair on their ears^; !!VRz-6&y-4=15:S^acts as an aphrodesiac^;
+!!VRz-6&y-4=16:S^turns them temporarily orange^; !!VRz-6&y-4=17:S^indigestion^;
+!!VRz-6&y-4=18:S^makes them want to dance^; !!VRz-6&y-4=19:S^makes them feel giddy^;
+!!VRz-6&y-4=20:S^a bad case of dandruff^;
+
+
+!!VRw109:-1; [Reduce number of hero's Frozen Foods by 1]
+!!MA:Ly-5/?y-6; [Creature level (0..6): y-6]
+!!VRy-6:*50 +300; [Calculate bonus movement points (300-600): y-6]
+!!HE-1:Wdy-6;  [Give hero bonus movement points: y-6]
+
+!!VRz1:S^%Y-6 Extra Movement^;
+!!UN:A98/9/1 A98/10/1; [Change Boots of Speed name/description to z1]
+!!IF:Q1/21/y-5/8/98/1^Thawing the frozen food reveals %Z-1 %Z-2 %Z-3 in %Z-4 %Z-5 sauce.
+
+Eating the %Z-2 %Z-3 gives your army %Y-6 extra movement points and %Z-6.^;
+!!UN:A98/9/0 A98/10/0; [Restore Boots of Speed name/description]
+!!VRz1:S^^; [Set z1 to null]
+

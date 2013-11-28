@@ -1,0 +1,748 @@
+ZVSE
+ERMS_ScriptDate=5.9(September).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Split Decision v1.8 by Timothy Pulver
+** WoGify name: script62.erm
+** Last Updated: September 5, 2006
+** Previously Updated: January 7, 2006
+
+** Note: this script is disabled for MP network battles.
+
+** This battle script lets a player split each stack up to once per combat by
+** ctrl-clicking the currently active stack. Stacks are split as evenly as
+** possible and all spells affecting a stack will affect both parts of the
+** split stack too. Splitting a stack uses the original stack's action.
+
+** A stack can only be split on that stack's turn and only if accompanied by
+** a hero. An AI hero has a 1 in 6 chance of splitting a stack but this
+** decreases with each stack it splits during the combat.
+
+** Note: You cannot split Commanders, Metamorphs, War Machines,
+** summoned creatures, clones, henchmen, Santa Gremlin guards, or any
+** creature that joins a battle after it has started.
+
+** Stacks may also be combined with an adjacent stack of the same type by
+** ctrl-clicking the adjacent stack on the acting stack's turn. There is no
+** limit to the number of times stacks can be combined this way. Combining
+** a stack uses the stack's action. The AI cannot combine stacks.
+
+** Note: You cannot combine summoned creatures or clones with regular creatures
+** but you can combine two adjacent summoned stacks of the same type, or two
+** cloned stacks of the same type.
+
+Variables Used: v3309, v3313-v3314, v3342-v3392, v3403-v3404, z1-z3
+Functions Used: FU43-FU47, FU49, FU60-FU61
+Flags Used: 1, 3-4
+
+-------------------------------------------------------------------------------------
+
+ [Check if script is active: v3309=1 if yes]
+!#UN:P62/?v3309;
+
+-------------------------------------------------------------------------------------
+
+ [Start of BA0 - before combat trigger]
+!?BA0&v3309=1/-998;
+
+ [Initialize variables v3350-v3391 to -1]
+!!DO60/3350/3391/1:P;
+
+ [Initialize random AI chance v3392 to 5]
+!!VRv3392:S4;
+
+ [Store attacking hero's # in y-1, defending hero's # in y-2]
+!!BA:H0/?y-1 H1/?y-2;
+
+ [Get owning player #s of attacker (y-3) and defender (y-4)]
+!!HEy-1&y-1>=0:O?y-3;
+!!HEy-2&y-2>=0:O?y-4;
+
+ [Check if AI (1) or human (0) for attacker (v3313) and defender (v3314)]
+!!OW&y-1>=0:Iy-3/?v3313;
+!!OW&y-2>=0:Iy-4/?v3314;
+!!VRv3313&y-1<0:S-1;
+!!VRv3314&y-2<0:S-1;
+
+ [Store heroes's Tactics skill in y-5 (attacker), y-6 (defender)]
+!!HEy-1&y-1>=0:S19/?y-5;
+!!HEy-2&y-2>=0:S19/?y-6;
+
+ [Store heroes's Tactics control state in y-7 (attcker), y-8 (defender)]
+!!HEy-1&y-1>=0/y-5>0:R4/?y-7;
+!!HEy-2&y-2>=0/y-6>0:R4/?y-8;
+
+ [If Tactics disabled, change y-5 and/or y-6 to 0]
+!!VRy-5&y-7=0:S0;
+!!VRy-6&y-8=0:S0;
+
+ [Check if Enhanced Tactics option is enabled: y-9]
+!!UN:P218/?y-9;
+
+ [Determine if there's a Tactics round. Set v3404 to 1 if there is]
+!!VRv3404:S0; [Initialize v3404 to 0]
+!!VRv3404&y-5<>y-6/y-9<>1:S1; [Set v3404 to 1 if there's a Tactics round]
+
+-------------------------------------------------------------------------------------
+
+ [Display start of combat instructions for splitting]
+ [Only display once per player per game]
+!?BR&v3309=1/v997>=0/1000/-998;
+
+!!VRv3404:+1; [Add 1 to v3404]
+!!FU&v3404<2:E; [Exit if not 2nd "round 0"]
+
+!!VRv3404:S0; [Reset v3404]
+
+!!OW:C?y-1; [Current Player: y-1]
+!!OW:Iy-1/?y-3; [Controller: y-3=1 if AI]
+!!FU&y-3=1:E; [Exit if it's the AI's turn]
+
+!!VRy-1:+1; [Add 1 to current player value: y-1]
+!!FU$bit$:Py-1; [Get bit value for current player: y-100]
+
+!!VRy-2:Sv3403; [Set y-2 to v3403: y-2]
+!!VRy-2:&y-100; [Check if message already displayed for this player (this game): y-2]
+!!FU&y-2>0:E; [Exit if already displayed]
+
+!!IF:M1/z162000;
+
+!!IF:Q1/21/56/21/57/1/z162001;
+
+!!VRv3403:|y-100; [Add player's bit value so message won't display again this game]
+
+-------------------------------------------------------------------------------------
+
+ [Mouse Move Trigger to update message about how to split a stack]
+!?MM0&v3309=1/-998;
+
+!!VRy-2:S0; [Initialize y-2 to 0]
+
+!!BG:Q?y-3; [Current acting side: y-3]
+!!VRy-4&y-3=0:Sv3313; [Set y-4 to 0 if Human with hero]
+!!VRy-4&y-3=1:Sv3314; [Set y-4 to 0 if Human with hero]
+
+ [Exit if not a human player with hero]
+!!FU&y-4<>0:E;
+
+ [Get Location of Mouse: y-1]
+!!MM:D?y-1;
+!!FU|y-1<1/y-1>185:E; [Exit if out of grid]
+
+ [Check if there's a living stack at y-1, and if not, exit.]
+ [If there is, store its stack number in v3342]
+!!BU:Ey-1/?v3342;
+!!FU&v3342<0:E; [Exit if no alive stack]
+
+ [Store stack Type in v3343, Current number in v3344, hero Slot in v3345]
+ [Position in v3347, and Side Index in y-5]
+!!BMv3342:T?v3343 N?v3344 O?v3345 P?v3347 I?y-5;
+
+ [Exit if current acting side is different from stack's side]
+!!FU&y-3<>y-5:E;
+
+ [Get current (acting) stack: y-6, type: y-11, position: y-12, hero slot: y-13]
+!!BG:N?y-6;
+!!BMy-6:T?y-11 P?y-12 O?y-13;
+
+ [If mouse position is not the current stack, see if it's an adjacent stack]
+ [of the same type, owned by the same player and if so, set y-2 to 2 for]
+ [a different hint text message]
+!!FU61&y-6<>v3342:Pv3342/1/y-11/y-12/y-13/y-6;
+
+ [Exit if stack is not the current stack unless y-2=2]
+!!FU&y-6<>v3342/y-2<>2:E;
+
+ [Exit if monster is a Metamorph]
+!!UN:P56/?y-8; [Check if Metamorphs script is enabled: y-8]
+!!VRy-9:S4500 +v3342; [Index for original monster: y-9]
+!!VRy-10:Svy-9; [Original monster number: y-10]
+!!FU&y-8=1/y-10=165:E; [Exit]
+
+ [Exit if stack is a war machine]
+!!FU&v3343>=145/v3343<=149:E; [Exit]
+
+ [Exit if stack is Hypnotized]
+!!BMv3342:G60/?y-8/d; [Check if stack is Hypnotized: y-8=0 if no]
+!!FU&y-8<>0:E; [Exit]
+
+ [If stack has already been split set y-2 to 1 unless combinable]
+!!VRy-8:S3350 +v3342; [Split index: y-8]
+!!VRy-2&vy-8>=0/y-2=0:S1; [Set y-2 to 1]
+
+ [Exit if stack is Commander, summoned elemental or clone unless combinable]
+!!FU&v3345<0/y-2=0:E; [Exit]
+
+ [Exit if only one creature in stack (unless already split or combinable)]
+!!FU&v3344=1/y-2=0:E; [Exit]
+
+!!MM:M?z-1; [Get combat display message: z-1]
+!!VRz-2&y-2=0:Sz162002;
+!!VRz-2&y-2=1:Sz162003;
+!!VRz-2&y-2=2:Sz162004;
+!!MM:Mz-2; [Display updated message: z-2]
+
+-------------------------------------------------------------------------------------
+
+ [Before Combat trigger for AI's chance of splitting a stack]
+!?BG0&v3309=1/-998;
+
+!!BG:Q?y-1; [Current attacking side: y-1]
+!!VRy-2&y-1=0:Sv3313; [Set y-2 to 1 if AI]
+!!VRy-2&y-1=1:Sv3314; [Set y-2 to 1 if AI]
+!!BG:A?y-3; [Action chosen by active stack: y-3 (6=walk and attack)]
+
+!!FU43&y-2=1/y-3<>6:P1/y-1; [AI may split a stack if the stack doesn't make a melee attack]
+
+-------------------------------------------------------------------------------------
+
+ [Mouse-click trigger for combat screen]
+!?CM4&v3309=1/-998;
+
+!!CM:I?y-1 S?y-2; [Location: y-1, 2009=wait button, Subtype: y-2, 14=right-click]
+!!CM:F?y-5 D?y-6; [Flags: y-5 (Ctrl=4), Battlefield Position: y-6]
+
+ [Exit if not a battlefield click]
+!!VRy-7:S0; [Initialize y-7 to 0]
+!!VRy-7&y-2=12/y-5=4/y-6>0/y-6<186:S2; [If control-left-click on battlefield, set y-7 to 2: y-7]
+!!FU&y-7=0:E; [Exit if not the right type of click: y-7]
+
+!!BG:Q?y-3; [Current acting side: y-3]
+!!VRy-4&y-3=0:Sv3313; [Set y-4 to 0 if Human with hero]
+!!VRy-4&y-3=1:Sv3314; [Set y-4 to 0 if Human with hero]
+!!IF&y-4<>0:M1/z162005;
+!!CM&y-4<>0:R0; [Disable standard right-click message]
+
+ [Exit if not a human player with hero]
+!!FU&y-4<>0:E;
+
+!!CM:R0; [Disable standard click message/display]
+
+!!FU43:P0/y-3; [Attempt to split a stack]
+
+------------------------------------------------------------------------------------
+
+ [Attempt to split a stack: Function 43]
+!?FU43&v3309=1;
+ [x1=0=Human, 1=AI, x2=Current Acting Side]
+
+ [Get stack number, store in v3342]
+!!BG:N?v3342;
+
+ [Store stack Type in v3343, Current number in v3344, hero Slot in v3345,]
+ [Original number in v3346, Position in v3347, Side Index in y8,]
+ [and Berserk Duration in y10 (y10>0 if Berserked)]
+!!BMv3342:T?v3343 N?v3344 O?v3345 B?v3346 P?v3347 I?y8 G59/?y10/d;
+
+ [Set Flags 3 and 4 to false]
+!!IF:V3/0 V4/0;
+
+ [Exit if current acting side is different from stack's side or if stack is Berserked]
+!!FU|x2<>y8/y10>0:E;
+
+ [If ctrl-click used, check if there's a living stack at y-6,]
+ [and if not, exit. If there is, store its stack number in y9]
+!!BU&y-7=2:Ey-6/?y9;
+!!FU&y-7=2/y9<0:E; [Exit if no alive stack]
+
+ [If position ctrl-clicked is not the current stack, see if it's]
+ [an adjacent stack of the same type, owned by the same player]
+ [and if so, combine them]
+!!FU61&y-7=2/y9<>v3342:Py9/0/v3343/v3347/v3345/v3342/v3344/y8;
+
+ [Exit if position ctrl-clicked is not the current stack]
+!!FU&y-7=2/y9<>v3342:E;
+
+ [If monster is a Metamorph, display message and exit]
+!!UN:P56/?y3; [Check if Metamorphs script is enabled: y3]
+!!VRy4:S4500 +v3342; [Index for original monster: y4]
+!!VRy5:Svy4; [Original monster number: y5]
+!!IF&y3=1/y5=165/x1=0:M1/z162006;
+!!FU&y3=1/y5=165:E;
+
+ [If stack is a Commander, set Flag 3 to True]
+!!IF&v3343>=174/v3343<=191:V3/1;
+
+ [If stack is a war machine, display message and exit]
+!!IF&v3343>=145/v3343<=149/x1=0:M1/z162007;
+!!FU&v3343>=145/v3343<=149:E;
+
+ [If stack is Hypnotized, display message and exit]
+!!BMv3342:G60/?y6/d; [Check if stack is Hypnotized: y6=0 if no]
+!!IF&y6<>0/x1=0:M1/z162008;
+!!FU&y6<>0:E;
+
+ [If stack has already been split, display message and exit]
+!!VRy7:S3350 +v3342; [Split index: y7]
+!!IF&vy7>=0/x1=0:M1/z162009;
+!!FU&vy7>=0:E;
+
+ [If stack is a summoned elemental or clone, display message and exit]
+ [Exception, don't display or exit if it's a Commander (Flag 4=True)]
+!!IF&v3345<0/-3/x1=0:M1/z162010;
+!!FU&v3345<0/-3:E;
+
+ [If only one creature in stack, display this message and then exit]
+!!UN&v3344=1:N3/2/v3343/0;
+!!VRz3:Sz162011;
+!!UN&v3344=1:G1/v3343/1/3; [Set new name: z3]
+!!VRz1:Sz162012;
+!!VRz1|v3343=2/v3343=12/v3343=13/v3343=33/v3343=35/v3343=42/v3343=52/v3343=53/v3343=55/v3343=71:Sz162013;
+!!VRz1|v3343=75/v3343=88/v3343=89/v3343=90/v3343=91/v3343=97/v3343=112/v3343=123/v3343=129/v3343=132:Sz162014;
+!!VRz1|v3343=136/v3343=148/v3343=153/v3343=160/v3343=161/v3343=162/v3343=163/v3343=165/v3343=166/v3343=170:Sz162015;
+!!VRz1|v3343=180/v3343=182/v3343=189/v3343=191:Sz162016;
+!!IF&v3344=1/x1=0:Q1/21/v3343/1/z162017;
+!!UN&v3344=1:G1/v3343/1/0; [Restore name]
+!!FU&v3344=1:E;
+
+ [Set random chance for AI to split a stack (1 in 5): y1]
+!!VRy2:S1 Tv3392; [Random target number 1..v3392: y2]
+!!VRy1&x1=0:Sy2; [Set y1 to y2 for Human]
+!!VRy1&x1=1:S1 Rv3392; [Set y1 to random number 1..v3392 for AI]
+!!VRy1&x1=1:S1 Rv3392; [Set y1 to random number 1..v3392 for AI]
+
+ [If player or AI splits stack, call Function 44]
+!!FU44&y1=y2:Px1;
+
+ [Decrease AI split chance by 2 per split by increasing v3392]
+!!VRv3392&x1=1/v3349>=2/y1=y2:+2;
+
+ [Make stack "walk in place" to use up its action (unless 20+ stacks and no split)]
+!!BG&v3349>=2/y1=y2:A2 Dv3347;
+
+-------------------------------------------------------------------------------------
+
+ [Split Stack: Function 44]
+!?FU44&v3309=1;
+
+!!VRv3348:S-1;
+
+ [Call Function 45 to make sure there's still a stack space available]
+ [Note: v3349 is incremented for each space available for that side]
+ [Side stack # = 0-19 or 21-40]
+!!VRv3349:S0; [Initialize v3349 to 0]
+!!DO45/0/19/1:P;
+
+ [If v3349 is less than 2 (not enough space left), display this message and exit]
+!!IF&v3349<2/x1=0:M1/z162018;
+!!FU&v3349<2:E;
+
+ [Divide current number of creatures in stack by 2, store in y1]
+!!VRy1:Sv3344 :2; [Current: half-size rounded down: y1]
+
+ [Subtract y1 (half stack) from current stack size, store in y2]
+!!VRy2:Sv3344 -y1; [Current: half-size rounded up: y2]
+
+ [Divide original number of creatures in stack by 2, store in y4]
+!!VRy4:Sv3346 :2; [Original: half-size rounded down: y4]
+
+ [Subtract y4 (half original stack) from original stack size, store in y3]
+!!VRy3:Sv3346 -y4; [Original: half-size rounded up: y3]
+
+ [Read flags of current stack: y6]
+!!BMv3342:F?y6;
+
+ [Determine if stack has already had morale this turn]
+!!VRy6:&16777216; [AND stack's flags with morale bit. y6=16777216 if it's had morale]
+
+ [Change current stack size to half size (y1), and orginal too (y4)]
+!!BMv3342:Ny1 By4; [Round down initially so Clone split will look right]
+
+ [Clone stack]
+!!BMv3342:C65/v3347/3/50/1;
+
+ [Correct current stack size to half size (y2), and orginal too (y3)]
+!!BMv3342:Ny2 By3; [Round up immediately after split]
+
+ [Determine stack number of Split clone stack: v3348]
+!!BMv3342:I?y5; [Side index: 0=left, 1=right: y5]
+!!BMv3342:U5/?v3348; [Clone's stack number (0..21): v3348]
+!!VRv3348&y5=1/v3348<21/v3348>=0:+21; [Add 21 for defending player to get correct number: v3348]
+
+ [Remove Clone stack's "cloned" association with original stack]
+!!BMv3342:U5/-1;
+
+ [If v3348 is less than 0, display error message and exit]
+~~IF&v3348<0:M1/z162019; [Disable this error message display for now]
+!!FU&v3348<0:E;
+
+ [If stack type of v3348 is less than 0 or number in stack v3348 is less than 1, display error message and exit]
+!!BMv3348:T?y7 N?y8; [Type of stack (y7), Number in stack (y8)]
+!!IF|y7<0/y8<1:M1/z162022;
+!!FU|y7<0/y8<1:E;
+
+ [Call Function 46 - Set up new Split Stack]
+!!FU46:Py1/y4/y6;
+
+ [Redraw screen]
+!!BU:R;
+
+-------------------------------------------------------------------------------------
+
+ [Set up new Split Stack: Function 46]
+ [x1=half current size of stack (round down)]
+ [x2=half original size of stack (round down)]
+ [x3=16777216 if original stack already had morale this turn]
+!?FU46&v3309=1;
+
+ [New stack's position: y7]
+!!BMv3348:P?y7;
+
+ [If stack's position is less than 0, display error message and exit]
+!!IF&y7<0:M1/z162023;
+!!FU&y7<0:E;
+
+ [New stack's side: y8]
+!!VRy8&v3348<=20:S0;
+!!VRy8&v3348>=21:S1;
+
+ [Kill clone by Teleportation plus K command and show Sacrifice animation]
+!!BMv3348:V51;
+!!BMv3342:C63/y7/3/0/0;
+!!BMv3348:N0 B0;
+!!BMv3348:K1000;
+
+ [Summon new creature]
+!!BU:Sv3343/x1/y7/y8/v3345/1;
+
+ [Determine NEW stack number of Split Stack: v3348]
+!!BU:Ey7/?v3348;
+
+ [Set original number of monsters for summoned stack]
+!!BMv3348:Bx2;
+
+ [Display message about stack split]
+!!UN:N3/-2/v3343/1;
+!!VRz-1:Sz162020;
+!!BU:Mz-1; [Display new message]
+
+ [Copy stack's bonus lines and experience to new stack]
+!!VRy11:Sv3342 +1 *-1;   [Original stack number as negative: y11]
+!!VRy12:Sv3348 +1 *-1;   [Split stack number as negative: y12]
+
+!!EAy12:Oy11; [Copy bonus lines from original stack (y11) to split stack (y12)]
+!!EAy11:E?y13/0/d/d; [Get original stack's experience: y13]
+!!EAy12:Ey13/2/d/d;  [Set split stack's experience: y13]
+
+ [If stack had more than one Warlord's Banner, give one to split stack]
+!!BMv3342:I?y16 O?y17; [Side that owns this stack: y16=0 for left, 1 for right, Slot number: y17]
+!!BHy16:N?y18; [Hero that owns this stack: y18]
+!!EXy18/y17&y18>=0/y17>=0:R?y19/?y20/?y21/?y22; [y19=1 if has Banner, y20=156, y21=Banner Option, y22=# of extra copies]
+!!EAy12&y18>=0/v3345>=0/y19=1/y22>0:R156/y21; [Give split stack a Banner and set Banner Option (y21)]
+
+ [Copy all spells and spell-like effects from original stack to new stack]
+!!DO47/0/80/1:Pv3342/v3348;
+
+ [Copy stack's other attributes in case they've been modified during the combat:]
+ [Retaliates, Attack, Defense, Health, Speed, Number of Spells, Shots Left]
+!!BMv3342:R?y1 A?y2 D?y3 H?y4 S?y5 E?y6 U3/?y14;
+!!BMv3348:Ry1 Ay2 Dy3 Hy4 Sy5 Ey6 U3/y14;
+
+ [If original stack already had morale this turn, copy this to new stack]
+!!BMv3348:F?y15; [Read new stack's flags: y15]
+!!VRy15&x3=16777216:|16777216; [Add morale bit: y15]
+!!BMv3348:Fy15; [Write new stack's flags: y15]
+
+ [Store split stack's stack number in v3350+original stack number]
+!!VRy9:S3350 +v3342; [Index: y9]
+!!VRvy9:Sv3348; [Store split stack number: vy9]
+
+ [Store original stack's stack number in v3350+split stack number]
+!!VRy10:S3350 +v3348; [Index: y10]
+!!VRvy10:Sv3342; [Store split stack number: vy10]
+
+-------------------------------------------------------------------------------------
+
+ [Start of Function 45 - make sure there's still a stack space available]
+ [Note: v3349 is incremented for each space available for that side]
+ [Side stack # = 0-19 or 21-40]
+!?FU45&v3309=1;
+
+!!IF:V4/0;
+
+ [y4=stack number]
+ [Store stack # (x16) in y4 - if stack is defender (slot 21-40), add 21]
+!!VRy4&v3342<21:Sx16;
+!!VRy4&v3342>20:Sx16 +21;
+
+ [For stack y4 (0-19 or 21-40), store Hero Slot # in y1,]
+ [Current Number of monsters in stack in y2 and Type in y3]
+!!BMy4:O?y1 N?y2 T?y3;
+
+ [If Hero Slot # is -1 (none) and Current Number of monsters in the stack is 0, set Flag 4 to True]
+!!IF&y1=-1/y2=0:V4/1;
+
+ [If slot contains a "dead" War Machine, reset Flag 4 to False]
+!!IF&4/y3>=145/y3<=149:V4/0;
+
+ [If slot contains a dead Commander, reset Flag 4 to False]
+!!IF&4/y3>=174/y3<=191:V4/0;
+
+ [Store 0 if slot is used or 1 if slot is available]
+!!VRy5:Sy4 +10; [Index: y5]
+!!VRy5:*-1;
+!!VRyy5&-4:S0;
+!!VRyy5&4:S1;
+
+ [If any available slot found (flag 4=True), increment v3349 by 1]
+!!VRv3349&4:+1;
+
+-------------------------------------------------------------------------------------
+
+ [Start of Function 47 - copies all spells and spell-like effects from]
+ [original stack to new split stack]
+!?FU47&v3309=1;
+ [x1=original stack #, x2=target stack #]
+
+ [Read each spell or spell-like effect from original]
+!!BMx1:Gx16/?y1/?y2;
+
+ [If spell duration is greater than zero, copy spell or spell-like effect to new stack]
+!!BMx2&y1>0:Mx16/y1/y2;
+
+-------------------------------------------------------------------------------------
+
+ [Start of BG1 - after action combat trigger]
+!?BG1&v3309=1/-998;
+
+ [Check if combat is at an end - set flag 1 to true if it is]
+!!BU:C=1;
+
+ [If flag 1 is true (combat over), call Function 49 to recombine all split stacks]
+ [into hero's army]
+!!DO49/0/40/1&1:P;
+
+-------------------------------------------------------------------------------------
+
+ [Start of Function 49 - recombine all split stacks into hero's army]
+!?FU49&v3309=1;
+
+ [For each stack (0 to 40), store Slot number in y1 and store the]
+ [Current number of creatures in y2, creature Type in y4]
+!!BMx16:O?y1 N?y2 T?y4;
+
+ [If no creatures in stack, not a hero stack or invalid type, skip]
+ [to next function loop number]
+!!FU|y1<0/y2<1/y4<0:E;
+
+ [If stack is a split stack with 1+ creatures, add the split stack's]
+ [number of creatures to it and set the split stack's hero slot and ]
+ [type to -1 and number of creatures to 0]
+!!VRy6:S3350 +x16; [Split index: y6]
+!!VRy7:Svy6; [Split stack's number (in original stack's variable): y7]
+!!FU&y7<0:E; [Exit if this is not a split stack]
+
+!!BMy7:O?y8 N?y9 T?y10; [Split stack's: Hero slot (y8), # of creatures (y9), Type (y10)]
+!!FU|y8<>y1/y9<1/y10<>y4:E; [Exit if something doesn't match or no creatures left]
+
+!!VRy11:S3350 +y7; [Split index: y11]
+!!VRy12:Svy11; [Original stack's number (in split stack's variable): y12]
+!!FU&y12<>x16:E; [Exit if not a match]
+
+!!VRy3:Sy2 +y9; [Add split stack's creatures to stack's creatures: y3]
+!!BMy7:O-1 N0 T-1; [Set split stack to no hero slot, 0 creatures, no creature type]
+
+ [If stack number is 21 or higher, set y14 (attacker/defender) to 1]
+!!VRy14:S0;
+!!VRy14&x16>20:S1;
+
+ [Set new stack size in hero's slot: y3]
+!!BA&y3>0:My14/y1/y4/y3;
+
+-------------------------------------------------------------------------------------
+
+ [Initialize Variables v3350-v3391 to -1]
+!?FU60&v3309=1;
+!!VRvx16:S-1; [Initialize variable vx16 to -1]
+
+-------------------------------------------------------------------------------------
+
+ [If position ctrl-clicked is not the current stack, see if it's]
+ [an adjacent stack of the same type, owned by the same player]
+ [and if so, combine them]
+!?FU61&v3309=1;
+ [Clicked Stack #: x1, Mouse Message: x2=1, Acting stack's Type: x3]
+ [Acting Stack's: Position: x4, Hero slot: x5, Stack number: x6]
+ [Number of Troops in Acting Stack: x7, Acting Side: y-3 (mouse move), x8 (combine)]
+
+ [Store stack's Type in y2, Current # in y3, Original number in y4, Side in y5]
+ [Hero slot in y6, Health in y7, Health Lost by Top Creature: y8]
+ [Clicked Stack's Real Position: y12]
+!!BMx1:T?y2 N?y3 B?y4 I?y5 O?y6 H?y7 L?y8 P?y12;
+
+ [Exit if not the same type of creature or not the same player]
+!!FU|y2<>x3/y5<>y-3:E;
+
+!!BMx1:F?y10 F?y13 F?y19; [Read clicked stack's flags: y10, y13, y19]
+!!BMx6:F?y20;             [Read acting stack's flags: y20]
+
+ [Check if either stack is a clone]
+!!VRy19:&8388608; [y19=8388608 if clicked stack is a clone: y19]
+!!VRy20:&8388608; [y20=8388608 if acting stack is a clone: y20]
+
+ [Set y21 to 99 if one stack is a clone but not both: y21]
+!!VRy21&y19=8388608/y20<>8388608:S99;
+!!VRy21&y20=8388608/y19<>8388608:S99;
+
+ [Set y21 to 99 if one stack is summoned but not both: y21]
+!!VRy21&x5<0/y6>=0:S99;
+!!VRy21&y6<0/x5>=0:S99;
+
+ [Exit if one stack is summoned but not both, or one is a clone but not both]
+!!FU&y21=99:E;
+
+ [Determine if  clicked stack is adjacent: y14=1 if yes]
+!!VRy13:&1; [See if stack is double-width: y13>0 if yes]
+!!VRy14:S0; [Initialize y14 to 0]
+
+ [Set y18 to 1 for odd rows, 2 for even rows: y18]
+!!VRy18&x4<17:S1;            [Odd row: y18]
+!!VRy18&x4>16/x4<34:S2;   [Even row: y18]
+!!VRy18&x4>33/x4<51:S1;   [Odd row: y18]
+!!VRy18&x4>50/x4<68:S2;   [Even row: y18]
+!!VRy18&x4>67/x4<85:S1;   [Odd row: y18]
+!!VRy18&x4>84/x4<102:S2;  [Even row: y18]
+!!VRy18&x4>101/x4<119:S1; [Odd row: y18]
+!!VRy18&x4>118/x4<136:S2; [Even row: y18]
+!!VRy18&x4>135/x4<152:S1; [Odd row: y18]
+!!VRy18&x4>152/x4<170:S2; [Even row: y18]
+!!VRy18&x4>169/x4<186:S1; [Odd row: y18]
+
+ [Both even & odd rows]
+!!VRy15:Sx4 -1;              [Left if single: y15]
+!!VRy15&y13>0:Sx4 -2;        [Left if double wide: y15]
+!!VRy14&y15=y12:S1;         [Set y14 to 1 if Clicked Stack is Left: y14]
+!!VRy15:Sx4 +1;              [Right if single: y15]
+!!VRy15&y13>0:Sx4 +2;        [Right if double wide: y15]
+!!VRy14&y15=y12:S1;         [Set y14 to 1 if Clicked Stack is Right: y14]
+!!VRy15:Sx4 -17;             [Up #1 single or double wide: y15]
+!!VRy14&y15=y12:S1;         [Set y14 to 1 if Clicked Stack is Up #1: y14]
+!!VRy15:Sx4 +17;             [Down #1 single or double wide: y15]
+!!VRy14&y15=y12:S1;         [Set y14 to 1 if Clicked Stack is Up #1: y14]
+
+ [Odd rows: y18=1]
+!!VRy15&y18=1:Sx4 -16;       [Up #2 single or double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #2: y14]
+!!VRy15&y18=1/y13>0:Sx4 -18; [Up #3 double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #3: y14]
+!!VRy15&y18=1/y13>0:Sx4 -15; [Up #4 double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #4: y14]
+!!VRy15&y18=1:Sx4 +18;       [Down #2 single or double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #2: y14]
+!!VRy15&y18=1/y13>0:Sx4 +16; [Down #3 double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #3: y14]
+!!VRy15&y18=1/y13>0:Sx4 +19; [Down #4 double wide: y15]
+!!VRy14&y18=1/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #4: y14]
+
+ [Even rows: y18=2]
+!!VRy15&y18=2:Sx4 -18;       [Up #2 single or double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #2: y14]
+!!VRy15&y18=2/y13>0:Sx4 -19; [Up #3 double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #3: y14]
+!!VRy15&y18=2/y13>0:Sx4 -16; [Up #4 double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Up #4: y14]
+!!VRy15&y18=2:Sx4 +16;       [Down #2 single or double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #2: y14]
+!!VRy15&y18=2/y13>0:Sx4 +15; [Down #3 double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #3: y14]
+!!VRy15&y18=2/y13>0:Sx4 +18; [Down #4 double wide: y15]
+!!VRy14&y18=2/y15=y12:S1;   [Set y14 to 1 if Clicked Stack is Down #4: y14]
+
+!!VRy-2&x2=1/y14=1:S2; [Set y-2 to 2 if adjacent and Mouse Message call]
+!!FU|y14=0/x2=1:E; [Exit if not adjacent or if Mouse Message call (x2=1)]
+
+ [Store acting stack's Health Lost by Top Creature in y9]
+!!BMx6:L?y9;
+
+ [Calculate health of top creature of combined stack]
+!!VRy16:Sy8 +y9; [Total health lost by both stacks: y16]
+!!BMx6&y8>0/y16<y7:Ldy8; [Adjust Health of original stack v3342]
+!!VRy3&y16>=y7:-1; [Subtract one from new stack if enough health lost: y3]
+!!VRy17&y16>=y7:Sy16 -y7; [Extra Health lost: y17]
+!!BMx6&y16>=y7:Ly17; [Set Health for top creature: y17]
+
+ [Average the remaining shots for combined stack, round up if necessary]
+!!BMx1:U3/?y22; [Shots remaining for stack 1: y22]
+!!BMx6:U3/?y23; [Shots remaining for stack 2: y23]
+!!VRy24:Sy22 +y23; [Total shots remaining: y24]
+!!VRy25&y24>0:Sy24 :2; [Averaged shots remaining: y25]
+!!VRy26&y24>0:Sy25 *2; [Check for an odd number of shots: y26]
+!!VRy25&y24>0/y26<y24:+1; [Round up an odd number of shots, rather than rounding down: y25]
+!!BMx6&y24>0:U3/y25; [Set averaged shots remaining (rounded up): y25]
+
+ [Get stack spell castings before XP set]
+!!BMx1:E?y48; [Number of spell castings remaining for clicked stack: y48]
+!!BMx6:E?y49; [Number of spell castings remaining for acting stack: y49]
+
+ [Average both stacks' experience]
+ [y3=number of troops in clicked stack]
+ [x7=number of troops in acting stack]
+!!VRy27:Sx1 +1 *-1; [Negative of stack index for clicked stack: y27]
+!!VRy28:Sx6 +1 *-1; [Negative of stack index for acting stack: y28]
+!!EAy27:E?y29/0/d/d; [Get clicked stack's experience: y29]
+!!EAy28:E?y30/0/d/d; [Get acting stack's experience: y30]
+!!VRy31:S0; [Initialize clicked stack's experience total to 0: y31]
+!!VRy33:S0; [Initialize acting stack's experience total to 0: y33]
+!!VRy35:S0; [Initialize total combined experience to 0: y35]
+!!VRy31&y29>0:Sy29 *y3; [Clicked stack's total experience: y31]
+!!VRy33&y30>0:Sy30 *x7; [Acting stack's total experience: y33]
+!!VRy34:Sy3 +x7; [Total number of troops in both stacks: y34]
+!!VRy35:Sy31 +y33; [Total combined experience for both stacks: y35]
+!!VRy35&y34>0/y35>0::y34; [Actual averaged experience for new combined stack: y35]
+!!EAy28&y35>0:Ey35/2/d/d; [Set averaged experience (y35) for combined stack]
+!!BHx8:N?y36; [Get hero # for current acting side: y36]
+!!EXy36/x5&y36>=0/x5>=0/y35>0:Ax3/y34/y35; [Set stack's new experience for hero slot after battle]
+
+ [Restore stack spell castings after XP set]
+!!BMx1:Ey48; [Set number of spell castings remaining for clicked stack: y48]
+!!BMx6:Ey49; [Set number of spell castings remaining for acting stack: y49]
+
+ [If clicked stack has a Warlord's Banner and acting stack doesn't, give acting stack a Banner]
+!!EAy27:R?y37/?y38; [Clicked Stack: y37=156 if stack has a Banner]
+!!EAy28:R?y39/?y40; [Acting Stack: y39=156 if stack has a Banner]
+!!EAy28&y39<>156/y37=156:R156/y38; [Give acting stack a Banner]
+
+ [Average remaining spell castings for combined stack, rounding 0.5 up and less than 0.5 down]
+!!BMx1:E?y41; [Number of spell castings remaining for clicked stack: y41]
+!!BMx6:E?y42; [Number of spell castings remaining for acting stack: y42]
+!!VRy43:Sy3 *y41; [Clicked stack: (number in stack * spell castings): y41]
+!!VRy44:Sx7 *y42; [Acting stack: (number in stack * spell castings): y42]
+!!VRy45:Sy43 +y44; [(Total of combined stack * combined spell castings): y45]
+!!VRy46:Sx7 +y3; [Total number of creatures in combined stack: y46]
+!!VRe1:Sy45 :y46; [Average spell castings: e1]
+!!VRy47:Se1; [Truncate decimal part of average spell castings: y47]
+!!VRe2:Se1 -y47; [Just decimal part of average spell castings: e2]
+!!VRe3:S1 :2; [Store 0.5 in e3]
+!!VRy47&e2>=e3:+1; [Add 1 if decimal part is 0.5 or higher (round up): y47]
+!!BMx6:Ey47; [Set acting stack's averaged spell castings (rounded to nearest): y47]
+
+ [Copy all spells and spell-like effects from absorbed stack to original]
+!!DO47/0/80/1:Px1/x6;
+
+ [Give old stack a hero slot of -1]
+!!BMx1:O-1;
+
+ [Remove absorbed stack by Teleportation plus K command and show Sacrifice animation]
+!!VRy10:|12582912; [Add "clone" bits]
+!!BMx1:Fy10; [Turn old stack into a "clone"]
+!!BMx1:V51; [Display animation]
+!!BMx1:C63/y12/3/0/1; [Teleport it]
+!!BMx1:N0 B0;
+!!BMx1:K1000; [Remove stack]
+
+ [Add clicked stack's number of creatures and original number to acting stack]
+!!BMx6:Ndy3 Bdy4;
+
+!!BU:R; [Redraw screen]
+
+ [Display message about stack split]
+!!UN:N3/-2/x3/1;
+!!VRz-1:Sz162021;
+!!BU:Mz-1; [Display new message]
+
+ [Make stack "walk in place" to use up its action]
+!!BGx6:A2 Dx4;
+
+** End of Script **
+

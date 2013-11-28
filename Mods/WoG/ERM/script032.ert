@@ -1,0 +1,56 @@
+132000	{VERSION OUT-OF-DATE WARNING} 
+ 
+Sorry, your versions of WoG and/or ERM 
+are too old to use the 
+{Summoning Stones version 1.0 script.} 
+ 
+Please update your files.	String type = <!#M>	08.06.2003
+132001	Summoning Stones (Not Visited)	String type = <!#S>	08.06.2003
+132002	Summoning Stones (Visited)	String type = <!#S>	08.06.2003
+132003	{Summoning Stones} 
+ 
+The Summoning Stones stand silent, their power spent. Try visiting again tomorrow.	String type = <!!M>	08.06.2003
+132004	{Summoning Stones} 
+ 
+The Summoning Stones are of no use to you without a town under your command.	String type = <!!M>	08.06.2003
+132005	{Summoning Stones} 
+ 
+Do you wish to invoke the power of the Summoning Stones and summon troops from one of your towns?	String type = <!!Q>	08.06.2003
+132006	Buy Troops	String type = <!!S>	08.06.2003
+132007	Buy new troops from town dwellings.	String type = <!!S>	08.06.2003
+132008	Garrison	String type = <!!S>	08.06.2003
+132009	Transport existing troops from the garrison.	String type = <!!S>	08.06.2003
+132010	Do you wish to buy new troops or transport troops from the garrison?	String type = <!!Q>	08.06.2003
+132011	Castle	String type = <!!S>	08.06.2003
+132012	Rampart	String type = <!!S>	08.06.2003
+132013	Tower	String type = <!!S>	08.06.2003
+132014	Inferno	String type = <!!S>	08.06.2003
+132015	Necropolis	String type = <!!S>	08.06.2003
+132016	Dungeon	String type = <!!S>	08.06.2003
+132017	Stronghold	String type = <!!S>	08.06.2003
+132018	Fortress	String type = <!!S>	08.06.2003
+132019	Conflux	String type = <!!S>	08.06.2003
+132020	Choose a Town to Summon Troops From	String type = <!!S>	08.06.2003
+132021	No thanks. I've changed my mind.	String type = <!!S>	08.06.2003
+132022	Sorry, but there are no creatures available to recruit in %Z1.	String type = <!!M>	08.06.2003
+132023	Which troops would you like to buy from %Z1?	String type = <!!S>	08.06.2003
+132024	None. I've changed my mind.	String type = <!!S>	08.06.2003
+132025	 and 	String type = <!!S>	08.06.2003
+132026	Buy	String type = <!!S>	08.06.2003
+132027	for	String type = <!!S>	08.06.2003
+132028	gold	String type = <!!S>	08.06.2003
+132029	Wood	String type = <!!S>	08.06.2003
+132030	Mercury	String type = <!!S>	08.06.2003
+132031	Ore	String type = <!!S>	08.06.2003
+132032	Sulfur	String type = <!!S>	08.06.2003
+132033	Crystals	String type = <!!S>	08.06.2003
+132034	Crystal	String type = <!!S>	08.06.2003
+132035	Gems	String type = <!!S>	08.06.2003
+132036	Gem	String type = <!!S>	08.06.2003
+132037	Sorry, but you can't afford to recruit the %Z2.	String type = <!!Q>	08.06.2003
+132038	Sorry, but there are no creatures at the %Z1 garrison to transport.	String type = <!!M>	08.06.2003
+132039	Which troops would you like to transport 
+from the %Z1 garrison?	String type = <!!S>	08.06.2003
+132040	None. I've changed my mind.	String type = <!!S>	08.06.2003
+132041	Transport	String type = <!!S>	08.06.2003
+132042	from the garrison.	String type = <!!S>	08.06.2003

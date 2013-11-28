@@ -1,0 +1,17 @@
+#	Text resource for "script63.erm" document		
+163000	As you slowly make your way through the trees, your skill at Scouting lets you spot an ambush before they spot you.
+
+Do you want to sneak around them and avoid a fight?	<!!Q>	01.08.2004
+163001	As you slowly make your way through the trees, you're suddenly ambushed!	<!!Q>	01.08.2004
+163002	landslide	<!!S>	01.08.2004
+163003	Landslide	<!!S>	01.08.2004
+163004	a	<!!S>	01.08.2004
+163005	avalanche	<!!S>	01.08.2004
+163006	Avalanche	<!!S>	01.08.2004
+163007	an	<!!S>	01.08.2004
+163008	{%Z-2}
+
+Your skill in Scouting pays off and you narrowly avoid a deadly %Z-1!	<!!M>	01.08.2004
+163009	{%Z-2}
+
+While slowly navigating the treacherous mountains, %Z-3 %Z-1 buries %Y10 of your %Z1!	<!!Q>	01.08.2004

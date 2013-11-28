@@ -1,0 +1,74 @@
+#	Text resource for "script48.erm" document		
+148000	{First Aid Tent} 
+ 
+The First Aid Tent provides healing to your troops during each round of combat and can resurrect (1-50 + hero level) hit points of a damaged unit after a battle.	<!#S>	01.08.2004
+148001	{Ballista} 
+ 
+The Ballista can target your enemy's troops in combat and can deal (1-50 + hero level) points of damage to an enemy unit prior to combat.	<!#S>	01.08.2004
+148002	{Supply Cart} 
+ 
+The Supply Cart ensures that your missile troops never run out of ammunition in combat and increases the (non-combat) effectiveness of a First Aid Tent and Ballista by 100%.	<!#S>	01.08.2004
+148003	Supply Cart	<!#S>	01.08.2004
+148004	Eagle Eye Spell Counter!	<!!S>	01.08.2004
+148005	From a distance, %Z1's Ballista kills %X3 creatures!
+
+%Z1 has gained
+{%Y1}
+experience.	<!!Q>	01.08.2004
+148006	From a distance, %Z1's Ballista kills a creature!
+
+%Z1 has gained
+{%Y1}
+experience.	<!!Q>	01.08.2004
+148007	After the battle, %Z1 used the First Aid Tent to revive a creature!	<!!Q>	01.08.2004
+148008	After the battle, %Z1 used the First Aid Tent to revive %Y5 creatures!	<!!Q>	01.08.2004
+148009	%Z1's mysticism reduces %Z3's available spell points to %Y1%%	<!!Q>	01.08.2004
+148010	Some of %Z1's army is feeling lucky today! 
+ 
+(+2 Attack / +2 Defense)	<!!Q>	01.08.2004
+148011	Some of %Z1's army is feeling lucky today! 
+ 
+(+2 Attack / +2 Defense)	<!!Q>	01.08.2004
+148012	Some of %Z1's army is feeling lucky today! 
+ 
+(+2 Attack / +2 Defense)	<!!Q>	01.08.2004
+148013	%Z700's estate has produced some resources.	<!!Q>	01.08.2004
+148014	%Z700's estate has produced some resources.	<!!Q>	01.08.2004
+148015	%Z700's estate has produced a number of resources.	<!!Q>	01.08.2004
+148016	Through diligent research, %Z700 has learned a spell.	<!!Q>	01.08.2004
+148017	his	<!!S>	01.08.2004
+148018	her	<!!S>	01.08.2004
+148019	he	<!!S>	01.08.2004
+148020	she	<!!S>	01.08.2004
+148021	him	<!!S>	01.08.2004
+148022	her	<!!S>	01.08.2004
+148023	Coming upon a small pond, %Z700 happened to spot a faerie and stopped to chat for a while. Grateful for the diversion, the faerie empowered %Z703 with some of her magic.	<!!Q>	01.08.2004
+148024	With %Z701 uncanny knack for finding things, %Z700 has uncovered a hidden stash of gold.	<!!Q>	01.08.2004
+148025	Due to %Z701 keen observational skills, %Z700 has discovered a small quantity of resources	<!!Q>	01.08.2004
+148026	While surveying the area, %Z700 has spotted a large cache of resources	<!!Q>	01.08.2004
+148027	While %Z702 was out scouting, %Z700 has discovered a %Z704 willing to join %Z701 army	<!!Q>	01.08.2004
+148028	While %Z702 was out scouting, %Z700 has discovered a band of %Z705 willing to join %Z701 army	<!!Q>	01.08.2004
+148029	While on the march, %Z700 spots a flowing spring. Allowing %Z701 troops to stop and fill up on fresh water has boosted their spirits.	<!!Q>	01.08.2004
+148030	Ever watchful, %Z700 spots a Phoenix feather lying on the ground - %Z702 picks it up and sticks it in %Z701 hat for luck.	<!!Q>	01.08.2004
+148031	While out scouting, %Z700 has met a wandering sage. They talk for a while and exchange stories, both learning from the experience.	<!!Q>	01.08.2004
+148032	Knowing the lay of the land, %Z700 has found a short-cut that will speed up %Z701 army's journey.	<!!Q>	01.08.2004
+148033	%Z700 spots a good vantage point at the top of a hill. %Z702 takes this opportunity to survey the land.	<!!Q>	01.08.2004
+148034	Hearing some noise, %Z700 stops %Z701 army and scouts ahead. Just off the path %Z702 spots a group of %Z705.
+
+Do you wish to fight the %Z705?	<!!Q>	01.08.2004
+148035	Shortcut	<!!Q>	01.08.2004
+148036	A loud ruckus alerts %Z700 to a large group of %Z705 just over the next hill.
+
+Do you wish to fight the %Z705?	<!!Q>	01.08.2004
+148037	Land Survey	<!!Q>	01.08.2004
+148038	You have assembled:
+ 
+{The Farseer's Talisman}
+
+This grants a 30% bonus to Eagle Eye's chance to counter spells.	<!!Q>	01.08.2004
+148039	You have assembled:
+
+{Tobyn's Spell Ward}
+
+This grants a 30% bonus to magic resistance.	<!!Q>	01.08.2004
+148040	The %Z1 are lucky (+1 Att / Def and Fortune for the battle).		26.07.2006

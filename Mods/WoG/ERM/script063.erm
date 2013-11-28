@@ -1,0 +1,491 @@
+ZVSE
+ERMS_ScriptDate=11.9(September).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Passable Terrain version 1.2 by Timothy Pulver
+** WoGify Name: Script63.erm
+** Last Updated: September 11, 2006
+** Previously Updated: October 31, 2004
+
+** This script makes most mountains, hills, forests, trees, logs, and flowers
+** passable to heroes, but at a high movement cost. Pathfinding skill reduces
+** the cost (a higher skill results in a better cost reduction).
+
+** When moving through trees, there's a 30% chance of being ambushed. Luck skill
+** will reduce this chance and a hero with Scouting skill may spot the ambush
+** ahead of time and can choose to avoid it.
+
+** When moving through mountains, there's a 25% chance of being caught in an
+** avalanche or rockslide that will kill some of your army. Pathfinding skill
+** will reduce this chance as will Luck skill to a lesser degree, although
+** there's always at minimum chance of 10%. However, a hero with Scouting skill
+** has a chance of avoiding the deadly slide by seeing it in time.
+
+** Version 1.2 update removes any chance of the AI encountering ambushes in
+** trees or landslides in mountains.
+
+--------------------------------------------------------------------------------
+
+** Temporary Variables: v1-v4, z1
+** Permanent Variables: v1270, v1272-v1275, w79
+** Functions: FU14001-FU14011
+
+--------------------------------------------------------------------------------
+
+!#VRv1270:S0; [Clear v1270]
+
+--------------------------------------------------------------------------------
+
+ [Daily Timer for all players]
+!?TM2;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!DO14011/0/155/1&y-1=1:P; [Clear all heroes' w79 variable]
+
+--------------------------------------------------------------------------------
+
+ [Clear all heroes' w79 variable (stores if value of 99 if Hero cast Fly)]
+!?FU14011;
+!!IF:Wx16;
+!!VRw79:S0; [Clear w79 variable]
+
+--------------------------------------------------------------------------------
+
+ [Adventure Spell casting is trigger]
+!?MG1;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if Passable Terrain is not enabled]
+!!IF:W-1; [Set w variables for current hero]
+!!VRw79&v997=6:S99; [Set w79 to 99 if hero casts Fly spell]
+
+--------------------------------------------------------------------------------
+
+ [x - loop through map squares]
+ [x1 - map size, x2=level]
+!?FU14000;
+!!DO14001/0/x1/1:Px16/x2; [Loop through map squares]
+
+ [y - loop through map squares]
+ [x1 - x1=x coordinate, x16=y coordinate, x2=level]
+!?FU14001;
+!!OBx1/x16/x2:T?y1; [Object type at loop: y1]
+!!TRx1/x16/x2|y1=114/y1=115/y1=116/y1=119/y1=120/y1=122/y1=129/y1=130/y1=131/y1=132/y1=135/y1=137/y1=138/y1=150/y1=153/y1=155:P1; [Make tree and bush and flower squares passable]
+!!TRx1/x16/x2|y1=156/y1=159/y1=160/y1=165/y1=166/y1=167/y1=160/y1=165/y1=166/y1=167/y1=170/y1=173/y1=181/y1=182/y1=183/y1=186:P1; [Make tree and bush and flower squares passable]
+!!TRx1/x16/x2|y1=188/y1=189/y1=194/y1=197/y1=199/y1=200/y1=211:P1; [Make tree and bush and flower squares passable]
+!!TRx1/x16/x2|y1=133/y1=134/y1=136/y1=147/y1=148/y1=151/y1=152/y1=157/y1=158/y1=169/y1=174/y1=184/y1=185/y1=187/y1=191:P1; [Make rock and mountain/hill squares passable]
+!!TRx1/x16/x2|y1=192/y1=201/y1=202/y1=206/y1=207/y1=208/y1=209/y1=210:P1; [If rock/mountain/hill set y4 to 1]
+
+--------------------------------------------------------------------------------
+
+!#UN:P63/?v3; [Check if Passable Terrain script is enabled: v3]
+!#UN:X?v1/?v2; [Get size of map: v1, and levels: v2]
+!#DO14000/0/v1/1&v3=1:Pv1/0; [Loop through surface squares]
+!#DO14000/0/v1/1&v2=1/v3=1:Pv1/1; [If underground, loop through underground squares]
+
+--------------------------------------------------------------------------------
+
+ [Hero trigger for moving through mountain and tree squares]
+!?HM-1;
+!!UN:P63/?v3; [Check if Passable Terrain script is enabled: v3]
+!!FU&v3=0:E; [Exit if Passable Terrain script is not enabled]
+
+!!OW:A-1/?v4; [Check active hero: v4]
+!!FU&v4<0:E; [Exit if no active hero]
+
+!!HE-1:A2/72/?v1/?v2; [Check if Angel Wings is equipped: v2=0 if None]
+!!IF:W-1; [Set w variables for current hero]
+!!FU14002&v2=0/w79<>99:P; [Call main function if hero isn't Flying]
+
+--------------------------------------------------------------------------------
+
+ [Temporary Sign as trigger for Ambush Battle]
+!?OB91&v1270=1;
+
+!!UN:P63/?v3; [Check if Passable Terrain script is enabled: v3]
+!!FU&v3=0:E; [Exit if Passable Terrain script is not enabled]
+
+!!OB998:S0; [Disable normal Sign function]
+!!POv998/v999/v1000:B0/?v1 B1/?v2; [Read creature type (v1) and number (v2) from battle square]
+!!HE-1:Tv998/v999/v1000/v1/v2; [Initiate battle with v1 of type v2 monsters]
+!!UN:Ov998/v999/v1000; [Delete Sign]
+!!TRv998/v999/v1000:P1; [Make square passable again]
+!!VRv1270:S0; [Clear v1270]
+
+--------------------------------------------------------------------------------
+
+ [Moving through mountain and tree squares]
+!?FU14002;
+!!OB998:T?y1; [Object: y1]
+!!HE-1:S0/?y2 S9/?y5; [Pathfinding Level (y2), Luck Level (y5)]
+!!VRy3|y1=114/y1=115/y1=116/y1=119/y1=120/y1=122/y1=129/y1=130/y1=131/y1=132/y1=135/y1=137/y1=138/y1=150/y1=153/y1=155:S1; [If tree/flower/bush/log, set y3 to 1]
+!!VRy3|y1=156/y1=159/y1=160/y1=165/y1=166/y1=167/y1=160/y1=165/y1=166/y1=167/y1=170/y1=173/y1=181/y1=182/y1=183/y1=186:S1; [If tree/flower/bush/log, set y3 to 1]
+!!VRy3|y1=188/y1=189/y1=194/y1=197/y1=199/y1=200/y1=211:S1; [If tree/flower/bush/log, set y3 to 1]
+!!VRy4|y1=133/y1=134/y1=136/y1=147/y1=148/y1=151/y1=152/y1=157/y1=158/y1=169/y1=174/y1=184/y1=185/y1=187/y1=191:S1; [If rock/mountain/hill set y4 to 1]
+!!VRy4|y1=192/y1=201/y1=202/y1=206/y1=207/y1=208/y1=209/y1=210:S1; [If rock/mountain/hill set y4 to 1]
+!!HE-1&y3=1/y2=0:Wd-600; [Subtract 600 from movement if tree square and no Pathfinding]
+!!HE-1&y3=1/y2=1:Wd-300; [Subtract 300 from movement if tree square and Basic Pathfinding]
+!!HE-1&y3=1/y2=2:Wd-150; [Subtract 150 from movement if tree square and Advanced Pathfinding]
+!!HE-1&y3=1/y2=3:Wd-75; [Subtract 75 from movement if tree square and Expert Pathfinding]
+!!HE-1&y4=1/y2=0:Wd-1000; [Subtract 1000 from movement if mountain square and no Pathfinding]
+!!HE-1&y4=1/y2=1:Wd-600; [Subtract 600 from movement if mountain square and Basic Pathfinding]
+!!HE-1&y4=1/y2=2:Wd-300; [Subtract 300 from movement if mountain square and Advanced Pathfinding]
+!!HE-1&y4=1/y2=3:Wd-150; [Subtract 150 from movement if mountain square and Expert Pathfinding]
+
+!!HE-1:O?y6; [Check hero's owner: y6]
+!!OW:Iy6/?y7; [Check for AI or Human: y7=1 if AI]
+!!FU&y7=1:E; [Exit if AI]
+
+ [If trees, call Function 14003]
+!!FU14003|y1=119/y1=135/y1=137/y1=155/y1=159/y1=160/y1=170/y1=186/y1=188/y1=199/y1=203/y1=204:Py5;
+
+ [If mountains, call Function 14008]
+!!FU14008|y1=134/y1=185/y1=187:Py2/y5;
+
+--------------------------------------------------------------------------------
+
+ [Trees Ambush]
+!?FU14003;
+
+ [x1=Luck skill level]
+
+ [Set chance of trees ambush: y1]
+!!VRy1:S30; [30% chance of ambush]
+!!VRy1&x1=1:-3; [Reduce chance of ambush by 3% for Basic Luck]
+!!VRy1&x1=2:-6; [Reduce chance of ambush by 6% for Advanced Luck]
+!!VRy1&x1=3:-9; [Reduce chance of ambush by 9% for Expert Luck]
+
+ [Ambush roll: y3]
+!!VRy3:S1 R999;
+!!VRy3:S1 R99;
+
+!!FU&y3>y1:E; [Exit Function if no ambush]
+
+ [Game date-1 divided by 7 plus 1: y2]
+!!VRy2:Sc-1 :7 +1;
+
+!!DO14004/0/2/0:Py2; [Random creature: v1]
+
+!!VRy4:Sv1; [Set creature number to y4]
+
+ [Number of creatures: y5]
+!!MA:Gy4/?y5; [Grow Rate: y11]
+!!VRy5&y4>182:S4; [Set growth rate of 4 for Commanders]
+!!VRy5:*y2 Ry2; [Multiply by number of game weeks plus add random #: 0 to # of game weeks]
+!!VRy5&y5<1:S1; [Minimum 1]
+
+!!HE-1:S3/?y6; [Scouting skill: y6]
+
+ [Chance of detecting Ambush: y7]
+!!VRy7&y6=0:S0;  [No Scouting skill, 0% chance of seeing it]
+!!VRy7&y6=1:S25; [Basic Scouting skill, 25% chance of seeing it]
+!!VRy7&y6=2:S50; [Advanced Scouting skill, 50% chance of seeing it]
+!!VRy7&y6=3:S75; [Expert Scouting skill, 75% chance of seeing it]
+
+ [Ambush detection roll: y8]
+!!VRy8:S1 R99;
+
+ [Ambush detection]
+!!IF:V2/0; [Set Flag 2 to False]
+!!IF&1000/y8<=y7:Q2/21/y4/2/z163000;
+
+ [Ambush!]
+!!IF&1000/y8>y7:Q1/21/y4/1/z163001;
+
+!!VRv1270&-2:S1; [Set v1270 to 1 to set up battlefield]
+!!UN&-2:Iv998/v999/v1000/91/0; [Place Sign temporarily to use as Battle Trigger]
+!!POv998/v999/v1000:B0/y4 B1/y5; [Store creature type/number in battle square]
+
+--------------------------------------------------------------------------------
+
+ [Random creature: v1]
+!?FU14004;
+ [x1=Game Week]
+
+ [Random creature: v1]
+!!VRv1:S0 R169;
+!!VRv1&v1>=122:+1;
+!!VRv1&v1>=124:+1;
+!!VRv1&v1>=126:+1;
+!!VRv1&v1>=128:+1;
+!!VRv1&v1>=145:+5;
+!!VRv1&v1>=160:+4;
+!!VRv1&v1>=174:+9;
+
+!!MA:Lv1/?y1; [Creature level: y1]
+!!VRx16&y1<=x1:S999; [Exit Function Loop if creature level is <= Game Week]
+
+--------------------------------------------------------------------------------
+
+ [Battlefield setup trigger]
+!?BF&v1270=1;
+!!UN:P63/?v3; [Check if Passable Terrain script is enabled: v3]
+!!FU14005&v3=1:P; [Set up battlefield]
+
+--------------------------------------------------------------------------------
+
+ [Set up battlefield]
+!?FU14005;
+
+!!BF:C; [Clear battlefield]
+!!VRy1:S30 R10; [Random number of trees (30-40): y1]
+!!DO14006/1/y1/1:P; [Set up trees and things]
+
+!!VRy2:S1 R3; [Random attacker setup: y2]
+!!DO14007/0/8/1&y2=1:P73/111/90/109/77/92/107/94/75; [Set attacker's stacks]
+!!DO14007/0/8/1&y2=2:P90/111/73/109/107/75/77/94/92; [Set attacker's stacks]
+!!DO14007/0/8/1&y2=3:P92/73/107/77/90/75/111/109/94; [Set attacker's stacks]
+!!DO14007/0/8/1&y2=4:P109/77/90/73/111/92/75/107/94; [Set attacker's stacks]
+
+!!VRy3:S1 R3; [Random defender setup: y4]
+!!DO14007/21/27/1&y3=1:P184/8/172/99/2/178/14; [Set defender's stacks]
+!!DO14007/21/27/1&y3=2:P8/99/178/14/172/2/184; [Set defender's stacks]
+!!DO14007/21/27/1&y3=3:P172/2/184/8/14/178/99; [Set defender's stacks]
+!!DO14007/21/27/1&y3=4:P14/184/99/172/8/178/2; [Set defender's stacks]
+
+--------------------------------------------------------------------------------
+
+ [Set stacks]
+!?FU14007;
+!!BMx16:T?y1 B?y2; [Type of monster: y1, Number of monsters: y2]
+!!VRy3&x16<21:Sx16 +1; [Index for x variable for attacker]
+!!VRy3&x16>=21:Sx16 -20; [Index for x variable for defender]
+!!BMx16&y1>=0/y2>=0/y1<>145/y1<>146/y1<>147/y1<>148:Pxy3; [Set stacks but not war machines]
+
+--------------------------------------------------------------------------------
+
+ [Set up trees and things on battlefield]
+!?FU14006;
+
+!!VRy1:S19 R148; [Random number: 19-167: y1]
+!!VRy2:Sy1 %17;
+!!VRy3:Sy1 +1;
+!!VRy3:%17;
+!!VRy4:S0;
+!!VRy4&y1>=73/y1<=79:S1;
+!!VRy4&y1>=90/y1<=95:S1;
+!!VRy4&y1>=107/y1<=112:S1;
+!!VRy4|y1=52/y1=86/y1=88/y1=99/y1=100/y1=154/y1=178:S1;
+!!VRy5:S34;
+!!VRy6:S0 R4;
+!!VRy7:S0;
+!!VRy7&y6=4:S1 R2;
+!!VRy5&y7=1:S21; [Stump]
+!!VRy5&y7=2:S66; [Evil Weeds]
+!!VRy5&y7=4:S84; [Earth Rock]
+
+!!BF&y2<>0/y3<>0/y4=0:Oy5/y1; [Place tree or other object]
+
+--------------------------------------------------------------------------------
+
+ [Mountain Avalanche/Landslide]
+!?FU14008;
+ [x1=Pathfinding skill level]
+
+!!TR998:T?y14/d/d/d/d/d/d/d; [Check terrain type: y14=3 if snow]
+
+ [Set chance of avalanche or landslide: y1]
+!!VRy1:S20; [20% chance of avalanche/landslide]
+!!VRy1&-1000:S15; [Only 15% chance for the AI]
+!!VRy1&x1=1:-4; [Reduce chance of avalanche by 4% for Basic Pathfinding]
+!!VRy1&x1=2:-8; [Reduce chance of avalanche by 8% for Advanced Pathfinding]
+!!VRy1&x1=3:-10; [Reduce chance of avalanche by 10% for Expert Pathfinding]
+!!VRy1&x2=1:-2; [Reduce chance of avalanche by 2% for Basic Luck]
+!!VRy1&x2=2:-4; [Reduce chance of avalanche by 4% for Advanced Luck]
+!!VRy1&x2=3:-6; [Reduce chance of avalanche by 6% for Expert Luck]
+!!VRy1&y1<10/1000:S10; [Minimum chance is always 10% for the player]
+!!VRy1&y1<10/-1000:S5; [Minimum chance is 5% for the AI]
+
+ [Avalanche/Landslide roll: y2]
+!!VRy2:S1 R999;
+!!VRy2:S1 R99;
+
+!!FU&y2>y1:E; [Exit Function if no avalanche/landslide]
+
+ [Determine which slot is affected]
+!!VRy6:S0 T6; [Random slot number 0-6: y6]
+!!HE-1:C0/y6/?y7/?y8; [Type of monster (y7) and number (y8) in slot y6]
+
+ [If nothing in that slot, try again]
+!!VRy6&y8<=0:S0 R6; [Random slot number 0-6: y6]
+!!HE-1&y8<=0:C0/y6/?y7/?y8; [Type of monster (y7) and number (y8) in slot y6]
+
+ [If nothing in that slot, try again]
+!!VRy6&y8<=0:S0 T6; [Random slot number 0-6: y6]
+!!HE-1&y8<=0:C0/y6/?y7/?y8; [Type of monster (y7) and number (y8) in slot y6]
+
+ [If nothing in that slot, try again]
+!!VRy6&y8<=0:S0 T6; [Random slot number 0-6: y6]
+!!HE-1&y8<=0:C0/y6/?y7/?y8; [Type of monster (y7) and number (y8) in slot y6]
+
+!!FU&y8<=0:E; [Exit Function if nothing in slot]
+
+!!HE-1:S3/?y3; [Scouting skill: y3]
+
+ [Chance of avoiding Avalanche/Landslide: y4]
+!!VRy4&y3=0:S0;  [No Scouting skill, 0% chance of avoiding it]
+!!VRy4&y3=1:S10; [Basic Scouting skill, 10% chance of avoiding it]
+!!VRy4&y3=2:S25; [Advanced Scouting skill, 25% chance of avoiding it]
+!!VRy4&y3=3:S50; [Expert Scouting skill, 50% chance of avoiding it]
+
+ [Set z-1 to avalanche or landslide depending on terrain type]
+!!VRz-1:Sz163002;
+!!VRz-2:Sz163003;
+!!VRz-3:Sz163004;
+!!VRz-1&y14=3:Sz163005;
+!!VRz-2&y14=3:Sz163006;
+!!VRz-3&y14=3:Sz163007;
+
+ [Determine number of creatures lost: y10]
+!!VRy13:Sy8 :2 +1; [Half of stack: y13+1]
+!!MA:Gy7/?y9; [Growth of creature: y9]
+!!VRy10:S0 Ry9; [Random number 0-y9: y10]
+!!VRy10&y10>y8/1000:Sy8; [Maximum = number of creatures in stack for human player]
+!!VRy10&y10>y13/-1000:Sy13; [Maximum = half number of creatures in stack +1 for AI]
+!!VRy10&y10<1:S1; [Minimum 1]
+
+ [Name of monster: z1]
+!!UN:N3/1/y7/1; [Name of plural monster in z1]
+
+ [Avalanche detection roll: y5]
+!!VRy5:S1 R99;
+
+ [Avalanche detection]
+!!IF&1000/y5<=y4:M1/z163008;
+
+ [Calculate value for creature number display in dialogue: y12]
+!!VRy12:Sy10 *65536 +y7;
+
+!!IF&1000/y5>y4:Q1/21/y12/1/z163009;
+
+ [Remove creatures]
+!!VRy11:Sy8 -y10; [Set remaining creatures in stack: y11]
+!!HE-1&y5>y4:C0/y6/y7/y11; [Set new number of creatures in stack]
+!!UN:R1; [Redraw screen]
+
+--------------------------------------------------------------------------------
+
+ [Check for an Artifact, Scroll, Resource Pile, Treasure Chest, or Camp Fire being picked up]
+
+ [Artifact is trigger]
+!?OB5;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU14009&y-1=1:P;
+
+ [Spell Scroll is trigger]
+!?OB93;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU14009&y-1=1:P;
+
+ [Resource Pile is trigger]
+!?OB79;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU14009&y-1=1:P;
+
+ [Treasure Chest is trigger]
+!?OB101;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU14009&y-1=1:P;
+
+ [Camp Fire is trigger]
+!?OB12;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-1]
+!!FU14009&y-1=1:P;
+
+--------------------------------------------------------------------------------
+
+ [Check for a monster nearby if Artifact, Scroll, Resource, Chest or Camp Fire is picked up]
+!?FU14009;
+
+!!VRy3:Sv1000;
+!!VRy6:S-1;
+!!VRy7:S-1;
+
+ [Check squares for a monster nearby]
+ [y6 and y7 will be >=0 if one found]
+!!VRy1:Sv998 -1; [x location: y1]
+!!VRy2:Sv999 -1; [y location: y2]
+!!OBy1/y2/y3:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998; [x location: y1]
+!!VRy2&y6<0:Sv999 -1; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998 +1; [x location: y1]
+!!VRy2&y6<0:Sv999 -1; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998 -1; [x location: y1]
+!!VRy2&y6<0:Sv999; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998 +1; [x location: y1]
+!!VRy2&y6<0:Sv999; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998 -1; [x location: y1]
+!!VRy2&y6<0:Sv999 +1; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998; [x location: y1]
+!!VRy2&y6<0:Sv999 +1; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!VRy1&y6<0:Sv998 +1; [x location: y1]
+!!VRy2&y6<0:Sv999 +1; [y location: y2]
+!!OBy1/y2/y3&y6<0:T?y4; [Object type: y4 (54=monster)]
+!!MOy1/y2/y3&y4=54/y6<0:R?y5/1; [Aggression level if monster is there: y5 (0=compliant)]
+!!VRy6&y4=54/y5>0/y6<0:Sy1; [Set x location of monster: y6]
+!!VRy7&y4=54/y5>0/y7<0:Sy2; [Set y location of monster: y7]
+
+!!OBy6/y7/y3&y6>=0:U?y8; [Monster type: y8]
+!!MOy6/y7/y3&y6>=0:G?y9; [Number of monsters: y9]
+!!VRv1272&y6>=0:S99; [Set v1272 to 99 if initiating a battle with monsters: v1272]
+
+ [Store monster location in v1273/v1274/v1275]
+!!VRv1273:Sy6; [x location]
+!!VRv1274:Sy7; [y location]
+!!VRv1275:Sy3; [level]
+
+ [Initiate battle with monsters]
+!!HE-1&y6>=0:Tv998/v999/v1000/y8/y9;
+
+--------------------------------------------------------------------------------
+
+ [Post-Battle trigger if HE:T monsters were fought]
+!?BA1&v1272=99;
+!!UN:P63/?y-1; [Check if Passable Terrain script is enabled: y-2]
+!!FU&y-1=0:E; [Exit if Passable Terrain script is not enabled]
+
+!!VRv1272:S0; [Set v1272 to 0]
+!!DO14010/0/6/1:P; [Loop through stacks and count monsters: total in y-2]
+!!MOv1273/v1274/v1275&y-2>0:Gy-2; [Set number of monsters to y-1 if above 0]
+!!UN&y-2=0:Ov1273/v1274/v1275; [Remove monster stack if all monsters killed]
+
+--------------------------------------------------------------------------------
+
+ [Loop through stacks and count monsters: total in y-2]
+!?FU14010;
+!!BA:M1/x16/?y1/?y2; [Number of defending monsters in slot x16: y2]
+!!VRy-2&y1>=0/y2>0:+y2; [Add monster numbers to y-2]
+

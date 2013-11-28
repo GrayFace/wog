@@ -1,0 +1,11 @@
+#	Text resource for "script55.erm" document		
+155000	Catapult	<!#S>	01.08.2004
+155001	Catapults	<!#S>	01.08.2004
+155002	Attacks siege walls.
+{Chance for Critical Hit.}	<!#S>	01.08.2004
+155003	Heals and {Resurrects} troops.	<!#S>	01.08.2004
+155004	Unlimited ammunition.
+{Increases army movement.}	<!#S>	01.08.2004
+155005	The First Aid Tent heals an additional %V7228 hit points.	<!!S>	01.08.2004
+155006	The First Aid Tent resurrects an additional %V7228 hit points.	<!!S>	01.08.2004
+155007	Critical hit! One enemy is crushed and perishes.	<!!S>	01.08.2004

@@ -1,0 +1,276 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+Potion Fountains by Bruno (some ZVS' fixes)
+WoGify Name: script17.erm
+Version 1.4.1
+
+Updated: September 15, 2003
+Updated: August 24, 2004 by Fnord to disable for MP battles
+Updated: October 6, 2004 to remove function y variables from triggers
+Updated: August 26, 2005 by Perfect0 to set mana after combat but not add
+
+Objects: Hydromel fountain, Berserker fountain, Venus's Blessing
+Hydromel potion (AI always drinks)
+Berserker potion (AI never drinks)
+Venus potion (AI never drinks (too much luck))
+*** Variables ***
+* Variables
+* Should keep value during the battle (otherwise may be changed)
+v1
+v40: level of spell points of attacker
+v41: level of spell points of defender
+v1260: Identity of attacker
+v1261: Identity of defender
+* Conditional Flags
+* Just janged, may be used
+conditional flag 1   (Store answer of the player,local use)
+* Should keep value durin the battle (otherwise may be changed)
+conditional flag 902 (attacker has drunk Hydromel potion)
+conditional flag 903 (defender has drunk Hydromel potion)
+conditional flag 904 (attacker has drunk Berserker potion)
+conditional flag 905 (defender has drunk Berserker potion)
+conditional flag 906 (attacker has drunk Venus potion)
+conditional flag 907 (defender has drunk Venus potion)
+* Hero Variables
+* Should keep value always
+w10: number of doses of Hydromel Potion
+w11: number of doses of Berserker Potion
+w12: number of doses of Venus's Blessing
+* Functions
+FU800: Beginning of battle init.
+FU801: Attacker has Hydromel potion
+FU802: Defender has Hydromel potion
+FU810: Attacker has Berserker potion
+FU811: Defender has Berserker potion
+FU812: Player loses Spell power
+FU814: Attacker has Venus potion
+FU815: Defender has Venus potion
+FU816: Build Hero's depending z vars
+*** String
+* Just janged, may be used
+z1: name of current hero (local use)
+z2: "his or her" of current hero (local use)
+z3: "he or she" of current hero (local use)
+z4: "dose or doses" of current hero (local use)
+* Should keep value always
+z18: Hint code for Venus's Blessing (not visited)
+z19: Hint code for Venus's Blessing (visited)
+z20: Hint code for Valhalla's Fountain (not visited)
+z21: Hint code for Valhalla's Fountain (visited)
+
+!#UN:P17/?v1; [Check if script is enabled: v1]
+
+*** Venus's Blessing **** Increases morale and luck (w12)
+!#VRz18&v1=1:Sz117000;
+!#VRz19&v1=1:Sz117001;
+!#HT63/2&v1=1:W12/0/18;
+!#HT63/2&v1=1:W12/1/19;
+!#HT63/2&v1=1:W12/2/19;
+!#HT63/2&v1=1:W12/3/19;
+
+!?OB63/2;
+!!UN:P17/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1; Call w variable for current hero
+!!FU816:P-1/1;
+!!VRw12:S3; fill potion  with 3 doses
+!!IF&1000:Q1/11/1/14/1/1/z117002;
+
+*** Hydromel Fountain **** Increases Attack and Defense (w10)
+* (Fountain of Fortune)
+!?OB30/0;
+!!UN:P17/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!UN:P17/?y-2; Check if Potion Fountains script is enabled in WoGify Options.
+* Continue trigger if script is enabled.
+!!IF&y-2=1:W-1; Call w variable for current hero
+!!FU816&y-2=1:P-1/1;
+!!VRw10&y-2=1:S3; fill potion  with 3 doses
+!!IF&1000/y-2=1:Q1/31/2/32/2/1/z117003;
+
+*** Berserker Potion *** (w11)
+!#VRz20:Sz117004;
+!#VRz21:Sz117005;
+!#HT63/48:W11/0/20;
+!#HT63/48:W11/1/21;
+!#HT63/48:W11/2/21;
+!#HT63/48:W11/3/21;
+
+!?OB63/48;
+!!UN:P17/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:W-1; Call w variable for current hero
+!!FU816:P-1/1;
+!!VRw11:S3; fill potion with 3 doses
+!!IF&1000:Q1/31/10/11/3/35/0/1/z117006;
+
+**** U S E    P O T I O N S   I N   B A T T L E ***
+*** At the beginning of battle ***
+!?BA0&-998;
+!!UN:P17/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!IF:V902/0 V903/0; init to Hydromel potion
+!!IF:V904/0 V905/0; init to Berserker potion
+!!IF:V906/0 V907/0; init to Venus potion
+!!BA:E?v1; check for MP battle
+!!FU800&v1<2:P; non AI against Human battle
+
+!?FU800; At the beginning of battle (init)
+!!VRy3:S0;
+!!VRy4:S0;
+!!VRy5:S0;
+!!VRy6:S1; check by default that defender is managed by AI
+!!BA:H0/?v1260; Identity of attacker and store in v1260
+!!BA:H1/?v1261; Identity of defender and store in v1261
+!!HEv1260:O?y3; owner of attacker
+!!HEv1261&v1261>-1:O?y4; owner of defender
+!!VRy4&v1261<0:S99; ho hero at all
+!!OW:Iy3/?y5; check if Attacker is human (AI=1)
+!!OW&v1261>-1:Iy4/?y6; check if defender is human (AI=1)
+!!VRy20:S0; [assume we don't have two human players]
+!!VRy20&v1261>-1/y5=0/y6=0:S1; [set flag to mean both players are human]
+
+*** Hydromel Potion
+!!IF:Wv1260; check if attacker has Hydromel potion
+!!VRy7&w10>=1:Sw10; attacker has Hydromel potion
+!!IF&v1261>-1:Wv1261; check if defender has Hydromel potion
+!!VRy8&w10>=1/v1261>-1:Sw10; defender has Hydromel potion
+!!FU801&y7>=1:Pv1260/y5/y3; call fu801 if att. has Hydromel potion
+!!FU802&y8>=1/y20=0:Pv1261/y6/y4; call fu802 if def. has Hydromel potion, except human vs. human
+*** Berserker Potion
+!!IF:Wv1260; ckeck if attacker has Berserker Potion
+!!VRy9&w11>=1:Sw11; attacker has Berserker Potion
+!!IF&v1261>-1:Wv1261; ckeck if defender has Berserker Potion
+!!VRy10&w11>=1/v1261>-1:Sw11; defender has Berserker Potion
+!!FU810&y9>=1:Pv1260/y5/y3; call fu810 if attacker has Berserker Potion
+!!FU811&y10>=1/y20=0:Pv1261/y6/y4; call fu811 if defender has Berserker Potion, except human vs. human
+*** Venus Potion
+!!IF:Wv1260; ckeck if attacker has Venus potion
+!!VRy11&w12>=1:Sw12; attacker has Venus potion
+!!IF&v1261>-1:Wv1261; ckeck if defender has Venus potion
+!!VRy12&w12>=1/v1261>-1:Sw12; defender has Venus potion
+!!FU814&y11>=1:Pv1260/y5/y3; call fu814 if att. has Venus potion
+!!FU815&y12>=1/y20=0:Pv1261/y6/y4; call fu815 if def. has Venus potion, except human vs. human
+
+!?FU801; Attacker has Hydromel potion
+!!IF:Wx1; !!FU816:Px1/w10;
+!!IF&x2=0/1000:Q1/31/2/32/2/2/z117007;
+*** Human
+!!IF&1:V902/1;
+!!VRw10&x2=0/902:-1; remove a dose
+!!HEx1&x2=0/902:Fd2/d2/d/d; give bonus
+*** AI
+!!IF&x2=1:V902/1;
+!!VRw10&x2=1:-1; remove a dose
+!!HEx1&x2=1:Fd2/d2/d/d; boost
+
+!?FU802; Defender has Hydromel potion
+!!IF:Wx1; !!FU816:Px1/w10;
+!!IF&x2=0/1000:Q1/31/2/32/2/2/z117008;
+!!IF&1:V903/1;
+!!VRw10&x2=0/903:-1; remove a dose
+!!HEx1&x2=0/903:Fd2/d2/d/d; give bonus
+*** Defender AI
+!!IF&x2=1:V903/1;
+!!VRw10&x2=1:-1; remove a dose
+!!HEx1&x2=1:Fd2/d2/d/d; boost
+
+!?FU810; Attacker has Berserker potion
+!!IF:Wx1; !!FU816:Px1/w11;
+!!IF&x2=0/1000:Q1/31/10/11/3/35/0/2/z117009;
+!!IF&1:V904/1;
+!!VRw11&x2=0/904:-1; remove a dose
+!!HEx1&x2=0/904:Fd10/d/d/d;  give bonus
+!!HEx1&x2=0/904:R1/3; boost luck
+!!HEx1&x2=0/904:I?v40; store spell points of attacker in v40
+!!HEx1&x2=0/904:I0; put spell points to 0
+*** attacker AI - don't drink
+!!IF&x2=1:V904/0; AI don't drink
+
+!?FU811; Defender has Berserker potion
+!!IF:Wx1; !!FU816:Px1/w11;
+!!IF&x2=0/1000:Q1/31/10/11/3/35/0/2/z117010;
+!!IF&1:V905/1;
+!!VRw11&x2=0/905:-1; remove a dose
+!!HEx1&x2=0/905:Fd10/d/d/d; give bonus
+!!HEx1&x2=0/905:R1/3; boost luck
+!!HEx1&x2=0/905:I?v41; store spell points of attacker in v41
+!!HEx1&x2=0/905:I0; put spell points to 0
+*** Defender AI
+!!IF&x2=1:V905/0; AI don't drink
+
+!?FU814; Attacker has Venus potion
+!!IF:Wx1; !!FU816:Px1/w12;
+!!IF&x2=0/1000:Q1/11/1/14/1/2/z117011;
+!!IF&1:V906/1;
+!!VRw12&x2=0/906:-1; remove a dose
+!!HEx1&x2=0/906:R1/3 R0/3; give bonus
+*** attacker AI
+!!VRw12&x2=1/x2=1:-1; remove a dose
+!!HEx1&x2=1/x2=1:R1/3 R0/3; boost
+!!IF&x2=1/x2=1:V906/1;
+
+!?FU815; Defender has Venus potion
+!!IF:Wx1; !!FU816:Px1/w12;
+!!IF&x2=0/1000:Q1/11/1/14/1/2/z117012;
+!!IF&1:V907/1;
+!!VRw12&x2=0/907:-1; remove a dose
+!!HEx1&x2=0/907:R1/3 R0/3; give bonus
+*** Defender AI
+!!IF&x2=1:V907/0; AI Don't drink
+
+*****************************
+*** At the end of battle  ***
+*****************************
+!?BA1&-998;
+
+!!UN:P17/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1=0:E; [Exit if script isn't enabled]
+
+!!VRv3:S0;
+!!VRv4:S0;
+!!VRv5:S0;
+!!VRv6:S1; check by default that defender is managed by AI
+!!HEv1260:O?v3; owner of attacker
+!!HEv1261&v1261>-1:O?v4; owner of defender
+!!VRv4&v1261<0:S99;
+!!OW:Iv3/?v5; check if Attacker is human (AI=1)
+!!OW&v1261>-1:Iv4/?v6; check if defender is human (AI=1)
+*** Hydromel Potion
+!!HEv1260&902:Fd-2/d-2/d/d; Remove bonus if attacker has drunk
+!!HEv1261&903:Fd-2/d-2/d/d; Remove bonus if defender has drunk
+*** Berserker Potion
+* attacker CF4
+!!HEv1260&904:Fd-10/d/d/d; Remove bonus if attacker has drunk
+!!HEv1260&904:Iv40; Reset Spell point
+!!VRv1:S0T100;
+!!FU812&902/904/v1>50:Pv1260/v5; att. has drunk 2 potions
+* defender CF5
+!!HEv1261&905:Fd-10/d/d/d; Remove bonus if defender has drunk
+!!HEv1261&905:Iv41; Reset Spell points
+!!VRv1:S0T100;
+!!FU812&903/905/v1>50:Pv1261/v6; def. has drunk 2 potions
+*** hero has drunk 2 potions
+!?FU812; Player loses Spell power if hero drank 2 potions
+!!HEx1:Fd/d/?y1/d/1; Return "clear" knowledge (without artifacts)
+!!HEx1&y1>1:Fd/d/d-1/d;
+!!FU816:Px1/1;
+!!IF&y1>1/x2=0:Q1/33/0/1/z117013;
+!?FU816; ZVS hero depending string preparation
+*** x1=hero index
+*** x2=doses
+!!HEx1:B0/?z1; Store name in z1
+!!HEx1:R2/?y1; Check sex
+!!VRz2&y1=0:Sz117014; Set "his" or "her" depending on sex
+!!VRz2&y1=1:Sz117015;
+!!VRz3&y1=0:Sz117016; Set "he" or "she" depending on sex
+!!VRz3&y1=1:Sz117017;
+!!VRz4&x2=1:Sz117018;
+!!VRz4&x2>1:Sz117019;
+

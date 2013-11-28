@@ -1,0 +1,331 @@
+#	Text resource for "script77.erm" document		
+177000	Reveal Adventure Map?	<!!Q>	01.08.2004
+177001	Hide Adventure Map?	<!!Q>	01.08.2004
+177002	times	<!!S>	01.08.2004
+177003	time	<!!S>	01.08.2004
+177004	Status: {Menu has not been}
+{previously enabled this game.}	<!!S>	01.08.2004
+177005	Status: {previously enabled and}
+{used %V9004 %Z-2 this game.}	<!!S>	01.08.2004
+177006	Enable WoG Cheat Menu?
+
+%Z-1	<!!Q>	01.08.2004
+177007	Disable WoG Cheat Menu?
+
+%Z-1
+	<!!Q>	01.08.2004
+177008	Red	<!!S>	01.08.2004
+177009	Blue	<!!S>	01.08.2004
+177010	Tan	<!!S>	01.08.2004
+177011	Green	<!!S>	01.08.2004
+177012	Orange	<!!S>	01.08.2004
+177013	Purple	<!!S>	01.08.2004
+177014	Teal	<!!S>	01.08.2004
+177015	Pink	<!!S>	01.08.2004
+177016	WoG Cheat Menu for %Z2	<!!S>	01.08.2004
+177017	Give Creatures to %Z2.	<!!S>	01.08.2004
+177018	Give or remove Stack Experience from %Z2's troops.	<!!S>	01.08.2004
+177019	Give or delete an Artifact from %Z2.	<!!S>	01.08.2004
+177020	Give Experience to %Z2.	<!!S>	01.08.2004
+177021	Give Luck, Morale, Movement or Spell Points to %Z2.	<!!S>	01.08.2004
+177022	Give or delete a Spell from %Z2's spell book.	<!!S>	01.08.2004
+177023	Give or remove Primary skills from %Z2.	<!!S>	01.08.2004
+177024	Give or delete a Secondary skill from %Z2.	<!!S>	01.08.2004
+177025	Change Owner of %Z2.	<!!S>	01.08.2004
+177026	Give or remove Resources from %Z-10 player.	<!!S>	01.08.2004
+177027	Dump Variables to external text file (for debugging, not a cheat).	<!!S>	01.08.2004
+177028	Exit cheat menu.	<!!S>	01.08.2004
+177029	Give a stack of creatures to %Z2.
+
+TIP: You can enter a number followed by a creature name
+to give that number of creatures, e.g., 45 silver pegasi.	<!!S>	01.08.2004
+177030	Enter a creature number (0..196) or a full or partial creature name.	<!!S>	01.08.2004
+177031	No creature found.	<!!M>	01.08.2004
+177032	No creature found.	<!!M>	01.08.2004
+177033	There are no creatures with numbers below 0.	<!!M>	01.08.2004
+177034	There are no creatures with numbers above 196.	<!!M>	01.08.2004
+177035	How many %Z-5 do you want to give to %Z2?	<!!S>	01.08.2004
+177036	Enter a number of creatures to give.	<!!S>	01.08.2004
+177037	Give experience to %Z2's troops.
+
+Type 'rank' or 'ranks' after the number to give ranks instead of points.
+
+To set EXACT experience, type = before the number of points or ranks.
+For example, to set all creatures to 5000 experience, type =5000,
+or to set them all to rank 3, type =3 ranks.
+
+(Use a negative number to remove experience. If
+used to remove ranks, it removes ALL experience.)	<!!S>	01.08.2004
+177038	Give experience to %Z-8.
+
+Type 'rank' or 'ranks' after the number to give ranks instead of points.
+
+To set EXACT experience, type = before the number of points or ranks.
+For example, to set 5000 experience for this stack, type =5000, or to 
+set it to rank 3, type =3 ranks.
+
+(Use a negative number to remove experience. If
+used to remove ranks, it removes ALL experience.)	<!!S>	01.08.2004
+177039	How much experience do you want to give?	<!!S>	01.08.2004
+177040	rank	<!!S>	01.08.2004
+177041	ranks	<!!S>	01.08.2004
+177042	The maximum experience you can add is %Y3.	<!!M>	01.08.2004
+177043	The maximum number of ranks you can add is %Y3.	<!!M>	01.08.2004
+177044	Give %Z2 a free artifact or delete one.
+
+To delete an artifact, type "delete" before the artifact name.	<!!S>	01.08.2004
+177045	Enter an artifact number (0..170) or a full or partial artifact name.	<!!S>	01.08.2004
+177046	delete	<!!S>	01.08.2004
+177047	Artifact number not found.	<!!M>	01.08.2004
+177048	No artifact found.	<!!M>	01.08.2004
+177049	Give %Z2 a free spell scroll.	<!!S>	01.08.2004
+177050	Remove a spell scroll from %Z2.	<!!S>	01.08.2004
+177051	Enter a spell number (0..69) or a full or partial spell name.	<!!S>	01.08.2004
+177052	Spell scroll number not found.	<!!M>	01.08.2004
+177053	No spell scroll found.	<!!M>	01.08.2004
+177054	Give experience to %Z2.
+
+Type 'level' or 'levels' after the number to give levels instead of points.
+
+To set EXACT experience, type = before the number of points or levels.
+For example, to set %Z2's experience to 5000 points, type =5000,
+or to set %Z2's level to 3, type =3 levels.	<!!S>	01.08.2004
+177055	How much experience do you want to give?	<!!S>	01.08.2004
+177056	level	<!!S>	01.08.2004
+177057	levels	<!!S>	01.08.2004
+177058	The minimum experience you can add is 1.	<!!M>	01.08.2004
+177059	The minimum number of levels you can add is 1.	<!!M>	01.08.2004
+177060	The maximum experience you can add is %Y3.	<!!M>	01.08.2004
+177061	The maximum number of levels you can add is %Y3.	<!!M>	01.08.2004
+177062	%Z2ermvardump.txt	<!!S>	01.08.2004
+177063	{Variable Dump}
+
+Output all non-zero variables to
+%Z2?
+
+{Warning: may take a few minutes.}	<!!Q>	01.08.2004
+177064	Variable Dump	<!!S>	01.08.2004
+177065	f = %Vf	<!!S>	01.08.2004
+177066	g = %Vg	<!!S>	01.08.2004
+177067	h = %Vh	<!!S>	01.08.2004
+177068	i = %Vi	<!!S>	01.08.2004
+177069	j = %Vj	<!!S>	01.08.2004
+177070	k = %Vk	<!!S>	01.08.2004
+177071	l = %Vl	<!!S>	01.08.2004
+177072	m = %Vm	<!!S>	01.08.2004
+177073	n = %Vn	<!!S>	01.08.2004
+177074	o = %Vo	<!!S>	01.08.2004
+177075	p = %Vp	<!!S>	01.08.2004
+177076	q = %Vq	<!!S>	01.08.2004
+177077	r = %Vr	<!!S>	01.08.2004
+177078	s = %Vs	<!!S>	01.08.2004
+177079	t = %Vt	<!!S>	01.08.2004
+177080	Brainssssssss...	<!!S>	01.08.2004
+177081	Variable Dump Complete!
+
+Variables have been written to:
+
+{%Z2}	<!!Q>	01.08.2004
+177082	v%X16 = %Y1	<!!S>	01.08.2004
+177083	Hero %X1: w%X16 = %Y1	<!!S>	01.08.2004
+177084	z%X16 = %Z-1	<!!S>	01.08.2004
+177085	Give luck, morale, movement or spell points to %Z2.
+
+TIP: You can enter a number before the word to give
+that amount of luck, morale, movement or spell points.
+e.g., 3 luck.  Negative numbers can also be entered.
+
+To set an EXACT bonus, type = before the number.
+For example, to set %Z2's luck to 2, type =2 luck.	<!!S>	01.08.2004
+177086	Enter luck, morale, movement or spell points.	<!!S>	01.08.2004
+177087	Bonus not found.	<!!M>	01.08.2004
+177088	luck	<!!S>	01.08.2004
+177089	No bonus given.	<!!M>	01.08.2004
+177090	morale	<!!S>	01.08.2004
+177091	No bonus given.	<!!M>	01.08.2004
+177092	movement	<!!S>	01.08.2004
+177093	No bonus given.	<!!M>	01.08.2004
+177094	spell points	<!!S>	01.08.2004
+177095	mana	<!!S>	01.08.2004
+177096	No bonus given.	<!!M>	01.08.2004
+177097	Bonus not found.	<!!M>	01.08.2004
+177098	luck	<!!S>	01.08.2004
+177099	morale	<!!S>	01.08.2004
+177100	movement	<!!S>	01.08.2004
+177101	mana	<!!S>	01.08.2004
+177102	How much %Z9 do you want to give to %Z8?
+
+To set an EXACT bonus, type = before the number.
+For example, to set the %Z9 to 5, enter =5.	<!!S>	01.08.2004
+177103	Enter a number of bonus %Z9 to give.	<!!S>	01.08.2004
+177104	Number not entered.	<!!M>	01.08.2004
+177105	No bonus given.	<!!M>	01.08.2004
+177106	Give %Z2 a free spell or delete a spell.
+
+TIP: to delete a spell, type "delete" before the spell name.	<!!S>	01.08.2004
+177107	Enter a spell number (0..69) or a full or partial spell name.	<!!S>	01.08.2004
+177108	delete	<!!S>	01.08.2004
+177109	del	<!!S>	01.08.2004
+177110	No spell found.	<!!M>	01.08.2004
+177111	No spell found.	<!!M>	01.08.2004
+177112	Give or remove %Z-10 player's resources.
+
+TIP: You can enter a number before the resource name
+to give that amount of resource. e.g., 3 wood. To
+give or remove ALL resources, enter "all" as the type.
+(Enter a negative number to remove resources).
+
+To set an EXACT bonus, type = before the number.
+For example, to set %Z-10's wood to 5, type =5 wood.	<!!S>	01.08.2004
+177113	Enter a resource type to give.	<!!S>	01.08.2004
+177114	Bonus not found.	<!!M>	01.08.2004
+177115	all	<!!S>	01.08.2004
+177116	No bonus given.	<!!M>	01.08.2004
+177117	wood	<!!S>	01.08.2004
+177118	No bonus given.	<!!M>	01.08.2004
+177119	mercury	<!!S>	01.08.2004
+177120	No bonus given.	<!!M>	01.08.2004
+177121	ore	<!!S>	01.08.2004
+177122	No bonus given.	<!!M>	01.08.2004
+177123	sulfur	<!!S>	01.08.2004
+177124	No bonus given.	<!!M>	01.08.2004
+177125	crystal	<!!S>	01.08.2004
+177126	No bonus given.	<!!M>	01.08.2004
+177127	gems	<!!S>	01.08.2004
+177128	No bonus given.	<!!M>	01.08.2004
+177129	gold	<!!S>	01.08.2004
+177130	No bonus given.	<!!M>	01.08.2004
+177131	mithril	<!!S>	01.08.2004
+177132	No bonus given.	<!!M>	01.08.2004
+177133	Bonus not found.	<!!M>	01.08.2004
+177134	wood	<!!S>	01.08.2004
+177135	mercury	<!!S>	01.08.2004
+177136	ore	<!!S>	01.08.2004
+177137	sulfur	<!!S>	01.08.2004
+177138	crystal	<!!S>	01.08.2004
+177139	gems	<!!S>	01.08.2004
+177140	gold	<!!S>	01.08.2004
+177141	mithril	<!!S>	01.08.2004
+177142	all resources	<!!S>	01.08.2004
+177143	much	<!!S>	01.08.2004
+177144	many	<!!S>	01.08.2004
+177145	many of	<!!S>	01.08.2004
+177146	How %Z8 %Z9 do you want to give the %Z-10 player?
+
+To set an EXACT bonus, type = before the number.
+For example, to set %Z-10's %Z9 to 5, type =5 %Z9.
+
+TIP: Enter negative numbers to remove %Z9.	<!!S>	01.08.2004
+177147	Enter a number of %Z9 to give.	<!!S>	01.08.2004
+177148	Number not entered.	<!!M>	01.08.2004
+177149	No bonus given.	<!!M>	01.08.2004
+177150	Increase or reduce %Z2's Primary Skills.
+
+TIP: You can enter a number before the primary skill name
+to give that number of points. e.g., 3 attack.
+To increase or reduce ALL primary skills, enter "all".
+(Enter a negative number to reduce primary skills).
+
+To set an EXACT bonus, type = before the number.
+For example, to set %Z2's defense to 2, type =2 defense.	<!!S>	01.08.2004
+177151	Enter a primary skill.	<!!S>	01.08.2004
+177152	Bonus not found.	<!!M>	01.08.2004
+177153	all	<!!S>	01.08.2004
+177154	attack	<!!S>	01.08.2004
+177155	defense	<!!S>	01.08.2004
+177156	defence	<!!S>	01.08.2004
+177157	power	<!!S>	01.08.2004
+177158	knowledge	<!!S>	01.08.2004
+177159	No bonus given.	<!!M>	01.08.2004
+177160	Bonus not found.	<!!M>	01.08.2004
+177161	attack	<!!S>	01.08.2004
+177162	defense	<!!S>	01.08.2004
+177163	power	<!!S>	01.08.2004
+177164	knowledge	<!!S>	01.08.2004
+177165	all primary skills	<!!S>	01.08.2004
+177166	How much bonus to %Z9 do you want to give %Z2?
+
+To set an EXACT bonus, type = before the number.
+For example, to set %Z2's %Z9 to 2, type =2.
+
+TIP: Enter negative numbers to reduce %Z9.	<!!S>	01.08.2004
+177167	Enter a number of %Z9 to give.	<!!S>	01.08.2004
+177168	Number not entered.	<!!M>	01.08.2004
+177169	No bonus given.	<!!M>	01.08.2004
+177170	Give %Z2 a free secondary skill.
+
+TIP: you can enter Basic, Advanced or Expert before the skill
+name to give that level of skill, or you can delete a skill by 
+typing "delete" before the skill name.	<!!S>	01.08.2004
+177171	Enter a skill number (0..27) or a full or partial skill name.	<!!S>	01.08.2004
+177172	delete	<!!S>	01.08.2004
+177173	basic	<!!S>	01.08.2004
+177174	advanced	<!!S>	01.08.2004
+177175	expert	<!!S>	01.08.2004
+177176	No skill found.	<!!M>	01.08.2004
+177177	No skill found.	<!!M>	01.08.2004
+177178	Select %Z-1 Skill Level for %Z2.	<!!S>	01.08.2004
+177179	Remove %Z-1.	<!!S>	01.08.2004
+177180	Give Basic %Z-1.	<!!S>	01.08.2004
+177181	Give Advanced %Z-1.	<!!S>	01.08.2004
+177182	Give Expert %Z-1.	<!!S>	01.08.2004
+177183	Cancel.	<!!S>	01.08.2004
+177184	Choose a new owner for %Z2.
+
+Note: only works if new owner has fewer than 8 active heroes.	<!!S>	01.08.2004
+177185	None (kills hero)	<!!S>	01.08.2004
+177186	WoG Cheat Menu for %Z2's Troop Slot %Y1	<!!S>	01.08.2004
+177187	Change Type and/or Number of %Z-8 in Slot %Y1.	<!!S>	01.08.2004
+177188	Add or remove Stack Experience from %Z-8 in Slot %Y1.	<!!S>	01.08.2004
+177189	Exit cheat menu.	<!!S>	01.08.2004
+177190	This slot is currently empty.	<!!S>	01.08.2004
+177191	There are %Y4 %Z-9 in this slot.	<!!S>	01.08.2004
+177192	Change Type and/or Number of Creatures in Slot #%X1.
+
+»» %Z-10 ««
+
+Enter a number alone to add creatures.  Ex:  35.
+Use negative numbers to remove creatures.  Ex:  -12.
+To set an EXACT number of creatures, put "=" in front 
+of the number. Ex:  =500.
+
+Enter a name alone to change the type of creatures without 
+changing the number.  Ex:  vampires.
+
+You can also enter a number followed by a creature name
+to give that number of creatures.  Ex:  45 silver pegasi.	<!!S>	01.08.2004
+177193	Add Creatures to Slot #%X1.
+
+»» %Z-10 ««
+
+Enter a number followed by a creature name to add 
+that number of creatures, e.g., 45 silver pegasi.	<!!S>	01.08.2004
+177194	Enter a number or a full or partial creature name.	<!!S>	01.08.2004
+177195	Enter a number followed by a full or partial creature name.	<!!S>	01.08.2004
+177196	You must enter a creature name after the number.	<!!M>	01.08.2004
+177197	You must enter a creature name after the number.	<!!M>	01.08.2004
+177198	Creature type not found.	<!!M>	01.08.2004
+177199	You must enter a number before the creature name.	<!!M>	01.08.2004
+177200	You must enter a positive number before the creature name.	<!!M>	01.08.2004
+177201	You must enter a positive number before the creature name.	<!!M>	01.08.2004
+177202	WoG Cheat Menu for %Z2	<!!S>	01.08.2004
+177203	Build or remove a building in %Z2.	<!!S>	01.08.2004
+177204	Change the Owner of %Z2.	<!!S>	01.08.2004
+177205	Give or remove Resources from %Z-10 player.	<!!S>	01.08.2004
+177206	Dump Variables to external text file (for debugging, not a cheat).	<!!S>	01.08.2004
+177207	Exit cheat menu.	<!!S>	01.08.2004
+177208	Choose a new owner for %Z2.	<!!S>	01.08.2004
+177209	None	<!!S>	01.08.2004
+177210	Build a free building in %Z2 or remove a building.
+
+To remove a building, type "remove" before the building name.
+To build or remove all buildings, use "all" as the building name.	<!!S>	01.08.2004
+177211	Enter a building number (0..43) or a full or partial building name.	<!!S>	01.08.2004
+177212	remove	<!!S>	01.08.2004
+177213	rem	<!!S>	01.08.2004
+177214	build	<!!S>	01.08.2004
+177215	No building found.	<!!M>	01.08.2004
+177216	all	<!!S>	01.08.2004
+177217	No building found.	<!!M>	01.08.2004
+177218	Change Stacksize (currently size is set to %V9008%%)		26.11.2004
+177219	Choose new percantage (at least 1 %)		26.11.2004

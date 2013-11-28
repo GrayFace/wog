@@ -1,0 +1,1335 @@
+308001	"{Summon Boat}
+
+Summons an existing, friendly, unoccupied boat from anywhere in the world to your location.
+
+Chances for success are 50%.
+"		
+308002	"{Basic Summon Boat}
+
+Summons an existing, friendly, unoccupied boat from anywhere in the world to your location.
+
+Chances for success are 50%.
+"		
+308003	"{Advanced Summon Boat}
+
+Summons an existing, friendly, unoccupied boat from anywhere in the world to your location.  If no boats exist, one is created.
+
+Chances for success are 75%.
+"		
+308004	"{Expert Summon Boat}
+
+Summons an existing, friendly, unoccupied boat from anywhere in the world to your location.  If no boats exist, one is created.
+"		
+308005	"{Scuttle Boat}
+
+Destroys a boat you own.  Use with caution, the effects are permanent.
+
+Chances for success are 50%.
+"		
+308006	"{Basic Scuttle Boat}
+
+Destroys a boat you own.  Use with caution, the effects are permanent.
+
+Chances for success are 50%.
+"		
+308007	"{Advanced Scuttle Boat}
+
+Destroys a boat you own.  Use with caution, the effects are permanent.
+
+Chances for success are 75%.
+"		
+308008	"{Expert Scuttle Boat}
+
+Destroys a boat you own.  Use with caution, the effects are permanent.
+"		
+308009	"{Visions}
+
+Gives you a basic idea of the strength of an opposing army, hero, or garrison.
+"		
+308010	"{Basic Visions}
+
+Gives you a basic idea of the strength of an opposing hero or garrison.  In the case of nearby wandering monsters, gives you exact numbers of troops and tells you if they would be willing to join your hero.
+"		
+308011	"{Advanced Visions}
+
+Gives you a basic idea of the strength of an opposing garrison.  In the case of nearby wandering monsters, gives you exact numbers of troops and tells you if they would be willing to join your hero.  Allows you to view a nearby enemy hero's primary skill statistics, creature type and quantity, as if the hero was part of your kingdom.
+"		
+308012	"{Expert Visions}
+
+Gives you exact numbers of wandering monsters and tells you if they would be willing to join your hero.  Allows you to view a nearby enemy hero's primary skill statistics, creature type and quantity, as if the hero was part of your kingdom, as well as a nearby town's statistics, garrison creatures and quantity.
+"		
+308013	"{View earth}
+
+Reveals the location of all resources to the caster.
+"		
+308014	"{Basic View Earth}
+
+Reveals the location of all resources to the caster.
+"		
+308015	"{Advanced View Earth}
+
+Reveals the location of all resources and mines to the caster.
+"		
+308016	"{Expert View Earth}
+
+Reveals the location of all resources and mines and reveals all terrain to the caster.
+"		
+308017	"{Disguise}
+
+Gives false information to an enemy attempting to view your hero.
+"		
+308018	"{Basic Disguise}
+
+Makes all units in your army look like your most powerful unit to enemies trying to view your hero.  Numbers in each group are unchanged.
+"		
+308019	"{Advanced Disguise}
+
+Makes all units in your army look like your most powerful unit to enemies trying to view your hero.  Numbers in each group appear as zero.
+"		
+308020	"{Expert Disguise}
+
+Makes all units in your army look like the most powerful unit affiliated to your hero type to enemies trying to view your hero.  Numbers in each group appear as zero.
+"		
+308021	"{View Air}
+
+Reveals the location of all unclaimed artifacts to the caster.
+"		
+308022	"{Basic View Air}
+
+Reveals the location of all unclaimed artifacts to the caster.
+"		
+308023	"{Advanced View Air}
+
+Reveals the location of all unclaimed artifacts, plus enemy heroes to the caster.
+"		
+308024	"{Expert View Air}
+
+Reveals the location of all unclaimed artifacts, plus enemy heroes and towns to the caster.
+"		
+308025	"{Fly}
+
+Allows your army to use part of its movement to fly over obstacles (distance traveled may be up to 60% of normal movement).  You must land at the end of the turn.
+"		
+308026	"{Basic Fly}
+
+Allows your army to use part of its movement to fly over obstacles (distance traveled may be up to 60% of normal movement).  You must land at the end of the turn.
+"		
+308027	"{Advanced Fly}
+
+Allows your army to use most of its movement to fly over obstacles (distance traveled may be up to 80% of normal movement).  You must land at the end of the turn.
+"		
+308028	"{Expert Fly}
+
+Allows your army to use up to all of its movement to fly over obstacles (distance traveled may be up to 100% of normal movement).  You must land at the end of the turn.
+"		
+308029	"{Water Walk}
+
+Allows your army to use part of its movement to walk across bodies of water (water movement may be up to 60% of normal movement).  You must end your movement on dry land.
+"		
+308030	"{Basic Water Walk}
+
+Allows your army to use part of its movement to walk across bodies of water (water movement may be up to 60% of normal movement).  You must end your movement on dry land.
+"		
+308031	"{Advanced Water Walk}
+
+Allows your army to use most of its movement to walk across bodies of water (water movement may be up to 80% of normal movement).  You must end your movement on dry land.
+"		
+308032	"{Expert Water Walk}
+
+Allows your army to use up to all of its movement to walk across bodies of water (water movement may be up to 100% of normal movement).  You must end your movement on dry land.
+"		
+308033	"{Dimension Door}
+
+May be cast once per day and reduces the hero's movement by three tiles for each casting, you may teleport your hero to a visible, unoccupied location on the adventure map.
+"		
+308034	"{Basic Dimension Door}
+
+May be cast twice per day and reduces the hero's movement by three tiles for each casting, you may teleport your hero to a visible, unoccupied location on the adventure map.
+"		
+308035	"{Advanced Dimension Door}
+
+May be cast three times per day and reduces the hero's movement by three tiles for each casting, you may teleport your hero to a visible, unoccupied location on the adventure map.
+"		
+308036	"{Expert Dimension Door}
+
+May be cast four times per day and reduces the hero's movement by two tiles for each casting, you may teleport your hero to a visible, unoccupied location on the adventure map.
+"		
+308037	"{Town Portal}
+
+Teleports your hero to the nearest friendly town (300 movement points are expended when the spell is cast).  The town must be unoccupied.
+"		
+308038	"{Basic Town Portal}
+
+Teleports your hero to the nearest friendly town (300 movement points are expended when the spell is cast).  The town must be unoccupied.
+"		
+308039	"{Advanced Town Portal}
+
+Teleports your hero to any friendly town (300 movement points are expended when the spell is cast).  The town must be unoccupied.
+"		
+308040	"{Expert Town Portal}
+
+Teleports your hero to any friendly town (200 movement points are expended when the spell is cast).  The town must be unoccupied.
+"		
+308041	"{Quicksand}
+
+Randomly places four small patches of quicksand on the battlefield which are only visible to the caster and creatures native to the terrain.  Walking into quicksand ends a unit's movement for the turn and makes it visible to all.
+"		
+308042	"{Basic Quicksand}
+
+Randomly places four small patches of quicksand on the battlefield which are only visible to the caster and creatures native to the terrain.  Walking into quicksand ends a unit's movement for the turn and makes it visible to all.
+"		
+308043	"{Advanced Quicksand}
+
+Randomly places six small patches of quicksand on the battlefield which are only visible to the caster and creatures native to the terrain.  Walking into quicksand ends a unit's movement for the turn and makes it visible to all.
+"		
+308044	"{Expert Quicksand}
+
+Randomly places eight small patches of quicksand on the battlefield which are only visible to the caster and creatures native to the terrain.  Walking into quicksand ends a unit's movement for the turn and makes it visible to all.
+"		
+308045	"{Land Mine}
+
+Randomly places four small areas of landmines on the battlefield which are only visible to the caster and creatures native to the terrain.  It inflicts damage to any unit walking over it.
+
+Damage (No Skill) = (Power x 10)+25
+"		
+308046	"{Basic Land Mine}
+
+Randomly places four small areas of landmines on the battlefield which are only visible to the caster and creatures native to the terrain.  It inflicts damage to any unit walking over it.
+
+Damage (Basic Skill) =  (Power x 10)+25
+"		
+308047	"{Advanced Land Mine}
+
+Randomly places six small areas of landmines on the battlefield which are only visible to the caster and creatures native to the terrain.  It inflicts damage to any unit walking over it.
+
+Damage (Advanced Skill) =  (Power x 10)+50
+"		
+308048	"{Expert Land Mine}
+
+Randomly places eight small areas of landmines on the battlefield which are only visible to the caster and creatures native to the terrain.  It inflicts damage to any unit walking over it.
+
+Damage (Expert Skill) =  (Power x 10)+100
+"		
+308049	"{Force Field}
+
+Places a small Force Field on the battlefield at a point specified by the caster (force wall is two hexes wide and movement through these hexes is blocked). 
+"		
+308050	"{Basic Force Field}
+
+Places a small Force Field on the battlefield at a point specified by the caster (force wall is two hexes wide and movement through these hexes is blocked). 
+"		
+308051	"{Advanced Force Field}
+
+Places a medium sized Force Field on the battlefield at a point specified by the caster (force wall is three hexes wide and movement through these hexes is blocked).
+"		
+308052	"{Expert Force Field}
+
+Places a medium sized Force Field on the battlefield at a point specified by the caster (force wall is three hexes wide and movement through these hexes is blocked).
+"		
+308053	"{Fire Wall}
+
+Places a small wildfire on the battlefield at a point specified by the caster.  Any units passing through the wall take damage.
+
+Damage (No Skill) = (Power x 10)+10
+"		
+308054	"{Basic Fire Wall}
+
+Places a small wildfire on the battlefield at a point specified by the caster.  Any units passing through the wall take damage.
+
+Damage (Basic Skill) = (Power x 10)+10
+"		
+308055	"{Advanced Fire Wall}
+
+Places a medium sized wildfire on the battlefield at a point specified by the caster.  Any units passing through the wall take damage.
+
+Damage (Advanced Skill) = (Power x 10)+20
+"		
+308056	"{Expert Fire Wall}
+
+Places a medium sized wildfire on the battlefield at a point specified by the caster.  Any units passing through the wall take damage.
+
+Damage (Expert Skill) = (Power x 10)+50
+"		
+308057	"{Earthquake}
+
+Randomly damages two sections of castle wall in combat.
+"		
+308058	"{Basic Earthquake}
+
+Randomly damages two sections of castle wall in combat.
+"		
+308059	"{Advanced Earthquake}
+
+Randomly damages three sections of castle wall in combat.
+"		
+308060	"{Expert Earthquake}
+
+Randomly damages four sections of castle wall in combat.
+"		
+308061	"{Magic Arrow}
+
+Causes a bolt of magical energy to strike the selected unit.
+
+Damage (No Skill) = (Power x 10)+10
+"		
+308062	"{Basic Magic Arrow}
+
+Causes a bolt of magical energy to strike the selected unit.
+
+Damage (Basic Skill) = (Power x 10)+10
+"		
+308063	"{Advanced Magic Arrow}
+
+Causes a bolt of magical energy to strike the selected unit.
+
+Damage (Advanced Skill) = (Power x 10)+20
+"		
+308064	"{Expert Magic Arrow}
+
+Causes a bolt of magical energy to strike the selected unit.
+
+Damage (Expert Skill) = (Power x 10)+30
+"		
+308065	"{Ice Bolt}
+
+Drains the body heat from the selected enemy unit.
+
+Damage (No Skill) = (Power x 20)+10
+"		
+308066	"{Basic Ice Bolt}
+
+Drains the body heat from the selected enemy unit.
+
+Damage (Basic Skill) = (Power x 20)+10
+"		
+308067	"{Advanced Ice Bolt}
+
+Drains the body heat from the selected enemy unit.
+
+Damage (Advanced Skill) = (Power x 20)+20
+"		
+308068	"{Expert Ice Bolt}
+
+Drains the body heat from the selected enemy unit.
+
+Damage (Expert Skill) = (Power x 20)+50
+"		
+308069	"{Lightning Bolt}
+
+Causes a bolt of lightning to strike the selected unit.
+
+Damage (No Skill) = (Power x 25)+10
+"		
+308070	"{Basic Lightning Bolt}
+
+Causes a bolt of lightning to strike the selected unit.
+
+Damage (Basic Skill) = (Power x 25)+10
+"		
+308071	"{Advanced Lightning Bolt}
+
+Causes a bolt of lightning to strike the selected unit.
+
+Damage (Advanced Skill) = (Power x 25)+20
+"		
+308072	"{Expert Lightning Bolt}
+
+Causes a bolt of lightning to strike the selected unit.
+
+Damage (Expert Skill) = (Power x 25)+50
+"		
+308073	"{Implosion}
+
+Inflicts massive damage to a single creature stack.
+
+Damage (No Skill) = (Power x 75)+100
+"		
+308074	"{Basic Implosion}
+
+Inflicts massive damage to a single creature stack.
+
+Damage (Basic Skill) = (Power x 75)+100
+"		
+308075	"{Advanced Implosion}
+
+Inflicts massive damage to a single creature stack.
+
+Damage (Advanced Skill) = (Power x 75)+200
+"		
+308076	"{Expert Implosion}
+
+Inflicts massive damage to a single creature stack.
+
+Damage (Expert Skill) = (Power x 75)+300
+"		
+308077	"{Chain Lightning}
+
+Fires a bolt of lightning at the selected unit which then travels to the nearest adjacent unit, inflicting half damage before traveling to the next adjacent unit, again inflicting half damage, etc.  Strikes four units.
+
+Damage (No Skill) = (Power x 40)+25
+"		
+308078	"{Basic Chain Lightning}
+
+Fires a bolt of lightning at the selected unit which then travels to the nearest adjacent unit, inflicting half damage before traveling to the next adjacent unit, again inflicting half damage, etc.  Strikes four units.
+
+Damage (Basic Skill) = (Power x 40)+25
+"		
+308079	"{Advanced Chain Lightning}
+
+Fires a bolt of lightning at the selected unit which then travels to the nearest adjacent unit, inflicting half damage before traveling to the next adjacent unit, again inflicting half damage, etc.  Strikes five units.
+
+Damage (Advanced Skill) = (Power x 40)+50
+"		
+308080	"{Expert Chain Lightning}
+
+Fires a bolt of lightning at the selected unit which then travels to the nearest adjacent unit, inflicting half damage before traveling to the next adjacent unit, again inflicting half damage, etc.  Strikes five units.
+
+Damage (Expert Skill) = (Power x 40)+100
+"		
+308081	"{Frost Ring}
+
+Drains the body heat of any units adjacent to the target location, without inflicting damage on the target.
+
+Damage (No Skill) = (Power x 10)+15
+"		
+308082	"{Basic Frost Ring}
+
+Drains the body heat of any units adjacent to the target location, without inflicting damage on the target.
+
+Damage (Basic Skill) = (Power x 10)+15
+"		
+308083	"{Advanced Frost Ring}
+
+Drains the body heat of any units adjacent to the target location, without inflicting damage on the target.
+
+Damage (Advanced Skill) = (Power x 10)+30
+"		
+308084	"{Expert Frost Ring}
+
+Drains the body heat of any units adjacent to the target location, without inflicting damage on the target.
+
+Damage (Expert Skill) = (Power x 10)+60
+"		
+308085	"{Fireball}
+
+Causes the selected target to burst into flames, inflicting fire damage to the target and any adjacent units.
+
+Damage (No Skill) = (Power x 10)+15
+"		
+308086	"{Basic Fireball}
+
+Causes the selected target to burst into flames, inflicting fire damage to the target and any adjacent units.
+
+Damage (Basic Skill) = (Power x 10)+15
+"		
+308087	"{Advanced Fireball}
+
+Causes the selected target to burst into flames, inflicting fire damage to the target and any adjacent units.
+
+Damage (Advanced Skill) = (Power x 10)+30
+"		
+308088	"{Expert Fireball}
+
+Causes the selected target to burst into flames, inflicting fire damage to the target and any adjacent units.
+
+Damage (Expert Skill) = (Power x 10)+60
+"		
+308089	"{Inferno}
+
+Causes a huge blast of fire to strike the selected target within a two-hex radius.  Don't be near this when it goes off!
+
+Damage (No Skill) = (Power x 10)+20
+"		
+308090	"{Basic Inferno}
+
+Causes a huge blast of fire to strike the selected target within a two-hex radius.  Don't be near this when it goes off!
+
+Damage (Basic Skill) = (Power x 10)+20
+"		
+308091	"{Advanced Inferno}
+
+Causes a huge blast of fire to strike the selected target within a two-hex radius.  Don't be near this when it goes off!
+
+Damage (Advanced Skill) = (Power x 10)+40
+"		
+308092	"{Expert Inferno}
+
+Causes a huge blast of fire to strike the selected target within a two-hex radius.  Don't be near this when it goes off!
+
+Damage (Expert Skill) = (Power x 10)+80
+"		
+308093	"{Meteor Shower}
+
+Causes a meteor shower to rain down on the selected target and any adjacent units.
+
+Damage (No Skill) = (Power x 25)+25
+"		
+308094	"{Basic Meteor Shower}
+
+Causes a meteor shower to rain down on the selected target and any adjacent units.
+
+Damage (Basic Skill) = (Power x 25)+25
+"		
+308095	"{Advanced Meteor Shower}
+
+Causes a meteor shower to rain down on the selected target and any adjacent units.
+
+Damage (Advanced Skill) = (Power x 25)+50
+"		
+308096	"{Expert Meteor Shower}
+
+Causes a meteor shower to rain down on the selected target and any adjacent units.
+
+Damage (Expert Skill) = (Power x 25)+100
+"		
+308097	"{Death Ripple}
+
+Sends a wave of death across the battlefield which damages all non-undead units.
+
+Damage (No Skill) = (Power x 5)+10
+"		
+308098	"{Basic Death Ripple}
+
+Sends a wave of death across the battlefield which damages all non-undead units.
+
+Damage (Basic Skill) = (Power x 5)+10
+"		
+308099	"{Advanced Death Ripple}
+
+Sends a wave of death across the battlefield which damages all non-undead units.
+
+Damage (Advanced Skill) = (Power x 5)+20
+"		
+308100	"{Expert Death Ripple}
+
+Sends a wave of death across the battlefield which damages all non-undead units.
+
+Damage (Expert Skill) = (Power x 5)+30
+"		
+308101	"{Destroy Undead}
+
+Attempts to destroy any undead creatures on the battlefield.
+
+Damage (No Skill) = (Power x 10)+10
+"		
+308102	"{Basic Destroy Undead}
+
+Attempts to destroy any undead creatures on the battlefield.
+
+Damage (Basic Skill) = (Power x 10)+10
+"		
+308103	"{Advanced Destroy Undead}
+
+Attempts to destroy any undead creatures on the battlefield.
+
+Damage (Advancedt Effect) = (Power x 10)+20
+"		
+308104	"{Expert Destroy Undead}
+
+Attempts to destroy any undead creatures on the battlefield.
+
+Damage (Expert Skill) = (Power x 10)+50
+"		
+308105	"{Armageddon}
+
+Rains fire down upon the battlefield, damaging all units.
+
+Damage (No Skill) = (Power x 50)+30
+"		
+308106	"{Basic Armageddon}
+
+Rains fire down upon the battlefield, damaging all units.
+
+Damage (Basic Skill) = (Power x 50)+30
+"		
+308107	"{Advanced Armageddon}
+
+Rains fire down upon the battlefield, damaging all units.
+
+Damage (Advanced Skill) = (Power x 50)+60
+"		
+308108	"{Expert Armageddon}
+
+Rains fire down upon the battlefield, damaging all units.
+
+Damage (Expert Skill) = (Power x 50)+120
+"		
+308109	"{Shield}
+
+Shields a selected unit, reducing the amount of damage received from hand-to-hand attacks by 15%.
+"		
+308110	"{Basic Shield}
+
+Shields a selected unit, reducing the amount of damage received from hand-to-hand attacks by 15%.
+"		
+308111	"{Advanced Shield}
+
+Shields a selected unit, reducing the amount of damage received from hand-to-hand attacks by 30%.
+"		
+308112	"{Expert Shield}
+
+Shields all friendly units, reducing the amount of damage received from hand-to-hand attacks by 30%.
+"		
+308113	"{Air Shield}
+
+Shields a selected unit, reducing the amount of damage received from ranged attacks by 25%.
+"		
+308114	"{Basic Air Shield}
+
+Shields a selected unit, reducing the amount of damage received from ranged attacks by 25%.
+"		
+308115	"{Advanced Air Shield}
+
+Shields a selected unit, reducing the amount of damage received from ranged attacks by 50%.
+"		
+308116	"{Expert Air Shield}
+
+Shields all friendly units, reducing the amount of damage received from ranged attacks by 50%.
+"		
+308117	"{Fire Shield}
+
+Cast on a friendly unit, it does not provide any additional protection, but any enemy attacking through the fire shield will suffer damage equal to 20% of what it inflicts.
+"		
+308118	"{Basic Fire Shield}
+
+Cast on a friendly unit, it does not provide any additional protection, but any enemy attacking through the fire shield will suffer damage equal to 20% of what it inflicts.
+"		
+308119	"{Advanced Fire Shield}
+
+Cast on a friendly unit, it does not provide any additional protection, but any enemy attacking through the fire shield will suffer damage equal to 25% of what it inflicts.
+"		
+308120	"{Expert Fire Shield}
+
+Cast on a friendly unit, it does not provide any additional protection, but any enemy attacking through the fire shield will suffer damage equal to 30% of what it inflicts.
+"		
+308121	"{Protection from Air}
+
+Protects the selected unit, reducing damage received from Air spells by 30%.
+"		
+308122	"{Basic Protection from Air}
+
+Protects the selected unit, reducing damage received from Air spells by 30%.
+"		
+308123	"{Advanced Protection from Air}
+
+Protects the selected unit, reducing damage received from Air spells by 50%.
+"		
+308124	"{Expert Protection from Air}
+
+Protects the selected unit, reducing damage received from Air spells by 50%.
+"		
+308125	"{Protection from Fire}
+
+Protects the selected unit, reducing damage received from Fire spells by 30%.
+"		
+308126	"{Basic Protection from Fire}
+
+Protects the selected unit, reducing damage received from Fire spells by 30%.
+"		
+308127	"{Advanced Protection from Fire}
+
+Protects the selected unit, reducing damage received from Fire spells by 50%.
+"		
+308128	"{Expert Protection from Fire}
+
+Protects the selected unit, reducing damage received from Fire spells by 50%.
+"		
+308129	"{Protection from Water}
+
+Protects the selected unit, reducing damage received from Water spells by 30%.
+
+
+"		
+308130	"{Basic Protection from Water}
+
+Protects the selected unit, reducing damage received from Water spells by 30%.
+
+
+"		
+308131	"{Advanced Protection from Water}
+
+Protects the selected unit, reducing damage received from Water spells by 50%.
+"		
+308132	"{Expert Protection from Water}
+
+Protects the selected unit, reducing damage received from Water spells by 50%.
+"		
+308133	"{Protection from Earth}
+
+Protects the selected unit, reducing damage received from Earth spells by 30%.
+
+
+"		
+308134	"{Basic Protection from Earth}
+
+Protects the selected unit, reducing damage received from Earth spells by 30%.
+
+
+"		
+308135	"{Advanced Protection from Earth}
+
+Protects the selected unit, reducing damage received from Earth spells by 50%.
+"		
+308136	"{Expert Protection from Earth}
+
+Protects the selected unit, reducing damage received from Earth spells by 50%.
+"		
+308137	"{Anti-magic}
+
+Protects the selected unit from all low level spells (allied troop can only be affected by lvl 4 or 5 spells).
+"		
+308138	"{Basic Anti-magic}
+
+Protects the selected unit from all low level spells (allied troop can only be affected by lvl 4 or 5 spells).
+"		
+308139	"{Advanced Anti-magic}
+
+Protects the selected unit all but the most powerful spells (allied troop can only be affected by lvl 5 spells).
+"		
+308140	"{Expert Anti-magic}
+
+Protects the selected unit from all spells.
+"		
+308141	"{Dispel}
+
+Removes all spell effects from a friendly creature.
+"		
+308142	"{Basic Dispel}
+
+Removes all spell effects from a friendly creature.
+"		
+308143	"{Advanced Dispel}
+
+Removes all spell effects from a friendly or hostile creature.
+"		
+308144	"{Expert Dispel}
+
+Removes all spell effects from all units on the battlefield.
+"		
+308145	"{Magic Mirror}
+
+Reflects hostile spells towards a random enemy creature 20% of the time.
+"		
+308146	"{Basic Magic Mirror}
+
+Reflects hostile spells towards a random enemy creature 20% of the time.
+"		
+308147	"{Advanced Magic Mirror}
+
+Reflects hostile spells towards a random enemy creature 30% of the time.
+"		
+308148	"{Expert Magic Mirror}
+
+Reflects hostile spells towards a random enemy creature 40% of the time.
+"		
+308149	"{Cure}
+
+Removes all negative spell effects and heals a small number of hit points on the selected unit.
+
+Health (No Skill) = (Power x 5)+10
+"		
+308150	"{Basic Cure}
+
+Removes all negative spell effects and heals a small number of hit points on the selected unit.
+
+Health (Basic Skill) = (Power x 5)+10
+"		
+308151	"{Advanced Cure}
+
+Removes all negative spell effects and heals a small number of hit points on all friendly units.
+
+Health (Advanced Skill) = (Power x 5)+20
+"		
+308152	"{Expert Cure}
+
+Removes all negative spell effects and heals a small number of hit points on all friendly units.
+
+Health (Expert Skill) = (Power x 5)+30
+"		
+308153	"{Resurrection}
+
+Resurrects units in the selected group by restoring a fixed number of hit points to the target.
+
+Health (No Skill) = (Power x 50)+40
+
+"		
+308154	"{Basic Resurrection}
+
+Resurrects units in the selected group by restoring a fixed number of hit points to the target.
+
+Health (Basic Skill) = (Power x 50)+40
+
+
+"		
+308155	"{Advanced Resurrection}
+
+Resurrects units in the selected group by restoring a fixed number of hit points to the target.
+
+Health (Advanced Skill) = (Power x 50)+160
+"		
+308156	"{Expert Resurrection}
+
+Resurrects units in the selected group by restoring a fixed number of hit points to the target. 
+
+Health (Expert Skill) = (Power x 50)+160
+"		
+308157	"{Animate Dead}
+
+Re-animates any destroyed undead in the selected group by restoring a fixed number of hit points to the target.
+
+Health (No Skill) = (Power x 50)+30
+"		
+308158	"{Basic Animate Dead}
+
+Re-animates any destroyed undead in the selected group by restoring a fixed number of hit points to the target.
+
+Health (Basic Skill) = (Power x 50)+30
+"		
+308159	"{Advanced Animate Dead}
+
+Re-animates any destroyed undead in the selected group by restoring a fixed number of hit points to the target.
+
+Health (Advanced Skill) = (Power x 50)+60
+"		
+308160	"{Expert Animate Dead}
+
+Re-animates any destroyed undead in the selected group by restoring a fixed number of hit points to the target.
+
+Health (Expert Skill) = (Power x 50)+160
+"		
+308161	"{Sacrifice}
+
+Destroys a friendly creature group in order to resurrect a dead group.  Number of resurrected creatures depends on the caster's spell power and the health of the destroyed stack.
+
+Health (No Skill) = (Power+Destroyed Troop's Creature Base Health+3) x Number of Creatures Sacrificed
+"		
+308162	"{Basic Sacrifice}
+
+Destroys a friendly creature group in order to resurrect a dead group.  Number of resurrected creatures depends on the caster's spell power and the health of the destroyed stack.
+
+Health (Basic Skill) = (Power+Destroyed Troop's Creature Base Health+3) x Number of Creatures Sacrificed
+"		
+308163	"{Advanced Sacrifice}
+
+Destroys a friendly creature group in order to resurrect a dead group.  Number of resurrected creatures depends on the caster's spell power and the health of the destroyed stack.
+
+Health (Advanced Skill) = (Power+Destroyed Troop's Creature Base Health+6) x Number of Creatures Sacrificed
+"		
+308164	"{Expert Sacrifice}
+
+Destroys a friendly creature group in order to resurrect a dead group.  Number of resurrected creatures depends on the caster's spell power and the health of the destroyed stack.
+
+Health (Expert Skill) = (Power+Destroyed Troop's Creature Base Health+10) x Number of Creatures Sacrificed
+"		
+308165	"{Bless}
+
+Causes the selected unit to inflict maximum damage in combat.
+"		
+308166	"{Basic Bless}
+
+Causes the selected unit to inflict maximum damage in combat.
+"		
+308167	"{Advanced Bless}
+
+Causes the selected unit to inflict greater than their normal maximum damage +1 in combat.
+"		
+308168	"{Expert Bless}
+
+Causes all friendly units to inflict greater than their normal maximum damage +1 in combat.
+"		
+308169	"{Curse}
+
+Causes the selected enemy unit to inflict minimum damage in combat.
+"		
+308170	"{Basic Curse}
+
+Causes the selected enemy unit to inflict minimum damage in combat.
+"		
+308171	"{Advanced Curse}
+
+Causes the selected enemy unit to inflict (80% of  their normal minimum damage)-1 in combat.
+"		
+308172	"{Expert Curse}
+
+Causes all enemy units to inflict (80% of  their normal minimum damage)-1 in combat.
+"		
+308173	"{Bloodlust}
+
+Increases the hand-to-hand damage inflicted by the selected unit by giving a three point attack rating bonus.
+"		
+308174	"{Basic Bloodlust}
+
+Increases the hand-to-hand damage inflicted by the selected unit by giving a three point attack rating bonus.
+"		
+308175	"{Advanced Bloodlust}
+
+Increases the hand-to-hand damage inflicted by the selected unit by giving a six point attack rating bonus.
+"		
+308176	"{Expert Bloodlust}
+
+Increases the hand-to-hand damage inflicted by the selected unit by giving a six point attack rating bonus.
+"		
+308177	"{Precision}
+
+Increases the ranged attack damage inflicted by the selected unit by giving a three point attack rating bonus.
+"		
+308178	"{Basic Precision}
+
+Increases the ranged attack damage inflicted by the selected unit by giving a three point attack rating bonus.
+"		
+308179	"{Advanced Precision}
+
+Increases the ranged attack damage inflicted by the selected unit by giving a six point attack rating bonus.
+"		
+308180	"{Expert Precision}
+
+Increases the ranged attack damage inflicted by all friendly units by giving a six point attack rating bonus.
+"		
+308181	"{Weakness}
+
+Reduces the selected enemy unit's attack strength by three.
+"		
+308182	"{Basic Weakness}
+
+Reduces the selected enemy unit's attack strength by three.
+"		
+308183	"{Advanced Weakness}
+
+Reduces the selected enemy unit's attack strength by six.
+"		
+308184	"{Expert Weakness}
+
+Reduces the attack strength of all enemy units by six.
+"		
+308185	"{Stone Skin}
+
+Increases the selected unit's defense strength by three.
+"		
+308186	"{Basic Stone Skin}
+
+Increases the selected unit's defense strength by three.
+"		
+308187	"{Advanced Stone Skin}
+
+Increases the selected unit's defense strength by six.
+"		
+308188	"{Expert Stone Skin}
+
+Increases the defense strength of all friendly units by six.
+"		
+308189	"{Disrupting Ray}
+
+Reduces the selected enemy unit's defense strength by three.  A single enemy may be targeted multiple times by this spell.
+"		
+308190	"{Basic Disrupting Ray}
+
+Reduces the selected enemy unit's defense strength by three.  A single enemy may be targeted multiple times by this spell.
+"		
+308191	"{Advanced Disrupting Ray}
+
+Reduces the selected enemy unit's defense strength by four.  A single enemy may be targeted multiple times by this spell.
+"		
+308192	"{Expert Disrupting Ray}
+
+Reduces the selected enemy unit's defense strength by five.  A single enemy may be targeted multiple times by this spell.
+"		
+308193	"{Prayer}
+
+Bestows a bonus to the attack strength, defense strength and speed of the selected unit by two.
+"		
+308194	"{Basic Prayer}
+
+Bestows a bonus to the attack strength, defense strength and speed of the selected unit by two.
+"		
+308195	"{Advanced Prayer}
+
+Bestows a bonus to the attack strength, defense strength and speed of the selected unit by four.
+"		
+308196	"{Expert Prayer}
+
+Bestows a bonus to the attack strength, defense strength and speed of all friendly units by four.
+"		
+308197	"{Mirth}
+
+Increases the selected unit's morale by one  ( +1 morale = 4.2% chance of acting again).
+"		
+308198	"{Basic Mirth}
+
+Increases the selected unit's morale by one  ( +1 morale = 4.2% chance of acting again).
+"		
+308199	"{Advanced Mirth}
+
+Increases the selected unit's morale by two  ( +2 morale = 8.3% chance of acting again).
+"		
+308200	"{Expert Mirth}
+
+Increases the morale of all friendly units by two  ( +2 morale = 8.3% chance of acting again).
+"		
+308201	"{Sorrow}
+
+Reduces the morale of the selected enemy unit by one  ( -1 morale = 4.2% chance of freezing).
+"		
+308202	"{Basic Sorrow}
+
+Reduces the morale of the selected enemy unit by one ( -1 morale = 4.2% chance of freezing).
+"		
+308203	"{Advanced Sorrow}
+
+Reduces the morale of the selected enemy unit by two ( -2 morale = 8.3% chance of freezing).
+"		
+308204	"{Expert Sorrow}
+
+Reduces the morale of all enemy units by two ( -2 morale = 8.3% chance of freezing).
+"		
+308205	"{Fortune}
+
+Increases the selected unit's luck by one ( +1 luck = 4.2% chance for double damage).
+"		
+308206	"{Basic Fortune}
+
+Increases the selected unit's luck by one ( +1 luck = 4.2% chance for double damage).
+"		
+308207	"{Advanced Fortune}
+
+Increases the selected unit's luck by two ( +2 luck = 8.3% chance for double damage).
+"		
+308208	"{Expert Fortune}
+
+Increases the luck of all friendly units by two ( +2 luck = 8.3% chance for double damage).
+"		
+308209	"{Misfortune}
+
+Reduces the luck of the selected enemy unit by one (decreases the chance to get double damage with melee and ranged by 4.2% if target's current luck is above zero.)
+"		
+308210	"{Basic Misfortune}
+
+Reduces the luck of the selected enemy unit by one (decreases the chance to get double damage with melee and ranged by 4.2% if target's current luck is above zero.)
+"		
+308211	"{Advanced Misfortune}
+
+Reduces the luck of the selected enemy unit by two (decreases the chance to get double damage with melee and ranged by 8.3% if target's current luck is above zero.)
+"		
+308212	"{Expert Misfortune}
+
+Reduces the luck of all enemy units by two (decreases the chance to get double damage with melee and ranged by 8.3% if target's current luck is above zero.)
+"		
+308213	"{Haste}
+
+Increases the speed of the selected unit by one.
+"		
+308214	"{Basic Haste}
+
+Increases the speed of the selected unit by one.
+"		
+308215	"{Advanced Haste}
+
+Increases the speed of the selected unit by one.
+"		
+308216	"{Expert Haste}
+
+Increases the speed of all friendly units by two.
+"		
+308217	"{Slow}
+
+Reduces the speed of the selected enemy unit by 10%.
+"		
+308218	"{Basic Slow}
+
+Reduces the speed of the selected enemy unit by 10%.
+"		
+308219	"{Advanced Slow}
+
+Reduces the speed of the selected enemy unit by 20%.
+"		
+308220	"{Expert Slow}
+
+Reduces the speed of all enemy units by 20%.
+"		
+308221	"{Slayer}
+
+Increases the amount of damage inflicted by a unit when fighting against Dragons, Behemoths and Hydras by eight.
+"		
+308222	"{Basic Slayer}
+
+Increases the amount of damage inflicted by a unit when fighting against Dragons, Behemoths and Hydras by eight.
+"		
+308223	"{Advanced Slayer}
+
+Increases the amount of damage inflicted by a unit when fighting against Dragons, Behemoths, Hydras, Devils and Angels by eight.
+"		
+308224	"{Expert Slayer}
+
+Increases the amount of damage inflicted by a unit when fighting against Dragons, Behemoths, Hydras, Devils, Angels and Titans by eight.
+"		
+308225	"{Frenzy}
+
+Selected troop intentionally lowers its defenses to increase the ferocity of its attack (target troop's attack is increased by 100% of the troop's defense rating, and its defense rating is reduced to zero).
+"		
+308226	"{Basic Frenzy}
+
+Selected troop intentionally lowers its defenses to increase the ferocity of its attack (target troop's attack is increased by 100% of the troop's defense rating, and its defense rating is reduced to zero).
+"		
+308227	"{Advanced Frenzy}
+
+Selected troop intentionally lowers its defenses to increase the ferocity of its attack (target troop's attack is increased by 150% of the troop's defense rating, and its defense rating is reduced to zero).
+"		
+308228	"{Expert Frenzy}
+
+Selected troop intentionally lowers its defenses to increase the ferocity of its attack (target troop's attack is increased by 200% of the troop's defense rating, and its defense rating is reduced to zero).
+"		
+308229	"{Titan's Lightning Bolt}
+
+Does {600} points of damage at no spell cost to the spellcaster."		
+308230	"{Titan's Lightning Bolt}
+
+Does 600 points of damage at no spell cost to the spellcaster."		
+308231	"{Titan's Lightning Bolt}
+
+Does 600 points of damage at no spell cost to the spellcaster."		
+308232	"{Titan's Lightning Bolt}
+
+Does 600 points of damage at no spell cost to the spellcaster."		
+308233	"{Counterstrike}
+
+The selected unit will retaliate against one additional attack each round.
+"		
+308234	"{Basic Counterstrike}
+
+The selected unit will retaliate against one additional attack each round.
+"		
+308235	"{Advanced Counterstrike}
+
+The selected unit will retaliate against two additional attacks each round.
+"		
+308236	"{Expert Counterstrike}
+
+All friendly units will retaliate against two additional attacks each round.
+"		
+308237	"{Berserk}
+
+The targeted unit will randomly attack the nearest unit, be it friend or foe.
+"		
+308238	"{Basic Berserk}
+
+The targeted unit will randomly attack the nearest unit, be it friend or foe.
+"		
+308239	"{Advanced Berserk}
+
+All units in a one-hex radius of the target will attack the nearest unit, be it friend or foe.
+"		
+308240	"{Expert Berserk}
+
+All units in a two-hex radius of the target will attack the nearest unit, be it friend or foe.
+"		
+308241	"{Hypnotize}
+
+Puts an enemy unit temporarily under your control. Allied troops may attack hypnotized troop without fear of retaliation.
+
+Health (No Skill) = (Power x 25)+10
+"		
+308242	"{Basic Hypnotize}
+
+Puts an enemy unit temporarily under your control. Allied troops may attack hypnotized troop without fear of retaliation.
+
+Health (Basic Skill) = (Power x 25)+10
+"		
+308243	"{Advanced Hypnotize}
+
+Puts an enemy unit temporarily under your control. Allied troops may attack hypnotized troop without fear of retaliation.
+
+Health (Advanced Skill) = (Power x 25)+20
+"		
+308244	"{Expert Hypnotize}
+
+Puts an enemy unit temporarily under your control. Allied troops may attack hypnotized troop without fear of retaliation.
+
+Health (Expert Skill) = (Power x 25)+50
+"		
+308245	"{Forgetfulness}
+
+Half of the selected enemy unit forgets to use its ranged attack.
+"		
+308246	"{Basic Forgetfulness}
+
+Half of the selected enemy unit forgets to use its ranged attack.
+"		
+308247	"{Advanced Forgetfulness}
+
+Causes the selected enemy unit to forget to use its ranged attack in combat.
+"		
+308248	"{Expert Forgetfulness}
+
+Causes all enemy troops to forget to use their ranged attack in combat.
+"		
+308249	"{Blind}
+
+Blinds a creature so that it cannot move and causes it to counterattack at half its normal attack strength.  Blindness persists until the unit is attacked or dispelled.
+"		
+308250	"{Basic Blind}
+
+Blinds a creature so that it cannot move and causes it to counterattack at half its normal attack strength.  Blindness persists until the unit is attacked or dispelled.
+"		
+308251	"{Advanced Blind}
+
+Blinds a creature so that it cannot move and causes it to counterattack at one-quarter of its normal attack strength.  Blindness persists until the unit is attacked or dispelled.
+"		
+308252	"{Expert Blind}
+
+Blinds a creature so that it cannot move or counterattack.  Blindness persists until the unit is attacked or dispelled.
+"		
+308253	"{Teleport}
+
+Teleports any friendly unit to any unoccupied spot on the battlefield.
+"		
+308254	"{Basic Teleport}
+
+Teleports any friendly unit to an unoccupied spot on the battlefield.
+
+Troop cannot teleport over walls or moats.
+"		
+308255	"{Advanced Teleport}
+
+Teleports any friendly unit to an unoccupied spot on the battlefield.
+
+Troop cannot teleport over walls.
+"		
+308256	"{Expert Teleport}
+
+Teleports any friendly unit to any unoccupied spot on the battlefield.
+"		
+308257	"{Remove Obstacle}
+
+Removes any normal obstacle (trees, rocks, etc.) of the caster's choice from the battlefield.
+"		
+308258	"{Basic Remove Obstacle}
+
+Removes any normal obstacle (trees, rocks, etc.) of the caster's choice from the battlefield.
+"		
+308259	"{Advanced Remove Obstacle}
+
+Removes any normal obstacle (trees, rocks, etc.) or Fire Wall of the caster's choice from the battlefield.
+"		
+308260	"{Expert Remove Obstacle}
+
+Removes any normal or magical obstacle of the caster's choice from the battlefield.
+"		
+308261	"{Clone}
+
+Creates a duplicate of the selected unit stack.  The image is dispelled if it is attacked.
+
+Clones creatures of levels 1-5.
+"		
+308262	"{Basic Clone}
+
+Creates a duplicate of the selected unit stack.  The image is dispelled if it is attacked.
+
+Clones creatures of levels 1-5.
+"		
+308263	"{Advanced Clone}
+
+Creates a duplicate of the selected unit stack.  The image is dispelled if it is attacked.
+
+Clones creatures of levels 1-6.
+"		
+308264	"{Expert Clone}
+
+Creates a duplicate of the selected unit stack.  The image is dispelled if it is attacked.
+
+Clones creatures of any level.
+"		
+308265	"{Summon Fire Elemental}
+
+Allows you to summon fire elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (No Skill) =  (Power x 2) Fire Elementals.
+"		
+308266	"{Basic Summon Fire Elemental}
+
+Allows you to summon fire elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Basic Skill) =  (Power x 2) Fire Elementals.
+"		
+308267	"{Advanced Summon Fire Elemental}
+
+Allows you to summon fire elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Advanced Skill) =  (Power x 3) Fire Elementals.
+"		
+308268	"{Expert Summon Fire Elemental}
+
+Allows you to summon fire elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Expert Skill) =  (Power x 4) Fire Elementals.
+"		
+308269	"{Summon Earth Elemental}
+
+Allows you to summon earth elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (No Skill) =  (Power x 2) Earth Elementals.
+"		
+308270	"{Basic Summon Earth Elemental}
+
+Allows you to summon earth elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Basic Skill) =  (Power x 2) Earth Elementals.
+"		
+308271	"{Advanced Summon Earth Elemental}
+
+Allows you to summon earth elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Advanced Skill) =  (Power x 3) Earth Elementals.
+"		
+308272	"{Expert Summon Earth Elemental}
+
+Allows you to summon earth elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Expert Skill) =  (Power x 4) Earth Elementals.
+"		
+308273	"{Summon Water Elemental}
+
+Allows you to summon water elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (No Skill) =  (Power x 2) Water Elementals.
+"		
+308274	"{Basic Summon Water Elemental}
+
+Allows you to summon water elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Basic Skill) =  (Power x 2) Water Elementals.
+"		
+308275	"{Advanced Summon Water Elemental}
+
+Allows you to summon water elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Advanced Skill) =  (Power x 3) Water Elementals.
+"		
+308276	"{Expert Summon Water Elemental}
+
+Allows you to summon water elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Expert Skill) =  (Power x 4) Water Elementals.
+"		
+308277	"{Summon Air Elemental}
+
+Allows you to summon air elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (No Skill) =  (Power x 2) Air Elementals.
+"		
+308278	"{Basic Summon Air Elemental}
+
+Allows you to summon air elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Basic Skill) =  (Power x 2) Air Elementals.
+"		
+308279	"{Advanced Summon Air Elemental}
+
+Allows you to summon air elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Advanced Skill) =  (Power x 3) Air Elementals.
+"		
+308280	"{Expert Summon Air Elemental}
+
+Allows you to summon air elementals.  Once cast, no other elemental types may be summoned.
+
+Summon (Expert Skill) =  (Power x 4) Air Elementals.
+"		

@@ -1,0 +1,817 @@
+ZVSE
+ERMS_ScriptDate=20.11(November).2007
+
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**********************************************************************************************************************
+**CAVE OF OBSCURITY (script87.erm)
+**by Rich Reed
+
+**LAST UPDATED: November 20, 2007
+
+**This script is a weird new "creature bank" in which a hero must battle a random horde of Sorcerers
+**inside a giant fortress, whom are protected by one of the four types of Emissaries. The Sorcerers,
+**represented by one of the 9 possible Commander types, cast a "mysterious spell" that does ocntinuous
+**damage to ALL of the hero's units--including Dragons and War Machines.  A separate "mysterious spell"
+**cast on the hero decreases his/her spell points by 6-8 every round!
+
+**For the first time, having the "Remove Obstacle" spell gives you a HUGE advantage, as it will allow some troops easier
+**access  inside the fortress on the battlefield to fight the guards.
+
+**Defeating the Sorcerers in the fortress earns the hero gold, mithril, a stack of Commanders into the hero's army,
+**and the "Mysterious Orb", which has the same powers as the Sorcerers who were inside the Cave of Obscurity!
+
+**The Orb's powers, however, are DISABLED for naval battles.
+
+**To view information regarding a hero's Orb, right-click on the "Spell Power" icon in the Hero Information Screen.
+
+**The caves can be visited continuously throughout the game but only once per week per hero.
+
+**This script uses object 63/59 under the Castle Objects (the cave with the skeleton in the
+**dark entrance).  It is the 20th object under the TOWER town in the last column of the Map Editor.
+
+**z476 used to store hint text for the caves
+**z478 used to store messages for custom dialogue boxes
+**z842 and z843 used to store hero names and messages during battles involving heroes with a "Mysterious Orb"
+
+**v935 used to store hint text for the caves
+**v936 used to determine type of battlefield arrangement within the cave
+**v937 determines type of Emissaries in battle
+**v938 determines type of Commander stacks
+**v939 used to increase number of guards and the guards' stats in all of the caves weekly
+**v1120 and v1121 used for mysterious spellcasting upon hero's troops each round when fighting the guards;
+**v1120 and v1121 also used for mysterious spellcasting if hero has an orb
+**v1126 used to show that at least one hero has visited any Cave of Obscurity on the map
+**v1174 used to calculate number of Caves of Obscurity at map start-up
+**v1500-v1503, v1505-v1508, v1513-1518 used in universal battles involving heroes with a "Mysterious Orb"
+
+**FUNCTION 7111 used to reset all of the heroes' w85 variables on DAY 1 of every week
+**FUNCTIONS 7112 and 7113 used to show animations and do "mysterious damage" on stacks affected by the Black Orb
+**FUNCTION 14308 used to assign PO numbers to all of the caves at map start-up
+
+**w85 stores the orb
+**w86 keeps rack if a hero has visited a cave during the current week (hero can only visit one cave per week)
+
+**FLAG 802 used for Cave of Obscurity battles ONLY
+
+**DIALOGUE BOXES 90 and 91 used
+
+******************************************************************************************************************
+
+**Clear string variables
+!#VRz476:S^^;
+!#VRz478:S^^;
+!#VRz842:S^^;
+!#VRz843:S^^;
+
+**Clear variables
+!#VRv1500:C0/0/0/0/0/0/0/0/0/0/0/0;
+!#VRv1513:C0/0/0/0/0/0;
+
+!#VRv939:S0;
+!#VRv939:+2;  **Store 2 into "v939" (used as base number for amount of commanders in each stack of guardians)
+
+!#VRv1174:S0;  **Cleat "v1174" at map start-up
+!#UN:U63/59/?v1174; **Get the total number of "Caves of Obscurity" on the map into "v1174"
+
+!#VRz476:S^Cave of Obscurity^;
+!#VRv935:S0;
+!#HT63/59:V935/0/476;  **Set up hint text for the caves
+
+******************************************************************************************************************
+**TIMER TRIGGERS
+
+!?TM1&$day$=1;
+!!DO14308/1/v1174/1:P; **Assign numbers to the caves
+
+**Timer to increase number of guards and the Emissaries' stats weekly
+!?TM2&$weekday$=$monday$/$day$>=8/$once$=1;
+!!UN:P235/?y1; **Check if "Creature Bank/Neutral Town" option is enabled
+!!FU&y1<>1:E; **Exit timer if NOT enabled
+!!VRv939&y1=1:+1;  **Number of cave guards and Emissaries' health increases weekly
+
+**Timer to reset all of the heroes' w85 variables on DAY 1 of each week
+!?TM2&$weekday$=$monday$/$once$=1;
+!!IF:W-1;  **Switch to current hero's variables
+!!IF&v1126=1:M^The Elder Gods of Erathia have suppressed all powers of the Orbs of Obscurity and have reopened the gates to every Cave of Obscurity around the lands!^;
+**Display above message if at least one hero has defeated a ave of Obscurity
+!!DO7111/0/155/1:P;
+
+*******************************************************************************************************************
+
+!?FU7111;  **Function to reset all of the heroes' w85 and w86 variables
+!!IF:Wx16;
+!!VRw85:S0;
+!!VRw86:S0;
+!!VRv1126:S0;
+
+*******************************************************************************************************************
+
+!?FU14308;  **Function to assign PO numbers to all of the caves
+!!VRv5:R7;  **Get random number from 0-7 into v5
+!!VRv6:R3;  **Get random number from 0-3 into v6
+!!VRv7:R8;  **Get random number from 0-8 into v7
+!!UN:U63/59/x16/1; **Get coordinates of the caves at each loop
+!!POv1/v2/v3:B0/v5;  **Store random number from 0-7 into PO:B at each loop to determine battlefields
+!!POv1/v2/v3:Hv6;    **Store random number from 0-3 into PO:H at each loop to determine type of Emissaries
+!!POv1/v2/v3:Sv7;    **Store random number from 0-8 into PO:S at each loop to determine type of Commanders
+!!VRv5:S0;  **Clear v5 to get another random number
+!!VRv6:S0;  **Clear v6 to get another random number
+!!VRv7:S0;  **Clear v7 to get another random number
+
+*******************************************************************************************************************
+
+!?OB63/59&v935=0/1000;  *Triggers when any "Cave of Obscurity" is visited
+
+!!IF:W-1;  **Switch to current hero's variables
+
+!!HE-1:B0/?z1;  **Get current hero's name into "z1" temporarily
+!!HE-1:R2/?j/0;  **Get sex of current hero into "j" temporarily
+
+**Display messages if hero has already visited a cave during the current week
+!!IF&w86=1/j=0:M^%Z1 has already visited a Cave of Obscurity this week.  He must wait until the week begins anew before the caves' portals are reopened to him.....^;
+!!IF&w86=1/j=1:M^%Z1 has already visited a Cave of Obscurity this week.  She must wait until the week begins anew before the caves' portals are reopened to her.....^;
+
+!!POv998/v999/v1000:B0/?y1; **Read PO:B0 value into y1
+!!POv998/v999/v1000:H?y2; **Read PO:H value into y2
+!!POv998/v999/v1000:S?y3; **Read PO:S value into y3
+
+**Store values from y1 into "v936" to determine battlefield
+!!VRv936&y1=0:S0;
+!!VRv936&y1=1:S1;
+!!VRv936&y1=2:S2;
+!!VRv936&y1=3:S3;
+!!VRv936&y1=4:S4;
+!!VRv936&y1=5:S5;
+!!VRv936&y1=6:S6;
+!!VRv936&y1=7:S7;
+
+**Store values from y2 into "v937" to determine type of Emissaries
+!!VRv937&y2=0:S160;  **Emissary of War
+!!VRv937&y2=1:S161;  **Emissary of Peace
+!!VRv937&y2=2:S162;  **Emissary of Mana
+!!VRv937&y2=3:S163;  **Emissary of Lore
+
+**Store values from y3 into "v938" to determine type of Commanders
+!!VRv938&y3=0:S183;  (PALADINS)
+!!VRv938&y3=1:S184;  (HIEROPHANTS)
+!!VRv938&y3=2:S185;  (TEMPLE GUARDIANS)
+!!VRv938&y3=3:S186;  (SUCCUBUSES)
+!!VRv938&y3=4:S187;  (SOUL EATERS)
+!!VRv938&y3=5:S188;  (BRUTES)
+!!VRv938&y3=6:S189;  (OGRE LEADERS)
+!!VRv938&y3=7:S190;  (SHAMANS)
+!!VRv938&y3=8:S191;  (ASTRAL SPIRITS)
+
+**Rename the Emissaries and commanders to "Mysterious Guards" temporarily
+!!VRz2:S^^;
+!!VRz2:S^Mysterious Guards^;
+!!UN:G1/160/1/z2;
+!!UN:G1/161/1/z2;
+!!UN:G1/162/1/z2;
+!!UN:G1/163/1/z2;
+!!UN:G1/183/1/z2;
+!!UN:G1/184/1/z2;
+!!UN:G1/185/1/z2;
+!!UN:G1/186/1/z2;
+!!UN:G1/187/1/z2;
+!!UN:G1/188/1/z2;
+!!UN:G1/189/1/z2;
+!!UN:G1/190/1/z2;
+!!UN:G1/191/1/z2;
+
+**Display messages if hero HASN'T visited a cave during the current week
+!!IF&w86=0/j=0:Q5/21/v937/21/v938/2^{Cave of Obscurity}
+
+%Z1 has found a Cave of Obscurity.  Will he challenge the strange entities that guard these caverns?^;
+
+!!IF&w86=0/j=1:Q5/21/v937/21/v938/2^{Cave of Obscurity}
+
+%Z1 has found a Cave of Obscurity.  Will she challenge the strange entities that guard these caverns?^;
+
+!!IF&5:V802/1;       **Sets FLAG 802 to TRUE if OK is pressed
+
+**Restore original names of Emissaries and Commanders
+!!UN:G1/160/1/0;
+!!UN:G1/161/1/0;
+!!UN:G1/162/1/0;
+!!UN:G1/163/1/0;
+!!UN:G1/183/1/0;
+!!UN:G1/184/1/0;
+!!UN:G1/185/1/0;
+!!UN:G1/186/1/0;
+!!UN:G1/187/1/0;
+!!UN:G1/188/1/0;
+!!UN:G1/189/1/0;
+!!UN:G1/190/1/0;
+!!UN:G1/191/1/0;
+
+**Trigger the battle
+!!HE-1&802/v935=0/w85=0:Tv998/v999/v1000/v937/1;
+
+*===============================================================================
+**Set up the special "Cave of Obscurity" battlefields and Unknown Creatures
+*===============================================================================
+
+!?BA0&802;
+!!UN:J8/1/^p\s087_obscurity.pcx^;  **Check to see if custom image exists in DATA folder
+!!BA&1:B^p\s087_obscurity.pcx^;  **Set background to "Obscurity"
+!!BA&-1:B12;  **Set background to "Subterranean"
+
+*===============================================================================
+**Clear important variables at start of every universal battle
+*===============================================================================
+!?BF;
+
+!!VRv1513:S0;
+!!VRv1514:S0;
+
+!!BH0&1000:N?v1513; **Get the number of the hero on left side of battlefield (attacking hero) into "v1513"
+!!IF:Wv1513;  **Switch to the variables of the attacking hero
+!!HEv1513:E?v1505/?v1506/1;  **Get ATTACKING hero's Level into "v1506"
+
+!!BH1&1000:N?v1514; **Get the number of the hero on right side of battlefield (defending hero) into "v1513"
+!!IF:Wv1514;  **Switch to the variables of the defending hero
+!!HEv1514:E?v1507/?v1508/1;  **Get DEFENDING hero's Spell Power into "v1508"
+
+**Clear all variables to be used during combat
+!!VRv1505:S0;
+!!VRv1507:S0;
+!!VRv1513:S0;
+!!VRv1514:S0;
+
+*===============================================================================
+**SET UP RANDOM SPECIAL BATTLEFIELDS FOR CAVE OF OBSCURITY BATTLES
+*===============================================================================
+!?BF&802/v936=0;
+
+!!BF:C; **Clear the battlefield
+**23 Cloud Holes covers the battlefield
+!!BF:O88/42 O88/43 O88/44 O88/45 O88/46 O88/47 O88/48 O88/65 O88/81 O88/98;
+!!BF:O88/115 O88/133 O88/150 O88/149 O88/148 O88/147 O88/146 O88/145 O88/144;
+!!BF:O88/128 O88/111 O88/77 O88/60;
+!!BM21&v936=0:P95;  **Place the Emissary
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=1; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place tree stumps
+!!BF:O21/25 O21/26 O21/41 O21/43 O21/58 O21/61 O21/74 O21/78 O21/91 O21/96;
+!!BF:O21/107 O21/113 O21/126 O21/127 O21/128 O21/129 O21/130 O21/131;
+**Place the Emissary
+!!BM21&v936=1:P125;
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=2; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place fire rocks
+!!BF:O79/8 O79/25 O79/26 O79/42 O79/59 O79/60 O79/73 O79/74 O79/75 O79/76;
+!!BF:O79/77 O79/78 O79/79 O79/80 O79/107 O79/108 O79/109 O79/110 O79/111;
+!!BF:O79/112 O79/113 O79/114 O79/127 O79/128 O79/144 O79/161 O79/162 O79/178;
+**Place the Emissary
+!!BM21&v936=2:P90;
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=3; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place clovers
+!!BF:O74/24 O74/157 O74/164;
+!!BF:O71/58 O71/61 O71/74 O71/78 O71/91 O71/96 O71/108 O71/112;
+!!BF:O71/126 O71/129 O71/143 O71/145 O71/161 O71/162;
+!!BM21&v936=3:P59;
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=4; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place frozen lakes and lucid rocks
+!!BF:O75/8 O75/25 O75/26 O75/41 O75/42 O75/43 O75/58 O75/59 O75/60 O75/61;
+!!BF:O75/74 O75/78 O75/96 O75/108 O75/112 O75/126 O75/127 O75/128 O75/129;
+!!BF:O75/143 O75/144 O75/145 O75/161 O75/162 O75/178;
+!!BM21&v936=4:P91;  **Position the Emissary on the field
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=5; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place white crosses on the battlefield
+!!BF:O63/8 O63/9 O63/10 O63/26 O63/28 O63/43 O63/45 O63/61 O63/63 O63/78;
+!!BF:O63/80 O63/96 O63/98 O63/113 O63/115 O63/131 O63/133 O63/148 O63/150;
+!!BF:O63/166 O63/168 O63/185;
+!!BM21&v936=5:P184;  **Position the Emissary on the field
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=6; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place earth rocks on the battlefield
+!!BF:O84/40 O84/41 O84/42 O84/43 O84/44 O84/45 O84/46 O84/47 O84/48 O84/57;
+!!BF:O84/59 O84/61 O84/63 O84/65 O84/73 O84/75 O84/77 O84/79 O84/81 O84/90;
+!!BF:O84/92 O84/94 O84/96 O84/98 O84/106 O84/108 O84/110 O84/112 O84/114;
+!!BM21&v936=6:P107;  **Position the Emissary on the field
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+!?BF&802/v936=7; **Sets up special battlefield
+
+!!BF:C; **Clear the battlefield
+**Place evil weeds on the battlefield
+!!BF:O66/43 O66/44 O66/45 O66/46 O66/47 O66/48 O66/60 O66/76 O66/77 O66/78;
+!!BF:O66/79 O66/80 O66/81 O66/93 O66/109 O66/110 O66/111 O66/112 O66/113;
+!!BF:O66/114;
+!!BM21&v936=7:P65;  **Position the Emissary on the field
+!!VRj:S0;
+!!VRj:+v939;
+!!VRj:*10;
+!!VRj:+80;
+!!BM21:Hj;   **Emissaries health begins at 100 and increases by 10 weekly
+
+**********************************************************************************************
+*TRIGGER FOR MYSTERIOUS SPELLCASTING MESSAGES AFTER EVERY ROUND DURING CAVE BATTLES
+**********************************************************************************************
+!?BR&802;
+
+!!VRj:S0;  **Clear temp. variable "j"
+!!VRk:S0;  **Clear temp. variable "k"
+
+!!BH0:N?k; **Get the number of the hero on left side of battlefield (attacking hero) into "k"
+!!IF:Wk;  **Switch to the variables of the attacking hero
+
+!!HEk:B0/?z2;  **Get current hero's name into "z2" temporarily
+
+!!IF&v997=1:Q1/21/v937/21/v938/1^"No one is immune to the magical force that permeates these caverns....."^;
+!!IF&v997=2:Q1/21/v937/21/v938/1^"Only the dead are spared from our powerful wrath of destructive magic....."^;
+!!IF&v997>=3:Q1/21/v937/21/v938/1^"The longer you remain inside this cave, the more that will surely perish....."^;
+
+********************************************************************************************************************
+*MYSTERIOUS SPELLCASTING ANIMATIONS BY CAVE GUARDIANS
+********************************************************************************************************************
+!?BR&802/v997>=0;
+
+**Clear temp. variables "n" and "o"
+!!VRn:S0;
+!!VRo:S0;
+!!VRn:S75;
+
+**Show the "mysterious spell" animation on the hero
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;
+!!BM0:V63;  **The "Fire Wall" animation used x8
+
+**Show the "mysterious spell" animation on all hero stacks that are currently alive
+!!DO7112/0/20/1:Pn;
+
+**Decrease hero's spell points by 3-5 each round of combat
+!!VRs:S0 S3 T2;
+!!HE-1:I?t;  **Get hero's spell points
+!!HE-1&s=3/t<=3:I0;
+!!HE-1&s=4/t<=4:I0;
+!!HE-1&s=5/t<=5:I0;  **Spell points reduced to a minimum of zero
+!!HE-1&s=3/t>3:Id-3;
+!!HE-1&s=4/t>4:Id-4;
+!!HE-1&s=5/t>5:Id-5; **Spell points reduced
+
+****************************************************************************************************************************************
+*MYSTERIOUS SPELLCASTING BY A HERO'S ORB IN ANY BATTLE
+****************************************************************************************************************************************
+!?BR&v997>=0;
+
+!!BA:S?v1513;  **Get type of battle into "v1513"
+
+!!VRv1514:S0;  **Clear "v1514"
+!!BH0&1000:N?v1514; **Get the number of the hero on left side of battlefield (attacking hero) into "v1514"
+!!BH1&1000:N?v1516; **Get the number of the hero on right side of battlefield (defending hero) into "v1516"
+
+!!IF:Wv1514;  **Switch to the variables of the attacking hero
+!!VRv1515:S75;
+!!DO7112/21/41/1&w85=1/v1513=0:Pv1515;   **Show the "mysterious spell" animation on all stacks that are currently alive
+!!VRv1505&w85=1:S0 S3 T2;  **Get number from 3-5 into "v1505"
+!!HEv1516&v1516>=0/w85=1:I?v1507;  **Get defending hero's spell points into "v1507"
+!!HEv1516&v1516>=0/v1505=3/v1507<=3/w85=1:I0;
+!!HEv1516&v1516>=0/v1505=4/v1507<=4/w85=1:I0;
+!!HEv1516&v1516>=0/v1505=5/v1507<=5/w85=1:I0;   **Defending hero's spell points reduced to zero
+!!HEv1516&v1516>=0/v1505=3/v1507>3/w85=1:Id-3;
+!!HEv1516&v1516>=0/v1505=4/v1507>4/w85=1:Id-4;
+!!HEv1516&v1516>=0/v1505=5/v1507>5/w85=1:Id-5;  **Defending hero loses spell points each round
+
+!!VRv1516:S0;  **Clear "v1516"
+!!BH1&1000:N?v1516; **Get the number of the hero on right side of battlefield (defending hero) into "v1516"
+!!IF:Wv1516;  **Switch to the variables of the defending hero
+!!DO7112/0/20/1&w85=1/v1516>0/v1513=0:Pv1515;   **Show the "mysterious spell" animation on all stacks that are currently alive
+!!VRv1505&w85=1:S0 S3 T2;  **Get number from 3-5 into "v1505" again
+!!HEv1514&v1516>=0/w85=1:I?v1507;  **Get attacking hero's spell points into "v1507"
+!!HEv1514&v1516>=0/v1505=3/v1507<=3/w85=1:I0;
+!!HEv1514&v1516>=0/v1505=4/v1507<=4/w85=1:I0;
+!!HEv1514&v1516>=0/v1505=5/v1507<=5/w85=1:I0;   **Attacking hero's spell points reduced to zero
+!!HEv1514&v1516>=0/v1505=3/v1507>3/w85=1:Id-3;
+!!HEv1514&v1516>=0/v1505=4/v1507>4/w85=1:Id-4;
+!!HEv1514&v1516>=0/v1505=5/v1507>5/w85=1:Id-5;  **Attacking hero loses spell points each round
+
+!!VRv1513:C0/0/0/0;  **Clear variables v1513-v1516 each round for reuse
+
+********************************************************************************************************************
+*MYSTERIOUS SPELLCASTING DAMAGE BY THE CAVE GUARDIANS
+********************************************************************************************************************
+!?BG&802/v997>=0;
+
+!!HE-1&v1517=0:B0/?z2;  **Get current hero's name into "z2" temporarily
+!!IF&v1517=0:Q1/21/v937/21/v938/1^"We have struck you and your troops with dark magic!  This is only the beginning of your sudden demise....."^;
+
+!!VRo:S0;  **Clear temp. variable "o"
+!!VRp:S0;  **Clear temp. variable "p"
+!!VRq:S0;  **Clear temp. variable "q"
+
+!!VRq:S5;
+!!VRq:T5;  **The "mysterious spell" does (5-10 damage) to all heroes' stacks at every action
+
+!!VRv4:Sc;  **Store current day number into "v4"
+
+!!VRq&v4>=8:+v939;  **The "mysterious spell" damage increases weekly in all caves
+
+**Strike all hero's stacks with the mysterious spell damage constantly and continuously
+!!DO7113/0/20/1:Pq;
+
+**Show message in combat message box
+!!VRz3:S^^;
+!!VRz3:S^The "mysterious spell" does %Vq damage to all of %Z2's troops!^;
+!!BU:Mz3;
+
+!!VRv1517:+1;
+
+*****************************************************************************************************************************************
+*MYSTERIOUS SPELLCASTING DAMAGE BY A HERO'S ORB IN ANY BATTLE
+*****************************************************************************************************************************************
+
+!?BG&v997>=0;
+
+!!BH0&1000:N?v1501; **Get the number of the hero on left side of battlefield (attacking hero) into "v1501"
+!!IF:Wv1501;  **Switch to the variables of the attacking hero
+!!BA&w85=1:S?v1500;  **Get type of battle into "v1500"
+!!HEv1501&w85=1:B0/?z842;  **Get attacking hero's name into "z842" temporarily
+!!IF&w85=1/w86=1/v1500=0/v1503=0:M^%Z842's "Mysterious Orb" has struck all enemy troops with dark magic.....and will continue its destruction for the remainder of this battle.....^;
+!!VRv1502&w85=1:S5;
+!!VRv1502&w85=1:T5;
+!!VRv1502&w85=1:+v1506;  **The "mysterious spell" does (5-10 damage + hero's Level) to all heroes' stacks at every action
+!!DO7113/21/41/1&w85=1/v1500=0:Pv1502;  **Strike enemy hero's stacks with mysterious spell damage continuously
+
+**Show message in combat message box for attacking hero
+!!VRz843&w85=1:S^^;
+!!VRz843&w85=1:S^%Z842's "Mysterious Orb" does %V1502 damage to all enemy creatures!^;
+!!BU&w85=1/v1500=0:Mz843;
+
+**Clear variables to be reused by the defending hero
+!!VRv1501:S0;
+!!VRz842:S^^;
+!!VRz843:S^^;
+!!VRv1502:S0;
+
+!!BH1&1000:N?v1501; **Get the number of the hero on right side of battlefield (defending hero) into "v1501"
+!!IF:Wv1501;  **Switch to the variables of the defending hero
+!!HEv1501&w85=1:B0/?z842;  **Get attacking hero's name into "z842" temporarily
+!!IF&w85=1/v1501>=0/w86=1/v1500=0/v1503=0:M^%Z842's "Mysterious Orb" has struck all enemy troops with dark magic.....and will continue its destruction for the remainder of this battle.....^;
+!!VRv1502&w85=1:S5;
+!!VRv1502&w85=1:T5;
+!!VRv1502&w85=1:+v1508;  **The "mysterious spell" does (5-10 damage + hero's Level) to all heroes' stacks at every action
+!!DO7113/0/20/1&w85=1/v1501>0/v1500=0:Pv1502;  **Strike enemy hero's stacks with mysterious spell damage continuously
+
+**Show message in combat message box for defending hero
+!!VRz843&w85=1:S^^;
+!!VRz843&w85=1:S^%Z842's "Mysterious Orb" does %V1502 damage to all enemy creatures!^;
+!!BU&w85=1/v1500=0/v1501>=0:Mz843;
+
+!!VRv1500&w85=1:C0/0/0; **Variables v1500-v1502 cleared
+!!VRz842:S^^;  **Clear "z842" to be reused by attacking hero
+
+!!VRv1503:+1;  **Messages will only display once in the first round before the first battlefield action
+
+**********************************************************************************************
+*TRIGGERS TO SUMMON EXTRA EMISSARIES AND COMMANDER STACKS ONTO THE BATTLEFIELD
+**********************************************************************************************
+
+!?BR&802/v936=0;
+
+!!BU&v997=0:Sv938/v939/61/1/-1/0;
+!!BU&v997=0:Sv938/v939/62/1/-1/0;
+!!BU&v997=0:Sv938/v939/63/1/-1/0;
+!!BU&v997=0:Sv938/v939/79/1/-1/0;
+!!BU&v997=0:Sv938/v939/113/1/-1/0;
+!!BU&v997=0:Sv938/v939/130/1/-1/0;
+!!BU&v997=0:Sv938/v939/131/1/-1/0;
+!!BU&v997=0:Sv938/v939/64/1/-1/0;
+!!BU&v997=0:Sv938/v939/78/1/-1/0;
+!!BU&v997=0:Sv938/v939/80/1/-1/0;
+!!BU&v997=0:Sv938/v939/96/1/-1/0;
+!!BU&v997=0:Sv938/v939/97/1/-1/0;
+!!BU&v997=0:Sv938/v939/112/1/-1/0;
+!!BU&v997=0:Sv938/v939/114/1/-1/0;
+!!BU&v997=0:Sv938/v939/129/1/-1/0;
+!!BU&v997=0:Sv938/v939/132/1/-1/0;
+
+!?BR&802/v936=1;
+
+!!BU&v997=0:Sv938/v939/42/1/-1/0;
+!!BU&v997=0:Sv938/v939/59/1/-1/0;
+!!BU&v997=0:Sv938/v939/60/1/-1/0;
+!!BU&v997=0:Sv938/v939/75/1/-1/0;
+!!BU&v997=0:Sv938/v939/76/1/-1/0;
+!!BU&v997=0:Sv938/v939/77/1/-1/0;
+!!BU&v997=0:Sv938/v939/92/1/-1/0;
+!!BU&v997=0:Sv938/v939/93/1/-1/0;
+!!BU&v997=0:Sv938/v939/94/1/-1/0;
+!!BU&v997=0:Sv938/v939/95/1/-1/0;
+!!BU&v997=0:Sv938/v939/108/1/-1/0;
+!!BU&v997=0:Sv938/v939/109/1/-1/0;
+!!BU&v997=0:Sv938/v939/110/1/-1/0;
+!!BU&v997=0:Sv938/v939/111/1/-1/0;
+!!BU&v997=0:Sv938/v939/112/1/-1/0;
+
+!?BR&802/v936=2;
+
+!!BU&v997=0:Sv937/1/98/1/-1/0;
+!!BU&v997=0:Sv938/3/91/1/-1/0;
+!!BU&v997=0:Sv938/3/92/1/-1/0;
+!!BU&v997=0:Sv938/3/93/1/-1/0;
+!!BU&v997=0:Sv938/3/94/1/-1/0;
+!!BU&v997=0:Sv938/3/95/1/-1/0;
+!!BU&v997=0:Sv938/3/96/1/-1/0;
+!!BU&v997=0:Sv938/3/97/1/-1/0;
+
+!!BM22:H100;
+
+!?BR&802/v936=3;
+
+!!BU&v997=0:Sv937/1/60/1/-1/0;
+!!BU&v997=0:Sv938/v939/75/1/-1/0;
+!!BU&v997=0:Sv938/v939/76/1/-1/0;
+!!BU&v997=0:Sv938/v939/77/1/-1/0;
+!!BU&v997=0:Sv938/v939/92/1/-1/0;
+!!BU&v997=0:Sv938/v939/93/1/-1/0;
+!!BU&v997=0:Sv938/v939/94/1/-1/0;
+!!BU&v997=0:Sv938/v939/95/1/-1/0;
+!!BU&v997=0:Sv938/v939/109/1/-1/0;
+!!BU&v997=0:Sv938/v939/110/1/-1/0;
+!!BU&v997=0:Sv938/v939/111/1/-1/0;
+!!BU&v997=0:Sv938/v939/127/1/-1/0;
+!!BU&v997=0:Sv938/v939/128/1/-1/0;
+!!BU&v997=0:Sv938/v939/144/1/-1/0;
+
+!!BM22:H100;
+
+!?BR&802/v936=4;
+
+!!BU&v997=0:Sv938/v939/75/1/-1/0;
+!!BU&v997=0:Sv938/v939/76/1/-1/0;
+!!BU&v997=0:Sv938/v939/77/1/-1/0;
+!!BU&v997=0:Sv938/v939/92/1/-1/0;
+!!BU&v997=0:Sv938/v939/93/1/-1/0;
+!!BU&v997=0:Sv938/v939/94/1/-1/0;
+!!BU&v997=0:Sv938/v939/95/1/-1/0;
+!!BU&v997=0:Sv938/v939/109/1/-1/0;
+!!BU&v997=0:Sv938/v939/110/1/-1/0;
+!!BU&v997=0:Sv938/v939/111/1/-1/0;
+
+!?BR&802/v936=5;
+
+!!BU&v997=0:Sv938/v939/28/1/-1/0;
+!!BU&v997=0:Sv938/v939/45/1/-1/0;
+!!BU&v997=0:Sv938/v939/63/1/-1/0;
+!!BU&v997=0:Sv938/v939/80/1/-1/0;
+!!BU&v997=0:Sv938/v939/98/1/-1/0;
+!!BU&v997=0:Sv938/v939/115/1/-1/0;
+!!BU&v997=0:Sv938/v939/133/1/-1/0;
+!!BU&v997=0:Sv938/v939/150/1/-1/0;
+!!BU&v997=0:Sv938/v939/168/1/-1/0;
+!!BU&v997=0:Sv938/v939/185/1/-1/0;
+
+!?BR&802/v936=6;
+
+!!BU&v997=0:Sv937/1/109/1/-1/0;
+!!BU&v997=0:Sv937/1/111/1/-1/0;
+!!BU&v997=0:Sv937/1/113/1/-1/0;
+!!BU&v997=0:Sv938/v939/58/1/-1/0;
+!!BU&v997=0:Sv938/v939/60/1/-1/0;
+!!BU&v997=0:Sv938/v939/62/1/-1/0;
+!!BU&v997=0:Sv938/v939/64/1/-1/0;
+!!BU&v997=0:Sv938/v939/74/1/-1/0;
+!!BU&v997=0:Sv938/v939/76/1/-1/0;
+!!BU&v997=0:Sv938/v939/78/1/-1/0;
+!!BU&v997=0:Sv938/v939/80/1/-1/0;
+!!BU&v997=0:Sv938/v939/91/1/-1/0;
+!!BU&v997=0:Sv938/v939/93/1/-1/0;
+!!BU&v997=0:Sv938/v939/95/1/-1/0;
+!!BU&v997=0:Sv938/v939/97/1/-1/0;
+
+!!BM22:H100;
+!!BM23:H100;
+!!BM24:H100;
+
+!?BR&802/v936=7;
+
+!!BU&v997=0:Sv937/1/98/1/-1/0;
+!!BU&v997=0:Sv938/v939/61/1/-1/0;
+!!BU&v997=0:Sv938/v939/62/1/-1/0;
+!!BU&v997=0:Sv938/v939/63/1/-1/0;
+!!BU&v997=0:Sv938/v939/64/1/-1/0;
+!!BU&v997=0:Sv938/v939/94/1/-1/0;
+!!BU&v997=0:Sv938/v939/95/1/-1/0;
+!!BU&v997=0:Sv938/v939/96/1/-1/0;
+!!BU&v997=0:Sv938/v939/97/1/-1/0;
+
+!!BM22:H100;
+
+**=================================================================================================
+**CAVE OF OBSCURITY POST-BATTLE TRIGGER AND COMMANDS
+**=================================================================================================
+
+**Post-battle trigger
+
+!?BA1&802; **Do the following while FLAG 802 is still TRUE
+
+!!HE-1:O?t;  **Get current hero's owner into "t"
+
+**Remove extra experience points and levels from hero based on number of Emissaries fought
+!!HE-1&t>=0/v936=0:Ed-2000/d-1;
+!!HE-1&t>=0/v936=1:Ed-2000/d-1;
+!!HE-1&t>=0/v936=2:Ed-4000/d-2;
+!!HE-1&t>=0/v936=3:Ed-4000/d-2;
+!!HE-1&t>=0/v936=4:Ed-2000/d-1;
+!!HE-1&t>=0/v936=5:Ed-2000/d-1;
+!!HE-1&t>=0/v936=6:Ed-8000/d-4;
+!!HE-1&t>=0/v936=7:Ed-2000/d-1;
+
+!!VRn:Sc;  **Store current day number into "n"
+
+**Determines gold, precious resources and Commanders awarded to hero
+!!VRj:S0;
+!!VRj&n>=8:+v939;
+!!VRj&v937=160:*500;
+!!VRj&v937=161:*600;
+!!VRj&v937=162:*700;
+!!VRj&v937=163:*800;
+!!VRj&v937=160:+5000;   (5000 BASE GOLD)
+!!VRj&v937=161:+6000;   (6000 BASE GOLD)
+!!VRj&v937=162:+7000;   (7000 BASE GOLD)
+!!VRj&v937=163:+8000;   (8000 BASE GOLD)
+
+!!VRk:S0;
+!!VRk&n>=8:+v939;
+!!VRk&v937=160:+5;  (5 BASE MITHRIL)
+!!VRk&v937=161:+6;  (6 BASE MITHRIL)
+!!VRk&v937=162:+7;  (7 BASE MITHRIL)
+!!VRk&v937=163:+8;  (8 BASE MITHRIL)
+
+!!VRm:S0;
+!!VRm&n>=8:+v939;
+!!VRm&v937=160:+5;  (5 BASE COMMANDERS)
+!!VRm&v937=161:+6;  (6 BASE COMMANDERS)
+!!VRm&v937=162:+7;  (7 BASE COMMANDERS)
+!!VRm&v937=163:+8;  (8 BASE COMMANDERS)
+
+!!HE-1:B0/?z2;  **Get current hero's name again into "z2" temporarily
+!!HE-1:R2/?s/0;  **Get sex of current hero again into "s" temporarily
+
+!!IF&t>=0/s=0:Q1/6/j/7/k/21/v938/1^%Z2 has defeated the mysterious entities inside this cave....for now.  He discovers a hidden stash of gold, precious resources, and a group of sorcerers that had been hiding within the dark chambers.  He captures the frightened sorcerers before they can escape and forces them to join his army!^;
+!!IF&t>=0/s=1:Q1/6/j/7/k/21/v938/1^%Z2 has defeated the mysterious entities inside this cave....for now.  She discovers a hidden stash of gold, precious resources, and a group of sorcerers that had been hiding within the dark chambers.  She captures the frightened sorcerers before they can escape and forces them to join her army!^;
+
+**Award hero with gold and precious resources
+!!OW&t>=0:R-1/6/dj;
+!!OW&t>=0:R-1/7/dk;
+
+**Award hero with commanders based on the ones he fought in the cave
+!!HE-1&t>=0:C2/v938/m/1;
+
+**Display message rewarding hero with mysterious Black Orb
+!!VRz478&t>=0/s=0:S^
+%Z2 also discovers a mysterious black orb. Holding it in his
+hands, he watches as ominous lightning flashes inside it like
+a violent storm. Suddenly, a burst of glowing light emerges
+from the orb, and powerful energy surges inside his body.
+Although the orb has obviously affected him in some way, he
+strangely doesn't seem to feel any wiser.....^;
+!!VRz478&t>=0/s=1:S^
+%Z2 also discovers a mysterious black orb. Holding it in her
+hands, she watches as ominous lightning flashes inside it like
+a violent storm. Suddenly, a burst of glowing light emerges
+from the orb, and powerful energy surges inside her body.
+Although the orb has obviously affected her in some way, she
+srangely doesn't seem to feel any wiser.....^;
+
+**Store filename and hint text for orb into "z4" and "z5"
+!!VRz4:S^..\data\p\s087_orb.gif^;
+!!VRz5:S^"Mysterious Orb"^;
+
+**DIALOGUE BOX 91 used to diaplay special dialogue box for the orb
+!!IF:D91/478/0/0/4/0/0/0/5/0/0/0/0/0/0/0;
+!!IF&t>=0:E2/91;  **Display the orb!
+
+
+**Display message reminding that the guards are still alive!
+!!IF&t>=0/s=0:Q1/21/v937/21/v938/1^As %Z2 leaves the cave, strange chanting voices echo through the walls.  Looking back, he watches as a faint glowing burst of energy emanates from around a corridor.  To his surprise, more of the mysterious entities emerge and appear as if they're prepared to battle again.  A second burst of energy, however, blasts %Z2 out of the cave and back into the daylight with the warning not to return to another cave until the week begins anew.....^;
+!!IF&t>=0/s=1:Q1/21/v937/21/v938/1^As %Z2 leaves the cave, strange chanting voices echo through the walls.  Looking back, she watches as a faint glowing burst of energy emanates from around a corridor.  To her surprise, more of the mysterious entities emerge and appear as if they're prepared to battle again.  A second burst of energy, however, blasts %Z2 out of the cave and back into the daylight with the warning not to return to another cave until the week begins anew.....^;
+
+**Clear variables for resue in future battles
+!!VRv936:S0;
+!!VRv1120:S0;
+!!VRv1121:S0;
+!!VRv1517:S0;
+
+!!IF:V802/0;  **Clear FLAG 802
+!!IF:V5/0;     **Clear FLAG 5
+
+!!IF:W-1;  **Switch to current hero's variables
+
+!!VRw85&t>=0:S1;  **Hero has an orb if he defeats guards in the cave!
+!!VRw86&t>=0:S1;  **Hero has visited AND defeated a cave in the current week!
+
+!!VRw85&t<0:S0;  **Hero does NOT receive an orb if he/she is defeated or retreats
+!!VRw86&t<0:S0;  **Hero can revisit any cave since he/she was defeated or retreated
+
+!!VRv1126:S1;  **Used to show that at least one hero has visited a cave
+
+!!VRz478:S^^;  **Clear string variable
+
+********************************************************************************
+**UNIVERSAL POST-BATTLE TRIGGER
+********************************************************************************
+!?BA1;
+
+!!VRv1503:S0;  **Clear counter variable to use for other battles
+
+********************************************************************************
+**Function to show animations on creatures affected by an orb
+********************************************************************************
+!?FU7112;
+!!BMx16:N?y1;
+!!BMx16&y1>0:Vx1;
+
+********************************************************************************
+**Function to do "mysterious damage" on creatures affected by an orb
+********************************************************************************
+!?FU7113;
+!!BMx16:N?y1;
+!!BMx16&y1>0:Kx1;
+
+**************************************************************************************************
+!?CM2;  **Trigger for clicking mouse on the Hero Information screen
+
+!!VRz2:S^^;    **Clear variable "z2"
+!!VRz3:S^^;    **Clear variable "z3"
+!!VRz4:S^^;    **Clear variable "z4"
+!!VRz5:S^^;    **Clear variable "z5"
+
+!!VRp:S0;
+!!VRq:S0;  **Clear variables
+
+!!HE-1:B0/?z2;  **Get current hero's name into string variable "z2"
+!!IF:W-1;  **Switch to current hero's variables again
+!!CM:I?i;  **Store click info of Spell Power icon into variable "i"
+
+!!VRz3:S^
+%Z2 currently HAS the "Mysterious Orb"!  During combat
+(EXCEPT in siege battles), the orb will do damage
+(5-10 + %Z2's Level) to all enemy stacks on the
+battlefield at every action taken by a hero OR a monster
+stack each round of combat. The orb and its powers will
+be destroyed on the first day of the next week.....^;  **Title text for dialogue box if hero HAS an orb
+
+!!VRz4:S^..\data\p\s087_orb.gif^;  **Store file name for "Mysterious Orb" picture into "z4"
+!!VRz5:S^"Mysterious Orb"^;  **Used to display the orb's name
+!!IF:D90/3/0/0/4/0/0/0/5/0/0/0;  **Set up the dialogue box
+!!IF&i=52/w85=1:E1/90;  **Display DIALOGUE BOX #90
+

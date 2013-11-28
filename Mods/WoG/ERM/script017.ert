@@ -1,0 +1,77 @@
+117000	Venus's Blessing (Not Visited)	String type = <!#S>	07.06.2003
+117001	Venus's Blessing (Visited)	String type = <!#S>	07.06.2003
+117002	{Venus's} {Blessing} 
+ 
+%Z1 arrives in front of a magnificent statue... 
+ 
+%Z1 fills a flask with water from the Magic Fountain.
+Now %Z3 has three doses of {Venus's} {Blessing}. 
+ 
+This potion increases morale and luck during combat.	String type = <!!Q>	07.06.2003
+117003	{Fountain} {of} {Fortune} 
+ 
+%Z1 fills a flask with water from the fountain.
+Now %Z3 has three doses of {Hydromel} {Potion}. 
+ 
+This potion increases Attack and Defense during combat.	String type = <!!Q>	07.06.2003
+117004	Valhalla's Fountain (Not Visited)	String type = <!#S>	07.06.2003
+117005	Valhalla's Fountain (Visited)	String type = <!#S>	07.06.2003
+117006	{Valhalla's} {Fountain} 
+ 
+%Z1 fills a flask with water from the fountain. 
+Now %Z3 has three doses of {Berserker} {Potion}. 
+ 
+This potion increases Attack and Luck during combat, but prevents the drinker from casting spells.	String type = <!!Q>	07.06.2003
+117007	{Hydromel} {Potion}    (%W10 %Z4 left) 
+ 
+If %Z1 drinks a Hydromel Potion, %Z3 will gain +2 Attack and +2 Defense for this combat... 
+ 
+%Z1, do you want to drink a Hydromel Potion?
+
+(if you drink {Hydromel} {Potion} and {Berserker} {Potion} at the same time, you get a chance to lose 1 Spell Power after a battle, so use them with care)
+	String type = <!!Q>	07.06.2003
+117008	{Hydromel} {Potion}    (%W10 %Z4 left) 
+ 
+If %Z1 drinks a Hydromel Potion, %Z3 will gain +2 Attack and +2 Defense for this combat... 
+ 
+%Z1, do you want to drink a Hydromel Potion?
+
+(if you drink {Hydromel} {Potion} and {Berserker} {Potion} at the same time, you get a chance to lose 1 Spell Power after a battle, so use them with care)
+	String type = <!!Q>	07.06.2003
+117009	{Berserker} {Potion}    (%W11 %Z4 left) 
+ 
+If %Z1 drinks a Berserker Potion, %Z3 will gain +10 Attack and maximum Luck for this combat... but won't be able to cast spells. 
+ 
+%Z1, do you want to drink a Berserker Potion?
+
+(if you drink {Hydromel} {Potion} and {Berserker} {Potion} at the same time, you get a chance to lose 1 Spell Power after a battle, so use them with care)
+	String type = <!!Q>	07.06.2003
+117010	{Berserker} {Potion}    (%W11 %Z4 left) 
+ 
+If %Z1 drinks a Berserker Potion, %Z3 will gain +10 Attack and maximum Luck for this combat... but won't be able to cast spells. 
+ 
+%Z1, do you want to drink a Berserker Potion?
+
+(if you drink {Hydromel} {Potion} and {Berserker} {Potion} at the same time, you get a chance to lose 1 Spell Power after a battle, so use them with care)
+	String type = <!!Q>	07.06.2003
+117011	{Venus's} {Blessing} {Potion}
+(%W12 %Z4 left) 
+ 
+If %Z1 drinks a Venus's Blessing Potion, %Z3 will have maximum Morale and Luck for this combat. 
+ 
+%Z1, do you want to drink a Venus's Blessing Potion?	String type = <!!Q>	07.06.2003
+117012	{Venus's} {Blessing} {Potion}
+(%W12 %Z4 left) 
+ 
+If %Z1 drinks a Venus's Blessing Potion, %Z3 will have maximum Morale and Luck for this combat. 
+ 
+%Z1, do you want to drink a Venus's Blessing Potion?	String type = <!!Q>	07.06.2003
+117013	{Berserker} {Potion} 
+ 
+%Z1 mixed Hydromel and Berserker potions, and had a bad reaction... %Z1 lost one Spell Power permanently.	String type = <!!Q>	07.06.2003
+117014	his	String type = <!!S>	07.06.2003
+117015	her	String type = <!!S>	07.06.2003
+117016	he	String type = <!!S>	07.06.2003
+117017	she	String type = <!!S>	07.06.2003
+117018	dose	String type = <!!S>	07.06.2003
+117019	doses	String type = <!!S>	07.06.2003

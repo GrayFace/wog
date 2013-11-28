@@ -1,0 +1,386 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+** ENHANCED COMMANDERS  -  ERM script 51
+
+** By Arstahd
+** Version: 1.11        updated October 2 2004
+** Updated September 15, 2004 to change local y variables in instructions to v variables
+** Special Thanks to Hermann the Weird for help with bug fixing and script maintenance
+
+** Note: Commander Enhancements are disabled for network human-to-human battles.
+
+** Variables used:
+** V variables:    v7080-v7092 v7177, v7185
+** Y variables:    y1-y9
+** Functions used: 7070-7074
+** Timers used:  none
+
+*** commander stats are calculated to new formulae
+**    display will be inaccurate when hero levels up, re-open commander screen to update stat display, ignore skill descriptions
+**    attack          - base 5 + 1/2 x level - skill adds +25%,+50%,+75%,+100%,+125%
+**    defence         - base 5 + 1/2 x level - skill adds +25%,+50%,+75%,+100%,+125%
+**    hit points      - base 30 + 15 x level - skill adds +25%,+50%,+75%,+100%,+125%
+**    damage          - base 10 + 5 x level  - skill adds +25%,+50%,+75%,+100%,+125%
+**    magic power     - base 3 + 3 x skill level  (Soul Eater & Astral Spirit: base 1 + 1 x skill level)
+**    magic resistance- base 0 + 10 x skill level
+**    speed           - base 5 - skill adds normal bonus
+**    spell quantity  - functions as normal (increased by magic power skill)
+*** commanders each start with a special ability
+**    paladin         - endless retaliation
+**    heirophant      - magic mirror (fire shield)
+**    temple guardian - shoot
+**    succubus        - fly
+**    soul eater      - fear
+**    brute           - no retaliation
+**    ogre leader     - block
+**    shaman          - 50% poison (death stare)
+**    astral spirit   - ignore 50% defense
+*** commander spells improved, most apply an additional spell (at adv. level) after they cast a spell
+**    paladin         - cure/bless
+**    heirophant      - shield/mirth
+**    temple guardian - prayer                 (precision removed)
+**    succubus        - fire shield/bloodlust  (displays Sacrifice animation)
+**    soul eater      - animate dead           (no change)
+**    brute           - bloodlust/stoneskin
+**    ogre leader     - stoneskin/counterstrike
+**    shaman          - haste/fortune
+**    astral spirit   - summon elemental       (counterstrike removed)
+*** commanders (except soul eater &astral spirit) are now living and can be resurrected (soul eater can still be raised with animate dead)
+*** commanders are town based if bought, type depends on town not hero when you buy a new commander (dismiss old commander to buy a new one)
+*** "Death Stare" ability replaced with 50% chance to cast Poison - attack or shoot
+*** "Fire Shield" ability replaced with expert Magic Mirror
+
+*** commander stones now give skills:
+**    opal - gives random special ability
+**    ruby - gives either +1 to Attack skill or Damage skill
+**    sapphire - gives either +1 to Defense skill or Hit Points skill
+**    emerald - gives either +1 to Magic skill or Speed skill
+
+
+** initialization
+!#UN:P51/?v7185;                                 [check if Enhanced Commanders is enabled in WoGify Options]
+!#UN:P186/?v7177;                                [check if Choose Commanders is enabled in WoGify Options]
+!#UN:P3/?v1;                                     [check if Commanders are enabled]
+!#VRv7185&v1=1:S0;                               [disable if Commanders aren't enabled]
+
+!#CO-2&v7185=1:P1;                               [enable custom primary skill control]
+
+!#UN:B6/1;     [set new chest 6 to advanced setting (disabled)]
+
+
+** function to make commanders alive
+!?FU7072;
+
+!!MA:Xx16/?i;                                    [get flags]
+!!VRi:+16;                                       [add alive bit]
+!!VRi|x16=178/x16=187:-16;                       [remove alive bit if soul eater]
+!!MA:Xx16/i;                                     [reset flags]
+** end of function **
+
+!#DO7072/174/191/1&v7185=1:P;                    [iterate through all commander types and make alive]
+** end of initialization
+
+** commander screen open trigger
+!?CO0&v7185=1;                                   [check if Enhanced Commanders is enabled]
+!!HE-1:N?y-1;                                    [get hero's (commander's) number]
+!!FU7070:Py-1;
+** end of hero level trigger
+
+** start of pre-battle trigger **
+!?BA0&v7185=1/-998;                              [check if Enhanced Commanders is enabled]
+!!VRv7080:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;        [initialize variables]
+!!BA:H0/?v7083;                                  [get hero (commander) number - attacker]
+!!BA:H1/?v7085;                                  [get hero (commander) number - defender]
+
+!!FU7070&v7083>-1:Pv7083;                        [modify commander stats - attacker]
+!!FU7070&v7085>-1:Pv7085;                        [modify commander stats - defender]
+
+!!COv7083&v7083>-1:B0/?y-1 T?v7088;              [check skill bits, get type - attacker]
+!!COv7085&v7085>-1:B0/?y-2 T?v7089;              [check skill bits, get type - defender]
+
+!!VRv7084&v7083>-1:Sy-1 &4096;                   [check death stare bit - attacker]
+!!VRv7086&v7085>-1:Sy-2 &4096;                   [check death stare bit - defender]
+!!COv7083&v7083>-1/v7084=4096:B1/12/0;           [remove death stare - attacker]
+!!COv7085&v7085>-1/v7086=4096:B1/12/0;           [remove death stare - defender]
+!!VRv7090&v7083>-1:Sy-1 &128;                    [check fire shield bit - attacker]
+!!VRv7091&v7085>-1:Sy-2 &128;                    [check fire shield bit - defender]
+!!COv7083&v7083>-1/v7090=128:B1/7/0;             [remove fire shield - attacker]
+!!COv7085&v7085>-1/v7091=128:B1/7/0;             [remove fire shield - defender]
+** end of pre-battle trigger
+
+
+** start of battlefield trigger **
+!?BF&v7185=1/-998;                               [continue if enabled]
+!!DO7074/0/41/1:P;                               [prepare to give magic mirror]
+** end of battlefield trigger
+
+
+** start of battle turn trigger **
+!?BR&v7185=1/-998;                               [continue if enabled]
+!!DO7074/0/41/1:P;                               [prepare to give magic mirror]
+** end of battle turn trigger **
+
+
+** pre-action trigger **
+!?BG&v7185=1/-998;                               [continue if enabled]
+!!BG:N?v7080 A?v7081 E?v7082;                    [get current stack, action type, destination stack]
+!!BMv7082&v7082>-1:R?v7087;                      [get retaliations of target creature stack]
+!!BMv7080&v7080>-1:T?v7092;                      [get type of current creature stack]
+
+
+!!VRy-2&v7092=182/v7081=10:S66 T3;               [if astral spirit is casting - choose random elemental spell]
+!!BMv7080&v7092=182/v7081=10:U4/y-2;             [if astral spirit is casting - change spell to summon elemental]
+!!VRy-2&v7092=191/v7081=10:S66 T3;               [if astral spirit is casting - choose random elemental spell]
+!!BMv7080&v7092=191/v7081=10:U4/y-2;             [if astral spirit is casting - change spell to summon elemental]
+
+** end of pre-action trigger **
+
+** post-action trigger **
+!?BG1&v7185=1/-998;                              [continue if enabled]
+!!BMv7080&v7080>-1:T?y-3 I?y-4;                  [get acting monster type and side]
+!!FU7071&y-3>=174/y-3<=191/v7081=10:Pv7080/y-3;  [cast extra spell if commander cast]
+
+!!BMv7082&v7082>-1:F?y-7 P?y-8;                  [get target's flags, position]
+
+!!VRy-10&y-3>=174/y-3<=191/v7081>=6/v7081<=7/v7084=4096/y-4=0:S0 R99;          [random roll - attacker]
+!!VRy-11&y-3>=174/y-3<=191/v7081>=6/v7081<=7/v7086=4096/y-4=1:S0 R99;          [random roll - defender]
+!!FU7073&y-3>=174/y-3<=191/v7081>=6/v7081<=7/v7084=4096/y-4=0/y-10<50:Py-7/y-8;  [50% cast poison if commander with death stare attacked or shot - attacker]
+!!FU7073&y-3>=174/y-3<=191/v7081>=6/v7081<=7/v7086=4096/y-4=1/y-11<50:Py-7/y-8;  [50% cast poison if commander with death stare attacked or shot - defender]
+
+!!BMv7080&v7092=182/v7081=10:U4/58;             [astral spirit - revert spell to counterstrike]
+!!BMv7080&v7092=191/v7081=10:U4/58;             [astral spirit - revert spell to counterstrike]
+
+**  retaliation attack
+!!BMv7082&v7082>-1:T?y-3 I?y-4 P?y-5;                                        [get target monster type, side, position]
+!!BU&v7082>-1:Ey-5/?y-6;                                                    [check if target is still alive]
+
+!!BMv7080&v7080>-1:F?y-9;                [get flags of attacking creature stack]
+!!VRy-9&v7080>-1:&65536;                  [check for no retaliation]
+
+!!BMv7080&v7080>-1:F?y-7 P?y-8;                                             [get acting creature's flags, position]
+!!VRy-10&y-3>=174/y-3<=191/v7081=6/v7084=4096/v7087>0/y-4=0/y-6>-1/y-9=0:S0 R99;          [random roll - attacker]
+!!VRy-11&y-3>=174/y-3<=191/v7081=6/v7086=4096/v7087>0/y-4=1/y-6>-1/y-9=0:S0 R99;          [random roll - defender]
+!!FU7073&y-3>=174/y-3<=191/v7081=6/v7084=4096/v7087>0/y-4=0/y-10<50/y-6>-1/y-9=0:Py-7/y-8;  [50% cast poison if commander with death stare retaliates - attacker]
+!!FU7073&y-3>=174/y-3<=191/v7081=6/v7086=4096/v7087>0/y-4=1/y-11<50/y-6>-1/y-9=0:Py-7/y-8;  [50% cast poison if commander with death stare retaliates - defender]
+
+!!BU:C?y-1;                                      [check for end of battle]
+!!COv7083&v7083>-1/v7084=4096/y-1=1:B1/12/1;     [restore death stare - attacker]
+!!COv7085&v7085>-1/v7086=4096/y-1=1:B1/12/1;     [restore death stare - defender]
+!!COv7083&v7083>-1/v7090=128/y-1=1:B1/7/1;       [restore fire shield - attacker]
+!!COv7085&v7085>-1/v7091=128/y-1=1:B1/7/1;       [restore fire shield - defender]
+** end of post-action trigger **
+
+
+** post-buy commander trigger **
+!?CO2&v7185=1/v7177<>1;                          [continue if enabled and "choose commanders" isn't]
+!!HE-1:P?y-1/?y-2/?y-3;                          [get hero position]
+!!OBy-1/y-2/y-3:U?y-4;                           [get subtype of town]
+!!CO-1:Ty-4;                                     [set commander type]
+** end of post-buy commander trigger **
+
+** function to edit commander stats
+!?FU7070;         x1=hero number
+
+!!COx1:X2/?y2 T?y5;                              [get commander level & type]
+** attack - base 5 + 1/2 x level - skill adds +25%,+50%,+75%,+100%,+125%
+!!COx1:S0/?y3;                                   [get attack level]
+!!VRy4&y3=0:Sy2 :2 +5;                           [if attack=0 set attack to 5 + 1/2 level]
+!!VRy4&y3=1:Sy2 :2 +5 *125 :100 -2;              [if attack=1 set attack to 5 + 1/2 level x 125%]
+!!VRy4&y3=2:Sy2 :2 +5 *150 :100 -5;              [if attack=2 set attack to 5 + 1/2 level x 150%]
+!!VRy4&y3=3:Sy2 :2 +5 *175 :100 -9;              [if attack=3 set attack to 5 + 1/2 level x 175%]
+!!VRy4&y3=4:Sy2 :2 +5 *2 -15;                    [if attack=4 set attack to 5 + 1/2 level x 200%]
+!!VRy4&y3=5:Sy2 :2 +5 *225 :100 -25;             [if attack=5 set attack to 5 + 1/2 level x 225%]
+!!COx1:P0/y4;                                    [set attack]
+** defense - base 5 + 1/2 x level - skill adds +25%,+50%,+75%,+100%,+125%
+!!COx1:S1/?y3;                                   [get defence level]
+!!VRy4&y3=0:Sy2 :2 +5;                           [if defence=0 set defence to 5 + 1/2 level]
+!!VRy4&y3=1:Sy2 :2 +5 *125 :100 -4;              [if defence=1 set defence to 5 + 1/2 level x 125%]
+!!VRy4&y3=2:Sy2 :2 +5 *150 :100 -10;             [if defence=2 set defence to 5 + 1/2 level x 150%]
+!!VRy4&y3=3:Sy2 :2 +5 *175 :100 -18;             [if defence=3 set defence to 5 + 1/2 level x 175%]
+!!VRy4&y3=4:Sy2 :2 +5 *2 -30;                    [if defence=4 set defence to 5 + 1/2 level x 200%]
+!!VRy4&y3=5:Sy2 :2 +5 *225 :100 -50;             [if defence=5 set defence to 5 + 1/2 level x 225%]
+!!COx1:P1/y4;                                    [set defence]
+** hit points - base 30 + 15 x level - skill adds +25%,+50%,+75%,+100%,+125%
+!!COx1:S2/?y3;                                   [get hit points level]
+!!VRy4&y3=0:Sy2 *20 +40;                         [if hit points=0 set hit points to 40 + 20 x level]
+!!VRy4&y3=1:Sy2 *20 +40 *125 :110;               [if hit points=1 set hit points to 40 + 20 x level x 125%]
+!!VRy4&y3=2:Sy2 *20 +40 *150 :125;               [if hit points=2 set hit points to 40 + 20 x level x 150%]
+!!VRy4&y3=3:Sy2 *20 +40 *175 :145;               [if hit points=3 set hit points to 40 + 20 x level x 175%]
+!!VRy4&y3=4:Sy2 *20 +40 *200 :170;               [if hit points=4 set hit points to 40 + 20 x level x 200%]
+!!VRy4&y3=5:Sy2 *20 +40 *225 :200;               [if hit points=5 set hit points to 40 + 20 x level x 225%]
+!!COx1:P2/y4;                                    [set hit points]
+** damage - base 10 + 5 x level - skill adds +25%,+50%,+75%,+100%,+125%
+!!COx1:S3/?y3;                                   [get damage level]
+!!VRy4&y3=0:Sy2 *5 +10;                          [if damage=0 set damage to 10 + 5 x level]
+!!VRy4&y3=1:Sy2 *5 +10 *125 :110;                [if damage=1 set damage to 10 + 5 x level x 125%]
+!!VRy4&y3=2:Sy2 *5 +10 *150 :125;                [if damage=2 set damage to 10 + 5 x level x 150%]
+!!VRy4&y3=3:Sy2 *5 +10 *175 :145;                [if damage=3 set damage to 10 + 5 x level x 175%]
+!!VRy4&y3=4:Sy2 *5 +10 *200 :170;                [if damage=4 set damage to 10 + 5 x level x 200%]
+!!VRy4&y3=5:Sy2 *5 +10 *225 :200;                [if damage=5 set damage to 10 + 5 x level x 225%]
+!!COx1:P3/y4;                                    [set damage]
+** magic power - base 3 + 3 x skill level   (Soul Eater: base 1 + 1 x skill level)
+!!COx1:S4/?y3;                                   [get MP level]
+!!VRy6:Sy3 +1 *3;                                [set power to (MP+1)x3]
+!!VRy6&y5=4:Sy3 +1;                              [if Soul Eater set power MP+1]
+!!VRy6&y5=8:Sy3 +1;                              [if Astral Spirit set power MP+1]
+!!VRy4&y3=0:Sy6;                                 [if MP=0 set power]
+!!VRy4&y3=1:Sy6 -1;                              [if MP=1 set power]
+!!VRy4&y3=2:Sy6 -3;                              [if MP=2 set power]
+!!VRy4&y3=3:Sy6 -7;                              [if MP=3 set power]
+!!VRy4&y3=4:Sy6 -14;                             [if MP=4 set power]
+!!VRy4&y3=5:Sy6 -29;                             [if MP=5 set power]
+!!COx1:P4/y4;                                    [set power]
+** magic resistance - base 0 + 10 x skill level
+!!VRy4&y3=0:S5;                                  [if MP=0 set magic resistance to 0]
+!!VRy4&y3=1:S5;                                  [if MP=1 set magic resistance to 10]
+!!VRy4&y3=2:S5;                                  [if MP=2 set magic resistance to 20]
+!!VRy4&y3=3:S-5;                                 [if MP=3 set magic resistance to 30]
+!!VRy4&y3=4:S-20;                                [if MP=4 set magic resistance to 40]
+!!VRy4&y3=5:S-40;                                [if MP=5 set magic resistance to 50]
+!!COx1:P6/y4;                                    [set magic resistance]
+** speed - base 5 - skill adds normal bonus
+!!COx1:P5/5;                                     [set base speed to 5]
+
+** starting special bonus
+
+!!COx1&y5=0:B1/5/1;                              [give paladin         - endless retaliation]
+!!COx1&y5=1:B1/7/1;                              [give hierophant      - magic mirror (fire shield)]
+!!COx1&y5=2:B1/4/1;                              [give temple guardian - shoot]
+!!COx1&y5=3:B1/14/1;                             [give succubus        - fly]
+!!COx1&y5=4:B1/1/1;                              [give soul eater      - fear]
+!!COx1&y5=5:B1/3/1;                              [give brute           - no retaliation]
+!!COx1&y5=6:B1/8/1;                              [give ogre leader     - block]
+!!COx1&y5=7:B1/12/1;                             [give shaman          - poison (death stare)]
+!!COx1&y5=8:B1/0/1;                              [give astral spirit   - ignore 50% defense]
+
+!!VRx1:+1;                                       [increment hero number]
+** end of function
+
+
+** function to cast spell    x1=acting stack x2=type x3=rank x4=power x5=no retaliation flag
+* x1=spell x2=position x3=rank x4=power
+!?FU7071;
+!!BMv7082&v7082>-1:P?y8;                         [get position of target creature stack]
+!!HE-1:N?y5;                                     [get hero's (commander's) number]
+!!COy5:P4/?y6;                                   [get power]
+
+!!BMv7082|x2=174/x2=183:V36 M41/y6/2;            [apply bless - paladin]
+!!BMv7082|x2=175/x2=184:V20 M49/y6/2;            [apply mirth - heirophant]
+*!BMv7082|x2=176/x2=185:V0 M48/y6/2;             [apply prayer - temple guardian]
+!!BMv7082|x2=177/x2=186:V51 M43/y6/2;            [apply bloodlust - succubus]
+*!BMv7082|x2=178/x2=187:V M51/y6/2;              [apply *** - soul eater]
+!!BMv7082|x2=179/x2=188:V54 M46/y6/2;            [apply stoneskin - brute]
+!!BMv7082|x2=180/x2=189:V7 M58/y6/2;             [apply counterstrike - ogre leader]
+!!BMv7082|x2=181/x2=190:V18 M51/y6/2;            [apply fortune - shaman]
+*!BMv7082|x2=182/x2=191:V28 M55/y6/3;            [apply slayer (expert) - astral spirit]
+*!BMv7082|x2=182/x2=191:V34 M30/y6/2 M31/y6/2 M32/y6/2 M33/y6/2; [apply protections - astral spirit]
+** end of function **
+
+** function to cast poison   x1=flags   x2=position
+!?FU7073;
+!!VRx1:&16;                                      [just check alive bit]
+!!BG:N?y1;                                       [get current stack #]
+!!BMy1&x1=16:C71/x2/1/3/1;                       [if target is alive have current stack cast poison]
+** end of function **
+
+** function to cycle through all stacks  (give magic mirror)
+!?FU7074;
+!!BMx16:T?y1;                                          [get stack's monster type]
+!!BMx16&y1>=174/y1<=191/v7090=128/x16<21:M36/100/3;    [give commander with fire shield exp. magic mirror - attacker]
+!!BMx16&y1>=174/y1<=191/v7091=128/x16>20:M36/100/3;    [give commander with fire shield exp. magic mirror - defender]
+
+!!BMx16&y1=176/v997=0:U4/48;             [temple guardian - change spell to prayer (on turn 0)]
+!!BMx16&y1=185/v997=0:U4/48;             [temple guardian - change spell to prayer (on turn 0)]
+
+** end of function **
+
+
+
+**  object trigger - opal
+!?OB101/7&v7185=1;
+!!HE-1:N?y-1;
+!!VRy-4:S0 T14;                                  [random roll 0-14]
+!!VRz2&y-4=0:Sz151000;                           [set string]
+!!VRz2&y-4=1:Sz151001;                           [set string]
+!!VRz2&y-4=2:Sz151002;                           [set string]
+!!VRz2&y-4=3:Sz151003;                           [set string]
+!!VRz2&y-4=4:Sz151004;                           [set string]
+!!VRz2&y-4=5:Sz151005;                           [set string]
+!!VRz2&y-4=6:Sz151006;                           [set string]
+!!VRz2&y-4=7:Sz151007;                           [set string]
+!!VRz2&y-4=8:Sz151008;                           [set string]
+!!VRz2&y-4=9:Sz151009;                           [set string]
+!!VRz2&y-4=10:Sz151010;                          [set string]
+!!VRz2&y-4=11:Sz151011;                          [set string]
+!!VRz2&y-4=12:Sz151012;                          [set string]
+!!VRz2&y-4=13:Sz151013;                          [set string]
+!!VRz2&y-4=14:Sz151014;                          [set string]
+
+!!COy-1:B1/y-4/?y-5 D?y-6 E?y-7 N?z1;                       [check if commander has skill, is alive, is enabled, get name]
+!!OB998&y-6=0/y-7=1:T101 U6;                                [set to chest 6 if commander is alive, enabled]
+!!COy-1&y-5=0/y-6=0/y-7=1:B1/y-4/1;                         [give skill if commander doesn't have it and is alive, enabled]
+
+!!IF&y-5=0/y-6=0/y-7=1/1000:M1/z151015;
+!!IF&y-5=1/1000:M1/z151016;
+
+** end of object trigger
+
+
+**  object trigger - ruby
+!?OB101/8&v7185=1;
+!!HE-1:N?y-1;
+!!COy-1:S0/?y-2 S3/?y-3 D?y-6 E?y-7 N?z1;                    [get Attack / Damage levels, check if alive, enabled, get name]
+!!OB998&y-6=0/y-7=1:T101 U6;                                 [set to chest 6 if commander is alive, enabled]
+!!COy-1&y-6=0/y-7=1/y-2>y-3:S3/d1;                           [if Attack > Damage add 1 to Damage level]
+!!COy-1&y-6=0/y-7=1/y-2<y-3:S0/d1;                           [if Attack < Damage add 1 to Attack level]
+!!VRy-4&y-6=0/y-7=1/y-2=y-3/y-2<5:S0 T99;                    [percentage roll]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4<50:S3/d1;              [if Attack = Damage and < 6 and roll is < 50 add 1 to Damage level]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4>49:S0/d1;              [if Attack = Damage and < 6 and roll is < 50 add 1 to Attack level]
+
+!!IF&1000/y-6=0/y-2>y-3:M1/z151017;
+!!IF&1000/y-6=0/y-2<y-3:M1/z151018;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4<50:M1/z151019;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4>49:M1/z151020;
+!!IF&1000/y-6=0/y-2=y-3/y-2>4:M1/z151021;
+** end of object trigger
+
+
+**  object trigger - sapphire
+!?OB101/9&v7185=1;
+!!HE-1:N?y-1;
+!!COy-1:S1/?y-2 S2/?y-3 D?y-6 E?y-7 N?z1;                    [get Defense / Hit Points levels, check if alive, enabled, get name]
+!!OB998&y-6=0/y-7=1:T101 U6;                                 [set to chest 6 if commander is alive, enabled]
+!!COy-1&y-6=0/y-7=1/y-2>y-3:S2/d1;                           [if Defense > Hit Points add 1 to Hit Points level]
+!!COy-1&y-6=0/y-7=1/y-2<y-3:S1/d1;                           [if Defense < Hit Points add 1 to Defense level]
+!!VRy-4&y-6=0/y-7=1/y-2=y-3/y-2<5:S0 T99;                    [percentage roll]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4<50:S2/d1;              [if Defense = Hit Points and < 6 and roll is < 50 add 1 to Hit Points level]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4>49:S1/d1;              [if Defense = Hit Points and < 6 and roll is < 50 add 1 to Defense level]
+
+!!IF&1000/y-6=0/y-2>y-3:M1/z151022;
+!!IF&1000/y-6=0/y-2<y-3:M1/z151023;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4<50:M1/z151024;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4>49:M1/z151025;
+!!IF&1000/y-6=0/y-2=y-3/y-2>4:M1/z151026;
+** end of object trigger
+
+
+**  object trigger - emerald
+!?OB101/10&v7185=1;
+!!HE-1:N?y-1;
+!!COy-1:S4/?y-2 S5/?y-3 D?y-6 E?y-7 N?z1;                    [get Magic Power / Speed levels, check if alive, enabled get name]
+!!OB998&y-6=0/y-7=1:T101 U6;                                 [set to chest 6 if commander is alive, enabled]
+!!COy-1&y-6=0/y-7=1/y-2>y-3:S5/d1;                           [if Magic Power > Speed add 1 to Speed level]
+!!COy-1&y-6=0/y-7=1/y-2<y-3:S4/d1;                           [if Magic Power < Speed add 1 to Magic Power level]
+!!VRy-4&y-6=0/y-7=1/y-2=y-3/y-2<5:S0 T99;                    [percentage roll]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4<50:S5/d1;              [if Magic Power = Speed and < 6 and roll is < 50 add 1 to Speed level]
+!!COy-1&y-6=0/y-7=1/y-2=y-3/y-2<5/y-4>49:S4/d1;              [if Magic Power = Speed and < 6 and roll is < 50 add 1 to Magic Power level]
+
+!!IF&1000/y-6=0/y-2>y-3:M1/z151027;
+!!IF&1000/y-6=0/y-2<y-3:M1/z151028;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4<50:M1/z151029;
+!!IF&1000/y-6=0/y-2=y-3/y-2<5/y-4>49:M1/z151030;
+!!IF&1000/y-6=0/y-2=y-3/y-2>4:M1/z151031;
+** end of object trigger
+

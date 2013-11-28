@@ -1,0 +1,407 @@
+ZVSE
+ERMS_ScriptName=IncreaseAI
+ERMS_ScriptAuthor=Perfect0
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=24.11(November).2013
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English
+ERMS_ScriptUsedVariables=4072-4076;w95
+ERMS_ScriptUsedFlags=24
+ERMS_ScriptUsedFunctions=4070-4077
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+TODO: unfinished
+!#FU:E; [unfinished - doesn't check WoG Options, option numbers not established]
+
+********************************************************************************
+*
+* GAME BALANCE v1.0b
+*
+********************************************************************************
+** 1. Movement Balancing:
+********************************************************************************
+
+** 1.1 [Dayly movement] v1.0.1b by Perfect0
+**** Sets hero movement points according to the smallest hero's unit
+**** speed (including commander).
+**** If hero has not any unit or commander then he will get 1300 movement points
+**** If summary value of hero's attack and defense less then quantity of his
+**** artifacts then the difference will be subtracted from movement points
+**** Logistic Specialization gives 3% of Logistic skill per level (instead of 5%)
+**** (supports Pathfinding (I))
+
+** 1.2 [Artifacts equiping/unequiping] v1.0b by Perfect0
+**** If you equip/unequip some movement artifact then you will get the movement
+**** bonus at the same turn. If after unequiping movement artifact hero will get
+**** negative amount of movement points then he will get one day curse with
+**** this amount of movement points. This corrects Admiral's Hat +
+**** some movement artifact bug and don't let player to use these artifacts
+**** without carrying them all day long. DON'T play with equiping/unequiping
+**** because curse will grow if the previous curse hasn't expired.
+
+********************************************************************************
+** 2. Secondary Skills Balancing:
+********************************************************************************
+
+** 2.1 [Boarding on Boat (Navigation)] v1.0b by Perfect0 and Horn
+**** If hero is boarding on boat with Navigation skill then he will still get
+**** some movement points according to Navigation level:
+**** Basic - 25% of movement points before boarding
+**** Advanced - 50% of movement points before boarding
+**** Expert - 100% of movement points before boarding
+**** If you forgot to equip Admiral's Hat then it will go the way like you didn't
+**** but Admiral's Hat will be still in a backpack and you will see notification.
+********************************************************************************
+-----1. [Movement Balancing] by Perfect0 ---------------------------------------
+!#VRv4074:S600; [Boots of Speed bonus]
+!#VRv4075:S450; [Angel Wings bonus]
+!#VRv4076:S300; [Equestrian's Gloves bonus]
+!#VRv4077:S400; [Stables bonus]
+
+----------1.1 [Dayly movement] by Perfect0 -------------------------------------
+________________________________________________________________________________
+!?HM-1&1000;
+!!HE-1:N?y1;
+!!IF:Wy1;
+!!VRw95:&-8;    [reset bits 1-3]
+________________________________________________________________________________
+!?TM2;
+
+!!DO4070/0/155/1:P;
+!?FU4070;
+!!HEx16:O?v1;
+!!FU&v1=-1:E;  [if hero is in hero pool then exit]
+
+!!OW:C?v2;
+!!FU&v1<>v2:E; [exit if current player doesn't own this hero]
+
+!!HEx16:P?v1/?v2/?v3;
+!!TRv1/v2/v3: T?v4/d/d/d/d/d/d/d;
+!!FU&v4=8:E;   [exit if hero is on water]
+
+!!VRy11:S0;
+!!VRy12:S0;
+!!VRy13:S0;
+!!VRy14:S0;
+!!VRy15:S0;
+!!VRy16:S0;
+!!VRy17:S0;
+
+!!HEx16:C0/0/?y1/d;  [get hero army type]
+!!HEx16:C0/1/?y2/d;
+!!HEx16:C0/2/?y3/d;
+!!HEx16:C0/3/?y4/d;
+!!HEx16:C0/4/?y5/d;
+!!HEx16:C0/5/?y6/d;
+!!HEx16:C0/6/?y7/d;
+
+!!MA&y1>-1: Sy-1/?y11; [get hero army speed]
+!!MA&y2>-1: Sy-2/?y12;
+!!MA&y3>-1: Sy-3/?y13;
+!!MA&y4>-1: Sy-4/?y14;
+!!MA&y5>-1: Sy-5/?y15;
+!!MA&y6>-1: Sy-6/?y16;
+!!MA&y7>-1: Sy-7/?y17;
+
+!!VRy18:S0;
+!!UN:P3/=0;             [flag 1 true if commanders enabled]
+!!COx16&1:D=0;          [flag 1 true if commander alive]
+!!COx16&1:E=1;          [flag 1 true if commander is present]
+!!if&1;
+!!COx16:P?y9;
+!!COx16:P5/?y18;       [get commanders statistic speed]
+!!COx16:S5/?y8;        [get commanders basic skill speed]
+!!VRy18&y9=0:+y8;
+!!VRy18&y9=0/y8=5:+1;
+!!en;
+
+!!FU4072:P?v1/y11/y12/y13/y14/y15/y16/y17/y18;
+
+!!UN:P209/=1;   [check if Pathfinding I script is enabled]
+!!if&1;
+!!HEx16:S0/?y1;
+!!VRy1&y1<>0:+5;
+!!VRv1&v1<y1:Sy1;
+!!en;
+
+ [v1 = Movement points]
+!!VRv1&v1>34:S2300;
+!!VRv1&v1=0:S1300;
+!!VRv1&v1=1:S1360;
+!!VRv1&v1=2:S1430;
+!!VRv1&v1=3:S1500;
+!!VRv1&v1=4:S1570;
+!!VRv1&v1=5:S1650;
+!!VRv1&v1=6:S1720;
+!!VRv1&v1=7:S1785;
+!!VRv1&v1=8:S1850;
+!!VRv1&v1=9:S1905;
+!!VRv1&v1=10:S1950;
+!!VRv1&v1=11:S1985;
+!!VRv1&v1=12:S2015;
+!!VRv1&v1=13:S2040;
+!!VRv1&v1=14:S2060;
+!!VRv1&v1=15:S2080;
+!!VRv1&v1=16:S2095;
+!!VRv1&v1=17:S2115;
+!!VRv1&v1=18:S2130;
+!!VRv1&v1=19:S2145;
+!!VRv1&v1=20:S2160;
+!!VRv1&v1=21:S2175;
+!!VRv1&v1=22:S2185;
+!!VRv1&v1=23:S2195;
+!!VRv1&v1=24:S2210;
+!!VRv1&v1=25:S2220;
+!!VRv1&v1=26:S2230;
+!!VRv1&v1=27:S2240;
+!!VRv1&v1=28:S2250;
+!!VRv1&v1=29:S2260;
+!!VRv1&v1=30:S2270;
+!!VRv1&v1=31:S2280;
+!!VRv1&v1=32:S2285;
+!!VRv1&v1=33:S2290;
+!!VRv1&v1=34:S2295;
+
+!!UN:P3/?y2;                [y2 = 1 if commanders disabled]
+!!VRv1|y1=1/y2=1:S1500;     [commander is dead or disabled]
+
+!!HEx16:S2/?y1;             [y1 level of hero's Logistic SS]
+!!VRy1:*10;
+
+!!HEx16:X?y3/?y2/d/d/d/d/d; [check if hero has Logistic Speciality]
+!!if&y2=2/y3=0;
+!!HEx16:Ed/?y3;             [y3 - hero level]
+!!VRy3:*3+100;              [y3 - percentage of Speciality bonus]
+!!VRy1:*y3:100;
+!!en;
+
+!!VRy1:+100;
+!!VRv1:*y1:100;
+!!HEx16:Wv1;
+
+!!HEx16:R7/?y1;
+!!VRy1:&2;              [check if Stables visited]
+!!HEx16&y1=2:Wdv4077;   [Stables bouns]
+
+!!HEx16: A2/98/d/?y1;
+!!HEx16&y1>0:Wdv4074;     [Boots of Speed bonus]
+
+!!HEx16: A2/72/d/?y1;
+!!HEx16&y1>0:Wdv4075;     [Angel Wings bonus]
+
+!!HEx16: A2/70/d/?y1;
+!!HEx16&y1>0:Wdv4076;     [Equestrian's Gloves bonus]
+
+!!FU4073:Px16/?y1;        [-1 movement point for every artifact hero has]
+!!HEx16:F?y2/?y3/d/d;
+!!VRy2:+y3;
+!!VRy1:*-1+y2;
+!!HEx16&y1<0:Wdy1;
+
+
+!?FU4072; [returns in x1 the smallest positive number of arguments or 0 if there is no positive numbers]
+
+!!VRx1:S2147483647;    [max value]
+!!VRx1&x2<>0/x2<x1:Sx2;
+!!VRx1&x3<>0/x3<x1:Sx3;
+!!VRx1&x4<>0/x4<x1:Sx4;
+!!VRx1&x5<>0/x5<x1:Sx5;
+!!VRx1&x6<>0/x6<x1:Sx6;
+!!VRx1&x7<>0/x7<x1:Sx7;
+!!VRx1&x8<>0/x8<x1:Sx8;
+!!VRx1&x9<>0/x9<x1:Sx9;
+!!VRx1&x10<>0/x10<x1:Sx10;
+!!VRx1&x11<>0/x11<x1:Sx11;
+!!VRx1&x12<>0/x12<x1:Sx12;
+!!VRx1&x13<>0/x13<x1:Sx13;
+!!VRx1&x14<>0/x14<x1:Sx14;
+!!VRx1&x15<>0/x15<x1:Sx15;
+!!VRx1&x1=2147483647:S0;
+
+!?FU4073; [returns in x2 common quantity of artifacts hero has]
+!!DO4074/0/170/1:Px1;
+!!VRx2:Sv2;
+!?FU4074;
+!!VRv2&x16=0:S0;
+!!HEx1:A2/x16/?v3/d;
+!!VRv2:+v3;
+----------1.1 [Dayly movement] by Perfect0 -------------------------------------
+
+----------1.2 [Artifacts equiping/unequiping] by Perfect0 ----------------------
+ [artifacts unequiping]
+!?AE0;
+!!HE-1:P?v1/?v2/?v3;
+!!TRv1/v2/v3: T=8/d/d/d/d/d/d/d;  [check if on water]
+!!IF:W-1;
+!!if&1;
+!!VRw95&v998=98:|8;      [set 4th bit - Boots were unequiped on water]
+!!VRw95&v998=72:|16;     [set 5th bit - Wings were unequiped on water]
+!!VRw95&v998=70:|32;     [set 6th bit - Gloves were unequiped on water]
+!!FU:E;
+!!en;
+!!FU4075&v998=98/-1:Pv4074/1; [Boots of Speed]
+!!FU4075&v998=72/-1:Pv4075/2; [Angel Wings]
+!!FU4075&v998=70/-1:Pv4076/4; [Equestrian's Gloves]
+!?FU4075;
+!!HE-1:W?v4/1;          [get current movement]
+!!VRv1&v4<1:Sx1*-1;     [set to art. bonus]
+!!VRv1&v4>0:Sv4-x1;     [set to difference between current movement and art. bonus]
+!!HE-1&v4<1:Wdv1/1;
+!!HE-1&v4>0:Wv1/1;
+!!VRv2&x1=v4074:Sw95%2;      [get 1st bit]
+!!VRv2&x1=v4075:Sw95:2%2;    [get 2nd bit]
+!!VRv2&x1=v4076:Sw95:4%2;    [get 3rd bit]
+!!if&v1<0/v2<>1;
+!!HE-1:Y10/?v2/?v3/;     [v2 = current bonus, v3 = days]
+!!VRv3|v3<1/v2=0:S1;
+!!VRv2:-v1;
+!!HE-1:Y10/v2/v3/1;
+!!VRw95:+x2;             [set bit-value]
+!!IF&1000:Lz184001;
+!!en;
+
+ [artifacts equiping]
+!?AE1;
+!!FU4076&v998=98:Pv4074/8;  [Boots of Speed]
+!!FU4076&v998=72:Pv4075/16; [Angel Wings]
+!!FU4076&v998=70:Pv4076/32; [Equestrian's Gloves]
+
+!?FU4076;
+!!HE-1:P?v1/?v2/?v3;
+!!TRv1/v2/v3: T=8/d/d/d/d/d/d/d;
+!!IF:W-1;
+!!VRv1:Sw95;
+!!VRv1:&x2;       [v1 = x2 if this art. was unequiped on a wanter]
+!!VRw95&v998=98:&-9;      [reset 4th bit]
+!!VRw95&v998=72:&-17;     [reset 5th bit]
+!!VRw95&v998=70:&-33;     [reset 6th bit]
+
+!!HE-1&v1=0/-1:Wdx1/1;
+----------1.2 [Artifacts equiping/unequiping] by Perfect0 ----------------------
+-----1. [Movement Balancing] by Perfect0 ---------------------------------------
+
+
+-----2. [Secondary Skills Balancing] by Perfect0 -------------------------------
+----------2.1 [Boarding on boat] by Perfect0 (mod. of TE script) ---------------
+!?OB8;
+!!VRv4072:S0;   [movement after boarding]
+!!VRv4073:S-2;  [equiped on head artifact]
+!!HE-1:A2/136/?v2/?v1;   Admiral's Hat presense verifying (put on the head)
+!!FU&v1=1:E; [exit if has Admiral's Hat]
+
+!!if&v1=0/v2>0; [if hero has Admiral's Hat only in his backpack]
+!!HE-1:A1/?v4073/0; [get art. on the Head]
+!!if&v4073<>-1;
+!!VRv4073:*-1;
+!!HE-1:Av4073;
+!!VRv4073:*-1;
+!!en;
+!!HE-1:A1/136/0;
+!!IF&1000:L184000;
+!!en;
+
+!!if&v2=0; [if hero doesn't have Admiral's Hat]
+!!HE-1:W?y1/1;   [get current move points]
+!!HE-1:S5/?y2;   [get Navigation level]
+!!VRv4072&y2=1:Sy1:4;
+!!VRv4072&y2=2:Sy1:2;
+!!VRv4072&y2=3:Sy1;
+!!en;
+
+!$OB8;
+!!HE-1:A2/136/d/=0;   [Admiral's Hat presense verifying]
+!!HE-1&1:Wv4072;      [Navigation bonus if hero has not Admiral's Hat]
+!!HE-1&v4073<>-2:A3/136/1/1;   [remove Admiral's Hat]
+!!HE-1&v4073>0:A1/v4073/0 ;  [restore artifact before boarding]
+----------2.1 [Boarding on boat] by Perfect0 (mod. of TE script) ---------------
+
+
+-----3. [Commander Skills Balancing] by Perfect0 -------------------------------
+* v4077-4091: mask for quantity of times to learn skills
+* Values: 0..7
+!#VRv4077:S5;      [0 - Death Stare]
+!#VRv4078:S3;      [1 - Strike Twice]
+!#VRv4079:S3;      [2 - Strike All Enemies Around]
+!#VRv4080:S3;      [3 - Attack may Paralyze]
+!#VRv4081:S3;      [4 - No Enemy Retaliation]
+!#VRv4082:S3;      [5 - Reduce Enemy Defense by 50%]
+!#VRv4083:S2;      [6 - Shooting Ability]
+!#VRv4084:S3;      [7 - Permanent Fire Shield]
+!#VRv4085:S3;      [8 - Fearsome]
+!#VRv4086:S2;      [9 - Maximum Damage]
+!#VRv4087:S3;      [10 - Unlimited Retaliation]
+!#VRv4088:S3;      [11 - Block Physical Damage]
+!#VRv4089:S1;      [12 - 50 HP each round]
+!#VRv4090:S2;      [13 - Champion Distance Bonus]
+!#VRv4091:S2;      [14 - Ignore Obstacles (Fly)]
+
+!?FU4071;
+!!CO-1:B0/?v1;     [v1 - bit mask of commander skills]
+!!VRv2:S1;         [v2 is current bitvalue of skill]
+!!DO4077/0/14/1:P; [make check for every skill]
+
+!?FU4077;
+!!VRy2:Sv1&v2; [check bit of current skill]
+!!VRv2:*2;     [set next bitvalue of skill]
+!!FU&y2=0:E;   [exit if no such skill]
+!!IF: W-1;
+!!FU4078:P?y2/x16; [y2 = x16th 3bit-value of w-var]
+!!VRy3:S4077+x16;  [y3 = index of v-var]
+!!FU&vy3<=y2:E;    [exit if commander reached knowledge of skill]
+!!VRy4:Sx16*3;
+!!FU4079:Py4;      [incrementig 3-bit-value of w-var]
+!!VRy2:+1;
+!!CO-1&vy3>y2:B3/x16/0;
+
+!?FU4078;
+!!VRx3:Sx2*3;
+!!VRx4:Sx3+1;
+!!VRx5:Sx4+1;
+!!FU4081:P?y1/x3;
+!!FU4081:P?y2/x4;
+!!FU4081:P?y3/x5;
+!!VRy4:Sw95&y1;
+!!VRy5:Sw95&y2;
+!!VRy6:Sw95&y3;
+!!VRx1:S0;
+!!VRx1&y4>0:+1;
+!!VRx1&y5>0:+2;
+!!VRx1&y6>0:+4;
+
+!?FU4081; [return in x1 value of 2^x2,  x2 = 0..31]
+!!VRx1&x2=0:S1;
+!!VRx1&x2=1:S2;
+!!VRx1&x2=2:S4;
+!!VRx1&x2=3:S8;
+!!VRx1&x2=4:S16;
+!!VRx1&x2=5:S32;
+!!VRx1&x2=6:S64;
+!!VRx1&x2=7:S128;
+!!VRx1&x2=8:S256;
+!!VRx1&x2=9:S512;
+!!VRx1&x2=10:S1024;
+!!VRx1&x2=11:S2048;
+!!VRx1&x2=12:S4096;
+!!VRx1&x2=13:S8192;
+!!VRx1&x2=14:S16384;
+!!VRx1&x2=15:S32768;
+!!VRx1&x2=16:S65536;
+!!VRx1&x2=17:S131072;
+!!VRx1&x2=18:S262144;
+!!VRx1&x2=19:S524288;
+!!VRx1&x2=20:S1048576;
+!!VRx1&x2=21:S2097152;
+!!VRx1&x2=22:S4194304;
+!!VRx1&x2=23:S8388608;
+!!VRx1&x2=24:S16777216;
+!!VRx1&x2=25:S33554432;
+!!VRx1&x2=26:S67108864;
+!!VRx1&x2=27:S134217728;
+!!VRx1&x2=28:S268435456;
+!!VRx1&x2=29:S536870912;
+!!VRx1&x2=30:S1073741824;
+!!VRx1&x2=31:S2147483648;
+
+-----3. [Commander Skills Balancing] by Perfect0 -------------------------------
+

@@ -1,0 +1,633 @@
+ZVSE
+ERMS_ScriptDate=4.10(October).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Artifact Boost ERM script v1.41 - Donald X. Vaccarino
+
+** Last Updated: October 4, 2006 by Timothy - fixed bug that occurs if you try to immediately use Statesman's Medal
+** to build on day 1 with a hero who starts with the artifact
+** Updated Jul. 18. 2004 by Hermann the Weird
+
+** modified at 08.01.2005 by Thomas Franz (samot) -  changes are commented by using //
+** - FU601: Pendant Of Dispassion gives you +1 Defense instead of Knowledge, if Magic ban (script99) is active
+** - FU608: Diplomats Ring: max. Bonus for L1-Units: unlimited for easy, 1000 for norm.,
+**   500 for hard, 250 for expert and 100 for impossible
+** - FU601: Emblem Of Cognizance: added gold limit (per emblem): unlimited for easy, 100.000 for norm.,
+**   50.000 for hard, 25.000 for expert and 10.000 for impossible
+** - Statesman's Medal: replaced OB98 by CM1, you will now be asked, to spend it, if you click on the
+**   townhall. If there is nothing is build, the Medal will NOT be removed (because it can be used in
+**   the Diplo-Boost (script96) too).
+** - FU612: Pendant Of Holiness - gives only spells, that are not disabled (Map-Options)
+**   or banned (Wog-Option to bann Resurrection)
+
+
+** Requires WOG version 3.58 or later
+** Make formerly weak artifacts do something special, usually once/week
+** WoGify Name: script02.erm
+
+** Bird Of Perception gives 6 Royal Griffins
+** Pendant Of Life gives 24 Sprites
+** Pendant Of Death gives 12 Zombies
+** Targ Of The Rampaging Ogre provokes a fight with 30 Ogres
+** Dead Man's Boots gives Dead Man's Boots
+** Pendant Of Total Recall gives 1000 experience
+** Emblem Of Cognizance gives 15 gold per troop
+** Stoic Watchman reveals a large map area
+** Pendant Of Second Sight upgrades lowly shooters
+** Pendant Of Holiness gives a random holy spell
+** Boots Of Polarity may be traded for a one-time movement bonus
+** Garniture Of Interference may be traded for a magic skill
+** Pendant Of Dispassion gives +1 knowledge
+** Pendant Of Free Will upgrades golems and peasants
+
+** following artifacts new as of script version 1.3
+
+** Diplomat's Ring may be traded to double number of first level troops hero has
+** Surcoat Of Counterpoise doubles the effects of these artifacts, where applicable
+** Orb Of Vulnerability gives 1 Archmage plus another per level of Wisdom
+** Sphere Of Permanence gives 1 Mighty Gorgon plus another per 10 Defense
+** Statesman's Medal may be traded at a town for up to three buildings
+** Orb Of Inhibition may be traded to modify a creature's abilities
+
+** All artifacts function for the AI (if worn) but AI won't agree to trades.
+
+** To use this code, put it into a Global Event, set to never happen.
+
+** Variables Used: v600-v628, v630-v631, v640-v648, z326-z331, i-l
+** Flags Used: 1, 2, 5, 710-714
+
+** w33 must not be modified by other programs, used for enabling/disabling weekly creatures!
+
+** The other variables may be used elsewhere but will be trashed by this code.
+
+** Functions Used: 599-608, 612, 613
+** Timers Used: 85 (was 76)
+
+
+** Initialization Code
+
+!#UN:P102/?v1; [Check if Artifact Boost is enabled in WoGify Options]
+
+!#TM85&v1=1:S1/999/7/255; [timer once/week for all players]
+
+** end of Initialization Code
+
+
+** Timer routine
+
+!?TM85;
+
+!!UN:P102/?y-1; [Check if Artifact Boost Script is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!OW:C?v630; [get current player]
+!!VRv600:S0; [start with hero #0]
+!!DO600/0/155/1:P; [iterate through all heroes]
+
+** end of timer routine
+
+
+!?CM2;     [R-click trigger for enabling/disabling weekly creatures from artifacts]
+
+!!IF:W-1;     [w vars refer to current hero]
+!!CM:F?y-1;     [Check if its a r-click]
+!!FU&y-1<>512:E;     [Exit if it isn't]
+
+!!UN:P102/?y-1; [Check if Artifact Boost Script is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!CM:I?y-1;     [Get r-click location]
+!!FU&y-1<>11/y-1<>12/y-1<>13/y-1<>14/y-1<>20/y-1<>4:E;     [Exit if not neck slot or misc. 1-5]
+
+!!VRy-1&y-1=11:S9;     [Translate r-click location to slot numbers]
+!!VRy-1&y-1=12:S10;
+!!VRy-1&y-1=13:S11;
+!!VRy-1&y-1=14:S12;
+!!VRy-1&y-1=20:S18;
+!!VRy-1&y-1=4:S2;
+
+!!HE-1:A1/?y-2/y-1;     [Check for weekly creature artifacts]
+!!FU&y-2<>103/y-2<>104/y-2<>63/y-2<>92/y-2<>93:E;     [Exit if no weekly creature artifact]
+!!CM:R0;     [Disable standard r-click info]
+
+!!VRz-1&y-2=63:Sz420;     [Set strings for r-click info]
+!!VRz-1&y-2=92:Sz924;
+!!VRz-1&y-2=93:Sz925;
+!!VRz-1&y-2=103:Sz930;
+!!VRz-1&y-2=104:Sz931;
+
+!!VRz-2:Sz102068+^.^;     [Set strings for status report]
+!!VRz-3:Sz102069;
+
+!!VRy-3&y-2=63:Sw33;
+!!VRy-3&y-2=63:&1;
+!!VRz-2&y-2=63/y-3>0:Sz102069+^.^;
+
+!!VRy-3&y-2=92:Sw33;
+!!VRy-3&y-2=92:&2;
+!!VRz-2&y-2=92/y-3>0:Sz102069+^.^;
+
+!!VRy-3&y-2=93:Sw33;
+!!VRy-3&y-2=93:&4;
+!!VRz-2&y-2=93/y-3>0:Sz102069+^.^;
+
+!!VRy-3&y-2=103:Sw33;
+!!VRy-3&y-2=103:&8;
+!!VRz-2&y-2=103/y-3>0:Sz102069+^.^;
+
+!!VRy-3&y-2=104:Sw33;
+!!VRy-3&y-2=104:&16;
+!!VRz-2&y-2=104/y-3>0:Sz102069+^.^;
+
+!!VRz-3&y-3>0:Sz102068;
+
+** Display question for enabling/disabling **
+!!IF:Q2/8/y-2/2/z102070;
+
+!!FU&-2:E;     [Exit if no answered]
+
+!!VRw33&y-3=1/y-2=63:-1;     [Set bit for Bird of Perception; y-3=0: enabled]
+!!VRw33&y-3=0/y-2=63:+1;
+
+!!VRw33&y-3=2/y-2=92:-2;     [Set bit for Sphere of Permanence]
+!!VRw33&y-3=0/y-2=92:+2;
+
+!!VRw33&y-3=4/y-2=93:-4;     [Set bit for Orb Of Vulnerability]
+!!VRw33&y-3=0/y-2=93:+4;
+
+!!VRw33&y-3=8/y-2=103:-8;     [Set bit for Pendant Of Life]
+!!VRw33&y-3=0/y-2=103:+8;
+
+!!VRw33&y-3=16/y-2=104:-16;     [Set bit for Pendant Of Death]
+!!VRw33&y-3=0/y-2=104:+16;
+
+** end of r-click trigger for enabling/disabling weekly creature artifacts **
+
+
+** function to iterate through current player's heroes
+
+!?FU600;
+
+!!HEv600:O?v602; [get owner of iterated hero]
+!!FU602&v602>=0/v630=v602:P; [if hero in use and it's that hero's owner's turn, continue in function 602]
+!!VRv600:+1; [inc hero #]
+
+** end of function
+
+
+** function to check one hero for special artifacts
+** note the code is broken up into multiple functions to speed it up
+** checking 156 heroes for 12 artifacts would take forever
+
+!?FU602;
+
+!!OW:Iv602/?v603; [get AI (1) or human (0)]
+
+!!HEv600:A2/63/0/?v610; [check for Bird Of Perception]
+!!HEv600:A2/103/0/?v611; [check for Pendant Of Life]
+!!HEv600:A2/104/0/?v612; [check for Pendant Of Death]
+!!HEv600:A2/16/0/?v613; [check for Targ Of The Rampaging Ogre]
+!!HEv600:A2/56/0/?v614; [check for Dead Man's Boots]
+!!HEv600:A2/107/0/?v615; [check for Pendant Of Total Recall]
+!!HEv600:A2/65/0/?v616; [check for Emblem Of Cognizance]
+!!HEv600:A2/64/0/?v617; [check for Stoic Watchman]
+!!HEv600:A2/101/0/?v618; [check for Pendant Of Second Sight]
+!!HEv600:A2/102/0/?v619; [check for Pendant Of Holiness]
+!!HEv600:A2/59/0/?v620; [check for Boots Of Polarity]
+!!HEv600:A2/57/0/?v621; [check for Garniture Of Interference]
+!!HEv600:A2/100/0/?v622; [check for Pendant Of Dispassion]
+!!HEv600:A2/105/0/?v623; [check for Pendant Of Free Will]
+!!HEv600:A2/67/0/?v624; [check for Diplomat's Ring]
+!!HEv600:A2/58/0/?v625; [check for Surcoat Of Counterpoise]
+!!HEv600:A2/93/0/?v626; [check for Orb Of Vulnerability]
+!!HEv600:A2/92/0/?v627; [check for Sphere Of Permanence]
+!!HEv600:A2/126/0/?v628; [check for Orb Of Inhibition]
+
+!!VRv608:Sv610 +v611 +v612 +v613 +v614 +v615 +v616 +v617 +v618 +v619 +v620 +v621 +v622 +v623;
+!!VRv608:+v624 +v625 +v626 +v627 +v628;
+!!FU601&v608>0:P; [handle any artifacts if found]
+
+** end of function
+
+
+** function to handle special artifacts for a hero who has one
+
+!?FU601;
+
+!!IF:Wv600;     [w vars refer to hero v600]
+!!HEv600:B0/?z326; [get hero name]
+!!HEv600:P?v604/?v605/?v606; [get hero x/y/level]
+!!HEv600:R2/?v607; [get hero sex]
+!!VRz327&v607=0:Sz102019;
+!!VRz327&v607=1:Sz102020;
+!!VRz328&v607=0:Sz102021;
+!!VRz328&v607=1:Sz102022;
+!!IF:V5/0;
+!!IF&v603=0:V5/1; [use flag 5 to mean we've got a human player's hero]
+
+!!IF&5/v625>0:M1/z102023;
+!!VRv631:S1;
+!!VRv631&v625>0:S2; [some effects will be multiplied by v631 - doubled for Surcoat]
+
+!!VRy3:Sw33;
+!!VRy3:&1;
+!!IF&5/v610>0/y3=0:Q1/21/5/1^%Z102024^;
+!!VRv610:*6;
+!!VRv610:*v631; [Surcoat factor]
+!!HEv600&5/v610>0/y3=0:C2/5/v610/1; [give 6 royal griffins per Bird]
+!!FU603&-5/v610>0:P5/v610; [offer AI griffins]
+
+!!VRy3:Sw33;
+!!VRy3:&8;
+!!IF&5/v611>0/y3=0:Q1/21/119/1^%Z102025^;
+!!VRy1:S24;
+!!VRy1:*v631; [Surcoat factor]
+!!HEv600&5/v611>0/y3=0:C2/119/y1/1; [give 24 sprites]
+!!FU603&-5/v611>0:P119/y1; [offer AI sprites]
+
+!!VRy3:Sw33;
+!!VRy3:&16;
+!!IF&5/v612>0/y3=0:Q1/21/59/1^%Z102026^;
+!!VRy1:S12;
+!!VRy1:*v631; [Surcoat factor]
+!!HEv600&5/v612>0/y3=0:C2/59/y1/1; [give 12 zombies]
+!!FU603&-5/v612>0:P59/y1; [offer AI zombies]
+
+!!VRy3:Sw33;
+!!VRy3:&4;
+!!HEv600:S7/?y2; [get wisdom level]
+!!VRy1:Sy2;
+!!VRy1:+1; [and one more]
+!!VRy1:*v626; [per Orb Of Vulnerability]
+!!VRy1:*v631; [Surcoat factor]
+!!IF&5/v626>0/y1=1/y3=0:Q1/21/35/1^%Z102027^;
+!!IF&5/v626>0/y1>1/y2=0/y3=0:Q1/21/35/1^%Z102028^;
+!!IF&5/v626>0/y1>1/y2>0/y3=0:Q1/21/35/1^%Z102029^;
+!!HEv600&5/v626>0/y3=0:C2/35/y1/1; [give 1-4 archmages]
+!!FU603&-5/v626>0:P35/y1; [offer AI archmages]
+
+!!VRy3:Sw33;
+!!VRy3:&2;
+!!HEv600:Fd/?y2/d/d; [get defense]
+!!VRy2::10; [every 10 gets you a mighty gorgon]
+!!VRy1:Sy2;
+!!VRy1:+1; [plus one base gorgon]
+!!VRy1:*v627; [per Sphere Of Permanence]
+!!VRy1:*v631; [Surcoat factor]
+!!IF&5/v627>0/y1=1/y3=0:Q1/21/103/1^%Z102030^;
+!!IF&5/v627>0/y1>1/y2=0/y3=0:Q1/21/103/1^%Z102031^;
+!!IF&5/v627>0/y1>1/y2>0/y3=0:Q1/21/103/1^%Z102032^;
+!!HEv600&5/v627>0/y3=0:C2/103/y1/1; [give 1 or more mighty gorgons]
+!!FU603&-5/v627>0:P103/y1; [offer AI mighty gorgons]
+
+!!IF&5/v614>0:Q1/8/56/1/z102033;
+!!HEv600&v614>0:A56; [give Dead Man's Boots]
+!!HEv600&v614>0/v625>0:A56; [another pair for Surcoat]
+
+!!VRy1:S1000;
+!!VRy1:*v631; [Surcoat factor]
+!!IF&5/v615>0:Q1/17/y1/1/z102034;
+!!HEv600&v615>0:Edy1; [give 1000 experience]
+
+!!VRk:S0; [0 counted]
+!!DO606/0/6/1&v616>0:P; [count number of creatures Hero has, return in k]
+!!VRj:S15;
+!!VRj:*v631; [Surcoat factor]
+!!VRk&v616>0:*j; // 15 gold per creature
+
+!!UN:J2/?y4; // get difficulty (unlimited for easy)
+!!VRy5&y4=1:S100000; // max 100000 gold for normal
+!!VRy5&y4=2:S50000; // max 50000 for hard
+!!VRy5&y4=3:S25000; // max 25000 for expert
+!!VRy5&y4=4:S10000; // max 10000 for impossible
+!!VRk&k>y5:Sy5; // limit the gold (depending on the difficulty)
+
+!!VRk&v616>0:*v616;  // * number of Emblems the hero has
+!!IF&5/v616>0:Q1/6/k/1/z102035;
+!!OW&v616>0:Rv602/6/dk; [give the gold]
+
+!!IF&5/v617>0:M1/z102036;
+!!VRy1:S30; [area]
+!!VRy1&v625>0:S42; [double area for Surcoat - 30 times square root of 2]
+!!UN&v617>0:Sv604/v605/v606/v602/y1; [reveal area]
+!!UN&v617>0:R1; [redraw screen]
+
+!!IF&5/v618>0:M1/z102037;
+!!HEv600&v618>0:C1/2/3/d; [turn archers to marksmen]
+!!HEv600&v618>0:C1/18/19/d; [turn wood elves to grand elves]
+!!HEv600&v618>0:C1/28/29/d; [turn gremlins to master gremlins]
+!!HEv600&v618>0:C1/44/45/d; [turn gogs to magogs]
+!!HEv600&v618>0:C1/74/75/d; [turn beholders to evil eyes]
+!!HEv600&v618>0:C1/88/89/d; [turn orcs to orc chieftans]
+!!HEv600&v618>0:C1/100/101/d; [turn lizard men to lizard warriors]
+!!HEv600&v618>0:C1/112/127/d; [turn air elementals to storm elementals]
+
+!!FU612&v619>0:P;     [Call function if Pendant of Holiness equipped]
+
+!!IF&5/v620>0:Q2/z102040;
+!!IF&5/v620>0/-2:M1/z102041;
+!!IF&5/v620>0/2:M1/z102042;
+!!VRy1:S1700; [about a day's movement]
+!!VRy1:*v631; [Surcoat factor]
+!!HEv600&5/v620>0/2:Wdy1; [add movement]
+!!HEv600&5/v620>0/2:A3/59/1/1; [remove Boots Of Polarity]
+
+!!VRi&5/v621>0:S14 R3; [pick a random magic skill]
+!!UN&5/v621>0:N4/z329/i; [get name of skill]
+!!IF&5/v621>0:Q2/z102043;
+!!IF&5/v621>0/-2:M1/z102044;
+!!HEv600&5/v621>0/2:Si/?j; [get level in that skill]
+!!IF&5/v621>0/2/j=3:M1/z102045;
+!!VRk&5/v621>0/2/j<3:Si *3 +3 +j; [get picture number of skill at level given]
+!!IF&5/v621>0/2/j<3:Q1/20/k/1/z102046;
+!!HEv600&5/v621>0/2/j<3:A3/57/1/1; [remove Garniture Of Interference]
+!!HEv600&5/v621>0/2/j<3:Si/d1; [give skill]
+
+!!IF&5/v622>0:Q1/34/v631/1/z102047;
+!!UN:P99/?y1; // check for magic bann script (script99)
+!!HEv600&v622>0/y1=0:Fd/d/d/dv631; // +1 knowledge if is script is not active
+!!HEv600&v622>0/y1=1:Fd/dv631/d/d; // +1 defense if magic bann is active
+
+!!IF&5/v623>0:M1/z102048;
+!!HEv600&v623>0:C1/139/143/d; [turn peasants to rogues]
+!!HEv600&v623>0:C1/116/117/d; [turn gold golems to diamond golems]
+!!HEv600&v623>0:C1/33/116/d; [turn iron golems to gold golems]
+!!HEv600&v623>0:C1/32/33/d; [turn stone golems to iron golems]
+!!HEv600&v623>0/v625>0:C1/116/117/d; [turn gold golems to diamond golems, again for Surcoat]
+!!HEv600&v623>0/v625>0:C1/33/116/d; [turn iron golems to gold golems, again for Surcoat]
+
+!!VRk:S0; [0 counted]
+!!DO607/0/6/1:P; [count number of first level troop stacks into k]
+!!IF&5/v624>0/k>0:Q2/z102049;
+!!IF&5/v624>0/k>0/2:M1/z102050;
+!!IF&5/v624>0/k>0/-2:M1/z102051;
+!!IF&-5:V2/0; [AI just says no]
+!!DO608/0/6/1&v624>0/k>0/2:P; [double qty in first level stacks]
+!!HEv600&5/v624>0/k>0/2:A3/67/1/1; [remove a Diplomat's Ring]
+!!UN&v624>0/2:R1; [redraw screen]
+
+!!VRk:S0 R6; [random slot # to start from]
+!!DO599/0/6/1:P; [find a slot with a creature - we always will]
+!!HEv600:C0/l/?j/?i; [get j type i qty of our random slot creature]
+!!UN&j>=0/i>0:N3/330/j/1; [get plural name of creature into z330]
+!!VRy1:S0 R1; [pick no-retaliation or attack-twice to offer]
+!!VRz331&y1=0:Sz102052;
+!!VRz331&y1=1:Sz102053;
+!!IF&5/v628>0/j>=0/i>0:Q2/z102054;
+!!IF|j<0/i=0:V2/0; [If no creatures, don't do anything]
+!!IF&-5:V2/0; [AI doesn't do it]
+!!IF&5/v628>0/2:M1/z102055;
+!!IF&5/v628>0/-2/j>=0/i>0:M1/z102056;
+!!HEv600&v628>0/2:A3/126/1/1; [remove an Orb Of Inhibition]
+!!MA&v628>0/2:Xj/?y2; [read current creature flags]
+!!VRy2&v628>0/2/y1=0:|32768; [attack twice bit]
+!!VRy2&v628>0/2/y1=1:|65536; [no retaliation bit]
+!!MA&v628>0/2:Xj/y2; [set creature flags!]
+
+!!IF&5/v613>0:M1/z102057;
+!!VRy1:S30;
+!!VRy1:*v631; [Surcoat factor]
+!!HEv600&v613>0:Tv604/v605/v606/90/y1; [ogre fight]
+
+** end of function
+
+
+** function to try to give creatures to AI hero
+** x1=creature type x2=quantity
+
+!?FU603;
+
+!!VRv609:S0 -1; [-1 indicates no slot found]
+!!DO604/0/6/1:Px1; [iterate through slots]
+!!HEv600&v609>=0:C0/v609/?i/d; [see what's in the slot we found]
+!!HEv600&v609>=0/i=x1:C0/v609/x1/dx2; [gain creatures in existing slot]
+!!HEv600&v609>=0/i=-1:C0/v609/x1/x2; [set creatures in empty slot]
+
+** end of function
+
+
+** function to check if an AI hero slot is empty or has a given creature type
+** x1=creature type x16=slot
+** result is to set v609 to the slot # if usable
+
+!?FU604;
+
+!!HEv600:C0/x16/?i/d; [check creature type without modifying]
+!!VRv609&i=-1:Sx16; [it's empty!]
+!!VRv609&i=x1:Sx16; [it's our type!]
+
+** end of function
+
+
+** function to add one slot's number of troops
+** slot number is in x16; result accumulates in k
+
+!?FU606;
+
+!!HEv600:C0/x16/d/?i; [get # of troops in slot x16]
+!!VRk:+i; [add them up]
+
+** end of function
+
+
+** function to check a slot for first-level-troops
+** slot number is x16; result accumulates in k
+
+!?FU607;
+
+!!HEv600:C0/x16/?y1/?y2; [get y1 creature type y2 qty]
+!!MA&y1>-1:Ly1/?y2; // check creature type for being first level
+!!VRk&y1>-1/y2=0:+1; [count it]
+
+** end of function
+
+
+** function to double first level troop slots
+** slot number is x16
+
+!?FU608;
+
+!!HEv600:C0/x16/?y1/?y2; [get y1 creature type y2 qty]
+!!MA&y1>-1:Ly1/?y3; // check creature type for being first level
+!!FU|y1<0/y3>0:E; // exit, if not (or if there is no creature
+
+!!UN:J2/?y4; // get difficulty
+!!VRy5:Sy2; // set y5 to the number of creatures (unlimited for easy)
+!!VRy5&y4=1/y5>1000:S1000; // max 1000 for normal
+!!VRy5&y4=2/y5>500:S500; // max 500 for hard
+!!VRy5&y4=3/y5>250:S250; // max 250 for expert
+!!VRy5&y4=4/y5>100:S100; // max 100 for impossible
+!!VRy5&v625>0:*2; // double bonus for Surcoat
+!!VRy2:+y5; // add bonus creatures to the original creatures
+
+!!HEv600:C0/x16/y1/y2; [increase the stack]
+
+** end of function
+
+
+
+** function to check a slot for creatures
+** k = random slot to check, l = slot found
+
+!?FU599;
+
+!!VRy1:Sk;
+!!VRy1:%7; [now we have a usable slot number]
+!!HEv600:C0/y1/?i/?j; [get i type j qty]
+!!VRl&i<>-1/j>0:Sy1; [it's got something!]
+!!VRk:+1; [next slot]
+
+** end of function
+
+
+
+
+!?CM1; // trigger for click inside a town (TH0 will not work, because Wog crashes, if you build something inside a TH0-trigger)
+!!UN:P102/?y-1; [Check if Artifact Boost script is enabled in WoGify Options]
+!!FU&y-1<>1:E;     [Exit if it isn't]
+
+!!CM:I?y-1; // get the clicked field
+!!FU|y-1<10/y-1>13:E; // exit, if not clicked at Village-, Town- or City-Hall or Capitol
+
+!!CA-1:H0/?y1 H1/?y2 U?y3; // get garrison and visiting hero / town number
+
+!!VRv628:S0; // init
+!!HEy1&y1>-1:A2/66/0/?v628; // check for Statesman's Medal - garrision hero
+!!VRy1&v628=0:Sy2; // use visiting instead, if garrison has no Medal (or there is no)
+!!HEy1&y1>-1:A2/66/0/?v628; // check for Statesman's Medal - garrision hero
+!!FU&v628<1:E; // exit, if nobody has the medal
+
+!!IF:V2/0; [AI won't give medal]
+!!IF&1000:Q2/8/66/2/z102058;
+!!IF&1000/-2:M1/z102059;
+!!FU605&2:Pv998/v999/v1000/y1; [handle giving the medal]
+!!UN:R4/y3; // redraw screen
+
+** end of trigger
+
+** function to handle statesman's medal when trade chosen
+
+!?FU605;
+
+!!CA-1:T?y7; [get town type]
+
+!!CA-1:B3/37; [check for upgraded dwelling 1]
+!!VRy1:S0;
+!!VRy1&-1:S1; [y1=1 means we built upgraded dwelling 1]
+!!CA-1:B3/30; [check for basic dwelling 1 - to see if we should add creatures]
+!!CA-1&-1:B6/30; [build basic dwelling if needed]
+!!CA-1:B6/37; [build upgraded dwelling 1]
+!!VRy8:Sy7;
+!!VRy8:*14; [get number of 1st level creature]
+!!VRy8:+1; [upgraded]
+!!VRy8&y8=113:S119; [sprites]
+!!MA:Gy8/?y9; [get growth rate of that creature]
+!!CA-1&-1:M1/0/d/y9; [add creatures (0 = 1st level) if dwelling 1 wasn't there before]
+!!UN:N2/326/y7/37; [name of upgrade building]
+
+!!VRv640:C21/17/21/21/17/22/21/21/21; [look-up table of special building numbers by town]
+!!VRv600:Sy7;
+!!VRv600:+640; [now vv600 = special building number]
+!!VRk:S1; [assume we met requirements to build it]
+!!CA-1:B3/33; [check for dwelling 4 (barracks)]
+!!VRk&-1/y7=0:S0; [needed for castle's stables]
+!!CA-1:B3/7; [check for fort]
+!!VRk&-1/y7=2:S0; [needed for tower's lookout tower]
+!!VRk&-1/y7=7:S0; [and for fortress's glyphs]
+!!VRk&-1/y7=4:S0; [and for necropolis's cover of darkness]
+!!VRk&-1/y7=3:S0; [and for inferno's brimstone stormclouds]
+!!CA-1:B3/14; [check for market]
+!!VRk&-1/y7=6:S0; [needed for stronghold's freelancer's guild]
+!!VRk&y7=8:S0; [conflux gets no special building]
+!!CA-1:B3/vv600; [check for special building]
+!!VRy2:S0;
+!!VRy2&-1/k=1:S1; [y2=1 means we built special building]
+!!CA-1&-1/k=1:B6/vv600; [build special building if requirements met and not there]
+!!UN:N2/327/y7/vv600; [name of special building]
+!!HEx4&y2=1/y7=2:O?v602; [get hero owner]
+!!UN&y2=1/y7=2:Sv604/v605/v606/v602/20; [reveal area for lookout tower]
+!!UN&y2=1/y7=2:R1; [redraw screen]
+
+!!VRy3:S0; [assume nothing built]
+!!CA-1:B3/14; [check for market]
+!!VRy3&1:S1; [y3=1 means market there]
+!!CA-1&y3=1:B3/15; [check for resource silo]
+!!VRy3&1:S0; [now y3=1 means market but no silo]
+!!CA-1&y3=1:B6/15; [build resource silo]
+!!UN:N2/328/y7/15; [name of resource silo]
+
+!!IF&y1=1/y2=1/y3>0:M1/z102060;
+!!IF&y1=1/y2=1/y3=0:M1/z102061;
+!!IF&y1=1/y2=0/y3>0:M1/z102062;
+!!IF&y1=0/y2=1/y3>0:M1/z102063;
+!!IF&y1=1/y2=0/y3=0:M1/z102064;
+!!IF&y1=0/y2=1/y3=0:M1/z102065;
+!!IF&y1=0/y2=0/y3>0:M1/z102066;
+!!VRy4:Sy1 +y2 +y3; // if y4 is now 0, nothing is built
+!!IF&y4=0:M1/z102067; // nothing built
+
+!!HEx4&y4>0:A3/66/1/1; // remove Statesman's Medal, if something is built
+
+** end of function
+
+!?FU612;     [Function for Pendant of Holiness]
+
+!!HEv600:A2/0/?k/?l; [check for spell book]
+!!IF&5/l=0:Q1/8/102/1/z102038;     [Message if no spell book]
+!!FU&l=0:E;     [Exit if no spell book]
+
+!!IF:V1/0;     [Init flag for counting spells]
+!!VRv1:S0;     [Init v var that carries spell number]
+
+!!VRy6:S920; // init index
+!!UN:J0/25/?y5; // check, if Destroy Undead is disabled
+!!VRvy6&y5=0:S25; !!VRy6&y5=0:+1; // add it to spell list, if not disabled
+!!UN:J0/37/?y5; // check, if Cure is disabled
+!!VRvy6&y5=0:S37; !!VRy6&y5=0:+1; // add it to spell list, if not disabled
+!!UN:J0/38/?y5; !!UN&y5=0:P272/?y5; // check, if Resurrection is disabled or banned by WOG-Option
+!!VRvy6&y5=0:S38; !!VRy6&y5=0:+1; // add it to spell list, if not disabled
+!!UN:J0/41/?y5; // check, if Bless is disabled
+!!VRvy6&y5=0:S41; !!VRy6&y5=0:+1; // add it to spell list, if not disabled
+!!UN:J0/48/?y5; // check, if Prayer is disabled
+!!VRvy6&y5=0:S48; !!VRy6&y5=0:+1; // add it to spell list, if not disabled
+
+!!DO613/920/y6/1&y5=0:P1/0/0;     [Looking in heroes spell book, counting spells not known to v1]
+
+!!VRy2:Sv1 -1;     [Random number between 1 and v1]
+!!VRy1:S1 Ry2;
+
+!!VRv1&v1=0:S999;     [Abort if all spells known]
+
+!!HEv600:B0/?z-1;     [Get hero name and sex]
+!!HEv600:R2/?y-1;
+!!VRz-2&y-1=0:Sz102021;
+!!VRz-2&y-1=1:Sz102022;
+
+!!IF&5/v1=999:Q1/8/102/1/z102071;
+
+!!FU&v1=999:E;     [Exit if all spells known]
+
+!!DO613/920/924/1:P1/y1/1;     [Find a random not-known spell]
+
+!!HEv600:S7/?y-1;     [Get wisdom level]
+
+!!IF&5/y-1=0/vv1=25:Q1/9/25/1/z102072;     [Display if spell is DU and no wisdom]
+!!FU&y-1=0/vv1=25:E;
+
+!!IF&5/y-1<2/vv1=38:Q1/9/38/1/z102073;     [Display if spell is Res. and no adv. wisdom]
+!!FU&y-1<2/vv1=38:E;
+
+!!IF&5/y-1<2/vv1=48:Q1/9/48/1/z102074;     [Display if spell is Pr. and no adv. wisdom]
+!!FU&y-1<2/vv1=48:E;
+
+!!IF&5:Q1/9/vv1/1^%Z102039^;     [Display the random not-known spell]
+!!HEv600:Mvv1/1;     [Learn the random not-known spell]
+
+!?FU613;     [Function to look up heroes spell book and find a random not-known spell]
+!!HEv600:M=vx16/1;
+!!VRvx1&x3=0/-1:+1;
+!!VRvx1&x2=1/-1/x3=1:Sx16;
+!!VRx16&x2=1/-1/x3=1:S999;
+!!VRx2&x2>1/-1:-1;
+

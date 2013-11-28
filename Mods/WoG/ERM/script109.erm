@@ -1,0 +1,373 @@
+ZVSE
+ERMS_ScriptName=script109 Random Monster King
+ERMS_ScriptAuthor=Thomas Franz (alias samot)
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=14.12(December).2006
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Updated 14.12(December).2006: reduced chance to get the better commander artifacts
+
+
+***************** Monster King  *****************
+** Written by Thomas Franz (alias samot)
+** Neutral Monsters are randomly leaded by a very powerful version of their class.
+
+** Usually you will fight f.e. against 3 stacks with 150 Peasants.
+** If a king appears, one of the stacks will be reduced to only one (the king),
+** but he gets the sum of the original HP and Damage (do always max. Dam).
+
+** This means for the example, that the Peasant-King will have 150 HP and do 300 Damage.
+** An Archangel-King (from original 20 Archangels) will have 6000 HP and do 1000 Damage!
+
+** Furthermore the Attack / Defense is increased by the Monster-Level (1-7), the
+** Speed is set to 125%. If stack experience is enabled, the King will get
+** 3 Bonus Level.
+
+** If you win the battle, you'll get an experience bonus (equivalent to the HP of
+** the king) and will find some treasures.
+
+** The chance, that you'll meet the king is 25% (16,5 % if the Random Hero
+** script is active)
+
+** Usage: v113-v115 exclusive
+
+*************** start Monster King script ***************
+!?BA0&1000; // battle occurs
+!!UN:P309/=1; !!VRv113&1:C0/-1/0; // init v113 - v115, if script is enabled
+
+
+!?BR&v997=0/1000/v113=0;  // first battle round
+** y-1 - chance to work for this battle
+** y-2 - King's stack number
+** y-3 - negative Stack number for Stack Experience
+** y-4 - Stack Exp for L10
+** y-5 - Original HP
+** y-6 - Original Speed
+** y-7 - New Speed
+** y-8 - MaxDamage
+** v1  - Monster Level
+** v2  - Stack Exp. for 3 Levels
+** v116 - new HP (and additional Exp. after the battle)
+** v114 - Monster type
+** v115 - original stacksize
+
+!!UN:P309/=1; !!FU&-1:E; // exit, if script is not enabled
+!!BA:H1/=-2;  !!FU&-1:E; // exit, if there is a defending hero
+!!BA:S=0;     !!FU&-1:E; // exit for siege battles
+!!VRy-1:Sv998 +v999 +v1000 + $day$ %4; // add coordinates and get the reminder of the division by 4
+!!FU&y-1<>3:E; // exit, if odds are bad (25 % chance)
+
+!!UN:P30/=1; // Check for Adventure Cave - WoG option (script30)
+!!OB998&1:T?y-9 U?y-10; // if yes get object type / subtype
+!!FU&1/y-9=63/y-10=57:E; // exit, if battle in an Adventure Cave
+
+!!VRy-2:S-1; // init
+!!DO-1/22/41/1:P; // loop through the defending stacks, starting at the second
+**                  (because the first may be already reduced by Artillery or
+**                   there may be only one stack); returns stack nr. in y-2
+!!FU&y-2=-1:E; // exit, if no stack was found
+
+!!UN:P900/=1; // check, if stack exp. is enabled
+!!VRy-3:S-1 -y-2; // calc negative stack number for stack experience (fe. stack 22 -> -23)
+!!EAy-3&1:E3/4/d/d; // add 3 Levels to the King, if stack exp. is activated
+
+!!BMy-2:T?v114 B?v115 H?y-5 S?y-6 U2/?y-8; // get monster parameters
+
+!!VRy-8:*v115; // new Max-Damage
+
+!!VRv113:Sy-5 *v115; // calc new HP
+!!VRy-7:Sy-6 *5 :4; // new Speed 125 %
+!!VRy-7&y-7<=y-6:Sy-6 +1; // at least +1 speed
+
+!!MA:Lv114/?v1; // get monster level (0..6)
+!!VRv1:+1;     // get monster level (1..7)
+
+!!BMy-2:B1 N1 Hv113 Sy-7 U1/y-8 U2/y-8 Adv1 Ddv1; // set new number, health, speed, damage; add level to Attack / Defense;
+!!BMy-2:M9/50/3; // apply TownPortal-Spell (to mark the king)
+
+*************** end BR ***************
+
+
+!?BA1&1000; // end of the battle
+** y-1 - hero number
+** y-2 - hero owner
+** y-3 - reward resource
+** y-4 - monster level
+** y-5 - reward amount
+** y-6 - player has already xxx of the resource
+** v113 - new HP (and additional Exp. after the battle)
+** v114 - Monster type
+** v115 - original stacksize
+!!UN:P309/=1; !!FU&-1:E; // exit, if script is not enabled
+!!FU|v113<1/v114<0/v115<1:E; // exit, if eighter HP or Monster type are not set (no King-battle)
+
+!!BA:H0/?y-1; // get attacking hero
+!!HEy-1:O?y-2; // get hero's owner
+!!FU&y-2<0:E; // exit if no owner (lost battle)
+
+!!VRv113:*2; // double the exp. you'll get as bonus, because you get only the exp. for one creature of the kingstack
+**     example: 40 Griffins with each 25 HP should give you 40*25 = 1000 exp.
+**              but because one of the both stacks is set to only one Griffin, you'll
+**              really get only 21 * 25 = 525 HP.
+**              The increased HPs by for the King will be ignored from the calculation function.
+
+
+!!FU-2:Pv114/?y-3; // get reward-resource depending on monster type
+!!MA:Lv114/?y-4; // monster level 0..6
+!!VRy-4::2 +1; // half monster-level 1 for L1-L2, 2 for L3/4, 3 for L5/6, 4 for L7
+
+!!UN:N3/1/v114/0; // singular name of the Monster to Z1
+
+!!VRy-5:Sv115 :10 +1 *y-4; // amount of res. = number of original monsters : 10 * half monster level
+!!VRy-5&y-5<1:S1; // at least one
+!!VRy-5|y-3=0/y-3=2:*2; // double for wood / ore
+!!VRy-5&y-3=6:*100; // *100 for gold
+
+!!IF:Q1/17/v113/21/v114/y-3/y-5/1/309001; // show reward-message (exp, treasures)
+!!HEy-1:Edv113; // give additional exp.
+
+!!OW:Ry-2/y-3/?y-6; // get amount of the resource that the player has
+!!VRy-6:+y-5; // new amount
+!!OW:Ry-2/y-3/y-6; // write back
+
+!!VRy-7:S0 R2; !!FU|y-7>0/v113<500:E; // if king has more then 500 HP then 33 % chance for one of the new artifacts (except the combination Barbarian Lord's Axe of Ferocity) as reward
+!!DO-3/1/100/1:P; // get (not disabled) reward artifact
+!!FU&y-100=0:E; // exit, if not at least one enabled new artifact was found
+!!IF:Q1/8/y-100/1/z309002;
+!!HEy-1:Ay-100; // give artifact
+
+*************** end BA1 ***************
+
+
+
+!?FU-1;
+!!BMx16:T>-1 B?y2; // check, if there is a monster in this stack
+!!VRy-2&1/y2>1:Sx16; // if yes return the stack number
+!!VRx16&1/y2>1:+100; // and exit the loop
+
+*************** end FU-1 ***************
+
+
+!?FU-2; // get the type of reward-resource
+!!VRx2:S6; // default
+!!VRx2&x1=0:S2; //  Pikeman
+!!VRx2&x1=1:S2; // Halberdier
+!!VRx2&x1=2:S0; // Archer
+!!VRx2&x1=3:S0; // Marksman
+*!VRx2&x1=4:S6; // Griffin
+*!VRx2&x1=5:S6; // Royal Griffin
+!!VRx2&x1=6:S2; // Swordsman
+!!VRx2&x1=7:S2; // Crusader
+!!VRx2&x1=8:S5; // Monk
+!!VRx2&x1=9:S5; // Zealot
+!!VRx2&x1=10:S2; // Cavalier
+!!VRx2&x1=11:S2; // Champion
+!!VRx2&x1=12:S5; // Angel
+!!VRx2&x1=13:S5; // Archangel
+*!VRx2&x1=14:S6; // Centaur
+*!VRx2&x1=15:S6; // Centaur Captain
+*!VRx2&x1=16:S6; // Dwarf
+*!VRx2&x1=17:S6; // Battle Dwarf
+!!VRx2&x1=18:S0; // Wood Elf
+!!VRx2&x1=19:S0; // Grand Elf
+!!VRx2&x1=20:S4; // Pegasus
+!!VRx2&x1=21:S4; // Silver Pegasus
+!!VRx2&x1=22:S0; // Dendroid Guard
+!!VRx2&x1=23:S0; // Dendroid Soldier
+!!VRx2&x1=24:S5; // Unicorn
+!!VRx2&x1=25:S5; // War Unicorn
+!!VRx2&x1=26:S4; // Green Dragon
+!!VRx2&x1=27:S4; // Gold Dragon
+!!VRx2&x1=28:S0; // Gremlin
+!!VRx2&x1=29:S2; // Master Gremlin
+!!VRx2&x1=30:S2; // Stone Gargoyle
+!!VRx2&x1=31:S2; // Obsidian Gargoyle
+!!VRx2&x1=32:S2; // Stone Golem
+!!VRx2&x1=33:S2; // Iron Golem
+!!VRx2&x1=34:S1; // Mage
+!!VRx2&x1=35:S1; // Arch Mage
+!!VRx2&x1=36:S5; // Genie
+!!VRx2&x1=37:S5; // Master Genie
+!!VRx2&x1=38:S2; // Naga
+!!VRx2&x1=39:S2; // Naga Queen
+!!VRx2&x1=40:S5; // Giant
+!!VRx2&x1=41:S5; // Titan
+*!VRx2&x1=42:S6; // Imp
+*!VRx2&x1=43:S6; // Familiar
+!!VRx2&x1=44:S3; // Gog
+!!VRx2&x1=45:S3; // Magog
+*!VRx2&x1=46:S6; // Hell Hound
+*!VRx2&x1=47:S6; // Cerberus
+*!VRx2&x1=48:S6; // Demon
+*!VRx2&x1=49:S6; // Horned Demon
+!!VRx2&x1=50:S0; // Pit Fiend
+!!VRx2&x1=51:S0; // Pit Lord
+!!VRx2&x1=52:S3; // Efreeti
+!!VRx2&x1=53:S3; // Efreet Sultan
+!!VRx2&x1=54:S1; // Devil
+!!VRx2&x1=55:S1; // Arch Devil
+*!VRx2&x1=56:S6; // Skeleton
+*!VRx2&x1=57:S6; // Skeleton Warrior
+!!VRx2&x1=58:S0; // Walking Dead
+!!VRx2&x1=59:S0; // Zombie
+!!VRx2&x1=60:S1; // Wight
+!!VRx2&x1=61:S1; // Wraith
+!!VRx2&x1=62:S4; // Vampire
+!!VRx2&x1=63:S5; // Vampire Lord
+!!VRx2&x1=64:S3; // Lich
+!!VRx2&x1=65:S3; // Power Lich
+!!VRx2&x1=66:S2; // Black Knight
+!!VRx2&x1=67:S2; // Dread Knight
+!!VRx2&x1=68:S1; // Bone Dragon
+!!VRx2&x1=69:S1; // Ghost Dragon
+*!VRx2&x1=70:S6; // Troglodyte
+*!VRx2&x1=71:S6; // Infernal Troglodyte
+*!VRx2&x1=72:S6; // Harpy
+*!VRx2&x1=73:S5; // Harpy Hag
+!!VRx2&x1=74:S4; // Beholder
+!!VRx2&x1=75:S4; // Evil Eye
+!!VRx2&x1=76:S1; // Medusa
+!!VRx2&x1=77:S1; // Medusa Queen
+!!VRx2&x1=78:S2; // Minotaur
+!!VRx2&x1=79:S2; // Minotaur King
+!!VRx2&x1=80:S3; // Manticore
+!!VRx2&x1=81:S3; // Scorpicore
+!!VRx2&x1=82:S3; // Red Dragon
+!!VRx2&x1=83:S3; // Black Dragon
+*!VRx2&x1=84:S6; // Goblin
+*!VRx2&x1=85:S6; // Hobgoblin
+*!VRx2&x1=86:S6; // Wolf Rider
+*!VRx2&x1=87:S6; // Wolf Raider
+!!VRx2&x1=88:S0; // Orc
+!!VRx2&x1=89:S0; // Orc Chieftain
+!!VRx2&x1=90:S0; // Ogre
+!!VRx2&x1=91:S0; // Ogre Mage
+!!VRx2&x1=92:S2; // Roc
+!!VRx2&x1=93:S2; // Thunderbird
+!!VRx2&x1=94:S4; // Cyclops
+!!VRx2&x1=95:S4; // Cyclops King
+!!VRx2&x1=96:S4; // Behemoth
+!!VRx2&x1=97:S4; // Ancient Behemoth
+!!VRx2&x1=98:S0; // Gnoll
+!!VRx2&x1=99:S6; // Gnoll Marauder
+!!VRx2&x1=100:S0; // Lizardman
+!!VRx2&x1=101:S0; // Lizard Warrior
+!!VRx2&x1=102:S2; // Gorgon
+!!VRx2&x1=103:S2; // Mighty Gorgon
+!!VRx2&x1=104:S5; // Serpent Fly
+!!VRx2&x1=105:S5; // Dragon Fly
+!!VRx2&x1=106:S1; // Basilisk
+!!VRx2&x1=107:S1; // Greater Basilisk
+!!VRx2&x1=108:S3; // Wyvern
+!!VRx2&x1=109:S3; // Wyvern Monarch
+!!VRx2&x1=110:S3; // Hydra
+!!VRx2&x1=111:S3; // Chaos Hydra
+*!VRx2&x1=112:S6; // Air Elemental
+!!VRx2&x1=113:S2; // Earth Elemental
+!!VRx2&x1=114:S3; // Fire Elemental
+!!VRx2&x1=115:S1; // Water Elemental
+*!VRx2&x1=116:S6; // Gold Golem
+!!VRx2&x1=117:S4; // Diamond Golem
+*!VRx2&x1=118:S6; // Pixie
+*!VRx2&x1=119:S6; // Sprite
+*!VRx2&x1=120:S6; // Psychic Elemental
+*!VRx2&x1=121:S6; // Magic Elemental
+*!VRx2&x1=122:S6; // NOT USED (attacker)
+!!VRx2&x1=123:S4; // Ice Elemental
+*!VRx2&x1=124:S6; // NOT USED (defender)
+!!VRx2&x1=125:S2; // Magma Elemental
+*!VRx2&x1=126:S6; // NOT USED (3)
+*!VRx2&x1=127:S6; // Storm Elemental
+*!VRx2&x1=128:S6; // NOT USED (4)
+!!VRx2&x1=129:S3; // Energy Elemental
+!!VRx2&x1=130:S3; // Firebird
+!!VRx2&x1=131:S1; // Phoenix
+!!VRx2&x1=132:S4; // Azure Dragon
+!!VRx2&x1=133:S4; // Crystal Dragon
+!!VRx2&x1=134:S1; // Faerie Dragon
+!!VRx2&x1=135:S2; // Rust Dragon
+!!VRx2&x1=136:S5; // Enchanter
+!!VRx2&x1=137:S0; // Sharpshooter
+!!VRx2&x1=138:S2; // Halfling
+*!VRx2&x1=139:S6; // Peasant
+*!VRx2&x1=140:S6; // Boar
+!!VRx2&x1=141:S3; // Mummy
+*!VRx2&x1=142:S6; // Nomad
+*!VRx2&x1=143:S6; // Rogue
+!!VRx2&x1=144:S0; // Troll
+!!VRx2&x1=145:S0; // Catapult (specialty X1)
+!!VRx2&x1=146:S0; // Ballista (specialty X1)
+*!VRx2&x1=147:S6; // First Aid Tent (specialty X1)
+*!VRx2&x1=148:S6; // Ammo Cart (specialty X1)
+!!VRx2&x1=149:S2; // Arrow Towers (specialty X1)
+!!VRx2&x1=150:S5; // Supreme Archangel
+!!VRx2&x1=151:S4; // Diamond Dragon
+!!VRx2&x1=152:S5; // Lord of Thunder
+!!VRx2&x1=153:S1; // Antichrist
+!!VRx2&x1=154:S1; // Blood Dragon
+!!VRx2&x1=155:S4; // Darkness Dragon
+!!VRx2&x1=156:S1; // Ghost Behemoth
+!!VRx2&x1=157:S3; // Hell Hydra
+!!VRx2&x1=158:S1; // Sacred Phoenix
+*!VRx2&x1=159:S6; // Ghost
+*!VRx2&x1=160:S6; // Emissary of War
+*!VRx2&x1=161:S6; // Emissary of Peace
+*!VRx2&x1=162:S6; // Emissary of Mana
+*!VRx2&x1=163:S6; // Emissary of Lore
+!!VRx2&x1=164:S3; // Fire Messenger
+!!VRx2&x1=165:S2; // Earth Messenger
+*!VRx2&x1=166:S6; // Air Messenger
+!!VRx2&x1=167:S1; // Water Messenger
+!!VRx2&x1=168:S1; // Gorynych
+!!VRx2&x1=169:S5; // War zealot
+!!VRx2&x1=170:S0; // Arctic Sharpshooter
+!!VRx2&x1=171:S3; // Lava Sharpshooter
+!!VRx2&x1=172:S2; // Nightmare
+!!VRx2&x1=173:S2; // Santa Gremlin
+*!VRx2&x1=174:S6; // Paladin (attacker)
+*!VRx2&x1=175:S6; // Hierophant (attacker)
+*!VRx2&x1=176:S6; // Temple Guardian (attacker)
+*!VRx2&x1=177:S6; // Succubus (attacker)
+*!VRx2&x1=178:S6; // Soul Eater (attacker)
+*!VRx2&x1=179:S6; // Brute (attacker)
+*!VRx2&x1=180:S6; // Ogre Leader (attacker)
+*!VRx2&x1=181:S6; // Shaman (attacker)
+*!VRx2&x1=182:S6; // Astral Spirit (attacker)
+*!VRx2&x1=183:S6; // Paladin (defender)
+*!VRx2&x1=184:S6; // Hierophant (defender)
+*!VRx2&x1=185:S6; // Temple Guardian (defender)
+*!VRx2&x1=186:S6; // Succubus (defender)
+*!VRx2&x1=187:S6; // Soul Eater (defender)
+*!VRx2&x1=188:S6; // Brute (defender)
+*!VRx2&x1=189:S6; // Ogre Leader (defender)
+*!VRx2&x1=190:S6; // Shaman (defender)
+*!VRx2&x1=191:S6; // Astral Spirit (defender)
+!!VRx2&x1=192:S0; // Sylvan Centaur
+!!VRx2&x1=193:S4; // Sorceress
+*!VRx2&x1=194:S6; // Werewolf
+!!VRx2&x1=195:S3; // Hell Steed
+!!VRx2&x1=196:S1; // Dracolich
+
+*************** end FU-2 ***************
+
+!?FU-3;
+** returns (in y-100) the number of a random new artifact (above 140), that is not
+** disabled and not the Barbarian Lord's Axe of Ferocity
+** This includes the commander artifacts and blank artifacts (if they are enabled).
+
+!!VRy1:S141 R29; // generate random artifact number
+!!UN:Ay1/=1; // check, if it is disabled
+!!FU&1:E; // next loop, if disabled
+
+!!VRy2:S0 R100;
+!!FU&y1=149/v113<4000/y2>2:E; // for Helm of Immortality the king has to have had at least 4000 hp (2 % chance to get it although)
+!!FU&y1=159/v113<5000/y2>2:E; // for Dragonheart the king has to have had at least 5000 hp (2 % chance to get it although)
+!!FU&y1=155/v113<6000/y2>2:E; // for Slava's Ring of Power the king has to have had at least 6000 hp (2 % chance to get it although)
+!!VRy-100&y1<>144/y1<>145/y1<>158:Sy1; // else set return value to the new artifact
+!!VRx16:+100; // exit loop
+
+*************** end Monster King script ***************
+

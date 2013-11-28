@@ -1,0 +1,338 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=21.6(June).2006
+
+** Command Points version 0.2
+** by Timothy Pulver
+** script122.erm
+** Temporary script number: script96.erm
+** Last Updated: June 21, 2006
+** Previously Updated: June 12, 2006
+
+** This script limits the number of troops that a single hero can take into
+** battle. The main goal is to require players to spread out their army,
+** rather than using the tried-and-true (but somewhat boring) "superhero"
+** strategy.
+
+** Higher level heroes *will* be able to command more troops, but the limits
+** make it necessary to diversify if you wish to field a larger army.
+** Each hero can command up to 2000 plus 3000 Command Points (3000 gold) worth
+** of troops per hero level in battle. Exceeding this results in the excess
+** troops departing.
+
+** A towns without a defending hero or Fort can send 5,000 Command Points of
+** troops into battle. If the town has a Fort, it can sent 10,000 points, a
+** Citadel, 15,000 points, and a Castle, 20,000 points. If the town has a
+** defending hero, the Fort/Citadel/Castle bonus is added to the defending
+** hero's Command Point total.
+
+** Neutral armies and towns have no Command Point limits.
+
+** To see the active hero's Command Point limit and total Command Points of the
+** hero's army at any time, right-click on the Sleep/Wake button. To see the
+** Command Points for a town garrison or garrison hero, right-click on the
+** garrison hero slot in the town screen.
+
+** Leadership reduces the Command Point value of troops by 10% per level of
+** Leadership (i.e., 10%/20%/30%) for troops affected by morale only.
+** In other words, Undead and Elementals don't get this reduction bonus.
+
+** Necromancy reduces the Command Point value of Undead troops in the same way
+** as Leadership (i.e., 10%/20%/30% for Undead troops only).
+
+** Air/Earth/Fire/Water Magic reduce the Command Point values of Elementals of
+** the same element by 10%/20%/30%, e.g., Advanced Fire Magic reduces the
+** Command Point cost of Fire and Energy Elementals by 20%.
+
+** Diplomacy increases a hero's Command Points by 150/300/500 per level.
+
+--------------------------------------------------------------------------------
+
+** ERM Option Number: 322
+** Flags and Variables: local/temporary only
+** Functions: FU317-FU321
+
+--------------------------------------------------------------------------------
+
+!?CM0&999; [Adventure Screen right-click trigger]
+!!UN:P322/=1; !!FU&-1:E; [Exit if script isn't enabled]
+
+!!CM:I?y-1; [Location clicked: y-1]
+!!FU&y-1<>6:E; [Exit if not Sleep/Wake button]
+
+!!OW:A-1/?y-1; [Active hero: y-1]
+!!FU317&y-1>=0:Py-1/0/0; [Display Command Points]
+!!CM:R0; [Disable standard click response]
+
+--------------------------------------------------------------------------------
+
+!?CM1&999; [Town Screen mouse click trigger]
+!!UN:P322/=1; !!FU&-1:E; [Exit if script isn't enabled]
+
+!!CM:I?y-1 S?y-2; [Location clicked: y-1, Subtype of Click: y-2]
+!!FU|y-1<>123/y-2<>14:E; [Exit if not a right-click on the Garrison Hero slot]
+
+!!CA-1:H0/?y-1; [Garrison hero: y-1]
+
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!CA-1:B3/9; [Check if Castle built: Flag 1=1 if yes]
+!!VRy-27&1:S3; [Set y-27 to 3 if Castle built]
+!!CA-1&-1:B3/8; [Check if Citadel built: Flag 1=1 if yes]
+!!VRy-27&1/y-27=0:S2; [Set y-27 to 2 if Citadel built]
+!!CA-1&-1:B3/7; [Check if Fort built: Flag 1=1 if yes]
+!!VRy-27&1/y-27=0:S1; [Set y-27 to 1 if Fort built]
+
+!!FU317&y-1>=0:Py-1/0/y-27/0; [Display Command Points: Garrison Hero]
+!!FU317&y-1<0:Py-1/0/y-27/1; [Display Command Points: Garrison (no hero)]
+!!CM:R0; [Disable standard click response]
+
+--------------------------------------------------------------------------------
+
+ [Calculate/Display Command Points]
+ [x1=Hero number, x2=0 for display, x2=1 for removal of excess troops]
+ [x3=Fort level for town siege, x4=1 for a town battle with no defending hero]
+!?FU317;
+
+!!HEx1&x4=0:Ed/?y1; [Hero's level: y1]
+
+ [Hero's skill levels: Leadership: y2, Necromancy: y3, Air Magic: y4]
+ [Earth Magic: y5, Fire Magic: y6, Water Magic: y7, Diplomacy: y8]
+!!HEx1&x4=0:S6/?y2 S12/?y3 S15/?y4 S17/?y5 S14/?y6 S16/?y7 S4/?y8;
+
+!!VRy9&x4=0:S3000 *y1 +2000; [Hero's basic Command Points: y9]
+!!VRy9&x3=0/x4=1:S5000; [5000 Command Points for a town with no Garrison hero and no Fort]
+!!VRy9&x3=1:+10000; [Add 10,000 Command Points for a Fort]
+!!VRy9&x3=2:+15000; [Add 15,000 Command Points for a Citadel]
+!!VRy9&x3=3:+20000; [Add 20,000 Command Points for a Castle]
+!!VRy10&y8=1:S150 *y1; [Basic Diplomacy bonus: y10]
+!!VRy10&y8=2:S300 *y1; [Advanced Diplomacy bonus: y10]
+!!VRy10&y8=3:S500 *y1; [Expert Diplomacy bonus: y10]
+!!VRy11:Sy9 +y10; [Hero's total Command Points: y11]
+
+!!VRy12:S10 -y2; [Leadership reduction multiplier: y12]
+!!VRy13:S10 -y3; [Necromancy reduction multiplier: y13]
+!!VRy14:S10 -y4; [Air Magic reduction multiplier: y14]
+!!VRy15:S10 -y5; [Earth Magic reduction multiplier: y15]
+!!VRy16:S10 -y6; [Fire Magic reduction multiplier: y16]
+!!VRy17:S10 -y7; [Water Magic reduction multiplier: y17]
+
+!!VRy-2:S0; [Initialize y-2 to 0]
+!!DO318/0/6/1&x4=0:Px1/y12/y13/y14/y15/y16/y17/0/0/0; [Loop through hero's troop slots and get total army Command Points: y-2]
+!!DO318/0/6/1&x4=1:Px1/y12/y13/y14/y15/y16/y17/0/1/0; [Loop through garrison troop slots and get total army Command Points: y-2]
+
+!!HEx1&x4=0:B0/?z5 R2/?y18; [Hero's name: z5, Hero's sex: y18]
+!!CA-1&x4=1:N?z5; [Name of Town: z5]
+!!VRz6&y18=0:S^His^; [His: z6]
+!!VRz6&y18=1:S^Her^; [Her: z6]
+!!VRz6&x4=1:S^This^; [This: z6]
+!!VRz7&y18=0:S^He^; [He: z7]
+!!VRz7&y18=1:S^She^; [She: z7]
+!!VRz7&x4=1:S^%Z5^; [Name of Town: z6]
+!!VRz9&y18=0:S^his^; [his: z9]
+!!VRz9&y18=1:S^her^; [her: z9]
+!!VRz9&x4=1:S^its^; [its: z9]
+!!VRz10:S^lead^; [lead: z10]
+!!VRz10&x4=1:S^send^; [send: z10]
+
+!!VRy19&y11>=y-2:Sy11 -y-2; [If hero has excess command points: y19]
+!!VRy19&y11<y-2:Sy-2 -y11; [If hero doesn't have enough command points: y19]
+!!VRz8&x2=0/y11=y-2:S^(%Z7 cannot command any additional troops in battle.)^;
+!!VRz8&x2=0/y11>y-2:S^(%Z7 can command up to %Y19 more points of troops in battle.)^;
+!!VRz8&x2=0/y11<y-2:S^(This exceeds %Z5's total by %Y19 points.)^;
+
+!!VRz1&x2=0:S^Command Points: %Y11^; [Abassadore's Sash name: z1]
+!!VRz2&x2=0:S^%Z5 can command up to %Y11 points of troops.^; [Abassadore's Sash right-click text: z2]
+!!VRz3&x2=0:S^Army's Points: %Y-2^; [Titan's Gladius name: z3]
+!!VRz4&x2=0:S^%Z5's army requires %Y-2 command points to lead into battle.^; [Titan's Gladius right-click text: z4]
+!!UN&x2=0:A68/9/1 A68/10/2 A12/9/3 A12/10/4; [Set Ambassadore's Sash and Titan's Gladius text: z1-z4]
+
+!!IF&x2=0:Q1/8/68/8/12/1^{C o m m a n d    P o i n t s}
+
+%Z5 can command up to %Y11 points of troops.
+
+%Z6 army requires %Y-2 command points to lead them into the terrifying heat of battle.
+
+%Z8^;
+
+!!UN&x2=0:A68/9/0 A68/10/0 A12/9/0 A12/10/0; [Restore Ambassadore's Sash and Titan's Gladius text]
+
+!!FU|x2=0/y11>=y-2:E; [Skip rest of function if displaying or if hero has no excess troops]
+
+ [Remove Excess Troops: y19=total excess, y-2=total army, y11=maximum command]
+!!VRy-5:S-1; [Initialize y-5 (virtual slot counter) to -1]
+!!VRe-1:Sy19 :y-2; [Percent of excess to remove from every stack: e-1]
+!!DO318/0/6/1:Px1/y12/y13/y14/y15/y16/y17/1/0/x4; [Remove percent of excess from every stack]
+!!VRy-2:S0; [Initialize y-2 to 0]
+!!DO318/0/6/1:Px1/y12/y13/y14/y15/y16/y17/0/0/x4; [Loop through hero's troop slots and get total Command Points: y-2]
+
+!!FU|y11>=y-2/y-5<0:E; [Exit if no more excess troops or no troops left]
+
+!!VRy-6:Sy-2 -y11; [Excess troop points: y-6]
+!!HEx1&x4=0:C0/y-10/?y21/?y22; [Type (y21) and number (y22) of creatures in first non-empty slot--for random seed]
+!!CAy-17/y-18/y-19&x4=1:M2/y-10/?y21/?y22; [Type (y21) and number (y22) of creatures in first non-empty slot--for random seed]
+!!VRy23:Sy21 *y22; [Random seed: y23]
+!!VRy24:R1/y23; [Set random seed to y23]
+!!DO319/0/1/0:Px1/y12/y13/y14/y15/y16/y17/x4; [Remove additional creatures at random until no longer in excess]
+
+--------------------------------------------------------------------------------
+
+ [Loop through hero x1's troop slots and total Command Points: y-2]
+ [x1=hero #, Mulipliers: x2=leadership, x3=necromancy,]
+ [x4=air magic, x5=earth magic, x6=fire magic, x7=water magic]
+ [For removing percent of excess troops from each stack (x8=1)]
+ [x9=1 for a garrison without hero, x10=1 for town battle with no defending hero]
+!?FU318;
+!!HEx1&x9=0/x10=0:C0/x16/?y1/?y2; [Type: y1, Number: y2]
+!!CAy-17/y-18/y-19&x9=0/x10=1:M2/x16/?y1/?y2; [Type: y1, Number: y2]
+!!CA-1&x9=1:M2/x16/?y1/?y2; [Type: y1, Number: y2]
+!!VRy10:S-20 -x16; [Index for troop number tracking variables (y-20..y-26): y10]
+!!VRyy10&yy10<0:Sy2; [Set yy10 (y-20..y-26) to number of troops in this slot]
+!!VRy11:S-50 -x16; [Index for troop type tracking variables (y-50..y-56): y11]
+!!VRyy11&yy11<0:Sy1; [Set yy11 (y-50..y-56) to type of troops in this slot]
+!!FU|y1<0/y2<1:E; [Exit if slot is empty]
+
+!!MA:Cy1/6/?y3 Xy1/?y4; [Gold Cost of creature: y3, Creature's Flags: y4]
+!!VRy5:Sy3 *y2; [Unmodified cost of stack: y5]
+
+!!VRy6:Sy4; [Copy flags to y6]
+!!VRy6:&16; [Check if stack is living: y6=16 if yes]
+!!VRy5&y6=16:*x2 :10; [Apply reduction for Leadership: y5]
+
+!!VRy6:Sy4; [Copy flags to y6]
+!!VRy6:&262144; [Check if stack is living: y6=262144 if yes]
+!!VRy5&y6=262144:*x3 :10; [Apply reduction for Necromancy: y5]
+
+!!VRy5|y1=112/y1=127:*x4 :10; [Apply reduction for Air Magic: y5]
+!!VRy5|y1=113/y1=125:*x5 :10; [Apply reduction for Earth Magic: y5]
+!!VRy5|y1=114/y1=129:*x6 :10; [Apply reduction for Fire Magic: y5]
+!!VRy5|y1=115/y1=123:*x7 :10; [Apply reduction for Water Magic: y5]
+
+!!VRy-2&x8=0:+y5; [Add stack's Command Points to army's total Command Points: y-2]
+
+!!FU&x8=0:E; [Exit if not removing excess troops]
+
+ [Remove excess percent from each stack]
+!!VRe1:Sy5 *e-1; [Number of points to remove: e1]
+!!VRe2:Sy5 :y2; [Modified cost per creature: e2]
+!!VRy7:Se1 :e2; [Number of creatures to remove: y7]
+!!VRy7&y7>y2:Sy2; [Can't remove more creatures than are there: y7]
+!!VRy8:Sy7 *-1; [Convert to a negative number: y8]
+!!HEx1&x10=0:C0/x16/d/dy8; [Remove y8 excess creatures]
+!!CAy-17/y-18/y-19&x10=1:M2/x16/d/dy8; [Remove y8 excess creatures]
+
+ [Store virtual slots (no empty slots)]
+!!FU&y7=y2:E; [Exit if all troops removed]
+!!VRy-5:+1; [Increment slot counter unless all troops removed: y-5]
+!!VRy9:S-10 -y-5; [Index for next virtual slot (y-10..y-16): y9]
+!!VRyy9:Sx16; [Store current slot number in virtual slot (y-10..y-16): yy9]
+
+--------------------------------------------------------------------------------
+
+ [Remove additional creatures at random until no longer in excess]
+ [x8=1 for town battle with no defending hero]
+!?FU319;
+!!VRy11:S0 Ry-5; [Random troop slot: y11]
+!!VRy12:S-10 -y11; [Virtual slot index (y-10..y-16): y2]
+!!VRy13:Syy12; [Virtual slot (y-10..y-16): y13]
+
+!!HEx1&x8=0:C0/y13/?y1/?y2; [Type: y1, Number: y2]
+!!CAy-17/y-18/y-19&x8=1:M2/y13/?y1/?y2; [Type: y1, Number: y2]
+
+!!FU|y1<0/y2<1:E; [Skip if slot is empty]
+!!MA:Cy1/6/?y3 Xy1/?y4; [Gold Cost of creature: y3, Creature's Flags: y4]
+!!VRy5:Sy3 *y2; [Unmodified cost of stack: y5]
+
+!!VRy6:Sy4; [Copy flags to y6]
+!!VRy6:&16; [Check if stack is living: y6=16 if yes]
+!!VRy5&y6=16:*x2 :10; [Apply reduction for Leadership: y5]
+
+!!VRy6:Sy4; [Copy flags to y6]
+!!VRy6:&262144; [Check if stack is living: y6=262144 if yes]
+!!VRy5&y6=262144:*x3 :10; [Apply reduction for Necromancy: y5]
+
+!!VRy5|y1=112/y1=127:*x4 :10; [Apply reduction for Air Magic: y5]
+!!VRy5|y1=113/y1=125:*x5 :10; [Apply reduction for Earth Magic: y5]
+!!VRy5|y1=114/y1=129:*x6 :10; [Apply reduction for Fire Magic: y5]
+!!VRy5|y1=115/y1=123:*x7 :10; [Apply reduction for Water Magic: y5]
+
+!!VRe1:Sy5 :y2; [Modified cost per creature: e1]
+!!HEx1&x8=0:C0/y13/d/d-1; [Remove 1 creature]
+!!CAy-17/y-18/y-19&x8=1:M2/y13/d/d-1; [Remove 1 creature]
+!!VRy-6:-e1; [Subtract 1 creature's points from excess: y-6]
+!!VRx16&y-6<=0:S999; [Exit when no more excess troops]
+
+--------------------------------------------------------------------------------
+
+ [Start of Battle Trigger: Remove Excess Troops]
+!?BA52;
+!!UN:P322/=1; !!FU&-1:E; [Exit if script isn't enabled]
+
+!!BA:H0/?y-3 H1/?y-4; [Attacker: y-3, Defender: y-4]
+
+ [Attacker]
+
+!!DO321/20/56/1:P; [Initialize y-20..y-56 variables to -1]
+
+!!FU317&y-3>=0:Py-3/1/0/0; [Remove Attacker's Excess Troops]
+
+!!VRy-7:S-1; [Initialize deserting stack counter to -1]
+
+!!DO320/0/6/1&y-3>=0:Py-3; [Setup Display Variables for Attacker's Deserting Troops]
+!!IF&y-7>=0/y-3>=0:Ny-30/y-40/y-31/y-41/y-32/y-42/y-33/y-43/y-34/y-44/y-35/y-45/y-36/y-46/-1/-1; [Set up Attacker's Deserting Troops Display]
+!!IF&y-7>=0/y-3>=0:N^{D e s e r t i n g   T r o o p s}
+
+%Z5 doesn't have enough Command Points to lead all of %Z9 troops into the terrifying heat of battle and some of them desert!^; [Display Attacker's Deserting Troops dialog]
+
+
+ [Defender]
+
+!!DO321/20/56/1:P; [Initialize y-20..y-56 variables to -1]
+
+!!BA:P?y-17/?y-18/?y-19; [Battle Position: y-17/y-18/y-19]
+!!BA:S?y-8; [Type of Battle (Siege): y-8=1 for Fort, y-8=2 for Citadel, y-8=3 for Castle]
+!!OBy-17/y-18/y-19:T?y-9; [Type of Object at Battle Position: y-9=98 for a town]
+!!CAy-17/y-18/y-19&y-9=98:O?y-28; [Owner of Town: y-28=-1 if no owner]
+
+!!FU&y-4<0/y-9<>98:E; [Exit if no defender but not a town battle]
+
+!!FU317&y-4>=0:Py-4/1/y-8/0; [Remove Defender's Excess Troops: Defending Hero]
+
+!!FU317&y-4=-2/y-9=98/y-28>=0:Py-4/1/y-8/1; [Remove Defender's Excess Troops: Non-Neutral Town Battle with no Defending Hero]
+
+!!VRy-7:S-1; [Initialize deserting stack counter to -1]
+
+!!DO320/0/6/1&y-4>=0:Py-4/0; [Setup Display Variables for Defender's Deserting Troops]
+!!DO320/0/6/1&y-4=-2/y-9=98/y-28>=0:Py-4/1; [Setup Display Variables for Defender's Deserting Troops: Town Battle with no Defending Hero]
+!!IF&y-7>=0:Ny-30/y-40/y-31/y-41/y-32/y-42/y-33/y-43/y-34/y-44/y-35/y-45/y-36/y-46/-1/-1; [Set up Defender's Deserting Troops Display]
+!!IF&y-7>=0:N^{D e s e r t i n g   T r o o p s}
+
+%Z5 doesn't have enough Command Points to %Z10 all of %Z9 troops into the terrifying heat of battle and some of them desert!^; [Display Defender's Deserting Troops dialog]
+
+--------------------------------------------------------------------------------
+
+ [Setup Display Variables for Deserting Troops]
+ [x1=hero. x2=1 for Town Battle with no Defending Hero]
+!?FU320;
+!!HEx1&x2=0:C0/x16/?y1/?y2; [Type: y1, Number: y2]
+!!CAy-17/y-18/y-19&x2=1:M2/x16/?y1/?y2; [Type: y1, Number: y2]
+!!VRy3:S-20 -x16; [Index for troop number tracking variables (y-20..y-26): y3]
+!!VRy4:Syy3 -y2; [Number of troops that deserted from this stack: y4]
+!!VRy7:S-50 -x16; [Index for troop type tracking variables (y-50..y-56): y7]
+!!FU|y4<1/yy7<0:E; [Exit if no troops deserted from this stack]
+
+!!VRy-7:+1; [Increment deserting stack counter: y-7]
+!!VRy5:S-30 -y-7; [Index for troop deserting stack display (y-30..y-36): y5]
+!!VRyy5:S21; [Set y-30..y-36 to 21 if there's a stack picture to display: yy5]
+!!VRy6:S-40 -y-7; [Index for troop deserting stack type (y-40..y-46): y6]
+!!VRyy6:Sy4 *65536 +yy7; [Store deserting stack type/number info. in y-40..y-46 for IF N display: yy6]
+
+--------------------------------------------------------------------------------
+
+ [Initialize y-20..y-56 variables to -1]
+!?FU321;
+!!VRy1:Sx16 *-1; [Index number for y- variables]
+!!VRyy1:S-1; [Initialize y- variables to -1]
+
+--------------------------------------------------------------------------------
+

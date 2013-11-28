@@ -1,0 +1,333 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=19.8(August).2006
+
+** Human Truce version 0.9
+** By Timothy Pulver
+** script120.erm
+** Last Updated: August 18, 2006
+** Previously Updated: August 10, 2006
+
+** This script disables combat between Human Players so that their heroes cannot
+** attack other human heroes and cannot attack or capture human-controlled towns
+** or external garrisons (they can be passed through with no effect). Mines and
+** other flagged objects can be captured but human heroes can no longer leave
+** creatures to guard mines.
+
+** EXCEPTION: If a human hero is on a monolith, another human hero entering
+** a connected monolith will result in a battle between them. I haven't yet
+** found a way to prevent this.
+
+** In addition, to prevent a situation where a human hero is used to block a
+** narrow passage, garrison, or border gate, you can ctrl-click on a human hero
+** to temporarily remove it. The hero will be restored on the next turn. While
+** this function seems fairly stable, it should only be used when needed, and
+** you should try to avoid leaving a hero in the same space as a "removed" hero,
+** especially in a garrison. You cannot remove a hero who's currently visiting
+** an object (other than a garrison or border gate).
+
+** NOTE: a human hero may be used to block use of a monolith that the hero is
+** currently visiting. Unfortunately, no viable solution has yet been found to
+** prevent this. When temporary removal of a hero on a monolith was permitted,
+** it caused the monolith to cease to function on that turn (and sometimes
+** after) so it served no useful purpose.
+
+** Computer players can attack and be attacked as normal.
+
+** At game start, you can choose if you want the Human Truce to last the entire
+** game, end when all AI players are eliminated, end after a certain number of
+** days, or automatically end when the Victory Points end-game period is reached
+** (if Victory Points are also enabled).
+
+** WoG Option: 320
+** Variables: v82-v83
+** Functions: FU96-FU97, FU152-FU157
+** Timers: TM1, TM2
+
+--------------------------------------------------------------------------------
+
+ [Choose Human Truce Options at Game Start]
+!?PI; [Post-Instruction Trigger]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!UN:P319/?y-1; [Check if Victory Points script is enabled: y-1]
+!!VRz1:S^HUMAN TRUCE OPTIONS^; [Human Truce Options]
+!!VRz2:S^Human Truce lasts the entire game.^; [Lasts entire game]
+!!VRz3:S^Human Truce ends when all AI computer players are eliminated.^; [Ends when AIs elimianted]
+!!VRz4:S^Human Truce ends after a specific number of days.^; [Ends after a number of days]
+!!VRz5:S^^; [Set option 4 to null initially: z5]
+!!VRz5&y-1=1/v77=1:S^Human Truce ends when the Victory Points "end-game" period is reached^; [Ends when end-game period reached]
+!!IF:G1/1/1/1/2/3/4/5/0/0/0/0/0/0/0/0; [Display radio button button dialog: result in v1]
+!!VRv82&v1=1:S0; [Set v82 to 0 if Human Truce should last the whole game: v82]
+!!VRv82&v1=2:S1; [Set v82 to 1 if Human Truce should end when all AIs are eliminated: v82]
+!!VRv82&v1=8:S2; [Set v82 to 2 if Human Truce should end when the Victory Points end-game period begins: v82]
+!!DO96/0/1/0&v1=4:Py-1; [Get input for number of days after which Human Truce should end: v82 (range=3-1000)]
+!!VRv83:S0; [Initialize v83 to 0]
+
+*Note: v82 will be set to -1 when the Human Truce has ended.
+
+--------------------------------------------------------------------------------
+
+ [Select Human Truce End Date]
+ [x1=1 if Victory Points script is also enabled]
+!?FU96; [Get input from player for number of days before Human Truce should end: v82]
+!!VRz1:S^^;
+!!VRz2:S^How many days before the Human Truce ends?^;
+!!VRy1:S1000; [Default maximum days is 1000: y1]
+!!VRy1&x1=1/v62=3:Sv63; [If VP game ends after a set number of days, make this the maximum]
+!!VRz3:S^Enter a number between 3 and %Y1.^;
+!!IF:D1/2/3/1/1/1/1/1/1/1/1/1/1/1/1/1; [Set up Input Box #1]
+!!IF:F1/1/1/1/1/0; [Disable ESC button for Input Box #1]
+!!IF:E2/1; [Display Input Box #1]
+!!VRv82:Vz1; [Convert input string to a number: y1]
+!!IF|v82<3/v82>y1:M^You must enter a number between 3 and %Y1.^;
+!!VRx16&v82>=3/v82<=y1:S999; [Exit if acceptable number]
+
+--------------------------------------------------------------------------------
+
+ [Display Human Truce Information]
+!?TM1; [Daily Timer]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script is not enabled]
+!!VRy-2:Sc0; [Current Day: y-2]
+!!FU|y-2<>1/-1000:E; [Exit if not Day 1 or for computer players]
+
+!!VRy-3&v82>=3:Sv82 :28 +1; [Month truce ends: y-3]
+!!VRy-4&v82>=3:Sv82 %28 :7 +1; [Week truce ends: y-4]
+!!VRy-5&v82>=3:Sv82 %28 %7 +1; [Day truce ends: y-5]
+
+!!VRz-1&v82=0:S^Human Truce is in effect and will last the entire game.^;
+!!VRz-1&v82=1:S^Human Truce is in effect but ends when all AI players are eliminated.^;
+!!VRz-1&v82=2:S^Human Truce is in effect but ends when the end-game period begins.^;
+!!VRz-1&v82>=3:S^Human Truce is in effect but will end Month %Y-3, Week %Y-4, Day %Y-5.^;
+!!IF:M^{Human Truce}
+
+%Z-1
+
+Human players cannot attack (or capture) human-owned towns, garrisons, or heroes except when a human hero is on the other end of a monolith that you've entered. External garrisons may be entered and mines may be captured but mine guards cannot be left. Ctrl-click on a human hero blocking your path to temporarily remove them (only affects heroes not visiting an object, other than a garrison or border gate).^; [Display opening Human Truce information message]
+
+--------------------------------------------------------------------------------
+
+ [Prevent human heroes interacting with enemy human heroes]
+!?CM5&v82>=0; [Adventure Map left-click]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!OW:C?y-1; [Current player: y-1]
+!!OW:H-1/1/0; [Number of heroes current player has: v1]
+!!DO152/1/v1/1&v1>0:P; [Loop through current player's heroes and disable human players interacting with them]
+
+--------------------------------------------------------------------------------
+
+!?FU152;
+!!OW:H-1/2/x16; [Store each hero number in v2]
+!!DO153/0/7/1:Pv2; [Loop through all player colours (0..7) and disable human players interacting with this hero]
+
+--------------------------------------------------------------------------------
+
+!?FU153;
+!!HOx1&x16=y-1:Ex16; [Enable player's other heroes to interact with his own heroes]
+!!FU&x16=y-1:E; [Exit if current player]
+!!OW:Ix16/?y1; [For colour x16, y1=0 if Human, y1=1 if AI]
+!!HOx1&y1=0:Dx16; [Disable this colour (if Human) from interacting with this hero]
+!!HOx1&y1=1:Ex16; [Enable this colour (if AI) to interact with this hero]
+
+--------------------------------------------------------------------------------
+
+ [Prevent human heroes interacting with enemy human heroes]
+!?BA1&v82>=0; [End of Battle Trigger]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!BA:H0/?y-1 H1/?y-2; [Heroes fighting battle: y-1, y-2]
+!!HEy-1&y-1>=0:O?y-3; [Attacking Hero's owner: y-3]
+!!HEy-2&y-2>=0:O?y-4; [Defending Hero's owner: y-4]
+!!HOy-1&y-1>=0/y-3<0:R; [Enable all heroes to interact with defeated Attacking hero]
+!!HOy-2&y-2>=0/y-4<0:R; [Enable all heroes to interact with defeated Defending hero]
+
+--------------------------------------------------------------------------------
+
+ [Prevent human-controlled heroes entering enemy human towns]
+!?OB98&1000/v82>=0; [Town Object trigger for Human player]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1; [Owner of hero: y-1]
+!!CA998:O?y-2; [Owner of town: y-2]
+!!OW:Iy-2/?y-3; [Town owner: y-3=0 if Human, y-3=1 if AI]
+!!OB998&y-3=0:Dy-1; [Disable town for this Human player if owned by another Human player]
+!!OB998|y-3=1/y-2<0:Ey-1; [Enable town for this Human player if owned by an AI player or unowned]
+!!OB998&y-1=y-2:Ey-1; [Enable town for this Human player if owned by this Human player]
+
+--------------------------------------------------------------------------------
+
+ [Disable human-controlled garrisons when an enemy human hero moves through]
+!?OB33&1000/v82>=0; [Garrison Object trigger for Human player]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1; [Owner of hero: y-1]
+!!GR998:O?y-2; [Owner of garrison: y-2]
+!!OW:Iy-2/?y-3; [Garrison owner: y-3=0 if Human, y-3=1 if AI]
+!!OB998&y-3=0:Dy-1; [Disable garrison for this Human player if owned by another Human player]
+!!OB998|y-3=1/y-2<0:Ey-1; [Enable garrison for this Human player if owned by an AI player or unowned]
+!!OB998&y-1=y-2:Ey-1; [Enable garrison for this Human player if owned by this Human player]
+
+--------------------------------------------------------------------------------
+
+ [Disable human-controlled garrisons when an enemy human hero moves through]
+!?OB219&1000/v82>=0; [Garrison Object trigger for Human player]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1; [Owner of hero: y-1]
+!!GR998:O?y-2; [Owner of garrison: y-2]
+!!OW:Iy-2/?y-3; [Garrison owner: y-3=0 if Human, y-3=1 if AI]
+!!OB998&y-3=0:Dy-1; [Disable garrison for this Human player if owned by another Human player]
+!!OB998|y-3=1/y-2<0:Ey-1; [Enable garrison for this Human player if owned by an AI player or unowned]
+!!OB998&y-1=y-2:Ey-1; [Enable garrison for this Human player if owned by this Human player]
+
+--------------------------------------------------------------------------------
+
+ [Prevent human players leaving guards in mines]
+!?OB53&1000/v82>=0; [Mine Object trigger for Human player]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1; [Visiting hero: y-1]
+!!MN998:O?y-2; [Mine owner: y-2]
+!!MN998&y-1=y-2:O-1; [Change mine to no owner if visiting hero owns mine]
+
+--------------------------------------------------------------------------------
+
+ [Prevent human players leaving guards in mines]
+!?OB220&1000/v82>=0; [Mine Object trigger for Human player]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!HE-1:O?y-1; [Visiting hero: y-1]
+!!MN998:O?y-2; [Mine owner: y-2]
+!!MN998&y-1=y-2:O-1; [Change mine to no owner if visiting hero owns mine]
+
+--------------------------------------------------------------------------------
+
+ [Ctrl-click on an enemy human hero to temporarily remove it from the game]
+!?CM5&999/v82>=0; [Left-click on adventure screen trigger for current player only]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!CM:F?y-1 I?y-2; [Flags for click: y-1, Location clicked: y-2]
+!!FU|y-1<>4/y-2<>37:E; [Exit if not a ctrl-click or not on the map itself]
+!!CM:P?y-3/?y-4/?y-5; [Location clicked: y-3/y-4/y-5]
+!!OW:C?y-6; [Current player: y-6]
+!!DO154/0/155/1:Py-6; [Loop through all heroes and possibly make hero clicked "invisible"]
+
+--------------------------------------------------------------------------------
+
+ [Adjust passability of heroes and towns]
+!?TM1&v82>=0; [Daily Timer]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!DO154/0/155/1&$day$>1:P10; [Loop through all heroes and restore them to normal (i.e., impassable)]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U searching]
+!!UN:U98/-1/?y-1; [Number of towns on map: y-1]
+!!OW:C?y-2; [Current player: y-2]
+!!OW:Iy-2/?y-3; [Current player is Human (0) or AI (1): y-3]
+!!DO155/1/y-1/1&y-1>0:Py-2/y-3; [Loop through all towns - make other human towns impassable on human turns]
+
+--------------------------------------------------------------------------------
+
+!?FU154;
+ [x1=current player number or '10' - daily restoration loop]
+!!HEx16:O?y1; [Hero owner: y1]
+!!FU&y1<0:E; [Skip if hero is unowned]
+!!OW:Iy1/?y2; [Player y1 is Human (0) or AI (1): y2]
+!!FU&y2=1:E; [Skip if hero is owned by AI]
+!!HEx16:P?y3/?y4/?y5; [Location of hero: y3/y4/y5]
+!!TRy3/y4/y5&x1=10:E?y8; [Hero's trigger square: y8=0 if yellow (on)]
+!!UN&x1=10/y8=1:P904/1; [Temporarily disable ERM error codes]
+!!CAy3/y4/y5&x1=10/y8=1:P?y19/?y20/?y21; [Check if there's a town at same coordinates: y19/y20/y21]
+!!UN&x1=10/y8=1:P904/0; [Re-enable ERM error codes]
+!!VRy8&x1=10/y8=1/y3=y19/y4=y20/y5=y21:S0; [Don't try to reset yellow trigger square if there's a town there]
+!!TRy3/y4/y5&x1=10/y8=1:E0; [Reset Hero's trigger square to yellow (on)]
+!!OW&x1=10:Ay1/x16; [Make this hero the active hero]
+!!FU&y1=x1:E; [Exit if hero is owned by current player]
+!!FU|y3<>y-3/y4<>y-4/y5<>y-5/x1=10:E; [Exit if hero isn't at location clicked or for daily restoration loop (x1=10)]
+!!CM:R0; [Cancel normal click-action]
+
+!!DO156/0/6/1:Px16/0; [Store Hero's army, stack XP, Banners and Banner settings in y-10..y-44]
+!!OW:Oy1/?y10/?y11/?y12/?y13/?y14/?y15/?y16/?y17/?y18; [Store heroes in clicked hero owner's hero list: y11..y18]
+!!HEx16:K; [Briefly Kill Hero]
+!!OBy3/y4/y5:T?y6; [Object at this location: y6]
+!!VRy7|y6=0/y6=33/y6=124/y6=212/y6=219:S1; [Set y7 to 1 for empty, Hole, Garrisons and Bordergates: y7]
+!!HEx16:Oy1 Py3/y4/y5; [Bring hero back to life]
+!!OW:Oy1/y10/y11/y12/y13/y14/y15/y16/y17/y18; [Restore heroes in clicked hero owner's hero list: y11..y18]
+!!DO156/0/6/1:Px16/1; [Restore Hero's army, stack XP, Banners and Banner settings from y-10..y-44]
+!!FU&y7=0:E; [Exit if not empty, Hole, Garrison or Bordergate]
+
+!!TRy3/y4/y5:E1; [Make hero ctrl-clicked temporarily invisible (like a ghost) if not visiting an adventure map object]
+!!OBy3/y4/y5&y6=212:Ty6; [Temporarily change hero's object type to object's type if visiting a border gate]
+!!OBy3/y4/y5|y6=0/y6=124:T0; [Temporarily change hero's object type to "none" if not visiting an adventure map object]
+
+--------------------------------------------------------------------------------
+
+!?FU155;
+ [x1=current player number, x2=current player is human (0) or AI (1)]
+!!UN:U98/-1/-1/1; [Next town location: v1/v2/v3]
+!!TR1&x2=1:P1; [Make all town entrances passable on AI turn]
+!!FU&x2=1:E; [Exit if AI turn]
+!!CA1:O?y1; [Town owner: y1]
+!!OW:Iy1/?y2; [Town owned by Human (0) or AI (1): y2]
+!!TR1|x1=y1/y2=1/y1<0:P1; [Make entrance of town owned by current player, neutral or AI passable]
+!!TR1&x1<>y1/y2=0/y1>0:P0; [Make entrance of town owned by other Human players impassable]
+
+--------------------------------------------------------------------------------
+
+!?FU156;
+ [Store/Restore Hero's army, stack XP, Banners and Banner settings in y-10..y-45]
+ [x1=hero, x2=0 for store, x2=1 for restore]
+!!VRy1:S-10 -x16; [Index for storing troop types (y-10..y-16): y1]
+!!VRy2:S-17 -x16; [Index for storing troop numbers (y-17..y-23): y2]
+!!VRy3:S-24 -x16; [Index for storing troop stack XP (y-24..y-30): y3]
+!!VRy4:S-31 -x16; [Index for storing Warlord Banner numbers (y-31..y-37): y4]
+!!VRy5:S-38 -x16; [Index for storing Warlord Banner settings (y-38..y-44): y5]
+
+ [Store]
+!!HEx1&x2=0:C0/x16/?yy1/?yy2/?yy3; [Store troop types, numbers, stack XP (y-10..y-30)]
+!!EXx1/x16&x2=0:R?y6/?y7/?y8/?y9; [Get Warlord Banner info: y6..y9]
+!!VRyy4&x2=0/y6>0:S1 +y9; [Store number of Warlord Banners: y-31..y-37]
+!!VRyy5&x2=0/y6>0:Sy8; [Store Warlord Banner options: y-38..y-44]
+
+ [Restore]
+!!HEx1&x2=1/yy1>=0/yy2>0:C0/x16/yy1/yy2/yy3/2; [Restore troop types, numbers, stack XP (y-10..y-30)]
+!!VRy10&x2=1/yy4>0:Syy4 -1; [Number of Warlord Banner copies: y10]
+!!EXx1/x16&x1=1/yy4>0:R1/156/yy5/y10; [Restore Warlord Banner info: y-31..y-44]
+
+--------------------------------------------------------------------------------
+
+ [Check for Human Truce Ending]
+!?TM2&v82>0; [Daily Timer]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!VRy-1&v82=1:S1; [Initialize y-1 to 1 if AI elimination option in effect: y-1]
+!!DO97/0/7/1&v82=1:P; [Human Truce ends when all AIs eliminated: y-1=0 if any AIs still alive]
+!!VRy-1&v82=2/v77=2:S1; [Human Truce ends when end-game reached: y-1 set to 1]
+!!VRy-1&v82>=3/v82<$day$:S1; [Human Truce ends when specific day reached: y-1 set to 1]
+!!FU&y-1=0:E; [Exit if Human Truce continues]
+!!VRv82:S-1; [Set v82 to -1 to end Human Truce]
+!!UN:U98/-1/?y-2; [Number of towns on map: y-2]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U searching]
+!!DO155/1/y-2/1&y-2>0:P0/1; [Loop through all towns and make them passable to all players]
+!!DO157/0/155/1:P; [Loop through all heroes and enable them all to interact with all heroes]
+
+--------------------------------------------------------------------------------
+
+!?FU97; [Human Truce ends when all AIs eliminated: y-1=1 if none still alive]
+!!OW:Ix16/?y1/?y2; [y1=1 if AI, y2=0 if alive]
+!!VRy-1&y1=1/y2=0:S0; [If any AI alive, set y-1 to 0]
+
+--------------------------------------------------------------------------------
+
+!?FU157;
+!!HOx16:R; [Enable all players' heroes to attack/visit this hero]
+
+--------------------------------------------------------------------------------
+
+ [Display Human Truce Ends Warning to All Players]
+!?TM2&v82<0/$AI$=0; [Daily Timer for Human Players]
+!!UN:P320/=1; !!FU&-1:E; [Exit if script isn't enabled]
+!!VRy-1:Sv83; [Copy v83 to y-1]
+!!OW:C?y-2; [Current player: y-2]
+!!VRy-3:Sy-2 +1; [Add 1 to current player number: y-3]
+!!FU$bit$:Py-3; [Convert y-3 to a bit value: y-100]
+!!VRy-1:&y-100; [See if current player number bit is in y-1 (v83): y-1=0 if no]
+!!VRv83&y-1=0:|y-100; [Add current player number bit to v83]
+!!IF&y-1=0:M^{WARNING: Human Truce has Ended!}
+
+The Human Truce has ended. For the rest of the game, human-controlled heroes can attack other human-controlled heroes, and can attack and capture human-controlled towns and garrisons.
+
+Troops may be left in mines and ctrl-clicking on enemy heroes will no longer cause them to temporarily vanish.^;
+
+--------------------------------------------------------------------------------
+

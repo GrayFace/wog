@@ -1,0 +1,11 @@
+#	Text resource for "script76.erm" document		
+176000	The monks usher you inside and offer to provide healing for your Commander in exchange for a small donation.
+
+Do you agree?	<!!Q>	01.08.2004
+176001	"You are welcome to stay at our sanctuary for as long as you wish."	<!!Q>	01.08.2004
+176002	"We see you do not have enough for a donation. But no matter, we will not deny you healing. Perhaps you can donate later."
+
+The monks take your Commander into a small alcove where they perform mystic rituals and chant for hours. Finally, they tell you that they're done, and you're overjoyed to see your Commander looking good as new!	<!!Q>	01.08.2004
+176003	"Thank you for honouring us with your kind donation to our humble sanctuary."
+
+The monks take your Commander into a small alcove where they perform mysical rituals and chant for hours. Finally, they tell you that they're done, and you're overjoyed to see your Commander looking good as new!	<!!Q>	01.08.2004

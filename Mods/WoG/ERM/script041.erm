@@ -1,0 +1,45 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_ScriptName=Battle Extender
+ERMS_ScriptAuthor=Alexis Koz
+ERMS_ScriptVersion=02
+ERMS_ScriptDate=29.5(May).2006
+ERMS_ScriptERMVersion=2,6
+ERMS_ScriptLanguage=Russian or русский (native)
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+//Thanks to: Fnord the Wizard who enchanted me
+//Thanks to: All WoG command
+
+// Last Updated at 30th of Jule 2005 by Thomas Franz (corr. usage)
+
+//USED:
+//v5-v7
+//FU78,79
+
+
+!?FU78;
+!!DO809/0/121/1:P;
+!!DO809/123/129/2:P;
+!!DO809/130/173/1:P;
+
+!?FU79;
+!!MA:Lx16/?v6;
+!!VRv7:S16-v6;
+!!MA:Px16/?v6;
+!!VRv6:*v7:10;
+!!MA:Px16/v6;
+!!MA:Nx16/?v6;
+!!VRv6:*3:4;
+!!MA:Nx16/v6;
+!!MA:Dx16/?v6;
+!!VRv6:*13:10+1;
+!!MA:Dx16/v6;
+!!MA:Sx16/?v6;
+!!VRv6:*7:10+1;
+!!MA:Sx16/v6;
+
+--------------------------Init----------------------------
+!#UN:P41/=1;
+!#FU78&1:P;
+!#MA&1:C11/2/2 C25/5/1 C39/1/1 C53/3/1 C67/4/1 C81/4/1 C95/5/1 C109/1/1 C121/3/1;
+

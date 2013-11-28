@@ -1,0 +1,635 @@
+ZVSE
+ERMS_ScriptDate=9.7(July).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Bank, Transfer all resources button and Resource trading post
+** by Donald X. Vaccarino, Timothy E. Pulver and Hermann the Weird
+** Last Updated: July 9, 2006 by Timothy Pulver
+** Previously Updated: July 1, 2006 by Timothy Pulver
+** Previously Updated: Aug. 14 2005 by Hermann the Weird
+
+** The Loan Bank lets you loan gold and resources for a fee
+** Transfer all resources button transfers all resources including gold and mithril to another player
+** Resource trading post lets you trade resources among players
+
+** Functions used: FU631-FU639, FU14800-FU14801
+** v-vars: v493-v500, v592-v599, v1184-v1199
+** temporary vars: v1
+** Dialogue: 4
+** Timers: TM75
+
+** ERM numbers:
+** Borrow money or resources: 105
+** Transfer all resources: 181
+** Resource trading post: 225
+
+
+** Initialization code **
+
+!#UN:P105/?v1;     [Check for WoG option]
+
+!#VRv592&v1=1:S0; [zero gold debts]
+!#VRv593&v1=1:S0;
+!#VRv594&v1=1:S0;
+!#VRv595&v1=1:S0;
+!#VRv596&v1=1:S0;
+!#VRv597&v1=1:S0;
+!#VRv598&v1=1:S0;
+!#VRv599&v1=1:S0;
+
+!#VRv493&v1=1:S0; [zero resource debts]
+!#VRv494&v1=1:S0;
+!#VRv495&v1=1:S0;
+!#VRv496&v1=1:S0;
+!#VRv497&v1=1:S0;
+!#VRv498&v1=1:S0;
+!#VRv499&v1=1:S0;
+!#VRv500&v1=1:S0;
+
+!#TM75&v1=1:S1/999/1/255; [new timer, all players, once/day]
+
+** End of Initialization code **
+
+--------------------------------------------------------------------------------
+
+** Main click routine **
+
+!?CM1;
+
+!!OW:C?y-10; [check for current player]
+!!OW:Gy-10/?y-11; [check if this player is sitting in front of the screen in which is clicked]
+!!FU&y-11=0:E; [Exit if it's not his turn]
+
+!!UN:P105/?y-1; [Check for bank enabled]
+!!UN:P181/?y-2; [Check for transfer all resources enabled]
+!!UN:P225/?y-3; [Check for resource trading enabled]
+
+!!FU&y-1=0/y-2=0/y-3=0:E; [Exit if none enabled]
+
+!!CM:A?y-4/?y-5; [x/y position of click]
+!!CM:S?y-6; [Get subtype of click]
+
+!!FU&y-6=13:E; [Exit if dead area click]
+!!FU|y-4<163/y-4>226/y-5<407/y-5>433:E; [Exit if not clicked on gold icon]
+
+!!CA-1:B3/14; [Check if Marketplace is built]
+!!CA-1:T?y-7; [Get type of town]
+!!VRy-7:+22; [Calculate offset]
+!!IF&-1:Q2/y-7/14/1/z105000; [display restriction message]
+!!FU&-1:E; [Exit if no Marketplace built]
+
+!!CM:F?y-12; [Get flag of click]
+!!FU639&y-12=512:P; [Call FU639 if r-clicked]
+!!FU&y-12=512:E; [Exit if r-clicked]
+
+
+** set strings for radio button box **
+!!VRz-3:S^^; !!VRz-4:S^^; !!VRz-5:S^^;
+!!VRz-1:Sz105001;
+!!VRz-2:Sz105002;
+!!VRz-3&y-2=1:Sz105003;
+!!VRz-4&y-3=1:Sz105004;
+!!VRz-5&y-1=1:Sz105005;
+
+!!VRy-13:S1184 +y-10; [Index for player's default button choice: y-13 (1184-1191)]
+!!VRvy-13&vy-13<1:S1; [Default to 1 if first time visit: vy-13]
+!!IF:G1/1/vy-13/-1/-2/-3/-4/-5; [Display box]
+!!VRvy-13:Sv1; [Set player's default button choice to last button chosen: vy-13 (v1184-v1191)]
+
+!!VRy-8:Sv1;
+!!FU14800&y-8=2:P; [call transfer all resources function]
+!!FU635&y-8=4:P; [call resource trading function]
+** Ask for money or resources **
+!!IF&y-8=8:Q1/6/0/5/0/7/z105006;
+
+!!VRy-9&1:S1;
+!!VRy-9&-1:S0;
+!!FU631&y-9=1/y-8=8:P; [call money function]
+!!FU632&y-9=0/y-8=8:P; [call resources function]
+
+** End of main click routine **
+
+--------------------------------------------------------------------------------
+
+** Mouse over hint text **
+
+!?MM1;
+
+!!UN:P105/?y-1; [Check for bank enabled]
+!!UN:P181/?y-2; [Check for transfer all resources enabled]
+!!UN:P225/?y-3; [Check for resource trading enabled]
+!!FU&y-1=0/y-2=0/y-3=0:E; [Exit if none enabled]
+!!CM:A?y-4/?y-5; [Get x/y position of mouse pointer]
+
+** prepare strings for hint text **
+!!VRz-1:S^^;
+!!VRz-1&y-1=1:+z105007;
+!!VRz-1&y-1=1/y-2=1:+^, ^;
+!!VRz-1&y-2=1:+z105008;
+!!VRz-1&y-2=1/y-3=1:+^, ^;
+!!VRz-1&y-1=1/y-2=0/y-3=1:+^, ^;
+!!VRz-1&y-3=1:+z105009;
+!!CM&y-4>=163/y-4<=226/y-5>=407/y-5<=433:Mz-1; [Display hint text]
+
+** End of mouse over hint text **
+
+--------------------------------------------------------------------------------
+
+!?FU639; [R-click function for displaying current debts]
+
+!!OW:C?y1; [get current player]
+!!VRy2:Sy1 +592; [offset value for gold]
+!!VRy6:Svy2; [get it into a not indexed var for displaying in msg]
+!!VRy3:Sy1 +493; [offst value for resources]
+
+!!VRy4&vy3<1000:Svy3; [determine quantity of resurces]
+!!VRy4&vy3<2000/vy3>1000:Svy3 -1000;
+!!VRy4&vy3<3000/vy3>2000:Svy3 -2000;
+!!VRy4&vy3<4000/vy3>3000:Svy3 -3000;
+!!VRy4&vy3<5000/vy3>4000:Svy3 -4000;
+!!VRy4&vy3<6000/vy3>5000:Svy3 -5000;
+
+!!VRy5&vy3<1000:S0; [determine type of resource]
+!!VRy5&vy3<2000/vy3>1000:S1;
+!!VRy5&vy3<3000/vy3>2000:S2;
+!!VRy5&vy3<4000/vy3>3000:S3;
+!!VRy5&vy3<5000/vy3>4000:S4;
+!!VRy5&vy3<6000/vy3>5000:S5;
+
+!!VRz-1&y5=0:Sz105018;
+!!VRz-1&y5=1:Sz105019;
+!!VRz-1&y5=2:Sz105020;
+!!VRz-1&y5=3:Sz105021;
+!!VRz-1&y5=4:Sz105022;
+!!VRz-1&y5=5:Sz105023;
+
+** no debts **
+!!IF&y6=0/y4=0:Q1/-1/-1/4/z105064;
+!!FU&y6=0/y4=0:E;
+
+** only gold debts **
+!!IF&y6<>0/y4=0:Q1/6/y6/4/z105065;
+!!FU&y6<>0/y4=0:E;
+
+** only resource debts **
+!!IF&y6=0/y4<>0:Q1/y5/y4/4/z105066;
+!!FU&y6=0/y4<>0:E;
+
+** both **
+!!IF&y6<>0/y4<>0:Q1/6/y6/y5/y4/4/z105067;
+!!FU&y6<>0/y4<>0:E;
+
+** End of R-click function for displaying current debts **
+
+--------------------------------------------------------------------------------
+
+** Borrow money or resources section **
+
+!?TM75; [Payback timer everyday/all colors]
+
+!!UN:P105/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!OW:C?y-1; [get current player]
+!!VRy-2:S0 +y-1 +592; [offset values]
+!!VRy-3:S0 +y-1 +493;
+!!FU633&vy-2>0:Py-1/y-2; [call gold function if debts]
+!!FU634&vy-3>0:Py-1/y-3; [call resource function if debts]
+
+!?FU631; [Function for borrowing gold]
+
+!!OW:C?y1; [get current player]
+!!VRy1:+592; [offset value]
+!!VRy4:Svy1; [get it into a not indexed var for displaying in msg]
+!!IF&vy1>0:M1/z105010;
+!!FU&vy1>0:E; [exit if not payed back yet]
+
+!!VRy3:Sc *100 +4900; [set maximum of loan]
+!!IF:Q1/6/0/1/z105011;
+
+!!VRz-1:Sz105012;
+!!VRz-2:Sz105013;
+
+!!DO636/1/1/1:Py3; [repeat input until correct parameters are entered]
+
+!!IF&v1=0:M1/z105014;
+!!FU&v1=0:E; [exit if zero or nonsense entered]
+
+!!IF:Q1/6/v1/1/z105015;
+
+!!OW:R-1/6/dv1; [give current player gold]
+!!VRy2:Sv1 *30 :100 +v1; [calculate interest]
+!!VRvy1:Sy2; [set payback value]
+
+** End of function for borrowing gold **
+
+
+!?FU632; [Function for borrowing resources]
+
+!!OW:C?y1; [get current player]
+!!VRy1:+493; [offset value]
+
+!!VRy5&vy1<1000:Svy1; [determine quantity of resurces]
+!!VRy5&vy1<2000/vy1>1000:Svy1 -1000;
+!!VRy5&vy1<3000/vy1>2000:Svy1 -2000;
+!!VRy5&vy1<4000/vy1>3000:Svy1 -3000;
+!!VRy5&vy1<5000/vy1>4000:Svy1 -4000;
+!!VRy5&vy1<6000/vy1>5000:Svy1 -5000;
+
+!!VRy6&vy1<1000:S0; [determine type of resource]
+!!VRy6&vy1<2000/vy1>1000:S1;
+!!VRy6&vy1<3000/vy1>2000:S2;
+!!VRy6&vy1<4000/vy1>3000:S3;
+!!VRy6&vy1<5000/vy1>4000:S4;
+!!VRy6&vy1<6000/vy1>5000:S5;
+
+!!VRz-9&y6=0:Sz105018; [set strings]
+!!VRz-9&y6=1:Sz105019;
+!!VRz-9&y6=2:Sz105020;
+!!VRz-9&y6=3:Sz105021;
+!!VRz-9&y6=4:Sz105022;
+!!VRz-9&y6=5:Sz105023;
+
+!!IF&y5>0:M1/z105016;
+!!FU&y5>0:E; [exit if not payed back yet]
+
+** set strings for input box **
+!!VRz-1:Sz105017;
+!!VRz-2:Sz105018;
+!!VRz-3:Sz105019;
+!!VRz-4:Sz105020;
+!!VRz-5:Sz105021;
+!!VRz-6:Sz105022;
+!!VRz-7:Sz105023;
+
+!!IF:G1/1/1/-1/-2/-3/-4/-5/-6/-7; [display input box]
+
+!!VRy2&v1=1:S0; [translate bit values]
+!!VRy2&v1=2:S1;
+!!VRy2&v1=4:S2;
+!!VRy2&v1=8:S3;
+!!VRy2&v1=16:S4;
+!!VRy2&v1=32:S5;
+
+!!VRz-8&y2=0:Sz-2; [set strings]
+!!VRz-8&y2=1:Sz-3;
+!!VRz-8&y2=2:Sz-4;
+!!VRz-8&y2=3:Sz-5;
+!!VRz-8&y2=4:Sz-6;
+!!VRz-8&y2=5:Sz-7;
+
+!!VRy4:Sc :14 +5; [set maximum of loan]
+!!IF:Q1/y2/0/1/z105024;
+
+!!VRz-1:Sz105025;
+!!VRz-2:Sz105026;
+
+!!DO637/1/1/1:Py4/y2; [repeat input until correct parameters are entered]
+
+!!IF&v1=0:M1/z105027;
+!!FU&v1=0:E;
+
+!!IF:Q1/y2/v1/1/z105028;
+
+!!OW:R-1/y2/dv1; [give current player resources]
+
+!!VRy3:Sv1 *30 :100 +v1; [calc interest]
+!!VRy3&y3=v1:+1; [if payback=loan, than add 1 to payback]
+!!VRvy1&y2=0:Sy3; [set payback values]
+!!VRvy1&y2=1:Sy3 +1000;
+!!VRvy1&y2=2:Sy3 +2000;
+!!VRvy1&y2=3:Sy3 +3000;
+!!VRvy1&y2=4:Sy3 +4000;
+!!VRvy1&y2=5:Sy3 +5000;
+
+** End of function for borrowing gold **
+
+
+!?FU633; [Function for gold payback]
+
+!!OW:Rx1/6/?y3; [get current players gold]
+!!VRy3&y3>1::2; [take half of gold if greater 1]
+!!VRy4&vx2>y3:Sy3; [if debts greater]
+!!VRy4&vx2<=y3:Svx2; [if debts lower]
+!!VRy4:*-1;
+
+!!OW:Rx1/6/dy4; [deduct calculated money]
+!!VRy4:*-1;
+
+!!VRy5:Svx2 -y4;
+
+ [** Check if Loan Repayment messages are disabled **]
+!!VRy6:Sx1 +1; [Add 1 to x1 (current player number): y6]
+!!FU$bit$:Py6; [Convert to bit number: y-100]
+!!VRy7:Sv3325; [Set y7 to v3325]
+!!VRy7:&y-100; [Check if message is disabled for current player: y7]
+ [** If y7=y-100, messages are disabled for current player **]
+
+!!IF&vx2>y3/y7<>y-100:Q1/6/y4/1/z105029;
+!!IF&vx2<=y3/y7<>y-100:Q1/6/y4/1/z105030;
+
+!!VRvx2:-y4; [set new debts]
+
+** End of function for gold payback **
+
+
+!?FU634; [Function for resource payback]
+
+!!VRy1&vx2<1000:Svx2; [determine quantity]
+!!VRy1&vx2<2000/vx2>1000:Svx2 -1000;
+!!VRy1&vx2<3000/vx2>2000:Svx2 -2000;
+!!VRy1&vx2<4000/vx2>3000:Svx2 -3000;
+!!VRy1&vx2<5000/vx2>4000:Svx2 -4000;
+!!VRy1&vx2<6000/vx2>5000:Svx2 -5000;
+
+!!VRy2&vx2<1000:S0; [determine type]
+!!VRy2&vx2<2000/vx2>1000:S1;
+!!VRy2&vx2<3000/vx2>2000:S2;
+!!VRy2&vx2<4000/vx2>3000:S3;
+!!VRy2&vx2<5000/vx2>4000:S4;
+!!VRy2&vx2<6000/vx2>5000:S5;
+
+!!OW:Rx1/y2/?y3; [get current players resource]
+!!VRy3&y3>1::2; [take half of resources if greater 1]
+!!VRy4&y1>y3:Sy3; [if debts greater]
+!!VRy4&y1<=y3:Sy1; [if debts lower]
+!!VRy4:*-1;
+
+!!OW:Rx1/y2/dy4; [deduct calculated resource]
+!!VRy4:*-1;
+
+** set variable and strings for message **
+!!VRy5:Sy1 -y4;
+!!VRz-1&y2=0:Sz105018;
+!!VRz-1&y2=1:Sz105019;
+!!VRz-1&y2=2:Sz105020;
+!!VRz-1&y2=3:Sz105021;
+!!VRz-1&y2=4:Sz105022;
+!!VRz-1&y2=5:Sz105023;
+
+ [** Check if Loan Repayment messages are disabled **]
+!!VRy6:Sx1 +1; [Add 1 to x1 (current player number): y6]
+!!FU$bit$:Py6; [Convert to bit number: y-100]
+!!VRy7:Sv3325; [Set y7 to v3325]
+!!VRy7:&y-100; [Check if message is disabled for current player: y7]
+ [** If y7=y-100, messages are disabled for current player **]
+
+!!IF&y1>y3/y7<>y-100:Q1/y2/y4/1/z105031;
+!!IF&y1<=y3/y7<>y-100:Q1/y2/y4/1/z105032;
+
+!!VRvx2:-y4; [set new debts]
+!!VRvx2&y1<=y3:S0; [reset if paid back]
+
+** End of function for resource payback **
+
+
+!?FU636; [Function for repeating input - gold]
+
+!!IF:D4/-1/-2/////////////;     [Set up input box]
+!!IF:F4/////0;
+!!IF:E1/4;
+
+!!VRv1:Vz1; [convert string to integer]
+
+!!IF&v1>x1:Q1/6/x1/1/z105033;
+!!IF&v1<0:Q1/6/0/1/z105034;
+
+!!VRx16|v1>x1/v1<0:-1;
+
+** End of function for repeating input - gold **
+
+
+!?FU637; [Function for repeating input - resources]
+
+!!IF:D4/-1/-2/////////////;     [Set up input box]
+!!IF:F4/////0;
+!!IF:E1/4;
+
+!!VRv1:Vz1; [convert string to integer]
+
+!!IF&v1>x1:Q1/x2/x1/1/z105035;
+!!IF&v1<0:Q1/x2/0/1/z105036;
+
+!!VRx16|v1>x1/v1<0:-1;
+
+** End of function for repeating input - resources **
+
+--------------------------------------------------------------------------------
+
+** Resource trading post section **
+
+!?FU635; [Function for resource trading post]
+
+!!OW:C?y10; [get current player]
+!!OW:Ry10/0/?y12 Ry10/1/?y13 Ry10/2/?y14 Ry10/3/?y15 Ry10/4/?y16 Ry10/5/?y17 Ry10/6/?y18 Ry10/7/?y19; [check current player's resources]
+!!VRy11:S0 +y12 +y13 +y14 +y15 +y16 +y17 +y18 +y19; [count up all resources]
+
+!!IF&y11=0:M1/z105037;
+!!FU&y11=0:E; [exit if no resources]
+
+** Set strings for resource choosing **
+!!VRz-1:S^^; !!VRz-2:S^^; !!VRz-3:S^^; !!VRz-4:S^^;
+!!VRz-5:S^^; !!VRz-6:S^^; !!VRz-7:S^^; !!VRz-8:S^^;
+
+!!VRz-1&y12>0:Sz105018;
+!!VRz-2&y13>0:Sz105019;
+!!VRz-3&y14>0:Sz105020;
+!!VRz-4&y15>0:Sz105021;
+!!VRz-5&y16>0:Sz105022;
+!!VRz-6&y17>0:Sz105023;
+!!VRz-7&y18>0:Sz105038;
+!!VRz-8&y19>0:Sz105039;
+
+!!VRz1:Sz105040;
+!!VRz2:Sz105041;
+
+!!IF:G1/1/1/1/2/-1/-2/-3/-4/-5/-6/-7/-8/0/0/0; [Display box]
+
+** calculate bits to resource numbers **
+!!VRy20&v1=2:S0;
+!!VRy20&v1=4:S1;
+!!VRy20&v1=8:S2;
+!!VRy20&v1=16:S3;
+!!VRy20&v1=32:S4;
+!!VRy20&v1=64:S5;
+!!VRy20&v1=128:S6;
+!!VRy20&v1=256:S7;
+
+!!FU&v1<2:E; [exit if none selected]
+
+!!OW:I0/d/?y1 I1/d/?y2 I2/d/?y3 I3/d/?y4 I4/d/?y5 I5/d/?y6 I6/d/?y7 I7/d/?y8; [Check which players are in game]
+
+** Set strings for box **
+!!VRz-1:S^^; !!VRz-2:S^^; !!VRz-3:S^^; !!VRz-4:S^^;
+!!VRz-5:S^^; !!VRz-6:S^^; !!VRz-7:S^^; !!VRz-8:S^^;
+
+!!VRz-1&y1=0/y10<>0:Sz105042;
+!!VRz-2&y2=0/y10<>1:Sz105043;
+!!VRz-3&y3=0/y10<>2:Sz105044;
+!!VRz-4&y4=0/y10<>3:Sz105045;
+!!VRz-5&y5=0/y10<>4:Sz105046;
+!!VRz-6&y6=0/y10<>5:Sz105047;
+!!VRz-7&y7=0/y10<>6:Sz105048;
+!!VRz-8&y8=0/y10<>7:Sz105049;
+
+!!VRz-9&y20=0:Sz105018;
+!!VRz-9&y20=1:Sz105019;
+!!VRz-9&y20=2:Sz105020;
+!!VRz-9&y20=3:Sz105021;
+!!VRz-9&y20=4:Sz105022;
+!!VRz-9&y20=5:Sz105023;
+!!VRz-9&y20=6:Sz105038;
+!!VRz-9&y20=7:Sz105039;
+
+!!VRz1:Sz105050;
+!!VRz2:Sz105051;
+
+!!VRy21:S1192 +y10; [Index for default button choice: y21 (1192-1199)]
+!!VRvy21&vy21<1:S1; [Default to 1 if first time visit: vy21]
+!!IF:G1/1/vy21/1/2/-1/-2/-3/-4/-5/-6/-7/-8/0/0/0; [Display box]
+!!VRvy21:Sv1; [Store player's last choice as default: vy21 (v1192-v1199)]
+
+** calculate bits to player numbers **
+!!VRy9&v1=2:S0;
+!!VRy9&v1=4:S1;
+!!VRy9&v1=8:S2;
+!!VRy9&v1=16:S3;
+!!VRy9&v1=32:S4;
+!!VRy9&v1=64:S5;
+!!VRy9&v1=128:S6;
+!!VRy9&v1=256:S7;
+
+!!FU&v1<2:E; [exit if none selected]
+
+** Set strings for input box **
+!!VRz-2&y20=0:Sz105018;
+!!VRz-2&y20=1:Sz105019;
+!!VRz-2&y20=2:Sz105020;
+!!VRz-2&y20=3:Sz105021;
+!!VRz-2&y20=4:Sz105022;
+!!VRz-2&y20=5:Sz105023;
+!!VRz-2&y20=6:Sz105038;
+!!VRz-2&y20=7:Sz105039;
+
+!!VRy11&y20=0:Sy12;
+!!VRy11&y20=1:Sy13;
+!!VRy11&y20=2:Sy14;
+!!VRy11&y20=3:Sy15;
+!!VRy11&y20=4:Sy16;
+!!VRy11&y20=5:Sy17;
+!!VRy11&y20=6:Sy18;
+!!VRy11&y20=7:Sy19;
+
+!!VRz-1:Sz105052;
+!!VRz-3:Sz105053;
+
+!!DO638/1/1/1:Py11/y20;
+
+!!IF&v1=0:Q1/y20/0/1/z105054;
+!!FU&v1=0:E; [exit if zero or nonsense entered]
+
+** set strings for displaying transfer **
+!!VRz-1&y9=0:Sz105042;
+!!VRz-1&y9=1:Sz105043;
+!!VRz-1&y9=2:Sz105044;
+!!VRz-1&y9=3:Sz105045;
+!!VRz-1&y9=4:Sz105046;
+!!VRz-1&y9=5:Sz105047;
+!!VRz-1&y9=6:Sz105048;
+!!VRz-1&y9=7:Sz105049;
+!!VRz-3:Sz105055;
+!!VRz-3&v1=1:Sz105056;
+
+!!IF:Q1/y20/v1/10/y9/1/z105057;
+
+!!OW:Ry9/y20/dv1; [add resource to receiving player]
+!!VRv1:*-1;
+!!OW:Ry10/y20/dv1; [subtract resource from giving player]
+
+** End of Resource trading post function **
+
+!?FU638; [function for repeating input box]
+
+!!IF:D4/-1/-3/////////////;     [Set up input box]
+!!IF:F4/////0;
+!!IF:E1/4;
+
+!!VRv1:Vz1; [convert string to integer]
+
+!!IF&x1<v1:Q1/x2/x1/1/z105058;
+!!IF&v1<0:Q1/x2/0/1/z105059;
+!!VRx16|x1<v1/v1<0:-1; [continue if no correct parameters entered]
+
+** End of function for repeating input box **
+
+
+** End of Resource trading post section **
+
+--------------------------------------------------------------------------------
+
+** Transfer all resources section **
+
+!?FU14800; [Main transfer all resources interface]
+
+!!OW:C?y10; [Current player: y10]
+
+ [Check which players are in game]
+!!OW:I0/d/?y1 I1/d/?y2 I2/d/?y3 I3/d/?y4 I4/d/?y5 I5/d/?y6 I6/d/?y7 I7/d/?y8;
+
+!!VRz-1:S^^; !!VRz-2:S^^; !!VRz-3:S^^; !!VRz-4:S^^;
+!!VRz-5:S^^; !!VRz-6:S^^; !!VRz-7:S^^; !!VRz-8:S^^;
+
+!!VRz-1&y1=0/y10<>0:Sz105042;
+!!VRz-2&y2=0/y10<>1:Sz105043;
+!!VRz-3&y3=0/y10<>2:Sz105044;
+!!VRz-4&y4=0/y10<>3:Sz105045;
+!!VRz-5&y5=0/y10<>4:Sz105046;
+!!VRz-6&y6=0/y10<>5:Sz105047;
+!!VRz-7&y7=0/y10<>6:Sz105048;
+!!VRz-8&y8=0/y10<>7:Sz105049;
+
+!!VRz1:Sz105060;
+!!VRz2:Sz105061;
+
+** Display dialogue box and store selection in v1 **
+** G:1=radio buttons, 1=store answer in v1, 1=initial state of buttons **
+** 1=header in z1, 2=first option in z2, -1..-8=2nd through 9th options in z-1..z-8 **
+
+!!VRy12:S1184 +y10; [Index for default button choice: y12 (1184-1191)]
+!!VRvy12&vy12<1:S1; [Default to 1 if first time visit: vy12]
+!!IF:G1/1/vy12/1/2/-1/-2/-3/-4/-5/-6/-7/-8/0/0/0;
+!!VRvy12:Sv1; [Store player's last choice as default: vy12 (v1184-v1191)]
+
+ [Determine which colour to transfer resources to: y9]
+!!VRy9&v1=2:S0;
+!!VRy9&v1=4:S1;
+!!VRy9&v1=8:S2;
+!!VRy9&v1=16:S3;
+!!VRy9&v1=32:S4;
+!!VRy9&v1=64:S5;
+!!VRy9&v1=128:S6;
+!!VRy9&v1=256:S7;
+
+** Transfer all resources **
+!!IF:V2/0;
+!!DO14801/0/7/1&v1>=2:Py10/y9;
+
+!!VRy11:Sy9 *-1 -1; [Determine z-variable index for player colour]
+!!VRz3:Szy11; [Player colour string]
+!!IF&v1>1/2:Q3/10/y9/1/z105062;
+!!IF&v1>1/-2:M1/z105063;
+
+
+!?FU14801; [Transfer all resources from player x1 to player x2]
+
+!!OW:Rx1/x16/?y1; [Read x1's resource amount into y1]
+!!IF&y1>0:V2/1; [Set Flag 2 if any resources transferred]
+!!OW:Rx2/x16/dy1; [Give resource to player x2]
+!!VRy1:*-1; [Multiply resource by -1]
+!!OW:Rx1/x16/dy1; [Take resource from player x1]
+
+** End of Transfer all resources section **
+
+--------------------------------------------------------------------------------
+

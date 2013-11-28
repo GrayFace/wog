@@ -1,0 +1,184 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**  Custom alliances Script Version 1.0 created by Sir Four
+**  Requires WoG version 3.58 or later using ERM version 2.8 or later.
+**  WoGify Name: script69.erm
+**  Updated: May 15, 2004
+
+Variables: v1-10, v13, v777, z1-9, z1000
+All variables may be reused except z1000 which stores set of teams.
+Flags: 1,2
+Functions: 20690-20701
+Timers: 11
+Local Variables: x1-7, x16, y-1, y-2
+
+********************************************************************************
+!?FU20690;  [start]
+!!UN:P69/?y-1;
+!!FU&y-1=0:E;
+** Select Default or Custom alliances **
+!!UN:A125/9/?y-1; [remember left artifact name]
+!!UN:A125/10/?y-2; [remember left artifact description]
+!!UN:A110/9/?y-3; [remember right artifact name]
+!!UN:A110/10/?y-4; [remember right artifact description]
+!!VRz1:Sz169000;
+!!VRz2:Sz169001;
+!!VRz3:Sz169002;
+!!VRz4:Sz169003;
+!!UN:A125/9/1; [set left artifact name]
+!!UN:A125/10/2; [set left artifact description]
+!!UN:A110/9/3; [set right artifact name]
+!!UN:A110/10/4; [set right artifact description]
+
+!!IF:Q2/8/125/8/110/7/z169004; [give message with picture choice]
+!!UN:A125/9/y-1; [restore original artifact names/descriptions]
+!!UN:A125/10/y-2;
+!!UN:A110/9/y-3;
+!!UN:A110/10/y-4;
+!!VRz1000:Sz169000; [set default teams]
+!!FU&2:E;
+!!DO20697/1/1/1:P; [ask for teams if custom]
+!!VRz1000:S^^; [clear teams]
+!!DO20699/0/7/1:P; [fill z1000 with new teams set]
+!!UN:X?y1/?y2; [y1=map size, y2=1 if there's an underground]
+!!VRy3:Sy1 :2; [Half of map size to get center of map: y3]
+!!UN:Hy3/y3/0/-1/y1; [replace entire shroud]
+!!UN&y2=1:Hy3/y3/1/-1/y1; [replace entire shroud, underground if there is one]
+
+********************************************************************************
+!?FU20701; [set teams by z1000]
+!!VRz1:M1/z1000/x16/1;
+!!VRy-1:Vz1;
+!!OW:Tx16/y-1;
+
+********************************************************************************
+!?FU20700; [set teams by z1000]
+!!UN:P69/?y-1;
+!!FU&y-1=0:E;
+!!VRz1000:Uz169000;
+!!FU&1:E;
+!!DO20701/0/7/1:P;
+
+********************************************************************************
+!?FU20699; [set z1000 as teams set]
+!!OW:Tx16/?y-1;
+!!VRz1000:+^%Y-1^;
+
+********************************************************************************
+!?FU20698;  [update teams message]
+!!VRx1:+1;
+!!VRz1000:Uz169005;
+!!VRz1000&-1:+^
+^+z169005+^: ^;
+!!VRz1000&1:+^, ^;
+!!VRz1000&x2=1:+z169006;
+!!VRz1000&x2=2:+z169007;
+!!VRz1000&x2=3:+z169008;
+!!VRz1000&x2=4:+z169009;
+!!VRz1000&x2=5:+z169010;
+!!VRz1000&x2=6:+z169011;
+!!VRz1000&x2=7:+z169012;
+!!VRz1000&x2=8:+z169013;
+!!OW:Ix16/?y-1;
+!!VRz1000&y-1=1:+z169014;
+!!VRz1000&y-1=0:+z169015;
+
+********************************************************************************
+!?FU20697;
+** Count number of players **
+!!VRv10:S0; [set no players alive v10=0]
+!!DO20691/0/7/1:P; [increment by turned on and prepare messages for select]
+!!VRz9:Sz169016;
+!!IF:G1/777/1/9/1/2/3/4/5/6/7/8; [v777 = result]
+!!VRv9&v777=1:Sv10; [Free for all]
+!!DO20692/2/7/1&v777>2:P2/4/8/16/32/64/128; [v9 = number of alliances selected]
+!!VRv13:Sv9; [store N_of_Teams]
+!!VRz1000:S^^; [clear teams text]
+!!DO20693/1/v13/1:P; [set teams]
+!!VRz1000:+z169017;
+!!IF:Q2^%Z1000^;
+!!VRx16&-2:S0;
+
+********************************************************************************
+!?FU20696;  [set team_number for selected colors]
+!!VRy-1:Sx16+1;
+!!VRy-2:Sv777&xy-1;
+!!FU&y-2=0:E; [exit if not selected]
+!!VRvy-1:Sv13-v9;
+!!OW:Tx16/vy-1;
+!!FU20698:Pvy-1/y-1;  [update teams message]
+!!VRv10:-1;
+
+********************************************************************************
+!?FU20695;  [Colors for choose]
+!!VRy-1:Sx16+1;
+!!VRzy-1&vy-1<>10:S^^; [disable if part of any team]
+!!FU&vy-1<>10:E;
+!!VRzy-1&y-1=1:Sz169006;
+!!VRzy-1&y-1=2:Sz169007;
+!!VRzy-1&y-1=3:Sz169008;
+!!VRzy-1&y-1=4:Sz169009;
+!!VRzy-1&y-1=5:Sz169010;
+!!VRzy-1&y-1=6:Sz169011;
+!!VRzy-1&y-1=7:Sz169012;
+!!VRzy-1&y-1=8:Sz169013;
+
+********************************************************************************
+!?FU20694;   [if N_of_teams = 1 or N_of_teams = N_of_players (remain after last select)]
+!!VRy-1:Sx16+1;
+!!FU&vy-1<>10:E; [exit if part of any team]
+!!VRvy-1:Sv13-v9;
+!!OW:Tx16/vy-1;
+!!VRv9&v9>1:-1;
+!!VRv10:-1;
+!!FU20698:Pvy-1/y-1;  [update teams message]
+
+********************************************************************************
+!?FU20693; [choose players to current team]
+!!VRv9&v9>v10:Sv10;
+!!DO20694/0/7/1&v9=v10|v9<2:P; [auto set last teams]
+!!VRx16&v9=v10|v9<2:Sv13; [end loop]
+!!FU&v9=v10|v9<2:E; [exit after auto_set]
+!!DO20695/0/7/1:P;
+!!VRy-1:Sv13-v9+1;
+!!VRz9:Sz169018;
+!!IF:G0/777/0/9/1/2/3/4/5/6/7/8;
+!!DO20696/0/7/1&v777>0:P1/2/4/8/16/32/64/128; [set team_number for selected colors]
+!!VRv9&v777>0:-1;
+!!VRx16&v777=0:-1; [try again]
+
+********************************************************************************
+!?FU20692; [get number of alliances selected]
+!!VRy-1:Sv777&xx16;
+!!VRv9&y-1>0:Sx16;
+
+********************************************************************************
+!?FU20691; [Check if color's in the game - decrement v10 if turned off]
+!!OW:Ix16/d/?y-2;
+!!VRv10&y-2=0:+1; [increment if alive]
+!!VRy-1:Sx16+1; [player number 1 to 8]
+!!VRzy-1:S^^; [blank message preset 1 to 8]
+!!VRzv10&v10=1:Sz169019; [free for all always the first]
+!!VRy-3:Sv10-1; [num of alliances = num of players -1]
+!!VRzv10&y-2=0/y-3>1:Sz169020; [1 alliance is not avaible]
+!!VRvy-1&y-2=0:S10; [set team number 'to be set']
+!!VRvy-1&y-2=1:S0;
+
+********************************************************************************
+!?PI;
+!!FU20690:P; [set teams by z1000]
+
+********************************************************************************
+!?GM0;
+!!FU20700:P; [set teams by z1000]
+
+********************************************************************************
+!?TM11;
+!!FU20700:P; [set teams by z1000]
+
+********************************************************************************
+!#TM11:S1/999/1/255; [timer day one for all players]
+

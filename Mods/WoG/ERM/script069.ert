@@ -1,0 +1,29 @@
+#	Text resource for "Script69.erm" document		
+169000	{Default}	String type = <!!S>	09.10.2003
+169001	{Default} alliances
+
+All teams are the same as it were assigned by the current map	String type = <!!S>	09.10.2003
+169002	{Custom}	String type = <!!S>	09.10.2003
+169003	{Custom} alliances
+
+You can set teams with any combination of colors	String type = <!!S>	09.10.2003
+169004	Do you want {Default} 
+or {Custom} alliances to be used?	String type = <!!Q>	09.10.2003
+169005	{Team #%X1}	String type = <!!S>	09.10.2003
+169006	Red	String type = <!!S>	09.10.2003
+169007	Blue	String type = <!!S>	09.10.2003
+169008	Tan	String type = <!!S>	09.10.2003
+169009	Green	String type = <!!S>	09.10.2003
+169010	Orange	String type = <!!S>	09.10.2003
+169011	Purple	String type = <!!S>	09.10.2003
+169012	Teal	String type = <!!S>	09.10.2003
+169013	Pink	String type = <!!S>	09.10.2003
+169014	 AI	String type = <!!S>	09.10.2003
+169015	 Human	String type = <!!S>	09.10.2003
+169016	Select number of alliances:	String type = <!!S>	09.10.2003
+169017	
+
+... is this correct?	String type = <!!S>	09.10.2003
+169018	Set players for alliance: #%X16	String type = <!!S>	09.10.2003
+169019	Free for all	String type = <!!S>	09.10.2003
+169020	Set %Y-3 alliances	String type = <!!S>	09.10.2003

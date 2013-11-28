@@ -1,0 +1,2777 @@
+ ZVSE
+ERMS_ScriptDate=24.11(November).2013
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+**  Map Options Script Version 2.6 created by Timothy E. Pulver
+**  Requires WoG version 3.58f or later using ERM version 2.7 or later.
+**  WoGify Name: script25.erm
+
+**  Last Updated: October 29, 2006 (Added a check for Buy All function for dwelling built in case available troops exist despite no dwelling)
+**  Previously Updated: September 5, 2006 (Future Compatibility: added message disabling for new Monster Resources script)
+**  Previously Updated: August 12, 2006 (rewritable signs and mana/movement checking should now work correctly in network games when not your turn)
+**  Previously Updated: July 17, 2006 (player can customize for every town levels he does not want to hire and levels he wants to hire unupgraded - by ctrl-click on castle icon)
+
+** Custom primary skill control for Choose Commander Class enabled by Hermann the Weird
+
+** This script sets up various map options according to what's been
+** chosen in the WoGify Options by the player.
+
+ * Message diabling for Neutral Spells and Summon elementals adventure added by Doom3d.
+ * Removed Cartographers will be replaced by Tree of knowledge/shipwreck survivor. Changes marked *Z
+
+** Current Map Options are:
+**  1. Remove all Forts
+**  2. Remove Forts only for Human Players (option 1 must also be selected)
+**  3. Remove all Cartographers (replaces them with Covers of Darkness)
+**  4. Spell Banning (Movement and Selected Spells)
+**  5. Artifact Banning (Selected)
+**  6. Town Renaming
+**  7. Check current hero's available Movement Points
+**  8. Universal Creature Upgrades (added in 1.3)
+**  9. Buy All Creatures button (added in 1.2), added by Thomas Franz (samot): check for script96 (diplomancy boost); added ability to choose levels and upgrades for every town by Ennin
+** 10. Extended Creature Upgrades (added in 1.3)
+** 11. Hero Renaming (added in 1.3)
+** 12. Display Hidden Secondary Skills (added in 1.3)
+** 13. Display hero's available Spell Points (added in 1.4)
+** 14. Rewriteable signs, plus display sign text when right-clicked if already visited (added in 1.4)
+ * 15. Message Disabling (added in 1.5),
+** added by Thomas Franz (samot): Disable Pre-Combat-Message for Artillery (script48) and HEROE-BATTLE-EXPERIENCE (script94)
+ * ,Doom3d: Neutral Spells (S132) and Summon Elementals Adventure (S74)
+** 16. Choose Commander Class (added in 1.6), added by Thomas Franz (samot): check for Rule 118 - Heroes starts at L5
+** 17. Enable Extension Heroes (added in 1.7)
+** 18. Disable Autosave option (added in 1.8)
+** 19. Select Neutral Town Types (added in 1.9)
+** 20. Build Twice a Day in Towns (added in 2.0)
+** 21. Quick Combat option for every battle (added in 2.1)
+** 22. Warlord's Banner: Quick Select (added in 2.1)
+** 23. Hero and Town List Reordering (added in 2.2)
+** 24. Check for Banned/Disabled Spells (added in 2.4)
+
+** More map options may be added later.
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+** Variables from all script25 Scriptlets **
+
+Variables: (v1-v8), (v600-v633), (v640-v646), v3300-v3302, v3310-v3312,
+  v3320-v3327, v3341, v3393-v3402, (z1-z9), (z22-z31)
+Flags: (1-5)
+Functions: FU18, FU41-FU42, FU50-FU57, FU3300-FU3304, FU10799-FU10807,
+  FU10808-FU10816, FU10920-FU10938, FU14802-FU14806
+Dialogs: DG17, DG25
+Macros: $ban$
+ERM Numbers: 25, 100, 131, 144-148, 150-164, 166-169, 173-180, 182-187, 220-223,
+  226-228, 233-234, 236-238, 240-241, 243-244, 246-247, 271-272
+PO numbers:
+ town: V0 (bits 1-14)
+Reserved:
+  v3304-v3308, v3328-v3330, v3334-v3336, v3406-v3407
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+********************************************************************************
+   Disable Forts and Remove Cartographers
+********************************************************************************
+
+Variables: (v1-v3)
+Functions: FU10799-FU10801
+ERM Numbers: 131, 144-145
+
+ [Daily timer for all players - once only]
+!?TM2&$once$=1/$day$=1;
+!!FU10799:P;  [Call function 10799 to disable forts and replace cartographers]
+
+-------------------------------------------------------------------------------
+
+ [Check various map options and perform appropriate actions if they're enabled]
+!?FU10799;
+
+ [Check if forts are disabled in WoGify options]
+!!UN:P131/?y1;
+
+ [Count all towns and store number in y4]
+!!UN&y1=1:U98/-1/?y4;
+
+ [Check if only human forts are disabled in WoGify script]
+!!UN:P144/?y2;
+
+ [Cycle through all towns to remove forts]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO10800/1/y4/1&y4>0/y1=1:Py2;
+
+ [Check if cartographers are to be removed]
+!!UN:P145/?y3;
+
+ [Count all cartographers]
+!!UN&y3=1:U13/-1/?y5;
+
+ [Check map size and subtract one]
+!!UN:X?y6/?y7;
+!!VRy6:-1;
+
+ [Cycle through all cartographers and remove them]
+!!DO10801/1/y5/1&y5>0/y3=1:Py5/y6;
+
+
+********************************************************************************
+   Cycle through all Towns and Remove Forts, Citadels and Castles
+********************************************************************************
+
+!?FU10800;
+
+ [x1=1 if only human/neutral towns start without forts]
+
+ [Store location of next castle in v1/v2/v3]
+!!UN:U98/-1/-1/1;
+
+ [Check owner of current castle to see if it's an AI or human: y2=1 if AI]
+!!CA1&x1=1:O?y1;
+!!OW&x1=1:Iy1/?y2;
+
+ [Remove fort, citadels and castles in town at loop]
+ [unless "Only human forts removed" option is set and town is owned by an AI]
+!!CA1|x1=0/y2=0:B2/9;
+!!CA1|x1=0/y2=0:B2/8;
+!!CA1|x1=0/y2=0:B2/7;
+
+ [Update Town Look on Adventure Map to match internal buildings]
+!!CA1|x1=0/y2=0:I0;
+
+********************************************************************************
+   Cycle through all cartographers and remove them
+********************************************************************************
+
+!?FU10801;
+
+ [x1=number of cartographers, x2=map size]
+
+ [Remove cartographers backwards so as not to mess up numbering]
+!!VRy1:Sx1 -x16 +1;
+
+ [Store location of current cartographer in v1/v2/v3]
+!!UN:U13/-1/y1/1;
+
+ [Store subtype of cartographer in y2: 0=water, 1=surface, 2=underground]
+!!OB1:U?y2;
+
+ [Remove current cartographer]
+!!UN:Ov1/v2/v3/1;
+
+ [Adjust x value by +1 to get lower-right position of object rectangle]
+!!VRv1&v1<x2:+1;
+
+ [Replace with Cover of Darkness unless it's a water cartographer]
+!!UN&y2<>0:Iv1/v2/v3/15/0;
+
+
+********************************************************************************
+   SPELL BANNING
+********************************************************************************
+
+Variables: (v1-v4), v3341
+Functions: FU10802-FU10807, FU10809-FU10812, FU10814, FU10932
+Macros: $ban$
+ERM Numbers: 146-148, 150-156, 221-223, 246-247, 271-272, 651
+
+
+********************************************************************************
+   Ban Spells from appearing in Mage Guilds and Pyramids
+********************************************************************************
+
+!?FU10802;
+
+!!UN:P152/?y1; [Summon Boat: y1=1 if banned]
+!!UN&y1=1:J0/0/1; [Disable Summon Boat]
+
+!!UN:P153/?y2; [Water Walk: y2=1 if banned]
+!!UN&y2=1:J0/7/1; [Disable Water Walk]
+
+!!UN:P154/?y3; [Town Portal: y3=1 if banned]
+!!UN&y3=1:J0/9/1; [Disable Town Portal]
+
+!!UN:P155/?y4; [Dimension Door: y4=1 if banned]
+!!UN&y4=1:J0/8/1; [Disable Dimension Door]
+
+!!UN:P156/?y5; [Fly: y5=1 if banned]
+!!UN&y5=1:J0/6/1; [Disable Fly]
+
+!!UN:P221/?y6; [Scuttle Boat: y6=1 if banned]
+!!UN&y6=1:J0/1/1; [Disable Scuttle Boat]
+
+!!UN:P222/?y7; [Visions: y7=1 if banned]
+!!UN&y7=1:J0/2/1; [Disable Visions]
+
+!!UN:P223/?y8; [Armageddon: y8=1 if banned]
+!!UN&y8=1:J0/26/1; [Disable Armageddon]
+
+!!UN:P246/?y9; [View Air: y9=1 if banned]
+!!UN&y9=1:J0/5/1; [Disable View Air]
+
+!!UN:P247/?y10; [View Earth: y10=1 if banned]
+!!UN&y10=1:J0/3/1; [Disable View Earth]
+
+!!UN:P271/?y11; [Animate Dead: y11=1 if banned]
+!!UN&y11=1:J0/39/1; [Disable Animated Dead]
+
+!!UN:P272/?y12; [Resurrection: y12=1 if banned]
+!!UN&y12=1:J0/38/1; [Disable Resurrection]
+
+!!UN:P651/?y12; [Disguise: y12=1 if banned]
+!!UN&y12=1:J0/4/1; [Disable Disguise]
+-------------------------------------------------------------------------------
+
+ [Prevent Heroes gaining Banned Spells from a Conflux Mage Guild in case Grail is built]
+ [Note: there is no check to see if the hero already had the spell]
+
+ [Town screen is trigger]
+!?CM1;
+
+!!UN:P146/?v1; [Check if Ban from Mage Guilds option is selected]
+!!CA-1:T?v2; [Check type of Town: v2=8 if Conflux]
+!!CA-1:B3/26; [Set Flag 1 to True if Grail Building is built
+!!FU|v1=0/v2<>8/-1:E; [Exit trigger if option isn't selected or not Conflux or no Grail]
+
+!!CA-1:H0/?y-11 H1/?y-12; [Garrison Hero (y-11), Visiting Hero (y-12)]
+
+!!FU&y-11<0/y-12<0:E; [Exit if no Garrison or Visiting hero in town]
+
+!!UN:P152/?y-1; [See if Summon Boat spell is banned]
+!!UN:P153/?y-2; [See if Water Walk spell is banned]
+!!UN:P154/?y-3; [See if Town Portal spell is banned]
+!!UN:P155/?y-4; [See if Dimension Door spell is banned]
+!!UN:P156/?y-5; [See if Fly spell is banned]
+!!UN:P221/?y-6; [See if Scuttle Boat spell is banned]
+!!UN:P222/?y-7; [See if Visions spell is banned]
+!!UN:P223/?y-8; [See if Armageddon spell is banned]
+!!UN:P246/?y-9; [See if View Air spell is banned]
+!!UN:P247/?y-10; [See if View Earth spell is banned]
+!!UN:P271/?y-13; [See if Animate Dead is banned]
+!!UN:P272/?y-14; [See if Resurrection is banned]
+!!UN:P651/?y-15; [See if Disguise is banned]
+
+!!FU10807&y-11>=0:Py-11; [Remove banned spells for garrison hero]
+!!FU10807&y-12>=0:Py-12; [Remove banned spells for visiting hero]
+
+-------------------------------------------------------------------------------
+
+ [Remove banned spells for heroes: x1=hero number]
+!?FU10807;
+!!HEx1&y-1=1:M0/0; [Remove hero's knowledge of Summon Boat if banned]
+!!HEx1&y-2=1:M7/0; [Remove hero's knowledge of Water Walk if banned]
+!!HEx1&y-3=1:M9/0; [Remove hero's knowledge of Town Portal if banned]
+!!HEx1&y-4=1:M8/0; [Remove hero's knowledge of Dimension Door if banned]
+!!HEx1&y-5=1:M6/0; [Remove hero's knowledge of Fly if banned]
+!!HEx1&y-6=1:M1/0; [Remove hero's knowledge of Scuttle Boat if banned]
+!!HEx1&y-7=1:M2/0; [Remove hero's knowledge of Visions if banned]
+!!HEx1&y-8=1:M26/0; [Remove hero's knowledge of Armageddon if banned]
+!!HEx1&y-9=1:M5/0; [Remove hero's knowledge of View Air if banned]
+!!HEx1&y-10=1:M3/0; [Remove hero's knowledge of View Earth if banned]
+!!HEx1&y-13=1:M39/0; [Remove hero's knowledge of Animate Dead if banned]
+!!HEx1&y-14=1:M38/0; [Remove hero's knowledge of Resurrection if banned]
+!!HEx1&y-15=1:M4/0; [Remove hero's knowledge of Disguise if banned]
+
+ [Remove and re-equip Visiting hero's Misc. Slot and Head Artifacts to restore any removed spells]
+!!HEx1:A1/?y-21/9;  [Artifact in misc. slot 1: y-21]
+!!HEx1:A1/?y-22/10; [Artifact in misc. slot 2: y-22]
+!!HEx1:A1/?y-23/11; [Artifact in misc. slot 3: y-23]
+!!HEx1:A1/?y-24/12; [Artifact in misc. slot 4: y-24]
+!!HEx1:A1/?y-25/18; [Artifact in misc. slot 5: y-25]
+!!HEx1:A1/?y-26/0;  [Artifact in head slot: y-26]
+
+!!HEx1|y-21=1/y-21=86/y-21=87/y-21=88/y-21=89:A3/y-21/1/1; [Delete 1 equipped artifact y-21]
+!!HEx1|y-22=1/y-22=86/y-22=87/y-22=88/y-22=89:A3/y-22/1/1; [Delete 1 equipped artifact y-22]
+!!HEx1|y-23=1/y-23=86/y-23=87/y-23=88/y-23=89:A3/y-23/1/1; [Delete 1 equipped artifact y-23]
+!!HEx1|y-24=1/y-24=86/y-24=87/y-24=88/y-24=89:A3/y-24/1/1; [Delete 1 equipped artifact y-24]
+!!HEx1|y-25=1/y-25=86/y-25=87/y-25=88/y-25=89:A3/y-25/1/1; [Delete 1 equipped artifact y-25]
+!!HEx1|y-26=123/y-26=124:A3/y-26/1/1; [Delete 1 equipped Sea Captain's or Spellbinder's Hat y-26]
+
+!!HEx1|y-21=1/y-21=86/y-21=87/y-21=88/y-21=89:A4/y-21; [Re-equip artifact y-21]
+!!HEx1|y-22=1/y-22=86/y-22=87/y-22=88/y-22=89:A4/y-22; [Re-equip artifact y-22]
+!!HEx1|y-23=1/y-23=86/y-23=87/y-23=88/y-23=89:A4/y-23; [Re-equip artifact y-23]
+!!HEx1|y-24=1/y-24=86/y-24=87/y-24=88/y-24=89:A4/y-24; [Re-equip artifact y-24]
+!!HEx1|y-25=1/y-25=86/y-25=87/y-25=88/y-25=89:A4/y-25; [Re-equip artifact y-25]
+!!HEx1|y-26=123/y-26=124:A4/y-26; [Re-equip Sea Captain's or Spellbinder's Hat y-26]
+
+!!HEx1&y-26=136:A2/136/?y-27/d; [Number of Admiral's Hats hero has: y-27]
+!!HEx1&y-26=136:A-136; [Delete all Admiral's Hats along with the locked neck slot]
+!!HEx1&y-26=136:A4/y-26; [Re-equip Admiral's Hat y-26]
+!!HEx1&y-26=136/y-27>1:A4/136; [Return additional Admiral's Hat (to hero's backpack)]
+!!HEx1&y-26=136/y-27>2:A4/136; [Return additional Admiral's Hat (to hero's backpack)]
+!!HEx1&y-26=136/y-27>3:A4/136; [Return additional Admiral's Hat (to hero's backpack)]
+!!HEx1&y-26=136/y-27>4:A4/136; [Return additional Admiral's Hat (to hero's backpack)]
+!!HEx1&y-26=136/y-27>5:A4/136; [Return additional Admiral's Hat (to hero's backpack)]
+
+-------------------------------------------------------------------------------
+
+ [Check for Banned and Disabled Spells - y-94 returns banned state]
+ [x1=spell to check for banning/disabling]
+
+!#MCv3341:S@ban@;
+!#VRv3341:S10932;
+
+* SYNTAX: FU$ban$:P#;
+* #=spell to check (x1)
+* y-94=0 if not banned/disabled
+* y-94=1 if banned
+* y-94=2 if disabled
+* y-94=3 if banned and disabled
+
+!?FU10932;
+
+!!FU|x1<0/x1>69:E; [Exit if not a valid spell number]
+!!UN:J0/x1/?y1; [Check if spell is enabled (0) or disabled (1): y1]
+!!VRy2:S0;
+!!VRy-94:S0; [Initialize y-94 to 0]
+!!UN&x1=0:P152/?y2; [Check for banned Summon Boat    - y2=1 if banned]
+!!UN&x1=7:P153/?y2; [Check for banned Water Walk     - y2=1 if banned]
+!!UN&x1=9:P154/?y2; [Check for banned Town Portal    - y2=1 if banned]
+!!UN&x1=8:P155/?y2; [Check for banned Dimension Door - y2=1 if banned]
+!!UN&x1=6:P156/?y2; [Check for banned Fly            - y2=1 if banned]
+!!UN&x1=1:P221/?y2; [Check for banned Scuttle Boat   - y2=1 if banned]
+!!UN&x1=2:P222/?y2; [Check for banned Visions        - y2=1 if banned]
+!!UN&x1=26:P223/?y2; [Check for banned Armageddon    - y2=1 if banned]
+!!UN&x1=5:P246/?y2; [Check for banned View Air       - y2=1 if banned]
+!!UN&x1=3:P247/?y2; [Check for banned View Earth     - y2=1 if banned]
+!!UN&x1=39:P271/?y2; [Check for banned Animate Dead  - y2=1 if banned]
+!!UN&x1=38:P272/?y2; [Check for banned Resurrection  - y2=1 if banned]
+!!UN&x1=4:P651/?y2; [Check for banned Disguise       - y2=1 if banned]
+
+!!VRy-94&y2=1:S1; [Set y-94 to 1 if spell is banned: y-94]
+!!VRy-94&y1=1:S2; [Set y-94 to 2 if spell is disabled: y-94]
+!!VRy-94&y1=1/y2=1:S3; [Set y-94 to 3 if spell is banned and disabled: y-94]
+
+-------------------------------------------------------------------------------
+
+ [Ban spells from appearing at Spell Shrines]
+!?FU10803;
+
+!!UN:U88/-1/?y1; [Check how many level 1 spell shrines are on map: store in y1]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO10804/1/y1/1&y1>0:P88/1; [Loop through level 1 spell shrines]
+
+!!UN:U89/-1/?y2; [Check how many level 2 spell shrines are on map: store in y2]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO10804/1/y2/1&y2>0:P89/2; [Loop through L2 shrines]
+
+!!UN:U90/-1/?y3; [Check how many level 3 spell shrines are on map: store in y3]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO10804/1/y3/1&y3>0:P90/3; [Loop through L3 shrines]
+
+-------------------------------------------------------------------------------
+
+ [Loop through Spell Shrines]
+ [Set a random spell that isn't banned or disabled]
+ [x1=object type of shrine, x2=level of shrine]
+!?FU10804;
+
+!!UN:Ux1/-1/-1/2; [Store coordinates of next Shrine in v2/v3/v4]
+!!SRv2/v3/v4:S?y1; [Read spell at shrine: y1]
+!!FU|y1<0/y1>69:E; [Exit if invalid spell]
+!!FU$ban$:Py1; [Check if spell is banned or disabled: y-94>0 if yes]
+!!FU$spell$&y-94>0:Px2/x2/0/0/1; [Random non-banned level x2 spell: y-99]
+!!SRv2/v3/v4&y-94>0:Sy-99; [Set a random spell (y-99) that isn't banned or disabled]
+
+-------------------------------------------------------------------------------
+
+ [Ban spells from being taught by Scholars]
+!?FU10805;
+
+!!UN:U81/-1/?y1; [Check how many Scholars are on the map: store in y1]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO10806/1/y1/1&y1>0:P; [Loop through Scholars]
+
+-------------------------------------------------------------------------------
+
+ [Loop through Scholars and substitute a non-banned spell of the same level]
+ [to replace any banned spell, or if none available, a secondary skill intead]
+!?FU10806;
+
+!!UN:U81/-1/-1/2; [Store coordinates of next Scholar in v2/v3/v4]
+!!SCv2/v3/v4:T?y1 L?y2; [Get type of Scholar (y1) and spell taught (y2), if any]
+!!VRy2:-1024; [Subtract 1024 to get spell number]
+!!VRy3:S0; [Clear y3]
+
+!!UN&y1=2/y2=0:P152/?y3; [Check for banned Summon Boat    - y3=1 if banned]
+!!UN&y1=2/y2=7:P153/?y3; [Check for banned Water Walk     - y3=1 if banned]
+!!UN&y1=2/y2=9:P154/?y3; [Check for banned Town Portal    - y3=1 if banned]
+!!UN&y1=2/y2=8:P155/?y3; [Check for banned Dimension Door - y3=1 if banned]
+!!UN&y1=2/y2=6:P156/?y3; [Check for banned Fly            - y3=1 if banned]
+!!UN&y1=2/y2=1:P221/?y3; [Check for banned Scuttle Boat   - y3=1 if banned]
+!!UN&y1=2/y2=2:P222/?y3; [Check for banned Visions        - y3=1 if banned]
+!!UN&y1=2/y2=26:P223/?y3; [Check for banned Armageddon    - y3=1 if banned]
+!!UN&y1=2/y2=5:P246/?y3; [Check for banned View Air       - y3=1 if banned]
+!!UN&y1=2/y2=3:P247/?y3; [Check for banned View Earth     - y3=1 if banned]
+!!UN&y1=2/y2=39:P271/?y3; [Check for banned Animate Dead  - y3=1 if banned]
+!!UN&y1=2/y2=38:P272/?y3; [Check for banned Resurrection  - y3=1 if banned]
+!!UN&y1=2/y2=4:P651/?y3; [Check for banned Disguise       - y3=1 if banned]
+
+!!FU7779&y3=1:Py2; [Check level of banned spell: y-96]
+!!FU$spell$&y3=1:Py-96/y-96/0/0/1; [Generate new non-banned spell of same level: y-99]
+!!SCv2/v3/v4&y3=1/y-99>=0:T2 Ly-99; [Give Scholar new Spell unless all are banned (y-99)]
+
+ [If all spells of same level banned (y-99=-1), give a skill instead]
+!!VRy4&y3=1/y-99<0:S0 R27; [Random # from 1 to 27 for Secondary Skill replacement (y4)]
+!!SCv2/v3/v4&y3=1/y-99<0:T1 Sy4; [Give Scholar Secondary Skill (y4)]
+
+-------------------------------------------------------------------------------
+
+ [Ban spells from being found on Spell Scrolls]
+!?FU10809;
+
+!!UN:U93/-1/?y1; [Check how many Spell Scrolls are on the map: store in y1]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO10810/1/y1/1&y1>0:P; [Loop through Spell Scrolls]
+
+-------------------------------------------------------------------------------
+
+ [Loop through Spell Scrolls and substitute a new non-banned spell]
+!?FU10810;
+
+!!UN:U93/-1/-1/2; [Store coordinates of next Spell Scroll in v2/v3/v4]
+!!ARv2/v3/v4:V?y1; [Store spell number in y1]
+!!FU|y1<0/y1>69:E; [Exit if invalid spell]
+!!FU$ban$:Py1; [Check if spell is banned: y-94>0 if yes]
+!!FU7779&y-94>0:Py1; [Check level of spell on spell scroll: y-96]
+!!FU$spell$&y-94>0:Py-96/y-96/0/0/1; [Generate new non-banned spell of same level: y-99]
+!!OBv2/v3/v4&y-94>0:Cy-99; [Give Spell Scroll new spell (y3)]
+
+-------------------------------------------------------------------------------
+
+ [Ban spells from Heroes' starting spells]
+!?FU10811;
+
+!!UN:P37/?y1; [Check if Rebalanced Factions script is active: y1=1 if active]
+!!UN:P152/?y2; [Check if Summon Boat is banned: y2=1 if banned]
+!!UN:P153/?y3; [Check if Water Walk is banned: y3=1 if banned]
+!!UN:P154/?y4; [Check if Town Portal is banned: y4=1 if banned]
+!!UN:P155/?y5; [Check if Dimension Door is banned: y5=1 if banned]
+!!UN:P156/?y6; [Check if Fly is banned: y6=1 if banned]
+!!UN:P221/?y7; [Check if Scuttle Boat is banned: y7=1 if banned]
+!!UN:P222/?y8; [Check if Visions is banned: y8=1 if banned]
+!!UN:P223/?y9; [Check if Armageddon is banned: y9=1 if banned]
+!!UN:P246/?y10; [Check if View Air is banned: y10=1 if banned]
+!!UN:P247/?y11; [Check if View Earth is banned: y11=1 if banned]
+!!UN:P271/?y12; [Check for banned Animate Dead: y12=1 if banned]
+!!UN:P272/?y13; [Check for banned Resurrection: y13=1 if banned]
+!!UN:P651/?y14; [Check for banned Disguise: y14=1 if banned]
+
+!!DO10812/0/155/1|y2=1/y3=1/y4=1/y5=1/y6=1/y7=1/y8=1/y9=1/y10=1/y11=1/y12=1/y13=1/y14=1:Py1/y2/y3/y4/y5/y6/y7/y8/y9/y10/y11/y12/y13/y14; [Loop through all Heroes if anything banned]
+
+-------------------------------------------------------------------------------
+
+ [Loops through Heroes and replaces banned spells]
+!?FU10812;
+
+!!HEx16:M0/?y1; [y1=1 if Hero has Summon Boat]
+!!HEx16&y1=1/x2=1:M0/0 M37/1; [Give Hero Cure instead if banned]
+!!HEx16:M7/?y2; [y2=1 if Hero has Water Walk]
+!!HEx16&y2=1/x3=1:M7/0 M68/1; [Give Hero Summon Water Elemental instead if banned]
+!!HEx16:M9/?y3; [y3=1 if Hero has Town Portal]
+!!HEx16&y3=1/x4=1:M9/0 M38/1; [Give Hero Resurrection instead if banned]
+!!HEx16:M8/?y4; [y4=1 if Hero has Dimension Door]
+!!HEx16&y4=1/x5=1:M8/0 M69/1; [Give Hero Summon Air Elemental instead if banned]
+!!HEx16:M6/?y5; [y5=1 if Hero has Fly]
+!!HEx16&y5=1/x6=1:M6/0 M69/1; [Give Hero Summon Air Elemental instead if banned]
+!!HEx16:M1/?y6; [y6=1 if Hero has Scuttle Boat]
+!!HEx16&y6=1/x7=1:M1/0 M45/1; [Give Hero Weakness instead if banned]
+!!HEx16:M2/?y7; [y7=1 if Hero has Visions]
+!!HEx16&y7=1/x8=1:M2/0 M62/1; [Give Hero Blind instead if banned]
+!!HEx16:M26/?y8; [y8=1 if Hero has Armageddon]
+!!HEx16&y8=1/x9=1:M26/0 M22/1; [Give Hero Inferno instead if banned]
+!!HEx16:M5/?y9; [y9=1 if Hero has View Air]
+!!HEx16&y9=1/x10=1:M5/0 M53/1; [Give Hero Haste instead if banned]
+!!HEx16:M3/?y10; [y10=1 if Hero has View Earth]
+!!HEx16&y10=1/x11=1:M3/0 M42/1; [Give Hero Curse instead if banned]
+!!HEx16:M39/?y11; [y11=1 if Hero has Animate Dead]
+!!HEx16&y11=1/x12=1:M39/0 M24/1; [Give Hero Death Ripple instead if banned]
+!!HEx16:M38/?y12; [y12=1 if Hero has Resurrection]
+!!HEx16&y12=1/x13=1:M38/0 M23/1; [Give Hero Meteor Shower instead if banned]
+!!HEx16:M4/?y13; [y13=1 if Hero has Disguise]
+!!HEx16&y13=1/x14=1:M4/0; [Give Hero nothing if banned]
+
+ [If Rebalanced Factions is active and Hero is Gem, take Cure away again]
+!!HEx16&y1=1/x1=1/x16=27:M37/0;
+
+-------------------------------------------------------------------------------
+
+ [Ban spells from appearing various places]
+
+!#UN:P146/?v1; [Check if Ban from Mage Guilds option is selected]
+!#FU10802&v1=1:P; [Call function to ban selected spells]
+
+!#UN:P148/?v1; [Check if Ban from Scholars option is selected]
+!#FU10805&v1=1:P; [Call function to ban selected spells]
+
+!#UN:P150/?v1; [Check if Ban from Spell Scrolls option is selected]
+!#FU10809&v1=1:P; [Call function to ban selected spells]
+
+!#UN:P151/?v1; [Check if Ban from Heroes starting spells is selected]
+!#FU10811&v1=1:P; [Call function to ban selected spells]
+
+!?PI;
+!!UN:P147/?v1; [Check if Ban from Spell Shrines option is selected]
+!!FU10803&v1=1:P; [Call function to ban selected spells]
+
+-------------------------------------------------------------------------------
+
+ [Pandora's Box trigger - for selected spell banning]
+
+!?OB6;
+
+ [Check if spell banning for Pandora's Box is enabled]
+!!UN:P150/?y-1;
+
+ [Call Function 10814 if banning is enabled]
+!!LE998&y-1=1:S?y-2; [Number of spells in Pandora's Box: y-2]
+!!VRy-3:Sy-2 -1;
+!!DO10814/0/y-3/1&y-1=1/y-2>0:P; [Remove all banned spells]
+
+-------------------------------------------------------------------------------
+
+ [Spell banning function for Pandora's Box - from object trigger]
+
+!?FU10814;
+
+!!LE998:Sx16/?y1;               [Check each spell given by Pandora's Box: y1]
+!!FU&y1<0:E;                    [Skip this spell if no spell at that position]
+!!FU$ban$:Py1;                  [Check if spell is banned: y-94=1 or 3 if banned]
+!!LE998|y-94=1/y-94=3:Sx16/-1;  [If banned, remove spell from box]
+
+-------------------------------------------------------------------------------
+
+ [End of Spell Banning]
+
+
+********************************************************************************
+   Artifact Banning
+********************************************************************************
+
+Variables: (v1)
+Functions: FU10816
+ERM Numbers: 157-164, 166-168, 175-178, 226-227, 234, 236-238, 241, 243, 652-654
+
+-------------------------------------------------------------------------------
+
+ [Disable Combination Artifact parts so Combo Artifacts can't be assembled]
+!?FU10816;
+!!UN:Ax16/5/-1; [Remove Combination part number]
+
+-------------------------------------------------------------------------------
+
+ [Disable Artifacts]
+
+!#UN:P157/?v1; [Boots of Levitation]
+!#UN&v1=1:A90/1;
+
+!#UN:P158/?v1; [Angel Wings]
+!#UN&v1=1:A72/1;
+
+!#UN:P159/?v1; [Tome of Air Magic]
+!#UN&v1=1:A87/1;
+
+!#UN:P160/?v1; [Tome of Earth Magic]
+!#UN&v1=1:A89/1;
+
+!#UN:P161/?v1; [Tome of Fire Magic]
+!#UN&v1=1:A86/1;
+
+!#UN:P162/?v1; [Tome of Water Magic]
+!#UN&v1=1:A88/1;
+
+!#UN:P163/?v1; [Spellbinder's Hat]
+!#UN&v1=1:A124/1;
+
+!#UN:P164/?v1; [Sea Captain's Hat]
+!#UN&v1=1:A123/1;
+
+!#UN:P166/?v1; [Recanter's Cloak]
+!#UN&v1=1:A83/1;
+
+!#UN:P167/?v1; [Orb of Inhibition]
+!#UN&v1=1:A126/1;
+
+!#UN:P168/?v1; [Orb of Vulnerability]
+!#UN&v1=1:A93/1;
+
+!#UN:P175/?v1; [Shackles of War]
+!#UN&v1=1:A125/1;
+
+!#UN:P652/?v1; [Necklace of Ocean Guidance]
+!#UN&v1=1:A71/1;
+
+!#UN:P653/?v1; [Badge of Courage]
+!#UN&v1=1:A49/1;
+
+!#UN:P176/?v1; [Magic Wand]
+!#UN&v1=1:A141/1;
+
+!#UN:P226/?v1; [Gold Tower Arrow]
+!#UN&v1=1:A142/1;
+
+!#UN:P227/?v1; [Monster's Power]
+!#UN&v1=1:A143/1;
+
+!#UN:P238/?v1; [Commander Artifacts: Note: enables artifacts if not disabled]
+!#UN&v1=1:A146/v1; (Axe of Smashing)
+!#UN&v1=1:A147/v1; (Mithril Mail)
+!#UN&v1=1:A148/v1; (Sword of Sharpness)
+!#UN&v1=1:A149/v1; (Helm of Immortality)
+!#UN&v1=1:A150/v1; (Pendant of Sorcery)
+!#UN&v1=1:A151/v1; (Boots of Haste)
+!#UN&v1=1:A152/v1; (Bow of Seeking)
+!#UN&v1=1:A153/v1; (Dragon Eye Ring)
+!#UN&v1=1:A154/v1; (Hardened Shield)
+!#UN&v1=1:A155/v1; (Slava's Ring of Power)
+
+!#UN:P177/?v1; [Slava's Ring of Power]
+!#UN&v1=1:A155/1;
+
+!#UN:P234/?v1; [Warlord's Banner]
+!#UN:A156/v1; [Note: enables artifact if not disabled]
+
+!#UN:P236/?v1; [Crimson Shield of Retribution]
+!#UN:A157/v1; [Note: enables artifact if not disabled]
+
+!#UN:P241/?v1; [Dragonheart]
+!#UN&v1=1:A159/1;
+
+!#UN:P243/?v1; [Gate Key]
+!#UN&v1=1:A160/1;
+
+!#UN:P237/?v1; [Barbarian Lord's Axe of Ferocity]
+!#UN:A158/1; [Note: disables artifact (like other combos) even if not disabled]
+
+!#UN:P654/?v1; [Cloak of the Undead King]
+!#UN&v1=1:A54/5/-1;
+!#UN&v1=1:A55/5/-1;
+!#UN&v1=1:A56/5/-1;
+
+!#UN:P178/?v1; [Assembling of Combination Artifacts]
+!#DO10816/7/128/1&v1=1:P;
+-------------------------------------------------------------------------------
+
+ [End of Artifact Banning]
+
+
+********************************************************************************
+   Town Renaming
+********************************************************************************
+
+Variables: (v1-v3), (z1-z4)
+Functions: FU10808, FU10813
+Flags: (1)
+Dialogs: DG17
+ERM Numbers: 169
+
+!?CM1&999;
+
+!!UN:P169/?v1; [Check if town renaming option is enabled]
+!!CM:A?v2/?v3 F?v4 S?v5; [Get x/y position, mode and flags of click]
+!!FU10813&v1=1/v2>=79/v2<=240/v3>=387/v3<=405/v4=0/v5=12:P;  [Call renaming function if town name is left-clicked]
+
+-------------------------------------------------------------------------------
+
+ [Hint Text trigger: Display new hint text for Town Name field]
+!?MM1&999;
+!!UN:P169/?v1; [Check if town renaming option is enabled]
+!!FU&v1<>1:E; [Exit if Town Renaming isn't enabled]
+!!VRz-1:Sz125000;
+!!CM:A?v2/?v3; [Get x/y position of mouse pointer (v2/v3)]
+!!CM&v2>=79/v2<=240/v3>=387/v3<=406:Mz-1; [Display hint text]
+
+-------------------------------------------------------------------------------
+
+ [Town renaming function]
+
+!?FU10813;
+
+!!CA-1:N?z1; [Store name of town in z-1]
+!!VRz2:Sz125001;
+!!VRz3:Sz125002;
+!!VRz4:S^^;
+!!IF:D17/2/3/4/4/4/4/4/4/4/4/4/4/4/4/4; [Set up dialogue box]
+!!IF:E1/17; [Display dialogue box]
+!!VRz1:H1; [Set flag 1 to true if text entered, false if no text entered]
+!!FU|-1/v1<1:E; [Exit if no text entered]
+
+!!UN:U98/-1/?y1; [Number of towns on map: y1]
+!!VRv1:S-1; [Initialize v1 to -1 for fast UN:U looping: v1]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!DO10808/1/y1/1:P; [Loop through all towns to check for duplicate names]
+!!CA-1&-2:Nz1; [Change town name if text entered and not a duplicate]
+!!IF&-2:M1/z125003; [Display message that name will be updated]
+!!IF&2:M1/z125087; [Display message that duplicate name was found]
+
+-------------------------------------------------------------------------------
+
+ [Check for duplicate town name - set Flag 2 to True if duplicate found]
+
+!?FU10808;
+
+!!UN:U98/-1/-1/1; [Next town coordinates at v1/v2/v3]
+!!CAv1/v2/v3:N?z5; [Town name: z5]
+!!IF&z1=z5:V2/1; [Set Flag 2 to TRUE if duplicate town is found]
+!!VRx16&2:S999; [Exit loop if duplicate town name found]
+
+-------------------------------------------------------------------------------
+
+ [End of Town Renaming]
+
+
+********************************************************************************
+   Display Hero Movement
+********************************************************************************
+
+Variables: (v1-v5), (z1-z2)
+Flags: (3-4)
+ERM Numbers: 25
+
+ [If you right-click on the movement button, you'll
+ [see the current hero's remaining movement points]
+
+ [If you right-click on a hero's movement bar, you'll]
+ [see the corresponding hero's remaining movement points]
+
+ [Adventure Map right-click trigger]
+!?CM0;
+!!UN:P25/?y-1; [See if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!IF:V3/0 V4/0; [Initialize Flags 3 & 4 to False]
+!!FU$LocalPlayer$:P; [Get local/current player: y-100]
+!!CM:I?v1; [Area clicked: v1]
+!!IF&v1=7:V3/1; [Set Flag 3 to True if hero movement button is right-clicked]
+!!IF&v1>=20/v1<=24:V4/1; [Set Flag 4 to True if a hero movement bar is right-clicked]
+!!OW&3:Ay-100/?v2; [Current hero: v2]
+!!VRv4&4:Sv1 -20; [Hero list number (0-4): v4]
+!!OW&4:Oy-100/v4/?v2; [Hero number: v2]
+!!IF&4/v2>=0:V3/1; [Set Flag 3 to True if movement bar is right-clicked by a valid hero]
+!!HEv2&3/v2>=0:W?v3 B0/?z1; [Store movement points: v3 and hero's name: z1]
+!!VRz2&3:Sz125004;
+!!UN&3:A98/9/2; [Set Boots of Speed text: z2]
+!!IF&3/v2>=0:Q1/8/98/4/z125005;
+!!IF&3/-4/v2<0:Q1/-1/-1/4/z125006;
+!!UN&3:A98/9/0; [Restore Boots of Speed text]
+!!CM&3:R0;  [Disable standard right-click operation]
+
+-------------------------------------------------------------------------------
+
+ [End of Display Hero Movement]
+
+
+********************************************************************************
+   Universal Creature Upgrades
+********************************************************************************
+
+Variables: (v1-v2), v3300-v3302, v3310-v3312
+Functions: FU3300-FU3303
+ERM Numbers: 174
+
+------------------------------------------------------------------------------------------------------------------
+
+!#VRv3300:S-1; [Initialize v3300 to -1]
+
+------------------------------------------------------------------------------------------------------------------
+
+!?CM1;
+!!UN:P174/?v1; [Check if Universal Upgrading is enabled: v1=1 if Yes]
+!!FU3300&v1=1:P;
+
+ [Set/Reset town types for creature upgrading]
+!?FU3300;
+!!CA-1:T?y1; [Town type: y1]
+!!CM:I?y2; [Position clicked: y2]
+
+ [Check creature types]
+!!CA-1:P?y3/?y4/?y5; [Town's position: y3/y4/y5]
+
+!!POy3/y4/y5:O?y6; [PO:O: y6]
+
+!!FU3302&y6>0/y6<8:Py1; [Restore creatures unless nothing is stored yet]
+
+ [Set creature to be upgraded (if upgraded creature dwelling is built)]
+!!FU3301&y2>=115/y2<=121:Py1/y2; [Garrison slots]
+!!FU3301&y2>=140/y2<=146:Py1/y2; [Visiting hero slots]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Determine which creature is clicked]
+ [x1=town type, x2=position clicked]
+!?FU3301;
+!!VRy1:S-1;  !!VRy2:S-1;
+
+!!VRy1&x2>=115/x2<=121:Sx2 -115; [Garrison creature slot number: y1]
+!!VRy2&x2>=140/x2<=146:Sx2 -140; [Visiting hero creature slot number: y2]
+
+ [Determine creature type: y5]
+!!CA-1:H0/?y3 H1/?y4; [Garrison hero: y3, Visiting hero: y4]
+!!HEy3&y3>=0/y1>=0:C0/y1/?y5/d; [Garrison hero creature: y5]
+!!CA-1&y3<0/y1>=0:M2/y1/?y5/d; [Garrison creature: y5]
+!!HEy4&y4>=0/y2>=0:C0/y2/?y5/d; [Visiting hero creature: y5]
+
+!!FU&y5<0:E; [Exit if not a creature]
+
+!!MA:Uy5/?y7; [Check for a custom upgrade: y7]
+
+ [Default upgrade for all towns except Conflux]
+!!VRy6&y7=-1/y5<=111:Sy5 %2; [Remainder of creature number divided by 2: y6]
+!!VRy7&y7=-1/y5<=111/y6=0:Sy5 +1; [If non-upgraded, upgrade is y7]
+
+ [Default upgrade for Conflux]
+!!VRy7&y7=-1/y5=112:S127; [Air Elemental]
+!!VRy7&y7=-1/y5=113:S125; [Earth Elemental]
+!!VRy7&y7=-1/y5=114:S129; [Fire Elemental]
+!!VRy7&y7=-1/y5=115:S123; [Water Elemental]
+!!VRy7&y7=-1/y5=118:S119; [Pixie]
+!!VRy7&y7=-1/y5=120:S121; [Psychic Elemental]
+!!VRy7&y7=-1/y5=130:S131; [Firebird]
+
+!!VRy6:S1; [Initialize y6 to 1]
+!!VRy6&y7>=0:S0; [Set y6 to 0 if y7>=0]
+
+!!FU|y6=1/y7=-2:E; [Exit if no upgrade]
+
+!!MA:Ly5/?v3302; [Store creature's level in v3302]
+
+!!VRy8:S37 +v3302; [Upgraded dwelling of this creature's level: y8]
+!!CA-1:B3/y8; [Check if town has this upgraded dwelling built: Flag 1 True if yes]
+!!CA-1&-1:B3/19; [Check if horde building 1 is built: Flag 1 is true if yes]
+!!CA-1&-1:B3/25; [Check if horde building 2 is built: Flag 1 is true if yes]
+
+!!FU&-1:E; [Exit if upgraded dwelling isn't built]
+
+!!VRv3300:Sy5; [Store creature number: v3300]
+!!MA:Oy5/?v3301;  [Store creature's town type in v3301]
+!!MA:Oy5/x1; [Change creature to this town type]
+
+!!VRv3310:Sy7; [Store upgraded creature number: v3310]
+!!MA:Oy7/?v3311;  [Store upgraded creature's town type in v3311]
+!!MA:Ly7/?v3312; [Store upgraded creature's level in v3312]
+!!MA:Oy7/x1; [Change upgraded creature to this town type]
+
+ [Check & Store creature type and level]
+!!CA-1:P?y13/?y14/?y15; [Town's position: y13/y14/y15]
+!!POy13/y14/y15:B0/?y16 B1/?y17 O?y18; [PO:B0: y16  PO:B1: y17  PO:O: y18]
+!!VRy9:Sy18 -1; [Subtract 1 from y18 to get real creature level: y9]
+!!UN&v3302<>y9:Tx1/v3302/0/?y18; [If this level not stored, get non-upgraded type: y18]
+!!UN&v3302<>y9:Tx1/v3302/1/?y19; [If this level not stored, get upgraded type: y19]
+!!VRy10&v3302<>y9:Sy18 +1; [Non-upgraded type +1: y10]
+!!VRy11&v3302<>y9:Sy19 +1; [Upgraded type +1: y11]
+!!VRy12&v3302<>y9:Sv3302 +1; [Creature level +1: y12]
+!!POy13/y14/y15&v3302<>y9:B0/y10; [If this level not stored, store non-upgraded type (+1)]
+!!POy13/y14/y15&v3302<>y9:B1/y11; [If this level not stored, store upgraded type (+1)]
+!!POy13/y14/y15&v3302<>y9:Oy12; [If this level not stored, store creature level (+1)]
+
+ [Set this town's creature of this level]
+!!UN:Tx1/v3302/0/y5; [Set non-upgraded creature]
+!!UN:Tx1/v3302/1/y7; [Set upgraded creature]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Reset changed town creature types]
+!?FU3302;
+!!CA-1:P?y1/?y2/?y3; [Town's position: y1/y2/y3]
+
+ [Creature type: y4 (non-upgraded) and y5 (upgraded), y6 (level)]
+!!POy1/y2/y3:B0/?y4 B1/?y5 O?y6; [PO:B0: y4  PO:B1: y5  PO:O: y6]
+!!VRy4&y4>0:-1; [Subtract 1 from y4 to get non-upgraded creature number]
+!!VRy5&y5>0:-1; [Subtract 1 from y5 to get upgraded creature number]
+!!VRy6&y6>0:-1; [Subtract 1 from y6 to get creature level]
+
+!!UN&y4>=0:Tx1/y6/0/y4; [Reset non-upgraded]
+!!UN&y5>=0:Tx1/y6/1/y5; [Reset upgraded]
+
+!!FU&v3300<0:E; [Exit function if no creature changed]
+
+ [Restore creature: v3300]
+!!MA:Ov3300/v3301;  [Restore creature's town type]
+
+ [Restore upgraded creature: v3310]
+!!MA:Ov3310/v3311;  [Restore upgraded creature's town type]
+
+ [Reset v3300 to -1]
+!!VRv3300:S-1;
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Post-visit Town Trigger for the AI]
+!$OB98&-1000;
+
+!!UN:P174/?v1; [Check if Universal Upgrading is enabled: v1=1 if Yes]
+!!FU&v1<>1:E; [Exit if not enabled]
+
+!!HE-1:N?v1; [Hero number: v1]
+!!CA998:T?v2; [Town type: v2]
+
+ [Check each creature in AI hero's army]
+!!DO3303/0/6/1:Pv1/v2;
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Check each creature in AI hero's army]
+ [x1=hero number, x2=town type]
+!?FU3303;
+
+!!HEx1:C0/x16/?y1/?y7; [Type of creature: y1, Number: y7]
+
+!!FU|y1<0/y7=0:E; [Exit if creature slot is empty]
+
+!!MA:Oy1/?y2; [Town creature belongs to: y2]
+!!MA:Uy1/?y3; [Creature's upgrade number: y3]
+!!MA:Ly1/?y4; [Creature's level: y4]
+!!VRy6:Sy4 +37; [Upgraded dwelling number in town: y6]
+!!CA998:B3/y6; [Check if upgraded dwelling is built: Flag 1 is true if yes]
+!!CA998&-1:B3/19; [Check if horde building 1 is built: Flag 1 is true if yes]
+!!CA998&-1:B3/25; [Check if horde building 2 is built: Flag 1 is true if yes]
+
+ [Exit if native town, creature has no upgrade or upgraded dwelling isn't built]
+!!FU|y2=x2/y3=-2/-1:E;
+
+ [Default upgrade for all towns except Conflux: y3]
+!!VRy5&y3=-1/y1<=111:Sy1 %2; [Remainder of creature number divided by 2: y5]
+!!VRy3&y3=-1/y1<=111/y5=0:Sy1 +1; [If non-upgraded, upgrade is y3]
+
+ [Default upgrade for Conflux: y3]
+!!VRy3&y3=-1/y1=112:S127; [Air Elemental]
+!!VRy3&y3=-1/y1=113:S125; [Earth Elemental]
+!!VRy3&y3=-1/y1=114:S129; [Fire Elemental]
+!!VRy3&y3=-1/y1=115:S123; [Water Elemental]
+!!VRy3&y3=-1/y1=118:S119; [Pixie]
+!!VRy3&y3=-1/y1=120:S121; [Psychic Elemental]
+!!VRy3&y3=-1/y1=130:S131; [Firebird]
+
+!!VRy5:S1; [Initialize y5 to 1]
+!!VRy5&y3>=0:S0; [Set y5 to 0 if y3>=0]
+
+!!FU|y5=1:E; [Exit if no upgrade]
+
+!!HEx1:C0/x16/y3/d; [Upgrade creature]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [End of Universal Creature Upgrades]
+
+
+********************************************************************************
+   Buy All Creatures Button
+********************************************************************************
+
+Variables: (v600-v633), (v640-v646), (z1-z3)
+Flags: (2-4)
+Functions: FU10920-FU10931, calls FU6136 from script96 (diplomancy boost) if this script enabled
+ERM Numbers: 180, (checks 96)
+
+ [Left-click on castle icon beneath town name (CM:I#159)]
+
+ [Mouse click in Town Screen is Trigger]
+!?CM1&999;
+!!UN:P180/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+**ennin**
+~!CM:A?y-1/?y-2 F?y-3 S?y-4; [Get x/y coordinates of screen clicked: y-1/y-2, y-3 = flags, y-4 = type of click]
+!!CM:A?y-1/?y-2 F?y-5 S?y-4; [Get x/y coordinates of screen clicked: y-1/y-2, y-5 = flags, y-4 = type of click]
+~!FU|y-1<122/y-1>159/y-2<413/y-2>450/y-3<>0/y-4<>12:E; [Exit if castle icon isn't clicked]
+!!FU|y-1<122/y-1>159/y-2<413/y-2>450/y-4<>12:E; [Exit if castle icon isn't clicked]
+!!FU&y-5<>0/y-5<>4:E;
+**/ennin**
+!!CA-1:U?y-3 O?y-9; [Town number: y-3, Town owner: y-9]
+**ennin**
+ !!VRv50:S-1;
+ !!FU10939:P;
+ !!FU10940&y-5<>0:P;
+**/ennin**
+!!OW:C?y-10; [Current player: y-10]
+!!VRy-4:S0; ["Buy All" called from Town Screen: y-4=0]
+
+!!UN:P96/?y-1; // check if script Diplomacy boost (script96) enabled
+!!FU6136&y-1=1/y-9=y-10:P; // call FU6136 from script96 to reduce the costs of all monsters if there is a diplo-hero in the town
+
+!!FU10920&y-9=y-10:P; [Call main Buy All function if current player owns town (e.g., not an allied town)]
+
+!!IF&y-9<>y-10:M1/z125084; [Display message if clicking in a town you don't own]
+!!CM:R0; [Disable standard mouse click function]
+
+-------------------------------------------------------------------------------
+
+ [Hint Text trigger: Display new hint text for Buy All Button]
+!?MM1&999;
+!!UN:P180/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:I?y-1; [Mouse location: y-1 (159=castle icon)]
+!!VRz-1:Sz125007;
+!!CM&y-1=159:Mz-1; [Display hint text]
+
+-------------------------------------------------------------------------------
+
+ [Adventure Map: Control-Left-click is Trigger]
+!?CM5&999;
+!!UN:P180/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:I?y-1 F?y-5 S?y-6; [Location clicked: y-1, Flags: y-5 (Ctrl=4), y-6 = type of click]
+!!FU|y-1<32/y-1>36/y-5<>4/y-6<>12:E; [Exit if town list not ctrl-left-clicked]
+
+!!VRy-2:Sy-1 -32; [Town list number (0-4): y-2]
+!!OW:N-1/y-2/?y-3; [Town number: y-3]
+
+!!VRz1:S^^;
+!!CA0/y-3&y-3>=0:N?z1; [Name of town right-clicked: z1]
+
+ [Call Main "Buy All" Function]
+**ennin**
+ !!VRv50:S-1;
+ !!FU10939:P;
+**/ennin**
+!!VRy-4:S1; ["Buy All" called from Adventure Map: y-4=1]
+!!FU10920:P; [y-3 holds town number]
+
+!!CM:R0; [Disable standard right-click function]
+
+-------------------------------------------------------------------------------
+
+ [Main "Buy All" Function]
+!?FU10920;
+
+!!VRz1:S^^; [Initialize z1 (list of troops purchased) to null]
+!!VRv633:S0; [Initialize v633 (any troops bought?) to 0]
+!!IF:V3/0 V4/0; [Initialize Flag 3 (Any troops available to buy?) and 4 (Any army slots available?) to FALSE]
+!!VRv624:C0/0/0/0/0/0/0/0; [Set total resource cost variables v624-v631 to 0]
+
+!!CA0/y-3:H0/?v600; [Check if town has a garrison hero: v600=hero # or -1 if no hero]
+!!CA0/y-3:P?y-6/?y-7/?y-8; [Town Location: y-6/y-7/y-8]
+
+!!DO10921/0/6/1:P; [Store troops from garrison/garrison hero in v601-v614]
+!!DO10922/0/7/1:P; [Store player's resources in v615-v622]
+!!DO10923/0/5/1:P; [Consolodate troops stacks of same type in virtual variable slots]
+!!DO10924/0/6/1:P; [Determine troops to be bought: v633>0 if any bought]
+!!FU10925&v633>0:P; [Display list of new troops and ask if player wishes to purchase them]
+*                   [If yes, deduct gold and resources, v633>0 if yes]
+!!DO10926/0/6/1&v633>0:P; [If bought, add troops to garrison/garrison hero]
+
+ [If no troops can be bought, display appropriate explanation message]
+!!CA0/y-3:N?z3; [Name of town: z3]
+!!IF&-3:M1/z125008;
+!!IF&3/-4:M1/z125009;
+!!IF&3/4/v633=0:M1/z125010;
+
+-------------------------------------------------------------------------------
+
+ [Store troops from garrison/garrison hero in v601-v614]
+ [Store troops' stack experience in y-11..y-17]
+ [Store number of troops' Warlord Banners in y-21..y-27]
+ [Store Warlord Banner options in y-31..y-37]
+!?FU10921;
+
+!!VRy1:S601 +x16; [v variable index to store troop types: y1]
+!!VRy2:S608 +x16; [v variable index to store troop numbers: y2]
+
+!!VRy3:S-11 -x16; [y- variable index to store troop's stack experience: y3]
+!!VRy4:S-21 -x16; [y- variable index to store troop's number of Warlord's Banners: y4]
+!!VRy5:S-31 -x16; [y- variable index to store troop's Warlord Banner Options: y5]
+
+!!VRy6:S0; [Initialize banners variable to 0: y6]
+!!HEv600&v600>=0:C0/x16/?vy1/?vy2/?yy3; [Store troops from garrison hero's slots]
+!!EXv600/x16&v600>=0:R?y6/156/?yy5/?yy4; [Store number of Warlord's Banners and Option from garrison hero stack]
+!!CA0/y-3&v600<0:M2/x16/?vy1/?vy2; [If no hero, store troops from garrison slots]
+!!EXy-6/y-7/y-8/x16/2&v600<0:E?yy3; [If no hero, store stack experience from garrison slots]
+!!EXy-6/y-7/y-8/x16/2&v600<0:R?y6/156/?yy5/?yy4; [If no hero, store number of Warlord's Banners and Option from garrison stack]
+
+!!VRyy3:*vy2; [Calculate and store total experience for the stack: yy3]
+!!VRyy4&y6=1:+1; [Calculate and store total banners for the stack: yy4]
+
+-------------------------------------------------------------------------------
+
+ [Store player's resources in v615-v622]
+!?FU10922;
+
+!!VRy1:S615 +x16; [v variable index to store resource amount: y1]
+!!OW:R-1/x16/?vy1; [Store resource amount for each resource type]
+
+-------------------------------------------------------------------------------
+
+ [Consolodate troops stacks of same type in virtual variable slots]
+!?FU10923;
+
+!!VRy1:Sx16 +1; [Set y1 to outer loop +1]
+!!VRy2:S601 +x16; [v variable index of stored troop types: y2]
+!!VRy3:S608 +x16; [v variable index of stored troop numbers: y3]
+!!VRy4:S-11 -x16; [y- variable index to store troop's stack experience: y4]
+!!VRy5:S-21 -x16; [y- variable index to store troop's number of Warlord's Banners: y5]
+!!VRy6:S-31 -x16; [y- variable index to store troop's Warlord's Banner Options: y6]
+
+!!DO10927/y1/6/1:Py2/y3/y4/y5/y6; [Inner loop]
+
+-------------------------------------------------------------------------------
+
+ [Inner consolodation loop]
+!?FU10927;
+ [x1=outer loop troop type index, x2=outer loop troop numbers index]
+ [x3=outer loop stack experience index, x4=outer loop warlord's banner index]
+ [x5=outer loop warlord's banner option index]
+
+!!VRy1:Svx1; [Outer loop troop type: y1]
+!!VRy2:Svx2; [Outer loop troop number: y2]
+
+!!VRy3:S601 +x16; [v variable index of stored troop types: y3]
+!!VRy4:S608 +x16; [v variable index of stored troop numbers: y4]
+
+!!VRy5:Svy3; [Inner loop troop type: y5]
+!!VRy6:Svy4; [Inner loop troop number: y6]
+
+!!VRy7:Syx3; [Outer loop troop's stack experience: y7]
+!!VRy8:Syx4; [Outer loop troop's number of Warlord's Banners: y8]
+!!VRy13:Syx5; [Outer loop troop's Warlord's Banner Option: y13]
+
+!!VRy9:S-11 -x16; [Inner loop y- index of stored troop's stack experience: y9]
+!!VRy10:S-21 -x16; [Inner loop y- index of stored troop's number of Warlord's Banners: y10]
+!!VRy14:S-31 -x16; [Inner loop y- index of stored troop's Warlord's Banner Option: y14]
+
+!!VRy11:Syy9; [Inner loop troop's stack experience: y11]
+!!VRy12:Syy10; [Inner loop troop's number of Warlord's Banners: y12]
+!!VRy15:Syy14; [Inner loop troop's Warlord's Banner Option: y15]
+
+ [If troop types are the same, add stack to the first stack]
+!!VRvy3&y1=y5:S-1; [Set inner loop troop type to empty]
+!!VRvy4&y1=y5:S0; [Set inner loop troop number to 0]
+!!VRvx2&y1=y5:+y6; [Add inner loop troop number to outer loop troop number]
+
+ [If troops types are the same, add stack experience to the first stack]
+!!VRyy9&y1=y5:S0; [Set inner loop stack experience to 0]
+!!VRyy10&y1=y5:S0; [Set inner loop number of Warlord's Banners to 0]
+!!VRyy14&y1=y5/y12>0:S0; [Set inner loop Warlord's Banner Option to 0]
+!!VRyx3&y1=y5:+y11; [Add inner loop stack experience to outer loop stack experience]
+!!VRyx4&y1=y5:+y12; [Add inner loop number of Warlord's Banners to outer loop number of Warlord's Banners]
+!!VRyx5&y1=y5/y12>0:Sy15; [Set outer loop Warlord's Banner Option to inner loop's Warlord's Banner Option]
+
+-------------------------------------------------------------------------------
+
+ [Add troops to garrison/garrison hero and remove purchased troops from town dwellings]
+!?FU10926;
+
+!!VRy1:S601 +x16; [v variable index of stored troop types: y1]
+!!VRy2:S608 +x16; [v variable index of stored troop numbers: y2]
+!!VRy7:S-11 -x16; [y- variable index for stored stack experience: y7]
+!!VRy8:S-21 -x16; [y- variable index for stored number of Warlord's Banners: y8]
+!!VRy11:S-31 -x16; [y- variable index for stored Warlord's Banner Options: y11]
+
+!!VRy9:S0; [Initialize real stack experience to 0: y9]
+!!VRy9&vy2>0:Syy7 :vy2; [Calculate real stack experience: y9]
+
+!!VRyy8:-1; [Set number of extra Warlord's Banners: yy8]
+!!VRy10&yy8<0:S0; [Don't give banners: y10]
+!!VRy10&yy8>=0:S1; [Give banners: y10]
+!!VRyy8&yy8<0:S0; [Set minimum number of extra Warlord's Banners to 0: yy8]
+!!VRyy8&yy8>3:S3; [Set maximum number of extra Warlord's Banners to 3: yy8]
+
+!!HEv600&v600>=0:C0/x16/vy1/vy2/y9/2; [Place troops into garrison hero's slots]
+!!EXv600/x16&v600>=0:Ry10/156/yy11/yy8; [Give Warlord's Banners]
+!!CA0/y-3&v600<0:M2/x16/vy1/vy2; [If no hero, place troops into garrison slots]
+
+!!VRy3:S640 +x16; [v variable index of troops bought: y3]
+!!VRy4:Svy3; [Number of troops bought: y4]
+!!CA0/y-3:M1/x16/?y5/?y6; [Get number of troops in town dwellings: y5 and y6]
+!!VRy5:-y4; [Remove purchased non-upgraded troops]
+!!VRy6:-y4; [Remove purchased upgraded troops]
+!!VRy5&y5<0:S0; [Set non-upgraded troops to 0 if it's less than 0]
+!!VRy6&y6<0:S0; [Set upgraded troops to 0 if it's less than 0]
+!!CA0/y-3:M1/x16/y5/y6; [Set remaining troop numbers in town dwellings]
+!!UN&y-4=0:R4; [Redraw town screen]
+!!UN&y-4=1:R1; [Redraw adventure screen]
+
+!!EXy-6/y-7/y-8/x16/2&v600<0:Ey9; [If no hero, set stack experience for garrison slots]
+!!EXy-6/y-7/y-8/x16/2&v600<0:Ry10/156/d/yy8; [If no hero, give Warlord's Banners to garrison stack]
+
+-------------------------------------------------------------------------------
+
+!?FU10924;
+!!VRy1:S6 -x16; [Troop level from 6 to 0: y1]
+!!CA0/y-3:M1/y1/?y2/?y3; [Check number of troops: y2=non-upgraded, y3=upgraded]
+!!CA0/y-3:T?y4; [Check TOWN TYPE: y4]
+!!VRy5:S-1; [Initialize TROOP TYPE to -1]
+
+!!VRy26:S30 +y1; [Non-upgraded dwelling of creature's level: y26]
+!!IF:V1/0; [Set Flag 1 to False]
+!!CA0/y-3:B3/y26; [Check if town has this non-upgraded dwelling built: Flag 1 True if yes]
+!!CA0/y-3&-1/y1=0/y4>=3:B3/18; [Check if non-upgraded horde building 1 is built (all *except* Castle, Rampart, Tower): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=1/y4>=1/y4<=2:B3/18; [Check if non-upgraded horde building 1 is built (Rampart, Tower): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=2/y4=0:B3/18; [Check if non-upgraded horde building 1 is built (Castle): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=4/y4=1:B3/24; [Check if non-upgraded horde building 2 is built (Rampart): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=2/y4=3:B3/24; [Check if non-upgraded horde building 2 is built (Inferno): Flag 1 is true if yes]
+!!VRy2&-1:S0; [If non-upgraded dwelling or horde building isn't built, set available non-upgraded troops to 0: y3]
+
+!!VRy27:S37 +y1; [Upgraded dwelling of creature's level: y27]
+!!IF:V1/0; [Set Flag 1 to False]
+!!CA0/y-3:B3/y27; [Check if town has this upgraded dwelling built: Flag 1 True if yes]
+!!CA0/y-3&-1/y1=0/y4>=3:B3/19; [Check if upgraded horde building 1 is built (all *except* Castle, Rampart, Tower): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=1/y4>=1/y4<=2:B3/19; [Check if upgraded horde building 1 is built (Rampart, Tower): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=2/y4=0:B3/19; [Check if upgraded horde building 1 is built (Castle): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=4/y4=1:B3/25; [Check if upgraded horde building 2 is built (Rampart): Flag 1 is true if yes]
+!!CA0/y-3&-1/y1=2/y4=3:B3/25; [Check if upgraded horde building 2 is built (Inferno): Flag 1 is true if yes]
+!!VRy3&-1:S0; [If upgraded dwelling or horde building isn't built, set available upgraded troops to 0: y3]
+
+**ennin**
+**   1   2   4    8   16   32   64  = 127
+** 128 256 512 1024 2048 4096 8192  = 16256
+ !!VRy25:S1+y1;
+ !!FU$bit$:Py25;
+ !!PO50:V0/?y21;
+ !!VRy21:&y-100; then check bits in y21: 1 for 0 level, 64 for 6 level
+ !!VRy22:Sy21; save result in y22
+ !!VRy25:S8+y1;
+ !!FU$bit$:Py25;
+ !!PO50:V0/?y21;
+ !!VRy21:&y-100; then check bits in y21: 128 for 0 level, 8192 for 6 level
+ !!VRy23:Sy21; save result in y23
+ !!VRy3&y22>0:S0;
+ !!VRy2&y22>0:S0;
+ !!VRy2&y22=0/y23>0/y3>0:Sy3;
+ !!VRy3&y22=0/y23>0/y3>0:S0;
+**/ennin**
+!!UN&y3>0:Ty4/y1/1/?y5; [Check TROOP TYPE (upgraded dwelling): y5]
+!!UN&y2>0/y3=0:Ty4/y1/0/?y5; [Check TROOP TYPE (non-upgraded dwelling): y5]
+!!VRy6:S0; [Initialize NUMBER of troops to 0]
+!!VRy6&y3>0:Sy3; [Set NUMBER of troops available (if upgraded): y6]
+!!VRy6&y2>0/y3=0:Sy2; [Set NUMBER of troops available (if non-upgraded): y6]
+!!IF&y6>0:V3/1; [Set Flag 3 to TRUE if any troops are available]
+
+!!VRv623:S-1; [Initialize v623 to -1]
+!!DO10928/0/6/1&y6>0:Py5; [Loop through slots to see if troop type exists]
+                          [If yes, store slot number in v623]
+!!DO10929/0/6/1&y6>0/v623<0:Py5; [If no match, loop again to see if an empty slot exists]
+                                 [If yes, store slot number in v623]
+!!IF&y6>0/v623>=0:V4/1; [Set Flag 4 to TRUE if any troops will fit into army]
+
+ [Determine resource cost of troop and store in variables y10 to y17]
+!!MA&v623>=0:Cy5/0/?y10 Cy5/1/?y11 Cy5/2/?y12 Cy5/3/?y13;
+!!MA&v623>=0:Cy5/4/?y14 Cy5/5/?y15 Cy5/6/?y16;
+
+ [See how many troops player can afford: v632]
+!!VRv632:S0; [Initialize v632 to 0]
+!!DO10930/1/y6/1&v623>=0:Py10/y11/y12/y13/y14/y15/y16/0;
+
+ [If player was able to afford troops and has space, add to virtual troop slot]
+!!VRy7&v623>=0/v632>0:S601 +v623; [Virtual slot troop type]
+!!VRy8&v623>=0/v632>0:S608 +v623; [Virtual slot number of troops]
+!!VRvy7&v623>=0/v632>0:Sy5; [Set troop type]
+!!VRvy8&v623>=0/v632>0:+v632; [Add troops]
+
+ [Keep track of troops bought for each level in variables: v640-v646]
+!!VRy9:S640 +y1; [Index for troops bought variable]
+!!VRvy9:Sv632; [Store number bought]
+
+ [Build string of troops purchased: z1]
+!!VRz2:S^^; [Initialize z2 to null]
+!!UN&v623>=0/v632=1:N3/2/y5/0; [Name of monster (singular): z2]
+!!UN&v623>=0/v632>1:N3/2/y5/1; [Name of monster (plural): z2]
+!!VRz1&v623>=0/v632>0:S^%Z1
+{%V632} {%Z2}^;  [Add new troop name and number to z1 string]
+
+ [Increment troops bought variable: v633]
+!!VRv633&v623>=0/v632>0:+v632;
+
+-------------------------------------------------------------------------------
+**ennin**
+ !?FU10939;
+ !!UN:U98/-1/-1/50; //find next town
+ !!CA50:U?y1;       //get ID
+ !!FU&y1=y-3:E;     //if valid ID then exit
+ !!FU10939:P;       //else recursive loop
+
+!?FU10940;
+!!CA0/y-3:T?y4;
+!!IF:Q1^%Z125089^;
+ !!UN&1:Ty4/0/0/?y10 Ty4/0/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz30&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/1/0/?y10 Ty4/1/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz31&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/2/0/?y10 Ty4/2/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz32&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/3/0/?y10 Ty4/3/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz33&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/4/0/?y10 Ty4/4/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz34&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/5/0/?y10 Ty4/5/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz35&1:S^%Z28 | %Z29^;
+ !!UN&1:Ty4/6/0/?y10 Ty4/6/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz36&1:S^%Z28 | %Z29^;
+ !!VRz28&1:S^%Z125090^;
+ !!PO50&1:V0/?y1;
+ !!VRy1&1:&127; //clean bits after 7th
+ !!IF&1:G0/1/y1/28/30/31/32/33/34/35/36/0/0/0/0/0;
+ !!VRv1&1:*1;        //move bits right to 1
+ !!PO50&1:V0/?y1;
+ !!VRy1&1:&-128|v1; //clean bits 1..7 and set choosed
+ !!PO50&1:V0/y1;
+!!IF:Q1^%Z125091^;
+ !!UN&1:Ty4/0/0/?y10 Ty4/0/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz30&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/1/0/?y10 Ty4/1/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz31&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/2/0/?y10 Ty4/2/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz32&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/3/0/?y10 Ty4/3/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz33&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/4/0/?y10 Ty4/4/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz34&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/5/0/?y10 Ty4/5/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz35&1:S^%Z29 -> %Z28^;
+ !!UN&1:Ty4/6/0/?y10 Ty4/6/1/?y20;!!UN&1:N3/28/y10/1 N3/29/y20/1;!!VRz36&1:S^%Z29 -> %Z28^;
+ !!VRz28&1:S^%Z125092^;
+ !!PO50&1:V0/?y1;
+ !!VRy1&1:&-128:128; //clean bits 1..7 and move 8..14 to 1..7
+ !!IF&1:G0/1/y1/28/30/31/32/33/34/35/36/0/0/0/0/0;
+ !!VRv1&1:*128;        //move bits right to 8
+ !!PO50&1:V0/?y1;
+ !!VRy1&1:&-16257|v1; //clean bits 8..14 and set choosed
+ !!PO50&1:V0/y1;
+**/ennin**
+
+-------------------------------------------------------------------------------
+
+ [Loop through slots to see if troop type exists already]
+ [If yes, store slot number in v623]
+!?FU10928;
+ [x1=troop type being checked]
+
+!!VRy1:S601 +x16; [v variable index of stored troop type: y1]
+!!VRy2:S608 +x16; [v variable index of stored troop number: y2]
+!!VRy3:Svy1; [Stored troop type: y3]
+!!VRy4:Svy2; [Stored troop number: y4]
+
+!!VRv623&x1=y3/y4>0:Sx16; [Store slot number if troop types match]
+
+!!VRx16&x1=y3/y4>0:S999; [Exit loop if troop types match]
+
+-------------------------------------------------------------------------------
+
+ [Loop through slots to see if empty slot exists]
+ [If yes, store slot number in v623]
+!?FU10929;
+ [x1=troop type being checked]
+
+!!VRy1:S601 +x16; [v variable index of stored troop type: y1]
+!!VRy2:S608 +x16; [v variable index of stored troop number: y2]
+!!VRy3:Svy1; [Stored troop type: y3]
+!!VRy4:Svy2; [Stored troop number: y4]
+
+!!VRv623|y3<0/y4<1:Sx16; [Store slot number if empty slot found]
+
+!!VRx16|y3<0/y4<1:S999; [Exit loop if troop types match or empty slot found]
+
+-------------------------------------------------------------------------------
+
+ [See how many troops player can afford: v632]
+!?FU10930;
+ [x1 through x8 are the resource costs of the troop]
+
+!!VRy1:Sv615 -x1; [Remaining wood after purchase: y1]
+!!VRy2:Sv616 -x2; [Remaining mercury after purchase: y2]
+!!VRy3:Sv617 -x3; [Remaining ore after purchase: y3]
+!!VRy4:Sv618 -x4; [Remaining sulfur after purchase: y4]
+!!VRy5:Sv619 -x5; [Remaining crystals after purchase: y5]
+!!VRy6:Sv620 -x6; [Remaining gems after purchase: y6]
+!!VRy7:Sv621 -x7; [Remaining gold after purchase: y7]
+~~VRy8:Sv622 -x8; [Remaining mithril after purchase: y8]
+
+!!VRy9:S1; [Initialize y9 to 1 (assume player can afford troop)]
+!!VRy9|y1<0/y2<0/y3<0/y4<0/y5<0/y6<0/y7<0/y8<0:S0; [If player can't afford it, set y9 to 0]
+
+ [If player can afford it, adjust virtual resources]
+!!VRv615&y9=1:Sy1; [Set wood]
+!!VRv616&y9=1:Sy2; [Set mercury]
+!!VRv617&y9=1:Sy3; [Set ore]
+!!VRv618&y9=1:Sy4; [Set sulfur]
+!!VRv619&y9=1:Sy5; [Set crystals]
+!!VRv620&y9=1:Sy6; [Set gems]
+!!VRv621&y9=1:Sy7; [Set gold]
+~~VRv622&y9=1:Sy8; [Set mithril]
+
+ [If player can afford it, increment number of troops bought: v632]
+!!VRv632&y9=1:+1;
+
+ [If player can afford it, add cost to total resource costs]
+!!VRv624&y9=1:+x1; [wood]
+!!VRv625&y9=1:+x2; [mercury]
+!!VRv626&y9=1:+x3; [ore]
+!!VRv627&y9=1:+x4; [sulfur]
+!!VRv628&y9=1:+x5; [crystals]
+!!VRv629&y9=1:+x6; [gems]
+!!VRv630&y9=1:+x7; [gold]
+~~VRv631&y9=1:+x8; [mithril]
+
+!!VRx16&y9=0:S99999; [If player can't afford it, exit loop]
+
+-------------------------------------------------------------------------------
+
+ [Display list of new troops and ask if player wishes to purchase them]
+ [If yes, deduct gold and resources]
+!?FU10925;
+
+ [Set 1st dialogue box picture]
+!!VRy1:S-1; [Initialize y1 to -1 (no picture)]
+!!VRy1&v624>0:S0; [wood picture]
+!!VRy1&v625>0:S1; [mercury picture]
+!!VRy1&v626>0:S2; [ore picture]
+!!VRy1&v627>0:S3; [sulfur picture]
+!!VRy1&v628>0:S4; [crystals picture]
+!!VRy1&v629>0:S5; [gems picture]
+
+!!VRy2:S624 +y1; [Index variable for 1st picture amount]
+
+!!CA0/y-3:N?z3; [Name of town: z3]
+!!VRz2:Sz125011;
+!!VRz2&v630>0:Sz125012;
+!!VRz2&v624>0:Sz125013;
+!!VRz2&v625>0:Sz125014;
+!!VRz2&v626>0:Sz125015;
+!!VRz2&v627>0:Sz125016;
+!!VRz2&v628>0:Sz125017;
+!!VRz2&v629>0:Sz125018;
+!!VRz1:S^%Z2?
+%Z1^;
+
+!!IF:Q2/6/v630/y1/vy2/2^%Z1^; [Display list of troops and ask if player wishes to purchase them]
+!!VRv633&-2:S-1; [Set v633 to -1 if player answer "no" to buying troops]
+
+!!DO10931/0/7/1&2:P; [Deduct resources if player answers "yes" to buying troops]
+
+-------------------------------------------------------------------------------
+
+ [Deduct resources if player answers "yes" to buying troops]
+ [Player's resources are stored in v615-v622]
+!?FU10931;
+
+!!VRy1:S615 +x16; [v variable index of stored resource amount: y1]
+!!OW:R-1/x16/vy1; [Set player's resource amount for each resource type]
+
+-------------------------------------------------------------------------------
+
+ [End of Buy All Creatures Button]
+
+
+
+********************************************************************************
+   Extended Creature Upgrades
+********************************************************************************
+
+Variables: (v1)
+ERM Numbers: 173, (checks 67)
+
+ [Set extra upgrades for Hill Forts or with Universal Creature Upgrades active]
+
+!#UN:P173/?v1; [Check if Extended Creature Upgrades is enabled: v1=1 if Yes]
+!#MA&v1=1:U09/169; [Zealots to War Zealots] *Castle*
+!#MA&v1=1:U13/150; [Archangels to Supreme Archangels] *Castle Level 8*
+!#MA&v1=1:U19/192; [Grand Elves to Sylvan Centaurs] *Rampart*
+!#MA&v1=1:U27/151; [Gold Dragons to Diamond Dragons] *Rampart Level 8*
+!#MA&v1=1:U29/173; [Master Gremlins to Santa Gremlins] *Tower*
+!#MA&v1=1:U33/116; [Iron Golems to Gold Golems] *Tower*
+!#MA&v1=1:U41/152; [Titans to Lords of Thunder] *Tower Level 8*
+!#MA&v1=1:U55/153; [Arch Devils to Antichrists] *Inferno Level 8*
+!#MA&v1=1:U59/141; [Zombies to Mummies] *Necropolis*
+!#MA&v1=1:U69/154; [Ghost Dragons to Blood Dragons] *Necropolis Level 8*
+!#MA&v1=1:U83/155; [Black Dragons to Darkness Dragons] *Dungeon Level 8*
+!#MA&v1=1:U97/156; [Ancient Behemoths to Ghost Behemoths] *Stronghold Level 8*
+!#UN:P67/?v2; [Check if Neutral Town is enabled: v2=1 if yes]
+!#MA&v1=1/v2<>1:U111/168; [Chaos Hydras to Gorynyches if Neutral Town disabled] *Fortress*
+!#MA&v1=1:U116/117; [Gold Golems to Diamond Golems] *Neutral*
+!#MA&v1=1/v2<>1:U168/157; [Gorynches to Hell Hydras if Neutral Town disabled] *Fortress Level 8*
+!#MA&v1=1/v2=1:U111/157; [Chaos Hydras to Hell Hydras if Neutral Town enabled] *Fortress Level 8*
+!#MA&v1=1:U131/158; [Phoenixes to Sacred Phoenixes] *Conflux Level 8*
+!#MA&v1=1:U137/170; [Sharpshooters to Arctic Sharpshooters] *Neutral*
+!#MA&v1=1:U136/193; [Enchanters to Sorceresses] *Neutral*
+!#MA&v1=1:U170/171; [Arctic Sharpshooters to Lava Sharpshooters] *Neutral*
+!#MA&v1=1:U193/136; [Sorceresses to Enchanters] *Neutral*
+!#MA&v1=1:U195/172; [Hell Steeds to Nightmares] *Neutral*
+
+ [The following can only be upgraded at Hill Forts]
+ [Hill Fort is trigger]
+!?OB35;
+!!UN:P173/?y-1; [Check if Extended Creature Upgrades is enabled: y-1=1 if Yes]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!MA:U127/166; [Storm Elementals to Air Messengers] *Conflux*
+!!MA:U125/165; [Magma Elementals to Earth Messengers] *Conflux*
+!!MA:U129/164; [Energy Elementals to Fire Messengers] *Conflux*
+!!MA:U123/167; [Ice Elementals to Water Messengers] *Conflux*
+
+ [Post-visit Hill Fort is trigger]
+!$OB35;
+!!UN:P173/?y-1; [Check if Extended Creature Upgrades is enabled: y-1=1 if Yes]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!MA:U127/-1; [Remove Storm Elementals to Air Messengers] *Conflux*
+!!MA:U125/-1; [Remove Magma Elementals to Earth Messengers] *Conflux*
+!!MA:U129/-1; [Remove Elementals to Fire Messengers] *Conflux*
+!!MA:U123/-1; [Remove Ice Elementals to Water Messengers] *Conflux*
+
+------------------------------------------------------------------------------------------------------------------
+
+ [End of Extended Creature Upgrades]
+
+
+********************************************************************************
+   Hero Renaming
+********************************************************************************
+
+Variables: (v1-v3), (z1-z5, z8-z9)
+Flags: (1)
+Functions: FU10815, FU10937
+ERM Numbers: 187
+
+ [Hero screen trigger]
+!?CM2&999;
+!!UN:P187/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:A?v1/?v2 F?v3 S?v4; [x/y location clicked, v3 = flags, v4 = type of click]
+!!VRv3:S0; [Initialize v3 to 0]
+!!VRv3&v1>=146/v2>=27/v1<=362/v2<=60/v3=0/v4=12:S1; [Set v3 to 1 if Hero's name is clicked on]
+!!FU&v3<>1:E; [Exit if Hero's name isn't clicked]
+
+!!HE-1:B0/?z9; [Store name of Hero in z9]
+!!VRz2:Sz125019;
+!!VRz3:Sz125020;
+!!VRz4:S^^;
+!!IF:D17/2/3/4/4/4/4/4/4/4/4/4/4/4/4/4; [Set up dialogue box]
+!!IF:E1/17; [Display dialogue box]
+!!VRz1:H1; [Set flag 1 to true if text entered, false if no text entered]
+!!FU|-1/v1<1:E; [Exit if nothing entered]
+!!VRy-9:S0; [Initialize y-9 to 0]
+!!DO10815/0/155/1:P; [Check for a duplicate hero name: set y-9 to 99 if duplicate]
+!!FU&y-9=99:E; [Exit if duplicate name found]
+
+!!VRz2:Sz9; [Store old name in z2]
+!!VRz2:M4/?y-2; [Length of old name: y-2]
+
+!!VRz1:M5/?y-6; [1st non-space character position of new name: y-6]
+!!VRz1:M6/?y-7; [Last non-space character position of new name: y-7]
+!!VRy-8:Sy-7 +1 -y-6; [Length of new name string to copy: y-8]
+!!VRy-8&y-8>12:S12; [Maximum 12 characters: y-8]
+!!VRz3:M1/z1/y-6/y-8; [Store up to first 12 characters of new name in z3]
+!!VRz3:M4/?y-3; [Length of new name: y-3]
+
+!!HE-1:B0/z3; [Change hero's name if text entered: z3]
+
+!!HE-1:B1/?z1; [Read custom bio (if any): z1]
+!!VRz1:H1; [Set flag 1 to True if custom bio exists, false if no custom bio yet]
+!!HE-1&-1:B3/?z1; [Read hero's default bio if no custom bio: z1]
+!!VRz1:M4/?y-1; [Length of bio: y-1]
+
+!!VRy-4:Sy-1 +200; [Add 200 to bio length: y-4]
+!!VRy-5:S-1; [Initialize y-5 to -1]
+
+!!DO10937/0/y-4/1&y-1>0:P; [Replace old name with new name in hero's bio]
+
+!!UN:R3/-1; [Redraw Hero screen]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Loop through all heroes to check for a duplicate]
+ [hero name: Set y-9 to 99 if duplicate found]
+
+!?FU10815;
+!!HEx16:B0/?z8; [Hero x16's name: z8]
+!!VRy-9&z8=z1:S99; [Set y-9 to 99 if duplicate found]
+!!VRx16&z8=z1:S999; [Set x16 to 999 to exit loop if duplicate found]
+!!IF&z8=z1:M1/z125088; [Display message that a duplicate hero name was found]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Replace old name with new name in hero's bio]
+
+!?FU10937;
+!!VRz-1:M1/z1/x16/y-2; [Get a substring of old name-length: z-1]
+!!FU&z-1<>z2:E; [Skip to next loop number if old name not found yet]
+
+!!VRy-5:Sx16; [If old name found, set y-5 to start position: x16]
+
+ [Build new bio string: z-2]
+!!VRz-2:M1/z1/0/x16;  [1st part of string: z-2]
+!!VRy1:Sx16 +y-2; [Start of 2nd part of string after name: y1]
+!!VRy2:Sy-1 -y1; [Length of 2nd part of string after name: y2]
+!!VRz-3:M1/z1/y1/y2; [2nd part of string: z-3]
+!!VRz1:S^%Z-2%Z3%Z-3^; [New string: z1]
+!!HE-1:B1/z1; [Set new bio: z1]
+!!VRz1:M4/?y-1; [Update length of bio: y-1]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [End of Hero Renaming]
+
+
+********************************************************************************
+   Display Hidden Skills
+********************************************************************************
+
+ [To view all skills (text list), Left-Click on the Experience icon]
+
+Variables: (v1-v4), (z1-z4)
+Flags: (2-3)
+Functions: FU14802-FU14806
+ERM Numbers: 182
+
+ [Hero screen trigger]
+!?CM2;
+!!UN:P182/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:I?v1 S?v2 F?v4; [Location clicked: v1 (119=Experience Icon), Type of click: v2 (12=left), Flags: v4]
+
+!!FU|v1<>119/v2<>12/v4>4:E; [Exit if Experience icon isn't left-clicked]
+
+!!VRv3&v4=1:S0; [Initialize v3 to 0 for skill shifting: v3]
+
+!!DO14804/1/8/1&v4=1:P; [Shift displayed skills, part 1 (store skills)]
+!!DO14805/1/v3/1&v4=1/v3>1:P; [Shift displayed skills, part 2 (remove skills)]
+!!DO14806/1/v3/1&v4=1/v3>1:P; [Shift displayed skills, part 3 (redisplay skills)]
+!!UN&v4=1/v3>1:R3/-1; [Redraw hero screen]
+
+!!VRv3&v4=4:S1; [Initialize v3 to 1 for skill swapping: v3]
+!!DO14803/0/27/1&v4=4:P; [Skill display swapping: hidden skills with displayed skills]
+!!IF&v4=4/y-60=0:M1/z125021;
+!!CM&v4>0:R0; [Cancel normal click message]
+
+!!FU&v4>0:E; [Exit if Experience icon shift or ctrl-clicked (Hidden skill display swapping)]
+
+ [Initialize z1, z4, v3 and y-1..y-27]
+!!VRv3:S0;
+!!HE-1:B0/?z3; [Hero's name: z3]
+!!VRz1:Sz125022;
+!!VRz4:S^^;
+
+!!DO14802/0/27/1:P; [Loop through all skills and add hidden skills to z1 list]
+
+ [Prepare dialogue for display of hidden skills]
+!!VRy-29&v3>=9/v3<=16:S2; [Total number of skill pages: y-29]
+!!VRy-29&v3>=17/v3<=24:S3; [Total number of skill pages: y-29]
+!!VRy-29&v3>=25:S4; [Total number of skill pages: y-29]
+!!IF&v3>=1:Ny-31/y-1/y-32/y-2/y-33/y-3/y-34/y-4/y-35/y-5/y-36/y-6/y-37/y-7/y-38/y-8;
+!!VRz4&v3<=8:S^%Z1^;
+!!VRz4&v3>=9:Sz125023;
+!!IF&v3>=1:N^%Z4^; [Display 1-8 hidden skill pictures]
+!!IF&v3>=9:Ny-39/y-9/y-40/y-10/y-41/y-11/y-42/y-12/y-43/y-13/y-44/y-14/y-45/y-15/y-46/y-16;
+!!VRz4&v3>=9:Sz125024;
+!!IF&v3>=9:N^%Z4^; [Display 9-16 hidden skill pictures]
+!!IF&v3>=17:Ny-47/y-17/y-48/y-18/y-49/y-19/y-50/y-20/y-51/y-21/y-52/y-22/y-53/y-23/y-54/y-24;
+!!VRz4&v3>=17:Sz125025;
+!!IF&v3>=17:N^%Z4^; [Display 17-24 hidden skill pictures]
+!!IF&v3>=25:Ny-55/y-25/y-56/y-26/y-57/y-27/y-58/y-28;
+!!VRz4&v3>=25:Sz125026;
+!!IF&v3>=25:N^%Z4^; [Display 25-28 hidden skill pictures]
+
+!!IF&v3=0:M1/z125027; [If no skills hidden skills, display this string]
+!!CM:R0; [Disable standard mouse click message]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Loop through all skills and store hidden skill picture numbers to y- variables]
+
+!?FU14802;
+!!HE-1:Sx16/?y1; [Skill Level in skill x16: y1]
+!!HE-1:S?y2/x16/1; [Show slot for skill x16: y2 (0=not shown)]
+!!VRv3&y1>0/y2=0:+1; [Increment v3 skill counter]
+!!VRy3&y1>0/y2=0:Sv3 *-1; [Negative of skill counter: y3]
+!!VRy7&y1>0/y2=0:Sy3 -30; [Negative of skill counter -30: y7]
+
+ [Store hidden skill number in yy3 (y-1..y-28)]
+!!VRy5:Sx16 +1 *-1; [-1..-28: y5]
+!!VRy6:Sy5 -30; [-31..-58: y6]
+!!VRyy5:S-1; [Initialize y-1..y-28 to -1]
+!!VRyy6:S-1; [Initialize y-31..y-58 to -1]
+!!VRy4&y1>0/y2=0:Sx16 +1 *3 +y1 -1; [Calculate skill picture number: y4]
+!!VRyy3&y1>0/y2=0:Sy4; [Store hidden skill picture number]
+!!VRyy7&y1>0/y2=0:S20; [Store 20 for each hidden skill]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Loop through all skills and allow hidden skills to be swapped with non-hidden]
+
+!?FU14803;
+!!HE-1:Sx16/?y1; [Skill Level in skill x16: y1 (0=no skill)]
+!!HE-1:S?y2/x16/1; [Check display slot for skill x16: y2 (0=not shown)]
+!!FU|y1=0/y2<>0/v3>8:E; [Exit if not a hidden skill or if v3>8]
+
+!!UN:P193/?y11; [See if Warfare Option is enabled: y11=1 if yes]
+!!VRy12:S0; [Initialize y12 to 0]
+!!VRy19:S0; [Initialize y19 to 0]
+!!VRy12|x16=10/x16=20/x16=27:S1; [Set y12 to 1 if this hidden skill is a Warfare Skill]
+!!HE-1:S10/?y13; [Skill Level in Ballistics: y13 (0=no skill)]
+!!HE-1:S?y14/10/1; [Check display slot for Ballistics: y14 (0=not shown)]
+!!VRy19&y13>0/y14>0:S1; [Set y19 to 1 if Ballistics skill know and shown: y19]
+!!HE-1:S20/?y15; [Skill Level in Artillery: y15 (0=no skill)]
+!!HE-1:S?y16/20/1; [Check display slot for Artillery: y16 (0=not shown)]
+!!VRy19&y15>0/y16>0:S1; [Set y19 to 1 if Artillery skill know and shown: y19]
+!!HE-1:S27/?y17; [Skill Level in First Aid: y17 (0=no skill)]
+!!HE-1:S?y18/27/1; [Check display slot for First Aid: y18 (0=not shown)]
+!!VRy19&y17>0/y18>0:S1; [Set y19 to 1 if First Aid skill know and shown: y19]
+!!VRy12|y11=0/y19=0:S0; [Reset y12 if Warfare not enabled, or no non-hidden Warfare Skill known]
+!!FU&y12=1:E; [Exit if Hidden skill is a Warfare skill and another is known and shown]
+
+!!VRy-60:S1; [Set y-60 to 1 if any hidden skill found: y-60]
+!!VRy4:Sx16 +1 *3 +y1 -1; [Calculate hidden skill picture number: y4]
+
+!!HE-1:S?y8; [Check number of displayed skills: y8]
+!!VRy9|y8=0/y8=8:Sv3; [If 0 or 8 skills are displayed, used v3 for display slot: y9]
+!!VRy9&y8>0/y8<8:Sy8 +1; [If more than 0 but fewer than 8 skills, use number displayed +1: y9]
+
+!!HE-1:Sy9/?y5/1; [Skill number of skill in display slot #y9 (1..8): y5]
+!!VRy6:S0; [Initialize y6 to 0]
+!!HE-1&y5>=0:Sy5/?y6; [Hero's Skill Level of skill in slot v3: y6]
+
+!!VRy7&y6>0:Sy5 +1 *3 +y6 -1; [Calculate displayed skill picture number: y7]
+
+!!UN:N4/-1/x16; [Skill name of Hidden skill: z-1]
+!!UN&y6>0:N4/-2/y5; [Skill name of Display skill: z-2]
+
+!!IF:V2/0 V3/0; [Initialize Flags 2 and 3 to False]
+
+!!IF&y6>0:Q2/20/y4/20/y7/2/z125028;
+
+!!HE-1&2:Sv3/x16/1; [Set hidden skill to display slot v3]
+
+!!IF&y6<1:Q3/20/y4/2/z125029;
+
+!!HE-1&3:Sx16/0; [Remove hidden skill]
+!!HE-1&3:Sx16/y1; [Give hidden skill]
+
+!!FU&-2/-3:E; [If no change, exit]
+
+!!UN:R3/-1; [Redraw hero screen]
+!!VRv3&y9=v3:+1; [Increment v3 display slot counter if y9=v3: v3]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Loop through all displayed skills and store their number and level]
+
+!?FU14804;
+!!HE-1:Sx16/?y1/1; [Skill number of skill in display slot #x16 (1..8): y1]
+!!FU&y1<0:E; [Skip if no skill there]
+!!HE-1:Sy1/?y2; [Hero's Skill Level of skill in slot y1: y2]
+
+!!VRv3:+1; [Increment v3]
+!!VRy3:S70 +v3 *-1; [Index: Store skill number in y-71..y-78]
+!!VRyy3:Sy1; [Store skill number: yy3]
+!!VRy4:S80 +v3 *-1; [Index: Store skill level in y-81..y-88]
+!!VRyy4:Sy2; [Store skill level: yy4]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Remove all displayed skills]
+
+!?FU14805;
+!!VRy1:S70 +x16 *-1; [Index for stored skill number in y-71..y-78: y1]
+!!HE-1:Syy1/0; [Delete skill: yy1]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [Redisplay redordered skills]
+
+!?FU14806;
+!!VRy1&x16=1:S70 +v3 *-1; [Index for last skill number: y1]
+!!VRy2&x16=1:S80 +v3 *-1; [Index for last skill level: y2]
+
+!!VRy1&x16>1:S70 +x16 -1 *-1; [Index for next skill number: y1]
+!!VRy2&x16>1:S80 +x16 -1 *-1; [Index for next skill level: y2]
+
+!!HE-1:Syy1/yy2; [Give skill to hero]
+
+------------------------------------------------------------------------------------------------------------------
+
+ [End of Display Hidden Skills]
+
+
+********************************************************************************
+   Display Hero's Spell Points
+********************************************************************************
+
+Variables: (v1-v3), (z1)
+Flags: (4)
+ERM Numbers: 179
+
+
+ [If you right-click on a hero's mana bar, you'll]
+ [see the corresponding hero's remaining spell points]
+
+ [Adventure Map right-click trigger]
+!?CM0;
+!!UN:P179/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!FU$LocalPlayer$:P; [Get local/current player: y-100]
+!!IF:V4/0; [Initialize Flag 4 to False]
+!!CM:I?v1; [Area clicked: v1]
+!!IF&v1>=25/v1<=29:V4/1; [Set Flag 4 to True if a hero mana bar is right-clicked]
+!!VRv4&4:Sv1 -25; [Hero list number (0-4): v4]
+!!OW&4:Oy-100/v4/?v2; [Hero number: v2]
+!!HEv2&4/v2>=0:I?v3 B0/?z1; [Store spell points: v3 and hero's name: z1]
+!!IF&4/v2>=0:Q1/35/v3/4/z125030;
+!!CM&4:R0;  [Disable standard right-click operation]
+
+ [End of Display Hero Spell Points]
+
+
+********************************************************************************
+   Rewritable Signs plus Right-click Display (if already visited)
+********************************************************************************
+
+Variables: (v1-v8), (z1-z4)
+Flags: (4-5)
+Dialogs: DG25
+ERM Numbers: 183
+
+ [Signs]
+ [v1270 is from Passable Terrain script that places temporary signs for battles]
+!$OB91&v1270=0;
+!!UN:P183/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!SG998:M?z1; [Current Sign Text: z1]
+
+!!IF&1000:Q4/z125031;
+
+ [Enter text dialogue box for sign]
+!!VRz2:S^^;
+!!VRz3:Sz125032;
+!!IF&4:D25/2/3/0/0/0/0/0/0/0/0/0/0/0/0/0;
+!!IF&4:F25/0/0/0/0/1; [Enable Escape Button]
+!!IF&4/1000:E1/25; [Display dialogue #25: z1 keeps new text]
+!!VRz1:H5; [Check if text entered: flag 5=1 if yes]
+
+ [Set new text for sign if new text was entered]
+!!SG998&4/5:M^%Z1^;
+
+ [Set PO:S number to show who's visited the sign]
+!!OW:C?v1; [Current player: v1]
+!!VRv2&v1=0:S1;   [Red]
+!!VRv2&v1=1:S2;   [Blue]
+!!VRv2&v1=2:S4;   [Tan]
+!!VRv2&v1=3:S8;   [Green]
+!!VRv2&v1=4:S16;  [Orange]
+!!VRv2&v1=5:S32;  [Purple]
+!!VRv2&v1=6:S64;  [Teal]
+!!VRv2&v1=7:S128; [Pink]
+
+!!PO998:S?v3; [Read PO:S number into v3]
+!!VRv3:|v2; [Add player colour if it's not already there]
+!!PO998:Sv3; [Write new PO:S number]
+
+----------------------------------------------------------------------------------------------------------
+
+ [If a sign is clicked on and it's already been]
+ [visited by this player display the sign text]
+!?CM0;
+!!UN:P183/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!VRv1:C-1/-1/-1/-1/-1/-1; [Initialize v1 to v6 to -1]
+!!CM:P?v1/?v2/?v3 S?v4; [Place clicked: v1/v2/v3, Type of click: v4]
+!!OBv1/v2/v3&v1>=0:T?v5; [Object clicked: v5]
+!!FU|v5<>91/v4<>14:E; [Exit if not a sign or right-click]
+
+!!POv1/v2/v3&v5>=0:S?v6; [PO:S number: v6]
+!!FU$LocalPlayer$:P; [Get current/local player: y-100]
+!!VRv8&y-100=0:S1;   [Red]
+!!VRv8&y-100=1:S2;   [Blue]
+!!VRv8&y-100=2:S4;   [Tan]
+!!VRv8&y-100=3:S8;   [Green]
+!!VRv8&y-100=4:S16;  [Orange]
+!!VRv8&y-100=5:S32;  [Purple]
+!!VRv8&y-100=6:S64;  [Teal]
+!!VRv8&y-100=7:S128; [Pink]
+!!VRv6:&v8; [Check if this player has visited sign before: v6>0 if yes]
+!!FU&v6<1:E; [Exit if sign not visited before]
+
+!!SGv1/v2/v3:M?z1; [Current Sign Text: z1]
+!!IF:Q4/-1/-1/4^%Z1^;
+!!CM:R0; [Disable standard right-click function]
+
+----------------------------------------------------------------------------------------------------------
+
+ [End of Rewritable Signs]
+
+
+********************************************************************************
+   Message Disabling
+********************************************************************************
+
+Variables: (v1), v3320-v3328, v82 bits 0-7, (v3329-v3330 reserved), (z1)
+Functions: FU10938
+ERM Numbers: 185, (checks: 22, 23, 33, 34, 105, 201, 233, 261, 282,332)
+
+ [Post-Instruction Initial Loading of Disabling States from disk file]
+!?PI;
+!!UN:P185/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!VRz1:S^Message Disabling^; [Section name: z1]
+!!DO10938/3320/3328/1:P0; [Load the saved disabling states from disk file]
+ *Z
+!!DO10938/82/82/1:P0;   Same for Neutral Spells &S74
+
+ [Right-click on System Options is trigger]
+!?CM0&999;
+!!UN:P185/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:I?y-1; [Location clicked: y-1]
+!!FU&y-1<>10:E; [Exit if System Options button isn't right-clicked]
+
+!!CM:R0; [Disable standard right-click message]
+
+!!VRz-1:Sz125033;
+!!UN:P23/?y-6; [Check if Sorcery script is enabled: y-6]
+!!VRz-2:S^^; [Initialize z-2 to null]
+!!VRz-2&y-6=1:Sz125034;
+!!UN:P33/?y-7; [Check if Living Scrolls script is enabled: y-7]
+!!VRz-3:S^^; [Initialize z-3 to null]
+!!VRz-3&y-7=1:Sz125035;
+!!UN:P22/?y-8; [Check if Monster Mutterings script is enabled: y-8]
+!!VRz-4:S^^; [Initialize z-4 to null]
+!!VRz-4&y-8=1:Sz125036;
+!!UN:P34/?y-9; [Check if Cards of Prophecy is enabled: y-9]
+!!VRz-5:S^^; [Initialize z-5 to null]
+!!VRz-5&y-9=1:Sz125037;
+!!UN:P233/?y-10; [Check if Quick Combat Battle Option enabled: y-10]
+!!VRz-6:S^^; [Initialize z-6 to null]
+!!VRz-6&y-10=1:Sz125038;
+!!UN:P105/?y-11; [Check if Loan Bank Option enabled: y-11]
+!!VRz-7:S^^; [Initialize z-7 to null]
+!!VRz-7&y-11=1:Sz125039;
+!!UN:P201/?y-12; // Check if ENHANCED Artillery Option enabled: y-12]
+!!VRz-8:S^^; [Initialize z-8 to null]
+!!VRz-8&y-12=1:Sz125085;
+!!UN:P261/?y-13; // Check if HERO-BATTLE-EXPERIENCE (script94) is enabled: y-13]
+!!VRz-9:S^^; [Initialize z-9 to null]
+!!VRz-9&y-13=1:Sz125086;
+!!UN:P282/?y-14; [Check if Monster Stack Resources (script121) is enabled: y-14]
+!!VRz-10:S^^; [Initialize z-10 to null]
+!!VRz-10&y-14=1:Sz125093;
+ *Z
+!!UN:P332/?y-15; [Check if Neutral Spells (script132) is enabled: y-14]
+!!VRz80:S^^; [Initialize z80 to null]  *  Sorry, we have ran out of z- variables ;)
+!!VRz80&y-15=1:Sz125094;
+
+!!IF&1000/y-6=0/y-7=0/y-8=0/y-9=0/y-10=0/y-11=0/y-12=0/y-13=0/y-14=0/y-15=0:M1/z125040; "Nothing to disable"
+!!FU&y-6=0/y-7=0/y-8=0/y-9=0/y-10=0/y-11=0/y-12=0/y-13=0/y-14=0/y-15=0:E; [Exit if nothing to disable]
+
+!!VRz1:S^Message Disabling^; [Section name: z1]
+!!DO10938/3320/3328/1:P0; [Load the saved disabling states from disk file]
+ *Z
+!!DO10938/82/82/1:P0;   Same for Neutral Spells &S74
+
+!!OW:C?y-2; [Current Player: y-2= 0..7]
+!!VRy-2:+1; [Add 1 to current player value: y-2 -> 1-8]
+!!FU$bit$:Py-2; [Get bit value for current player: y-100]
+!!VRy-3:S0; [Initialize button state to 0: y-3]
+
+!!VRy-4:Sv3320; [Set y-4 to v3320: y-4]
+!!VRy-4:&y-100; [Check if Sorcery Messages are disabled: y-4]
+!!VRy-3&y-4>0:+1; [Add 1 to button state if disabled: y-3]
+
+!!VRy-4:Sv3321; [Set y-4 to v3321: y-4]
+!!VRy-4:&y-100; [Check if Living Scroll Messages are disabled: y-4]
+!!VRy-3&y-4>0:+2; [Add 2 to button state if disabled: y-3]
+
+!!VRy-4:Sv3322; [Set y-4 to v3322: y-4]
+!!VRy-4:&y-100; [Check if Monster Muttering Messages are disabled: y-4]
+!!VRy-3&y-4>0:+4; [Add 4 to button state if disabled: y-3]
+
+!!VRy-4:Sv3323; [Set y-4 to v3323: y-4]
+!!VRy-4:&y-100; [Check if Cards of Prophecy messages are disabled: y-4]
+!!VRy-3&y-4>0:+8; [Add 8 to button state if disabled: y-3]
+
+!!VRy-4:Sv3324; [Set y-4 to v3324: y-4]
+!!VRy-4:&y-100; [Check if Quick Combat Battle messages are disabled: y-4]
+!!VRy-3&y-4>0:+16; [Add 16 to button state if disabled: y-3]
+
+!!VRy-4:Sv3325; [Set y-4 to v3325: y-4]
+!!VRy-4:&y-100; [Check if Loan Bank Option messages are disabled: y-4]
+!!VRy-3&y-4>0:+32; [Add 32 to button state if disabled: y-3]
+
+!!VRy-4:Sv3326; [Set y-4 to v3326: y-4]
+!!VRy-4:&y-100; [Check if ENHANCED Artillery Option messages are disabled: y-4]
+!!VRy-3&y-4>0:+64; [Add 64 to button state if disabled: y-3]
+
+!!VRy-4:Sv3327; [Set y-4 to v3327: y-4]
+!!VRy-4:&y-100; [Check if HERO-BATTLE-EXPERIENCE Option messages are disabled: y-4]
+!!VRy-3&y-4>0:+128; [Add 128 to button state if disabled: y-3]
+
+!!VRy-4:Sv3328; [Set y-4 to v3328: y-4]
+!!VRy-4:&y-100; [Check if Monster Resources Option messages are disabled: y-4]
+!!VRy-3&y-4>0:+256; [Add 256 to button state if disabled: y-3]
+ *Z
+!!VRy-4:Sv82; [Set y-4 to v82: y-4]
+!!VRy-4:&y-100; [Check if Neutral Spell messages are disabled: y-4]
+!!VRy-3&y-4>0:+512; [Add 512 to button state if disabled: y-3]
+
+ [Display Message Disabling Dialogue Box: player's choices in v1]
+!!IF:G0/1/y-3/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/80/0/0;
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&1; [Check if Sorcery Messages are now disabled: y-5]
+!!VRv3320:|y-100; [Add disabled state to v3320 for this player: v3320]
+!!VRv3320&y-5=0:-y-100; [Remove disabled state of v3320 for this player: v3320]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&2; [Check if Living Scroll Messages are now disabled: y-5]
+!!VRv3321:|y-100; [Add disabled state to v3321 for this player: v3321]
+!!VRv3321&y-5=0:-y-100; [Remove disabled state of v3321 for this player: v3321]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&4; [Check if Monster Muttering Messages are now disabled: y-5]
+!!VRv3322:|y-100; [Add disabled state to v3322 for this player: v3322]
+!!VRv3322&y-5=0:-y-100; [Remove disabled state of v3322 for this player: v3322]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&8; [Check if Cards of Prophecy messages are now disabled: y-5]
+!!VRv3323:|y-100; [Add disabled state to v3323 for this player: v3323]
+!!VRv3323&y-5=0:-y-100; [Remove disabled state of v3323 for this player: v3323]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&16; [Check if Quick Combat Battle messages are now disabled: y-5]
+!!VRv3324:|y-100; [Add disabled state to v3324 for this player: v3324]
+!!VRv3324&y-5=0:-y-100; [Remove disabled state of v3324 for this player: v3324]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&32; [Check if Loan Bank Repayment messages are now disabled: y-5]
+!!VRv3325:|y-100; [Add disabled state to v3325 for this player: v3325]
+!!VRv3325&y-5=0:-y-100; [Remove disabled state of v3325 for this player: v3325]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&64; [Check if Artillery (pre combat) is now disabled: y-5]
+!!VRv3326:|y-100; [Add disabled state to v3326 for this player: v3326]
+!!VRv3326&y-5=0:-y-100; [Remove disabled state of v3326 for this player: v3326]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&128; [Check if HERO-BATTLE-EXPERIENCE is now disabled: y-5]
+!!VRv3327:|y-100; [Add disabled state to v3327 for this player: v3327]
+!!VRv3327&y-5=0:-y-100; [Remove disabled state of v3327 for this player: v3327]
+
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&256; [Check if Monster Resources messages are now disabled: y-5]
+!!VRv3328:|y-100; [Add disabled state to v3328 for this player: v3328]
+!!VRv3328&y-5=0:-y-100; [Remove disabled state of v3328 for this player: v3328]
+ *Z
+!!VRy-5:Sv1; [Set y-5 to v1: y-5]
+!!VRy-5:&512; [Check if Neutral Spell messages are now disabled: y-5]
+!!VRv82:|y-100; [Add disabled state for this player, v82]
+!!VRv82&y-5=0:-y-100; [Remove disabled state for this player]
+
+!!DO10938/3320/3328/1:P1; [Save the disabling state variables to disk file]
+ *Z
+!!DO10938/82/82/1:P1; [Same for Neutral Spells &op.74]
+
+
+----------------------------------------------------------------------------------------------------------
+
+ [Load or save the disabling state variables to/from disk file]
+ [x1=0 for load, x1=1 for save]
+!?FU10938;
+!!UN&x1=0:N6/2/x16/1; [Read stored message disabling number into z2]
+!!VRvx16&x1=0:Vz2; [Set Message Disabling variable to stored value]
+
+!!VRz2&x1=1:M3/vx16; [Convert variable to string: z2]
+!!UN&x1=1:N5/2/x16/1; [Save message disabling variable z2]
+
+----------------------------------------------------------------------------------------------------------
+
+ [End of Message Disabling]
+
+
+********************************************************************************
+   Choose Commander Class
+********************************************************************************
+
+Variables: (v2-v5), (z2), (z22-z31)
+Functions: FU18
+ERM Numbers: 186, (checks: 51, 118)
+
+ [Triggers when a Commander is hired]
+!?CO2;
+!!UN:P186/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!HE-1:N?y-1; [Hero number: y-1]
+!!FU18:Py-1/0; [Choose Commander class]
+
+--------------------------------------------------------------------------------------------------------------
+
+ [Choose Commander class]
+ [x1=Hero number, x2=1 if AI]
+!?FU18;
+
+!!HEx1:B0/?z1; [Hero's name: z1]
+
+!!VRz2:Sz125041;
+!!VRz22:Sz125042;
+!!VRz23:Sz125043;
+!!VRz24:Sz125044;
+!!VRz25:Sz125045;
+!!VRz26:Sz125046;
+!!VRz27:Sz125047;
+!!VRz28:Sz125048;
+!!VRz29:Sz125049;
+!!VRz30:Sz125050;
+!!VRz31:Sz125051;
+
+ [Dialogue box to choose Commander]
+ [1=radio buttons, 2=v variable to store selection, 0=initial button state]
+ [2=z variable for header, 22-31=z variables for choices]
+ [0/0=unused]
+!!VRv2:S0;
+!!IF&1000/x2=0:G1/2/1/2/22/23/24/25/26/27/28/29/30/31/0;
+
+ [Determine selection number: v3]
+!!VRv3|-1000/x2=1:S0 R8; [AI chooses randomly]
+!!VRv3&v2=1:S-1;
+!!VRv3&v2=2:S0;
+!!VRv3&v2=4:S1;
+!!VRv3&v2=8:S2;
+!!VRv3&v2=16:S3;
+!!VRv3&v2=32:S4;
+!!VRv3&v2=64:S5;
+!!VRv3&v2=128:S6;
+!!VRv3&v2=256:S7;
+!!VRv3&v2=512:S8;
+
+ [If Commander class not chosen, remove hero's]
+ [Commander display message and refund 1000 gold]
+!!CO-1&v3<0:E0; [Remove Commander]
+!!IF&1000/v3<0:M1/z125052;
+!!OW&v3<0:R-1/6/d1000; [Refund gold]
+
+!!FU&v3<0:E; [End function if Commander not chosen]
+
+!!HEx1:B2/?v4; [Hero's class: v4]
+
+!!COx1:Hv4; [Set class of Commander's owning hero]
+!!COx1:Tv3; [Set new Commander type]
+
+** edited by Hermann the Weird **
+!!UN:P51/?y1;     [check if enhanced commanders is enabled]
+!!COx1&y1=1:P1;   [set custom primary skill control if EnComm is enabled]
+
+** suggestion by Thomas Franz (samot)
+!!HEx1:E?y2; [Hiring hero's experience: y2]
+!!VRy2&v3=0:*3 :2; [If Commander is Paladin give 150% of experience: y2]
+!!COx1&$day$=1:X1/y2; [on day 1 only, give newly hired Commander experience equal to hiring hero]
+
+----------------------------------------------------------------------------------------------------------
+
+ [End of Choose Commander Class]
+
+
+********************************************************************************
+   Enable Extension Heroes
+********************************************************************************
+
+Variables: (v1-v2)
+Functions: FU3304
+ERM Numbers: 100
+
+----------------------------------------------------------------------------------------------------------
+
+ [Enable Heroes to appear on the map]
+!?FU3304;
+!!HEx16:R3/1/255; [Enable hero x16]
+
+----------------------------------------------------------------------------------------------------------
+
+!#UN:P100/?v1; [Check if Enable Extension Heroes option is enabled]
+!#UN:P106/?v2; [Check if Hourglass of Asmodeus is enabled]
+!#DO3304/144/154/1&v1=1/v2=1:P; [Enable all heroes except Xeron to appear on the map]
+!#DO3304/144/155/1&v1=1/v2=0:P; [Enable all heroes including Xeron to appear on the map]
+
+----------------------------------------------------------------------------------------------------------
+
+ [End of Enable Extension Heroes]
+
+
+********************************************************************************
+   Disable Autosave
+********************************************************************************
+
+Variables: (v1)
+ERM Numbers: 184
+
+!#UN:P184/?v1; [Check if Disable Autosave is selected: v1]
+!#UN&v1<>0:J5/0; [Disable autosave if option is selected]
+
+ [Map Load trigger]
+!?GM0;
+!!UN:P184/?y-1; [Check if Disable Autosave is selected: y-1]
+!!UN&y-1<>0:J5/0; [Disable autosave if option is selected]
+
+----------------------------------------------------------------------------------------------------------
+
+ [End of Disable Autosave]
+
+
+********************************************************************************
+   Select Neutral Town Types
+********************************************************************************
+
+Variables: (v1-v4)
+Functions: FU50-FU53
+ERM Numbers: 220
+
+--------------------------------------------------------------------------------
+
+ [Select Neutral Town Types]
+!?PI;
+!!UN:P220/?y-13; [Check if script is enabled: y-13=1 if yes]
+!!FU&y-13<>1:E; [Exit if not enabled]
+
+!!FU50:P; [Select town types]
+!!UN:U98/-1/?y-11; [Number of towns: y-11]
+!!VRv2:S-1; [Initialize v2 to -1 to work with new faster UN:U syntax]
+!!DO51/1/y-11/1&y-10<9/y-11>0:P; [Cycle through towns if any disallowed]
+
+--------------------------------------------------------------------------------
+
+ [Select town types]
+!?FU50;
+!!VRz-1:Sz125053;
+!!VRz-2:Sz125054;
+!!VRz-3:Sz125055;
+!!VRz-4:Sz125056;
+!!VRz-5:Sz125057;
+!!VRz-6:Sz125058;
+!!VRz-7:Sz125059;
+!!VRz-8:Sz125060;
+!!VRz-9:Sz125061;
+!!VRz-10:Sz125062;
+
+!!IF:G0/1/511/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/0/0/0;
+
+ [Initialize y-1..y-9 to -1]
+!!VRy-1:S-1; !!VRy-2:S-1; !!VRy-3:S-1;
+!!VRy-4:S-1; !!VRy-5:S-1; !!VRy-6:S-1;
+!!VRy-7:S-1; !!VRy-8:S-1; !!VRy-9:S-1;
+
+!!VRy-10:S0; [Initialize y-10 (index) to 0: y-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&1; [Check for Castle: y1=1 if selected: y1]
+!!VRy-10&y1=1:-1; [Subtract 1 from index if Castle selected: y-10]
+!!VRyy-10&y1=1:S0; [Store Castle (0) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&2; [Check for Rampart: y1=1 if selected: y1]
+!!VRy-10&y1=2:-1; [Subtract 1 from index if Rampart selected: y-10]
+!!VRyy-10&y1=2:S1; [Store Rampart (1) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&4; [Check for Tower: y1=1 if selected: y1]
+!!VRy-10&y1=4:-1; [Subtract 1 from index if Tower selected: y-10]
+!!VRyy-10&y1=4:S2; [Store Tower (2) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&8; [Check for Inferno: y1=1 if selected: y1]
+!!VRy-10&y1=8:-1; [Subtract 1 from index if Inferno selected: y-10]
+!!VRyy-10&y1=8:S3; [Store Inferno (3) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&16; [Check for Necropolis: y1=1 if selected: y1]
+!!VRy-10&y1=16:-1; [Subtract 1 from index if Necropolis selected: y-10]
+!!VRyy-10&y1=16:S4; [Store Necropolis (4) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&32; [Check for Dungeon: y1=1 if selected: y1]
+!!VRy-10&y1=32:-1; [Subtract 1 from index if Dungeon selected: y-10]
+!!VRyy-10&y1=32:S5; [Store Dungeon (5) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&64; [Check for Stronghold: y1=1 if selected: y1]
+!!VRy-10&y1=64:-1; [Subtract 1 from index if Stronghold selected: y-10]
+!!VRyy-10&y1=64:S6; [Store Stronghold (6) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&128; [Check for Fortress: y1=1 if selected: y1]
+!!VRy-10&y1=128:-1; [Subtract 1 from index if Fortress selected: y-10]
+!!VRyy-10&y1=128:S7; [Store Fortress (7) if selected: yy-10]
+
+!!VRy1:Sv1; [Set y1 to options selected: y1]
+!!VRy1:&256; [Check for Conflux: y1=1 if selected: y1]
+!!VRy-10&y1=256:-1; [Subtract 1 from index if Conflux selected: y-10]
+!!VRyy-10&y1=256:S8; [Store Conflux (8) if selected: yy-10]
+
+!!IF&v1=0:M1/z125063;
+!!FU50&v1=0:P; [Call function again if no towns chosen]
+
+--------------------------------------------------------------------------------
+
+ [Cycle through towns]
+!?FU51;
+!!UN:U98/-1/-1/2; [Store next town's coordinates in v2/v3/v4]
+!!CA2:O?y1; [Owner of town: y1]
+!!FU&y1>=0:E; [Exit function if town is owned]
+
+!!CA2:T?y2; [Type of town: y2]
+!!VRy3:Sy-10 *-1; [Convert y-10 (index) to positive number: y3]
+!!VRy-12:S0; [Initialize y-12 to 0]
+
+!!DO52/1/y3/1:Py2; [Check if town type is allowed: y-12=1 if yes]
+!!FU&y-12=1:E; [Exit function if town type is allowed]
+
+!!IF:V1/0; [Initialize Flag 1 to False]
+!!VRy8:S-1; [Initialize y8 to -1]
+!!CA2:B3/4; [Check if Level 5 Mage Guild is built: Flag 1=True if built]
+!!VRy8&1:S4; [Set y8 to level of Mage Guild]
+!!CA2&-1:B3/3; [Check if Level 4 Mage Guild is built: Flag 1=True if built]
+!!VRy8&1/y8<0:S3; [Set y8 to level of Mage Guild]
+!!CA2&-1:B3/2; [Check if Level 3 Mage Guild is built: Flag 1=True if built]
+!!VRy8&1/y8<0:S2; [Set y8 to level of Mage Guild]
+!!CA2&-1:B3/1; [Check if Level 2 Mage Guild is built: Flag 1=True if built]
+!!VRy8&1/y8<0:S1; [Set y8 to level of Mage Guild]
+!!CA2&-1:B3/0; [Check if Level 1 Mage Guild is built: Flag 1=True if built]
+!!VRy8&1/y8<0:S0; [Set y8 to level of Mage Guild]
+!!CA2&y8>=0:B2/y8; [Demolish old Mage Guild]
+
+!!VRy4:Sy3 -1; [Subtract 1 from y3: y4]
+!!VRy5:Sy-10 Ry4; [Generate number from y-10 to y-10+(random y4): y5]
+!!VRy6:Syy5; [New random allowable town type: y6]
+!!CA2:Ty6 I0; [Set town to new allowable town type and redraw outside: y6]
+
+!!DO53/0/6/1:Py6; [Change garrison creatures to match new town type]
+
+ [Adjust Mage Guild enabling]
+!!VRy7:S0;
+!!CA2&y2=0/y6<>6/y6<>7:B4/4; [If old was Castle and new not Stronghold or Fortress, enable level 5 mage guild]
+!!VRy7&y2=0/y6<>6/y6<>7:S5; [Generate a 5th level spell: y7=5]
+!!CA2&y2=6/y6=0:B4/3; [If old was Stronghold and new is Castle, enable level 4 mage guild]
+!!VRy7&y2=6/y6=0:S4; [Generate a 4th level spell: y7=4]
+!!CA2&y2=7/y6=0:B4/3; [If old was Fortress and new is Castle, enable level 4 mage guild]
+!!VRy7&y2=7/y6=0:S4; [Generate a 4th level spell: y7=4]
+!!CA2&y2=6/y6<>0/y6<>7:B4/3 B4/4; [If old was Stronghold and new not Fortress or Castle, enable level 4 and 5 mage guilds]
+!!VRy7&y2=6/y6<>0/y6<>7:S6; [Generate a 4th and 5th level spell: y7=6]
+!!CA2&y2=7/y6<>0/y6<>6:B4/3 B4/4; [If old was Fortress and new not Stronghold or Castle, enable level 4 and 5 mage guilds]
+!!VRy7&y2=7/y6<>0/y6<>6:S6; [Generate a 4th and 5th level spell: y7=6]
+
+!!VRy8&y6>=6/y6<=7/y8>2:S2; [Maximum L3 Mage Guild in Stronghold and Fortress]
+!!VRy8&y6=0/y8>3:S3; [Maximum L4 Mage Guild in Castle]
+!!CA2&y8>=0:B6/y8; [Rebuild Mage Guild]
+
+!!FU&y7=0:E; [Exit if no change to Mage Guilds]
+
+ [Set two or three Level 4 spells: y9-y11]
+!!FU$spell$|y7=4/y7=6:P4/4/0/0/1/0; [1st L4 level spell: y-99]
+!!VRy9:S-1; [Initialize y9 to -1]
+!!VRy9|y7=4/y7=6:Sy-99; [Set y9 to 1st L4 spell]
+!!CA2&y9>=0:G3/0/y9; [Set 1st L4 spell: y9]
+
+!!FU$spell$|y7=4/y7=6:P4/4/0/0/1/1/y9; [2nd L4 spell, excluding 1st L4 level spell: y-99]
+!!VRy10:S-1; [Initialize y10 to -1]
+!!VRy10|y7=4/y7=6:Sy-99; [Set y10 to 2nd L4 spell]
+!!CA2&y10>=0:G3/1/y10; [Set 2nd L4 spell: y10]
+
+!!FU$spell$|y7=4/y7=6:P4/4/0/0/1/2/y9/y10; [3rd L4 spell, excluding 1st and 2nd L4 spells: y-99]
+!!VRy11:S-1; [Initialize y11 to -1]
+!!VRy11|y7=4/y7=6:Sy-99; [Set y11 to 3rd L4 spell]
+!!CA2&y11>=0/y6=2:G3/2/y11; [Set 3rd L4 spell for Tower town only: y11]
+
+ [Set one or two Level 5 spells: y12-y13]
+!!FU$spell$&y7>=5:P5/5/0/0/1/0; [1st L5 level spell: y-99]
+!!VRy12:S-1; [Initialize y12 to -1]
+!!VRy12&y7>=5:Sy-99; [Set y12 to 1st L5 spell]
+!!CA2&y12>=0:G4/0/y12; [Set 1st L5 spell: y12]
+
+!!FU$spell$&y7>=5:P5/5/0/0/1/1/y12; [2nd L5 spell, excluding 1st L5 level spell: y-99]
+!!VRy13:S-1; [Initialize y13 to -1]
+!!VRy13&y7>=5:Sy-99; [Set y13 to 2nd L5 spell]
+!!CA2&y13>=0/y6=2:G4/1/y13; [Set 2nd L5 spell for Tower town only: y13]
+
+--------------------------------------------------------------------------------
+
+ [Check if town type is allowed]
+ [x1=town type]
+!?FU52;
+!!VRy1:Sx16 *-1; [Convert x16 to negative number: y1]
+!!VRy-12&x1=yy1:S1; [Set y-12 to 1 if town type is allowed]
+!!VRx16&x1=yy1:S99; [Exit loop if town type is allowed]
+
+--------------------------------------------------------------------------------
+
+ [Change garrison creatures to match new town type]
+ [x1=town type, v2/v3/v4=coordinates]
+!?FU53;
+!!CA2:M2/x16/?y1/?y2; [Type: y1, Number: y2]
+!!FU|y1<0/y2=0:E; [Exit if slot empty]
+
+!!MA:Ly1/?y3; [Level of monster (0..6): y3]
+!!VRy4:S0 R1; [Random non-upgraded/upgraded: y4]
+!!UN:Tx1/y3/y4/?y5; [Type of correct monster: y5]
+!!CA2:M2/x16/y5/y2; [Replace with correct monster types]
+
+--------------------------------------------------------------------------------
+
+ [End of Select Neutral Town Types]
+
+
+********************************************************************************
+   Build Twice a Day in Towns (Human players only, AI gets free builds instead)
+********************************************************************************
+
+Variables: (v1-v4)
+Flags: (1)
+Functions: FU54-FU56
+ERM Numbers: 228
+
+--------------------------------------------------------------------------------
+
+ [Build Twice a Day in Towns for Human Players]
+ [AI can't build twice but gets free builds to compensate]
+
+  [Daily Timer for all players]
+!?TM1;
+!!UN:P228/?y-1; [Check if Build Twice a Day option is enabled: y-1=1 if Yes]
+!!FU&y-1<>1:E; [Exit if option not enabled]
+
+!!UN:U98/-1/?y-2; [Number of towns on map: y-2]
+!!VRy-3:Sc0; [Current day: y-3]
+!!UN:J2/?y-4; [Game difficulty chosen by player: y-4]
+!!VRy-5&y-4=0:S4; [Easy difficulty - free AI build every 4 days: y-5]
+!!VRy-5&y-4=1:S3; [Normal difficulty - free AI build every 3 days: y-5]
+!!VRy-5&y-4=2:S2; [Hard difficulty - free AI build every 2 days: y-5]
+!!VRy-5&y-4=3:S1; [Expert difficulty - free AI build every day: y-5]
+!!VRy-5&y-4=4:S1; [Impossible difficulty - 2 free AI builds every day: y-5]
+!!VRy-6:Sy-3 :y-5 *y-5; [AI free build frequency check: y-6]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO54/1/y-2/1&y-2>0:P; [Loop through all towns to reset "daily builds number"]
+
+ [Loop through all towns to reset "daily builds number"]
+!?FU54;
+!!UN:U98/-1/-1/1; [Store coordinates of next town in v1/v2/v3]
+!!PO1:S0; [Reset PO:S to 0 for all towns]
+!!CA1&$AI$=1:O?y1; [Get owner of town if AI turn: y1]
+!!FU55&$AI$=1/y1=$color$/y-6=y-3:P; [If AI town on AI turn, call "Free Build" Function]
+!!FU55&$AI$=1/y1=$color$/y-4=4:P; [Impossible Difficulty extra "Free Build" for AI]
+
+ [Post Town-Hall Trigger]
+!?TH1;
+!!UN:P228/?y-1; [Check if Build Twice a Day option is enabled: y-1=1 if Yes]
+!!FU&y-1<>1:E; [Exit if option not enabled]
+
+!!CA-1:P?y-4/?y-5/?y-6; [Town's location: y-4/y-5/y-6]
+!!POy-4/y-5/y-6:S?y-1; [Read PO:S number for town: y-1]
+!!CA-1:R?y-2; [Read build flag value for town: y-2]
+!!VRy-3&y-2=1:Sy-1 +1; [Increment PO:S number by 1 for each build: y-3]
+!!POy-4/y-5/y-6&y-2=1/y-1<100:Sy-3; [Store new PO:S number: y-3]
+!!CA-1&y-2=1/y-3<2:R0; [Reenable building in town if two builds or less]
+!!UN:R4; [Redraw town screen]
+
+
+ [Free Build Function for AI Towns]
+!?FU55;
+!!VRv4:S0; [Initialize v4 to 0]
+!!DO56/1/15/1:P10/5/11/14/16/0/12/7/1/2/8/9/30/31/32; [P values=Build order]
+!!DO56/1/15/1&v4=0:P18/33/34/24/35/36/3/37/38/39/19/21/17/22/23; [P values=Build order]
+!!DO56/1/8/1&v4=0:P40/41/25/42/43/4/15/13; [P values=Build order]
+
+ [Free Building for AI Towns]
+!?FU56;
+!!VRy1:Sxx16; [Building number to check and/or build: y1]
+!!CA1:T?y2; [Get town type: y2]
+!!VRy3:Sy1 -1; [Building # that's one before building being built: y3]
+!!VRy7:Sy1 +1; [Building # that's one after building being built: y7]
+!!VRy8:Sy1 +2; [Building # that's two after building being built: y8]
+!!VRy9:Sy1 +3; [Building # that's three after building being built: y9]
+!!VRy10:Sy1 +4; [Building # that's four after building being built: y10]
+
+!!IF:V1/0 V2/0 V3/0; [Initialize Flags 1, 2 and 3 to False]
+
+!!CA1:B3/y1; [Check if structure is already built: Flag 1=True if built]
+
+ [Check if higher levels of Mage Guild built: Flag 1=True if built]
+!!CA1&-1/y1>=0/y1<=3:B3/y7; [Check level+1]
+!!CA1&-1/y1>=0/y1<=2:B3/y8; [Check level+2]
+!!CA1&-1/y1>=0/y1<=1:B3/y9; [Check level+3]
+!!CA1&-1/y1=0:B3/y10;       [Check level+4]
+
+ [Check if higher levels of Fort structure built: Flag 1=True if built]
+!!CA1&-1/y1>=7/y1<=8:B3/y7; [Check level+1]
+!!CA1&-1/y1=7:B3/y8;        [Check level+2]
+
+ [Check if higher levels of Hall is built: Flag 1=True if built]
+!!CA1&-1/y1>=10/y1<=12:B3/y7; [Check level+1]
+!!CA1&-1/y1>=10/y1<=11:B3/y8; [Check level+2]
+!!CA1&-1/y1=10:B3/y9;         [Check level+3]
+
+ [If Mystic Pond, check if Fountain of Fortune is built: Flag 1=True if built]
+!!CA1&-1/y1=17/y2=1:B3/21; [Don't build Mystic Pond if Fountain is built]
+
+ [If Fountain of Fortune, check if Mystic Pond is built: Flag 1=True if built]
+!!CA1&-1/y1=21/y2=1:B3/17; [Check if Mystic Pond is built]
+!!IF&-1/y1=21/y2=1:V3/0; [Don't build Fountain if Mystic Pond isn't is built: Flag 3 set to True]
+!!IF&1/y1=21/y2=1:V1/0; [Build Fountain if Mystic Pond is built: Flag 1 reset to False]
+
+!!VRy4&y1>=30/y1<=36:Sy1 +7; [Upgraded Dwelling number to check: y4]
+!!CA1&-1/y1>=30/y1<=36:B3/y4; [Also check for upgraded dwelling: Flag 1=True if built]
+
+!!VRy11:S0; [Initialize y11 to 0]
+!!VRy11&y2>=3:S1; [Level 1 creature that uses Horde buildings 18 and 19]
+!!VRy11|y2=1/y2=2:S2; [Level 2 creature that uses Horde buildings 18 and 19]
+!!VRy11&y2=0:S3; [Level 3 creature that uses Horde buildings 18 and 19]
+!!VRy12:S0; [Initialize y12 to 0]
+!!VRy12&y2=3:S3; [Level 3 creature that uses Horde buildings 24 and 25]
+!!VRy12&y2=1:S5; [Level 5 creature that uses Horde buildings 24 and 25]
+
+!!CA1&-1/y1=30/y11=1:B3/18; [If Level 1 Non-upgraded Dwelling, check for Non-upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=30/y11=1:B3/19; [If Level 1 Non-upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=37/y11=1:B3/19; [If Level 1 Upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=31/y11=2:B3/18; [If Level 2 Non-upgraded Dwelling, check for Non-upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=31/y11=2:B3/19; [If Level 2 Non-upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=38/y11=2:B3/19; [If Level 2 Upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=32/y11=3:B3/18; [If Level 3 Non-upgraded Dwelling, check for Non-upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=32/y11=3:B3/19; [If Level 3 Non-upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=39/y11=3:B3/19; [If Level 3 Upgraded Dwelling, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=32/y12=3:B3/24; [If Level 3 Non-upgraded Dwelling, check for Non-upgraded 2nd Horde built: Flag 1=True if built]
+!!CA1&-1/y1=32/y12=3:B3/25; [If Level 3 Non-upgraded Dwelling, check for Upgraded 2nd Horde built: Flag 1=True if built]
+!!CA1&-1/y1=39/y12=3:B3/25; [If Level 3 Upgraded Dwelling, check for Upgraded 2nd Horde built: Flag 1=True if built]
+!!CA1&-1/y1=34/y12=5:B3/24; [If Level 5 Non-upgraded Dwelling, check for Non-upgraded 2nd Horde built: Flag 1=True if built]
+!!CA1&-1/y1=34/y12=5:B3/25; [If Level 5 Non-upgraded Dwelling, check for Upgraded 2nd Horde built: Flag 1=True if built]
+!!CA1&-1/y1=41/y12=5:B3/25; [If Level 5 Upgraded Dwelling, check for Upgraded 2nd Horde built: Flag 1=True if built]
+
+!!CA1&-1/y1=18:B3/19; [If Non-upgraded Horde building, check for Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=19:B3/18; [If Upgraded Horde building, check for Non-upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=24:B3/25; [If Non-upgraded 2nd Horde building, check for 2nd Upgraded Horde built: Flag 1=True if built]
+!!CA1&-1/y1=25:B3/24; [If Upgraded 2nd Horde building, check for 2nd Non-upgraded Horde built: Flag 1=True if built]
+
+ [Skip buildings that don't exist for this town type]
+!!IF&y1=3/y2=6:V2/1; [Set Flag 2 to True if Level 4 Mage Guild and Stronghold]
+!!IF&y1=3/y2=7:V2/1; [Set Flag 2 to True if Level 4 Mage Guild and Fortress]
+!!IF&y1=4/y2=0:V2/1; [Set Flag 2 to True if Level 5 Mage Guild and Castle]
+!!IF&y1=4/y2=6:V2/1; [Set Flag 2 to True if Level 5 Mage Guild and Stronghold]
+!!IF&y1=4/y2=7:V2/1; [Set Flag 2 to True if Level 5 Mage Guild and Fortress]
+!!IF&y1=17/y2=0:V2/1; [Set Flag 2 to True if Building 17 (Lighthouse) and Castle town type]
+!!IF&y1>=24/y1<=25/y2=0:V2/1; [Set Flag 2 to True if 2nd Horde Building inappropriate for town type]
+!!IF&y1>=24/y1<=25/y2=2:V2/1; [Set Flag 2 to True if 2nd Horde Building inappropriate for town type]
+!!IF&y1>=24/y1<=25/y2>=4:V2/1; [Set Flag 2 to True if 2nd Horde Building inappropriate for town type]
+!!IF&y1=17/y2=3:V2/1; [Set Flag 2 to True if Special Building 17 and Inferno]
+!!IF&y1=22/y2=8:V2/1; [Set Flag 2 to True if Special Building 22 and Conflux]
+!!IF&y1=23/y2=0:V2/1; [Set Flag 2 to True if Special Building 23 and Castle]
+!!IF&y1=23/y2=1:V2/1; [Set Flag 2 to True if Special Building 23 and Rampart]
+!!IF&y1=23/y2=4:V2/1; [Set Flag 2 to True if Special Building 23 and Necropolis]
+!!IF&y1=23/y2=7:V2/1; [Set Flag 2 to True if Special Building 23 and Fortress]
+!!IF&y1=23/y2=8:V2/1; [Set Flag 2 to True if Special Building 23 and Conflux]
+
+!!FU|1/2/3:E; [Skip loop number if already built or if inappropriate for town type]
+
+!!VRv4:S1; [Set v4 to 1 to show a build was done]
+!!VRx16:S999; [Set x16 to 999 to exit loop]
+
+!!CA1:B6/y1; [Build Structure in AI Town: y1]
+
+--------------------------------------------------------------------------------
+
+ [End of Build Twice in Towns]
+
+
+********************************************************************************
+   Quick Combat Battle Options
+********************************************************************************
+
+Variables: (v1), v3393-v3402
+Functions: FU57
+ERM Numbers: 233
+
+--------------------------------------------------------------------------------
+
+ [Start of battle trigger]
+!?BA0&1000;
+!!UN:P233/?y-1; [Check if Quick Combat Battle option is enabled: y-1]
+!!BA:O?y-2/?y-3; [Attacking hero owner: y-2, Defending hero owner: y-3]
+!!OW:Iy-2/?y-4; [Attacking hero Human (0) or AI (1): y-4]
+!!OW:Iy-3/?y-5; [Defending hero Human (0) or AI (1): y-5]
+!!BA:E?y-6; [Type of battle (0 if runs at this PC and not network battle): y-6]
+!!VRy-6&y-4=1/y-5=1:S1; [If both heroes are AI, set y-6 to 1: y-6]
+!!FU57&y-1=1/y-6=0:P; [Call main function if enabled, not network and at least one human]
+
+ [Main Quick Combat Battle option function]
+!?FU57;
+!!BA:Q?v3401; [Store state of main Quick Combat option in v3401]
+!!VRy1&y-4=0:Sy-2; [Set human hero owner, if attacker: y1]
+!!VRy1&y-4=1:Sy-3; [Set human hero owner, if defender: y1]
+
+!!VRy2:S3393 +y1; [Index for v variable storing this player's last selected option: y2]
+!!VRy3:Svy2; [Last selected option: vy2 (v3393-v3400)]
+!!VRy3&y3=0:S1; [If no option was selected, default to option 1]
+
+ [** Check if Quick Combat Battle messages are disabled **]
+!!VRy4:Sy1 +1; [Add 1 to y1: y4]
+!!FU$bit$:Py4; [Convert to bit number: y-100]
+!!VRy5:Sv3324; [Set y5 to v3324]
+!!VRy5:&y-100; [Check if message is disabled for current player: y5]
+ [** If y5=y-100, messages are disabled for current player **]
+
+!!VRz-1:Sz125064;
+!!VRz-2:Sz125065;
+!!VRz-3:Sz125066;
+!!VRz-4:Sz125067;
+!!VRv1:S0; [Initialize v1 to 0]
+!!BA:H0/?y6 H1/?y7; [Attacking hero number: y6, Defending hero number: y7]
+!!VRy8&y-4=0:Sy6; [Set human hero number, if attacker: y8]
+!!VRy8&y-4=1:Sy7; [Set human hero number, if defender: y8]
+!!VRz-4&y8=-2:S^^; [No "no mana" option if no defending human hero]
+!!IF&y5<>y-100:G1/1/y3/-1/-2/-3/-4/0/0/0/0/0/0/0/0/0; [Display option list unless disabled]
+!!VRvy2&y5<>y-100:Sv1; [Store selected option in vy2 (v3393-v3400) unless disabled]
+!!VRv1&y5=y-100:Sy3; [If message disabled, use last selected option: v1]
+!!VRv1&v1=4/y8=-2:S2; [Set to regular quick combat instead of no defending human hero]
+!!BA&v1=1:Q0; [No quick combat]
+!!BA|v1=2/v1=4:Q1; [Quick combat]
+
+!!HEy8&v1=4:I?v3402; [Store hero's spell points: v3402]
+!!HEy8&v1=4:I0; [Set hero's spell points to 0]
+
+ [End of battle trigger]
+!?BA1&1000;
+!!UN:P233/?y-1; [Check if Quick Combat Battle option is enabled: y-1]
+!!BA:O?y-2/?y-3; [Attacking hero owner: y-2, Defending hero owner: y-3]
+!!OW:Iy-2/?y-4; [Attacking hero Human (0) or AI (1): y-4]
+!!OW:Iy-3/?y-5; [Defending hero Human (0) or AI (1): y-5]
+!!BA:E?y-6; [Type of battle (0 if runs at this PC and not network battle): y-6]
+!!VRy-6&y-4=1/y-5=1:S1; [If both heroes are AI, set y-6 to 1: y-6]
+!!FU|y-1<>1/y-6<>0:E; [Exit if script isn't enabled or network/AI only battle]
+
+!!BA:Qv3401; [Restore state of Quick Combat option: v3401]
+!!VRy-7&y-4=0:Sy-2; [Set human hero owner, if attacker: y-7]
+!!VRy-7&y-4=1:Sy-3; [Set human hero owner, if defender: y-7]
+!!VRy-8:S3393 +y-7; [Index for v variable storing this player's last selected option: y-8]
+
+!!VRv4071&vy-8<>4:S-1; [Perfect0: if it is not battle without mana set to -1 to interact with script39]
+!!VRv4071&vy-8=4:S4; [Perfect0: if it is battle without mana set to 4 to interact with script39]
+
+!!BA:H0/?y-9 H1/?y-10; [Attacking hero number: y-9, Defending hero number: y-10]
+!!VRy-11&y-4=0:Sy-9; [Set human hero number, if attacker: y-11]
+!!VRy-11&y-4=1:Sy-10; [Set human hero number, if defender: y-11]
+!!HEy-11&vy-8=4/y-11<>-2/-904:Iv3402; [Restore hero's spell points: v3402 | flag 904 for interaction with Berserker Potion]
+
+--------------------------------------------------------------------------------
+
+ [End of Quick Combat Battle Options]
+
+
+********************************************************************************
+   Warlord's Banner Quick-Select Options
+********************************************************************************
+
+Variables: (v1), (z1-z8)
+Functions: FU10933-FU10936
+ERM Numbers: 240
+
+--------------------------------------------------------------------------------
+
+ [Hero screen mouse-click trigger]
+!?CM2;
+!!UN:P240/?y-5; [See if script is enabled: y-5]
+!!FU&y-5<>1:E; [Exit if not enabled]
+!!CM:I?y-1 F?y-2 S?y-3; [Location of click (y-1), Flags (y-2), Subtype (y-3)]
+!!FU|y-1<>141/y-2<>4/y-3<>12:E; [Exit if not a ctrl-click on Flag above hero list]
+
+!!HE-1:B0/?z4; [Hero's name: z4]
+
+!!DO10936/0/6/1:P; [Check if any stack's have Warlord's Banners: y-6=1 if yes]
+!!IF&y-6<>1:Q1/8/156/1/z125068;
+!!FU&y-6<>1:E; [Exit if no stacks have Warlord's Banners equipped]
+
+!!VRz1:Sz125069;
+!!VRz-1:Sz125070;
+!!VRz-2:Sz125071;
+!!VRz-3:Sz125072;
+!!VRz-4:Sz125073;
+!!VRz-5:Sz125074;
+!!VRz-6:Sz125075;
+!!VRz-7:Sz125076;
+!!VRz-8:Sz125077;
+!!VRz-9:Sz125078;
+!!VRz-10:Sz125079;
+!!VRz2:Sz125080;
+!!VRz3:Sz125081;
+
+ [Display option dialogue: choice in v1]
+!!IF:G1/1/2048/1/-1/-2/-3/-4/-5/-6/-7/-8/-9/-10/2/3;
+
+!!VRy-4:S-1; [Initialize y-4 to -1]
+!!VRy-4&v1=1:S0;
+!!VRy-4&v1=2:S1;
+!!VRy-4&v1=4:S2;
+!!VRy-4&v1=8:S3;
+!!VRy-4&v1=16:S4;
+!!VRy-4&v1=32:S5;
+!!VRy-4&v1=64:S6;
+!!VRy-4&v1=128:S7;
+!!VRy-4&v1=256:S8;
+
+!!FU&v1=2048:E; [Exit if Cancel option selected]
+
+!!VRz5:Sz125082; [wog.ini section name: z5]
+!!UN:J9/0/6; [Hero's home folder: z6]
+!!VRz7:Sz125083; [Path and File name to store banner options: z7]
+
+!!DO10933/0/6/1&y-4>=0:Py-4; [Set Banner Option for all stacks]
+!!DO10934/0/6/1&v1=512:P; [Store current options in wog.ini file "Warlord's Banner Options" section]
+!!DO10935/0/6/1&v1=1024:P; [Restore current options from wog.ini file "Warlord's Banner Options" section]
+
+ [Set Banner Options for all stacks]
+ [x1=Artifact Option]
+!?FU10933;
+!!EX-1/x16:R?y1/?y2; [Get artifact number (y1), option (y2) from stack x16]
+!!EX-1/x16&y1=156:R156/x1; [Set new banner option]
+
+ [Store current options in wog.ini file]
+ ["Warlord's Banner Options" section]
+!?FU10934;
+!!EX-1/x16:R?y1/?y2; [Get artifact number (y1), option (y2) from stack x16]
+!!VRz8&y1=156:S^%Y2^; [Artifact option string: z8]
+!!UN&y1=156:N5/z8/x16/z5/z7; [Write z8 string to banopt.ini file]
+
+ [Restore current options from wog.ini file]
+ ["Warlord's Banner Options" section]
+!?FU10935;
+!!UN:N6/z8/x16/z5/z7; [Read z8 string from banopt.ini file]
+!!VRz8:H1; [Set Flag 1 to True if there's text in z8: Flag 1]
+!!VRy1:Vz8; [Convert string (z8) to value y1]
+!!EX-1/x16:R?y2/?y3; [Get artifact number (y2), option (y3) from stack x16]
+!!EX-1/x16&1/y2=156:R156/y1; [Restore Warlord's Banner option to stack x16]
+
+ [Check if any stack's have Warlord's Banners: y-6=1 if yes]
+!?FU10936;
+!!EX-1/x16:R?y1/?y2; [Get artifact number (y1), option (y2) from stack x16]
+!!VRy-6&y1=156:S1; [Set y-6 to 1 if any stack has a Warlord's Banner equipped: y-6]
+
+--------------------------------------------------------------------------------
+
+ [End of Warlord's Banner Quick-Select Options]
+
+
+********************************************************************************
+   Hero and Town List Reordering
+********************************************************************************
+
+Variables: (Local only)
+Flags: (checks: 999)
+Functions: FU41-FU42
+ERM Numbers: 244
+
+--------------------------------------------------------------------------------
+
+ [Left-click on Adventure Map is trigger (for current local player only)]
+!?CM5&999;
+!!UN:P244/?y-4; [Check if script is enabled: y-4]
+!!FU&y-4<>1:E; [Exit if script isn't enabled]
+
+!!CM:F?y-1 I?y-2; [Type of click (1=shift): y-1, Location clicked: y-2]
+!!CM:S?y-3; [Subtype of click (12 if left click, 13 if left click-release): y-3]
+!!FU&y-1<>1:E; [Exit if not a shift-click]
+
+!!FU41&y-2>=39/y-2<=43:P; [Call Function 41 if a Hero slot is shift-clicked]
+!!FU42&y-2>=32/y-2<=36:P; [Call Function 42 if a Town slot is shift-clicked]
+
+ [Move Hero shift-clicked to first slot]
+!?FU41;
+!!VRy1:Sy-2 -39; [Hero slot that's shift-clicked (0..4): y1]
+!!OW:O-1/y1/?y2; [Hero that's shift-clicked in Hero list: y2]
+!!OW:A-1/?y3; [Active hero: y3]
+!!CM&y2=y3/y-3<>13:R0; [Cancel normal click operation if active hero shift-clicked]
+!!FU|y2<0/y-3<>13:E; [Exit if no hero in hero slot or if not shift-click release]
+!!OW:O-1/1/y1/0; [Move hero to top of list]
+!!OW:A-1/y2; [Set active hero to hero shift-clicked: y2]
+!!CM:R0; [Cancel normal click operation for shift click-release]
+!!UN:R1; [Redraw screen]
+
+ [Move town shift-clicked to first slot]
+!?FU42;
+!!VRy1:Sy-2 -32; [Town slot that's shift-clicked (0..4): y1]
+!!OW:N-1/y1/?y2; [Real Town number of Town shift-clicked in Town list: y2]
+!!OW:N-1/?y3; [Active town number: y3]
+!!CM&y2=y3/y2>=0/y-3<>13:R0; [Disabled standard click response if active town clicked]
+!!FU|y2<0/y-3<>13:E; [Exit if no town in town slot or if not shift-click release]
+!!OW:N-1/1/y1/0; [Move town to top of list]
+!!UN:R1; [Redraw screen]
+
+--------------------------------------------------------------------------------
+
+ [End of Hero and Town List Reordering]
+
+** End of Script **
+

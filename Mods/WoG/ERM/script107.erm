@@ -1,0 +1,367 @@
+ZVSE
+ERMS_ScriptName=script124
+ERMS_ScriptAuthor=BAD
+ERMS_ScriptVersion=1.0.0
+ERMS_ScriptDate=22.11(November).2013
+ERMS_ScriptERMVersion=2.70
+ERMS_ScriptLanguage=English (United States) or English (native)
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+** STARTING HERO BOOST v1.2 by Alexandru Balahura
+** WoGify Name: script107.erm
+** Wog Option: 307
+** Last Updated: October 25, 2007
+** Previously Updated: September 12, 2007
+
+!#FU:E; [Uses some stuff used by script057]
+
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+*Functions Used: FU2011-FU2020, FU709-FU729
+*Timers Used: TM2
+*Normal Variables Used: v116, v1419-v1459, v4200-v4215, v7120-v7129, v9008-v9199
+*String Variables used: Z-1,Z-2,Z-3,Z-4,Z-6- so far
+<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+ ** This script is made to help the players that use Neutral Units script(script 57).
+This script have a check before map will be created to see if script57 is active or incompatilities,
+otherwise will be overpowered and will be turned off showing a message.
+In same cases will turn off the incompatibilities.
+
+ ** New Formula for movement is based on hero's level including AI (22 movement from start +1 movement at every 3 levels);
+ ** New additional creatures for all heroes based on Hotraits.txt for now;
+ ** New additional creatures for all heroes in taverns;
+ ** All Heroes with spell book have magic arrow from start;
+ ** Extra Experience from Bonuses(using original formula from script 57 and just for level 5,6,7 and 8 creatures for now);
+doesnt work for Dragon Utopia, Creature Banks, Crypt, Creature Generators and so on...
+
+ -10% extra experience from bonuses for level 5 creatures;
+ -20% extra experience from bonuses for level 6 creatures;
+ -100% extra experience from bonuses for level 7 and 8 creatures;
+
+For instance:
+=============
+An archangel in month 3 has 280 extra health from bonuses and we will get extra 280 experience per creature.
+
+
+ ** Unique Spells Boost is special for casters (cleric, druid and so on...) when do battles against neutral units
+and give them all more spell damage using number of days and hero's level by using the following formula:
+Number of Days x Base Spell damage : 100 (1%) x hero's lvl : 5(5% for ice bolt...), 10(10% for magic arrow...) or 20 (5% implosion...)
+ ** Unique Spells Boost is addapted for now just for the following spells: * magic arrow *, * ice bolt *, * Lightning Bolt *,
+implosion *, * Chain Lightning *, * frost ring *, * fireball *, * inferno *, * meteor shower *, * death ripple *,
+destroy undead *, * armageddon *, * Titan's Lightning Bolt *.
+
+For Instance:
+==============
+
+A Champion on map without a hero will have in month 4, 440 health and lets assume we have a level 30 hero with 20 power
+and implosion without sorcery or other artifacts that increase spell damage.
+
+The implosion will do 1600 damage and will take 3 champion per turn, but with the new formula the hero will be able to do
+4288 and take almost 10.
+
+So, against a human or a computer, 1600 damage means 10 champions (without ranks) and against map with bonuses
+is the almost the same and can be more with sorcery and artifacts(remember that neutral units grow more and have more
+bonuses so sorcery is a need after month 4 and so on...)
+
+
+!#UN:P307/?v116;   [Check is the script is enabled, otherwise exit]
+!?TM2&v116=1/$day$>=0;
+!!UN:P307/=1; !!FU&-1:E;
+
+!IF&y-1=1:V1/1; [Set Flag 1 to true if the script is enable]
+!!UN:P307/?y-1;
+!!OW:H-1/2/0;
+!!DO2011/1/v2/1&y-1=1/v2>0:P; [Heroes have additional movement per level]
+
+!!DO2012/0/155/1&1:P; [Heroes with spell book have magic arrow from start]
+
+!!DO2013/0/155/1&1/$once$=1/$day$=1:P; [Heroes have additional creatures from start]
+
+!UN:U98/-1/?y-7; [Check all types of towns]
+!DO2014/1/y-7/1&y-7>0:P; [Heroes that have a creature speciality won't need a town for this]
+
+!DO2015/0/155/1&1:P; [Prevent fighters to get spell power, knowledge and casters to get attack, defense]
+
+
+!UN:P307/?y-1;
+!DO2016/0/155/1&y-1=1:P;
+
+*!UN:P307/?y-1;
+*!DO2016/0/7/1&y-1=1:P;
+
+*!UN:P307/?y-1;  [Check if script is enabled: y-1]
+*!UN:U98/-1/?y-1;  Castle, Necropolis, Stronghold, Fortress
+*!VRv2:S-1;
+*!DO871/0/8/1&y-1=1/$once$=1/$day$=1:P;
+
+
+
+ ** Protection Message for Starting Hero Boost **
+
+!#UN:P307/?y-1;   [Check if Starting Hero Boost is Enabled]
+!#UN:P057/?y-3;   [Check if Neutral Units is Enabled]
+!#UN:P232/?y-4;   [Check if Neutral Stack Size is Enabled]
+!#UN:P121/?y-5;    [Check if map rule for double movement is Enabled]
+!#UN:P084/?y-6;    [Check if map rule for movement balancing is Enabled]
+
+
+!#VRz-1:S^Starting Hero Boost requires:
+ ^;
+!#VRz-2:S^Starting Hero Boost
+^;
+!#VRz-9:S^Starting Hero Boost is not compatible with:
+ ^;
+
+#VRz-3:S^^;
+#VRz-4:S^^;
+
+!#VRz-3&y-3=0:S^{Neutra Units Bonuses (script57)}
+^;
+!#VRz-4&y-4=0:S^{Neutra Stack Size (script57)}
+^;
+!#VRz-5&y-5=1:S^{Map Rule Double Movement}
+^;
+#VRz-6&y-6=1:S^{Movement Balancing}
+^;
+
+!#VRz-7:S^%Z-1 %Z-3 %Z-4^;
+!#IF&y-1=1/y-3=0:M^%Z-7^; !#IF&y-1=1/y-4=0:M^%Z-7^;
+!#VRz-8:S^%Z-2 {is turned off}^; !#VRz-10:S^%Z-9 %Z-5 %Z-6^; !#IF&y-1=1/y-5=1:M^%Z-10^; !#IF&y-1=1/y-5=1:M^%Z-8^;
+!#IF&y-1=1/y-3=0:M^%Z-8^; !#IF&y-1=1/y-4=0:M^%Z-8^;   #IF&v116=1/y-5=1/y-6=1:M^%Z-10^;  #IF&v116=1/y-5=1/y-6=1:M^%Z-8^;
+#UNy-1=1/y-3=0/y-4=0:P307/0;
+!#UN&y-1=1/y-5=1:P307/0; !#UN&y-1=1/y-6=1:P084/0;
+
+
+
+[NEW MOVEMENT FOR ALL HEROES: ADDITIONAL MOVEMENT POINTS PER HERO'S LEVEL]
+
+!?FU2011;
+!!UN:P307/=1; !!FU&-1:E; // exit, if script is not enabled
+!!UN:P057/=1; !!FU&-1:E; // exit, if script 57 "Neutral Units" is not enabled
+!!UN:P232/=1; !!FU&-1:E; // exit, if script 57 "Neutral Growth Stack" is not enabled
+!!OW:H-1/2/x16; [Store the hero in v2]
+!!HEv2:W?y1 Ed/?y2; [Get hero's movement : y1]  [Get hero's lvl : y2]
+!!VRy3&y2>=1/y2<=99:S100:3*y2; 1 movement at every 3 hero's lvl
+!!VRy1:+700;  The minimum movement is now 2260(22) instead of 1560 (15)
+!!VRy1:+y3;
+!!HEv2:Wy1 Gy1; [Set hero's new movement plus additional hero's movement]
+
+
+================================================================================
+
+[HEROES WITH SPELL BOOK FROM START HAVE MAGIC ARROW]
+!?FU2012;
+!!HEx16:A2/0/?y-2/?y-3; [Check if heroes have spell book]
+!HEx16:Ed/?y-4;
+!HEx16&y-4>=25:M9/1; Town Portal pentru eroii cu nivelul egal sau mare de 25
+!!HEx16&y-3=1:M15/1; [All heroes with spellbook from start have magic arrow]
+
+
+================================================================================
+
+[HEROES HAVE ADDITIONAL CREATURES FROM START]
+
+!?FU2013;
+!!HEx16:B2/?y-7;
+* Castle *
+!!HEx16|y-7=0/y-7=1:C0/0/0/20 C0/1/2/5 C0/2/4/3;
+* Rampart *
+!!HEx16|y-7=2/y-7=3:C0/0/14/20 C0/1/16/5 C0/2/18/3;
+* Tower *
+!!HEx16|y-7=4/y-7=5:C0/0/28/30 C0/1/30/5 C0/2/32/3;
+* Inferno *
+!!HEx16|y-7=6/y-7=7:C0/0/42/25 C0/1/44/5 C0/2/46/3;
+* Necropolis *
+!!HEx16|y-7=8/y-7=9:C0/0/56/27 C0/1/58/5 C0/2/60/3;
+* Dungeon *
+!!HEx16|y-7=10/y-7=11:C0/0/70/25 C0/1/72/5 C0/2/74/3;
+* Stronghold *
+!!HEx16|y-7=12/y-7=13:C0/0/84/22 C0/1/86/5 C0/2/88/3;
+* Fortress *
+!!HEx16|y-7=14/y-7=15:C0/0/98/20 C0/1/100/5 C0/2/104/3;
+* Conflux *
+!!HEx16|y-7=16/y-7=17:C0/0/118/23 C0/1/112/5 C0/2/115/3;
+* Special Heroes *
+!!HE144&v116=1:C0/0/1/25  C0/1/3/10 C0/2/5/5;
+!!HE145&v116=1:C0/0/99/25 C0/1/101/10 C0/2/105/5;
+!!HE146&v116=1:C0/0/1/25  C0/1/7/4 C0/2/7/4;
+!!HE147&v116=1:C0/0/136/1; C0/1/136/2 C0/2/136/2
+!!HE148&v116=1:C0/0/137/4 C0/1/137/2 C0/2/137/2;
+!!HE149&v116=1:C0/0/85/35 C0/1/87/10 C0/2/89/5;
+!!HE150&v116=1:C0/0/1/25  C0/1/3/10 C0/2/5/5;
+!!HE151&v116=1:C0/0/71/28 C0/1/73/10 C0/2/75/5;
+!!HE152&v116=1:C0/0/1/25  C0/1/7/4 C0/2/7/4;
+!!HE153&v116=1:C0/0/71/28 C0/1/73/10 C0/2/75/5;
+!!HE154&v116=1:C0/0/85/35 C0/1/91/4 C0/2/91/4;
+!!HE155&v116=1:C0/0/43/30 C0/1/45/10 C0/2/47/5;
+
+
+================================================================================
+
+[HEROES THAT HAVE A CREATURE SPECIALITY WILL NOT NEED A TOWN FOR THIS]
+
+?FU2014;
+
+
+================================================================================
+
+[FIGHTERS CAN'T GET SPELL POWER AND KNOWLEDGE AND CASTERS CAN'T GET ATTACK AND DEFENSE]
+?FU2015;
+!HEx16:B2/?y-6;
+!HEx16&y-6=0:Y29/d/999/1 Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=1:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=2:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=3:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=4:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=5:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=6:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=7:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=8:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=9:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=10:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=11:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=12:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=13:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=14:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=15:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+!HEx16&y-6=16:Y25/d/999/1 Y26/d/999/1 Y31/d/999/1;
+!HEx16&y-6=17:Y24/d/999/1 Y29/d/999/1 Y30/d/999/1 Y33/d/999/1;
+
+================================================================================
+
+
+[CASTERS ARE BETTER PER EACH LEVEL, INCLUDING SUMMONING]
+
+?FU2016;
+
+
+ ** Extra experience from bonuses **
+
+!?BA0&1000;      Before Battle (just human for now)
+!!UN:P307/=1; !!FU&-1:E; // exit, if script is not enabled
+!!UN:P057/=1; !!FU&-1:E; // exit, if script 57 "Neutral Units" is not enabled
+!!UN:P232/=1; !!FU&-1:E; // exit, if script 57 "Neutral Growth Stack" is not enabled
+!!BA:H0/?v1419;   Check attacker
+!!BA:H1/?v1419;   Check defender
+
+!?BA1&v1419=-2/1000; Exist if the army has a hero After Battle
+!!BA:H0/?y-1;  Check attacker
+!!HEy-1:O?y-2; Check Owner
+!!FU&y-2<0:E;  Exit if battle is lost
+
+!!OB998:U?y-3 T?y-9;  Type of monsters
+!!FU|y-9=25/y-9=16/y-9=84/y-9=63/y-3=15/y-3=57/y-9=53/y-3=7/y-9=17:E;  Doesnt work yet for Dragon Utopia...
+!!MO998:G?y-4; Number of monsters
+!!MA:Py-3/?y-5; Check health of monsters
+!!MA:Ly-3/?y-7; Check level of creature
+!!FU&y-7<4:E;  Wont be extra bonuses for level 4,3....
+!!VRy-6:Sc0*y-5:50; Extra Health from bonuses, using original formula for this
+!!VRy-8:Sy-4 *y-6; Number of Monsters * Number of Health
+!!VRv1420&y-7=4:Sy-8:10; Set the new extra experience(10% from bonuses) from level 5 creatures
+!!VRv1420&y-7=5:Sy-8:5; Set the new extra experience(20% from bonuses) from level 6 creatures
+!!VRv1420&y-7=6:Sy-8; Set the new extra experience(100% from bonuses) from level 7 and 8 creatures
+!!UN:N3/1/y-3/1; Plural of creatures
+!!IF:Q1/17/v1420/21/y-3/1^Because of extra health for %Z1 from Neutral Units Bonuses, you gain extra experience.^;
+!!HE-1:N?y-8; Check number of hero
+!!HEy-8:Edv1420; New extra experience
+
+
+// No logistics from start //
+!#HE23&v116=1:S2/0;
+!#HE54&v116=1:S2/0;
+!#HE85&v116=1:S2/0;
+!#HE106&v116=1:S2/0;
+!#HE132&v116=1:S2/0;
+
+
+// No tactics from start //
+!#HE07&v116=1:S19/0;
+!#HE36&v116=1:S19/0;
+!#HE51&v116=1:S19/0;
+!#HE82&v116=1:S19/0;
+!#HE85&v116=1:S19/0;
+!#HE87&v116=1:S19/0;
+!#HE103&v116=1:S19/0;
+!#HE107&v116=1:S19/0;
+!#HE67&v116=1:S19/0;
+!#HE131&v116=1:S19/0 S22/2;
+!#HE135&v116=1:S19/0 S22/2;
+!#HE129&v116=1:S19/0;
+!#HE133&v116=1:S19/0;
+
+
+// No learning from start //
+!#HE14&v116=1:S21/0;
+!#HE60&v116=1:S21/0;
+!#HE124&v116=1:S21/0;
+!#HE127&v116=1:S21/0;
+!#HE95&v116=1:S21/0;
+!#HE66&v116=1:S21/0;
+!#HE77&v116=1:S21/0;
+!#HE135&v116=1:S21/0;
+
+
+// No special spells, but ballista, first aid ten from start //
+!#HE6&v116=1:A1/4/13;
+!#HE8&v116=1:A1/6/15;
+!#HE27&v116=1:A1/6/15;
+!#HE54&v116=1:A1/4/13;
+!#HE123&v116=1:A1/6/15;
+!#HE128&v116=1:A1/4/13;
+!#HE130&v116=1:A1/4/13;
+
+
+!#HE11&v116=1:M20/0;
+!#HE14&v116=1:M48/0;
+!#HE45&v116=1:M19/0;
+!#HE63&v116=1:M21/0;
+!#HE57&v116=1:M22/0;
+!#HE30&v116=1:M16/0;
+!#HE88&v116=1:M23/0;
+!#HE93&v116=1:M23/0;
+!#HE91&v116=1:M23/0;
+!#HE73&v116=1:M23/0;
+!#HE72&v116=1:M24/0;
+!#HE76&v116=1:M24/0;
+
+================================================================================
+
+!?BA0&-998;
+!!BA:H0/?v4201;
+!!BA:H1/?v4201;
+
+!?MR1&v4201=-2/-998;
+!!UN:P307/=1; !!FU&-1:E; // exit, if script is not enabled
+!!UN:P057/=1; !!FU&-1:E; // exit, if script 57 "Neutral Units" is not enabled
+!!UN:P232/=1; !!FU&-1:E; // exit, if script 57 "Neutral Units" with option 232(Neutral Stack Size) is not enabled
+!!MR:M?y-2 S?y-3 D?y-4;
+!!BG:Q?y-5;
+!!BA:Hy-5/?y-6;
+!!HEy-6&y-6>-1:B2/?y-7 Ed/?y-8;
+!!VRy-99:Sy-7 %2; // only for casters
+!!FU&y-99=0:E; // exit the function, if it is a fighter class
+!!VRy-9:S9100 + y-3;
+
+
+!!VRv9115:Sc0*y-4:100*y-8:10; // Magic Arrow
+!!VRv9116:Sc0*y-4:100*y-8:5; // Ice Bolt
+!!VRv9117:Sc0*y-4:100*y-8:5; // Lightning Bolt
+!!VRv9118:Sc0*y-4:100*y-8:20; // Implosion
+!!VRv9119:Sc0*y-4:100*y-8:10; // Chain Lightning
+!!VRv9120:Sc0*y-4:100*y-8:5; // Frost Ring
+!!VRv9121:Sc0*y-4:100*y-8:5; // Fireball
+!!VRv9122:Sc0*y-4:100*y-8:5; // Inferno
+!!VRv9123:Sc0*y-4:100*y-8:5; // Meteor Shower
+!!VRv9124:Sc0*y-4:100*y-8:10; // Death Ripple
+!!VRv9125:Sc0*y-4:100*y-8:10; // Destroy Undead
+!!VRv9126:Sc0*y-4:100*y-8:20; // Armageddon
+!!VRv9157:Sc0*y-4:100*y-8:5; // Titan's Lightning Bolt
+!!VRy-4:+vy-9 ; // add spell-depending damage from v9115– v9157
+!BA:Q?v4202; Check Quick Combat
+!IF&v4202=0:L^Final damage is {%Y-4}^;
+!!MR:Fy-4;
+
+
+================================================================================
+

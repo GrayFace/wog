@@ -1,0 +1,125 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Alms House ERM script v1.1 - Donald X. Vaccarino
+** with one visit per hero update (for interacting with the Arcane Tower) by Steven Lynch
+** Requires WOG v3.52 or later.
+** A location to give a little to those with nothing
+
+** To use this code, put it into a Global Event, set to never happen,
+** and add some Alms House buildings to your map.
+** It's the church-ish building 10 down from the conflux in the editor
+** Except this version of this script uses the snowy artifact merchant instead.
+
+** Variables Used: v590, v600-v606, z120, z326, z402, w13
+** z402 must not be changed elsewhere!
+** v590 must always be 0! Some of my other scripts also use it as 0 for hint indexing
+** The other variables may be used elsewhere but will be trashed by this code.
+
+** Modified by Thomas Franz (samot): gives 1000 exp. if the heroes exp. is lesser than 1000
+** (because els the Alms house is worser than an simle learning stone)
+
+** Functions Used: 610-611
+
+
+** Initialization code
+!#UN:P18/?v1;     [Check for WoG option]
+!#VRz402&v1=1:Sz118000;
+!#VRv590&v1=1:S0;
+!#HT63/24&v1=1:V590/0/402; [set hint to z402, whenever v590 is 0, which it always will be]
+
+** end of Initialization code
+
+
+** Object routine
+
+!?OB63/24;
+!!UN:P18/?y-1;     [Check for WoG option]
+!!FU&y-1=0:E;     [Exit if its disabled]
+
+!!IF:W-1;
+!!HE-1:W?v606; [get movement]
+!!HE-1:B0/?z120;
+!!IF&1000/v606=0/w13=0:M1/z118001;
+!!IF&1000/v606>=0/w13>=1:M1/z118002;
+
+!!FU611&v606>0/w13<1:P; [do actual visiting if hero has any movement]
+!!FU611&w13=1:E;
+!!VRw13:+1; [add 1 to hero's w13 variable]
+
+
+** function to handle visiting Alms House
+
+!?FU611;
+
+!!VRv600:S0; [number of times Alms House has helped hero]
+!!IF&1000:M1/z118003;
+
+!!VRz326:Sz118004;
+!!FU610:P0/1; [wood]
+
+!!VRz326:Sz118005;
+!!FU610:P1/1; [mercury]
+
+!!VRz326:Sz118006;
+!!FU610:P2/1; [ore]
+
+!!VRz326:Sz118007;
+!!FU610:P3/1; [sulfur]
+
+!!VRz326:Sz118008;
+!!FU610:P4/1; [crystal]
+
+!!VRz326:Sz118009;
+!!FU610:P5/1; [gems]
+
+!!VRz326:Sz118010;
+!!FU610:P6/100; [gold]
+
+!!HE-1:F?v602/?v603/?v604/?v605; [get primary skills]
+
+!!IF&1000/v602=0:Q1/31/1/1/z118011;
+!!HE-1&v602=0:Fd1/d/d/d; [+1 attack]
+!!VRv600&v602=0:+1; [count times helped]
+
+!!IF&1000/v603=0:Q1/32/1/1/z118012;
+!!HE-1&v603=0:Fd/d1/d/d; [+1 defense]
+!!VRv600&v603=0:+1; [count times helped]
+
+!!IF&1000/v604=1:Q1/33/1/1/z118013;
+!!HE-1&v604=1:Fd/d/d1/d; [+1 spell power]
+!!VRv600&v604=1:+1; [count times helped]
+
+!!IF&1000/v605=1:Q1/34/1/1/z118014;
+!!HE-1&v605=1:Fd/d/d/d1; [+1 knowledge]
+!!VRv600&v605=1:+1; [count times helped]
+
+!!HE-1:E?v606; [get experience]
+!!IF&1000/v606<1000:Q1/17/1000/1/z118015;
+!!HE-1&v606<1000:Ed1000; [give experience]
+!!VRv600&v606<200:+1; [count times helped]
+
+!!IF&1000/v600=0:M1/z118016;
+!!IF&1000/v600>0/v600<4:M1/z118017;
+!!IF&1000/v600>=4:M1/z118018;
+
+!!HE-1&v600>0:W0; [remove movement to prevent infinite resources]
+
+** End of Object routine
+
+
+** function to give resources, with message, if player has none
+** x1 = resource, x2 = quantity to give, z326 = message if given
+** v601 used; benevolence tallied in v600
+
+!?FU610;
+
+!!OW:R-1/x1/?v601; [get quantity]
+!!IF&1000/v601=0:Q1/x1/x2/1^%Z326^; [show message]
+!!OW&v601=0:R-1/x1/dx2; [give some of that resource]
+!!VRv600&v601=0:+1; [count times helped]
+
+** end of function
+

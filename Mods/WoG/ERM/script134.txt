@@ -1,0 +1,64 @@
+The alternate peasant script
+
+This script makes peasants do many different economic things. What they do depends on where you put them.
+
+Peasants in towns:
+In towns peasants are producing gold and optionally resources. To do so they must be garrisoned. Peasants in a visiting heroes army do not produce gold or resources. They may do other things (see peasants in hero armies). The basic gold production in a village (town with only village hall built) is 1 gold per peasant. This may be increased by town buildings and/or hero level, secondary skills, speciality and artifacts as well as peasant rank:
+	+1% per average rank
+	+10% for town hall
+	+20% for city hall
+	+40% for capitol (note: town hall, city hall and capitol do not sum up)
+	+10% for market place
+	+100% for grail
+	+0...60% for estates (0..30% normal, 0-60% for gold or estates specialists)
+	+20% per hero level for gold specialists
+	+15% for equipped sack of gold
+	+10% for equipped bag of gold
+	+5% for equipped purse of gold
+If a resource silo is built, then 1 unit of the silos resource type is produced daily per 1000 peasants. If the resource silo produces wood and ore, both are produced, but still per 1000 peasants.
+If the garrisoned hero is a resource specialist, then 1 unit of that resource per 1000 peasants is produced, too, if the resource silo is built.
+
+Peasants in mines:
+For wood and ore, one unit of that resource is produced per day per 500 peasants. For the other resources, 1 resource unit is produced daily per 1000 peasants. Additionally some mines add a significant growth rate to some creatures. They do (currently) not produce any creatures out of nothing, but they do apply a growth rate to these creatures already guarding the mine. The growth rate is 1 hitpoint per 1-2 peasants, depending on the peasant growth rate. These mines apply growth rates to these creatures:
+Wood: Dendroid gurads, and dendroid soldiers
+Mercury: Currently none (no idea)
+Ore: Iron golems
+Sulfur: Rust dragons
+Crystal: Crystal dragon
+Gem: Diamond golems and diamond dragons
+Gold: Gold golems
+(Planned for next version: Peasants will apply a smaller growth rate to any creature for unowned mines. At startup all unowned mines are filled with some creatures.)
+
+Peasants in Garrisons:
+Peasants do apply a small growth rate to any creature garrisoned. The growth rate is applied to peasants, too. Growth rate is 1 hitpoint per 2-4 peasants depending on peasant growth rate. A visiting hero at the end of week gets this growth rate for his own stacks, too.
+
+Peasants as guards in dwellings (planned for future version):
+They supply additional creatures to be hired per week. 
+
+
+General strategic considerations:
+
+Peasants do not do all these things at the same time. You have to decide what to focus on. In early game, depending on your resource situation, it may be good to put peasants in multiples of 500 into sawmills and ore pits to increase the production of these urgently needed resources. The production is more effective than buying these resources at the in-town market place, as long as you own less than 4 market places. Of course, if you have access to a market place on the adventure map, it is most effective to buy these resources there and put the peasants into your capitol. Later in the game it may become mandatory to move them to a town, preferably into the capitol. The gold production is highest in the capitol. But later you also will need some of the precious resources, f.ex. to build your magic guilds or to build your high-level dwellings. If you own 4 or more market places it is better to buy these resources there. If you own less it is more effective to let these resources be produced in the mines. 
+
+If you have enough resources and access to a garrison, especially in early game it may be a good idea to put the peasants into the garrison, maybe together with some low level creatures. This slightly increases your army in the next week. Att.: The growth rate is applied to every non-empty slot! So it is best to fill all slots with something. Hint: It may be a good idea to fill all slots of the garrison with peasants. This increases your available peasants very fast, since the growth rate is applied to every stack, and so next week there are more peasants in every stack applying a higher growth rate to all peasant stacks, and so on. Drawback is, as long as they are in the garrison they do not produce resources in mines or towns. It is your decision where you put the peasants.
+
+Some tactical considerations:
+If you get the peasants into battle to increase their experience, then try to preserve them. They are no fodder. Each peasant killed means one potential gold income less. And, if you are unlucky, 1 other resource less per day, too. So keep an eye on your peasants, they are valuable units! Not on the battlefield, but economically. If you are short on resources, the peasants may be the key to victory!
+
+If you have some garrisons on the adventure map, be sure to use them to replenish your stacks at the start of the week. For this a hero should have one stack of peasants in his army with significant numbers (preferably more than 1000). So if there is no enemy nearby on day 7, put the peasants into the garrison, together with 1 creature of any type you whish to refill. Be sure to fill all 7 slots of the garrision as well as all 7 slots of the hero himself. The next day you then will have some new recruits. Of course this is only useful for garrisons where you then can remove these creatures and put them into your army. Perhaps you check first.
+
+Appendix:
+Peasant growth rate is set to 50 if one of the other general growth options is set: 
+Option 284	Growth in town dwelling option (script127)
+Option 285	Growth in hero army and garrison
+Option 116	General army growth
+
+The alternate peasant script is disabled if the H4 peasant script is enabled (Option 286).
+
+Simple notification messages are subpressed if option 185 is set (disable some messages).
+
+Bugs:
+Due to erm limitations these bugs apply:
+If a town has a visiting hero (i.e. a hero at the same position as the town), then the peasant experience is irrelevant (only base rank applies). The same applies to mines.
+
+Have fun!

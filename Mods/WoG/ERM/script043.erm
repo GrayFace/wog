@@ -1,0 +1,107 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+** Obelisk Runes version 1.0 by Timothy Pulver
+** WoGify Name: script43.erm
+** Updated: September 12, 2004
+
+** This script inscribes a random Adventure Spell on every obelisk. Human played
+** Heroes may cast this spell at no cost when they visit the Obelisk. The AI
+** can only use Fly or Water Walk and gets 10 bonus spell points for any other
+** Obelisk visited instead. Once visited, an Obelisk's spell will remain the
+** same for the rest of the game. Some spells like Summon Boat will usually
+** be useless but may appear anyway. Banned movement spells will not appear on
+** Obelisks.
+
+** PO Numbers used for Obelisk object:
+**  S (spell number)
+**  T (which players have visited the Obelisk)
+
+** Function used: FU5312 (FU5311 no longer used but reserved)
+
+--------------------------------------------------------------------------------
+
+ [Set up Obelisk spells at start of map]
+!?PI;
+!!UN:P43/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!UN:U57/-1/?y-2; [Number of Obelisks on map: y-2]
+!!VRv1:S-1; [Initialize v1 to -1 to work with new faster UN:U syntax]
+!!DO5312/1/y-2/1&y-2>0:P; [Loop through all Obelisks to set spell]
+
+--------------------------------------------------------------------------------
+
+ [Loop through all obelisks to set spell]
+!?FU5312;
+!!UN:U57/-1/-1/1; [Store next Obelisk coordinates in v1/v2/v3]
+!!FU$spell$:P0/0/1/0/1/0; [Determine random non-banned Adventure Spell number: y-99]
+!!POv1/v2/v3:Sy-99; [Set spell number (S) to y-99 -- will be -1 if all spells banned]
+
+--------------------------------------------------------------------------------
+
+ [Post-visit trigger for Obelisk]
+!$OB57;
+!!UN:P43/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!PO998&y-1>0:S?y-2; [Read spell number: y-2]
+!!FU&y-2<0:E; [Exit if all Adventure Spells banned]
+
+ [Set PO:T number to show who's visited the Obelisk]
+!!OW:C?y-4; [Current player: y-4]
+!!VRy-5&y-4=0:S1;   [Red]
+!!VRy-5&y-4=1:S2;   [Blue]
+!!VRy-5&y-4=2:S4;   [Tan]
+!!VRy-5&y-4=3:S8;   [Green]
+!!VRy-5&y-4=4:S16;  [Orange]
+!!VRy-5&y-4=5:S32;  [Purple]
+!!VRy-5&y-4=6:S64;  [Teal]
+!!VRy-5&y-4=7:S128; [Pink]
+
+!!PO998:T?y-6; [Read PO:T number into y-6]
+!!VRy-6:|y-5; [Add player colour if it's not already there]
+!!PO998:Ty-6; [Write new PO:T number]
+
+ [Ask if player wants to cast the Obelisk spell]
+!!IF:V2/0; [Initialize Flag 2 to False]
+!!IF&1000:Q2/9/y-2/2/z143000;
+!!IF&-1000/y-2>=6/y-2<=7:V2/1; [For AI, say "yes" if it's Fly or Water Walk]
+!!HE-1&-1000/-2:Id10/1; [Give AI 10 spell points if it's not Fly or Water Walk]
+!!FU&-2:E; [Exit trigger if player clicks "no"]
+
+!!HE-1:I?y-3/1; [Hero's spell points before casting: y-3]
+!!OW:S1/y-2; [Cast adventure map spell for current hero]
+!!HE-1:Iy-3/1; [Restore hero's spell points after casting: y-3]
+!!UN:R1; [Redraw screen]
+
+--------------------------------------------------------------------------------
+
+ [If an Obelisk is right-clicked and it's already been visited]
+ [by this player display right-click text with spell icon]
+!?CM0;
+!!UN:P43/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+!!CM:P?y-1/?y-2/?y-3 S?y-10; [Place clicked: y-1/y-2/y-3, Type of click: y-10]
+!!OBy-1/y-2/y-3&y-1>=0:T?y-4; [Object clicked: y-4]
+!!FU|y-4<>57/y-10<>14:E; [Exit if not an Obelisk or right-click]
+
+!!POy-1/y-2/y-3&y-4>=0:T?y-5; [PO:T number: y-5]
+!!OW:C?y-6; [Current player: y-6]
+!!VRy-7&y-6=0:S1;   [Red]
+!!VRy-7&y-6=1:S2;   [Blue]
+!!VRy-7&y-6=2:S4;   [Tan]
+!!VRy-7&y-6=3:S8;   [Green]
+!!VRy-7&y-6=4:S16;  [Orange]
+!!VRy-7&y-6=5:S32;  [Purple]
+!!VRy-7&y-6=6:S64;  [Teal]
+!!VRy-7&y-6=7:S128; [Pink]
+!!VRy-5:&y-7; [Check if this player has visited the Obelisk before: y-5>0 if yes]
+!!FU&y-5<1:E; [Exit if Obelisk not visited before]
+
+!!POy-1/y-2/y-3:S?y-9; [Spell number for this Obelisk: y-9]
+!!IF&y-9>=0:Q4/9/y-9/4/z143001;
+!!CM&y-9>=0:R0; [Disable standard right-click function]
+

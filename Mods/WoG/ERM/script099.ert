@@ -1,0 +1,48 @@
+199001	An old priest shuffles slowly upon to you: "I'm very sorry. Once this was a beautiful shrine and we guarded the knowledge of a very nice spell here. But ever since this unfortunate Magic-Banning-Act came along, it is prohibited to share this knowledge. 
+
+But if you want, we can share some other knowledge..."	Visiting Shrines	16.12.2004
+199002	An old priest shuffles slowly upon to you: "I'm very sorry. Once this was a beautiful shrine and we guarded the knowledge of a very nice spell here.  But ever since this unfortunate Magic-Banning-Act came along, it is prohibited to share this knowledge. 
+
+Unfortunately we can teach you nothing other, you have already learned all, what we know."	revisit shrine	16.12.2004
+199003	The caretaker of the Library opens the door and examines you slowly: "You are neither famous nor diplomatic enough to use our excellent library.", he mumbles scornfully. "Come back, when you think you're more worthy."	Library: not worth	16.12.2004
+199004	You enter the {Library of Enlightenment}  just to find this sign:
+
+"There are no lessons in Magic Power and Knowledge, but there are extra lessons in Attack and Defense"
+
+You hunch your shoulders and take what you can get.	Visiting Library	16.12.2004
+199005	You search for some new knowledge in the dusty books of the library, but cannot find anything that you don't already know.	revisit Library	16.12.2004
+199006	Shrine of Initiation (gives 1.500 exp)	Object Hint	17.12.2004
+199007	Shrine of Consolidation (gives 3.000 exp.)	Object Hint	17.12.2004
+199008	Shrine of Retainance (gives 5.000 exp).	Object Hint	17.12.2004
+199009	Shrine (visited)	Object Hint	17.12.2004
+199010	You read a sign saying:
+
+"Magic Guild closed - Usage is prohibited by capital punishment!!!"	inside CM1 (clicking on Mage Guild)	18.12.2004
+199011	Just as you prepare for battle, a hot wind blows through your tent and all of your magic scrolls crumbles to dust.	!?BA0 - remove scrolls	19.12.2004
+199012	{Garden of Revelation}
+
+Some old veterans uses this  Garden of Revelation since the magic is banned from the land. They agree to share the secret of how to survive in a battle.	visit  Garden of Revelation	20.12.2004
+199013	{Garden of Revelation}
+
+The old veterans invite you to sit down a while and talk about old times full of battles, rum and - of course - hookers.	revisit  Garden of Revelation	20.12.2004
+199014	{Star Axis}
+
+You disturb a marauder who is looting the ruins of this Star Axis. Although he is obviously inferior, he gives you a furious fight before you can knock him out.
+
+After you hand him over to the local authorities, you use a little free time to remember some of the very uncommon attacks.	visit Star Axis	20.12.2004
+199015	{Star Axis}
+
+Only the wind howls through the ruins of this ancient Star Axis.	revisit Star Axis	20.12.2004
+199016	{School of Magic}
+
+You streak through the empty floors of the School of Magic. Suddenly you hear noises that are definite battle sounds. You rush forward and find youself face to face with a skinny, old mage:
+
+"Hey, another hero who wants to fight against my famous Golems to improve his abilities! It's only 1000 gold."	visit Schools of Magic	20.12.2004
+199017	{School of Magic}
+
+"No more lessons for you.", grunts a scabby Golem who is guarding the door.	revisit Schools of Magic	20.12.2004
+199018	{School of Magic}
+
+You streak through the empty floors of the School of Magic. Suddenly you hear noises that are definite battle sounds. You rush forward and find you face to face with a skinny, old mage:
+
+"Hey, another hero who wants to fight against my famous Golems to improve his abilities! It's only 1000 gold. You don't have it? Then go away and stop wasting my time!"	no gold (Schools of Magic)	20.12.2004

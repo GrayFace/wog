@@ -1,0 +1,2389 @@
+ZVSE
+ERMS_ScriptDate=19.10(October).2008
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+
+~#FU:C0; [Enable y variable outside of Function checking]
+~#VC:CB; [Clear used variable list and start variable logging]
+
+** Wogify ERM script v2.0 - Donald X. Vaccarino
+** with updates by Timothy Pulver, Anders Jonsson and Thomas Franz
+** Requires WOG version 3.58f or later
+** Add WOG objects to a map on day one
+** WoGify Name: script00.erm
+** Last update 2007.06.08.by Doom3d, bugfix for Getbasicprimaries &Enhanced Commander artifacts ***Z
+** Previous update: 2007.02.11. by Doom3d, speedup Bit macro, FU3334 free'd up, changes marked ***Z
+** Previous Update: October 11, 2006 by Thomas Franz: fixed $GetBasicPrim$ (regarding Spellpower and Knowledge)
+** Previous Update: October 10, 2006 (added library function RandomStack for choosing a random stack on the battlefield]
+** Previous Update: July 18, 2006 (added library function LocalPlayer for determining local player in network games)
+** Previous Update: 11.7(July).2006 updated GetBasicPrimaries to fit with new script71; Disable Blank Artifacts at game start
+** Previous Update: 6.7(July).2006 (correction of FU$Set4ByteVar$; added macros GetBasicPrimaries)
+** Previous Update: Jan. 02, 2006 (correction of usage for 4byteVars-Macros by Thomas Franz)
+** Previous update: May 30, 2006 (added check to spell function for banning of disguise in wog options)
+** Previous update: Jan. 14, 2006 (correction of Scroll replacement by Timothy)
+** (Previous update: August 22, 2005)
+
+** In addition to normal WOG objects, the following scripted objects as well as
+** non-object scripts may be used, though none are essential and all can be
+** disabled from the WoGify Options Dialogue. The exception is the Map Options
+** script which is required for all spell and artifact disabling to function as
+** well as several other options.
+
+** - script01.erm: Map Rules [by Donald X.]
+** - script02.erm: Artifact Boosts [by Donald X.]
+** - script03.erm: Secondary Skills Boosts [by Donald X.]
+** - script04.erm: Arcane Tower [by Donald X.]
+** - script05.erm: Bank [by Donald X.]
+** - script06.erm: Hourglass of Asmodeus [by Fnord]
+** - script07.erm: Fishing Well [by Fnord]
+** - script08.erm: Junk Merchant [by Donald X.]
+** - script09.erm: Market Of Time [by Fnord]
+** - script10.erm: Magic Mushrooms [by Bruno]
+** - script11.erm: Palace Of Dreams [by Fnord]
+** - script12.erm: Living Skull [by Fnord]
+** - script13.erm: Tavern Card Game [by Fnord]
+** - script14.erm: Altar Of Transformation [by Fnord]
+** - script15.erm: Mysterious Creature Dwelling [by Dieter]
+** - script16.erm: Battle Academy [by Anders]
+** - script17.erm: Potion Fountains [by Bruno]
+** - script18.erm: Alms House [by Donald X.]
+** - script19.erm: Masters of Life [by Sir Four]
+** - script20.erm: Week of Monster [by Fnord]
+** - script21.erm: Freelancer's Guild [by Fnord]
+** - script22.erm: Monster Mutterings [by Fnord]
+** - script23.erm: Sorcery Enhancement [by Fnord]
+** - script24.erm: Enhanced Hint Text (for creature dwellings) [by Fnord]
+** - script25.erm: Map Options [by Fnord]
+** - script26.erm: Artificer [by Dieter]
+** - script27.erm: Spellbook [by Anders]
+** - script28.erm: School Of Wizardry [by Anders]
+** - script29.erm: Chest [by Donald X.]
+** - script30.erm: Adventure Cave [by Donald X.]
+** - script31.erm: Treasure Chest 2 [by Fnord]
+** - script32.erm: Summoning Stones [by Fnord]
+** - script33.erm: Living Scrolls [by Fnord]
+** - script34.erm: Cards of Prophecy [by the Qurqirish Dragon]
+** - script35.erm: Mysticism Enhancement [by Anders]
+** - script36.erm: Mithril Enhancements [by Anders]
+** - script37.erm: Rebalanced Factions [by Steven Lynch]
+** - script38.erm: Karmic Battles [by Dieter]
+** - script39.erm: Hero Specialization Boost [by Alexis Koz]
+** - script40.erm: First Money [by Alexis Koz]
+** - script41.erm: Battle Extender [by Alexis Koz]
+** - script42.erm: Garrisons [by Fnord]
+** - script43.erm: Obelisk Runes [by Fnord]
+** - script44.erm: Emerald Tower [by Fnord]
+** - script45.erm: Castle Upgrading [by Alexis Koz]
+** - script46.erm: Berserker Flies [by Fnord]
+** - script47.erm: Creature Relationships [by the Qurqirish Dragon]
+** - script48.erm: Enhanced Secondary Skills [by Arstahd]
+** - script49.erm: Henchmen [by Arstahd]
+** - script50.erm: Enhanced Monsters [by Arstahd]
+** - script51.erm: Enhanced Commanders [by Arstahd]
+** - script52.erm: Mirror of the Home-Way [by Sir Four]
+** - script53.erm: Dungeon of the Dragon Master [by Hermann the Weird]
+** - script54.erm: Enhanced War Machines I [by Overlord]
+** - script55.erm: Enhanced War Machines II [by Arstahd]
+** - script56.erm: Metamorphs [by Fnord]
+** - script57.erm: Neutral Units [by Alexandru Balahura]
+** - script58.erm: Espionage [by Petyo]
+** - script59.erm: Piercing Shot [by Petyo]
+** - script60.erm: Forgotten Shrine [by Petyo]
+** - script61.erm: Protection from the Elements by Petyo]
+** - script62.erm: Split Decision [by Fnord]
+** - script63.erm: Passable Terrain [by Fnord]
+** - script64.erm: Tobyn's Scripts [by Tobyn]
+** - script65.erm: Monolith Costs [by Steven Lynch]
+** - script66.erm: Commander Witch Huts [by Donald X.]
+** - script67.erm: Neutral Town [by Donald X. and Jonas]
+** - script68.erm: New Battlefields [by Donald X., Robert, and Jonas]
+** - script69.erm: Custom Alliances [by Sir Four]
+** - script70.erm: Death Chamber [by Rich Reed]
+** - script71.erm: Enhanced Artifacts [by Arstahd]
+** - script72.erm: Random Hero [by Bonizag]
+** - script73.erm: Enhanced War Machines III [by Bonizag]
+** - script74.erm: Summon Elementals [by Bonizag]
+** - script75.erm: Secondary Skill Text [by Hermann the Weird]
+** - script76.erm: Commander Sanctuary [by Fnord]
+** - script77.erm: WoG Cheat Menu [by Fnord]
+
+** Variables Used: v508,v600-v705, v950-v966, v3339-v3340, v4800-v4869
+** Flags Used: 9,870 (used by Anders' Mithril script section]
+** Functions Used: 8-9, 670-686, 5209, 350-351
+** Dialogs Used: 1
+** Timers Used: 19, 79
+
+** Universal Timer uses:
+** Timers: 1, 2
+** Variables: v201-v202, v2371-v2395, v1337-v1338
+** Macros: $week$, $weeks$, $once$, $day$, $weekday$, $AI$, $color$, $month$,
+** $monday$, $tuesday$, $wednesday$, $thursday$, $friday$, $saturday$, $sunday$,
+** $red$, $blue$, $tan$, $green$, $orange$, $purple$, $teal$, $pink$
+** $lastplayer$, $battlewinner$, $battleloser$
+
+** Bit Conversion uses:
+** Functions: FU3333
+** Macros: $bit$
+** Variables: v3333, y-100
+
+** Generate Random Spell uses:
+** Functions: FU7777-FU7779
+** Macros: $spell$
+** Variables: v3500, y-96..y-99
+
+** Set AI/Human Experience uses:
+** Functions: FU22000-FU22001
+** Dialogs: DG15
+** Variables: v1-v3 (temporary)
+
+** Add Warlord's Banner Artifacts to some Creature Banks
+** Functions: FU25, FU27
+
+** Level 7+ Creatures Only Receive 50% Stack Experience
+** Functions: FU29
+
+** 4ByteVar-Routines use
+** Functions FU90-FU93
+** Macros $Set4ByteVar$, $Get4ByteVar$, $Set4ByteVarByte$, $Get4ByteVarByte$
+** variables: v46-v49
+
+** GetBasicPrimaries-Routine
+** Macros $GetBasicPrim$
+** variables: v293-v294, v371, v423-v424
+** Functions FU454-FU455
+
+** LocalPlayer-Routine
+** Macro: $LocalPlayer$
+** Variables: v203, y-100
+** Functions: FU2405-FU2406
+
+** RandomStack-Routine
+** Macro: $RandomStack$
+** Variables: v509, y-100, (temporary use of v600-v642)
+** Functions: FU2407-FU2408
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+** Selects a Random Stack on the Battlefield **
+** Parameters: x1=0 =attacking side, x1=1 =defending side, x1=2 =either side
+**             x2=0 =including war machines (except arrow towers)
+**             x2=1 =excluding war machines
+**             x3=0 =shooters or non-shooters
+**             x3=1 =shooters only
+**             x3=2 =non-shooters only
+** Stack Number returned in y-100 (-1 returned if no valid stack) **
+
+** e.g., FU$RandomStack$:P0/1/0; [Random attacking stack, no war machines, any unit]
+**       FU$RandomStack$:P1/0/1; [Random defending stack, war machines allowed, shooters only]
+**       FU$RandomStack$:P0/0/0; [Random attacking stack, war machines allowed, any unit]
+
+** Macro: $RandomStack$
+** Variables: v509, y-100, (temporary use of v600-v642)
+** Functions: FU2407-FU2408
+
+--------------------------------------------------------------------------------
+
+!#MCv509:S@RandomStack@; [Set up macro]
+!#VRv509:S2407; ["Link" to FU2407]
+
+--------------------------------------------------------------------------------
+
+ [Choose a random stack, stack number returned in y-100]
+!?FU2407;
+!!VRy-100:S-1; [Initialize y-100 to -1]
+!!VRy1|x1=0/x1=3:S0; [Attacking side: starting stack #: y1]
+!!VRy2&x1=0:S20; [Attacking side: ending stack #: y2]
+!!VRy1&x1=1:S21; [Defending side: starting stack #: y1]
+!!VRy2|x1=1/x1=3:S41; [Defending side: ending stack #: y2]
+!!VRv642:S-1; [Initialize v642 to -1]
+!!DO2408/y1/y2/1:Px2/x3; [Loop through stacks, store valid targets in v600-v641]
+!!FU&v642<0:E; [Exit if no valid stacks]
+!!VRy3:S600 Rv642; [Choose a random stack (index): y3]
+!!VRy-100:Svy3; [Set y-100 to random valid stack number]
+
+ [Loop through stacks, store valid targets in v600-v641]
+!?FU2408;
+ [x1=1 to exclude war machines, x2=1 for shooters only, x2=2 for non-shooters only]
+!!BMx16:N?y1; [Number of creatures in stack: y1]
+!!FU&y1<1:E; [Skip if no creatures in stack]
+!!BMx16:T?y2 F?y3; [Type: y2, Flags: y3]
+!!FU|y2<0/y2=122/y2=124/y2=126/y2=128/y2=149:E; [Skip none, unused, and arrow towers]
+!!FU&x1=1/y2>=145/y2<=148:E; [Skip War Machines if excluded]
+!!VRy3:&4; [Check for shooter: y3>0 if shooter]
+!!FU&x2=1/y3=0:E; [Exit if shooters only and it's a non-shooter]
+!!FU&x2=2/y3>0:E; [Exit if non-shooters only and it's a shooter]
+!!VRv642:+1; [Increment stack counter: v642]
+!!VRy4:S600 +v642; [Index for storing stack number: y4]
+!!VRvy4:Sx16; [Store valid stack number in v600-v641]
+
+--------------------------------------------------------------------------------
+
+** [Get Local Player (player in front of screen) for Network Games] **
+
+** Syntax: FU$LocalPlayer$:P;
+** Returned: local player number in y-100
+** (If for some reason the local player isn't found, y-100 will return -1.)
+
+** Macro: $LocalPlayer$
+** Variables: v203, y-100
+** Functions: FU2405-FU2406
+
+--------------------------------------------------------------------------------
+
+!#MCv203:S@LocalPlayer@; [Set up macro]
+!#VRv203:S2405; ["Link" to FU2405]
+
+--------------------------------------------------------------------------------
+
+ [Determine local player for Network game or current player if non-network: y-100]
+!?FU2405;
+!!VRy-100:S-1; [Initialize y-100 to -1]
+!!UN:V?y1/?y1/?y1/?y2/?y1; [Check if it's a network game: y2=1 if yes]
+!!DO2406/0/7/1&y2=1:P; [If Network game, determine local player: y-100]
+!!OW&y2=0:C?y-100; [Get current player for a non-network game: y-100]
+
+--------------------------------------------------------------------------------
+
+ [Determine local player for Network game: y-100]
+!?FU2406;
+!!OW:Gx16/?y1; [Is this player (x16) in front of screen?: y1=1 if yes]
+!!VRy-100&y1=1:Sx16; [Set y-100 to x16 if this is the player in front of screen]
+!!VRx16&y1=1:S999; [End Loop if player found]
+
+--------------------------------------------------------------------------------
+
+********************************************************************************
+
+** Disable all blank artifacts (other scripts has to reenable them, if it us any of them
+!#UN:A161/1 A162/1 A163/1 A164/1 A165/1 A166/1 A167/1 A168/1 A169/1 A170/1;
+
+** Auto-disable "Arrow Towers Gain Experience" for Network Games
+
+!?PI; [Post-instruction trigger]
+!!UN:V?y-1/?y-2/?y-3/?y-4/?y-5; [Get game info: y-4=1 for a Network game]
+!!UN:P1/?y-6; [Check if Arrow Tower Experience is enabled: y-6=0 if YES]
+!!UN&y-4=1/y-6=0:P1/1; [Disable Arrow Tower Experience if a Network game]
+!!IF&y-4=1/y-6=0:M1/z100040; [Display message that Arrow Tower Experience option was disabled]
+
+********************************************************************************
+
+** Bit Conversion by the Qurqirish Dragon **
+
+ [Set up macro for bit-conversion]
+
+!#MCv3333:S@bit@;
+!#VRv3333:S3333;
+
+BITWISE PACKER SETUP;  lookup table to calculate 2^x (x:0-31) placed on v1460-v1491 for speedup
+!#VRv1460:C1/2/4/8/16/32/64/128/256/512/1024/2048/4096/8192/16384/32768;
+!#VRv1476:C65536/131072/262144/524288/1048576/2097152/4194304/8388608/16777216/33554432/67108864/134217728/268435456/536870912/1073741824/-2147483648;
+** v1491= +2147483648 also tested ok, but -2147483648 is used ..    can be shared as read-only
+
+* [Calculate bit value:]
+* [  Method 1: input in x1 parameter, result in y-100. e.g., FU$bit$:P50;   ]
+* [  Method 2: input in x1 parameter, use return variable syntax for result ]
+* [            (x2) in return variable parameter. e.g., FU$bit$:P50/?y1;    ]
+* [                                                                         ]
+* [Note: y-100 will return the result even if method 2 is used.             ]
+* [Doom3d: exception handling added for x1<0/x1>32, FU3334 free'd up        ]  ***Z
+
+
+!?FU3333;
+* n-> 2^(n-1), but 0->0, exceptions: "-1" returned
+
+!!VRy1:S1459 +x1;
+!!VRv3339:Svy1;
+!!VRv3339&x1=0:S0;
+!!VRv3339|x1<0/x1>32:S-1; exception handling
+;return values
+!!VRy-100:Sv3339; [Store converted bit value in y-100]
+!!VRx2:Sv3339; [Store converted bit value in return variable]
+
+** end of Bit Conversion.
+
+********************************************************************************
+
+  UNIVERSAL TIMER INIT by Tobyn   (see script64.erm for longer description)
+
+!#TM1:S1/999/1/255;    triggers every color every day
+!#TM2:S1/999/1/255;    same but triggers only *after* all calculations from TM1 are done
+!#VRv2396:S1;          init v2396 month indicator (starts with month 1)
+!#VRv2390:S1;          init v2390 day comparator (c also starts with day 1 value)
+!#MCv2391:S@once@;     init macros (= other names) for the eight used vars
+!#MCv2392:S@day@;
+!#MCv2393:S@weekday@;
+!#MCv2394:S@AI@;
+!#MCv2395:S@color@;
+!#MCv2396:S@month@;
+!#MCv2388:S@week@;     monthly week count    (1,2,3,4,1,2,...)
+!#MCv2389:S@weeks@;    continuing week count (1,2,3,4,5,6,...)
+
+!#MCv2371:S@monday@;     !#VR$monday$:S1;    init macros and values for weekdays
+!#MCv2372:S@tuesday@;    !#VR$tuesday$:S2;
+!#MCv2373:S@wednesday@;  !#VR$wednesday$:S3;
+!#MCv2374:S@thursday@;   !#VR$thursday$:S4;
+!#MCv2375:S@friday@;     !#VR$friday$:S5;
+!#MCv2376:S@saturday@;   !#VR$saturday$:S6;
+!#MCv2377:S@sunday@;     !#VR$sunday$:S7;
+
+!#MCv2380:S@red@;        !#VR$red$:S0;       init macros and values for colors
+!#MCv2381:S@blue@;       !#VR$blue$:S1;
+!#MCv2382:S@tan@;        !#VR$tan$:S2;
+!#MCv2383:S@green@;      !#VR$green$:S3;
+!#MCv2384:S@orange@;     !#VR$orange$:S4;
+!#MCv2385:S@purple@;     !#VR$purple$:S5;
+!#MCv2386:S@teal@;       !#VR$teal$:S6;
+!#MCv2387:S@pink@;       !#VR$pink$:S7;
+
+!#MCv1337:S@lastplayer@;  !#VRv1338:S0; // init last player
+!#MCv201:S@battlewinner@; !#MCv202:S@battleloser@;
+
+  UNIVERSAL TIMER GLOBAL CALL EVERY DAY
+
+!?TM1;                     GLOBAL CALL (in central script so user needn't do it himself)
+!!OW:C?v2395;                get current player color (0..7)
+!!OW:Iv2395/?v2394;          get current player status (0=human, 1=AI)
+!!VRv2393:Sc %7;             set weekday (mon=1..sat=6,sun=0)
+!!VRv2393&v2393=0:S7;        set sunday=7 instead of sunday=0
+!!VRv2392:Sc;                set current day (comparison with c doesn't work in the next two lines)
+!!VRv2391&v2390=v2392:S1;    set once-on-that-day flag (only first active color)
+!!VRv2391&v2390>v2392:S0;    reset that flag (at second active color each day)
+!!VRv2390&v2391=1:+1;        inc day comparator (needed for flag)
+!!VRv2389&v2391=1:Sc -1 :7 +1; set weeks (cont count)
+!!VRv2388&v2393=1/v2391=1:+1; inc  week counter by 1 for each monday
+!!VRv2396&v2388=5/v2391=1:+1; inc month counter by 1 for each 5th week
+!!VRv2388&v2388=5/v2391=1:S1; reset week counter for each new month
+
+!!VR$lastplayer$:Sv1338; // set lastplayer
+!!VRv1338:Sv2395; // save current player for the next day
+
+********************************************************************************
+
+!?BA1; // end of every battle: set $battlewinner$ and $battleloser$ (local)
+!!BA:H0/?y-1 H1/?y-2; // get both heroes
+!!HEy-1&y-1>-1:O?y-3; // get owner attacker
+!!HEy-2&y-2>-1:O?y-4; // get owner defender
+!!VR$battlewinner$&y-3>-1:Sy-1; !!VR$battleloser$&y-3>-1:Sy-2;
+!!VR$battlewinner$&y-3<0:Sy-2; !!VR$battleloser$&y-3<0:Sy-1;
+
+!?BA51; // end of every battle: set $battlewinner$ and $battleloser$ (network battle)
+!!BA:H0/?y-1 H1/?y-2; // get both heroes
+!!HEy-1&y-1>-1:O?y-3; // get owner attacker
+!!HEy-2&y-2>-1:O?y-4; // get owner defender
+!!VR$battlewinner$&y-3>-1:Sy-1; !!VR$battleloser$&y-3>-1:Sy-2;
+!!VR$battlewinner$&y-3<0:Sy-2; !!VR$battleloser$&y-3<0:Sy-1;
+********************************************************************************
+
+
+*** Generate Random Spell Number by Fnord ***
+
+!#MCv3500:S@spell@;
+!#VR$spell$:S7777;
+
+Syntax:
+
+ * FU$spell$:P#1/#2/#3/#4/#5/#6/#7/#8/#9/#10/#11/#12/#13/#14/#15;
+ * Spell Number is returned in y-99, value is -1 if no spell exists.
+
+ #1 = minimum spell level: 0=any, or 1..5
+ #2 = maximum spell level: 0=any, or 1..5
+ #3 = type: 0=any, 1=adventure, 2=combat
+ #4 = element: 0=any, 1=air, 2=earth, 4=fire, 8=water. Add numbers for multiple elements.
+ #5 = banning: 0=ignore spell banning, 1=skip banned spells
+ #6 = exclusions: 0=no exclusions, 1..9=number of specific spell exclusions (#7..#15)
+ #7..#15 = specific spell exclusions: 0..69 for spell number, anything else is ignored
+           and only exclusions up to the number in #6 are used, so if #6 is 0, all
+           specific exclusions will be ignored.
+
+ Example:
+   To generate a random Level 3 Combat Fire or Air spell excluding all Banned
+   spells and excluding the Misfortune (spell #52), use:
+   * !!FU$spell$:P3/3/2/5/1/1/52;
+
+A subfunction of this function may be used to determine the level, element and type
+(combat or adventure) of any given spell:
+
+Syntax:
+    FU7779:P#;
+
+ #=spell number being checked (0..69).
+
+Returned Values:
+ y-96 : Level (1..5)
+ y-97 : Type (1=Adventure, 2=Combat)
+ y-98 : Element (1=air, 2=earth, 4=fire, 8=water, 15=all elements)
+
+--------------------------------------------------------------------------------
+
+!?FU7777;
+ [x1=min. level, x2=max. level, x3=type, x4=element, x5=banning]
+ [x6=number of exclusions, x7..x15=specific exclusions]
+
+ [Display invalid parameter message for an invalid parameter]
+!!IF|x1<0/x1>5:M1/z100032;
+!!IF|x2<0/x2>5:M1/z100033;
+!!IF|x3<0/x3>2:M1/z100034;
+!!IF|x4<0/x4>15:M1/z100035;
+!!IF|x5<0/x5>3:M1/z100036;
+!!IF|x6<0/x6>9:M1/z100037;
+
+ [Set y-99 to -99 for an invalid parameter]
+!!VRy-99|x1<0/x1>5/x2<0/x2>5/x3<0/x3>2/x4<0/x4>15/x5<0/x5>3/x6<0/x6>9:S-99;
+
+!!FU&y-99=-99:E; [Exit if an invalid parameter is entered]
+
+!!VRy-99:S-1; [Initialize y-99 to -1]
+
+ [Do up to 500 loops to find a valid spell number: y-99]
+!!DO7778/1/500/1:Px1/x2/x3/x4/x5/x6/x7/x8/x9/x10/x11/x12/x13/x14/x15;
+
+--------------------------------------------------------------------------------
+
+ [Generate Valid Random Spell Number: y-99]
+!?FU7778;
+ [x1=min. level, x2=max. level, x3=type, x4=element, x5=banning]
+ [x6=number of exclusions, x7..x15=specific exclusions]
+
+!!VRy1:S0 R69; [Random spell number (0..69): y1]
+!!FU7779:Py1; [Determine Spell Level (y-96), Type (y-97), Element (y-98)]
+
+!!VRy2:S0; [Initialize y2 to 0]
+!!VRy2&x1<>0/y-96<x1:S1; [If level too low, set y2 to 1]
+!!VRy2&x2<>0/y-96>x2:S1; [If level too high, set y2 to 1]
+!!VRy2&x3<>0/x3<>y-97:S1; [If invalid type, set y2 to 1]
+!!VRy3:Sx4; [Copy x4 (elements) to y3]
+!!VRy3:&1; [Check for Air Element]
+!!VRy2&x4<>0/x4<>15/y-98<>15/y-98=1/y3<>1:S1; [If Air Spell and invalid, set y2 to 1]
+!!VRy3:Sx4; [Copy x4 (elements) to y3]
+!!VRy3:&2; [Check for Earth Element]
+!!VRy2&x4<>0/x4<>15/y-98<>15/y-98=2/y3<>2:S1; [If Earth Spell and invalid, set y2 to 1]
+!!VRy3:Sx4; [Copy x4 (elements) to y3]
+!!VRy3:&4; [Check for Fire Element]
+!!VRy2&x4<>0/x4<>15/y-98<>15/y-98=4/y3<>4:S1; [If Fire Spell and invalid, set y2 to 1]
+!!VRy3:Sx4; [Copy x4 (elements) to y3]
+!!VRy3:&8; [Check for Water Element]
+!!VRy2&x4<>0/x4<>15/y-98<>15/y-98=8/y3<>8:S1; [If Water Spell and invalid, set y2 to 1]
+!!UN:J0/y1/?y4; [Check if spell is enabled (0) or disabled (1): y4]
+!!VRy2&y4=1/x5=1:S1; [If spell is disabled and banning is selected, set y2 to 1]
+!!VRy5:S0; [Initialize y5 to 0]
+!!UN&y1=0:P152/?y5; [Check for banned Summon Boat    - y5=1 if banned]
+!!UN&y1=1:P221/?y5; [Check for banned Scuttle Boat   - y5=1 if banned]
+!!UN&y1=2:P222/?y5; [Check for banned Visions        - y5=1 if banned]
+!!UN&y1=3:P247/?y5; [Check for banned View Earth     - y5=1 if banned]
+!!UN&y1=4:P651/?y5; [Check for banned Disguise       - y5=1 if banned]
+!!UN&y1=5:P246/?y5; [Check for banned View Air       - y5=1 if banned]
+!!UN&y1=6:P156/?y5; [Check for banned Fly            - y5=1 if banned]
+!!UN&y1=7:P153/?y5; [Check for banned Water Walk     - y5=1 if banned]
+!!UN&y1=8:P155/?y5; [Check for banned Dimension Door - y5=1 if banned]
+!!UN&y1=9:P154/?y5; [Check for banned Town Portal    - y5=1 if banned]
+!!UN&y1=26:P223/?y5; [Check for banned Armageddon    - y5=1 if banned]
+!!UN&y1=38:P272/?y5; [Check for banned Resurrection  - y5=1 if banned]
+!!UN&y1=39:P271/?y5; [Check for banned Animated Dead - y5=1 if banned]
+!!VRy2&y5=1/x5=1:S1; [If spell is banned and banning is selected, set y2 to 1]
+!!VRy2&x6>=1/x7=y1:S1; [If spell is 1st excluded spell, set y1 to 1]
+!!VRy2&x6>=2/x8=y1:S1; [If spell is 2nd excluded spell, set y1 to 1]
+!!VRy2&x6>=3/x9=y1:S1; [If spell is 3rd excluded spell, set y1 to 1]
+!!VRy2&x6>=4/x10=y1:S1; [If spell is 4th excluded spell, set y1 to 1]
+!!VRy2&x6>=5/x11=y1:S1; [If spell is 5th excluded spell, set y1 to 1]
+!!VRy2&x6>=6/x12=y1:S1; [If spell is 6th excluded spell, set y1 to 1]
+!!VRy2&x6>=7/x13=y1:S1; [If spell is 7th excluded spell, set y1 to 1]
+!!VRy2&x6>=8/x14=y1:S1; [If spell is 8th excluded spell, set y1 to 1]
+!!VRy2&x6>=9/x15=y1:S1; [If spell is 9th excluded spell, set y1 to 1]
+
+!!VRy-99&y2=0:Sy1; [If spell is valid, set y-99 to spell number: y-99]
+!!VRx16&y2=0:S999; [If spell is valid, set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Determine Spell Level, Type, Element]
+!?FU7779;
+ [x1=spell number, y-96 returns level, y-97 returns type, y-98 returns element]
+
+!!VRy-97&x1<=9:S1; [Set y-97 to 1 for an Adventure Spell]
+!!VRy-97&x1>=10:S2; [Set y-97 to 2 for a Combat Spell]
+
+!!VRy-96&x1=0:S1; [Summon Boat]
+!!VRy-98&x1=0:S8; [Water]
+!!VRy-96&x1=1:S2; [Scuttle Boat]
+!!VRy-98&x1=1:S8; [Water]
+!!VRy-96&x1=2:S2; [Visions]
+!!VRy-98&x1=2:S15; [All Elements]
+!!VRy-96&x1=3:S1; [View Earth]
+!!VRy-98&x1=3:S2; [Earth]
+!!VRy-96&x1=4:S2; [Disguise]
+!!VRy-98&x1=4:S1; [Air]
+!!VRy-96&x1=5:S1; [View Air]
+!!VRy-98&x1=5:S1; [Air]
+!!VRy-96&x1=6:S5; [Fly]
+!!VRy-98&x1=6:S1; [Air]
+!!VRy-96&x1=7:S4; [Water Walk]
+!!VRy-98&x1=7:S8; [Water]
+!!VRy-96&x1=8:S5; [Dimension Door]
+!!VRy-98&x1=8:S1; [Air]
+!!VRy-96&x1=9:S4; [Town Portal]
+!!VRy-98&x1=9:S2; [Earth]
+!!VRy-96&x1=10:S2; [Quicksand]
+!!VRy-98&x1=10:S2; [Earth]
+!!VRy-96&x1=11:S3; [Land Mine]
+!!VRy-98&x1=11:S4; [Fire]
+!!VRy-96&x1=12:S3; [Force Field]
+!!VRy-98&x1=12:S2; [Earth]
+!!VRy-96&x1=13:S2; [Fire Wall]
+!!VRy-98&x1=13:S4; [Fire]
+!!VRy-96&x1=14:S3; [Earthquake]
+!!VRy-98&x1=14:S2; [Earth]
+!!VRy-96&x1=15:S1; [Magic Arrow]
+!!VRy-98&x1=15:S15; [All Elements]
+!!VRy-96&x1=16:S2; [Ice Bolt]
+!!VRy-98&x1=16:S8; [Water]
+!!VRy-96&x1=17:S2; [Lightning Bolt]
+!!VRy-98&x1=17:S1; [Air]
+!!VRy-96&x1=18:S5; [Implosion]
+!!VRy-98&x1=18:S2; [Earth]
+!!VRy-96&x1=19:S4; [Chain Lightning]
+!!VRy-98&x1=19:S1; [Air]
+!!VRy-96&x1=20:S3; [Frost Ring]
+!!VRy-98&x1=20:S8; [Water]
+!!VRy-96&x1=21:S3; [Fireball]
+!!VRy-98&x1=21:S4; [Fire]
+!!VRy-96&x1=22:S4; [Inferno]
+!!VRy-98&x1=22:S4; [Fire]
+!!VRy-96&x1=23:S4; [Meteor Shower]
+!!VRy-98&x1=23:S2; [Earth]
+!!VRy-96&x1=24:S2; [Death Ripple]
+!!VRy-98&x1=24:S2; [Earth]
+!!VRy-96&x1=25:S3; [Destroy Undead]
+!!VRy-98&x1=25:S1; [Air]
+!!VRy-96&x1=26:S4; [Armageddon]
+!!VRy-98&x1=26:S4; [Fire]
+!!VRy-96&x1=27:S1; [Shield]
+!!VRy-98&x1=27:S2; [Earth]
+!!VRy-96&x1=28:S3; [Air Shield]
+!!VRy-98&x1=28:S1; [Air]
+!!VRy-96&x1=29:S4; [Fire Shield]
+!!VRy-98&x1=29:S4; [Fire]
+!!VRy-96&x1=30:S2; [Protection from Air]
+!!VRy-98&x1=30:S1; [Air]
+!!VRy-96&x1=31:S1; [Protection from Fire]
+!!VRy-98&x1=31:S4; [Fire]
+!!VRy-96&x1=32:S1; [Protection from Water]
+!!VRy-98&x1=32:S8; [Water]
+!!VRy-96&x1=33:S3; [Protection from Earth]
+!!VRy-98&x1=33:S2; [Earth]
+!!VRy-96&x1=34:S3; [Anti-Magic]
+!!VRy-98&x1=34:S2; [Earth]
+!!VRy-96&x1=35:S1; [Dispel]
+!!VRy-98&x1=35:S8; [Water]
+!!VRy-96&x1=36:S5; [Magic Mirror]
+!!VRy-98&x1=36:S1; [Air]
+!!VRy-96&x1=37:S1; [Cure]
+!!VRy-98&x1=37:S8; [Water]
+!!VRy-96&x1=38:S4; [Resurrection]
+!!VRy-98&x1=38:S2; [Earth]
+!!VRy-96&x1=39:S3; [Animate Dead]
+!!VRy-98&x1=39:S2; [Earth]
+!!VRy-96&x1=40:S5; [Sacrifice]
+!!VRy-98&x1=40:S4; [Fire]
+!!VRy-96&x1=41:S1; [Bless]
+!!VRy-98&x1=41:S8; [Water]
+!!VRy-96&x1=42:S1; [Curse]
+!!VRy-98&x1=42:S4; [Fire]
+!!VRy-96&x1=43:S1; [Bloodlust]
+!!VRy-98&x1=43:S4; [Fire]
+!!VRy-96&x1=44:S2; [Precision]
+!!VRy-98&x1=44:S1; [Air]
+!!VRy-96&x1=45:S2; [Weakness]
+!!VRy-98&x1=45:S8; [Water]
+!!VRy-96&x1=46:S1; [Stone Skin]
+!!VRy-98&x1=46:S2; [Earth]
+!!VRy-96&x1=47:S2; [Disrupting Ray]
+!!VRy-98&x1=47:S1; [Air]
+!!VRy-96&x1=48:S4; [Prayer]
+!!VRy-98&x1=48:S8; [Water]
+!!VRy-96&x1=49:S3; [Mirth]
+!!VRy-98&x1=49:S8; [Water]
+!!VRy-96&x1=50:S4; [Sorrow]
+!!VRy-98&x1=50:S2; [Earth]
+!!VRy-96&x1=51:S2; [Fortune]
+!!VRy-98&x1=51:S1; [Air]
+!!VRy-96&x1=52:S3; [Misfortune]
+!!VRy-98&x1=52:S4; [Fire]
+!!VRy-96&x1=53:S1; [Haste]
+!!VRy-98&x1=53:S1; [Air]
+!!VRy-96&x1=54:S1; [Slow]
+!!VRy-98&x1=54:S2; [Earth]
+!!VRy-96&x1=55:S4; [Slayer]
+!!VRy-98&x1=55:S4; [Fire]
+!!VRy-96&x1=56:S4; [Frenzy]
+!!VRy-98&x1=56:S4; [Fire]
+!!VRy-96&x1=57:S5; [Titan's Lightning Bolt]
+!!VRy-98&x1=57:S1; [Air]
+!!VRy-96&x1=58:S4; [Counterstrike]
+!!VRy-98&x1=58:S1; [Air]
+!!VRy-96&x1=59:S4; [Berserk]
+!!VRy-98&x1=59:S4; [Fire]
+!!VRy-96&x1=60:S3; [Hypnotize]
+!!VRy-98&x1=60:S1; [Air]
+!!VRy-96&x1=61:S3; [Forgetfulness]
+!!VRy-98&x1=61:S8; [Water]
+!!VRy-96&x1=62:S2; [Blind]
+!!VRy-98&x1=62:S4; [Fire]
+!!VRy-96&x1=63:S3; [Teleport]
+!!VRy-98&x1=63:S8; [Water]
+!!VRy-96&x1=64:S2; [Remove Obstacle]
+!!VRy-98&x1=64:S8; [Water]
+!!VRy-96&x1=65:S4; [Clone]
+!!VRy-98&x1=65:S8; [Water]
+!!VRy-96&x1=66:S5; [Fire Elemental]
+!!VRy-98&x1=66:S4; [Fire]
+!!VRy-96&x1=67:S5; [Earth Elemental]
+!!VRy-98&x1=67:S2; [Earth]
+!!VRy-96&x1=68:S5; [Water Elemental]
+!!VRy-98&x1=68:S8; [Water]
+!!VRy-96&x1=69:S5; [Air Elemental]
+!!VRy-98&x1=69:S1; [Air]
+
+********************************************************************************
+
+** SET AI STACK EXPERIENCE DIFFICULTY by Fnord **
+
+ [Set AI values for all difficulties]
+!?FU22000;
+!!EA0:Ax16/x1; [Set AI Experience Multiplier]
+!!VRz-10&x4=1:S^%X1^; [Convert x1 to a string: z-10]
+!!UN&x4=1:N5/-10/2; [Write AI Experience Multiplier to ini file, index 2]
+!!EA0:Sx16/x2; [Set AI Additional Experience]
+!!VRz-10&x4=1:S^%X2^; [Convert x1 to a string: z-10]
+!!UN&x4=1:N5/-10/3; [Write AI Experience Multiplier to ini file, index 3]
+!!EA0:Tx16/x3; [Set AI Town Garrison Multiplier]
+!!VRz-10&x4=1:S^%X3^; [Convert x1 to a string: z-10]
+!!UN&x4=1:N5/-10/4; [Write AI Experience Multiplier to ini file, index 4]
+
+ [Customize Human/AI values]
+!?FU22001;
+!!UN:J2/?y1; [Player Difficulty level: y1]
+!!EA0:Ay1/?y2; [AI Experience Multiplier: y2]
+!!EA0:Sy1/?y3; [AI Additional Experience: y3]
+!!EA0:Ty1/?y4; [AI Town Garrison Multiplier: y4]
+!!EA0:H?y5; [Human Experience Multiplier: y5]
+
+!!VRz-10:S^^; [Set z-10 to null]
+!!UN:N6/-10/1; [Load Human Experience Multiplier: z-10]
+!!VRz-10:H2; [Set Flag 2 to TRUE if z-10 string not empty]
+!!VRy5&2:Vz-10; [Convert z-10 to y5]
+!!VRz-10:S^^; [Set z-10 to null]
+!!UN:N6/-10/2; [Load AI Experience Multiplier: z-10]
+!!VRz-10:H2; [Set Flag 2 to TRUE if z-10 string not empty]
+!!VRy2&2:Vz-10; [Convert z-10 to y2]
+!!VRz-10:S^^; [Set z-10 to null]
+!!UN:N6/-10/3; [Load Additional Experience: z-10]
+!!VRz-10:H2; [Set Flag 2 to TRUE if z-10 string not empty]
+!!VRy3&2:Vz-10; [Convert z-10 to y3]
+!!VRz-10:S^^; [Set z-10 to null]
+!!UN:N6/-10/4; [Load AI Town Garrison Multiplier: z-10]
+!!VRz-10:H2; [Set Flag 2 to TRUE if z-10 string not empty]
+!!VRy4&2:Vz-10; [Convert z-10 to y4]
+
+!!EA0:Hy5; [Set Custom Human Experience Multiplier: y5]
+!!DO22000/0/4/1:Py2/y3/y4/0; [Set Custom AI Values: y2, y3, y4]
+
+ [Set AI Experience Multiplier "Level" string: z2]
+!!VRz2&y2=0:Sz100039; [None]
+!!VRz2&y2>0/y2<100:Sz100018; [Easier than Easy]
+!!VRz2&y2=100:Sz100019; [Easy]
+!!VRz2&y2>100/y2<200:Sz100020; [Easy/Normal]
+!!VRz2&y2=200:Sz100021; [Normal]
+!!VRz2&y2>200/y2<300:Sz100022; [Normal/Hard]
+!!VRz2&y2=300:Sz100023; [Hard]
+!!VRz2&y2>300/y2<400:Sz100024; [Hard/Expert]
+!!VRz2&y2=400:Sz100025; [Expert]
+!!VRz2&y2>400/y2<500:Sz100026; [Expert/Impossible]
+!!VRz2&y2=500:Sz100027; [Impossible]
+!!VRz2&y2>500:Sz100028; [Harder than Impossible]
+
+ [Set AI Additional Experience "Level" string: z3]
+!!VRz3&y3=0:Sz100039; [None]
+!!VRz3&y3>0/y3<50:Sz100018; [Easier than Easy]
+!!VRz3&y3=50:Sz100019; [Easy]
+!!VRz3&y3>50/y3<100:Sz100020; [Easy/Normal]
+!!VRz3&y3=100:Sz100021; [Normal]
+!!VRz3&y3>100/y3<200:Sz100022; [Normal/Hard]
+!!VRz3&y3=200:Sz100023; [Hard]
+!!VRz3&y3>200/y3<300:Sz100024; [Hard/Expert]
+!!VRz3&y3=300:Sz100025; [Expert]
+!!VRz3&y3>300/y3<400:Sz100026; [Expert/Impossible]
+!!VRz3&y3=400:Sz100027; [Impossible]
+!!VRz3&y3>400:Sz100028; [Harder than Impossible]
+
+ [Set AI Town Garrison Multiplier "Level" string: z4]
+!!VRz4&y4=0:Sz100039; [None]
+!!VRz4&y4>0/y4<10:Sz100018; [Easier than Easy]
+!!VRz4&y4=10:Sz100019; [Easy]
+!!VRz4&y4>10/y4<25:Sz100020; [Easy/Normal]
+!!VRz4&y4=25:Sz100021; [Normal]
+!!VRz4&y4>25/y4<50:Sz100022; [Normal/Hard]
+!!VRz4&y4=50:Sz100023; [Hard]
+!!VRz4&y4>50/y4<75:Sz100024; [Hard/Expert]
+!!VRz4&y4=75:Sz100025; [Expert]
+!!VRz4&y4>75/y4<100:Sz100026; [Expert/Impossible]
+!!VRz4&y4=100:Sz100027; [Impossible]
+!!VRz4&y4>100:Sz100028; [Harder than Impossible]
+
+!!VRz-1:Sz100006; [Dialogue Header: z-1]
+!!VRz-2:Sz100007; [AI Experience Multiplier: z-2]
+!!VRz-3:Sz100008; [Human Experience Multiplier: z-3]
+!!VRz-4:Sz100009; [AI Town Garrison Multiplier: z-4]
+!!VRz-5:Sz100010; [AI Additional Experience Multiplier: z-5]
+!!VRz-6:Sz100011; [Use these values: z-6]
+
+ [Display radio button dialogue: result in v3]
+!!IF:G1/3/16/-1/-2/-3/-4/-5/-6/0/0/0/0/0/0/0;
+
+ [Display Input box: result in z1 converted to value y6]
+!!VRz-9&v3=1:Sz100029; [AI Experience Multiplier values: z-9]
+!!VRz-9&v3=4:Sz100030; [AI Town Garrison Multiplier values: z-9]
+!!VRz-9&v3=8:Sz100031; [AI Additional Experience values: z-9]
+!!VRz-7&v3=1:Sz100012; [AI Experience Multiplier: z-7]
+!!VRz-7&v3=2:Sz100013; [Human Experience Multiplier: z-7]
+!!VRz-7&v3=4:Sz100014; [AI Town Garrison Multiplier: z-7]
+!!VRz-7&v3=8:Sz100015; [AI Additional Experience Multiplier: z-7]
+!!VRz-8:Sz100016; [Input prompt: z-8]
+
+!!FU&v3=16:E; [Exit Function if no more changes]
+
+ [Multipurpose Dialogue Box #15 - Text Input Box]
+ [Result in z1 converted to y6. v1=-1 if ESC clicked]
+!!VRz1:S^^; [Initialize z1 to null: z1]
+!!IF:D15/-7/-8/1/1/1/1/1/1/1/1/1/1/1/1/1;
+!!IF:E1/15; [Display Input Box]
+!!VRz1:H1; [Flag 1 is set to False if no text and True if text]
+!!VRy6:Vz1; [Convert z1 to a value and store in y6]
+
+ [Check for allowed range: set Flag 2 to False if out of range]
+!!IF:V2/1; [Initialize Flag 2 to True]
+!!IF&y6<0:V2/0; [Set Flag 2 to False if y6 less than 0]
+!!IF&y6>10000:V2/0; [Set Flag 2 to False if y6 greater than 10000]
+
+!!IF&-2:M1/z100017; [Out of Range Message]
+
+!!VRy2&1/2/v1>=0/v3=1:Sy6; [AI Experience Multiplier]
+!!VRy5&1/2/v1>=0/v3=2:Sy6; [Human Experience Multiplier]
+!!VRy4&1/2/v1>=0/v3=4:Sy6; [AI Town Garrison Multiplier]
+!!VRy3&1/2/v1>=0/v3=8:Sy6; [AI Additional Experience]
+
+!!EA0&1/2/v1>=0/v3=2:Hy5; [Set Custom Human Experience Multiplier: y5]
+!!VRz-10:S^%Y5^; [Convert y5 to a string: z-10]
+!!UN:N5/-10/1; [Write Human Experience Multiplier to ini file, index 1]
+!!DO22000/0/4/1&1/2/v1>=0/v3<>2:Py2/y3/y4/1; [Set Custom AI Values: y2, y3, y4]
+
+!!FU22001:P; [Call Function again to redisplay menu options]
+
+---------------------------------------------------------
+
+!#UN:P900/?v1; [Check if Stack Experience is enabled: v1]
+!#UN:P229/?v2; [AI Stack Experience Difficulty: v2]
+
+** If v2=0, Default is used (based on Game Difficulty chosen by player) **
+!#DO22000/0/4/1&v1=1/v2=1:P0/0/0; [None]
+!#DO22000/0/4/1&v1=1/v2=2:P100/0/10; [Easy]
+!#DO22000/0/4/1&v1=1/v2=3:P200/100/25; [Normal]
+!#DO22000/0/4/1&v1=1/v2=4:P400/200/50; [Hard]
+!#DO22000/0/4/1&v1=1/v2=5:P800/400/75; [Expert]
+!#DO22000/0/4/1&v1=1/v2=6:P1600/800/100; [Impossible]
+
+** If v2=7, Defaults are used but may be customized by the player **
+!#FU22001&v1=1/v2=7:P; [Custom]
+
+********************************************************************************
+
+ [Post-Instruction Trigger]
+!?PI;
+!!UN:R5/1/1; [Change mouse cursor to "wait" hourglass symbol]
+!!UN:R7/0/1; [Show mouse cursor and disable changing]
+!!DO350/0/69/1:P; [Store disabled spells in v4800-v4869 at map start]
+
+---------------------------------------------------------
+
+ [Map Load Trigger]
+!?GM0;
+!!DO351/0/69/1:P; [Restore disabled spells at map load]
+
+---------------------------------------------------------
+
+ [Store disabled spells in v4800-v4869 at map start]
+!?FU350;
+!!VRy1:S4800 +x16; [Index for v variable: y1]
+!!UN:J0/x16/?vy1; [Store spell status (enabled or disabled) in vy1]
+
+---------------------------------------------------------
+
+ [Restore disabled spells at map load]
+!?FU351;
+!!VRy1:S4800 +x16; [Index for v variable: y1]
+!!UN:J0/x16/vy1; [Restore disabled spells status from values stored in vy1]
+
+********************************************************************************
+
+** WoGify Initialization Code
+
+!#UN:P901/0; [Set Experience System to "Equal Shares"]
+
+!#IF:V870/0; [Flag 870 will be set to true by Mithril script if in use]
+!#TM19:S1/1/1/255; [timer day one for all players]
+!#TM79:S1/1/1/255; [timer day one for all players]
+!#VRv950:S0; [assume we haven't done the conversion yet]
+!#VRv508:S0;
+
+*** Start of Additions by Anders Jonsson ***
+!#UN:P3/?v1; (Check if commanders are active)
+!#UN&v1=1:A146/1;
+!#UN&v1=1:A147/1;
+!#UN&v1=1:A148/1;
+!#UN&v1=1:A149/1;
+!#UN&v1=1:A150/1;
+!#UN&v1=1:A151/1;
+!#UN&v1=1:A152/1;
+!#UN&v1=1:A153/1;
+!#UN&v1=1:A154/1;
+!#UN&v1=1:A155/1; (Disable Commander Artifacts if commanders are inactive)
+*** End of Additions by Anders Jonsson ***
+
+** end of Initialization Code
+
+
+** Timer routine
+
+!?TM19&v950=0;
+
+!!FU670:P; [do conversion if we haven't yet]
+
+** end of timer routine
+
+
+** function to do conversion
+
+!?FU670;
+
+** setup of and display dialogue box for WoGification message
+!!VRv1:S0;
+!!VRz1:Sz100000;
+!!VRz2:Sz100001;
+!!VRz3:S^../data/zvs/lib1.res/wogoption2.bmp^;
+!!VRz4:Sz100002;
+!!VRz-1:S^^;
+!!IF:D1/1/-1/2/3/-1/-1/-1/4/-1/-1/-1/-1/-1/-1/-1;
+!!IF:F1/-1/-1/-1/-1/1; [enabled cancel button]
+!!UN:P248/?y26; [check if "Display WoGification Messages" is enabled: y26]
+!!IF&y26=1:E1/1; [display WoGification dialogue box if enabled]
+!!UN:R5/1/1; [Change cursor to "wait" hourglass cursor]
+!!UN:R7/0/1; [Show cursor and disable changing]
+!!VRv3340:S0; [Initialize v3340 to 0]
+!!VRv3340&v1<0:S99; [Set v3340 to 99 if WoGification cancelled]
+!!IF&v3340=99:M1/z100038;
+!!UN&v3340=99:R7/0/0; [Show mouse cursor and enable changing if WoGification cancelled]
+!!UN&v3340=99:R5/0/0; [Restore default cursor if WoGification cancelled]
+
+!!VRv950:S1; [note we've done conversion]
+!!FU&v3340=99:E; [Exit if WoGification cancelled]
+
+!!UN:X?v957/?v958; [get map size and underground flag]
+
+!!UN:P900/?y22; [Check if Stack Experience is enabled: y22]
+!!UN:P143/?y23; [Check if New Artifacts is enabled: y23]
+!!UN:P234/?y24; [Check if Warlord's Banner is disabled: y24]
+!!UN&y22=0:A156/1; [If Stack Experience is disabled, disable Warlord's Banner]
+!!UN:P245/?y25; [Check if Level 7+ Troops Only Gain 50% Experience is enabled: y25]
+
+!!DO29/0/196/1&y22=1/y25=1:P; [Set 50% Exp. Multiplier for Level 7+ Troops]
+
+ [If Stack Experience enabled, New WoG Artifacts enabled, and]
+ [Warlord's Banners not banned, add Banners to Creature Banks]
+!!FU25&y22=1/y23=1/y24=0:P;
+
+** Convert Objects
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!UN:P195/?y21; [Check if Replace Objects is enabled: y21=1 if yes]
+
+** TABLE of Y OBJECTS **
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P104/?y3; [check if Arcane Tower script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/ 9/0/-1/0/1/0; [arcane tower] [table of Y objects]
+
+!!UN:P110/?y3; [check if Magic Mushrooms script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/14/0/-1/0/1/0; [air mushroom]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/18/0/-1/0/1/0; [water mushroom]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/23/0/-1/1/1/0; [earth mushroom]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/29/0/-1/0/1/0; [fire mushroom]
+
+!!UN:P12/?y3; [check if Living Skull skull script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/50/0/-1/1/1/0; [living skull]
+
+!!UN:P17/?y3; [check if Potion Fountains script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/48/0/-1/0/0/0; [valhalla fountain]
+
+!!UN:P18/?y3; [check if Alms House script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/24/0/ 3/0/1/0; [alms house using snowy artifact merchant]
+
+!!UN:P70/?y3; [check if Death Chamber script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C 63/15/0/-1/0/1/0; [death chamber]
+
+!!FU671&y20>0:P88/-1/0/y20/60; [replace 60% of level 1 magic shrines]
+!!FU671&y20>0:P100/-1/0/y20/20; [replace 20% of learning stones]
+!!FU671&y20>0:P113/-1/0/y20/15; [replace 15% of witch huts]
+!!FU671&y20>0:P112/-1/0/y20/10; [replace 10% of windmills]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+** TABLE of RYR OBJECTS **
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P140/?y3; [check if New Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/91/3/-1/0/1/0; [vast cavern] [table of RYR objects]
+
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/99/1/-1/1/1/0; [hellfire rift]
+
+!!UN:P138/?y3; [check if New Creature Banks option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/20/3/-1/1/2/1; [grotto]
+
+!!UN:P108/?y3; [check if Junk Merchant script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/ 8/3/-1/2/2/1; [junk merchant] [actually RRYR]
+
+!!UN:P17/?y3; [check if Potion Fountains script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/ 2/3/-1/1/1/0; [venus's fountain]
+
+!!UN:P15/?y3; [check if Mysterious Creature Dwelling script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/ 3/3/-1/0/2/1; [mysterious creature dwelling]
+
+!!UN:P30/?y3; [check if Adventure Cave script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/57/3/-1/0/1/0; [adventure cave]
+
+!!UN:P26/?y3; [check if Artificer script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/52/3/-1/0/2/0; [artificer]
+
+!!UN:P21/?y3; [check if Freelancer's Guild script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C213/0/3/-1/0/1/0; [freelancer's guild]
+
+!!FU671&y20>0:P16/1/3/y20/80; [replace 80% of dwarven treasuries]
+!!FU671&y20>0:P55/0/3/y20/80; [replace 80% of mystical gardens]
+!!FU671&y20>0:P84/0/3/y20/80; [replace 80% of crypts]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+** TABLE of Non-Level 8 Dwelling RY OBJECTS **
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P138/?y3; [check if New Creature Banks option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/11/1/-1/1/1/0; [hunting lodge]   [table of non-level 8 RY Objects]
+
+!!UN:P109/?y3; [check if Market of Time script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/51/1/-1/0/0/0; [market of time]
+
+!!UN:P28/?y3; [check if School of Wizardry script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/62/1/-1/0/0/0; [school of wizardry]
+
+!!UN:P44/?y3; [check if Emerald Tower script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/65/1/-1/0/0/0; [emerald tower]
+
+!!UN:P140/?y3; [check if New Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/94/1/-1/0/1/0; [lost friary]
+
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/96/1/-1/0/0/0; [sylvan homestead]
+
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/98/1/-1/0/0/0; [howling hollow]
+
+!!UN:P76/?y3; [check if Commander Sanctuary script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C80/0/1/-1/0/0/0; [sanctuary]
+
+!!FU671&y20>0:P16/3/1/y20/70; [replace 70% of imp caches]
+!!FU671&y20>0:P16/2/1/y20/70; [replace 70% of griffin conservatories]
+!!FU671&y20>0:P64/-1/1/y20/75; [replace 75% of rally flags]
+!!FU671&y20>0:P23/-1/1/y20/25; [replace 25% of marletto towers]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+** TABLE of LEVEL 8 DWELLING RY OBJECTS **
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P137/?y3; [check if Level 8 Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/80/1/-1/0/1/0; [portal of splendor] [table of level 8 RY objects]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/82/1/-1/1/0/0; [storm temple]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/83/1/-1/0/0/0; [unholy palace]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/85/1/-1/0/1/0; [cave of darkness]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/86/1/-1/0/1/0; [behemoth tomb]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/88/1/-1/0/1/0; [spirit pyre]
+
+!!FU671&y20>0:P16/3/1/y20/40; [replace 40% of imp caches]
+!!FU671&y20>0:P16/2/1/y20/40; [replace 40% of griffin conservatories]
+!!FU671&y20>0:P64/-1/1/y20/50; [replace 50% of rally flags]
+!!FU671&y20>0:P23/-1/1/y20/10; [replace 10% of marletto towers]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+** TABLE of Non-Level 8 Dwelling YR OBJECTS **
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P140/?y3; [check if New Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/89/2/ 6/0/1/0; [rock covered position] [table of non-level 8 YR objects]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/90/2/ 3/0/1/0; [snow covered position]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/92/2/-1/0/1/0; [dream horse-shoe]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/93/2/-1/0/1/0; [natural calamity]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/95/2/ 3/1/1/0; [snowman]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/97/2/-1/0/1/0; [sorceress dwelling]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/100/2/-1/0/1/0; [dracolich dwelling]
+
+!!UN:P138/?y3; [check if New Creature Banks option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/12/2/ 3/1/2/0; [snow-covered grotto]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/17/2/-1/0/1/0; [translyvanian tavern]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/18/2/-1/0/1/0; [home of the bat]
+
+!!UN:P141/?y3; [check if Sphinx option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/10/2/ 1/0/1/0; [sand sphinx]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/13/2/ 3/0/1/0; [snow sphinx]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/12/2/ 2/0/1/0; [grass sphinx]
+
+!!UN:P14/?y3; [check if Altar of Transformation script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/20/2/-1/0/1/0; [transformation altar]
+
+!!UN:P13/?y3; [check if Tavern Card Game script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C95/ 0/2/-1/0/1/0; [tavern]
+
+
+!!FU671&y20>0:P16/4/2/y20/70; [replace 70% of medusa stores]
+!!FU671&y20>0:P16/0/2/y20/70; [replace 70% of cyclops stockpiles]
+!!FU671&y20>0:P16/5/2/y20/70; [replace 70% of naga banks]
+!!FU671&y20>0:P96/-1/2/y20/75; [replace 75% of temples]
+!!FU671&y20>0:P106/-1/2/y20/75; [replace 75% of war machine factories]
+!!FU671&y20>0:P28/-1/2/y20/75; [replace 75% of fairy rings]
+!!FU671&y20>0:P14/-1/2/y20/80; [replace 80% of swan ponds]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P137/?y3; [check if Level 8 Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/81/2/-1/0/1/0; [dragon peaks] [table of level 8 YR objects]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/84/2/-1/0/1/0; [spectral vault]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/87/2/-1/0/1/0; [chaos pool]
+
+!!FU671&y20>0:P16/4/2/y20/25; [replace 25% of medusa stores]
+!!FU671&y20>0:P16/0/2/y20/25; [replace 25% of cyclops stockpiles]
+!!FU671&y20>0:P16/5/2/y20/25; [replace 25% of naga banks]
+!!FU671&y20>0:P28/-1/2/y20/40; [replace 40% of fairy rings]
+!!FU671&y20>0:P14/-1/2/y20/60; [replace 60% of swan ponds]
+
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P137/?y3; [check if Level 8 Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/62/1/ 3/0/1/0; [frozen cliffs] [table of Azure Dragon dwelling]
+
+!!FU671&y20>0:P39/-1/1/y20/10; [replace 10% of Lean To's]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P137/?y3; [check if Level 8 Creature Dwellings option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C17/63/1/-1/0/0/0; [crystal caverns] [table of Crystal Dragon dwelling]
+
+!!FU671&y20>0:P78/-1/1/y20/10; [replace 10% of Refugee Camps]
+!!FU671&y20>0:P97/-1/1/y20/30; [replace 30% of Den of Thieves]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P138/?y3; [check if New Creature Banks option is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C16/19/0/-1/0/0/0; [lost bottle] [table of Y water objects]
+
+!!FU671&y20>0:P82/-1/0/y20/20; [replace 20% of sea chests]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P11/?y3; [check if Palace of Dreams script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/33/4/-1/0/1/0; [palace of dreams] [table of large objects]
+
+!!UN:P16/?y3; [check if Battle Academy script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/32/5/-1/0/1/0; [battle academy]
+
+!!FU671&y20>0:P25/-1/4/y20/40; [replace 40% of dragon utopias]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P32/?y3; [check if Summoning Stones script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/21/3/-1/1/1/0; [summoning stones] [table of obscure objects]
+
+!!UN:P52/?y3; [check if Mirror of the Way Home script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/66/1/-1/1/0/0; [mirror portal]
+
+!!FU671&y20>0:P107/-1/3/y20/60; [replace 60% of schools of war]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P29/?y3; [check if New Treasure Chest script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/1/0/-1/0/0/0; [new treasure chest] [table of new chests]
+
+!!UN:P31/?y3; [check if New Treasure Chest 2 script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/5/0/-1/0/0/0; [2nd new treasure chest (type 5)]
+
+!!FU671&y20>0:P101/0/0/y20/50; [replace 50% of treasure chests]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P27/?y3; [check if Spellbook script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C5/0/0/-1/0/0/0; [spellbook]
+
+!!FU671&y20>0:P93/-1/0/y20/10; [replace 10% of scrolls]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P165/?y3; [check if Replace Dragon Fly option is enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C112/0/0/-1/0/1/0; [windmill] [table of dragon fly hive replacements]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C113/0/0/-1/0/1/0; [witch hut]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C12/0/0/-1/0/0/0; [camp fire]
+
+!!FU671&y20>0:P16/6/0/y20/80; [replace 80% of dragon fly hives]
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P196/?y3; [check if Power Stones option is enabled]
+!!UN:P3/?y4; [Check if Commanders are enabled: y4=0 if yes]
+!!VRy3&y4=1:S0; [Disable option if Commanders not enabled]
+!!UN&y3=1:B7/1; [Enable Power Stones]
+!!UN&y3=1:B8/1; [Enable Power Stones]
+!!UN&y3=1:B9/1; [Enable Power Stones]
+!!UN&y3=1:B10/1; [Enable Power Stones]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/7/0/-1/0/0/0; [opal of magic] [table of power stones]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/8/0/-1/0/0/0; [ruby of offense]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/9/0/-1/0/0/0; [sapphire of defense]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/10/0/-1/0/0/0; [emerald of speed]
+
+!!FU671&y20>0:P79/1/0/y20/10; [replace 10% of mercury]
+!!FU671&y20>0:P79/3/0/y20/10; [replace 10% of sulfur]
+!!FU671&y20>0:P79/4/0/y20/10; [replace 10% of crystals]
+!!FU671&y20>0:P79/5/0/y20/10; [replace 10% of gems]
+!!FU671&y20>0:P93/-1/0/y20/20; [replace 20% of spell scrolls]
+
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!UN:P60/?y3; [check if Forgotten Shrine script is enabled]
+!!VRy3&y21=0:S0; [set y3 to 0 if Replace Objects isn't enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C63/22/0/-1/0/0/0; [Forgotten Shrine]
+
+!!FU671&y20>0:P89/-1/0/y20/40; [replace 40% of level 2 magic shrines]
+!!FU671&y20>0:P90/-1/0/y20/40; [replace 40% of level 3 magic shrines]
+!!FU671&y20>0:P38/-1/0/y20/50; [replace 50% of idols of fortune]
+
+
+
+** table fields: type/subtype/footprint/terrain/back wall/edge x/edge y
+** footprint values:  0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+
+!!VRy20:S0; [initialize object counter to 0]
+!!VRy3:S0; [initialize y3 to 0]
+!!VRy3&y21=1:S1; [set y3 to 1 if Replace Objects is enabled]
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C79/6/0/-1/0/0/0; [gold pile] [table of scroll replacements]
+
+!!VRy20&y3=1:+1; [add one to object counter]
+!!VRy11&y3=1:Sy20 *7; [number to add to index variable]
+!!VRy10&y3=1:S593 +y11; [new index number]
+!!VRvy10&y3=1:C101/0/0/-1/0/0/0; [standard treasure chest]
+
+!!FU671&y20>0:P93/-1/0/y20/70; [replace 70% of scrolls]
+
+------------
+** This section is Anders' code for adding Mithril for the Mithril script.
+*** Replace Resource Piles ***
+!!VRy1&870:S1;
+!!UN&870:U79/-1/?v1;  (Get number of resource piles on map(for replacing with Mithril))
+!!VRy3:S10;
+!!VRy3&v1<10:Sv1;       (1 of the ten first stacks will always be replaced. If less than ten stacks total, one will still be replaced)
+!!VRy1&870:S1 Ry3;      (Draw random number to see what pile to start with)
+!!VRv5:Sv70 +v70 -1;    (Get replacing frequency)
+!!VRv6:S0; (Check for number of replaced piles of Mithril)
+!!DO8179/y1/v1/1&870:P; (Cycle through all resource piles, replace one in what value v70 holds)
+!d!IF:M^Total number of resource piles: %V1.
+Number replaced with Mithril: %V6^;
+
+*** Campfires ***
+!!IF:V9/1;
+!!UN&870:U12/-1/?v1;   (Get number of campfires on map(for replacing with Mithril))
+!!VRy3:S10;
+!!VRy3&v1<10:Sv1;      (1 of the ten first stacks will always be replaced. If less than ten stacks total, one will still be replaced)
+!!VRy1&870:S1 Ry3;     (Draw random number to see what pile to start with)
+!!VRv5:Sv70 +v70 -1;    (Get replacing frequency)
+!!DO8179/y1/v1/1&870:P;(Cycle through all Campfires, replace one in what value v70 holds)
+
+!!IF:V870/0;    (set Flag to indicate that Mithril has been added)
+** End of Mithril section.
+-------------
+
+
+** convert some artifacts
+
+!!VRv600:C12/18/24/30/32/33/34/35/36/40; [table of relic numbers]
+!!VRv610:C44/59/72/86/87/88/89/90/93/115;
+!!VRv620:C123/124/126;
+
+!!UN:P143/?y3; [check if New Artifacts options is enabled]
+!!UN&y3=1:A155/3/8; [Set Slava's Ring as "Major" class artifact]
+!!UN&y3=1:A157/3/8; [Set Crimson Shield of Retribution as "Major" class artifact]
+!!UN&y3=1:U5/-1/?v951; [get number of artifacts]
+!!VRy2&y3=1:S0 R4; [starting number for Commander artifact replacement: y2]
+!!VRy4&y3=1:S0 R4; [starting number for Relic artifact replacement: y4]
+!!VRy5&y3=1:S0 R7; [starting number for Major artifact replacement: y5]
+!!VRy6&y3=1:S0 R9; [starting number for Minor artifact replacement: y6]
+!!VRy7&y3=1:S0 R3; [starting number for Combo artifact replacement: y7
+!!VRv952:S-2; [Initialize v952 to last object for faster UN:U format]
+!!DO677/1/v951/1&y3=1:Py2/y4/y5/y6/y7; [loop through all artifacts on map]
+
+
+** upgrade chests
+
+!!UN:P132/?y3; [check if Upgrading Treasure Chests option is enabled]
+!!UN&y3=1:U101/-1/?v951; [get number of treasure chests]
+!!VRv952:S-1; [Initialize v952 to first object for faster UN:U format]
+!!DO679/1/v951/1&y3=1:P; [upgrade some of them]
+
+** convert monster stacks
+
+!!UN:P139/?y3; [check if Replacing Creatures option is enabled]
+!!UN:P242/?y4; [Check if some Level 3's replaced with Ghosts enabled: y4=1 if enabled]
+!!UN|y3=1/y4=1:U54/-1/?v951; [get number of monsters]
+!!VRv952:S-2; [Initialize v952 to last object for faster UN:U format]
+!!DO680/1/v951/1|y3=1/y4=1:Py3/y4; [loop through all monsters]
+
+** upgrade dwellings
+
+!!UN:P133/?y3; [check if Upgraded Dwellings option is enabled]
+!!UN&y3=1:U17/-1/?v951; [get number of dwellings]
+!!VRv952:S-1; [Initialize v952 to first object for faster UN:U format]
+!!DO684/1/v951/1&y3=1:P; [loop through dwellings]
+
+** add SoD terrains
+
+!!UN:P142/?y3; [check if Special Terrain option is enabled]
+!!VRy1&y3=1:Sv957; [get map size]
+!!VRy1&y3=1::9; [get size-dependent number from 4-16]
+!!DO685/1/y1/1&y3=1:P; [try to add 4-16 bits of SoD terrain]
+
+** redraw screen
+
+!!UN:R1;
+
+** end of function
+
+
+!?TM79&v950=1/v508=0/v3340<>99;
+** setup of and display dialogue box for closing WoGification message
+
+!!VRz1:Sz100003;
+!!VRz2:Sz100004;
+!!VRy-2:S0 R8;
+!!VRz3&y-2=0:S^0^;
+!!VRz3&y-2=1:S^1^;
+!!VRz3&y-2=2:S^2^;
+!!VRz3&y-2=3:S^3^;
+!!VRz3&y-2=4:S^4^;
+!!VRz3&y-2=5:S^5^;
+!!VRz3&y-2=6:S^6^;
+!!VRz3&y-2=7:S^7^;
+!!VRz3&y-2=8:S^8^;
+!!VRz4:S^../data/zvs/lib1.res/npc%Z3.gif^;
+!!VRz5:Sz100005;
+!!IF:D1/1/0/2/4/0/0/0/5/0/0/0/0/0/0/0;
+!!IF:F1/0/0/0/0/0; [remove cancel button]
+!!UN:P248/?y-1; [check if "Display WoGification Messages" is enabled: y-1]
+!!IF&y-1=1:E1/1; [display WoGification dialogue box if enabled]
+!!UN:R7/0/0; [Show mouse cursor and enable changing]
+!!UN:R5/0/0; [Restore default cursor]
+!!VRv508:S1; [Set v508 if this has been displayed]
+
+** End of Timer 79
+
+** high level function to handle building replacement objects
+** x1/x2 are type/subtype of object to replace
+** x3 is footprint of object to replace
+**    0 = Y, 1 = RY, 2 = YR, 3 = RYR, 4 = other
+** x4 is the number of possible replacements in a table at v600
+** x5 is % chance to actually change any given object
+
+!?FU671;
+
+!!UN:Ux1/x2/?v951; [count number of replaceable objects]
+!!VRx4:-1; [deal with replacements numbered 0 to x4]
+!!VRv952:S-2; [Initialize v952 to last object for faster UN:U format]
+!!DO672/1/v951/1:Px1/x2/x3/x4/x5; [do a loop for each object]
+
+** end of function
+
+
+** function to handle possibly replacing one object
+
+!?FU672;
+
+!!UN:Ux1/x2/-2/952; [get x/y/l of yellow square of object into v952-v954]
+!!VRy3:S1 R3; [number of times to roll percentile dice (for extra randomness): y3]
+!!VRy2:S0 R99; [roll percentile dice: y2]
+!!VRy2&y3=4:S0 R99; [reroll percentile dice: y2]
+!!MTv952/v953/v954&y2<x5/x1=57:N?y4; [If an Obelisk is replaced, get Obelisk number: y4]
+!!UN&y2<x5/x1=57:L-2/y4/1; [If an Obelisk is replaced, set it to "visited" for all players]
+!!FU673&y2<x5:Px1/x2/x3/x4/x5; [go replace it x5 % of the time]
+
+** end of function
+
+
+** function to replace an object if possible
+
+!?FU673;
+
+!!VRv955:S0 Rx4; [pick a random replacement]
+!!FU674:Px1/x2/x3/x4/x5; [check for usable in v965]
+!!FU675&v965=1:Px1/x2/x3/x4/x5; [actually replace object]
+
+** end of function
+
+
+** function to check for replace-ability
+
+!?FU674;
+
+!!VRy1:Sv955 *7 +602; [now vy1 is footprint]
+!!VRy2:Sy1 +1; [now vy2 is terrain required]
+!!VRy3:Sy1 +2; [now vy3 is back wall flag]
+!!VRy4:S1; [assume can replace]
+
+!!TR952:T?y5/d/d/d/d/d/d/d; [get terrain]
+!!VRy4&vy2<>-1/vy2<>y5:S0; [wrong terrain]
+
+ [Check for a customized (or ERM-placed) scroll - (note: simply setting a spell isn't enough to "protect" it)]
+!!UN&x1=93:P904/1; [Disable error messages]
+!!UN&x1=93:P905/0; [Reset P905 ERM error status to 0]
+!!AR952&x1=93:M1/?z1; [Check for a custom text string]
+!!UN&x1=93:P905/?y4; [Check for error: y4=1 if error, meaning non-customized, or y4=0 if no error, meaning customized]
+!!UN&x1=93:P904/0; [Enable error messages]
+
+** disabled -- not needed unless replacing with permanent objects **
+~~FU5209&x1=93:P; [Check scrolls for invalid replacement]
+~~VRy4&x1=93/v966=0:S0; [If scroll can't be replaced, set y4 to 0]
+** disabled -- not needed unless replacing with permanent objects **
+
+!!FU686:P0/-1; [test square above yellow for redness]
+!!VRy6:Sv966;
+!!FU686:P-1/-1; [test square above and left of yellow for redness]
+!!VRy5:Sv966;
+!!FU686:P1/-1; [test square above and right of yellow for redness]
+!!VRy7:Sv966;
+!!VRy4&vy3=1/vy1=0/y6<>0:S0; [back wall missing for Y object]
+!!VRy4&vy3=1/vy1=1/y5<>0:S0; [back wall missing for RY object]
+!!VRy4&vy3=1/vy1=1/y6<>0:S0;
+!!VRy4&vy3=1/vy1=2/y6<>0:S0; [back wall missing for YR object]
+!!VRy4&vy3=1/vy1=2/y7<>0:S0;
+!!VRy4&vy3=1/vy1=3/y5<>0:S0; [back wall missing for RYR object]
+!!VRy4&vy3=1/vy1=3/y6<>0:S0;
+!!VRy4&vy3=1/vy1=3/y7<>0:S0;
+!!FU686:P-2/0; [test square two to the left of yellow square for redness]
+!!VRy4&vy3=2/v966<>0:S0; [far left red square missing for Junk Merchant]
+
+!!VRv965:Sy4; [set return value in v965 equal to y4]
+
+** end of function
+
+
+** function to replace object
+
+!?FU675;
+
+!!VRv955:*7 +600; [vv955 is new type]
+!!VRv956:Sv955 +1; [vv956 is new subtype]
+
+!!VRv959:Sv955 +2; [vv959 is new footprint]
+!!VRv960:Sv955 +5; [vv960 is x offs to place]
+!!VRv961:Sv955 +6; [vv961 is y offs to place]
+
+!!VRy3:Sv952 +vv960; [y3 = x to place]
+!!VRy4:Sv953 +vv961; [y4 = y to place]
+
+!!UN:Ov952/v953/v954; [delete old object]
+!!UN:Iy3/y4/v954/vv955/vv956/vv955/vv956/-1/0; [place new object, no redraw]
+
+ ** Setup for some Dragon Fly Hive and Scroll replacement objects **
+
+!!VRy5:S0 R5; [random resource]
+!!VRy6:S3 R3; [random amount (3-6)]
+!!VRy8:S2 R3; [random amount (2-5)]
+!!VRy9:S5 R5; [random amount (5-10)]
+!!VRy7:Sy3 -1; [subtract 1 from x value to get trigger square]
+!!MLy7/y4/v954&vv955=112:By5/y6; [set up windmill]
+!!FRy3/y4/v954&vv955=12:By5/6; [set up camp fire]
+!!CHy3/y4/v954&vv955=101/vv956=0:S0 By8; [set up treasure chest]
+!!ARy3/y4/v954&vv955=79/vv956=6:Vy9; [set up gold pile]
+
+
+!!VRy5:S0 R26; [random skill]
+!!VRy5&y5>=12:+1; [Add one if it's Necromancy or higher]
+!!WHy7/y4/v954&vv955=113:Sy5; [set up witch hut]
+
+ ** End of setup **
+
+!!FU676&vv959=4:P-4/-1 P-3/-1 P-2/-2 P0/-2 P1/-2; [fill missing red squares for utopia/palace swap]
+!!FU676&vv959=5:P-4/-1 P-2/0 P-2/-2 P0/-2 P1/-2; [fill missing red squares for utopia/battle academy swap]
+
+** end of function
+
+
+** function to place a stump or log if square isn't red;
+** v952-v954 = x/y/l; x1/x2 are x/y offset
+
+!?FU676;
+
+!!VRv952:+x1;
+!!VRv953:+x2;
+!!TR952:P?y1; [get y1=0 if red square]
+!!VRy2:S0 R1;
+!!VRy2&y2=0:S130; [log]
+!!VRy2&y2=1:S153; [stump]
+!!UN&y1<>0:Iv952/v953/v954/y2/0/y2/0/-1/0; [place object, no redraw]
+!!VRv952:-x1;
+!!VRv953:-x2;
+
+** end of function
+
+
+** function to possibly replace an artifact
+
+!?FU677;
+
+!!UN:U5/-1/-2/952; [get x/y/l of yellow square of artifact into v952-v954]
+!!OB952:U?v955; [get subtype = artifact number]
+
+!!VRy20:S0; [Initialize y20 to 0]
+!!UN&v955<=128:Av955/?y20; [y20=1 if artifact to be replaced is disabled - prevents quest hut artifacts being replaced]
+
+ [Check for a customized (or ERM-placed) artifact]
+!!UN:P904/1; [Disable error messages]
+!!UN:P905/0; [Reset P905 ERM error status to 0]
+!!AR952:M1/?z1; [Check for a custom text string]
+!!UN:P905/?y36; [Check for error: y36=1 if error, meaning non-customized, or y36=0 if no error, meaning customized]
+!!UN:P904/0; [Enable error messages]
+
+ [Skip this artifact if it's Armageddon's Blade, a new WoG Artifact, a customized artifact or a quest hut artifact]
+!!FU|v955<7/v955=128/v955>=141/y20=1/y36=0:E;
+
+!!UN:Av955/3/?y4; [get artifact class into y4]
+!!VRx2&y4=16/v955<128:+1; [add 1 to counter: replace 1 in 4 relics with WoG Relics]
+!!VRx3&y4=8:+1; [add 1 to counter: replace 1 in 8 major artifacts with WoG Majors]
+!!VRx4&y4=4:+1; [add 1 to counter: replace 1 in 10 minor artifacts with Warlord's Banners]
+!!VRx5&v955>=129/v955<=140:+1; [add 1 to counter: replace 1 in 4 combos with WoG Combos]
+!!FU&y4=16/x2<4/v955<=128:E; [Skip this artifact if it's a relic but not replaced]
+!!FU&v955>=129/v955<=140/x5<4:E; [Skip this artifact if it's a Combo but not replaced]
+
+!!VRy50:S0; [Initialize y50 to 0]
+
+!!UN:P237/?y29; [Check if Barbarian Lord's Axe of Ferocity is disabled in WoG Options: y29=0 if enabled]
+!!UN&v955>=129/v955<=140/x5>=4/x9<2/y29=0:Ov952/v953/v954; [delete old Combo artifact]
+!!UN&v955>=129/v955<=140/x5>=4/x9<2/y29=0:Iv952/v953/v954/5/158/5/158/-1/0; [place new wog Combo, no redraw]
+!!VRx9&v955>=129/v955<=140/x5>=4/y29=0:+1; [increment x9 -- place a maximum of *two* Barbarian Lord's Axes]
+!!VRx5&v955>=129/v955<=140/x5>=4/x9<2/y29=0:S0; [reset Combo replacement counter after replacement]
+!!FU&v955>=129/v955<=140:E; [Exit if a Combo]
+
+!!UN:P176/?y22; [Check if Magic Wand is disabled in WoG Options: y22=0 if enabled]
+!!UN:P226/?y23; [Check if Gold Tower Arrow is disabled in WoG Options: y23=0 if enabled]
+!!UN:P227/?y24; [Check if Monster's Power is disabled in WoG Options: y24=0 if enabled]
+!!UN:P241/?y32; [Check if Dragonheart Ring is disabled in WoG Options: y32=0 if enabled]
+!!UN:P243/?y33; [Check if Gate Key is disabled in WoG Options: y33=0 if enabled]
+
+!!VRy25:S4; [New Relic Artifact random range (initialize to 4): y25]
+!!VRy25&y22=1:-1; [Subtract 1 if Magic Wand disabled: y25]
+!!VRy25&y23=1:-1; [Subtract 1 if Gold Tower Arrow disabled: y25]
+!!VRy25&y24=1:-1; [Subtract 1 if Monster's Power disabled: y25]
+!!VRy25&y32=1:-1; [Subtract 1 if Dragonheart disabled: y25]
+!!VRy25&y33=1:-1; [Subtract 1 if Gate Key disabled: y25]
+!!FU&y4=16/y25<0:E; [Exit if it's a relic and all are disabled]
+!!VRy3:S141 Ry25; [New Artifact #: y3 (141-145), 144 will be changed to 159, 145 to 160]
+!!VRy3&y22=1/y3>=141:+1; [Add 1 to new artifact # if Magic Wand disbled: y3]
+!!VRy3&y23=1/y3>=142:+1; [Add 1 to new artifact # if Gold Tower Arrow disabled: y3]
+!!VRy3&y24=1/y3>=143:+1; [Add 1 to new artifact # if Monster's Power disabled: y3]
+!!VRy3&y32=1/y3>=144:+1; [Add 1 to new artifact # if Dragonheart Ring disabled: y3]
+!!VRy3&y33=1/y3>=145:+1; [Add 1 to new artifact # if Gate Key disabled: y3]
+!!VRy3&y3=144/y32=0:S159; [Set correct number for Dragonheart: y3]
+!!VRy3&y3=145/y33=0:S160; [Set correct number for Gate Key: y3]
+
+!!UN&y4=16/x2>=4/y26=0:Ov952/v953/v954; [delete old relic artifact]
+!!UN&y4=16/x2>=4/y26=0:Iv952/v953/v954/5/y3/5/y3/-1/0; [place new wog relic, no redraw]
+!!VRx2&y4=16/x2>=4/y26=0:S0; [reset relic replacement counter after replacement]
+
+!!UN:P3/?y8; [check if Commanders are enabled: y8=0 if enabled]
+!!UN:P219/?y27; [check if Enhanced Commander Artifacts are enabled: y27=1 if enabled]
+!!VRy8&y27=1:S0; [Set y8 0 (enabled) if Enhanced Commander Artifacts enabled]
+!!UN:P238/?y30; [check if Commander artifacts are enabled: y30=0 if enabled]
+!!VRy8&y30=1:S1; [set y8 to 1 (disabled) if Commander artifacts are disabled: y8]
+
+!!UN:P236/?y28; [Check if Crimson Shield of Retribution is disabled in WoG Options: y28=0 if enabled]
+!!UN:P177/?y21; [Check if Slava's Ring is disabled in WoG Options: y21=0 if enabled]
+
+!!VRy34&x3>=8:S1; [New Major Artifact random range (initialize to 1): y34]
+!!VRy34&x3>=8/y28=1:-1; [Subtract 1 if Crimson Shield is disabled: y34]
+!!VRy34|y21=1/y8=1:-1; [Subtract 1 if Slava's Ring or Commanders disabled: y34]
+!!VRy35&x3>=8:S0; [Initialize y35 to 0]
+!!VRy35&x3>=8/y4=8/y34>=0:S1 Ry34; [New Artifact y35 = 1..2. 1 will be changed to 157, 2 to 155]
+!!VRy35&x3>=8/y4=8/y34>=0/y28=1/y35>=1:+1; [Add 1 to new artifact # if Crimson Shield disabled: y3]
+!!VRy35&x3>=8/y4=8/y34>=0/y35=1:S157; [Set correct number for Crimson Shield: y35]
+!!VRy35&x3>=8/y4=8/y34>=0/y35=2:S155; [Set correct number for Slava's Ring: y35]
+
+!!UN&y4=8/x3>=8/y35=157/x7<2:Ov952/v953/v954; [delete old major artifact]
+!!UN&y4=8/x3>=8/x7<2/y35=157:Iv952/v953/v954/5/157/5/157/-1/0; [place Shield of Retribution, no redraw]
+!!VRy50&y4=8/x3>=8/y35=157/x7<2:S1; [set y50 to 1 to exit after replacement: y50]
+!!VRx7&y4=8/x3>=8/y35=157:+1; [increment x7 -- place a maximum of *two* Crimson Shields]
+!!VRx3&y4=8/x3>=8/y35=157/x7<=2:S0; [reset major artifact replacement counter after replacement]
+
+!!UN&y4=8/x3>=8/y35=155/x8<2:Ov952/v953/v954; [delete old major artifact]
+!!UN&y4=8/x3>=8/x8<2/y35=155:Iv952/v953/v954/5/155/5/155/-1/0; [place Slava's Ring, no redraw]
+!!VRy50&y4=8/x3>=8/y35=155/x8<2:S1; [set y50 to 1 to exit after replacement: y50]
+!!VRx8&y4=8/x3>=8/y35=155:+1; [increment x8 -- place a maximum of *two* Slava's Rings]
+!!VRx3&y4=8/x3>=8/y35=155/x8<=2:S0; [reset major artifact replacement counter after replacement]
+
+!!UN&y4=4:P234/?y31; [Check if Warlord's Banners are disabled in WoG Options: y31=0 if enabled]
+!!UN&y4=4/x4>=10/y31=0:Ov952/v953/v954; [delete old minor artifact]
+!!UN&y4=4/x4>=10/y31=0:Iv952/v953/v954/5/156/5/156/-1/0; [place warlord's banner, no redraw]
+!!PO952&y4=4/x4>=10/y31=0:O-2; [Set value of -2 for PO:O for Warlord's Banner square]
+!!VRy50&y4=4/x4>=10/y31=0:S1; [set y50 to 1 to exit after replacement: y50]
+!!VRx4&y4=4/x4>=10/y31=0:S0; [reset minor artifact replacement counter after replacement]
+
+!!FU|y4=16/y8=1/y50=1:E; [Exit if artifact was a relic, replaced or Commanders are disabled]
+
+!!VRx1&y4>=2/y4<=8:+1; [add 1 to counter: replace 1 in 5 treasure/minor/major artifacts]
+!!VRy6&x1>=5/v955>6:S146 R8; [Commander artifact #, excluding Slava's Ring]
+!!UN&x1>=5/v955>6:Ov952/v953/v954; [delete old artifact]
+!!UN&x1>=5/v955>6:Iv952/v953/v954/5/y6/5/y6/-1/0; [place new artifact, no redraw]
+!!UN&x1>=5/v955>6:Ay6/3/4; [set Commander artifact to "minor" class artifact]
+!!VRx1&x1>=5/v955>6:S0; [reset counter after replacement]
+
+** end of function
+
+** function to check if an artifact is a relic
+
+!?FU678;
+
+!!VRy1:S600;
+!!VRy1:+x16; [get number of variable with relic number]
+!!VRv956&vy1=v955:S1; [it's a relic]
+
+** end of function
+
+
+** function to possibly upgrade a treasure chest
+
+!?FU679;
+
+!!UN:U101/-1/-1/952; [get x/y/l of yellow square of chest into v952-v954]
+!!VRy1:S0 R99; [roll percentile dice]
+!!CH952&y1<8:B5; [8% chance for 2500 gold chest]
+!!CH952&y1>97:B6; [2% chance for 3000 gold chest]
+
+** end of function
+
+
+** function to possibly convert a monster stack
+
+!?FU680;
+ [x1=1 if replacing some monster with WoG monsters is enabled]
+ [x2=1 if replacing some L3 monsters with ghosts is enabled]
+!!UN:U54/-1/-2/952; [get x/y/l of yellow square of monster into v952-v954]
+!!VRy2:S0 R99; [roll percentile dice]
+!!FU&y2>=50:E; [Exit if roll is 50 or higher: greatest chance is 50% - to save time only go on half the time]
+
+!!UN:P904/1; [Disable Error Messages]
+!!UN:P905/0; [Initialize error-result flag to 0]
+!!MO952:A?y3; [Check if monster has an artifact: y3]
+!!UN:P905/?y4; [Check if an error occurred: y4=1 if there was an error]
+!!UN:P904/0; [Reenable Error Messages]
+!!FU&y4=0:E; [Skip this monster if NO error occurred (because it has custom setup of text, artifact or resources)]
+!!MO952:G?y5 O?y6; [Check number (y5) and grow/no-grow (y6)]
+!!FU&y5=1/y6=1:E; [Skip if only 1 monster and set to not grow]
+!!MO952:R?y7/1; [Check aggressions: y7]
+!!FU|y7=0/y7=10:E; [Skip if monster set to always join or always fight]
+
+!!FU681:Py2/x1/x2; [Possible conversion (greatest chance is 50%)]
+
+** end of function
+
+
+** function to continue possibly converting a monster stack
+
+!?FU681;
+ [x1=percentile roll]
+ [x2=1 if replacing some monster with WoG monsters is enabled]
+ [x3=1 if replacing some L3 monsters with ghosts is enabled]
+!!OB952:U?v955; [get subtype = monster type]
+!!FU&v955>144:E; [don't convert WoG monsters]
+!!MA:Lv955/?v956; [Get Monster Level: v956]
+!!VRv956:+1; [Add 1 to Monster Level to get 1..7: v956]
+!!VRx1&v957<80::2; [double chance of new monsters on small maps]
+!!FU682&v956=3/x3=1/x1>=12/x1<=16:P159/1; [5% of level 3's become Ghosts]
+!!FU&x2<>1:E; [Exit if other monster replacement aren't enabled]
+!!FU682&v956=3/x1<=4:P173/0; [5% of level 3's become Santa Gremlins]
+!!FU682&v956=3/x1>=5/x1<=11:P192/1; [7% of level 3's become half as many Sylvan Centaurs]
+!!FU682&v956=4/x1<=2:P164/0; [3% of level 4's become Fire Messengers]
+!!FU682&v956=4/x1>=3/x1<=5:P165/0; [3% of level 4's become Earth Messengers]
+!!FU682&v956=4/x1>=6/x1<=8:P166/0; [3% of level 4's become Air Messengers]
+!!FU682&v956=4/x1>=9/x1<=11:P167/0; [3% of level 4's become Water Messengers]
+!!FU682&v956=5/x1<=2:P169/0; [3% of level 5's become War Zealots]
+!!FU682&v956=5/x1>=3/x1<=5:P170/0; [3% of level 5's become Arctic Sharpshooters]
+!!FU682&v956=5/x1>=6/x1<=8:P171/0; [3% of level 5's become Lava Sharpshooters]
+!!FU682&v956=5/x1>=9/x1<=15:P194/0; [7% of level 5's become Werewolves]
+!!FU682&v956=6/x1<=7:P172/0; [8% of level 6's become Nightmares]
+!!FU682&v956=6/x1>=8/x1<=15:P168/1; [8% of level 6's become half as many Gorynyches]
+!!FU682&v956=6/x1>=16/x1<=23:P195/0; [8% of level 6's become Hell Steeds]
+!!FU682&v956=6/x1>=24/x1<31:P193/0; [8% of level 6's become Sorceresses]
+!!FU682&v955=13:P150/1; [50% of archangels become half as many Supreme Archangels]
+!!FU682&v955=27:P151/1; [50% of gold dragons become half as many Diamond Dragons]
+!!FU682&v955=41:P152/1; [50% of titans become half as many Lords Of Thunder]
+!!FU682&v955=55:P153/1; [50% of archdevils become half as many Antichrists]
+!!VRy1:S0 R2; [33% chance that Ghost Dragons will become one quarter as many Dracoliches]
+!!FU682&y1<2/v955=69:P154/1; [50% of ghost dragons become half as many Blood Dragons]
+!!FU682&y1=2/v955=69:P196/2; [33% chance that 25% of ghost dragons become one quarter as many Dracoliches]
+!!FU682&v955=83:P155/1; [50% of black dragons become half as many Darkness Dragons]
+!!FU682&v955=97:P156/1; [50% of ancient behemoths become half as many Ghost Behemoths]
+!!FU682&v955=111:P157/1; [50% of chaos hydras become half as many Hell Hydras]
+!!FU682&v955=131:P158/1; [50% of phoenixes become half as many Sacred Phoenixes]
+!!FU682&v955=134:P133/0; [50% of faerie dragons become Crystal Dragons]
+!!FU682&v955=135:P132/1; [50% of rust dragons become half as many Azure Dragons]
+
+** end of function
+
+
+** function to convert a monster stack, x1 = new subtype, x2 = 1 if half as many
+
+!?FU682;
+
+!!MO952:G?y1; [get old number of monsters]
+!!VRy1&x2=1::2; [half as many if x2=1]
+!!VRy1&x2=2::4; [one quarter as many if x2=2]
+!!VRy1&y1<1:S1; [make sure there's at least 1 left]
+!!UN:Ov952/v953/v954; [delete old monster stack]
+!!UN:Iv952/v953/v954/54/x1/54/x1/-1/0; [place new stack, no redraw]
+!!MO952:Gy1; [set number of monsters and set them to grow]
+!!MO952:O0 U0; [set monsters to grow and allow them to flee]
+!!MO952&x1=159:R10/1; [Set Ghost stacks to "savage" (never join)]
+
+
+** end of function
+
+
+** function to possibly upgrade a dwelling
+** Modified by Thomas Franz (samot): FU684 (some dwellings have upgr. creatures) works for conflux
+** again midified at 21.12.04: always upgrade, if creature is L1 and Master of Life is enabled
+
+!?FU684;
+
+!!UN:U17/-1/-1/952; [get x/y/l of yellow square of dwelling into v952-v954]
+!!DW952:M0/?y1/?y2; [get y1 creature type y2 qty]
+!!VRy3:S0 R3; [roll percentile dice]
+
+!!UN:P19/?y4; // check for "Master of Life"-Rule
+!!MA:Ly1/?y5; // get level of the creature
+!!VRy3&y4=1/y5=0:S0; // always upgrade, if L1 and Master of Life is enabled
+
+!!VRy1&y1<111:+1; [get upgraded creature number]
+!!DW952&y3=0/y1<112:M0/y1/y2; [set upgraded creature in first slot, 25% of the time for original creatures only] (not for conflux)
+
+!!FU&y1<112:E; // exit, if it is a "usual" creature
+!!VRy1&y1=118:S119; // pixie
+!!VRy1&y1=112:S127; // Air Elemental
+!!VRy1&y1=115:S123; // Water Elemental
+!!VRy1&y1=114:S129; // fire Elemental
+!!VRy1&y1=113:S125; // earth Elemental
+!!VRy1&y1=120:S121; // psychic Elemental
+!!VRy1&y1=130:S131; // Firebird
+!!DW952&y3=0:M0/y1/y2; [set upgraded creature in first slot, 25% of the time for original creatures only] (not for conflux)
+
+
+** end of function
+
+
+** function to try to add a bit of SoD terrain
+
+!?FU685;
+
+!!VRy1:Sv957; [map size]
+!!VRy1:-4; [max x/y location]
+!!VRv952:S0 Ry1; [random x]
+!!VRv953:S0 Ry1; [random y]
+!!VRv954:S0; [surface only, to avoid having to check for cave walls]
+!!TR952:P?y3; [get y3=0 if red square]
+!!TR952:E?y4; [get y4=0 if yellow square]
+!!TR952:T?y6/d/d/d/d/d/d/d; [get terrain type]
+!!VRy5:S222 R8; [random terrain number]
+!!VRy5&y5>=225:+1; [skip Favorable Winds]
+!!VRy5&y5=223:S21; [use old Cursed Ground]
+!!VRy5&y5=230:S46; [use old Magic Plains]
+!!VRy5&y6=8:S225; [use Favorable Winds if on water]
+!!VRy6:S1; [assume we need 4 copies of terrain]
+!!VRy6&y5=21:S0; [not so for Cursed Ground]
+!!VRy6&y5=46:S0; [or Magic Plains]
+!!UN&y3<>0/y4<>0:Iv952/v953/v954/y5/0/y5/0/-1/0; [place SoD terrain on empty spot, no redraw]
+!!VRv952&y6=1:+1;
+!!VRv953&y6=1:-1;
+!!UN&y3<>0/y4<>0/y6=1:Iv952/v953/v954/y5/0/y5/0/-1/0; [place additional terrains, since they're tall and skinny]
+!!VRv952&y6=1:+1;
+!!VRv953&y6=1:+1;
+!!UN&y3<>0/y4<>0/y6=1:Iv952/v953/v954/y5/0/y5/0/-1/0;
+!!VRv952&y6=1:+1;
+!!VRv953&y6=1:-1;
+!!UN&y3<>0/y4<>0/y6=1:Iv952/v953/v954/y5/0/y5/0/-1/0;
+
+ [If Passable Terrain script active, make squares passable again]
+!!UN:P63/?y7; [Check if Passable Terrain script is enabled: y7]
+!!FU&y7<>1:E; [Exit if Passable Terrain isn't enabled]
+!!UN:X?y8/?y9;          [Map size: y8]
+!!VRy10&y6=1:Sv953 -4;  [Starting y-coordinate for loop: y10]
+!!VRy11&y6=1:Sv953 +1;  [Ending y-coordinate for loop: y11]
+!!VRy10&y6=0:Sv953 -3;  [Starting y-coordinate for loop (Magic Plains/Cursed Land): y10]
+!!VRy11&y6=0:Sv953 +0;  [Ending y-coordinate for loop (Magic Plains/Cursed Land): y11]
+!!VRy10&y10<0:S0;       [No y-coordinate below 0: y10]
+!!VRy11&y11>=y8:Sy8 -1; [No y-coordinate above map size: y11]
+!!DO8/y10/y11/1&y3<>0/y4<>0:Py6/v952/0; [Make trees, mountains etc. passable again]
+
+** end of function
+
+
+** Functions if Passable Terrain active and special SoD patches placed
+** to make the appropriate squares passable again
+
+!?FU8;
+ [x1=Magic Plains/Cursed Land if 0, Other Terrains if 1]
+ [x2=ending x-coordinate, x16=y-coordinate, x3=level]
+
+!!VRy1&x1=0:Sx2 -5; [Starting x-coordinate for Magic Plains/Cursed Land]
+!!VRy1&x1=1:Sx2 -4; [Starting x-coordinate for other terrains]
+!!VRy1&y1<0:S0;     [No x-coordinate below 0]
+!!DO9/y1/x2/1:Px16/x3; [Check each square and make passable if trees, mountains etc.]
+
+!?FU9; [Passable Terrain compatibility with added SoD terrains]
+ [x16=x-coordinate, x1=y-coordinate, x2=level]
+!!OBx16/x1/x2:T?y1; [Type of object: y1]
+!!TRx16/x1/0|y1=114/y1=115/y1=116/y1=119/y1=120/y1=122/y1=129/y1=130/y1=131/y1=132/y1=135/y1=137/y1=138/y1=150/y1=153/y1=155:P1; [Make tree and bush and flower squares passable]
+!!TRx16/x1/0|y1=156/y1=159/y1=160/y1=165/y1=166/y1=167/y1=160/y1=165/y1=166/y1=167/y1=170/y1=173/y1=181/y1=182/y1=183/y1=186:P1; [Make tree and bush and flower squares passable]
+!!TRx16/x1/0|y1=188/y1=189/y1=194/y1=197/y1=199/y1=200/y1=211:P1; [Make tree and bush and flower squares passable]
+!!TRx16/x1/0|y1=133/y1=134/y1=136/y1=147/y1=148/y1=151/y1=152/y1=157/y1=158/y1=169/y1=174/y1=184/y1=185/y1=187/y1=191:P1; [Make rock and mountain/hill squares passable]
+
+** end of functions
+
+
+** function to check square v952-v954 for being red or off the map, but not being water
+** x1/x2 = x/y offset, v966 returns 0 if red
+
+!?FU686;
+
+!!VRv952:+x1;
+!!VRv953:+x2;
+!!VRv966:S0; [assume red]
+!!TR952&v952>=0/v953>=0/v952<v957/v953<v957:P?v966; [get 0 if red, 1 if not]
+!!TR952&v952>=0/v953>=0/v952<v957/v953<v957:T?y1/d/d/d/d/d/d/d; [get terrain]
+!!VRv966&y1=8:S1; [treat water as not red]
+!!VRv952:-x1;
+!!VRv953:-x2;
+
+** end of function
+
+!?FU5209;
+
+!!VRy1:S1; [assume squares are clear to begin with]
+!!FU686:P0/1; [check for red square directly below scroll]
+!!VRy1&v966=0:S0; [set y1 to 0 if scroll with red square directly below]
+!!FU686:P-1/1; [check for red square below and left of scroll]
+!!VRy1&v966=1:S1; [set y1 to 1 if square left and below is open]
+!!FU686:P1/1; [check for red square below and right of scroll]
+!!VRy1&v966=1:S1; [set y1 to 1 if square right and below is open]
+!!FU686:P-1/0; [check for red square left of scroll]
+!!VRy1&v966=1:S1; [set y1 to 1 if square left is open]
+!!FU686:P1/0; [check for red square right of scroll]
+!!VRy1&v966=1:S1; [set y1 to 1 if square right is open]
+
+!!VRv966&y1=1:S1; [Set v966 to 1 if scroll can be replaced]
+!!VRv966&y1=0:S0; [Set v966 to 0 if scroll can't be replaced]
+
+** end of function
+
+ [Set up Warlord's Banner artifacts on map]
+!?FU25;
+!!UN:U16/-1/?y2; [Number of Creature Banks on map: y2]
+!!VRv1:S-1; [Initialize v1 to first object for faster UN:U format]
+!!DO27/1/y2/1&y2>0:P16; [Loop through all Creature Banks]
+!!UN:U24/-1/?y3; [Number of Derelict Ships on map: y2]
+!!VRv1:S-1; [Initialize v1 to first object for faster UN:U format]
+!!DO27/1/y3/1&y3>0:P24; [Loop through all Creature Banks]
+!!UN:U25/-1/?y4; [Number of Dragon Utopias on map: y2]
+!!VRv1:S-1; [Initialize v1 to first object for faster UN:U format]
+!!DO27/1/y4/1&y4>0:P25; [Loop through all Creature Banks]
+!!UN:U84/-1/?y5; [Number of Crypts on map: y2]
+!!VRv1:S-1; [Initialize v1 to first object for faster UN:U format]
+!!DO27/1/y5/1&y5>0:P84; [Loop through all Crypts]
+!!UN:U85/-1/?y6; [Number of Shipwrecks on map: y2]
+!!VRv1:S-1; [Initialize v1 to first object for faster UN:U format]
+!!DO27/1/y6/1&y6>0:P85; [Loop through all Shipwrecks]
+
+** end of function
+
+ [Add Banners to some Creature Banks]
+!?FU27;
+!!UN:Ux1/-1/-1/1; [Store Creature Bank Coordinates in v1/v2/v3]
+!!VRy1:S0 R1; [Random number from 0..1: y1]
+!!CB1&y1=1:A3/156; [Add a Banner to 50% of Creature Banks]
+!!CB1&x1=25:A3/156; [Add an extra Banner to all Dragon Utopias]
+
+** end of function
+
+ [Set 50% Exp. Multiplier for Level 7+ Troops]
+!?FU29;
+!!MA:Lx16/?y1; [Level of Monster: y1]
+!!EAx16&y1>=6:M500; [Set 50% Exp. Multiplier if Level 7+]
+
+** end of function
+
+
+
+*******************************************************************************
+** 4ByteVar-Routines added by Thomas Franz
+** allows to save 4 bytes (0-255) in a single 32-bit-var (v or w-var)
+
+** Functions FU90-FU93
+** Macros $Set4ByteVar$, $Get4ByteVar$, $Set4ByteVarByte$, $Get4ByteVarByte$
+** variables: v46-v49
+
+** calling:
+** FU$Set4ByteVar$:P?y1/10/24/128/1; - saves 10 as first, 24 as 2nd, 128 as 3rd and 1 as 4th byte (returns 169.377.793 in y1)
+** FU$Get4ByteVar$:Py1/?y2/?y3/?y4/?y5; - returns the 4 numbers from one line above in y2-y5
+** FU$Set4ByteVarByte$:Py1/2/123/?y6; - sets the 2nd byte (original 128) to 123; does not touch the other bytes; returns in y6
+** FU$Get4ByteVarByte$:Py6/2/?y7; - gets the 2nd byte of y6, return in y7 (will now be 123)
+
+
+!#MCv46:S@Set4ByteVar@; !#MCv47:S@Get4ByteVar@; !#MCv48:S@Set4ByteVarByte@; !#MCv49:S@Get4ByteVarByte@; // setup Macros
+!#VRv46:C90/91/92/93; // assign the correct function number to the macro-vars
+
+!?FU90;  // saves #1-#4 into the x1-value; #1-#4 have to be between 0 and 255
+** call FU90:P?$/#1/#2/#3/#4 f.e. FU90:P?y1/10/24/128/v1;
+!!VRy2:Sx2; !!VRy3:Sx3; !!VRy4:Sx4; !!VRy5:Sx5; // copy x-vars to y
+!!VRy2&y2>255:S255; !!VRy2&y2<0:S0; // correction of incorrect values
+!!VRy3&y3>255:S255; !!VRy3&y3<0:S0;
+!!VRy4&y4>255:S255; !!VRy4&y4<0:S0;
+!!VRy5&y5>255:S255; !!VRy5&y5<0:S0;
+
+!!VRy1:S1; !!VRy1&y2>127:S-1; !!VRy2&y2>127:-127; // correction for the first byte, because - if it is >127 you would get an stack overflow
+**                                                   with the correction, you'll get a negative value (because the last byte is defined as the
+**                                                   algebraic sign)
+!!VRx1:Sy2 *256 +y3 *256 +y4 *256 +y5 *y1;
+--------------------------------------------------------------------------------
+
+
+!?FU91; // returns the 4 parts (bytes) of the 32 bit var #1 into $1 to $4
+** call FU91:P#1/?$1/?$2/?$3/?$4 f.e. FU91:Py1/?y2/?y3/?y4/?y5 to split y1 to 4 bytes (into y2-y5)
+!!VRy1:Sx1; // copy the value to y1
+!!IF:V1/0; !!IF&y1<0:V1/1; // set flag 1, if the value is negative (means, that 127 has to been added to the 1st byte)
+!!VRy1&1:*-1; // convert the negative value to a positive value in this case
+
+!!VRx2:Sy1 :16777216; // divides 3 times 256 (cuts automatical decimal places, so that you'll get only an integer) as first byte
+!!VRy2:Sx2 *16777216; // calcs the value of the 1st byte
+!!VRy1:-y2; // subtract it from the original value
+!!VRx2&1:+127; // add 127 to the first byte, if the var was negative
+
+!!VRx3:Sy1 :65536; // divides two times by 256 to get the 2nd byte
+!!VRy2:Sx3 *65536; // calcs the value of the 2nd byte
+!!VRy1:-y2; // subtract it from the original value
+
+!!VRx4:Sy1 :256; // divides by 256 to get the 3rd byte
+!!VRy2:Sx4 *256; // calcs the value of the 3rd byte
+
+!!VRx5:Sy1 -y2; // subtract it from the original value - the remaining value will be the 4th byte
+
+
+--------------------------------------------------------------------------------
+
+!?FU92; // sets the #1st part of the 4-byte-var #2 to #3; returns in $ (x3)
+** call FU92:P#1/#2/#3/?$; f.e. FU92:P3/v1/128/?y1; to set the 3rd byte of the Var v1 to 128; returns in y1
+!!FU91:Px2/?y1/?y2/?y3/?y4; // gets all 4 bytes
+!!FU90&x1=1:P?x4/x3/y2/y3/y4; //set the var
+!!FU90&x1=2:P?x4/y1/x3/y3/y4;
+!!FU90&x1=3:P?x4/y1/y2/x3/y4;
+!!FU90&x1=4:P?x4/y1/y2/y3/x3;
+
+--------------------------------------------------------------------------------
+
+!?FU93; // returns the #1st part of the 4-byte-var #2; returns in $ (x3)
+** call FU93:P#1/#2/?$ f.e. FU93:P3/v1/?y1; to get the 3rd byte of the Var v1; return in y1
+!!FU91&x1=1:Px2/?x3/?y2/?y3/?y4;
+!!FU91&x1=2:Px2/?y1/?x3/?y3/?y4;
+!!FU91&x1=3:Px2/?y1/?y2/?x3/?y4;
+!!FU91&x1=4:Px2/?y1/?y2/?y3/?x3;
+--------------------------------------------------------------------------------
+
+
+
+********************************************************************************
+**                                                                            **
+**                              GetBasicPrimaries                             **
+**                              -----------------                             **
+** syntax: FU$GetBasicPrim$:Px1/?y1/?y2/?y3/?y4;                              **
+**         while x1 = hero number and y1-y4 receives the basic siklls         **
+**                                                                            **
+********************************************************************************
+!#MCv371:S@GetBasicPrim@; // setup macro
+!#VRv371:S454; // "Link" to FU454
+
+!?FU454; // gets the primary skills without artifact bonuses
+** should be used, because HE:F////1; returns sometimes a wrong (negative) value
+** and ignore the bonuses given by the Enhanced Commander Artifacts
+**
+**
+**
+** x1 = hero number (may be -1 for the current hero)
+** x2 = v423 = return basic attack
+** x3 = v424 = return basic defense
+** x4 = v293 = return basic spell power
+** x5 = v294 = return basic wisdom
+
+
+!!UN:P219/=1; // check for Enhanced Commander Artifacts
+!!DO7038/146/155/1&1:Px1; // if enabled, then remove all bonuses from commander artifacts (Function does not really unequip the art.)
+
+!!HEx1:F?v423/?v424/?v293/?v294; // get current attack / defense (including artifacts)
+!!DO455/0/18/1:Px1; // loop through all slots, set v423 / v424 to the basic value without artifact bonuses
+!!VRv423&v423<0:S0; !!VRv424&v424<0:S0; !!VRv293&v293<1:S1; !!VRv294&v294<1:S1; // protection from negative / invalid results
+!!VRx2:Sv423; !!VRx3:Sv424; !!VRx4:Sv293; !!VRx5:Sv294; // set return Values
+
+!!UN:P219/=1; // check for Enhanced Commander Artifacts
+!!DO7040/146/155/1&1:Px1/0; // if enabled, then give the bonuses for all equipped commander artifacts back
+***Z: FU 7040 checks x2 as well, and "base attack" value was inherited..
+
+!?FU455;                                                                                                         (samot)
+** x1 = hero number
+** x16 = body slot
+** y1 = artifact in this slot
+** v423 = new attack
+** v424 = new defense
+** v293 = new spell power
+** v294 = new wisdom
+
+!!HEx1:A1/?y1/x16;  // get art. at body position x16
+!!FU&y1=-1:E; // exit, if empty
+!!FU&y1<7:E; !!FU&y1>44/y1<128:E; !!FU&y1>135/y1<146:E;   // exit for artifacts, that do
+!!FU|y1=130/y1=131/y1=133/y1=156/y1=159/y1=160/y1>999:E;  // not change the primary skills (speed optimization)
+
+** ATTACK
+!!VRv423&y1=7:-2; // Centaur Axe
+!!VRv423&y1=8:-3; // Blackshard of the Dead Knight
+!!VRv423&y1=9:-4; // Greater Gnoll's Flail
+!!VRv423&y1=10:-5; // Ogre's Club of Havoc
+!!VRv423&y1=11:-6; // Sword of Hellfire
+!!VRv423&y1=12:-12; // Titan's Gladius
+!!VRv423&y1=18:+3; // Sentinel's Shield
+!!VRv423&y1=31:-1; // Armor of Wonder
+!!VRv423&y1=32:-2; // Sandals of the Saint
+!!VRv423&y1=33:-3; // Celestial Necklace of Bliss
+!!VRv423&y1=34:-4; // Lion's Shield of Courage
+!!VRv423&y1=35:-5; // Sword of Judgement
+!!VRv423&y1=36:-6; // Helm of Heavenly Enlightenment
+!!VRv423&y1=37:-1; // Quiet Eye of the Dragon
+!!VRv423&y1=38:-2; // Red Dragon Flame Tongue
+!!VRv423&y1=39:-3; // Dragon Scale Shield
+!!VRv423&y1=40:-4; // Dragon Scale Armor
+!!VRv423&y1=128:-3; // Armageddon's Blade
+!!VRv423&y1=129:-21; // Angelic Alliance
+!!VRv423&y1=132:-3; // Armor of the Damned
+!!VRv423&y1=134:-16; // Power of the Dragon Father
+!!VRv423&y1=135:-9; // Titan's Thunder
+!!VRv423&y1=158:-5; // Barbarian Lord's Axe of Ferocity *
+
+** DEFENSE
+!!VRv424&y1=12:+3; // Titan's Gladius
+!!VRv424&y1=13:-2; // Shield of the Dwarven Lords
+!!VRv424&y1=14:-3; // Shield of the Yawning Dead
+!!VRv424&y1=15:-4; // Buckler of the Gnoll King
+!!VRv424&y1=16:-5; // Targ of the Rampaging Ogre
+!!VRv424&y1=17:-6; // Shield of the Damned
+!!VRv424&y1=18:-12; // Sentinel's Shield
+!!VRv424&y1=31:-1; // Armor of Wonder
+!!VRv424&y1=32:-2; // Sandals of the Saint
+!!VRv424&y1=33:-3; // Celestial Necklace of Bliss
+!!VRv424&y1=34:-4; // Lion's Shield of Courage
+!!VRv424&y1=35:-5; // Sword of Judgement
+!!VRv424&y1=36:-6; // Helm of Heavenly Enlightenment
+!!VRv424&y1=37:-1; // Quiet Eye of the Dragon
+!!VRv424&y1=38:-2; // Red Dragon Flame Tongue
+!!VRv424&y1=39:-3; // Dragon Scale Shield
+!!VRv424&y1=40:-4; // Dragon Scale Armor
+!!VRv424&y1=128:-3; // Armageddon's Blade
+!!VRv424&y1=129:-21; // Angelic Alliance
+!!VRv424&y1=132:-3; // Armor of the Damned
+!!VRv424&y1=134:-16; // Power of the Dragon Father
+!!VRv424&y1=135:-9; // Titan's Thunder
+!!VRv424&y1=157:-2; // Crimson Shield of Retribution*
+!!VRv424&y1=158:-5; // Barbarian Lord's Axe of Ferocity *
+
+** SPELL POWER
+!!VRv293&y1=24:+2; // Thunder Helmet
+!!VRv293&y1=25:-1; // Breastplate of Petrified Wood
+!!VRv293&y1=26:-2; // Rib Cage
+!!VRv293&y1=27:-3; // Scales of the Greater Basilisk
+!!VRv293&y1=28:-4; // Tunic of the Cyclops King
+!!VRv293&y1=29:-5; // Breastplate of Brimstone
+!!VRv293&y1=30:-10; // Titan's Cuirass
+!!VRv293&y1=31:-1; // Armor of Wonder
+!!VRv293&y1=32:-2; // Sandals of the Saint
+!!VRv293&y1=33:-3; // Celestial Necklace of Bliss
+!!VRv293&y1=34:-4; // Lion's Shield of Courage
+!!VRv293&y1=35:-5; // Sword of Judgement
+!!VRv293&y1=36:-6; // Helm of Heavenly Enlightenment
+!!VRv293&y1=41:-1; // Dragonbone Greaves
+!!VRv293&y1=42:-2; // Dragon Wing Tabard
+!!VRv293&y1=43:-3; // Necklace of Dragonteeth
+!!VRv293&y1=44:-4; // Crown of Dragontooth
+!!VRv293&y1=128:-3; // Armageddon's Blade
+!!VRv293&y1=129:-21; // Angelic Alliance
+!!VRv293&y1=132:-2; // Armor of the Damned
+!!VRv293&y1=134:-16; // Power of the Dragon Father
+!!VRv293&y1=135:-8; // Titan's Thunder
+!!VRv293&y1=158:-4; // Barbarian Lord's Axe of Ferocity *
+
+** WISDOM
+!!VRv294&y1=19:-1; // Helm of the Alabaster Unicorn
+!!VRv294&y1=20:-2; // Skull Helmet
+!!VRv294&y1=21:-3; // Helm of Chaos
+!!VRv294&y1=22:-4; // Crown of the Supreme Magi
+!!VRv294&y1=23:-5; // Hellstorm Helmet
+!!VRv294&y1=24:-10; // Thunder Helmet
+!!VRv294&y1=30:+2; // Titan's Cuirass
+!!VRv294&y1=31:-1; // Armor of Wonder
+!!VRv294&y1=32:-2; // Sandals of the Saint
+!!VRv294&y1=33:-3; // Celestial Necklace of Bliss
+!!VRv294&y1=34:-4; // Lion's Shield of Courage
+!!VRv294&y1=35:-5; // Sword of Judgement
+!!VRv294&y1=36:-6; // Helm of Heavenly Enlightenment
+!!VRv294&y1=41:-1; // Dragonbone Greaves
+!!VRv294&y1=42:-2; // Dragon Wing Tabard
+!!VRv294&y1=43:-3; // Necklace of Dragonteeth
+!!VRv294&y1=44:-4; // Crown of Dragontooth
+!!VRv294&y1=128:-6; // Armageddon's Blade
+!!VRv294&y1=129:-21; // Angelic Alliance
+!!VRv294&y1=132:-2; // Armor of the Damned
+!!VRv294&y1=134:-16; // Power of the Dragon Father
+!!VRv294&y1=135:-8; // Titan's Thunder
+!!VRv294&y1=158:-4; // Barbarian Lord's Axe of Ferocity *
+
+
+************************* End GetBasicPrimaries ********************************
+

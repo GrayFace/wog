@@ -1,0 +1,472 @@
+ZVSE
+ERMS_ScriptDate=29.5(May).2006
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+
+**  Treasure Chest 2 Script Version 1.3 created by Timothy E. Pulver
+**  Requires WoG version 3.57 or later using ERM version 2.6 or later.
+**  WoGify Name: script31.erm
+**  Last Updated: August 7, 2005
+**  Previously Updated: September 12, 2004
+
+** Modified by Thomas Franz (samot): FU5207: added check for Mithril Forge to
+** the function that gives you an unowned mine.
+
+** This script makes use of the fifth new treasure chest added to the
+** the WoG editor. This chest is the right-most chest on the second
+** row of Treasure objects. When picked up by a hero, there are three
+** possible results: Gold and a scroll, a Tome of Knowledge, or a
+** Deed to an unowned mine.
+
+** If the chest holds gold (300-900 gp) and a scroll, the hero has the
+** option to keep the scroll or destroy it for its magical energy. The
+** level of the scroll is dependant on the level of the hero plus a random
+** factor. At level 20 and up, all scrolls will be for 5th level spells.
+** If the hero destroys the scroll, the spell points gained are equal to
+** the spell level x 30.
+
+** The second possibility is that the chest contains two Tomes of Knowledge.
+** This result can only occur if the hero has at least two skills at the
+** Basic or Advanced level. A Tome of Knowledge will raise the hero's skill
+** to Expert after one week's time. Only one Tome may be chosen to study.
+
+** The third option for the chest's content is a deed to an unowned mine.
+** The mine is randomly selected from all unowned mines on the map and is
+** immediately flagged with the player's colour. A small area around the
+** mine is revealed and the map view is briefly changed to show the mine's
+** location.
+
+** Version 1.1 equips scrolls with the new HE:A4 command and displays a hero's
+** current skill levels when he or she finds a tome of knowledge.
+
+** Version 1.2 removes Armageddon and Clone from the "Living Scroll" category.
+
+
+Flags used: 1-2, 1000
+Variables used: v1-v6, z1-z7, w52-w54, w64 (check only)
+Local variables: y1-y7, x1-x3, x16
+Timers used: TM2 (Universal Timer)
+Functions used: FU5200-FU5208, FU5210-FU5210, (FU5211 reserved but not used)
+Note: Function 5209 is used in the update of WoGify: script00.erm.
+
+----------------------------------------------------------------------------------------
+
+[Check version of ERM to see if it's current enough]
+[Display warning message if it isn't]
+!#IF:V1/0;
+!#UN:V?v234/?v247;
+!#IF&v234<357:V1/1;
+!#IF&v247<260:V1/1;
+!#IF&1:M1/z131000;
+
+---------------------------------------------------------------------------------------
+
+!#UN:P31/?v1; [Check if script is enabled: v1]
+!#UN&v1=1:B5/1; [ERM-enable Treasure Chest 2]
+
+---------------------------------------------------------------------------------------
+
+[Timer 2 - Tome of Knowledge - Reset Hero Studying Variables]
+
+* [Section Variables: y-1]
+
+!?TM2&$day$=1/$once$=1; [Day 1, one-time only]
+!!UN:P31/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!DO5205/0/155/1:P;  [Cycle through Heroes to reset w52/w53 variables]
+
+---------------------------------------------------------------------------------------
+
+[Timer 2 - Tome of Knowledge - Studying]
+
+* [Section Variables: y-1, y-2]
+
+!?TM2; [Daily Universal Timer for all players]
+!!UN:P31/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+!!OW:C?y-2; [Get current player]
+!!DO5203/0/155/1:Py-2; [Cycle through all Heroes - check if they're currently studying]
+
+---------------------------------------------------------------------------------------
+
+[Treasure Chest type 5 is trigger]
+
+* [Section Variables: v3, w52]
+
+!?OB101/5&-875;
+!!UN:P31/?y-1; [Check if script is enabled: y-1]
+!!FU&y-1<>1:E; [Exit if script isn't enabled]
+
+ [Set w variables to refer to current Hero]
+!!IF:W-1;
+
+ [Generate random chest result from 1-5 - store in v3]
+!!VRv3:S1 R4;
+
+ [If result is 1, Call Deed function]
+!!FU5206&v3=1:P;
+
+ [If Hero is already studying and result is 2 or 3, change result to 4 (Scroll)]
+!!VRv3&v3>=2/v3<=3/w52>0:S4;
+
+ [If result is 2 or 3, Call Tomes of Knowledge function]
+!!FU5201&v3>=2/v3<=3/w52<1:P;
+
+ [If result is 4 or 5, Call Scroll/Spell Points and Gold function]
+!!FU5200&v3>=4/v3<=5:P;
+
+---------------------------------------------------------------------------------------
+
+[Function 5200 - Scroll/Spell Points and Gold]
+
+* [Section Variables: y1-y11, v1, w64, z1-z2, flags 1, 2 & 1000]
+
+!?FU5200;
+
+ [Determine level of Hero - store in y1]
+!!HE-1:Ed0/?y1;
+
+ [Divide Hero's level by 5 and add 1. If number is above 5, set to 5]
+!!VRy2:Sy1 :5;
+!!VRy2:+1;
+!!VRy2&y2>5:S5;
+
+ [Small chance of spell being 1 or 2 levels higher, increasing with level]
+!!VRy6:S1 R9;
+!!VRy7:Sy1 %5;
+!!VRy6:+y7;
+!!VRy2&y2<5/y6>=10:+1;
+!!VRy2&y2<5/y6>=14:+1;
+
+ [Get spell number for scroll (y-99): level=y2]
+!!FU$spell$:Py2/y2/0/0/1/0;
+
+ [Check if hero already has that scroll]
+!!VRy9:Sy-99 +1001; [Scroll artifact number: y9]
+!!HE-1:A2/y9/?y10/?y11; [y10=number of artifacts of that type]
+
+ [If hero already has that scroll, try again (y-99 is spell number): level=y2]
+!!FU$spell$&y10>0:Py2/y2/0/0/1/0;
+!!VRy9&y10>0:Sy-99 +1001; [Scroll artifact number: y9]
+!!HE-1&y10>0:A2/y9/?y10/?y11; [y10=number of artifacts of that type]
+
+ [If hero already has at least one of that scroll, reduce level (unless 1) and try again]
+!!VRy2&y10>0/y2>1:-1; [Subtract 1 from level unless already 1]
+!!FU$spell$&y10>0:Py2/y2/0/0/1/0; [Get new spell number for scroll (y-99): level=y2]
+!!VRy9&y10>0:Sy-99 +1001; [Scroll artifact number: y9]
+!!HE-1&y10>0:A2/y9/?y10/?y11; [y10=number of artifacts of that type]
+
+ [If hero still has at least one of that scroll, try again]
+!!FU$spell$&y10>0:Py2/y2/0/0/1/0; [Get new spell number for scroll (y-99): level=y2]
+!!VRy9&y10>0:Sy-99 +1001; [Scroll artifact number: y9]
+!!HE-1&y10>0:A2/y9/?y10/?y11; [y10=number of artifacts of that type]
+
+ [If hero STILL has at least one of that scroll, reduce level again (unless 1) and try again]
+!!VRy2&y10>0/y2>1:-1; [Subtract 1 from level unless already 1]
+!!FU$spell$&y10>0:Py2/y2/0/0/1/0; [Get new spell number for scroll (y-99): level=y2]
+!!VRy9&y10>0:Sy-99 +1001; [Scroll artifact number: y9]
+!!HE-1&y10>0:A2/y9/?y10/?y11; [y10=number of artifacts of that type]
+
+ [If hero still has at least one of that scroll, try one final time]
+!!FU$spell$&y10>0:Py2/y2/0/0/1/0; [Get new spell number for scroll (y-99): level=y2]
+!!VRy9&y10>0:Sy-99 +1001; [Scroll artifact number: y9]
+
+ [Store name of spell in z1]
+!!UN:N1/1/y-99;
+
+ [Calculate Mana value of scroll (level x 30) - store in y3]
+!!VRy3:Sy2 *30;
+
+ [Determine amount of gold in chest (300-900) - store in y5]
+!!VRy5:S3 R6;
+!!VRy5:*100;
+
+ [Double gold if hero learned the "wealth" lesson at the Adventure Cave]
+!!VRy5&w64=3:*2;
+
+ [Check if Living Scrolls script is active and if this is a Living Scroll]
+!!UN:P33/?y8; [Check if Living Scrolls script is active]
+!!VRy8|y-99<10/y-99=24/y-99=25/y-99=26/y-99=35/y-99=38/y-99=39/y-99=40/y-99>=65:S0;
+!!VRz2&y8=0:Sz131001;
+!!VRz2&y8=1:Sz131002;
+
+ [Display message with choice of scroll or mana - result of choice in Flag 2]
+!!IF&1000:Q2/9/y-99/35/y3/7/z131003;
+
+ [If Hero is controlled by the AI, choose randomly]
+!!VRy4&-1000:S0 R1;
+!!IF&-1000/y4=0:V2/0;
+!!IF&-1000/y4=1:V2/1;
+
+ [Add 1001 to spell number to make it a scroll]
+!!VRy-99:+1001;
+
+ [If Hero keeps scroll, equip it automatically (if possible)]
+!!HE-1&2:A4/y-99;
+
+ [If Hero destroys scroll, display message and add mana to Hero's current total]
+ [but if it's the AI, give the hero 1500 experience instead]
+!!IF&1000/-2:Q2/35/y3/1/z131004;
+!!HE-1&-2/1000:Idy3;
+!!HE-1&-2/-1000:Ed1500;
+
+ [Add gold to player's total]
+!!OW:R-1/6/dy5;
+
+---------------------------------------------------------------------------------------
+
+[Function 5201 - Tomes of Knowledge]
+
+* [Section Variables: y1-y9, v1-v3, z1-z3, w52-w53, flags 2 & 1000]
+
+!?FU5201;
+
+ [Initialize v1 and v2 to -1]
+!!VRv1:S-1;
+!!VRv2:S-1;
+
+ [Choose random starting number for first secondary skill]
+!!VRy1:S0 R27;
+!!VRy2:Sy1 -1; [Subtract 1 from y1]
+
+ [Call function 5202 - 1st skill, part 1 - search for Basic or
+ [Advanced secondary skill known by Hero - store in v1]
+!!DO5202/y1/27/1:P;
+
+ [Call function 5202 - 1st skill, part 2 - continue search for skill]
+!!DO5202/0/y2/1&y1<>0/v1=-1:P;
+
+ [Choose random starting number for second secondary skill]
+!!VRy1:S0 R27;
+!!VRy2:Sy1 -1; [Subtract 1 from y1]
+
+ [Call function 5202 - 2nd skill, part 1 - search for Basic or
+ [Advanced secondary skill known by Hero - store in v2]
+!!DO5202/y1/27/1&v1<>-1:P;
+
+ [Call function 5202 - 2nd skill, part 2 - continue search for skill]
+!!DO5202/0/y2/1&y1<>0/v1<>-1/v2=-1:P;
+
+ [If hero has two Basic or Advanced Secondary Skills, display dialogue with choice]
+!!VRy3&v1<>-1/v2<>-1:Sv1 *3 +5; [1st Secondary Skill # used for dialogue box display]
+!!VRy4&v1<>-1/v2<>-1:Sv2 *3 +5; [2nd Secondary Skill # used for dialogue box display]
+!!UN&v1<>-1/v2<>-1:N4/1/v1; [Lookup name of 1st Secondary Skill - store in z1]
+!!UN&v1<>-1/v2<>-1:N4/2/v2; [Lookup name of 2nd Secondary Skill - store in z2]
+!!HE-1&v1<>-1:Sv1/?y8; [Level in 1st Skill (y8)]
+!!HE-1&v1<>-1/v2<>-1:Sv2/?y9; [Level in 2nd Skill (y9)]
+!!VRz6&v1<>-1/y8=1:Sz131005;    [Skill level in 1st skill if Basic: z6]
+!!VRz6&v1<>-1/y8=2:Sz131006; [Skill level in 1st skill if Advanced: z6]
+!!VRz7&v1<>-1/v2<>-1/y9=1:Sz131007;    [Skill level in 2nd skill if Basic: z7]
+!!VRz7&v1<>-1/v2<>-1/y9=2:Sz131008; [Skill level in 2nd skill if Advanced: z7]
+
+!!IF&1000/v1<>-1/v2<>-1:Q2/20/y3/20/y4/7/z131009;
+
+ [If Hero is controlled by AI, choose randomly]
+!!VRy5&-1000/v1<>-1/v2<>-1:S0 R1;
+!!IF&-1000/v1<>-1/v2<>-1/y5=0:V2/0;
+!!IF&-1000/v1<>-1/v2<>-1/y5=1:V2/1;
+
+ [Set z3, y6 and y7 according to choice made]
+!!VRz3&2/1000/v1<>-1/v2<>-1:Sz131010;
+!!VRz3&-2/1000/v1<>-1/v2<>-1:Sz131011;
+!!VRy6&2/v1<>-1/v2<>-2:Sy3;  [y6 = dialogue display number of skill]
+!!VRy6&-2/v1<>-1/v2<>-2:Sy4; [y6 = dialogue display number of skill]
+!!VRy7&2/v1<>-1/v2<>-2:Sv1;  [y7 = actual number of skill]
+!!VRy7&-2/v1<>-1/v2<>-2:Sv2; [y7 = actual number of skill]
+
+
+!!IF&1000/v1<>-1/v2<>-1:Q2/20/y6/2/z131012;
+
+ [Store number of days in w52, skill number in w53,]
+ [and 99 if daily reminders wanted in w54]
+!!VRw52&v1<>-1/v2<>-1:S7; [Number of days left to learn skill]
+!!VRw53&v1<>-1/v2<>-1:Sy7; [Number of skill being studied at Expert level]
+!!VRw54&2:S99; [Store 99 in w54 if daily reminders wanted]
+
+ [If two appropriate Secondary Skills weren't found, set v3 to 4 - Scroll result]
+!!VRv3|v1=-1/v2=-1:S4;
+
+---------------------------------------------------------------------------------------
+
+[Function 5202 - Search for Basic or Advanced Secondary Skill known by Hero]
+
+[Section Variables: x16, y1-y2, v1-v2]
+
+!?FU5202;
+
+ [Check Hero's skill level with current skill being checked (x16) - store in y1]
+!!HE-1:Sx16/?y1;
+
+ [If level is 1 or 2, store value in v1 or v2 and exit loop (x16 set to 999)]
+!!VRy2&y1>=1/y1<=2/v1=-1:S999; [Set y2 to 999 if first skill found]
+!!VRv1&y1>=1/y1<=2/v1=-1:Sx16; [Store 1st skill in v1]
+!!VRy2&y1>=1/y1<=2/v1<>-1/v1<>x16:S999; [Set y2 to 999 if second skill found]
+!!VRv2&y1>=1/y1<=2/v1<>-1/v1<>x16:Sx16; [Store 2nd skill in v2]
+
+ [If skill found (y2=999), set x16 to 999]
+!!VRx16&y2=999:S999;
+
+---------------------------------------------------------------------------------------
+
+[Function 5203 - Cycle through all Heroes and see if they're currently studying]
+
+* [Section Variables: x1 (current player), x16, y1, w52]
+
+!?FU5203;
+
+ [Check if owner of Hero being checked is the current player]
+!!HEx16:O?y1; [Owner of Hero]
+
+!!IF&x1=y1:Wx16; [Set w variables for Hero being checked]
+
+ [Call function 5204 if current player owns Hero and Hero is studying]
+!!FU5204&x1=y1/w52>0:Px16;
+
+---------------------------------------------------------------------------------------
+
+[Function 5204 - Hero is studying]
+
+* [Section Variables: x1, y1-y5, w52-w53, z1-z5, flags 2 & 1000]
+
+!?FU5204;
+
+!!HEx1:B0/?z1; [Store hero's name in z1]
+!!UN:N4/2/w53; [Store name of manual in z2]
+!!HEx1:R2/?y1; [Store hero's sex in y1]
+!!VRz3&y1=0:Sz131013;  [Set z3 to "he" for a male hero]
+!!VRz3&y1=1:Sz131014; [Set z3 to "she" for a female hero]
+!!VRz5&y1=0:Sz131015; [Set z5 to "his for a male hero]
+!!VRz5&y1=1:Sz131016; [Set z5 to "hers for a female hero]
+!!VRy2:Sw53 *3 +5; [Secondary Skill # used for dialogue box display]
+!!VRy3:Sw52 -1;    [Days left -1 for message display]
+!!VRy5:S0 R144; [Generate number for one of the study messages]
+!!UN:N3/4/y5/1; [Store study monster name in z5]
+
+ [Check if hero has learned skill at expert before finishing studying the book]
+!!HEx1:Sw53/?y4; [Hero's skill level in skill being studied]
+!!IF&1000/y4=3:Q2/20/y2/1/z131017;
+!!VRw52&y4=3:S0; [Set days left to 0]
+
+ [If not finished studying, display progress message if w54=99]
+!!IF&1000/w52=7/w54=99:Q2/20/y2/1/z131018;
+!!IF&1000/w52=6/w54=99:Q2/20/y2/1/z131019;
+!!IF&1000/w52=5/w54=99:Q2/20/y2/1/z131020;
+!!IF&1000/w52=4/w54=99:Q2/20/y2/1/z131021;
+!!IF&1000/w52=3/w54=99:Q2/20/y2/1/z131022;
+!!IF&1000/w52=2/w54=99:Q2/20/y2/1/z131023;
+
+ [If finished studying, display completion message]
+!!IF&1000/w52=1:Q2/20/y2/1/z131024;
+
+ [If finished studying, give Hero skill at Expert level]
+!!HEx1&w52=1:Sw53/3;
+
+ [Decrement number of days left]
+!!VRw52&w52>0:-1;
+!!VRw53&w52=0:S0; [If studying completed, set w53 to 0]
+!!VRw54&w52=0:S0; [If studying completed, set w54 to 0]
+
+---------------------------------------------------------------------------------------
+
+[Function 5205 - Cycle through all Heroes to reset w52/w53 variables]
+
+* [Section Variables: x16, w52-w53]
+
+!?FU5205;
+
+!!IF:Wx16; [Set w variable to currently checked Hero]
+
+ {Reset w52 and w53 variables for this hero]
+!!VRw52:S0;
+!!VRw53:S0;
+
+---------------------------------------------------------------------------------------
+
+[Function 5206 - Give player a Deed to an available (unowned) Mine if possible]
+
+* [Section Variables: y1-y3, v1 & v3]
+
+!?FU5206;
+
+ [Initialize v1 to -1]
+!!VRv1:S-1;
+
+ [Store number of mines in y1]
+!!UN:U53/-1/?y1;
+
+ [Generate random starting mine number to check for unowned status - y2]
+!!VRy2:Sy1 -1;
+!!VRy3&y1>0:S1 Ry2;
+
+ [Part 1 of checking for owned status of mine]
+!!UN&y1>0:U53/-1/y3/4; [Store location of first mine checked for new UN:U syntax: v4/v5/v6]
+!!DO5207/y3/y1/1&y1>0:Py3;
+
+ [Part 2 of checking for owned status of mine]
+!!VRv4:S-1; [Initialize v4 to -1 to work with new faster UN:U syntax]
+!!DO5207/1/y1/1&y1>0/y3<>1/v1=-1:P0;
+
+ [If no valid mine is found, change v3 to 2 (Tomes of Knowledge) result]
+!!VRv3&v1=-1:S2;
+
+---------------------------------------------------------------------------------------
+
+[Function 5207 - Check for an available (unowned) Mine]
+
+* [Section Variables: x1, x16, y1-y3, v1, v2 & v4-v6, flag 1000]
+
+!?FU5207;
+
+ [Store coordinates of each mine in v4/v5/v6]
+!!UN|x1=0/x16>x1:U53/-1/-1/4;
+
+ [Check owner of mine - store in y1. Check type of mine - store in y2]
+!!MNv4/v5/v6:O?y1 R?y2;
+
+!!UN:P79/=1; // check, if Mithril Mine is enabled
+!!VRy99:S-1; // initialize y99 to -1
+!!PO4&1:O?y99; // if yes: check, if it it a mithril forge (y99 = -2 or 0..7)
+!!FU|y99=-2/y99>-1:E; // exit, if yes
+
+ [Check current player - store in y3]
+!!OW:C?y3;
+
+ [If mine is unowned, make player the owner and reveal 3 squares of the shroud around it]
+ [Also, set v1 to 1]
+!!MNv4/v5/v6&y1=-1:Oy3;
+!!UN&y1=-1:Sv4/v5/v6/y3/3;
+!!VRv1&y1=-1:S1;
+
+ [If mine was unowned, display message and then change point of view to the mine]
+!!FU5208&y1=-1:Py2; [Store mine string in z1]
+!!IF&1000/y1=-1:Q2/y2/v2/1/z131025;
+!!UN&1000/y1=-1:Lv4/v5/v6/2500; [Move view for 2.5 seconds to mine]
+
+ [Set x16 to 999 to exit loop]
+!!VRx16&y1=-1:S999;
+
+---------------------------------------------------------------------------------------
+
+[Function 5208 - Get type of Mine and store string in z1 and amount produced in v2]
+
+* [Section Variables: x1, v2, z1]
+
+!?FU5208;
+
+ [Set z1 depending on mine type]
+!!VRz1&x1=0:Sz131026;
+!!VRz1&x1=1:Sz131027;
+!!VRz1&x1=2:Sz131028;
+!!VRz1&x1=3:Sz131029;
+!!VRz1&x1=4:Sz131030;
+!!VRz1&x1=5:Sz131031;
+!!VRz1&x1=6:Sz131032;
+!!VRz1&x1=7:Sz131033;
+
+ [Set v2 depending on mine type]
+!!VRv2|x1=0/x1=2:S-2; [Sawmill or Ore Pit]
+!!VRv2&x1=6:S-1000; [Gold Mine]
+!!VRv2&x1<>0/x1<>2/x1<>6:S-1; [All other types of mine]
+

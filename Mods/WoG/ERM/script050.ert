@@ -1,0 +1,258 @@
+#	Text resource for "script50.erm" document		
+150000	Ethereal - Only %Y-2 damage taken.	<!!S>	22.10.2004
+150001	Cleaving Blow! The enemy's defense is ignored.	<!!S>	22.10.2004
+150002	and does %V7005 damage.	<!!S>	22.10.2004
+150003	The caustic venom does an additional %V7005 damage.	<!!S>	22.10.2004
+150004	The enemy dispairs and loses it's will to fight back.	<!!S>	22.10.2004
+150005	and does %Y-3 damage.	<!!S>	22.10.2004
+150006	The caustic venom does an additional %Y-3 damage.	<!!S>	22.10.2004
+150007	The enemy dispairs and loses it's will to fight back.	<!!S>	22.10.2004
+150008	A curse falls upon those who dared to attack a Mummy.	<!!S>	22.10.2004
+150009	Regeneration heals %Y5 lost health.	<!!S>	22.10.2004
+150010		<!!S>	22.10.2004
+150011		<!!S>	22.10.2004
+150012	{at+ de+}	<!!S>	22.10.2004
+150013	Shoots twice.
+{at+ de+}	<!!S>	22.10.2004
+150014	Retaliates twice.
+{dh+}	<!!S>	22.10.2004
+150015	Unlimited retaliations.
+{hp+ dh+}	<!!S>	22.10.2004
+150016		<!!S>	22.10.2004
+150017		<!!S>	22.10.2004
+150018		<!!S>	22.10.2004
+150019		<!!S>	22.10.2004
+150020		<!!S>	22.10.2004
+150021	Jousting bonus.
+{Shield.}	<!!S>	22.10.2004
+150022	Hates Devils.
+{Prot Water.}	<!!S>	22.10.2004
+150023	+1 morale. Resurrects allies. Hates Devils. {Prot Water.}	<!!S>	22.10.2004
+150024		<!!S>	22.10.2004
+150025		<!!S>	22.10.2004
+150026	20% magic resistance.
+{dl+}	<!!S>	22.10.2004
+150027	40% magic resistance.
+{Slayer. de+ dl+}	<!!S>	22.10.2004
+150028		<!!S>	22.10.2004
+150029	Shoots twice.
+{de+}	<!!S>	22.10.2004
+150030		<!!S>	22.10.2004
+150031	Magic damper.
+{Air Shield. at+}	<!!S>	22.10.2004
+150032		<!!S>	22.10.2004
+150033		<!!S>	22.10.2004
+150034	Resistance aura. Blinding attack.
+{Magic Mirror.}	<!!S>	22.10.2004
+150035	Resistance aura. Blinding attack.
+{Magic Mirror. at+ de+}	<!!S>	22.10.2004
+150036	Immune to spell levels 1-3.
+{Poison attack. sp+}	<!!S>	22.10.2004
+150037	Immune to spell levels 1-4.
+{Petrify attack.}	<!!S>	22.10.2004
+150038		<!!S>	22.10.2004
+150039		<!!S>	22.10.2004
+150040	{No morale.}
+{hp+ de+}	<!!S>	22.10.2004
+150041	{No morale.}
+{hp+ de+}	<!!S>	22.10.2004
+150042		<!!S>	22.10.2004
+150043	Damage from spells reduced 75%.
+{de+}	<!!S>	22.10.2004
+150044		<!!S>	22.10.2004
+150045		<!!S>	22.10.2004
+150046	Hates Efreet.
+{hp+}	<!!S>	22.10.2004
+150047	Spellcaster: Random benefit. Hates Efreet. {hp+ at+ de+}	<!!S>	22.10.2004
+150048		<!!S>	22.10.2004
+150049		<!!S>	22.10.2004
+150050	Mind immune. {Lightning attack.}
+{Prot Air. hp+ sp+}	<!!S>	22.10.2004
+150051	No melee penalty. Mind immune. Hates Black Dragons. {Prot Air}	<!!S>	22.10.2004
+150052	{Flying}	<!!S>	22.10.2004
+150053	Magic channel.
+{Flying}	<!!S>	22.10.2004
+150054	{hp+ sp+}	<!!S>	22.10.2004
+150055	Fireball attack.
+{hp+ sp+}	<!!S>	22.10.2004
+150056		<!!S>	22.10.2004
+150057	3-headed attack. Enemies cannot retaliate.
+{dl+}	<!!S>	22.10.2004
+150058		<!!S>	22.10.2004
+150059	{at+ de+}	<!!S>	22.10.2004
+150060	{Strikes twice.}
+{dl- dh-}	<!!S>	22.10.2004
+150061	Summons demons. {Strikes twice.}
+{at+ de+ dl- dh-}	<!!S>	22.10.2004
+150062		<!!S>	22.10.2004
+150063		<!!S>	22.10.2004
+150064	-1 luck. No retal. Hates Angels. {True Teleport. Prot Fire. hp+}	<!!S>	22.10.2004
+150065	-1 luck. No retal. Hates Angels. {True Teleport. Prot Fire. hp+}	<!!S>	22.10.2004
+150066		<!!S>	22.10.2004
+150067		<!!S>	22.10.2004
+150068	Undead. {Disease.}	<!!S>	22.10.2004
+150069	Undead. Disease.
+{at+ de+}	<!!S>	22.10.2004
+150070	Undead.  Regenerating. 
+{Paralyzing attack. hp+}	<!!S>	22.10.2004
+150071	Undead.  Regenerating.
+{Paralyzing attack. hp+}	<!!S>	22.10.2004
+150072		<!!S>	22.10.2004
+150073		<!!S>	22.10.2004
+150074		<!!S>	22.10.2004
+150075		<!!S>	22.10.2004
+150076		<!!S>	22.10.2004
+150077		<!!S>	22.10.2004
+150078	Undead.  -1 to enemy morale. {Sorrow attack (burns retal). de+}	<!!S>	22.10.2004
+150079	Undead.  -1 to enemy morale.  Can Age. {Ethereal at+ de+}	<!!S>	22.10.2004
+150080		<!!S>	22.10.2004
+150081		<!!S>	22.10.2004
+150082	Strike and return.
+{hp+}	<!!S>	22.10.2004
+150083	Strike and return. No enemy retaliation. {hp+}	<!!S>	22.10.2004
+150084	No melee penalty.
+{Weakness shot.}	<!!S>	22.10.2004
+150085	No melee penalty.
+{Weakness shot.}	<!!S>	22.10.2004
+150086	No melee penalty. Stone gaze. {hp+ sh+}	<!!S>	22.10.2004
+150087	No melee penalty. Stone gaze. {hp+ sh+}	<!!S>	22.10.2004
+150088		<!!S>	22.10.2004
+150089		<!!S>	22.10.2004
+150090	{Paralyzing venom.}{dh+ sp+}	<!!S>	22.10.2004
+150091	Paralyzing venom.
+{hp+ de+ dh+}	<!!S>	22.10.2004
+150092	Immune to spell levels 1-3.
+{Fireball attack. hp+}	<!!S>	22.10.2004
+150093	Immune to spell levels 1-5. Hates Titans. {Acid attack.}	<!!S>	22.10.2004
+150094		<!!S>	22.10.2004
+150095		<!!S>	22.10.2004
+150096	{hp+}	<!!S>	22.10.2004
+150097	Strikes twice.
+{hp+}	<!!S>	22.10.2004
+150098	{No melee penalty.}	<!!S>	22.10.2004
+150099	{No melee penalty.}
+{at+ de+}	<!!S>	22.10.2004
+150100		<!!S>	22.10.2004
+150101		<!!S>	22.10.2004
+150102		<!!S>	22.10.2004
+150103	Lightning strike. {Prot Air.}
+{hp+}	<!!S>	22.10.2004
+150104		<!!S>	22.10.2004
+150105	Attacks siege walls.
+{hp+}	<!!S>	22.10.2004
+150106	Ignores 40% Defense. {2 Retals.}
+{Protection from Earth. at- de+}	<!!S>	22.10.2004
+150107	Ignores {40%} Defense. {2 Retals.}
+{Protection from Earth. at+ de+}	<!!S>	22.10.2004
+150108		<!!S>	22.10.2004
+150109	{hp+}	<!!S>	22.10.2004
+150110	{Diseased arrows. hp+}	<!!S>	22.10.2004
+150111	{Diseased arrows}	<!!S>	22.10.2004
+150112		<!!S>	22.10.2004
+150113		<!!S>	22.10.2004
+150114		<!!S>	22.10.2004
+150115		<!!S>	22.10.2004
+150116	Petrifying attack.
+{hp+}	<!!S>	22.10.2004
+150117	Petrifying attack.
+{hp+}	<!!S>	22.10.2004
+150118	{Caustic Venom.}
+{hp+}	<!!S>	22.10.2004
+150119	Poisonous.
+{hp+}	<!!S>	22.10.2004
+150120	Attacks all adjacent enemies. No retaliation. {Heals.}	<!!S>	22.10.2004
+150121	Attacks all adjacent enemies. No retaliation. {Heals. at+ de+}	<!!S>	22.10.2004
+150122	Meteor immune. Lightning:x2. {Flying.}  {Autocaster.}	<!!S>	22.10.2004
+150123	Lightning immune. Meteor shower:x2. {Autocaster.} {dh+}	<!!S>	22.10.2004
+150124	Fire immune. Ice:x2.
+{Autocaster. dl+ dh+}	<!!S>	22.10.2004
+150125	Ice immune. Fire:x2.
+{Autocaster.} {dl+ dh-}	<!!S>	22.10.2004
+150126		<!!S>	22.10.2004
+150127		<!!S>	22.10.2004
+150128		<!!S>	22.10.2004
+150129		<!!S>	22.10.2004
+150130	Radius attack. No retaliation. Mind spell immunity. {Flying.}	<!!S>	22.10.2004
+150131	Radius attack. No retaliation. Spell immunity. {Flying. hp+}	<!!S>	22.10.2004
+150132		<!!S>	22.10.2004
+150133	Ice immune. Fire:x2.
+{Autocaster.} {de+ dl+ dh-}	<!!S>	22.10.2004
+150134		<!!S>	22.10.2004
+150135	Lightning immune. Meteor:x2. {Autocaster. at+ de+}	<!!S>	22.10.2004
+150136		<!!S>	22.10.2004
+150137	Meteor immune. Lightning:x2. {Flying. Autocaster. at+ de+}	<!!S>	22.10.2004
+150138		<!!S>	22.10.2004
+150139	Fire immune. Ice:x2.
+{Autocaster. dl+ dh+}	<!!S>	22.10.2004
+150140	Breath attack.  Fire spell immunity.  {Fire Shield.	<!!S>	22.10.2004
+150141	Breath attack.  Fire spell immunity.  Rebirth. {Fire Shield. sp-}	<!!S>	22.10.2004
+150142	Immune to spell levels 1-3. Fear.
+{Ice Bolt attack.}	<!!S>	22.10.2004
+150143	Crystal generation.
+{Magic Arrow attack}	<!!S>	22.10.2004
+150144	Offensive spell caster.
+{at+ de+ dl+ dh+}	<!!S>	22.10.2004
+150145	Spits Acid. {Retaliates twice.} {dh+}	<!!S>	22.10.2004
+150146	No melee penalty. Group spell caster.
+{dh+}	<!!S>	22.10.2004
+150147		<!!S>	22.10.2004
+150148		<!!S>	22.10.2004
+150149	{hp+}	<!!S>	22.10.2004
+150150	{Can Frenzy.}
+{hp+ at+ de+ dl+ dh+ L3}	<!!S>	22.10.2004
+150151	Undead. {Curses attackers.  L4} {Fire:x2 hp+ at+ de+ dl+ dh+}	<!!S>	22.10.2004
+150152	Desert guide.
+{Immune to Slow.} {at+ dl+ sp+}	<!!S>	22.10.2004
+150153	Spying. {Retaliates twice.}
+{hp+}	<!!S>	22.10.2004
+150154	{Regenerates lost units.}	<!!S>	22.10.2004
+150155		<!!S>	22.10.2004
+150156		<!!S>	22.10.2004
+150157		<!!S>	22.10.2004
+150158		<!!S>	22.10.2004
+150159		<!!S>	22.10.2004
+150160	+2 morale. Resurrect x2. No Fear {Mind Immune. Prot Water. sp+}	<!!S>	22.10.2004
+150161	Spell immunity. Fearless. Can blind. +1 Gem/day. {at+ de+ sp+}	<!!S>	22.10.2004
+150162	Shoot twice. Fearless. Air shield. Thunderclap. {Prot Air. at+ de+}	<!!S>	22.10.2004
+150163	-2 luck. Petrify. No retal. {Prot} {Fire. Teleport. at+ de+ hp+ sp+}	<!!S>	22.10.2004
+150164	Undead. -2 enemy morale. Drains life. Age. {at+ de+ dl+ sp+}	<!!S>	22.10.2004
+150165	Spell immunity. Fear. Gets back. Fearless. Darkness. {at+ de+ sp+}	<!!S>	22.10.2004
+150166	Ignores {40%} Defense. {3 Retals.} +2 luck. {Prot Earth. at+ de+ sp+}	<!!S>	22.10.2004
+150167	Radius att. Acid. Regeneration. Fearless. {at+ de+ dl+ dh+ sp+}	<!!S>	22.10.2004
+150168	Fire immunity. Slayer. Rebirth always. Fire Shield. {at+ de+}	<!!S>	22.10.2004
+150169	Creates Ghosts. {Daily losses.} {Magic:x2 hp+ at- de- dl+ dh+ sp-}	<!!S>	22.10.2004
+150170		<!!S>	22.10.2004
+150171		<!!S>	22.10.2004
+150172		<!!S>	22.10.2004
+150173		<!!S>	22.10.2004
+150174	Elemental. Prot Fire.
+{hp+ at+ de- dl+ dh+ sp+}	<!!S>	22.10.2004
+150175	Elemental. Prot Earth.
+{hp+ AT- de+ dh+}	<!!S>	22.10.2004
+150176	Elemental. Prot Air.
+{at+ de+ dl- dh+ sp+}	<!!S>	22.10.2004
+150177	Elemental. Prot Water.
+{hp+ at+ de+ dl+ dh+ sp+}	<!!S>	22.10.2004
+150178	{Strikes twice. Retaliates twice.} {Alive. sp+}	<!!S>	22.10.2004
+150179	Magic Mirror. Fearless. No melee penalty. {Shoots twice}	<!!S>	22.10.2004
+150180	Air shield. {Mind Immune. Dispel} {arrows. hp+ de+ dl+ dh+ sh- L5}	<!!S>	22.10.2004
+150181	Fire shield. {Explosive arrows.} {hp+ at+ de+ dh+ sh- L5}	<!!S>	22.10.2004
+150182	Death stare breath. No fear. Mind immune. {at+ de+ dl+ dh+}	<!!S>	22.10.2004
+150183		<!!S>	22.10.2004
+150184	Shoots twice. Merry. No Melee Penalty.
+{hp+ de+}	<!!S>	22.10.2004
+150185		<!!S>	22.10.2004
+150186		<!!S>	22.10.2004
+150187		<!!S>	22.10.2004
+150188		<!!S>	22.10.2004
+150189		<!!S>	22.10.2004
+150190		<!!S>	22.10.2004
+			
+			
+			
+			
+			
+			
+			
+			
+			

@@ -1,0 +1,14 @@
+--------------------------------------------------------------------------------
+Build 3
+--------------------------------------------------------------------------------
+[+] New WoG Options format and dialog.
+
+--------------------------------------------------------------------------------
+Build 4
+--------------------------------------------------------------------------------
+[+] New path option (in LD:L and other file maniputation commands): 10 for Mods folder.
+[+] New [Common]DeveloperPath parameter in WoG.ini for WoG developement.
+[-] Custom LODs now work.
+[*] Now Wogify and Map scripts in Lua run earlier. This allows loading of custom lods with objects and in future will allow a new InitializeObject trigger.
+[+] Better error reporting.
+[+] Def frames aren't put into global cache now (that is, 2 defs can have identical frame names)

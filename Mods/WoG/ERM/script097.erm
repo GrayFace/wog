@@ -1,0 +1,1900 @@
+ZVSE
+_WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
+ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_ScriptDate=12.10(October).2006
+
+** Script097.erm
+** Random Events version 0.96 by Timothy Pulver
+** Thanks to Steve Hanna for his numerous Bad Event text suggestions
+** Updated: October 12, 2006
+** Previously Updated: August 19, 2006
+
+** RANDOM EVENTS
+
+** Random Good Events: All players receive one good event each week on random days
+** (except never on the very first day of a game). The value of events increases
+** based on the game date.
+
+** Random Bad Events: All players receive one bad event each week on random days
+** (except never on the very first day of a game). The value of events increases
+** based on the game date.
+
+** A weekly Good Event will give each player one of the following:
+**   o Free Gold or Resources;
+**   o Bonus troops available for recruitment (at a random town);
+**   o Experience or a Skill improvement (for a random hero);
+**   o An artifact (for a random hero);
+**   o Stack Experience (for a random stack of a random hero);
+**   o Free Neutral Mercenaries (they'll offer to join a random hero).
+
+** A weekly Bad Event will give each player one of the following:
+**   o Loss of Gold or Resources;
+**   o Loss of troops available for recruitment (at a random town);
+**   o Random Primary or Secondary Skill loss (for a random hero);
+**   o Loss of a random artifact (for a random hero);
+**   o Loss of Stack Experience (a random stack of a random hero);
+**   o Loss of troops (from a random hero's army).
+
+** All players will receive the same or equivalent good and bad events if possible,
+** although skill changes, artifact or troops losses, etc. will of course be
+** different for each hero. If a player has no heroes or towns, they won't benefit
+** or suffer from a hero or town event. Likewise, if a player's randomly chosen
+** town has no creature dwellings at all, that player won't receive or lose
+** anything from such an event.
+
+** Due to the nature of Bad Events, they will be somewhat less balanced between
+** players than Good Events. This is unavoidable since in order for something to
+** be lost, it must exist in the first place and all players will have different
+** artifacts, troops and so on. However, over the long run they should pretty
+** well even out.
+
+
+** Random Good Events (ERM Option 97)
+Variables: v7300-v7311, (z1-z7, z-1..z-10, v1-v2)
+Flags: (1-2)
+Functions: FU20220-FU20232
+
+** Random Bad Events (ERM Option 277)
+Variables: v7312-v7323, (z1-z10, z-1..z-10, v1-v2)
+Flags: (1-2)
+Functions: FU20233-FU20247
+
+--------------------------------------------------------------------------------
+
+ [Initialize variables]
+!#VRv7300:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;
+
+--------------------------------------------------------------------------------
+
+ [Determine which day they'll be a Random Good Event: v7300=day]
+!?TM2&$weekday$=$monday$/$once$=1;
+!!UN:P97/?y-1; [Check if Random Good Events script is enabled: y-1=1 if enabled]
+!!FU&y-1<>1:E; [Exit if not enabled]
+
+!!VRv7300:S1 R6; [Random day from 1..7]
+!!VRv7300&v7300=v7309:S1 R6; [Reroll random day from 1..7]
+!!VRv7300&v7300=v7309:S1 R6; [Reroll random day from 1..7]
+!!VRv7300&v7300=v7309:S1 R6; [Reroll random day from 1..7]
+!!VRv7300&v7300=v7309:S1 T6; [Reroll random day from 1..7]
+!!VRv7300&$day$=1:S2 R5; [Random day from 2..7 first week]
+!!VRv7309:Sv7300; [Store last random day for next week: v7309]
+!!VRv7301:S0; [Initialize random event type to 0: v7301]
+!!VRv7302:S0; [Initialize random event text to 0: v7302]
+!!VRv7303:S-1; [Initialize random event detail to -1: v7303]
+!!VRv7304:S0; [Initialize event amount number to 0: v7304]
+
+--------------------------------------------------------------------------------
+
+ [Choose a Random Good Event but never Month 1, Week 1, Day 1]
+!?TM2&$day$>1/$weekday$=v7300;
+!!UN:P97/?y-1; [Check if Good Random Events script is enabled: y-1=1 if enabled]
+!!FU&y-1<>1:E; [Exit if not enabled]
+
+!!VRy-8:S0;            [Initialize y-8 to 0]
+!!VRy-8&v7301=0:S1;    [Set y-8 to 1 if v7301 is 0: y-8]
+!!VRv7301&y-8=1:S1 R13; [Random Event number (1..14: v7301]
+!!VRv7301&y-8=1/v7301=v7305:S1 R13; [Reroll Random Event number (1..14): v7301]
+!!VRv7301&y-8=1/v7301=v7305:S1 R13; [Reroll Random Event number (1..14): v7301]
+!!VRv7301&y-8=1/v7301=v7305:S1 R13; [Reroll Random Event number (1..14): v7301]
+!!VRv7301&y-8=1/v7301=v7305:S1 T13; [Reroll Random Event number (1..14): v7301]
+
+!!VRv7305&y-8=1:Sv7301; [Store last random event for next week]
+
+!!FU20222&v7301=1:P;   [Resource Event]
+!!FU20223&v7301=2:P;   [Additional Troops to Hire Event]
+!!FU20225&v7301=3:P1;  [Hero Experience Event]
+!!FU20231&v7301=4:P;   [Neutral Mercenary Event]
+!!FU20225&v7301=5:P2;  [Skill Event]
+!!FU20225&v7301=6:P3;  [Stack Experience Event]
+!!FU20230&v7301=7:P;   [Artifact Event]
+!!FU20225&v7301=8:P2;  [Skill Event]
+!!FU20225&v7301=9:P1;  [Hero Experience Event]
+!!FU20225&v7301=10:P3; [Stack Experience Event]
+!!FU20222&v7301=11:P;  [Resource Event]
+!!FU20230&v7301=12:P;  [Artifact Event]
+!!FU20231&v7301=13:P;  [Neutral Mercenary Event]
+!!FU20223&v7301=14:P;  [Additional Troops to Hire Event]
+
+--------------------------------------------------------------------------------
+
+ [Generate Male Name: z3]
+ [Note: This Function is used by both Good Events and Bad Events]
+!?FU20220;
+!!VRy1:S0 T51; [First part of name: y1]
+!!VRy2:S0 R51; [Second part of name: y2]
+!!VRz1&y1=0:S^Goth^; !!VRz1&y1=1:S^Woob^; !!VRz1&y1=2:S^Grond^; !!VRz1&y1=3:S^Gorg^;
+!!VRz1&y1=4:S^Ming^; !!VRz1&y1=5:S^Gind^; !!VRz1&y1=6:S^Lard^; !!VRz1&y1=7:S^Rand^;
+!!VRz1&y1=8:S^Ping^; !!VRz1&y1=9:S^Boll^; !!VRz1&y1=10:S^Nath^; !!VRz1&y1=11:S^Crab^;
+!!VRz1&y1=12:S^Ax^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Till^; !!VRz1&y1=15:S^Jon^;
+!!VRz1&y1=16:S^Jim^; !!VRz1&y1=17:S^Morg^; !!VRz1&y1=18:S^Glib^; !!VRz1&y1=19:S^Zam^;
+!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Ick^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Laft^;
+!!VRz1&y1=24:S^Ard^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Drip^; !!VRz1&y1=27:S^Slik^;
+!!VRz1&y1=28:S^Dorp^; !!VRz1&y1=29:S^Noil^; !!VRz1&y1=30:S^Arv^; !!VRz1&y1=31:S^Parb^;
+!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Ryl^; !!VRz1&y1=34:S^Velp^; !!VRz1&y1=35:S^Varg^;
+!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Hilt^; !!VRz1&y1=38:S^Pet^; !!VRz1&y1=39:S^Rent^;
+!!VRz1&y1=40:S^Swift^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Corn^;
+!!VRz1&y1=44:S^Clad^; !!VRz1&y1=45:S^Than^; !!VRz1&y1=46:S^Bald^; !!VRz1&y1=47:S^Oog^;
+!!VRz1&y1=48:S^Simp^; !!VRz1&y1=49:S^Bong^; !!VRz1&y1=50:S^Wazz^; !!VRz1&y1=51:S^Hal^;
+
+!!VRz2&y2=0:S^weed^; !!VRz2&y2=1:S^wort^; !!VRz2&y2=2:S^alar^; !!VRz2&y2=3:S^ant^;
+!!VRz2&y2=4:S^taran^; !!VRz2&y2=5:S^elan^; !!VRz2&y2=6:S^wump^; !!VRz2&y2=7:S^abot^;
+!!VRz2&y2=8:S^pong^; !!VRz2&y2=9:S^woval^; !!VRz2&y2=10:S^nack^; !!VRz2&y2=11:S^creen^;
+!!VRz2&y2=12:S^ellan^; !!VRz2&y2=13:S^smith^; !!VRz2&y2=14:S^ofex^; !!VRz2&y2=15:S^athan^;
+!!VRz2&y2=16:S^orfin^; !!VRz2&y2=17:S^nelp^; !!VRz2&y2=18:S^wert^; !!VRz2&y2=19:S^ifan^;
+!!VRz2&y2=20:S^ylart^; !!VRz2&y2=21:S^rasp^; !!VRz2&y2=22:S^alig^; !!VRz2&y2=23:S^alot^;
+!!VRz2&y2=24:S^varkan^; !!VRz2&y2=25:S^weird^; !!VRz2&y2=26:S^ingan^; !!VRz2&y2=27:S^glick^;
+!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^parth^; !!VRz2&y2=30:S^erly^; !!VRz2&y2=31:S^oomp^;
+!!VRz2&y2=32:S^ivore^; !!VRz2&y2=33:S^and^; !!VRz2&y2=34:S^untor^; !!VRz2&y2=35:S^islarg^;
+!!VRz2&y2=36:S^astin^; !!VRz2&y2=37:S^ernie^; !!VRz2&y2=38:S^doggoth^; !!VRz2&y2=39:S^ispade^;
+!!VRz2&y2=40:S^onent^; !!VRz2&y2=41:S^enclark^; !!VRz2&y2=42:S^sore^; !!VRz2&y2=43:S^doggel^;
+!!VRz2&y2=44:S^blackin^; !!VRz2&y2=45:S^atoth^; !!VRz2&y2=46:S^hair^; !!VRz2&y2=47:S^isploog^;
+!!VRz2&y2=48:S^son^; !!VRz2&y2=49:S^isgon^; !!VRz2&y2=50:S^itfore^; !!VRz2&y2=51:S^nowk^;
+
+!!VRz3:S^%Z1%Z2^; [Male name: z1]
+
+--------------------------------------------------------------------------------
+
+ [Generate Female Name: z4]
+ [Note: This Function is used by both Good Events and Bad Events]
+!?FU20221;
+!!VRy1:S0 T51; [First part of name: y1]
+!!VRy2:S0 R51; [Second part of name: y2]
+!!VRz1&y1=0:S^Jen^; !!VRz1&y1=1:S^Pink^; !!VRz1&y1=2:S^Selip^; !!VRz1&y1=3:S^Perr^;
+!!VRz1&y1=4:S^Jinn^; !!VRz1&y1=5:S^Tin^; !!VRz1&y1=6:S^Sand^; !!VRz1&y1=7:S^Bett^;
+!!VRz1&y1=8:S^Nymph^; !!VRz1&y1=9:S^Sab^; !!VRz1&y1=10:S^Grace^; !!VRz1&y1=11:S^Lean^;
+!!VRz1&y1=12:S^Jess^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Amber^; !!VRz1&y1=15:S^Lemon^;
+!!VRz1&y1=16:S^Tess^; !!VRz1&y1=17:S^Liz^; !!VRz1&y1=18:S^Mari^; !!VRz1&y1=19:S^Zam^;
+!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Hir^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Kar^;
+!!VRz1&y1=24:S^Flor^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Cath^; !!VRz1&y1=27:S^Silk^;
+!!VRz1&y1=28:S^Petal^; !!VRz1&y1=29:S^Daph^; !!VRz1&y1=30:S^Tar^; !!VRz1&y1=31:S^Zir^;
+!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Rion^; !!VRz1&y1=34:S^Merb^; !!VRz1&y1=35:S^Lov^;
+!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Felt^; !!VRz1&y1=38:S^Lin^; !!VRz1&y1=39:S^Ren^;
+!!VRz1&y1=40:S^Sweet^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Con^;
+!!VRz1&y1=44:S^Clov^; !!VRz1&y1=45:S^Nan^; !!VRz1&y1=46:S^Christ^; !!VRz1&y1=47:S^Jil^;
+!!VRz1&y1=48:S^Dar^; !!VRz1&y1=49:S^Bint^; !!VRz1&y1=50:S^Wuzz^; !!VRz1&y1=51:S^Hil^;
+
+!!VRz2&y2=0:S^ie^; !!VRz2&y2=1:S^aling^; !!VRz2&y2=2:S^ina^; !!VRz2&y2=3:S^nine^;
+!!VRz2&y2=4:S^eena^; !!VRz2&y2=5:S^elane^; !!VRz2&y2=6:S^ephine^; !!VRz2&y2=7:S^ily^;
+!!VRz2&y2=8:S^a^; !!VRz2&y2=9:S^amth^; !!VRz2&y2=10:S^whip^; !!VRz2&y2=11:S^grass^;
+!!VRz2&y2=12:S^elia^; !!VRz2&y2=13:S^iris^; !!VRz2&y2=14:S^ena^; !!VRz2&y2=15:S^ina^;
+!!VRz2&y2=16:S^wood^; !!VRz2&y2=17:S^lin^; !!VRz2&y2=18:S^iper^; !!VRz2&y2=19:S^ifan^;
+!!VRz2&y2=20:S^ine^; !!VRz2&y2=21:S^sel^; !!VRz2&y2=22:S^issy^; !!VRz2&y2=23:S^appla^;
+!!VRz2&y2=24:S^virka^; !!VRz2&y2=25:S^wirda^; !!VRz2&y2=26:S^ing^; !!VRz2&y2=27:S^ette^;
+!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^etta^; !!VRz2&y2=30:S^spice^; !!VRz2&y2=31:S^locki^;
+!!VRz2&y2=32:S^ivora^; !!VRz2&y2=33:S^andi^; !!VRz2&y2=34:S^rose^; !!VRz2&y2=35:S^puff^;
+!!VRz2&y2=36:S^asti^; !!VRz2&y2=37:S^erni^; !!VRz2&y2=38:S^dogga^; !!VRz2&y2=39:S^ispa^;
+!!VRz2&y2=40:S^onenti^; !!VRz2&y2=41:S^enlara^; !!VRz2&y2=42:S^orenna^; !!VRz2&y2=43:S^ispi^;
+!!VRz2&y2=44:S^eela^; !!VRz2&y2=45:S^atothi^; !!VRz2&y2=46:S^haira^; !!VRz2&y2=47:S^isplooga^;
+!!VRz2&y2=48:S^ily^; !!VRz2&y2=49:S^isgona^; !!VRz2&y2=50:S^itfora^; !!VRz2&y2=51:S^nowkee^;
+
+!!VRz4:S^%Z1%Z2^; [Female name: z4]
+
+--------------------------------------------------------------------------------
+
+ [Resource Event]
+!?FU20222;
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7302=0:S1;     [Set y-8 to 1 if v7302 is 0: y-8]
+!!VRv7302&y-8=1:S1 R19; [Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7306:S1 R19; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7306:S1 R19; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7306:S1 R19; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7306:S1 T19; [Reroll Event text: v7302]
+
+!!VRv7306&y-8=1:Sv7302; [Store last resource event: v7306]
+
+!!VRv7303&v7303<0:S0 T6; [Resource type (0..6): v7303]
+!!VRv7303|v7302=12/v7302=14/v7302=17/v7302=18:S6; [Always gold for events 12, 14, 17 and 18]
+!!VRy1:S$weeks$; [Number of weeks: y1]
+!!VRy2:Sy1 :2; [Half weeks: y2]
+!!VRy1:+y2; [Add half weeks: y1]
+!!VRy1:R3; [Add 0..3: y1]
+!!VRy1|v7303=1/v7303=3/v7303=4/v7303=5::2; [Divide by 2 if it's not Wood, Ore or Gold: y1]
+!!VRy1&y1<2:S2; [Minimum 2: y1]
+!!VRy1&v7303=6:*200 R199; [Multiply by 200 and add random 199 if it's Gold: y1]
+
+!!VRv7304&v7304=0:Sy1; [Set v7304 to amount (y1) unless already set: v7304]
+
+!!VRz-1&v7303=0:S^wood^; [wood]
+!!VRz-1&v7303=1:S^mercury^; [mercury]
+!!VRz-1&v7303=2:S^ore^; [ore]
+!!VRz-1&v7303=3:S^sulfur^; [sulfur]
+!!VRz-1&v7303=4:S^crystal^; [crystal]
+!!VRz-1&v7303=5:S^gems^; [gems]
+!!VRz-1&v7303=6:S^gold^; [gold]
+
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRz-2&v7302=1:S^{Shrewd Deal}
+
+You make a shrewd deal with the local wise woman, %Z4, allowing her to continue her fortune telling practice in exchange for %V7304 %Z-1.^;
+!!VRz-2&v7302=2:S^{Booming Trade}
+
+Trade is really booming today and naturally you rake off your rightful share.^;
+!!VRz-2&v7302=3:S^{Inheritance}
+
+You've just received an inheritance! Poor old %Z3. You know you'll miss him.^;
+!!VRz-2&v7302=4:S^{An Old Loan}
+
+Your old buddy %Z3 has finally repayed the %V7304 %Z-1 he owed you. About time too!^;
+!!VRz-2&v7302=5:S^{A Noble Gift}
+
+Lady %Z4 sends you %V7304 %Z-1 as a thank you gift for her recent visit. Sweet!^;
+!!VRz-2&v7302=6:S^{Protection Money}
+
+The local villagers deliver %V7304 %Z-1 in return for your protection.^;
+!!VRz-2&v7302=7:S^{Pillaging and Looting}
+
+Your armies return from their campaign and Captain %Z3 brings you %V7304 %Z-1. Not a bad haul but could have been better.^;
+
+!!VRz-2&v7302=8:S^{Old Crates}
+
+While poking about in the castle dungeons, you discover some old crates containing %V7304 %Z-1. What a lucky find!^;
+!!VRz-2&v7302=9:S^{Wrong Address}
+
+A shipment of %V7304 %Z-1 is delivered to you by mistake. Apparently it was supposed to go to someone named %Z3. Oh well, you might as well make use of it until the real owner comes along...^;
+!!VRz-2&v7302=10:S^{Ransom}
+
+The castle dungeons are crowded so you ransom off a seductive spy named %Z4 for %V7304 %Z-1.^;
+!!VRz-2&v7302=11:S^{Tax Rebate}
+
+Good Queen %Z4 has given you some %Z-1 as a Tax Rebate! Jolly good show.^;
+!!VRz-2&v7302=12:S^{Good Yield}
+
+The weather's been good, the peasants have worked hard and the farms are doing better than expected. All that translates into an extra %V7304 gold for your coffers.^;
+!!VRz-2&v7302=13:S^{Chain Letter}
+
+You can scarcely believe it, but the chain letter you dispatched by horse four years ago actually worked! You just received %V7304 %Z-1 from someone named %Z4!^;
+!!VRz-2&v7302=14:S^{Stable Sale}
+
+Your retainers hold a stable sale to clear out the useless odds and ends that have been collecting dust. At the end of the day you've got an extra %V7304 gold.^;
+!!VRz-2&v7302=15:S^{Mad Alchemist}
+
+The mad alchemist %Z3 demonstrates how to turn rocks and dirt into pure %Z-1.
+
+(Too bad the next demonstration blew up in his face!)^;
+!!VRz-2&v7302=16:S^{Genie}
+
+A rather peculiar genie named %Z4 dines with you this morning and insists on giving you %V7304 %Z-1 as payment for a fine meal.^;
+!!VRz-2&v7302=17:S^{Rented Rooms}
+
+To generate a little extra income, you've been renting out rooms in the town hall for private parties.^;
+!!VRz-2&v7302=18:S^{Flood Insurance}
+
+There was a terrible downpour last night. It flooded out half the dungeon. The rats survived but most of the prisoners drowned. Luckily for you, that new flood insurance you purchased more than reimbursed you for the damages.^;
+!!VRz-2&v7302=19:S^{Bad Bookkeeping}
+
+%Z3's poor bookkeeping has resulted in an error in your favour. You have %V7304 more %Z-1 than you thought!^;
+
+!!VRz-2&v7302=20:S^{Buried Treasure}
+
+Following an old treasure map you found in the attic, you discover a chest containing %V7304 %Z-1 buried at the foot of a nearby tree.^;
+
+!!IF&1000:Q1/v7303/v7304/1^%Z-2^; [Display message for human players]
+!!OW:R-1/v7303/dv7304; [Give resources]
+
+--------------------------------------------------------------------------------
+
+ [Additional Troops to Hire Event]
+!?FU20223;
+!!VRy-8:S0;            [Initialize y-8 to 0]
+!!VRy-8&v7302=0:S1;    [Set y-8 to 1 if v7302 is 0: y-8]
+!!VRv7302&y-8=1:S1 R8; [Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7307:S1 R8; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7307:S1 R8; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7307:S1 R8; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7307:S1 T8; [Reroll Event text: v7302]
+
+!!VRv7307&y-8=1:Sv7302; [Store last Additional Troops event: v7307]
+
+!!VRv7303&v7303<0:S0 T6; [Dwelling level (0..6): v7303]
+
+!!VRy10:S$weeks$;
+!!VRy10:-1;
+!!VRv7303&v7303>y10:Sy10; [Maximum is weeks -1: v7303]
+!!VRv7304&v7304=0:S1000 *$weeks$; [Gold cost of troops: 1000*number of weeks: v7304]
+
+!!OW:W-1/?y1; [Number of towns owned by current player: y1]
+!!FU&y1<1:E; [Exit if player doesn't own any towns]
+!!VRy1:-1; [Subtract 1 from y1]
+!!VRy2:S0 Ty1; [Select a random town: y2]
+!!OW:W-1/y2/?y2; [Get town number on map: y2]
+
+!!CA0/y2:T?y3; [Town type: y3]
+!!VRy4:S-1; [Initialize y4 to -1]
+!!VRy5:S-1; [Initialize y5 to -1]
+!!IF:V1/0; [Initialize Flag 1 to False]
+
+ [Check dwellings: return highest dwelling built (up to v7303) in y4]
+ [Return upgraded (1) or not (0) in y5]
+!!DO20224/0/v7303/1:Py2/y3/?y4/?y5;
+!!FU&y4<0:E; [Exit if player doesn't have any dwellings built there]
+
+!!VRy5&y5<>1:S0; [If dwelling isn't upgraded (1), it must be non-upgraded (0): y5]
+!!UN:Ty3/y4/y5/?y6; [Type of monster in dwelling: y6]
+!!MA:Cy6/6/?y7; [Gold cost of one monster: y7]
+!!VRy8:Sv7304 :y7; [Number of bonus creatures: y8]
+!!CA0/y2&y5=0:M1/y4/dy8/d; [Give bonus y8 non-upgraded creatures of level y4]
+!!CA0/y2&y5=1:M1/y4/d/dy8; [Give bonus y8 upgraded creatures of level y4]
+
+!!VRy9:Sy8*65536+y6; [Subtype number for IF command to show numbers: y9]
+!!UN&y8=1:N3/-1/y6/0; [Monster name (singular): z-1]
+!!UN&y8>1:N3/-1/y6/1; [Monster name (plural): z-1]
+!!CA0/y2:N?z-2; [Town name: z-2]
+
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRz-3&v7302=1:S^{Reinforcements}
+
+King %Z3 supports you in your war and sends %Y8 %Z-1 to %Z-2.^;
+
+!!VRz-3&v7302=2:S^{New Recruits}
+
+Queen %Z4 is impressed with the way you run your army and has sent %Y8 %Z-1 as new recruits to %Z-2.^;
+
+!!VRz-3&v7302=3:S^{Poster Campaign}
+
+Your recent poster campaign has been a stunning success!
+
+%Y8 new %Z-1 have signed up for service at %Z-2.^;
+
+!!VRz-3&v7302=4:S^{Rumours of War}
+
+Recent rumours of war result in a sudden increase in enlistment.
+
+%Y8 %Z-1 sign up for service at %Z-2.^;
+
+!!VRz-3&v7302=5:S^{Patriotism}
+
+Your recruiting officers have done a fine job of instilling patriotism in the local populous.
+
+%Y8 more %Z-1 sign up to serve in the army at %Z-2.^;
+
+!!VRz-3&v7302=6:S^{Famous Campaigns}
+
+News of your army's campaigns have spread across the land and %Y8 %Z-1 show up at %Z-2, eager to fight for your cause.^;
+
+!!VRz-3&v7302=7:S^{The Draft}
+
+To further the war effort, your recruiting officers have reinstated the draft.
+
+%Y8 new %Z-1 have volunteered to join your ranks at %Z-2.^;
+
+!!VRz-3&v7302=8:S^{New Cook}
+
+You've hired a new gourmet cook to oversee the army meals at %Z-2.
+
+Word of the great food has inspired %Y8 additional %Z-1 to sign up.^;
+
+!!VRz-3&v7302=9:S^{Hungry Monsters}
+
+A number of recent disappearances at %Z-2 have been linked to some rather hungry monsters, which has in turn inspired %Y8 %Z-1 to sign up for military training in self defense.^;
+
+!!IF&1000:Q1/21/y9/1^%Z-3^;
+
+--------------------------------------------------------------------------------
+
+ [Find Highest Level Dwelling Built in Town up to v7303 (x3), Upgraded or not (x4)]
+ [x1=town number, x2=town type]
+!?FU20224;
+!!VRy1:Sv7303 -x16; [Go through loop backwards: y1]
+!!VRy2:S37 +y1; [Upgraded dwelling: y2]
+!!VRy3:S30 +y1; [Non-upgraded dwelling: y3]
+
+!!VRy4:S-1; [Initialize y4 to -1]
+!!VRy4&y1=4/x2=1:S25; [Horde for Dendroid Soldiers: y4]
+!!VRy4&y1=2/x2=0:S19; [Horde for Royal Griffins: y4]
+!!VRy4&y1=2/x2=3:S25; [Horde for Cerberi: y4]
+!!VRy4&y1=1/x2=1:S19; [Horde for Battle Dwarves: y4]
+!!VRy4&y1=1/x2=2:S19; [Horde for Obsidian Gargoyles: y4]
+!!VRy4&y1=0/x2=5:S19; [Horde for Infernal Troglodytes: y4]
+!!VRy4&y1=0/x2=7:S19; [Horde for Gnoll Marauders: y4]
+!!VRy4&y1=0/x2=3:S19; [Horde for Familiars: y4]
+!!VRy4&y1=0/x2=4:S19; [Horde for Skeleton Warriors: y4]
+!!VRy4&y1=0/x2=6:S19; [Horde for Hobgoblins: y4]
+!!VRy4&y1=0/x2=8:S19; [Horde for Sprites: y4]
+
+!!VRy5:S-1; [Initialize y5 to -1]
+!!VRy5&y1=4/x2=1:S24; [Horde for Dendroid Guards: y5]
+!!VRy5&y1=2/x2=0:S18; [Horde for Griffins: y5]
+!!VRy5&y1=2/x2=3:S24; [Horde for Hell Hounds: y5]
+!!VRy5&y1=1/x2=1:S18; [Horde for Dwarves: y5]
+!!VRy5&y1=1/x2=2:S18; [Horde for Stone Gargoyles: y5]
+!!VRy5&y1=0/x2=5:S18; [Horde for Troglodytes: y5]
+!!VRy5&y1=0/x2=7:S18; [Horde for Gnolls: y5]
+!!VRy5&y1=0/x2=3:S18; [Horde for Imps: y5]
+!!VRy5&y1=0/x2=4:S18; [Horde for Skeletons: y5]
+!!VRy5&y1=0/x2=6:S18; [Horde for Goblins: y5]
+!!VRy5&y1=0/x2=8:S18; [Horde for Pixies: y5]
+
+!!CA0/x1:B3/y2; [Set Flag 1 to True if Upgraded Dwelling is built]
+!!CA0/x1&-1/y4>0:B3/y4; [Set Flag 1 to True if Upgraded Horde Dwelling is built]
+!!VRx3&1:Sy1; [If built, set dwelling level return value to y1: x3]
+!!VRx4&1:S1; [If built, set non-upgraded/upgraded return value to 1: x4]
+!!VRx16&1:S999; [If built, set x16 to 999 to exit loop: x16]
+!!FU&1:E; [Exit if Upgraded Dwelling is built]
+
+!!CA0/x1:B3/y3; [Set Flag 1 to True if Non-upgraded Dwelling is built]
+!!CA0/x1&-1/y5>0:B3/y5; [Set Flag 1 to True if Non-upgraded Horde Dwelling is built]
+!!VRx3&1:Sy1; [If built, set dwelling level return value to y1: x3]
+!!VRx4&1:S0; [If built, set non-upgraded/upgraded return value to 0: x4]
+!!VRx16&1:S999; [If built, set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Experience or Skill Event]
+!?FU20225;
+
+ [x1=1 for Hero Experience]
+ [x1=2 for Secondary Skill]
+ [x1=3 for Stack Experience]
+
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7302=0:S1;     [Set y-8 to 1 if v7302 is 0: y-8]
+!!VRv7302&y-8=1:S1 R11; [Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7308:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7308:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7308:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7308:S1 T11; [Reroll Event text: v7302]
+
+!!VRv7308&y-8=1:Sv7302; [Store last Experience or Skill Event: v7308]
+
+!!UN&x1=3:P900/?y2; [See if Stack Experience is enabled: y2]
+!!VRv7303&x1=3/y2=1/v7303<0:S1; [If enabled, give stack experience bonus: v7303]
+!!VRx1&x1=3/y2=0:S1 R1; [If disabled, give either hero exp. or secondary skill instead]
+
+!!VRy1&x1=1:S200 *$weeks$; [Base hero experience: 200 per week: y1]
+!!VRy1&x1=3:S400 *$weeks$; [Base stack experience: 400 per week: y1]
+!!VRv7304&x1<>2/v7304=0:Sy1 +200 R499; [Final experience bonus: v7304]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!VRy4:Sv1 -1; [Number of heroes -1: y4]
+!!VRy5&v1>0:S1 Ty4; [Choose a random hero index: y5]
+!!OW:H-1/2/y5; [Random hero's number: v2]
+
+ [Raise a known skill]
+!!VRy1&x1=2:S0 T27; [Random starting skill number 0..27: y1]
+!!VRy-3&x1=2:S0; [Initialize y-3 to 0]
+!!DO20227/y1/27/1&x1=2:Pv2; [Select skill part 1: skill # in v7303, level in v7304]
+!!DO20227/0/y1/1&x1=2/y-3=0:Pv2; [Select skill part 2: skill # in v7303, level in v7304]
+
+ [Give a new skill if no known skills below Expert]
+!!VRy-4&x1=2:S0; [Initialize y-4 to 0]
+!!DO20228/y1/27/1&x1=2/y-3=0:Pv2; [Select skill part 1: skill # in v7303, level in v7304]
+!!DO20228/0/y1/1&x1=2/y-3=0/y-4=0:Pv2; [Select skill part 2: skill # in v7303, level in v7304]
+
+!!FU&x1=2/y-3=0/y-4=0:E; [Exit if hero knows all 27 skills at Expert level]
+
+!!HEv2:B0/?z-1; [Hero's name: z-1]
+!!HEv2:R2/?y6; [Hero's sex: y6]
+!!VRz-2&y6=0:S^he^;
+!!VRz-3&y6=0:S^his^;
+!!VRz-4&y6=0:S^him^;
+!!VRz-2&y6=1:S^she^;
+!!VRz-3&y6=1:S^her^;
+!!VRz-4&y6=1:S^her^;
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRy-2&x1=3/v7303=1:S0; [Initialize stack experience bonus check to 0: y-2]
+!!VRy-10&x1=3/v7303=1:S0; [Initialize slot index counter to 0]
+!!DO20229/0/6/1&x1=3/v7303=1:Pv2; [Index non-empty slots. y-10=#, y-11..y-17=slot #s]
+!!FU&x1=3/v7303=1/y-10=0:E; [Exit if hero has no creatures]
+!!FU20226&x1=3/v7303=1/y-10>0:Pv2; [Give Stack Experience bonus]
+!!FU&x1=3/v7303=1/y-2=999:E; [Exit if a Stack Experience bonus was given]
+!!IF&x1=3/v7303=1/y-2=0:M^Y-2=%Y-2 Please check for Error^;
+
+!!VRz-5&v7302=1:S^{Hitting the Books}
+
+%Z-1 has been reading a wonderful book by %Z4 the Great and has learned all kinds of useful things.^;
+
+!!VRz-5&v7302=2:S^{Practice makes Perfect}
+
+%Z-1 has spent a lot of time practicing lately and it's really paid off.^;
+
+!!VRz-5&v7302=3:S^{Meditation}
+
+%Z-1 has been practicing the meditation techniques of the fabled %Z3 to improve %Z-3 mind.^;
+
+!!VRz-5&v7302=4:S^{War Games}
+
+%Z-1 has been playing war games with %Z-3 troops and has learned quite a bit %Z-4self.^;
+
+!!VRz-5&v7302=5:S^{Dreams}
+
+%Z-1 has been having very vivid dreams, and learning from them greatly.^;
+
+!!VRz-5&v7302=6:S^{Belief}
+
+%Z-1 really believes in %Z-4self and strives to do the best %Z-2 can every single day.^;
+
+!!VRz-5&v7302=7:S^{Prayer}
+
+In this time of battle and conflict, %Z-1 prays to %Z4, Goddess of Learning, and it seems she has answered %Z-4.^;
+
+!!VRz-5&v7302=8:S^{No Sleep}
+
+%Z-1 just can't seem to fall asleep at night, but %Z-2's been putting %Z-3 time to good use by studying and practicing instead.^;
+
+!!VRz-5&v7302=9:S^{Something Fishy}
+
+It's true what they say about fish being brain food. %Z-1 has eaten nothing else for a week and %Z-2 feels smarter already.^;
+
+!!VRz-5&v7302=10:S^{Correspondance Courses}
+
+Those correspondance courses that %Z-1 enrolled in are quite comprehensive. Already %Z-2's learned lots of interesting stuff.^;
+
+!!VRz-5&v7302=11:S^{Private Lessons}
+
+The private lessons with %Z4 have been quite enlightening for %Z-1.^;
+
+!!VRz-5&v7302=12:S^{Visions}
+
+%Z-1 has been having some rather odd visions lately, and they've helped %Z-4 learn things that %Z-2 didn't quite understand before.^;
+
+!!IF&1000/x1=1:Q1/17/v7304/1^%Z-5^; [Display event message: z-5]
+!!HEv2&x1=1:E?y7; [Hero's current experience total: y7]
+!!VRy8&x1=1:Sy7 +v7304; [New experience total for hero (v7304=exp. bonus): y8]
+!!UN&x1=1:J1/?y9/?y10; [Get experience level limits (if any): y10=exp. amount]
+!!VRy8&x1=1/y9>0/y8>y10:Sy10; [If hero's experience would exceed level limit (if any), reduce it the level limit: y8]
+!!HEv2&x1=1/y8>y7:Ey8; [Set Hero's new Experience total unless already greater than the level limit: y8]
+
+!!FU|v7303<0/v7303>27/v7304<1/v7304>3:E; [Exit if skill number or level is invalid]
+
+!!VRy11&x1=2:Sv7303*3 +v7304 +2; [Subtype for IF:Q display of skill: y11]
+!!IF&1000/x1=2:Q1/20/y11/1^%Z-5^; [Display event message: z-5]
+!!HEv2&x1=2:Sv7303/v7304; [Give skill: v7303, level v7304]
+
+--------------------------------------------------------------------------------
+
+ [Stack Experience]
+ [x1=hero number]
+!?FU20226;
+!!VRy4:Sy-10 -1; [Number of non-empty slots minus 1: y4]
+!!VRy5:S1 Ry4;   [Choose a random non-empty slot: y5]
+!!VRy6:S-10 -y5; [Index of non-empty slot variables y-11..y-17: y6]
+!!VRy7:Syy6;     [Non-empty slot number: y7]
+
+!!FU|y7<0/y7>6:E; [If not a valid slot, exit]
+!!HEx1:C0/y7/?y1/?y2; [Type: y1, Number: y2]
+!!FU|y1<0/y2<1:E; [If no monsters in that slot, exit]
+
+!!UN&y2=1:N3/-6/y1/0; [Monster name (singular): z-6]
+!!UN&y2>1:N3/-6/y1/1; [Monster name (plural): z-6]
+
+!!VRz-7&y2=1:S^its^; [its]
+!!VRz-7&y2>1:S^their^; [their]
+!!VRz-8&y2=1:S^has^; [has]
+!!VRz-8&y2>1:S^have^; [have]
+!!VRz-9&y2=1:S^is^; [is]
+!!VRz-9&y2>1:S^are^; [are]
+!!VRz-10&y2=1:S^it's^; [it's]
+!!VRz-10&y2>1:S^they're^; [they're]
+!!VRz5&y2=1:S^it^; [it]
+!!VRz5&y2>1:S^them^; [them]
+!!UN:N3/6/y1/0; [Monster name (singular): z6]
+!!VRy4:Sy2 -1; [Number of creatures minus 1: y4]
+
+!!VRz-5&v7302=1:S^{Diligent Practice}
+
+%Y2 %Z-6 in %Z-1's army %Z-8 been practing night and day to improve %Z-7 skills.^;
+
+!!VRz-5&v7302=2:S^{Superior Breeding}
+
+%Y2 %Z-6 in %Z-1's army %Z-9 convinced %Z-10 better than any normal %Z-6.^;
+
+!!VRz-5&v7302=3:S^{Ambition}
+
+%Y2 %Z-6 in %Z-1's army %Z-9 extremely ambitious, and intend to advance in rank as fast as possible.^;
+
+!!VRz-5&v7302=4:S^{Healthy}
+
+%Y2 %Z-6 in %Z-1's army %Z-9 on a health kick and it seems to be doing %Z5 a world of good.^;
+
+!!VRz-5&v7302=5:S^{Blessing}
+
+%Z4, Goddess of Warriors, has blessed %Y2 %Z-6 in %Z-1's army with experience.^;
+
+!!VRz-5&v7302=6/y2>1:S^{Good Teacher}
+
+One exceptional %Z6 in %Z-1's army named %Z3, has taught the other %Y4 %Z-6 many cunning tricks.^;
+
+!!VRz-5&v7302=6/y2=1:S^{Good Student}
+
+One exceptional %Z6 named %Z4 in %Z-1's army, has taught itself many cunning tricks.^;
+
+!!VRz-5&v7302=7:S^{Magic Fungus}
+
+%Y2 %Z-6 in %Z-1's army %Z-8 found magic mushrooms. After ingesting them, %Z-7 skills begin to improve.^;
+
+!!VRz-5&v7302=8:S^{The Power of %Z4}
+
+The Ancient Power of %Z4 grants %Y2 %Z-6 in %Z-1's army extra experience.^;
+
+!!VRz-5&v7302=9:S^{School}
+
+%Z-1 has been encouraging %Y2 %Z-6 in %Z-3 army to read the Scrolls of %Z3.
+
+Despite all the grumbling, it appears to have helped with %Z-7 training.^;
+
+!!VRz-5&v7302=10:S^{Dumb Luck}
+
+%Y2 %Z-6 in %Z-1's army seem to be blessed with luck (which is a good thing since %Z-10 not really too bright).^;
+
+!!VRz-5&v7302=11:S^{Contest}
+
+%Y2 %Z-6 in %Z-1's army won a contest and got extra weapons and training as %Z-7 prize.^;
+
+!!VRz-5&v7302=12:S^{Connections}
+
+%Y2 %Z-6 in %Z-1's army have a special connection with %Z3, who's training %Z5 in the %Z4 school of combat.^;
+
+!!VRy3:Sy2*65536+y1; [Subtype number for IF command to show numbers: y3]
+!!IF&1000:Q1/21/y3/17/v7304/1^%Z-5^; [Display event message: z-5]
+!!HEx1:C0/y7/d/d/v7304/3; [Add bonus experience to stack]
+
+!!VRy-2:S999; [Set y-2 to 999 to show stack experience given]
+!!VRx16:S999; [Set x16 to 999 to exit loop]
+
+--------------------------------------------------------------------------------
+
+ [Raise a Random Known Skill]
+ [x1=hero number, skill number returned in v7303, skill level in v7304]
+ [y-3 set to 1 if a valid skill is found]
+!?FU20227;
+!!HEx1:Sx16/?y1; [Check level of hero's skill x16: y1]
+!!VRv7303&y1>0/y1<3:Sx16; [If skill is known but below expert, set v7303 to skill number]
+!!VRv7304&y1>0/y1<3:Sy1 +1; [New skill level: v7304]
+!!VRy-3&y1>0/y1<3:S1; [Set y-3 to 1 to show that a valid skill has been found: y-3]
+!!VRx16&y1>0/y1<3:S999; [Set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Give a Random New Skill]
+ [x1=hero number, skill number returned in v7303, skill level in v7304]
+ [y-4 set to 1 if a valid skill is found]
+!?FU20228;
+!!HEx1:Sx16/?y1; [Check level of hero's skill x16: y1]
+!!VRv7303&y1=0:Sx16; [If skill isn't known, set v7303 to skill number]
+!!VRv7304&y1=0:S1; [Basic skill level: v7304]
+!!VRy-4&y1=0:S1; [Set y-4 to 1 to show that a valid skill has been found: y-4]
+!!VRx16&y1=0:S999; [Set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Index Non-Empty Creature Slots]
+ [x1=hero number]
+!?FU20229;
+!!HEx1:C0/x16/?y1/?y2; [Type: y1, Number: y2]
+!!FU|y1<0/y2<1:E; [If no monsters in that slot, skip it]
+!!VRy-10:+1; [Increment slot counter if any troops there: y-10]
+!!VRy3:S-10 -y-10; [Slot index: y3]
+!!VRyy3:Sx16; [Set y-11..y-17 to non-empty slot numbers: y-11..y-17]
+
+--------------------------------------------------------------------------------
+
+ [Artifact Event]
+!?FU20230;
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7302=0:S1;     [Set y-8 to 1 if v7302 is 0: y-8]
+!!VRv7302&y-8=1:S1 R11; [Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7310:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7310:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7310:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7310:S1 T11; [Reroll Event text: v7302]
+
+!!VRv7310&y-8=1:Sv7302; [Store last Artifact Event: v7310]
+
+!!VRy1&$weeks$<4:S2;             [Treasure: y1]
+!!VRy1&$weeks$>=4/$weeks$<8:S4;  [Minor: y1]
+!!VRy1&$weeks$>=8/$weeks$<16:S8; [Major: y1]
+!!VRy1&$weeks$>=16:S16;          [Relic: y1]
+!!UN&v7303<0:J6/y1/?v7303; [Random Artifact bonus: v7303]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!VRy4:Sv1 -1; [Number of heroes -1: y4]
+!!VRy5&v1>0:S1 Ty4; [Choose a random hero index: y5]
+!!OW:H-1/2/y5; [Random hero's number: v2]
+
+!!HEv2:B0/?z-1; [Hero's name: z-1]
+!!HEv2:R2/?y6; [Hero's sex: y6]
+!!UN:N0/-6/v7303; [Artifact name: z-6]
+!!VRz-2&y6=0:S^he^;
+!!VRz-2&y6=1:S^she^;
+!!VRz-3&y6=0:S^his^;
+!!VRz-3&y6=1:S^her^;
+!!VRz-4&y6=0:S^him^;
+!!VRz-4&y6=1:S^her^;
+!!VRz-7&y6=0:S^He^;
+!!VRz-7&y6=1:S^She^;
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+!!VRy2:S0 R187; [Random monster: y2]
+!!VRy2&y2>=122:+1; [Skip not used: y2]
+!!VRy2&y2>=124:+1; [Skip not used: y2]
+!!VRy2&y2>=126:+1; [Skip not used: y2]
+!!VRy2&y2>=128:+1; [Skip not used: y2]
+!!VRy2&y2>=145:+5; [Skip War Machines: y2]
+!!UN:N3/7/y2/0; [Monster name (singular): z7]
+
+!!VRz-5&v7302=1:S^{Birthday}
+
+It's %Z-1's birthday and %Z-3 favourite sister, %Z4, sent %Z-4 a wonderful %Z-6. How thoughtful!^;
+
+!!VRz-5&v7302=2:S^{Prince %Z3}
+
+A gift arrives for %Z-1 from Prince %Z3's castle. This is quite unexpected!^;
+
+!!VRz-5&v7302=3:S^{Store Room}
+
+While poking about in an old dusty store room, %Z-1 discovers the %Z-6.^;
+
+!!VRz-5&v7302=4:S^{An Old Favour}
+
+Repaying an old favour, %Z4 sends the %Z-6 to %Z-1.^;
+
+!!VRz-5&v7302=5:S^{MAGIC!}
+
+Out of thin air, the %Z-6 suddenly appears before %Z-1, startling %Z-4 pleasantly.^;
+
+!!VRz-5&v7302=6:S^{Loyal Troops}
+
+%Z-1's loyal troops have somehow managed to obtain the %Z-6, and they present it to %Z-4 in a touching ceremony of honour.^;
+
+!!VRz-5&v7302=7:S^{Delivery}
+
+A %Z7 arrives with a package for %Z-1. Opening it curiously, %Z-2 discovers it's the %Z-6.
+
+The %Z7 then bows once and departs.^;
+
+!!VRz-5&v7302=8:S^{Just Lying Around}
+
+%Z-1 stumbles upon the %Z-6, just lying around for anyone who happens by to pick up. So %Z-2 picks it up and keeps it for %Z-4self.^;
+
+!!VRz-5&v7302=9:S^{A Game of Chance}
+
+An odd little gnome challenges %Z-1 to a game of chance. The gnome tries to trick %Z-1, but %Z-2's too wiley and fools the gnome instead!
+
+The prize is the %Z-6.^;
+
+!!VRz-5&v7302=10:S^{Grows on Trees}
+
+They say money doesn't grow on trees, but %Z-1 is very surprised to find that artifacts sometimes do!
+
+%Z-7 picks the %Z-6 from a tree and marvels at its magic.^;
+
+!!VRz-5&v7302=11:S^{Old Pillow}
+
+%Z-1 can't seem to get comfortable with %Z-3 lumpy old pillow. A search of the pillow reveals the reason--the %Z-6 was hidden inside!^;
+
+!!VRz-5&v7302=12:S^{Foraging}
+
+While foraging for food, one of %Z-1's troops finds a magic artifact!
+
+Naturally, %Z-2'll put it to good use.^;
+
+!!IF&1000:Q1/8/v7303/1^%Z-5^; [Display event message: z-5]
+!!HEv2:A4/v7303; [Give Artifact to hero]
+
+--------------------------------------------------------------------------------
+
+ [Mercenary Event]
+!?FU20231;
+
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7302=0:S1;     [Set y-8 to 1 if v7302 is 0: y-8]
+!!VRv7302&y-8=1:S1 R11; [Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7311:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7311:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7311:S1 R11; [Reroll Event text: v7302]
+!!VRv7302&y-8=1/v7302=v7311:S1 T11; [Reroll Event text: v7302]
+
+!!VRv7311&y-8=1:Sv7302; [Store last Mercenary Event: v7311]
+
+!!DO20232/1/1000/1&v7303<0:P; [Loop: Find a Neutral Creature of appropriate level: v7303]
+!!FU&v7303<0:E; [Exit if no valid creature]
+
+!!VRy1:S1000 *$weeks$; [Gold cost of free mercenaries: 1000 per week: y1]
+!!MA:Cv7303/6/?y2; [Cost of 1 Neutral Creature: y2]
+!!VRy3:Sy1 :y2; [Basic number of Neutral Mercenaries: y3]
+!!VRy3&y3<1:S1; [Minimum 1 creature: y3]
+!!VRy7:Sy3 :10; [10% of basic number (may be 0): y7]
+!!VRy8:S0 R4; [Random 0..4: y8]
+!!VRy9:Sy7 *y8; [0-40% of basic number: y9]
+!!VRy3&y9>0:+y9; [Add 0-40% to basic number: y3]
+!!VRv7304&v7304=0:Sy3; [Set v7304 to number of troops to offer to Hero]
+!!VRv7304&v7303>=160/v7303<=163:S1; [Maximum of one Emissary: v7303]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!VRy4:Sv1 -1; [Number of heroes -1: y4]
+!!VRy5&v1>0:S1 Ty4; [Choose a random hero index: y5]
+!!FU&v1=0:E; [Exit if player has no heroes]
+!!OW:H-1/2/y5; [Random hero's number: v2]
+
+!!HEv2:B0/?z-1; [Hero's name: z-1]
+
+!!UN&v7304=1:N3/-6/v7303/0; [Monster name (singular): z-6]
+!!UN&v7304>1:N3/-6/v7303/1; [Monster name (plural): z-6]
+!!UN:N3/-7/v7303/0; [Monster name (singular): z-7]
+
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRz-2&v7304=1:S^I^;
+!!VRz-2&v7304>1:S^We^;
+!!VRz-3&v7304=1:S^I'm^;
+!!VRz-3&v7304>1:S^We're^;
+!!VRz-4&v7304=1:S^I^;
+!!VRz-4&v7304>1:S^we^;
+!!VRz-9&v7304=1:S^me^;
+!!VRz-9&v7304>1:S^us^;
+!!VRz-10&v7304=1:S^my^;
+!!VRz-10&v7304>1:S^our^;
+!!VRz5&v7304=1:S^am^;
+!!VRz5&v7304>1:S^are^;
+
+!!VRz-5&v7302=1:S^%Z-2 seek adventure! It's awfully dull around here, so %Z-4'd really appreciate it if you would allow %Z-9 to accompany you on your military campaigns. We promise to fight hard for your cause!^;
+!!VRz-5&v7302=2:S^%Z-2 have had a Holy Vision and %Z-4 %Z5 on a Mission from God. Our God, %Z3, has told %Z-9 you would come to lead %Z-9 into the Holy War and let %Z-9 fulfill %Z-10 Destiny!^;
+!!VRz-5&v7302=3:S^The weather's been so crummy lately that %Z-4'd be really grateful if you would let %Z-9 come with your army. %Z-2'd rather fight and die in the heat of battle than shiver and freeze to death, cold, hungry and alone in the middle of nowhere.^;
+!!VRz-5&v7302=4:S^Your camp's cooking smells are so delicious! Do you think %Z-4 could join your army? %Z-2've had nothing to eat but old salty pork gristle and nothing to drink but muddy rain water..for weeks! Could %Z-4 have a little bowl of that delicious stew? And some of those bread-stick things? And perhaps some fruit..please?^;
+!!VRz-5&v7302=5:S^%Z-3 here to fight the EVIL of those who oppose YOU, %Z-1. Let %Z-9 join and you won't be disappointed.^;
+!!VRz-5&v7302=6:S^%Z3 sent %Z-9! %Z-3 supposed to help you and your army. He wouldn't say why. Will you let %Z-9?^;
+!!VRz-5&v7302=7:S^Sorry, but %Z-4 seem to be a bit lost? Perhaps %Z-4 could train with your army and help out with any bits of fighting you get into until %Z-4 find %Z-10 way again.^;
+!!VRz-5&v7302=8:S^Please..you've got to let %Z-9 join you! We escaped from %Z4's tyrannical rule and all %Z-4 want is to be given a chance to show %Z-10 worth. Will you have %Z-9?^;
+!!VRz-5&v7302=9:S^%Z3 (%Z-10 great leader) exploded last night and %Z-4 haven't chosen a new leader yet. Perhaps %Z-4 could follow you for awhile?^;
+!!VRz-5&v7302=10:S^%Z4 always said that the army was a good career for a %Z-7 so %Z-4 thought %Z-4'd give it a try (if that's okay with you).^;
+!!VRz-5&v7302=11:S^There's absolutely NOTHING to do around here anymore. Until you came along, %Z-4 were soooo bored that %Z-4 were even considering going somewhere else for awhile. Could %Z-4 join your army please?^;
+!!VRz-5&v7302=12:S^%Z-2 have heard of you, %Z-1 and you are a great inspiration to %Z-9! Please allow %Z-9 to serve in your illustrious army!^;
+
+!!VRz-8&v7304=1:S^{%V7304 %Z-6 wishes to join %Z-1's army.}
+
+"%Z-5"
+
+Will you allow the %Z-6 to join?^;
+
+!!VRz-8&v7304>1:S^{%V7304 %Z-6 wish to join %Z-1's army.}
+
+"%Z-5"
+
+Will you allow the %Z-6 to join?^;
+
+!!VRy6:Sv7304*65536+v7303; [IF:Q display for creature picture with number: y6]
+
+!!IF&1000:V2/0; [Initialize Flag 2 to False for human player]
+!!IF&1000:Q2/21/y6/2^%Z-8^; [Ask if human player wants troops]
+!!HEv2&1000/2:C2/v7303/v7304/1; [Give human-controlled hero troops]
+!!HEv2&-1000:C2/v7303/v7304/0; [Give AI-controlled hero troops]
+
+!!IF&1000/-2/v7304=1:M^The %Z-6 is disappointed at your refusal and sadly leaves.^;
+!!IF&1000/-2/v7304>1:M^The %Z-6 are disappointed at your refusal and sadly leave.^;
+
+--------------------------------------------------------------------------------
+
+ [Find a Neutral Creature of Appropriate Level: store in v7303]
+!?FU20232;
+!!VRy1:S0 R196;    [Random creature number: y1]
+!!FU|y1=122/y1=124/y1=126/y1=128/y1=139/y1=145/y1=146/y1=147/y1=148/y1=149:E; [Skip if invalid # or Peasants]
+!!MA:Oy1/?y2;      [Town that creature belongs to: y2 (-1=neutral)]
+!!FU&y2>=0:E;      [Skip if not a neutral creature]
+!!MA:Ly1/?y3;      [Creature level (0..6): y3]
+!!VRy4:Sy3 *2;     [Creature Level * 2 = 0..12: y4]
+!!FU&y4>$weeks$:E; [Skip if y4 is greater than current number of game weeks]
+!!VRv7303:Sy1;     [Set v7303 equal to random valid creature type]
+!!VRx16:S9999;     [Set x16 to 9999 to exit loop]
+
+================================================================================
+
+** Random Bad Events **
+
+Variables: v7312-v7323, (z1-z10, z-1..z-10, v1-v2)
+Flags: (1-2)
+Functions: FU20233-FU20247
+
+--------------------------------------------------------------------------------
+
+ [Initialize variables]
+!#VRv7312:C-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1;
+
+--------------------------------------------------------------------------------
+
+ [Determine which day they'll be a Random Bad Event: v7312=day]
+!?TM2&$weekday$=$monday$/$once$=1;
+!!UN:P277/?y-1; [Check if Random Bad Events script is enabled: y-1=1 if enabled]
+!!FU&y-1<>1:E; [Exit if not enabled]
+
+!!VRv7312:S1 R6; [Random day from 1..7]
+!!VRv7312|v7312=v7321/v7312=v7300:S1 R6; [Reroll random day from 1..7]
+!!VRv7312|v7312=v7321/v7312=v7300:S1 R6; [Reroll random day from 1..7]
+!!VRv7312|v7312=v7321/v7312=v7300:S1 R6; [Reroll random day from 1..7]
+!!VRv7312|v7312=v7321/v7312=v7300:S1 T6; [Reroll random day from 1..7]
+!!VRv7312&$day$=1:S2 R5; [Random day from 2..7 first week]
+!!VRv7312&$day$=1/v7312=v7300:S2 R5; [Reroll random day from 2..7 first week]
+
+!!VRv7321:Sv7312; [Store last random day for next week: v7321]
+!!VRv7313:S0; [Initialize random event type to 0: v7313]
+!!VRv7314:S0; [Initialize random event text to 0: v7314]
+!!VRv7315:S-1; [Initialize random event detail to -1: v7315]
+!!VRv7316:S0; [Initialize event amount number to 0: v7316]
+
+--------------------------------------------------------------------------------
+
+ [Choose a Bad Random Event but never Month 1, Week 1, Day 1]
+ [y- variables used: y-1..y-6]
+!?TM2&$day$>1/$weekday$=v7312;
+!!UN:P277/?y-1; [Check if Random Bad Events script is enabled: y-1=1 if enabled]
+!!FU&y-1<>1:E; [Exit if not enabled]
+
+!!VRy-8:S0;            [Initialize y-8 to 0]
+!!VRy-8&v7313=0:S1;    [Set y-8 to 1 if v7313 is 0: y-8]
+!!VRv7313&y-8=1:S1 R13; [Random Event number (1..14: v7313]
+!!VRv7313&y-8=1/v7313=v7317:S1 R13; [Reroll Random Event number (1..14): v7313]
+!!VRv7313&y-8=1/v7313=v7317:S1 R13; [Reroll Random Event number (1..14): v7313]
+!!VRv7313&y-8=1/v7313=v7317:S1 R13; [Reroll Random Event number (1..14): v7313]
+!!VRv7313&y-8=1/v7313=v7317:S1 T13; [Reroll Random Event number (1..14): v7313]
+
+!!VRv7317&y-8=1:Sv7313; [Store last random event for next week]
+
+!!FU20233&v7313=1:P;   [Lose Resources Event]
+!!FU20234&v7313=2:P;   [Available Troops Decrease Event]
+!!FU20236&v7313=3:P1;  [Lose a Primary Skill Event]
+!!FU20244&v7313=4:P;   [Loss of Army Troops Event]
+!!FU20236&v7313=5:P2;  [Lose a Secondary Skill Event]
+!!FU20236&v7313=6:P3;  [Lose Stack Experience Event]
+!!FU20241&v7313=7:P;   [Lose an Artifact Event]
+!!FU20236&v7313=8:P2;  [Lose a Secondary Skill Event]
+!!FU20236&v7313=9:P1;  [Lose a Primary Skill Event]
+!!FU20236&v7313=10:P3; [Lose Stack Experience Event]
+!!FU20233&v7313=11:P;  [Lose Resources Event]
+!!FU20241&v7313=12:P;  [Lose an Artifact Event]
+!!FU20244&v7313=13:P;  [Loss of Army Troops Event]
+!!FU20234&v7313=14:P;  [Available Troops Decrease Event]
+
+--------------------------------------------------------------------------------
+
+ [Lose Resource Event]
+!?FU20233;
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7314=0:S1;     [Set y-8 to 1 if v7314 is 0: y-8]
+!!VRv7314&y-8=1:S1 R20; [Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7318:S1 R20; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7318:S1 R20; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7318:S1 R20; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7318:S1 T20; [Reroll Event text: v7314]
+
+!!VRv7315&v7315<0/v7314=15:S0 T5; [Resource type (0..5): v7315 -- never gold for event #15]
+!!VRv7315&v7315<0:S0 T6; [Resource type (0..6): v7315]
+!!VRv7315|v7314=6/v7314=7/v7314=8/v7314=9/v7314=12/v7314=14:S6; [Always gold for events 6, 7, 8, 9, 12, 14]
+!!VRv7315|v7314=16:S0; [Always wood for event 16]
+!!VRv7315|v7314=17:S4; [Always crystal for event 17]
+!!VRy1:S$weeks$; [Number of weeks: y1]
+!!VRy2:Sy1 :2; [Half weeks: y2]
+!!VRy1:+y2; [Add half weeks: y1]
+!!VRy1:R3; [Add 0..3: y1]
+!!VRy1|v7315=1/v7315=3/v7315=4/v7315=5::2; [Divide by 2 if it's not Wood, Ore or Gold: y1]
+!!VRy1&y1<2:S2; [Minimum 2: y1]
+
+!!OW:R-1/v7315/?y3; [Check player's amount of this resource: y3]
+!!VRv7314&y3<2/v7314>=15/v7314<=17:S1 R14; [Change event text if player has < 2 of resource and it's a non-gold event: v7314]
+!!VRv7315&y3<2:S6; [Change it to gold if player has less than 2 of this resource]
+!!OW&y3<2:R-1/v7315/?y3; [Check again (for gold this time) if player had < 2 of this resource: y3]
+
+!!VRv7318&y-8=1:Sv7314; [Store last resource event: v7318]
+
+!!FU&y3<2/v7315<>6:E; [Exit if player doesn't have at least 2 of this resource other than gold]
+!!FU&y3<500/v7315=6:E; [Exit if player doesn't have at least 500 gold, if resource is gold]
+
+!!VRy1&v7315=6:*200 R199; [Multiply by 200 and add random 199 if it's Gold: y1]
+!!VRv7316&v7316=0:Sy1; [Set v7316 to amount (y1) unless already set: v7316]
+!!VRv7316&v7316>y3:Sy3; [Set resource loss amount (v7316) to the maximum that player has (y3)]
+
+!!VRz-1&v7315=0:S^wood^; [wood]
+!!VRz-1&v7315=1:S^mercury^; [mercury]
+!!VRz-1&v7315=2:S^ore^; [ore]
+!!VRz-1&v7315=3:S^sulfur^; [sulfur]
+!!VRz-1&v7315=4:S^crystal^; [crystal]
+!!VRz-1&v7315=5:S^gems^; [gems]
+!!VRz-1&v7315=6:S^gold^; [gold]
+
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRz-2&v7314=1:S^{Bad Deal}
+
+You make a bad deal with %Z3, the local merchant. He's wiley, cunning and shrewd and ends up cheating you out of %V7316 %Z-1.^;
+!!VRz-2&v7314=2:S^{Castle Maintenance}
+
+Keeping your castle in fit repair seems to be a never-ending drain on your resources.^;
+!!VRz-2&v7314=3:S^{Inheritance Tax}
+
+You've just received the tax owing on old Uncle %Z3's estate, and its much higher than you expected!^;
+!!VRz-2&v7314=4:S^{Gambling Debts}
+
+Your old buddy %Z3 has finally come to collect the %V7316 %Z-1 you owe him. Too bad he didn't die before he found you!^;
+!!VRz-2&v7314=5:S^{A Noble Gift}
+
+To keep in her good graces, you send Lady %Z4 %V7316 %Z-1 as a thank you gift for her hospitality during your recent visit.^;
+!!VRz-2&v7314=6:S^{Farm Subsidies}
+
+The local peasants have had a poor growing season and you can't wage a war with no food. Subsidies cost you %V7316 gold.^;
+!!VRz-2&v7314=7:S^{Bandit Raiders}
+
+Bandits, lead by their infamous leader %Z4 the Black, have been raiding your stocks and robbing the local businesses. Extra security costs you %V7316 gold.^;
+
+!!VRz-2&v7314=8:S^{Unlucky Cards}
+
+You get into a poker game with some of the troops and lose. You lose the next round too. And the next. If you didn't know better, you'd think they were cheating!^;
+!!VRz-2&v7314=9:S^{Threadbare}
+
+You can't understand where all your spare change has been disappearing to lately, but after much investigation you discover a hole in your pocket. Perhaps Seamstress %Z4 will mend it for you next time you stop by.^;
+!!VRz-2&v7314=10:S^{Ransom}
+
+Lord %Z3 of Bloonbirae is willing to return Agent %Z4 to you for %V7316 %Z-1. Of course you agree!^;
+!!VRz-2&v7314=11:S^{Building Repairs}
+
+Unexpected repairs to several buildings cost you %V7316 %Z-1.^;
+!!VRz-2&v7314=12:S^{Inflation}
+
+Everything's going up these days, except for your income. The rising cost of living leaves you %V7316 gold poorer.^;
+!!VRz-2&v7314=13:S^{Statue}
+
+The local townspeople erect a most impressive statue in your honour. You glow with pride and joy...until you get the bill! %V7316 %Z-1 came out of the treasury to complete this piece of frivolity.^;
+!!VRz-2&v7314=14:S^{Stable Fire}
+
+Your stables burn down and repairs and replacement horses cost you %V7316 gold.^;
+!!VRz-2&v7314=15:S^{Magical Accident}
+
+%V7316 %Z-1 are destroyed when %Z3, your chief magician, suffers a major spell malfunction.^;
+!!VRz-2&v7314=16:S^{%Z4 the Bricklayer}
+
+You've been rather slow to give %Z4 a helping hand with building a barn to store his bricks, so his workers take %V7316 wood from your stores themselves.^;
+!!VRz-2&v7314=17:S^{Borrowed Crystal}
+
+Some Diamond Golems are impressed by the beauty of the red crystals that you own and decide to take %V7316 to show their friends.^;
+!!VRz-2&v7314=18:S^{Rogues}
+
+A handful of very sneaky rogues find your army camped near a watering hole and steal %V7316 of your %Z-1 from your personal stash, but thankfully they decided to spare your life.^;
+!!VRz-2&v7314=19:S^{Bad Competition}
+
+Your troops have been invited to a competition with other troops from other factions and %V7316 %Z-1 are put up for the ante. Your troops try their best but it's not good enough and they lose the competition...and you lose the resources. Seems like more training's in order!^;
+!!VRz-2&v7314=20:S^{Wandering Kobold}
+
+A wandering Kobold named %Z4 promises you riches as you lead him back to his home near to where you found him. As you lead him along, he slips his hand inside your resource cache and steals %V7316 %Z-1. He then slips away before you notice the loss.^;
+!!VRz-2&v7314=21:S^{Enchanted Resources}
+
+As you march along, you think about how to spend your hard earned resources. The next day, as you count what you have, you realize that some of the %Z-1 in your stockpile must have been enchanted to appear as more because %V7316 %Z-1 have vanished.^;
+
+!!VRy4:Sv7316 *-1 -100000; [Negative value for message display: y4]
+!!IF&1000:Q1/v7315/y4/1^%Z-2^; [Display message for human players]
+!!VRy5:Sv7316 *-1; [Multiply v7316 value by -1 to get negative value: y5]
+!!OW:R-1/v7315/dy5; [Remove resources]
+
+--------------------------------------------------------------------------------
+
+ [Available Troops Decrease Event]
+!?FU20234;
+!!VRy-8:S0;            [Initialize y-8 to 0]
+!!VRy-8&v7314=0:S1;    [Set y-8 to 1 if v7314 is 0: y-8]
+!!VRv7314&y-8=1:S1 R9; [Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7319:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7319:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7319:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7319:S1 T9; [Reroll Event text: v7314]
+
+!!VRv7319&y-8=1:Sv7314; [Store last Available Troops Decrease event: v7319]
+
+!!VRv7315&v7315<0:S0 R6; [Dwelling level (0..6): v7315]
+
+!!VRy10:S$weeks$;
+!!VRy10:-1;
+!!VRv7315&v7315>y10:Sy10; [Maximum dwelling level is weeks -1: v7315]
+!!VRv7316&v7316=0:S1000 *$weeks$; [Gold cost of troops: 1000*number of weeks: v7316]
+
+!!OW:W-1/?y1; [Number of towns owned by current player: y1]
+!!FU&y1<1:E; [Exit if player doesn't own any towns]
+!!VRy1:-1; [Subtract 1 from y1]
+!!VRy2:S0 Ty1; [Select a random town: y2]
+!!OW:W-1/y2/?y2; [Get town number on map: y2]
+
+!!CA0/y2:T?y3; [Town type: y3]
+!!VRy4:S-1; [Initialize y4 to -1]
+!!VRy5:S-1; [Initialize y5 to -1]
+!!IF:V1/0; [Initialize Flag 1 to False]
+
+ [Check dwellings: return highest dwelling built with 1+ creatures available (up to v7315) in y4]
+ [Return upgraded (1) or not (0) in y5]
+!!DO20235/0/v7315/1:Py2/y3/?y4/?y5;
+!!FU&y4<0:E; [Exit if player doesn't have any dwellings built at this town or no creatures available]
+
+!!VRy5&y5<>1:S0; [If dwelling isn't upgraded (1), it must be non-upgraded (0): y5]
+!!UN:Ty3/y4/y5/?y6; [Type of monster in dwelling: y6]
+!!MA:Cy6/6/?y7; [Gold cost of one monster: y7]
+!!VRy8:Sv7316 :y7; [Number of available creatures to remove: y8]
+!!VRy8&y8<1:S1; [Minimum of 1 creature to remove: y8]
+!!CA0/y2&y5=0:M1/y4/?y11/d; [Number of Non-upgraded creatures of level y4: y11]
+!!CA0/y2&y5=1:M1/y4/d/?y12; [Number of Upgraded creatures of level y4: y12]
+!!VRy8&y5=0/y8>y11:Sy11; [Maximum number of available Non-upgraded troops to lose is number available (y11): y8]
+!!VRy8&y5=1/y8>y12:Sy12; [Maximum number of available Upgraded troops to lose is number available (y12): y8]
+!!VRy13:Sy8 *-1; [Multiply troops to remove by -1 to get a negative number: y13]
+!!CA0/y2&y5=0:M1/y4/dy13/d; [Remove y8 Non-upgraded available creatures of level y4]
+!!CA0/y2&y5=1:M1/y4/d/dy13; [Remove y8 Upgraded available creatures of level y4]
+
+!!VRy9:Sy8*65536+y6; [Subtype number for IF command to show numbers: y9]
+!!UN&y8=1:N3/-1/y6/0; [Monster name (singular): z-1]
+!!UN&y8>1:N3/-1/y6/1; [Monster name (plural): z-1]
+!!CA0/y2:N?z-2; [Town name: z-2]
+
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+!!VRz-3&v7314=1:S^{Conscription}
+
+King %Z3 calls for your support in the war, and you're obliged to send him %Y8 %Z-1 from the volunteers at %Z-2.^;
+!!VRz-3&v7314=2:S^{Plague}
+
+The %Z-2 grainary hasn't been inspected for quite some time. As a result, rats got into the grain and the grain was made into bread that sickened %Y8 of the local %Z-1 who had signed up for service.^;
+!!VRz-3&v7314=3:S^{AWOL}
+
+Some troops within your domain heard rumours that you are a warmonger and decided to vanish into the outerworld, far away from your evil grasp.
+
+%Y8 %Z-1 are no longer available for service at %Z-2.^;
+
+!!VRz-3&v7314=4:S^{The Carney}
+
+When the circus comes to %Z-2, %Y8 %Z-1 hear that the ringmaster wants to recruit their type. They decide to abandon your cause and join the vagabonds.^;
+!!VRz-3&v7314=5:S^{Seasonal Workers}
+
+Local farmer %Z3 has come to %Z-2 to recruit rhubarb pickers before the next rains come. %Y8 %Z-1 have been consigned by Queen %Z4 to help with the harvest.^;
+!!VRz-3&v7314=6:S^{Famous Campaigns}
+
+News of your arch enemy, Lady %Z4's, campaigns have spread across the land and %Y8 %Z-1 leave %Z-2, eager to fight for her cause.^;
+!!VRz-3&v7314=7:S^{Volunteers}
+
+Queen %Z4 feels it is important to recruit locals to help with fire control and community protection within %Z-2's municipal area.
+
+%Y8 %Z-1 have been volunteered for this service and are no longer available for army recruitment.^;
+!!VRz-3&v7314=8:S^{Food Poisioning}
+
+The %Z-2 cook got drunk and made a bad batch of stew.
+
+Word of the poisoned food has scared away %Y8 %Z-1 from enlisting.^;
+!!VRz-3&v7314=9:S^{Further Education}
+
+%Y8 %Z-1 from %Z-2 have decided that their education is more important than enlisting in the army. With grants from King %Z3, they decide to train to become eventual Heroes instead.^;
+
+!!VRz-3&v7314=10:S^{Town Jurors}
+
+Lady %Z4's guards have dragged in the infamous one-eyed Horse Thief named %Z3, who stole 58 of your prized horses last year, and have selected %Y8 %Z-1 from %Z-2 to be on the jury. With this kind of news you hope they find the thief guilty!^;
+
+!!IF&1000:Q1/21/y9/1^%Z-3^; [Display event message]
+
+--------------------------------------------------------------------------------
+
+ [Find Highest Level Dwelling Built in Town up to v7315 (x3), Upgraded or not (x4)]
+ [x1=town number, x2=town type]
+!?FU20235;
+!!VRy1:Sv7315 -x16; [Go through loop backwards: y1]
+!!VRy2:S37 +y1; [Upgraded dwelling: y2]
+!!VRy3:S30 +y1; [Non-upgraded dwelling: y3]
+
+!!VRx3:S-1; [Initialize x3 to -1]
+
+!!VRy4:S-1; [Initialize y4 to -1]
+!!VRy4&y1=4/x2=1:S25; [Horde for Dendroid Soldiers: y4]
+!!VRy4&y1=2/x2=0:S19; [Horde for Royal Griffins: y4]
+!!VRy4&y1=2/x2=3:S25; [Horde for Cerberi: y4]
+!!VRy4&y1=1/x2=1:S19; [Horde for Battle Dwarves: y4]
+!!VRy4&y1=1/x2=2:S19; [Horde for Obsidian Gargoyles: y4]
+!!VRy4&y1=0/x2=5:S19; [Horde for Infernal Troglodytes: y4]
+!!VRy4&y1=0/x2=7:S19; [Horde for Gnoll Marauders: y4]
+!!VRy4&y1=0/x2=3:S19; [Horde for Familiars: y4]
+!!VRy4&y1=0/x2=4:S19; [Horde for Skeleton Warriors: y4]
+!!VRy4&y1=0/x2=6:S19; [Horde for Hobgoblins: y4]
+!!VRy4&y1=0/x2=8:S19; [Horde for Sprites: y4]
+
+!!VRy5:S-1; [Initialize y5 to -1]
+!!VRy5&y1=4/x2=1:S24; [Horde for Dendroid Guards: y5]
+!!VRy5&y1=2/x2=0:S18; [Horde for Griffins: y5]
+!!VRy5&y1=2/x2=3:S24; [Horde for Hell Hounds: y5]
+!!VRy5&y1=1/x2=1:S18; [Horde for Dwarves: y5]
+!!VRy5&y1=1/x2=2:S18; [Horde for Stone Gargoyles: y5]
+!!VRy5&y1=0/x2=5:S18; [Horde for Troglodytes: y5]
+!!VRy5&y1=0/x2=7:S18; [Horde for Gnolls: y5]
+!!VRy5&y1=0/x2=3:S18; [Horde for Imps: y5]
+!!VRy5&y1=0/x2=4:S18; [Horde for Skeletons: y5]
+!!VRy5&y1=0/x2=6:S18; [Horde for Goblins: y5]
+!!VRy5&y1=0/x2=8:S18; [Horde for Pixies: y5]
+
+!!CA0/x1:B3/y2; [Set Flag 1 to True if Upgraded Dwelling is built]
+!!CA0/x1&-1/y4>0:B3/y4; [Set Flag 1 to True if Upgraded Horde Dwelling is built]
+
+!!CA0/x1&1:M1/y1/d/?y6; [Check number of Upgraded creatures available at level y1: y6]
+!!FU&1/y6<1:E; [Exit if Upgraded Dwelling is built but no creatures available]
+
+!!VRx3&1:Sy1; [If built, set dwelling level return value to y1: x3]
+!!VRx4&1:S1; [If built, set non-upgraded/upgraded return value to 1: x4]
+!!VRx16&1:S999; [If built, set x16 to 999 to exit loop: x16]
+!!FU&1:E; [Exit if Upgraded Dwelling is built]
+
+!!CA0/x1:B3/y3; [Set Flag 1 to True if Non-upgraded Dwelling is built]
+!!CA0/x1&-1/y5>0:B3/y5; [Set Flag 1 to True if Non-upgraded Horde Dwelling is built]
+
+!!CA0/x1&1:M1/y1/?y7/d; [Check number of Non-upgraded creatures available at level y1: y7]
+!!FU&1/y7<1:E; [Exit if Non-upgraded Dwelling is built but no creatures available]
+
+!!VRx3&1:Sy1; [If built, set dwelling level return value to y1: x3]
+!!VRx4&1:S0; [If built, set non-upgraded/upgraded return value to 0: x4]
+!!VRx16&1:S999; [If built, set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Lose a Primary Skill Point or Secondary Skill Level or Stack Experience Event]
+!?FU20236;
+
+ [x1=1 for Primary Skill]
+ [x1=2 for Secondary Skill]
+ [x1=3 for Stack Experience]
+
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7314=0:S1;     [Set y-8 to 1 if v7314 is 0: y-8]
+!!VRv7314&y-8=1:S1 R8; [Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7320:S1 R8; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7320:S1 R8; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7320:S1 R8; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7320:S1 T8; [Reroll Event text: v7314]
+
+!!VRv7320&y-8=1:Sv7314; [Store last Experience or Skill Event: v7320]
+
+!!UN&x1=3:P900/?y2; [See if Stack Experience is enabled: y2]
+!!VRv7315&x1=3/y2=1/v7315<0:S1; [If enabled, set to lose stack experience: v7315]
+!!VRx1&x1=3/y2=0:S1 R1; [If disabled, remove either a primary skill point or secondary skill level instead]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!VRy4:Sv1 -1; [Number of heroes -1: y4]
+!!VRy5&v1>0:S1 Ty4; [Choose a random hero index: y5]
+!!OW:H-1/2/y5; [Random hero's number: v2]
+
+!!VRy1&x1=3:S400 *$weeks$; [Base stack experience to lose: 400 per week: y1]
+!!VRv7316&x1=3/v7316=0:Sy1 +200 R499; [Final stack experience to lose: v7316]
+
+!!VRy-2&x1=3/v7315=1:S0; [Initialize stack experience bonus check to 0: y-2]
+!!VRy-10&x1=3/v7315=1:S0; [Initialize slot index counter to 0]
+!!DO20240/0/6/1&x1=3/v7315=1:Pv2; [Index non-empty slots with v7316+ stack exp. y-10=#, y-11..y-17=slot #s]
+!!FU&x1=3/v7315=1/y-10=0:E; [Exit if hero has no creatures]
+!!FU20237&x1=3/v7315=1/y-10>0:Pv2; [Remove Stack Experience bonus]
+!!FU&x1=3/v7315=1/y-2=999:E; [Exit if some Stack Experience was removed]
+!!VRx1&x1=3/y-10=0:S1 R1; [If no valid stacks, remove either a primary skill point or secondary skill level instead]
+
+ [Lose a secondary skill level]
+!!VRy1&x1=2:S0 T27; [Random starting skill number 0..27: y1]
+!!VRy-3&x1=2:S0; [Initialize y-3 to 0]
+!!DO20238/y1/27/1&x1=2:Pv2; [Select skill part 1: skill # in v7315, new level in v7316]
+!!DO20238/0/y1/1&x1=2/y-3=0:Pv2; [Select skill part 2: skill # in v7315, new level in v7316]
+!!VRx1&x1=2/y-3=0:S1; [If hero has no Secondary Skills, lose a Primary skill point instead]
+
+ [Lose a primary skill point]
+!!VRy-4&x1=1:S0; [Initialize y-4 to 0]
+!!VRy12&x1=1:S0 T3; [Random starting primary skill number 0..3: y12]
+!!DO20239/y12/3/1&x1=1/y-4=0:Pv2; [Select skill part 1: primary skill # in v7315, new level in v7316]
+!!DO20239/0/y12/1&x1=1/y-4=0/y-4=0:Pv2; [Select skill part 2: primary skill # in v7315, new level in v7316]
+
+!!FU&x1=1/y-4=0:E; [Exit if hero has no skills that can be reduced]
+
+!!HEv2:B0/?z-1; [Hero's name: z-1]
+!!HEv2:R2/?y6; [Hero's sex: y6]
+!!VRz-2&y6=0:S^he^;
+!!VRz-3&y6=0:S^his^;
+!!VRz-4&y6=0:S^him^;
+!!VRz-2&y6=1:S^she^;
+!!VRz-3&y6=1:S^her^;
+!!VRz-4&y6=1:S^her^;
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+
+** PRIMARY SKILL LOSS MESSAGES **
+
+!!VRz-5&x1=1/v7314=1:S^{Bad Shrooms}
+
+%Z-1 fries up some exotic mushrooms %Z-2 found near the campsite this morning...but a few hours later %Z-2's regretting it terribly!^;
+
+!!VRz-5&x1=1/v7314=2:S^{Old Witch}
+
+%Z-1 encounters an old witch named %Z4 who offers to tell %Z-3 fortune for 10,000 gold. When %Z-2 declines, the witch curses %Z-4, turns into a crow and flies out of sight!^;
+
+!!VRz-5&x1=1/v7314=3:S^{Battle Rot}
+
+%Z-1 is quickly learning that all these endless battles are taking their toll upon %Z-4.^;
+
+!!VRz-5&x1=1/v7314=4:S^{Bad Omen}
+
+As %Z-1's party marches along, %Z-2 spots five trees in a strange pattern %Z-2's never seen before. "It must be an Omen!" remarks one of %Z-3 troops. Some take leave of their senses and flee %Z-1's band. Now %Z-3 skills have taken leave of their senses as well.^;
+
+!!VRz-5&x1=1/v7314=5:S^{Ill Winds}
+
+Gathering storm clouds can forecast disaster for any army and this one was no exception. In fact, it was worse than imagined--this storm was cursed! It blew away some of %Z-1's skill.^;
+
+!!VRz-5&x1=1/v7314=6:S^{Wrath of the Gods}
+
+The Gods are displeased that %Z-1 has not shown them penitence. They have scorned %Z-4 for not showing %Z-3 faith to the heavens and have removed something dear to %Z-4: a primary skill!^;
+
+!!VRz-5&x1=1/v7314=7/v7315=0:S^{Food Poisoning}
+
+Around midnight, the terrible stomach pains were a sure sign that %Z-1's army had acquired food poisoning from eating the nearby Salmonberries (which contained salmonella). Although %Z-1 managed to pull through, the illness had a permanent effect on %Z-3 combat skills.^;
+
+!!VRz-5&x1=1/v7314=7/v7315=1:S^{Playing Hooky}
+
+While attending one of the many war schools located in the area, %Z-1 decided to skip the Armour 101 class and it costs %Z-4 dearly.^;
+
+!!VRz-5&x1=1/v7314=7/v7315=2:S^{Unicorn}
+
+A War Unicorn, stuck in some brambles whinnies for %Z-1's help. Being too busy to assist, the Unicorn absorbs a little of %Z-3 Power.^;
+
+!!VRz-5&x1=1/v7314=7/v7315=3:S^{Knowledge}
+
+%Z3, a nearby Enchanter, seems lost and wayward. He asks %Z-1 if %Z-2 could point him to the nearest town where he might possibly regain his powers. As %Z-1 points, a bright light appears and the Enchanter vanishes! %Z-1 realizes that the crafty old magician has stolen some of %Z-3 Knowledge!^;
+
+!!VRz-5&x1=1/v7314=8/v7315=0:S^{Arm Wrestling}
+
+At the end of a hard day's march, %Z-1 comes upon a large group of Giants whose leader challenges %Z-4 to a friendly arm wrestling competition. It seems wiser to agree than try to fight them all, but as expected, %Z-1 loses the competion. The Giant Leader claims victory, and then clutching a glowing necklace intones arcanes words that leave %Z-1 feeling light-headed and dizzy. After %Z-1 and %Z-3 army departs in the morning, %Z-2 realizes that %Z-3 Attack skill has declined.^;
+
+!!VRz-5&x1=1/v7314=8/v7315=1:S^{Chilling Rains}
+
+The rains from the previous night have stricken many of %Z-1's army and left an ache in %Z-3 bones. Many are sick and cannot help %Z-4. Even after the chilling rains stop, %Z-1 finds that %Z-3 Defense skills aren't quite what they were before.^;
+
+!!VRz-5&x1=1/v7314=8/v7315=2:S^{Evil Spirits}
+
+Evil never sleeps. As the dawn approaches, Ghosts and Wraiths alike have shared %Z-1's Power this day. There is nothing %Z-2 can do but accept what has been taken.^;
+
+!!VRz-5&x1=1/v7314=8/v7315=3:S^{Pool of Memories}
+
+While stopping for a drink, %Z-1 gazes into a deep pool of crystal clear water. Suddenly %Z-3 mind is being sucked into the pool and his memories are spiraling down down down like sinking pebbles tossed in one by one. Luckily, %Z-1's captain %Z4 finds %Z-4 in time and breaks the spell, but some of %Z-1's Knowledge is lost forever.^;
+
+!!VRz-5&x1=1/v7314=9:S^{Beer Bad}
+
+%Z-1 has been living the good life, drinking and partying all night with %Z-3 troops. Inevitably this has led to frequent hangovers and a decline in %Z-3 battle skills.^;
+
+
+!!VRz-6&x1=1/v7315=0:S^Attack^; [Set z-6 to 'Attack']
+!!VRz-6&x1=1/v7315=1:S^Defense^; [Set z-6 to 'Defense']
+!!VRz-6&x1=1/v7315=2:S^Power^; [Set z-6 to 'Power']
+!!VRz-6&x1=1/v7315=3:S^Knowledge^; [Set z-6 to 'Knowledge']
+
+!!VRz-5&x1=1:+^
+
+{...}%Z-1 loses 1 point of %Z-6{...}^;
+
+** SECONDARY SKILL LOSS MESSAGES **
+
+!!VRz-5&x1=2/v7314=1:S^{Witches Night Out}
+
+Though not normally known for climbing out of their witch huts, today, witches are on the move. They secretly swap huts for some unknown reason, and as one wisps by %Z-1, %Z-2 feels a strange change in %Z-3 skills.^;
+
+!!VRz-5&x1=2/v7314=2:S^{Omens from the Sky}
+
+Two comets pass through the night sky and an omen given to %Z-1 by the the local astrologer has come true--it has stricken one of %Z-3 skills.^;
+
+!!VRz-5&x1=2/v7314=3:S^{A Bad Gamble}
+
+%Z-1 decides to have a friendly card game at one of the local taverns. Since %Z-2 doesn't wish to gamble away %Z-3 resources, %Z-2 bets one of %Z-3 skills, hoping to improve it. Unfortunately, %Z-3 opponent came out ahead this day.^;
+
+!!VRz-5&x1=2/v7314=4:S^{The Siren Calls}
+
+A beautiful siren seduces %Z-1 and when %Z-2 awakes in the morning %Z-2 finds that the succubus has stolen away some of %Z-3 skill.^;
+
+!!VRz-5&x1=2/v7314=5:S^{Disturbing Dreams}
+
+During the night, %Z-1 had a vision of battle with Harpies, Imps, Druids and Sprites. Though only a dream, it shook the very foundation of %Z-3 being and as a result, a skill was lost without %Z-3 knowing!^;
+
+!!VRz-5&x1=2/v7314=6:S^{%Z-1 and the Voodoo Doll}
+
+Tucked far away within the empire, a deranged Psychic Elemental begins practicing sympathetic magic and chooses %Z-1 as the victim of his curse. Without knowing what was happening, and along with a lot of pain, one of %Z-1's skills has been reduced!^;
+
+!!VRz-5&x1=2/v7314=7:S^{Rogues will Steal Anything}
+
+A wandering band of Rogues demand diamonds from a nearby mine %Z-1 discovered. Since %Z-1 didn't find any diamonds, they ransack %Z-3 party and also manage to wrestle away one of %Z-3 skills!^;
+
+!!VRz-5&x1=2/v7314=8:S^{You can't Trust Anyone}
+
+While resting for the night, %Z-1 learns that one of %Z-3 troops is a Were Jackal! Having destroyed the beast, %Z-2 discovers that before it died, it took one of %Z-3 skills from %Z-4!^;
+
+!!VRz-5&x1=2/v7314=9:S^{Tribunal}
+
+%Z4 the Sorceress has demanded that %Z-1 be brought to one of their tribunals. Refusing to accept the invitation, %Z-2 discovers they have mysteriously stolen one of %Z-3 skills!^;
+
+!!UN&x1=2:N4/-6/v7315; [Set z-6 to secondary skill name]
+!!VRz-5&x1=2/v7316>0:+^
+
+{...}%Z-1 loses a level of %Z-6{...}^;
+!!VRz-5&x1=2/v7316=0:+^
+
+{...}%Z-1 loses %Z-3 Basic %Z-6 skill{...}^;
+
+!!VRy13&1000/x1=1:Sv7315 +31; [IF:Q type for primary skill loss: y13]
+!!IF&1000/x1=1:Q1/y13/0/1^%Z-5^; [Display event message for primary skill loss: z-5]
+!!HEv2&x1=1/v7315=0:Fd-1/d/d/d; [Set hero's new Attack skill: v7316]
+!!HEv2&x1=1/v7315=1:Fd/d-1/d/d; [Set hero's new Defense skill: v7316]
+!!HEv2&x1=1/v7315=2:Fd/d/d-1/d; [Set hero's new Power skill: v7316]
+!!HEv2&x1=1/v7315=3:Fd/d/d/d-1; [Set hero's new Knowledge skill: v7316]
+
+!!FU|v7315<0/v7315>27/v7316<0/v7316>3:E; [Exit if skill number or level is invalid]
+
+!!VRy11&x1=2/v7316>0:Sv7315*3 +v7316 +2; [Subtype for IF:Q display of new skill level: y11]
+!!VRy14&x1=2:Sv7315*3 +v7316 +3; [Subtype for IF:Q display of old skill level: y14]
+!!IF&1000/x1=2/v7316>0:Q1/20/y14/20/y11/1^%Z-5^; [Display event message if hero had Advanced or Expert skill: z-5]
+!!IF&1000/x1=2/v7316=0:Q1/20/y14/1^%Z-5^; [Display event message if hero had Basic skill: z-5]
+!!HEv2&x1=2:Sv7315/v7316; [Remove a Secondary skill level: v7315, level v7316]
+
+--------------------------------------------------------------------------------
+
+ [Lose Stack Experience]
+ [x1=hero number]
+!?FU20237;
+!!VRy4:Sy-10 -1; [Number of non-empty slots (with enough stack experience) minus 1: y4]
+!!VRy5:S1 Ry4;   [Choose a random non-empty slot with enough stack experience: y5]
+!!VRy6:S-10 -y5; [Index of non-empty slot variables y-11..y-17: y6]
+!!VRy7:Syy6;     [Non-empty slot number: y7]
+
+!!FU|y7<0/y7>6:E; [If not a valid slot, exit]
+!!HEx1:C0/y7/?y1/?y2; [Type: y1, Number: y2]
+!!FU|y1<0/y2<1:E; [If no monsters in that slot, exit]
+
+!!UN&y2=1:N3/-6/y1/0; [Monster name (singular): z-6]
+!!UN&y2>1:N3/-6/y1/1; [Monster name (plural): z-6]
+
+!!HEv2:B0/?z-1; [Hero's name: z-1]
+!!VRz-7&y2=1:S^its^; [its]
+!!VRz-7&y2>1:S^their^; [their]
+!!VRz-8&y2=1:S^has^; [has]
+!!VRz-8&y2>1:S^have^; [have]
+!!VRz-9&y2=1:S^is^; [is]
+!!VRz-9&y2>1:S^are^; [are]
+!!VRz-10&y2=1:S^it's^; [it's]
+!!VRz-10&y2>1:S^they're^; [they're]
+!!VRz5&y2=1:S^it^; [it]
+!!VRz5&y2>1:S^them^; [them]
+!!UN:N3/6/y1/0; [Monster name (singular): z6]
+!!VRy4:Sy2 -1; [Number of creatures minus 1: y4]
+
+!!VRy9:S0 R1; [Random additional text event number 0..1: y9]
+
+!!VRz-5&v7314=1:S^{Cursed Banner}
+
+Marching along, %Y2 %Z-6 in %Z-1's army magically discover a Warlord Banner! Equipping it, the %Z-6 discovers it was cursed and loses some of %Z-7 stack experience.^;
+
+!!VRz-5&v7314=2:S^{Bad Ale}
+
+Having drunk a bad drink at the local tavern the night before, %Z-1's %Y2 %Z-6 %Z-9 sickened and realize that some of %Z-7 battle skills have declined!^;
+
+!!VRz-5&v7314=3:S^{School of Hard Lumps}
+
+%Y2 %Z-6 in %Z-1's army %Z-8 decided to freelance and look for enemy creatures on %Z-7 own. Realizing that this was not a good idea after finding some and barely escaping alive, %Z-7 confidence was badly shaken and %Z-7 fighting ability affected sorely.^;
+
+%Y2 %Z-6 in %Z-1's army %Z-9 extremely ambitious, and intend to advance in rank as fast as possible.^;
+
+!!VRz-5&v7314=4:S^{Food Fight}
+
+It could'nt be deadlier! Two of %Z-1's troops have decided to fight over the last lamb chop and the result is the loser (%Y2 %Z-6) has lost some of its power, along with the lamb chop!^;
+
+!!VRz-5&v7314=5:S^{A Fair Trade}
+
+Desperately needing to fix a war machine, %Y2 %Z-6 in %Z-1's army decide to trade some of %Z-7 experience for the materials you need. %Z-1 thanks the %Z-6 and asks for %Z5 to never do it again.^;
+
+!!VRz-5&v7314=6/y9=0:S^{Druids Do It}
+
+Some nearby Druids begin chanting around a stone henge they had just erected. As a result, %Y2 %Z-6 in %Z-1's army feel a drain of their power. It seems that Druids are more powerful than once thought!^;
+
+!!VRz-5&v7314=6/y9=1:S^{Charity begins at Hovel}
+
+Charity has its ups and downs. %Y2 %Z-6 in %Z-1's army agree to help some peasants rebuild their hovel. Unfortunately, once they rebuild one family's hovel it seems only fair to help out the peasant family's friends, and pretty soon a week has passed and %Z-7 combat skills have declined from lack of use.^;
+
+!!VRz-5&v7314=7:S^{Hidden Knowledge}
+
+%Y2 %Z-6 in %Z-1's army discovered a living scroll and hid the knowledge from %Z-4. Being crafty, %Z-1 finds out anyway, throws the living scroll away, and punishes the %Z-6 for their insubordination.^;
+
+!!VRz-5&v7314=8:S^{The Power of %Z4}
+
+The Ancient Power of %Z4 curses %Y2 %Z-6 in %Z-1's army with a loss of experience.^;
+
+!!VRz-5&v7314=9:S^{Backwards Learning}
+
+%Y2 %Z-6 in %Z-1's army have been studying an outdated war manual, and as a result have actually gotten worse rather than better.^;
+
+!!VRy3:Sy2*65536+y1; [Subtype number for IF command to show numbers: y3]
+!!VRy8:Sv7316 *-1; [Negative of v7316]
+!!IF&1000:Q1/21/y3/17/y8/1^%Z-5^; [Display event message: z-5]
+!!HEx1:C0/y7/d/d/y8/3; [Remove some stack experience]
+
+!!VRy-2:S999; [Set y-2 to 999 to show that some stack experience was removed]
+!!VRx16:S999; [Set x16 to 999 to exit loop]
+
+--------------------------------------------------------------------------------
+
+ [Lose a Random Secondary Skill Level]
+ [x1=hero number, skill number returned in v7315, new skill level in v7316]
+ [y-3 set to 1 if a valid skill is found]
+!?FU20238;
+!!HEx1:Sx16/?y1; [Check level of hero's skill x16: y1]
+!!VRv7315&y1>0:Sx16; [If skill is known, set v7315 to skill number]
+!!VRv7316&y1>0:Sy1 -1; [New skill level: v7316]
+!!VRy-3&y1>0:S1; [Set y-3 to 1 to show that a valid skill has been found: y-3]
+!!VRx16&y1>0:S999; [Set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Lose a Random Primary Skill Point]
+ [x1=hero number, primary skill number returned in v7315, new primary skill level in v7316]
+ [y-4 set to 1 if a valid primary skill is found]
+!?FU20239;
+!!VRv7315:S-1; [Initialize v7315 to -1]
+!!FU$GetBasicPrim$&x16=0:Px1/?y1/d/d/d; [Check base level of hero's Attack skill x16: y1]
+!!FU$GetBasicPrim$&x16=1:Px1/d/?y1/d/d; [Check base level of hero's Defense skill x16: y1]
+!!FU$GetBasicPrim$&x16=2:Px1/d/d/?y1/d; [Check base level of hero's Power skill x16: y1]
+!!FU$GetBasicPrim$&x16=3:Px1/d/d/d/?y1; [Check base level of hero's Knowledge skill x16: y1]
+!!VRv7315&x16<=1/y1>0:Sx16; [If Attack or Defense skill is above 0, set v7315 to Primary skill number]
+!!VRv7315&x16>=2/y1>1:Sx16; [If Knowledge or Power skill is above 1, set v7315 to Primary skill number]
+!!FU&v7315<0:E; [Exit if hero's primary skill can't go any lower]
+
+!!HEx1&x16=0:F?y2/d/d/d; [Check current level of hero's Attack skill x16: y2]
+!!HEx1&x16=1:Fd/?y2/d/d; [Check current level of hero's Defense skill x16: y2]
+!!HEx1&x16=2:Fd/d/?y2/d; [Check current level of hero's Power skill x16: y2]
+!!HEx1&x16=3:Fd/d/d/?y2; [Check current level of hero's Knowledge skill x16: y2]
+!!VRv7316:Sy2 -1; [New Primary skill level: v7316]
+!!VRy-4:S1; [Set y-4 to 1 to show that a valid Primary skill has been found: y-4]
+!!VRx16:S999; [Set x16 to 999 to exit loop: x16]
+
+--------------------------------------------------------------------------------
+
+ [Index Non-Empty Creature Slots with v7316+ stack experience]
+ [x1=hero number]
+!?FU20240;
+!!HEx1:C0/x16/?y1/?y2/?y4; [Type: y1, Number: y2, Stack Experience: y4]
+!!FU|y1<0/y2<1/y4<v7316:E; [If no monsters in that slot or not enough stack experience, skip it]
+!!VRy-10:+1; [Increment slot counter if any troops there: y-10]
+!!VRy3:S-10 -y-10; [Slot index: y3]
+!!VRyy3:Sx16; [Set y-11..y-17 to non-empty slot numbers: y-11..y-17]
+
+--------------------------------------------------------------------------------
+
+ [Lose Artifact Event]
+!?FU20241;
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7314=0:S1;     [Set y-8 to 1 if v7314 is 0: y-8]
+!!VRv7314&y-8=1:S1 R9; [Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7322:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7322:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7322:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7322:S1 T9; [Reroll Event text: v7314]
+
+!!VRv7322&y-8=1:Sv7314; [Store last Lose Artifact Event: v7322]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!VRy4:Sv1 -1; [Number of heroes -1: y4]
+!!VRy5&v1>0:S1 Ty4; [Choose a random starting hero index: y5]
+!!VRy-5:S-1; [Initialize y-5 to -1]
+!!DO20242/y5/v1/1:P; [Loop through Heroes from y5 to last hero: y-5=hero to use, =-1 if no hero found]
+!!DO20242/1/y4/1&y-5<0:P; [Loop through Heroes from 1 to y4: y-5=hero to use, =-1 if no hero found]
+!!FU|y-5<0/y-6<0/y-7<0:E; [Exit if no hero found with artifacts]
+!!HEy-5:A2/y-6/?y7/?y8; [Number of artifacts that hero has (just to be sure): y7]
+!!FU&y7<1:E; [Exit if hero doesn't have artifact for some reason]
+
+!!HEy-5:B0/?z-1; [Hero's name: z-1]
+!!HEy-5:R2/?y6; [Hero's sex: y6]
+!!UN:N0/-6/y-7; [Artifact name: z-6]
+!!VRz-2&y6=0:S^he^;
+!!VRz-2&y6=1:S^she^;
+!!VRz-3&y6=0:S^his^;
+!!VRz-3&y6=1:S^her^;
+!!VRz-4&y6=0:S^him^;
+!!VRz-4&y6=1:S^her^;
+!!VRz-7&y6=0:S^He^;
+!!VRz-7&y6=1:S^She^;
+!!FU20220:P; [Generate male name: z3]
+!!FU20221:P; [Generate female name: z4]
+!!VRy2:S0 R187; [Random monster: y2]
+!!VRy2&y2>=122:+1; [Skip not used: y2]
+!!VRy2&y2>=124:+1; [Skip not used: y2]
+!!VRy2&y2>=126:+1; [Skip not used: y2]
+!!VRy2&y2>=128:+1; [Skip not used: y2]
+!!VRy2&y2>=145:+5; [Skip War Machines: y2]
+!!UN:N3/7/y2/0; [Monster name (singular): z7]
+
+!!VRz-5&v7314=1:S^{Late Birthday Present}
+
+Uh oh, it's Lady %Z4's birthday and %Z-1 forgot to buy a gift--%Z-2 has no choice but to wrap up %Z-3 %Z-6 and send it to %Z4 at once!^;
+
+!!VRz-5&v7314=2:S^{Thieves}
+
+The unthinkable has happened! Thieves somehow managed to steal %Z-1's %Z-6 without even waking %Z-4!^;
+
+!!VRz-5&v7314=3:S^{Unlucky Storm}
+
+%Z-1 is caught in a violent thunderstorm when a bolt of lightning arcs down from the heavens.
+
+Unfortunately, %Z-3 %Z-6 is charred and ruined, although its magic probably saved %Z-3 life.^;
+
+!!VRz-5&v7314=4:S^{An Old Favour Returned}
+
+Repaying an old favour, %Z-1 sends %Z-3 %Z-6 to %Z3, although %Z-2 knows %Z-2'll miss it terribly.^;
+
+!!VRz-5&v7314=5:S^{Foul Sorcery}
+
+%Z-1's %Z-6 suddenly glows with a dark red light, like blood, and then vanishes as if it were never there, leaving only %Z-1's curses ringing in the air!^;
+
+!!VRz-5&v7314=6:S^{Freezing Night}
+
+Waking up after an especially cold night, %Z-1 is dismayed to find that %Z-3 %Z-6 froze solid and cracked, its magic gone forever.^;
+
+!!VRz-5&v7314=7:S^{Burned to a Crisp}
+
+%Z-1 has a little party at camp to relieve the stress of war, and along with %Z-3 troops, drinks the night away.
+
+When morning comes, %Z-1's throbbing headache isn't helped when %Z-2 realizes %Z-3 %Z-6 accidentally ended up in the campfire and was burned to a crisp.^;
+
+!!VRz-5&v7314=8:S^{Demon Lord}
+
+A powerful Demon Lord appears and demands %Z-1's soul. In a hasty bargain, %Z-1 gives up %Z-3 %Z-6 if the Demon Lord will agree to depart and leave %Z-4 alone.^;
+
+!!VRz-5&v7314=9:S^{Another Game of Chance}
+
+An odd little gnome challenges %Z-1 to a game of chance. The gnome manages to trick %Z-1, and soon %Z-2 has lost %Z-3 prized %Z-6 to the wiley creature!^;
+
+!!VRz-5&v7314=10:S^{Waterlogged}
+
+%Z-1 is carefully cleaning %Z-3 %Z-6 when %Z-3 hand slips and it falls into a tub of dirty bath water. %Z-7 fishes it out but it's ruined and completely  worthless now.^;
+
+!!IF&1000/y-6<=1000:Q1/8/y-7/1^%Z-5^; [Display event message except for Spell Scroll: z-5]
+!!VRy9&y-6>1000:Sy-6 -1001; [Spell number on spell scroll: y9]
+!!IF&1000/y-6>1000:Q1/9/y9/1^%Z-5^; [Display event message for Spell Scroll: z-5]
+!!IF&y-6>1000:V1/0; [If a spell scroll is being removed, set Flag 1 to False]
+!!HEy-5&y-6>1000:M=y9/1; [Check if hero knows the spell on the spell scroll: Flag 1=1 if he/she knows it anyway]
+!!HEy-5&y-6>=1000:A3/y-6/1/1; [Remove scroll or spell book Artifact y-6 from hero y-5]
+!!HEy-5&y-6>1000/-1:My9/0; [Remove unknown scroll spell from hero's spell book]
+!!FU&y-6>=1000:E; [Exit if Artifact removed was a scroll or spell book]
+
+!!HEy-5:A2/y-6/?y10/?y11; [Number of Artifacts of type y-6 that hero y-5 has: y10]
+!!VRy12:Sy-6 *-1; [Change y-6 to a negative number: y12]
+!!HEy-5:Ay12; [Remove ALL Artifacts of type y12 (y-6) from hero y-5]
+!!HEy-5&y10>1:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>2:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>3:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>4:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>5:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>6:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>7:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>8:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>9:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>10:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+!!HEy-5&y10>11:Ay-6; [Give hero y-5 back an extra removed Artifact of type y-6]
+** [If hero y-5 had more than 12 artifacts of this type, the extras are lost] **
+
+--------------------------------------------------------------------------------
+
+ [Find a hero with at least one equipped artifact: hero number in y-5]
+!?FU20242;
+!!OW:H-1/2/x16; [Hero x16's number: v2]
+!!VRy1:S0 R18; [Random starting equipped artifact slot to check 0-18: y1]
+!!VRy-6:S-1; [Initialize y-6 to -1]
+!!VRy-7:S-1; [Initialize y-7 to -1]
+!!DO20243/y1/18/1:P; [Check artifact slots y1..18: y-6=artifact #, =-1 if none found]
+!!DO20243/0/y1/1&y-6<0:P; [Check artifact slots 0..y1: y-6=artifact #, =-1 if none found]
+!!VRy-5&y-6>=0:Sv2; [Set y-5 to hero number if a hero with an artifact is found: y-5]
+!!VRx16&y-6>=0:S999; [Exit loop if hero with artifact is found]
+
+--------------------------------------------------------------------------------
+
+ [Check Equipped Artifact Slots: artifact number in y-6]
+!?FU20243;
+!!HEv2:A1/?y-6/x16; [Artifact in equipped slot x16: y-6]
+!!UN&y-6>=0/y-6<=170:Ay-6/?y1; [Artifact is disabled if y1=1]
+!!VRy-6|y-6=3/y1=1:S-1; [Catapult and disabled artifacts don't count (so quest artifacts won't be taken)]
+!!VRy-7:Sy-6; [Copy y-6 to y-7]
+!!VRy-7&y-6=1000:S0; [If it's a spell book, set y-7 value to 0: y-7]
+!!VRy-7&y-6>1000:S1; [If it's a spell scroll, set y-7 value to 1: y-7]
+!!VRx16&y-6>=0/y-6<>3/y1=0:S999; [Exit loop if artifact found except for Catapult or disabled artifacts]
+
+--------------------------------------------------------------------------------
+
+ [Loss of Army Troops Event]
+!?FU20244;
+!!VRy-8:S0;             [Initialize y-8 to 0]
+!!VRy-8&v7314=0:S1;     [Set y-8 to 1 if v7314 is 0: y-8]
+!!VRv7314&y-8=1:S1 R9; [Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7323:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7323:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7323:S1 R9; [Reroll Event text: v7314]
+!!VRv7314&y-8=1/v7314=v7323:S1 T9; [Reroll Event text: v7314]
+
+!!VRv7323&y-8=1:Sv7314; [Store last Loss of Army Troops Event: v7323]
+
+!!OW:H-1/1/0; [Number of heroes player has: v1]
+!!FU&v1<1:E; [Exit if player has no heroes]
+
+!!VRv7316:S1200 *$weeks$; [Gold value of Troops to lose: 1200 per week: v7316]
+!!VRy-1:Sv7316; [Copy v7316 to y-1]
+!!VRy1:Sv1 -1; [Number of heroes -1: y1]
+!!VRy2:S1 Ty1; [Choose a random starting hero index: y2]
+!!VRy-2:S-1; [Initialize y-2 to -1 (hero number)]
+!!VRy-3:S-1; [Initialize y-3 to -1 (stack number)]
+!!VRy-4:S-1; [Initialize y-4 to -1 (troop type)]
+!!VRy-5:S-1; [Initialize y-5 to -1 (number in stack)]
+!!DO20245/1/12/1:Py2/y1; [Loop through all Heroes up to 12 times]
+!!FU|y-2<0/y-3<0/y-4<0/y-5<0:E; [Exit if no suitable stack found]
+
+!!UN&y-5=1:N3/-6/y-4/0; [Monster name (singular): z-6]
+!!UN&y-5>1:N3/-6/y-4/1; [Monster name (plural): z-6]
+
+!!HEy-2:B0/?z-1; [Hero's name: z-1]
+!!VRz-7&y-5=1:S^its^; [its]
+!!VRz-7&y-5>1:S^their^; [their]
+!!VRz-8&y-5=1:S^has^; [has]
+!!VRz-8&y-5>1:S^have^; [have]
+!!VRz-9&y-5=1:S^is^; [is]
+!!VRz-9&y-5>1:S^are^; [are]
+!!VRz-10&y-5=1:S^it's^; [it's]
+!!VRz-10&y-5>1:S^they're^; [they're]
+!!VRz4&y-5=1:S^says^; [says]
+!!VRz4&y-5>1:S^say^; [say]
+!!VRz5&y-5=1:S^it^; [it]
+!!VRz5&y-5>1:S^them^; [them]
+!!VRz7&y-5=1:S^its^; [its]
+!!VRz7&y-5>1:S^they've^; [they've]
+!!VRz9&y-5=1:S^vanishes^; [vanishes]
+!!VRz9&y-5>1:S^vanish^; [vanish]
+!!VRz10&y-5=1:S^it^; [it]
+!!VRz10&y-5>1:S^they^; [they]
+
+!!HEy-2:P?y6/?y7/?y8; [Hero's location: y6/y7/y8]
+!!TRy6/y7/y8:T?y9/d/d/d/d/d/d/d; [Terrain type at hero's location: y9]
+
+!!UN:N3/6/y-4/0; [Monster name (singular): z6]
+!!UN:N3/8/y-4/1; [Monster name (plural): z8]
+
+
+ [y-6=cost of one creature, y-7=gold value of stack, v7316=gold value to remove]
+!!VRy3&y-7>=v7316:Sv7316 :y-6; [Number of creatures to remove: y3]
+!!VRy3&y-7<v7316:Sy-5; [Number of creatures to remove is entire stack if less than gold value: y3]
+!!VRy3&y3<1:S1; [Minimum removal of one creature: y3]
+!!VRy4:Sy3 *-1; [Number of creatures to remove as a negative value: y4]
+
+!!VRz-5&v7314=1:S^{War's Tough}
+
+It's tough being in the army when there's a war on, and %Y3 of %Z-1's %Z-6 %Z-8 decided %Z7 had enough and quit.^;
+
+!!VRz-5&v7314=2/y9=0:S^{Dark Hole}
+
+As %Z-1's army is marching along, the ground suddenly gives way and %Y3 %Z-6 %Z9 into a large dark hole in the earth, never to be seen again.^;
+
+!!VRz-5&v7314=2/y9=1:S^{Sand Storm}
+
+A fierce sand storm blows up without warning and %Y3 of %Z-1's %Z8 %Z-9 lost without trace.^;
+
+!!VRz-5&v7314=2/y9=2:S^{Grass Fire}
+
+%Z-1 awakes to shouting in the night and the smell of smoke. It quickly becomes clear that a dangerous grass fire is in trying to barbecue everyone.
+
+After many frantic minutes of screaming and panic, %Z-1's army is safely clear of the fire, but sadly, %Y3 %Z-6 were lost to the flames.^;
+
+!!VRz-5&v7314=2/y9=3:S^{Blizzard}
+
+While marching across the snowy wastes, %Z-1's army is caught in a terrible blizzard. When the blizzard abates, %Y3 %Z-6 have been lost.^;
+
+!!VRz-5&v7314=2/y9=4:S^{Quicksand and Swamp Gas}
+
+%Z-1 knows the swamp is treacherous, but despite moving slowly and carefully, %Y3 %Z-6 succumb to quicksand and toxic swamp gas.^;
+
+!!VRz-5&v7314=2/y9=5:S^{Earthquake}
+
+A thunderous earthquake shakes the land, causing great dismay to %Z-1's army. Rocks and troops are tossed about like pieces in a game of chess, and %Y3 %Z-6 %Z-9 crushed beneath a huge boulder.^;
+
+!!VRz-5&v7314=2/y9=6:S^{Stalactites}
+
+While traversing the winding passageways of the underground, %Y3 %Z-6 in %Z-1's army %Z-9 killed by falling stalactites.^;
+
+!!VRz-5&v7314=2/y9=7:S^{Boiled in Lava}
+
+Volcanoes spew smoke and ash all around %Z-1's army as they travel here, and %Y3 unlucky %Z-6 %Z-9 boiled alive by molten lava when it suddenly erupts beneath %Z5.^;
+
+!!VRz-5&v7314=2/y9=8:S^{Swept Overboard}
+
+%Z-1 usually enjoys sailing but today was an exception. A storm blew up and %Y3 %Z-6 were swept overboard where %Z10 drowned beneath the unforgiving waves.^;
+
+!!VRz-5&v7314=3:S^{Better Food}
+
+%Y3 %Z-6 in %Z-1's army %Z-8 been grumbling about the quality of food for days and finally took %Z-7 leave in search of yummier meals.^;
+
+!!VRz-5&v7314=4:S^{Higher Pay}
+
+The pay may not be great in %Z-1's army, but serving under a hero in battle should be reward in itself. %Y3 %Z-6 didn't agree and %Z-8 deserted. Talk about ungrateful!^;
+
+!!VRz-5&v7314=5:S^{Found Religion}
+
+%Y3 %Z-6 in %Z-1's army %Z4 %Z10 %Z-8 "found religion" and won't fight anymore. While %Z-1 is trying to decide what to do with %Z5, the %Z-6 quietly %Z9.^;
+
+!!VRz-5&v7314=6:S^{Eaten}
+
+A gigantic 100 foot tall beast appears before %Z-1's army. The foul-smelling creature is lizard-like and covered in slime-coated scales, with glowing red eyes and black teeth like obsidian daggers. The monster growls and roars, its drooling acid-saliva leaving charred barren ground where before was grass. It lunges for %Y3 %Z-6 and gobbles them up in seconds, crunching %Z-7 bones with obvious enjoyment. Thankfully, the beast then vanishes, but the terrifying memory remains.^;
+
+!!VRz-5&v7314=7:S^{Caught Stealing}
+
+%Y3 %Z-6 in %Z-1's army %Z-9 caught stealing from the other troops. Although %Z-1 tries to discipline them fairly, they become rebellious and vanish in the night.^;
+
+!!VRz-5&v7314=8:S^{Leaping Leprosy}
+
+One of %Z-1's troops is afflicted with leprosy. Although normal leprosy isn't contagious, this is a rare form called leaping leprosy, and before the week is out, %Y3 %Z-6 have literally fallen to pieces.^;
+
+!!VRz-5&v7314=9:S^{Rabid Weasels}
+
+%Z-1's camp is beset with scores of rabid weasels. Before they can be dispatched, %Y3 %Z-6 succumb.^;
+
+!!VRz-5&v7314=10:S^{Mind Parasites}
+
+It's tragic and terrifying but there's nothing that %Z-1 can do about the mind parasites infecting %Y3 %Z-6.
+
+After %Z10 finish going mad, %Z10 explode quite messily.^;
+
+!!VRy5:Sy3*65536+y-4; [Troop picture for subtype message display: y5]
+!!IF&1000:Q1/21/y5/1^%Z-5^; [Display event message]
+!!HEy-2:C0/y-3/d/dy4; [Remove y4 creatures from hero y-2, slot y-3]
+
+--------------------------------------------------------------------------------
+
+ [Loop through all Heroes up to 12 times]
+ [v1=number of heroes]
+ [x1=random starting hero index]
+ [x2=number of heroes -1]
+!?FU20245;
+!!VRy-1&x16>1::2; [After 1st loop, divide minimum gold value of troops by 2 each time through loop: y-1]
+!!DO20246/x1/v1/1:P; [Loop through heroes, starting at hero x1]
+!!DO20246/1/x2/1&y-2<0/x2>0:P; [Loop through heroes, from 1 to just before starting hero]
+!!VRx16&y-2>=0:S999; [Exit loop if suitable stack found]
+
+--------------------------------------------------------------------------------
+
+ [Loop through heroes]
+!?FU20246;
+!!VRy1:S0 R6; [Random starting stack: y1]
+!!VRy2:Sy1 -1; [1 less than y1: y2]
+!!OW:H-1/2/x16; [Hero's number: v2]
+!!DO20247/y1/6/1:P; [Loop through hero's stacks, from y1 to 6]
+!!DO20247/0/y2/1&y-2<0/y2>=0:P; [Loop through hero's stacks, from 1 to y2]
+!!VRx16&y-2>=0:S999; [Exit loop if suitable stack found]
+
+--------------------------------------------------------------------------------
+
+ [Loop through hero's stacks]
+ [Return values: y-2=hero number, y-3=stack number, y-4=troop type, y-5=number in stack]
+ [Return values: y-6=cost of one creature, y-7=gold value of stack]
+ [Note: Hero's number: v2, Gold cost to remove: v7316, Minimum gold cost to remove: y-1]
+!?FU20247;
+!!HEv2:C0/x16/?y1/?y2; [Type: y1, Number: y2]
+!!FU|y1<0/y2<1:E; [Skip if no troop in stack]
+!!MA:Cy1/6/?y-6; [Cost of 1 creature: y-6]
+!!VRy-7:Sy2 *y-6; [Gold Value of stack: y-7]
+!!FU|y-7<y-1/y-6>v7316:E; [Skip if stack < than minimum gold cost or 1 creature > maximum removal value]
+!!VRy-2:Sv2; [Set y-2 to hero number]
+!!VRy-3:Sx16; [Set y-3 to stack number]
+!!VRy-4:Sy1; [Set y-4 to troop type]
+!!VRy-5:Sy2; [Set y-5 to number in stack]
+!!VRx16:S999; [Exit loop]
+
