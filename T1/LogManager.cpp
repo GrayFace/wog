@@ -1,12 +1,13 @@
 #include "LogManager.h"		
 
-#ifdef DebugBuild
-void addlog(char *s,int flag){FILE* f=fopen("dxproxylog.txt", "at");if(flag==0)fprintf(f,"%s\n",s);else fprintf(f,"%s:%d\n",s,flag);fclose(f);}
-void clearlog(){fclose(fopen("dxproxylog.txt", "wt")); DeleteFile("Logger.txt");}
-#else
+//#ifdef DebugBuild
+//void addlog(char *s,int flag){FILE* f=fopen("dxproxylog.txt", "at");if(flag==0)fprintf(f,"%s\n",s);else fprintf(f,"%s:%d\n",s,flag);fclose(f);}
+//void clearlog(){DeleteFile("Logger.txt"); DeleteFile("Logger.txt");}
+//#else
 void clearlog(){DeleteFile("Logger.txt");}
-#endif
+//#endif
 void adduserlog(const char *s){FILE* f=fopen("Logger.txt", "at"); fprintf(f,"%s\n",s);fclose(f);}
+#define addlog adduserlog
 
 void CLogManager::AddEntry(unsigned char Tab,char* Text,DWORD TextColor,DWORD	BgColor)
 {

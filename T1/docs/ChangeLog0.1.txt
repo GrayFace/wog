@@ -232,6 +232,7 @@ In most cases, setting or clearing these bits won't change Luck, Morale, movemen
 
 Slava writes;  I think it is correct for THIS current day. If you set a "affect a few days" like a Stable, I think the effect will be applied automatically on every next day until the effect ends up.
 
+
 17. New UN:J11 command (instruction or receiver)
   UN:J11/$
     $ is a flag that allows to stay on a battle screen a right mouse
@@ -239,3 +240,9 @@ click stack info dialog (0, default) or work a standard way like in
 SoD (1).
   This flag is stored in saved game, so you can set it once per a
 game.
+
+18. MP ERM fix.
+  When !?GM0 is called (load saved game) in MP game (network based or
+hot seat one) on a server side, the "player(s) at this PC" was not set
+properly.
+  Now fixed.

@@ -62,7 +62,7 @@ const char* ToString(lua_State *L, int i)
 
 void ErrorMessage(const char * msg)
 {
-	adduserlog(msg);
+	FILE* f=fopen("WOGLUALOG.TXT", "w"); fprintf(f,"%s\n",msg); fclose(f);
 	if (GameLoaded)
 		Message(Format("{Error}\n%s", msg));
 	else

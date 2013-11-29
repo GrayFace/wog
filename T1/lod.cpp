@@ -268,6 +268,7 @@ int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 
 int ResetLODs(void){
 	// unload extra LODs
+	STARTNA(__LINE__, 0)
 	Lod *lod=Lod::First;
 	while(lod!=0){
 		Lod *item=lod;
@@ -276,7 +277,7 @@ int ResetLODs(void){
 	}
 	LastInd=8;
 	Lod::First=0;
-	return 0;
+	RETURN(0)
 }
 
 int LoadLODs(int /*ver*/)

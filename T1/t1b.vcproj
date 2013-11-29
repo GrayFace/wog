@@ -50,7 +50,7 @@
 				AdditionalOptions="/vmg"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;.\lua\src\&quot;;.\dxdep\;.\HDetour\;.\luasocket\src\"
-				PreprocessorDefinitions="NDEBUG,WIN32,_CONSOLE,_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="NDEBUG,WIN32,_CONSOLE,_CRT_SECURE_NO_WARNINGS,WOG_DIRTY"
 				ExceptionHandling="0"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="false"
@@ -307,6 +307,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\lod.h"
+				>
+			</File>
+			<File
 				RelativePath=".\monsters.h"
 				>
 			</File>
@@ -542,6 +546,10 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\lod.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\monsters.cpp"

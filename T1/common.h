@@ -403,6 +403,8 @@ extern PEr GEr;
 
 //#pragma warn .inl
 
+#ifdef WOG_DIRTY
+
 // Slava recklessly modifies EBX in a lot of places, so LAStEBX should make things safer
 #define STARTC(x,y) { __asm{ pusha } GEr.Add(x,y); __asm{ popa } }  int LAStEBX; __asm{ mov LAStEBX, ebx}
 #define START(x)    { __asm{ pusha } GEr.Add(x,0); __asm{ popa } }  int LAStEBX; __asm{ mov LAStEBX, ebx}
@@ -416,6 +418,18 @@ extern PEr GEr;
 #define STOP {__asm{ mov ebx, LAStEBX } PEr::Del();}
 #define RETURN(x) {__asm{ mov ebx, LAStEBX } PEr::Del();return(x);}
 #define RETURNV {__asm{ mov ebx, LAStEBX } PEr::Del(); return;}
+
+#else
+
+#define STARTC(x,y) { GEr.Add(x,y); }
+#define START(x)    { GEr.Add(x,0); }
+#define STARTNC(x,y)    { GEr.AddN(x,y); }
+#define STARTNA(x,y)    STARTNC(__FILENUM__*1000000 + x, y)
+#define STOP {PEr::Del();}
+#define RETURN(x) {PEr::Del();return(x);}
+#define RETURNV {PEr::Del(); return;}
+
+#endif
 
 //  try{
 //  }catch(...){ GEr.Add("ZStrNCpy fault",0); throw __LINE__; } 
