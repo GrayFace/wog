@@ -96,20 +96,33 @@ Flags:
 0x00000004 - Has a time scale (3 rounds or so)
 0x00000008 - Creature Spell
 0x00000010 - target - single stack
-0x00000020 - target - single shooting stack (???)
+0x00000020 - targets shooting stacks, has a mass version at advanced level
 0x00000040 - has a mass version at expert level
 0x00000080 - target - any location
-0x00000100 - 
-0x00000200 - 
+0x00000100 - target - obstackle
+0x00000200 -   damage spell (???) (not Death Cloud)
 0x00000400 - Mind spell
 0x00000800 - friendly and has mass version
 0x00001000 - cannot be cast on SIEGE_WEAPON
 0x00002000 - Spell from Artifact
-0x00004000 -
-0x00008000 - AI 
+0x00004000 -   protection spell (???)
+0x00008000 - AI
+ (Meteor Shower, Magic Arrow, Ice Bolt, Lightning Bolt, Implosion, Frost Ring,
+  Fireball, Meteor Shower, Titan's Bolt)
+ (not Chain Lightning, not Inferno)
+
 0x00010000 - AI area effect
+
 0x00020000 - AI
+ (Armageddon, Destroy Undead, Death Ripple)
+
 0x00040000 - AI
+ (Bless, Curse, Bloodlust, Precision, Weakness, Stone Skin, Disrupting Ray,
+  Prayer, Mirth, Sorrow, Fortune, Misfortune, Haste, Slow, Slayer, Frenzy,
+  Clone, Blind, Teleport, Counterstrike, Berserk, Shield, Air Shield, 
+  Fire Shield, Protection from Air, Protection from Fire, Prot. from Water, 
+  Prot. from Earth, Anti-Magic, Dispel, Magic Mirror, Cure)
+
 0x00080000 - AI number/ownership of stacks may be changed 
 0x00100000 - AI
-
+ (Summon Boat, Fly, Water Walk, Dimension Door, Town Portal, Earthquake, Titan's Lightning Bolt)

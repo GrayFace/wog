@@ -20,7 +20,7 @@ LodTypes::_Table LodTypes::Table[4][3]={
 // 1 def
 // 2 txt,pic
 // 3 wav
-int LodTypes::Seq[4][3][100]={
+int LodTypes::Seq[4][3][LODNUM]={
 	{{5,1},{4,0},{1,0}},
 	{{7,3,1},{6,2,0},{2,1,0}},
 	{{1},{0},{1,0}},
@@ -39,7 +39,10 @@ Byte LodTable[LODNUM][0x190];
 #define SOD_BinTree (0x69E560)
 #define SOD_BinTree_FindItem(Name) (((int (__fastcall *)(Dword,int,char *))0x55EE00)(SOD_BinTree,0,Name))
 #define SOD_BinTree_AddItem(buf, Name) (*((int *(__fastcall *)(Dword,int,void*,char *))0x55DDF0)(SOD_BinTree,0,(void*)buf,Name))
-#define SOD_BinTree_RemoveItem(buf_po,Item_po) (((int (__fastcall *)(Dword,int,Dword*,Dword))0x55DF20)(SOD_BinTree,0,buf_po,Item_po))
+#define SOD_BinTree_RemoveItem(buf_po,Item_po) (((int (__fastcall *)(Dword,int,int*,Dword))0x55DF20)(SOD_BinTree,0,buf_po,Item_po))
+
+#define SOD_FindDefLod(name) (((int (__fastcall *)(char*))0x55D160)(name))
+#define SOD_FindPcxLod(name) (((int (__fastcall *)(char*))0x55D1F0)(name))
 
 #define SOD_LoadDef(name) (((int (__fastcall *)(char*))0x55C9C0)(name))
 #define SOD_LoadPcx(name) (((int (__fastcall *)(char*))0x55AA10)(name))
@@ -69,7 +72,6 @@ Lod::Lod(int location,char *name){
 //  void (__fastcall *ctor)(Byte *lodthis,int,char *lodname); *(Dword *)&ctor=0x559420;
 //  ctor(LodTable[Ind],0,Name);
 	SOD_LOD_ctor(LodTable[Ind],Name);
-	FileList.fl=0;
 	Next=First;
 	First=this;
 	int ret=LoadIt();
@@ -80,18 +82,16 @@ Lod::Lod(int location,char *name){
 		TError(buf);
 	} else {
 		LastInd++;
+		ReloadItems();
 	}
 	RETURNV
 }
 
 Lod::~Lod(){
 	STARTNA(__LINE__, 0)
-	if(Ind<0) RETURNV
+	if(Ind<0 || LodTypes::Del4List(Ind)) RETURNV
+	ReloadItems();
 	SOD_LOD_dtor(LodTable[Ind],Name);
-	LodTypes::Del4List(Ind);
-	for(int i=0;i<FileList.sn;i++) LodTypes::ReloadItem(ITxt(i,0,&FileList));
-	UnloadTXT(&FileList);
-	FileList.fl=0;
 	Lod *cur=First,*prev=0;
 	while(cur!=0){
 		if(cur==this){
@@ -111,54 +111,20 @@ int Lod::LoadIt(void){
 	strncpy(fullpathname,GetFolder(Location),255); fullpathname[255]=0;
 	strcat_s(fullpathname, 256, Name);
 	if(LodTypes::Load(Ind, fullpathname)) RETURN(2)
-	if(SOD_SearchFileFromLOD(LodTable[Ind],"filelist.txt")==0) RETURN(3)
-	Byte *item=0;
-	item=SOD_LoadFileFromLOD(LodTable[Ind],"filelist.txt");
-	if(item==0) RETURN(4)
-	void *mem1=h3new(*(size_t *)&item[0x14]);
-	Dword ts[50];
-	ts[0/* -34 */]=0; if(mem1!=0) ts[0]=1;
-	ts[1/* -30 */]=(Dword)mem1;
-	ts[2/* -2C */]=0x641138;
-	ts[3/* -28 */]=(Dword)&LodTable[Ind][4];
-	__asm{
-		mov     eax,item
-		mov     edi,[eax+0x14]
-		mov     edx,0x641138
-		mov     esi,mem1
-		push    edi
-		push    esi
-		lea     ecx,ts[2*4]
-		mov     eax,[edx+4]  
-		call    eax
-	}
-	void *mem2=h3new(0x34); if(mem2==0) RETURN(6)
-	_FileLoaded_ *filelist=0;
-	char *tname="filelist.txt";
-	ts[6/* -1C */]=(Dword)mem2;
-	__asm{
-		mov     esi,mem1
-		push    esi               
-		mov     eax,item
-		mov     edi,[eax+0x14]
-		push    edi               
-		mov     ebx,tname
-		push    ebx               
-		mov     ecx,mem2 
-		mov     eax,0x5BC260 /*5BBF90*/
-		call    eax
-		mov     filelist,eax
-	}
-	if(ts[0]){ h3delete(mem1); }
-	if(filelist==0) RETURN(7)
-	FileList.fl=filelist;
-	FileList.sn=filelist->Stop-filelist->Start;
-//__asm int 3
 	int ret=LodTypes::Add2List(Ind);
-	for(int i=0;i<FileList.sn;i++) LodTypes::ReloadItem(ITxt(i,0,&FileList));
 	RETURN(ret)
 }
 
+void Lod::ReloadItems()
+{
+	STARTNA(__LINE__, 0)
+	int lod = (int)&LodTable[Ind][4];
+	int n = *(int*)(lod + 0x178);
+	char *name = *(char**)(lod + 0x180);
+	for(; n > 0; n--, name += 32)
+		LodTypes::ReloadItem(name);
+	RETURNV
+}
 
 int LodTypes::Add2List(int ind){
 	STARTNA(__LINE__, 0)
@@ -168,8 +134,8 @@ int LodTypes::Add2List(int ind){
 			int  n=Table[i][j].Num; 
 			int *t=Table[i][j].Inds;
 			if(n>=LODNUM){ Del4List(ind); TError("Too many LODs"); RETURN(-2); }
-			for(int k=99;k>0;k--){ t[k]=t[k-1];}
-			t[0]=ind; Table[i][j].Num+=1;
+			for(int k=n;k>0;k--){ t[k]=t[k-1];}
+			t[0]=ind; Table[i][j].Num++;
 		}
 	}
 	RETURN(0)  
@@ -185,13 +151,21 @@ int LodTypes::Del4List(int ind){
 				if(t[k]==ind){ // found
 					for(int l=k+1;l<n;l++) t[l-1]=t[l];
 					t[n-1]=0;
-					Table[i][j].Num-=1;
+					Table[i][j].Num--;
 					break;
 				}
 			}
 		}
 	}
 	RETURN(0)  
+}
+
+static int BinTree_FindItem(char *name)
+{
+	int ret=SOD_BinTree_FindItem(name);
+	if(ret==*(int *)(SOD_BinTree + 4))  return 0;
+	if(strcmpi(name,(char *)(ret+0x0C))<0)  return 0;
+	return ret;
 }
 
 static int buf[347];
@@ -205,44 +179,41 @@ static void DoReload(int *a, int *b, int size, char *name)
 	a[6] = buf[6];
 	// delete temp item
 	SOD_Deref(b);
-	int ret = SOD_BinTree_AddItem(buf, name);
-	*(int**)(ret + 0x1C) = a;
+	int ti = SOD_BinTree_AddItem(buf, name);
+	*(int**)(ti + 0x1C) = a;
 }
 
 void LodTypes::ReloadItem(char *name){
 	STARTNA(__LINE__, 0)
-	int *item = (int*)LodTypes::RemoveItemFromTree(name);
+	int ti = BinTree_FindItem(name);
+	int *item = (ti ? *(int**)(ti + 0x1C) : 0);
 
 	// Reload Def/Pcx
 	switch (item ? *item : 0)
 	{
 		case 0x63D6B0: // def
-			DoReload(item, (int*)SOD_LoadDef(name), 0x38, name);
+			if (SOD_FindDefLod(name))
+			{
+				SOD_BinTree_RemoveItem(&ti, ti);
+				DoReload(item, (int*)SOD_LoadDef(name), 0x38, name);
+			}
 			break;
 		case 0x63BA14: // pcx
-			DoReload(item, (int*)SOD_LoadPcx(name), 0x56C, name);
+			if (SOD_FindPcxLod(name))
+			{
+				SOD_BinTree_RemoveItem(&ti, ti);
+				DoReload(item, (int*)SOD_LoadPcx(name), 0x56C, name);
+			}
 			break;
 		case 0x63B9C8: // pcx16
-			DoReload(item, (int*)SOD_LoadPcx16(name), 0x38, name);
+			if (SOD_FindPcxLod(name))
+			{
+				SOD_BinTree_RemoveItem(&ti, ti);
+				DoReload(item, (int*)SOD_LoadPcx16(name), 0x38, name);
+			}
 			break;
 	}
 	RETURNV
-}
-int LodTypes::RemoveItemFromTree(char *name){
-	STARTNA(__LINE__, 0)
-//  Dword (__fastcall *FindItemInBinTree)(Dword TreeRoot,int,char *Name); *(Dword *)&FindItemInBinTree=0x55EE00;
-//  Dword ret=FindItemInBinTree(0x69E560,0,name);
-	Dword ret=SOD_BinTree_FindItem(name);
-	if(ret==*(Dword *)(SOD_BinTree + 4)) RETURN(0)
-	//if(strncmp((char *)(ret+0x0C),name,12)!=0) RETURNV
-	if(strcmpi(name,(char *)(ret+0x0C))<0) RETURN(0)
-
-//  void (__fastcall *RemoveItemFromBinTree)(Dword TreeRoot,int,Dword Item_po,Dword *buf_po); *(Dword *)&RemoveItemFromBinTree=0x55DF20;
-//  RemoveItemFromBinTree(0x69E560,0,ret,&buf);
-
-	int item = *(int*)(ret + 0x1C);
-	SOD_BinTree_RemoveItem(&ret,ret);
-	RETURN(item)
 }
 
 //////////////////////////////
@@ -314,21 +285,19 @@ int LoadLODs(int /*ver*/)
 	ResetLODs();
 	char buf[4]; if(Loader(buf,4)) RETURN(1)
 	if(buf[0]!='L'||buf[1]!='O'||buf[2]!='D'||buf[3]!='0') {MError("LoadLODs cannot start loading"); RETURN(1)}
-	int  num,location;
-	char name[32];
+	int  num;
 	if(Loader(&num,sizeof(int))) RETURN(1)
 	if(num==0) RETURN(0)
 	struct _lod_{ int l; char n[32]; };
 	_lod_ *ar=(_lod_ *) new _lod_[num];
 	if(ar==0) RETURN(1)
 	for(int i=0;i<num;i++){
-		if(Loader(&location,sizeof(int))) RETURN(1)
-		if(Loader(name,32)) RETURN(1)
-		name[31]=0;
-		ar[i].l=location; strncpy(ar[i].n,name,32);
+		if(Loader(&ar[i].l,sizeof(int))) RETURN(1)
+		if(Loader(ar[i].n,32)) RETURN(1)
+		ar[i].n[31]=0;
 	}
-	for(int i=0;i<num;i++){
-		Lod::LoadCustomLOD(ar[num-i-1].l,ar[num-i-1].n);
+	for(int i = num - 1; i > 0; i--){
+		Lod::LoadCustomLOD(ar[i].l, ar[i].n);
 	}
 	delete ar;
 	RETURN(0)

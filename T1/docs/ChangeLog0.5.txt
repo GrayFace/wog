@@ -1,0 +1,80 @@
+7.
+  New command UN:J12 - get map file name.
+  Syntax: !!UN:J12/z#;
+    z# - z var to store the name (z-1...z-10, z1...z1000)
+  Comments
+    If you want to use a different INI file for different map, you may
+now check the map name.
+
+9.
+  Now you can load and unload custom LOD files.
+  First. We will have "h3wog.lod" file in DATA folder and I am going
+to move all WoG related files there.
+  Then there will be "h3custom.lod" file also located in DATA folder.
+  These two LODs will be loaded in any case (if they are present).
+  To use any other LOD file (in WoGification script or in a specific
+map) use the next commands:
+
+  !!LD:L?$1/$2/$3 - load a custom LOD file
+  $1 - a variable to store index of the loaded LOD file (>=0) or -1
+if mot loaded.
+  $2 - a location folder for the file like in UN:J9.
+  $3 - an index of Z variable that stores a name of the LOD file (may
+be local, global or static Z variable).
+
+  !!LD:U$ - unload a custom LOD file
+  $1 - a variable keeps an index of the loaded LOD file (>=0).
+
+  Comments.
+  Loaded LOD files will be unloaded if you start a new game or load a
+save.
+  The list of loaded LOD files is stored in the saved game and thus
+all of them will be uploaded again if you load this save. This means
+that if the map uses a custom LOD file, you should have it if you want
+to load a saved game for this map. This also means that LODs are not
+stored in the saved game and it takes only a few bytes there :-)
+
+  You can use a several load/unload sequence in one game. Say you can
+use a different environment for the adventure map, dialogs or anything
+else.
+  Note though that standard TXT files (like crtraits.txt and so) in
+game are parsed at game start. so even if you modify it, it does not
+affect the game until you use "h3wog.lod" or "h3custom.lod". These two
+files are loaded at game start.
+
+  Example.
+!#VRz35:S^my.lod^;
+!#LD:L?v3/2/35;
+  This will load my.lod file from MAPS folder.
+
+10.
+  Horn asked me to supply some additional temporal variable set for a
+battle.
+  I added an array that is not stored in the saved game.
+  Get/Set variable:
+!!BG:V$1/$2/$3;
+  $1 - stack index (0...99)
+  $2 - variable index (0...99)
+  $3 - variable to set/get the value
+
+  Clean up the array:
+!!BG:C$;
+  $ - stack to clean up (0...99) or -1 to clean up the whole array.
+
+  Comments.
+  You may keep there any integer value. It does not matter either a
+real stack is present in the battle or not.
+
+  Example:
+!!BG:C-1; clean up the array
+!!BG:V2/3/33; set var 3 for "stack" 2 to 33
+!!BG:V2/3/?v5; get this var to v5
+
+11.
+Jake Hunter reported (long ago already :-)
+JH> the command '!!HE-1:L4/$' which is meant to re-set the portraits to a
+JH> specific hero-number, does what it is said to do, yet, if one were to save
+JH> the game after change a hero's portrait (like with my script that I sent
+JH> you) and reload it afterwards, the portrait gets screwed up.
+  I found the bug and hope that it works now correct (I ran a quick
+test).

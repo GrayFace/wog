@@ -150,6 +150,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lod.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\\LogManager.cpp"
 				>
 			</File>
@@ -189,6 +193,10 @@
 			</File>
 			<File
 				RelativePath="..\\global_hooks.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lod.h"
 				>
 			</File>
 			<File

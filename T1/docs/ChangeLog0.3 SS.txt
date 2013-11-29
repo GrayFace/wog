@@ -1,0 +1,149 @@
+  New features:
+
+1. Now you have ERM access to Spell parameters.
+  Receiver SS (mai be used in instruction).
+
+  SS# where # is a number of a spell (the left column in the attached
+spells.txt file).
+  Commands:
+
+  O$ - set/check/get a spell type:
+     -1 = target is an enemy stack
+      1 = target is a friendly stack
+      0 = no direct target
+
+  W$ - sound file name like "Visions.wav".
+      The file should be in Heroes3.snd or in DATA folder directly.
+      You may not get the default file name now but you can set it
+(and check later) through z vars. You may use a standard Z vars
+[1...1000] or a static Z vars from ERT file [>1000].
+      If you set the name and then check it, you will receive an index
+of Z var you set the name.
+      If you did not set the name, you will get 0.
+
+  X$ - DEF animation index. You may get the default index in the
+attached spells.txt.
+      Now you can only change it to another existing one but later I
+will add a way to use a custom DEF file.
+
+  F$ - spell flags. The default flags are in spells.txt file but I do
+not know all of them.
+
+  N$ - name of a spell. Works similar to W$ way with Z var.
+
+  A$ - abbreviation name. Works similar to W$ way with Z var.
+
+  L$ - spell level (0...4)
+
+  S$ - magic school bits (Air=1,Fire=2,Water=4,Earth=8)
+
+  C#/$ - mana cost to cast at a skill level.
+      # - skill level (0...3)
+      $ - mana points
+
+  P$ - spell power. May mean different things for spells.
+
+  E#/$ - spell effect at a skill level
+      # - skill level (0...3)
+      $ - effect
+
+  H#/$ - chance to get a spell by a town type
+      # - town type (0...8)
+      $ - chance (0...100)
+
+  I#/$ - AI value.
+      # - skill level (0...3)
+      $ - value for AI to choose this spell
+
+  D#/$ - description of a spell at a skill level
+      # - skill level (0...3)
+      $ - Z var index.  Works similar to W$ way.
+
+  All settings are stored in a saved game and thus you may script your
+spells for a particular map.
+
+  Also I reserved spells for WoG up to 200. This is why you need to
+expand Sptraits.txt file or game will not start. I have attached a
+modified file. You may put it to the DATA folder.
+
+  Example:
+***************
+!#VRz123:S^New Spell Name^;
+!#VRz125:S^New {Spell} Description Basic^;
+!#SS15:Nz123 D0/z125; set new name to magic arrow
+***************
+  Set a Magic Arrow name and description for a basic skill level to
+custom.
+  Also you may check how it work if start the attached map, go to town
+and check a magic arrow spell in a Magic Guild.
+
+  2. I added a way to simulate an adventure map spells.
+  I think it is better to describe with an example:
+***************
+[the object to activate the spell, only for example]
+
+!?OB8/11/0;
+
+[show the message]
+
+!!IF:M^Now move a mouse over enemy hero
+and click left mouse button to "sunk" them.
+Use right mouse click to finish^;
+
+[call the magic dialog]
+[12345 is a callback function number]
+!!DL:P12345;
+[since now you can move a mouse over a map and when you go to]
+[the next square a function 12345 will be called]
+
+[here you come only when the spell is finished]
+[show the message though you may take any other action]
+!!IF:M^Now spell has ended^;
+
+[callback function]
+[called at any click or move to another square]
+[on the entrance we have]
+[x1=action:]
+[   0  - mouse move to another square]
+[   12 - left mouse button push]
+[   13 - left mouse button release]
+[   14 - right mouse button push]
+[x2=x coordinate of a map square]
+[x3=y coordinate of a map square]
+[x4=level of a map square]
+!?FU12345;
+
+!!if&x1=0:;  mouse move
+  !!OBx2/x3/x4:T?y1; get object type at a square
+  !!if&y1=34:; hero ?
+    [you may use now DL:C command to set a mouse cursor for a dialog]
+    !!DL:C1042; sunk boat cursor
+  !!el:;
+    !!DL:C1000; arrow cursor
+  !!en:;
+  !!FU:E;
+!!en:;
+!!if&x1=13:;  left mouse release
+  !!OBx2/x3/x4:T?y1 C?y2;
+  !!if&y1=34:; hero
+    !!HEy2:K; kill hero
+    !!DL:C1000; arrow cursor
+  !!en:;
+  !!FU:E;
+!!en:;
+!!if&x1=14:;  right mouse push
+  !!DL:C1;
+!!en:;
+***************
+
+  You may see how it works on the attached map if try to pick up a
+pile of gold.
+  Move then your mouse over enemy heros, left click to kill them and
+right click to end the spell.
+  I hope that this example is detailed enough but ask me if you need
+more info.
+
+  I made some engine changes to the WoG and now it may not be modified
+(code part). It should work fine but for any case if the game crashes
+when it worked before and there is no visible reason, send me the
+crash log.

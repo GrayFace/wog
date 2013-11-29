@@ -241,10 +241,10 @@ function P.CheckBoxesDialog(t)
 				if t.On[map[i]] then
 					if y > h*2/3 then
 						y = y - h/2
-						for i = i - 1, 1, -1 do
+						for j = i - 1, 1, -1 do
 							y = y - group.Items[i].Height
 							if y < 0 then
-								i = i - 1
+								i = i - j - 1
 								if i >= scroll.TicksCount then
 									i = scroll.TicksCount - 1
 								end
@@ -260,10 +260,6 @@ function P.CheckBoxesDialog(t)
 		end
 		group:UpdateScroll()
 		all:Realign()
-		-- dlg.Width = all.Width
-		-- dlg.Height = all.Height
-		-- assert(dlg.Width <= 600, dlg.Width)
-		-- assert(dlg.Height <= maxH, dlg.Height)
 	end
 	
 	-- Dialog position
@@ -309,20 +305,20 @@ function P.CheckBoxesDialog(t)
 	end
 end
 
--- function _G.Q()
+-- function _G.Q(n)
 	-- P.CheckBoxesDialog{Width = 300, Texts = {
 		-- "2222222222222222222 22222 222222 22222 2",
-		-- -- "1", "2222222222222222222 22222 222222 22222 2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-		-- -- "1", "2", "3", "4",
-	-- }, SelectedItem = 1, Radio = true, Caption = "Test", CancelButton = true}
+		-- "1", "2222222222222222222 22222 222222 22222 2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+		-- "1", "2", "3", "4",
+	-- }, SelectedItem = n or 20, Radio = true, Caption = "Test", CancelButton = true}
 -- end
 
 local dialogs_CheckBoxesDialog = P.CheckBoxesDialog

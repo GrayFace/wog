@@ -307,10 +307,6 @@
 				>
 			</File>
 			<File
-				RelativePath="lod.h"
-				>
-			</File>
-			<File
 				RelativePath=".\monsters.h"
 				>
 			</File>
@@ -546,10 +542,6 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="lod.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\monsters.cpp"

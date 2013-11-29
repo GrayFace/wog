@@ -952,8 +952,8 @@ local FuncsList
 -- FindRef
 
 function _G.FR(p, p1, start, stop)
-	SodExe = SodExe or io.LoadString[[c:\_WoG\wog359\trunk\Build\heroes3.ex_]]
-	FuncsList = FuncsList or dofile(AppPath.."Mods/FuncsList.lua")
+	SodExe = SodExe or io.LoadString(internal.CoreScriptsPath.."../Build/heroes3.ex_")
+	FuncsList = FuncsList or dofile(internal.CoreScriptsPath.."Funcs/FuncsList.lua")
 	p1 = p1 or p + 1
 	local t = {}
 	local t1 = {}

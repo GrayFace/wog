@@ -1,0 +1,60 @@
+2. Now I added a way to have up to 100 local functions per script.
+The syntax is the same as for calling a global function but the
+index is negative like this.
+
+!?FU-5; start local function -5
+...
+
+!!FU-5:P...; call a local function -5
+
+Index may be from -1 to -100.
+The difference between global and local functions is the scope.
+Local function is searched ONLY in the current (where the call found)
+script body.
+This means that you may have function -5 in many scripts but when
+the call is executed only functions -5 in the calling script will be
+executed.
+Also it gives a specific functionality.
+Say you have two scripts: 23 and 456.
+
+Script 23 has:
+!?FU-34; #1
+...
+
+!?FU657;
+!!FU-34:P...;
+...
+
+!?FU-34; #2
+...
+
+Script 456 has:
+!?FU-34; #3
+...
+
+!?TM6;
+!!FU-34:P...;
+!!FU657:P...;
+...
+
+!?FU-34; #4
+...
+
+Now say timer 6 executed. The ERM interpreter will find a trigger
+body (!?TM6) in the script 456.
+So first !?TM6 section is executed.
+Call to FU-34 will execute function #3 and then #4 because both of
+them are located in the script that call is executed (script 456).
+Then call to FU657 will move the current call scope to the script 23
+because the body of the global function 657 is located there.
+So now call to FU-34 will execute functions #1 and #2.
+
+This means that all local functions are independent and may be
+cross referenced only through the global function calls.
+
+3. HE:A1/... fix.
+Now commands like:
+!!HE-1:A1/?y-2/y-1; [Check for weekly creature artifacts]
+will not produce an error message.
+
+4. 3.58f bug fix. Minotaur King now should have positive moral always.

@@ -1,0 +1,273 @@
+  First version of custom dialog support.
+
+  Now we have a new receiver/instruction DL.
+  Syntax:
+!!DL#:...
+    # - unique dialog Id (>0)
+  Commands: N,S,E,H,C
+
+N# - parse dialog template
+    # - template file name
+      May be:
+    ^filename^ - direct text
+    z10 - global Z var
+    z-5 - local Z var
+    z100000 - static Z var
+      The text is parsed before using.
+  This command load template file (if not loaded already), searches
+the dialog (using dialog Id) in the file and parses it.
+  It does not show the dialog.
+  The main aim of it is to give you a chance to adjust loaded dialog
+settings before showing it.
+  Results:
+    Flag 1 = 1 if Ok
+    Flag 1 = 0 if Error happens (no dialog template found)
+
+S$ - show dialog
+     $ - return item (the active item when closed)
+  Shows the dialog (with a specific Id) and wait until it is closed.
+This means that the followed command will be executed not immediately
+but when the dialog is closed by any means.
+  You may use no parameter at all, it means that return code is
+ignored.
+
+E#1/#2
+    #1 - dialog Item Id (see below)
+    #2 - enable (1) or disable (0) it
+
+H#1/#2
+    #1 - dialog Item Id (see below)
+    #2 - hint text (appear when you move a mouse over the item)
+      May be:
+    z10 - global Z var
+    z100000 - static Z var
+      The text is parsed before showing (not setting).
+
+C# - set a specific callback action.
+    # - type of action (will be extended)
+        1 - close dialog with current item return code
+    For this command you need not to set a dialog Id in DL trigger
+part. It affect the active dialog and any item. Example:
+!!DL:C1; - close dialog
+
+  A new trigger is added to control callback actions !?DL. It is
+called when a mouse and keyboard (not supported yet) action is taken
+at any dialog item.
+  Syntax:
+!?DL...;
+  When the trigger is called the next vars are set:
+v998  = Dialog Id
+v999  = Item Id
+v1000 = action
+  Action for now:
+    12 - left mouse button push
+    13 - left mouse button release
+    14 - right mouse button push
+
+  Also to simplify right mouse button info dialog, I extended a bit
+IF:M command. Now it may have three parameters:
+IF:M$/#1/#2
+    $  - variable to receive a reply item
+    #1 - type of the dialog:
+         = 1 - standard Ok
+         = 2 - question Yes/No
+         = 4 - right mouse click info
+         = 7 - choice from two options (not supported yet)
+         = 10- choice from two options with escape (not supported yet)
+
+Notes:
+  # means that only set syntax may be used (direct value or variable)
+  $ means that set/check/get syntax may be used
+  You may show one dialog "from another" and the sequence may be
+unlimited but you may have only ONE dialog of the same type on the
+screen at the same moment. This means that you cannot call a dialog X
+from dialog X.
+
+  Now the template layout.
+  This is a standard Heroes 3 text table file.
+  First two lines are ignored (may be filled with text or left empty)
+  The most left column is also ignored (may be filled with text or
+left empty).
+  The dialog starts with the next line items (in column order):
+0: ignored
+1: '#' sign - means new dialog template starts
+2: xxx number - unique dialog Id
+3: x pos number - X position of left top corner (-1=auto center)
+4: y pos number - Y position of left top corner (-1=auto center)
+5: dx number - hor. size of dialog
+6: dy number - ver. size of dialog
+7: xxx number - number of dialog items (you may have less but not more)
+8: xxx number - player to adjust border color (-1 means current player)
+9: text - background PCX file name
+10: XXX number - Id of text item that is used as hint field
+  Following lines are parsed as dialog items until the next '#' sign
+in the 1st column is found. This may be just an empty line with '#'
+sign or a line with a new dialog start.
+  The most important thing is the first character in the first column.
+The next character is supported for now:
+  ';' commented line - skipped
+  'P' - PCX picture item
+  'D' - DEF cadre picture item
+  'A' - Animated DEF item
+  'B' - Button item (specific DEF)
+  'T' - Text item
+  'S' - Text with vertical scroll bar item
+  'E' - Edited text item
+  'V' - SMK or BIK video item
+
+  'P' - PCX picture item columns:
+0: ignored
+1: 'P'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - PCX file name
+8: flags - a specific value (not known completely yet)
+
+  'D' - DEF cadre picture item columns:
+0: ignored
+1: 'D'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - DEF file name
+8: cadre - an image inside of DEF to show
+9: flags - a specific value (not known completely yet)
+
+  'A' - Animated DEF item columns:
+not supported yet
+
+  'B' - Button item (specific DEF)
+0: ignored
+1: 'B'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - DEF file name
+8: flags - a specific value (not known completely yet)
+
+  'T' - Text item columns:
+0: ignored
+1: 'T'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - text (may be empty and set later)
+8: font - name of font file to show
+9: color - color of text
+10: bkcol - background text color
+11: align - text align
+12: flags - a specific value (not known completely yet)
+
+  'S' - Text with vertical scroll bar item columns:
+0: ignored
+1: 'S'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - text (may be empty and set later)
+8: font - name of font file to show
+9: color - color of text
+10: col2 - color of scrollbar
+11: align - text align
+
+  'E' - Edited text item columns:
+0: ignored
+1: 'E'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+5: dx number - hor. size of item
+6: dy number - ver. size of item
+7: text - text (may be empty and set later)
+8: font - name of font file to show
+
+  'V' - SMK or BIK video item columns:
+0: ignored
+1: 'V'...
+2: xxx number - unique item Id
+3: x pos number - X position in dialog of left top corner
+4: y pos number - Y position in dialog of left top corner
+  Video item is shown over any other existing items, has no hint
+support. It should not go out of a dialog border or you will have
+problems with redrawing.
+  Also you may have only one video per dialog.
+
+  Notes:
+  You may have more than one dialog in one template file.
+  You may not use dialogs with identical Id in different template
+files, every dialog should have its own unique Id. This in particular
+means that we should reserve an Id range for WoG dialogs.
+  Item with number 30721 is a default cancel item. So if a user press
+ESC button when a dialog is shown, it is closed.
+
+  Now an example.
+  Make a test map and put there the next ERM code:
+***********
+ZVSE
+
+!?CM0;
+!!CM:R0;
+!!VRz-1:S^12345.txt^;
+!!DL666:Nz-1S?v1;
+!!IF:M^Dlg Closed, return item is %V1^;
+
+!?DL&v998=666/v999=49/v1000=14;
+!!IF:M0/4/^Right Mouse Pop Up
+Text for Item number 49^;
+
+!?DL&v998=666/v999=30722/v1000=14;
+!!IF:M0/4/^Right Mouse Pop Up
+Text for Item number 30722^;
+
+!?DL&v998=666/v999=35/v1000=13;
+!!DL:C1;
+***********
+  Now at any right mouse click at adventure screen you will see a
+customized dialog. You need to put to DATA folder the attached
+12345.txt file with a dialog template.
+  You see that a pop up hint dialog appear when you use right mouse
+click on a gold icon or "buy boat" button.
+  Also a dialog is closed when you release left mouse button over a
+picture with a water surface.
+
+***********
+  Some modifications.
+  Now if you set the background PCX for a dialog (field number 9) to
+empty string, the background will be built automatically (a similar
+way to standard dialog background).
+  The background will be resized automatically to a desired dialog
+size.
+  In this case the previous field number 8 that means a color of a
+dialog border means not a color (it will be set automatically to
+current player) but a hint field in the bottom part of a dialog. If it
+is 0, there will be no hint field and if it is not 0, the field will
+be shown.
+
+***********
+New item commands for DL:A
+  They may be called in !?DL trigger and so may be used to customize
+the dialog on a fly.
+
+  - set text for text item
+  cmd = 3, par = Z var with text
+  example:
+!!VRz-5:S^Set New Text^; !!DL666:A22/3/z-5;
+
+  - set PCX picture for picture item
+  cmd = 11, par = Z var with text
+!!VRz-5:S^newpcx.pcx^; !!DL666:A33/11/z-5;
+
+  - set displayed cadre in DEF
+  cmd = 4, par = cadre
+!!DL666:A49/4/5;

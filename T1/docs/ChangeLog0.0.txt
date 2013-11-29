@@ -108,22 +108,16 @@ call "continue" one time and it will run. So no calling stack present.
    # = 6, $ = turn length time in ms (get/set/check)
    # = 7, $ = turn length time in s (get/set/check)
   Now how it works.
-  When a player gets control, the current time is stored in "turn
-start time". Then every second the engine checks that:
+  When a player gets control, the current time is stored in "turn start time". Then every second the engine checks that:
   current_time - turn_start_time < turn_length
   If it is false, the turn ends.
-  Now if you go to battle, the timer is paused. At this moment the
-current time is stored in "pause start time".
+  Now if you go to battle, the timer is paused. At this moment the current time is stored in "pause start time".
   Until "pause start time" is not 0, the turn will continue.
-  Hint: to check if the turn paused or not, get "pause start time" and
-if it is 0, the timer runs but if it is 0, the timer is paused.
-  When the timer continues (the battle is finished) "turn start time"
-is modified to reduce spent time for a length of the pause:
+  Hint: to check if the turn paused or not, get "pause start time" and if it is 0, the timer runs but if it is 0, the timer is paused.
+  When the timer continues (the battle is finished) "turn start time" is modified to reduce spent time for a length of the pause:
   turn_start_time = current_time - pause_start_time + turn_start_time
   and pause_start_time is set to 0.
 
-
-  Save is incompatible with the previous T1 save.
 
   To discuss.
   I found a way to show any internal message/request dialog
@@ -149,106 +143,3 @@ before.
 
 3. OB:H returns now 0 for check/get syntax if this object was not set
 before.
-
-4. I added a control over structure building sequence in towns.
-New command CD:B
-  Syntax:
-    B0/town/struct/ENdis - global enanle/disable structure
-    B1/town/struct/$/$ - build dependence
-    B2/town/struct/#/#/#... - build dependence
-    B3/town/struct/$/$ - exclusion dependence
-    B4/town/struct/#/#/#... - exclusion dependence
-  Details:
-    B0/#1/#2/$;
-      Enable/disable #2 structure to build in any towns of #1 type.
-      $ - flag (0=disabled, 1=enabled).
-    B1/#1/#2/$1/$2;
-      #2 structure of town #1 dependencies. Every set bit in $1 (dword
-0) or in $2 (dword 1) means that this structure may be build only when
-a structure represented by this bit is built.
-    Example: $1=0x00000024 means that this structure may be build only
-when Magic Guild Lvl 3 and Tavern both built.
-    B2/#1/#2/#3/#4/#5...
-      Another way to set dependencies (you cannot check or get it with
-this command, use B1 for it).
-    #2 structure of town #1 may be built only when #3, #4, #5...
-structures are built.
-    B3/#1/#2/$1/$2;
-      Exclusive structures. It has the same syntax as B1 but this
-command means that if this structure is built all dependent structures
-will be removed from the town screen. Usually it is used for a
-specific structures like upgraded dwellings (when you build then
-non-upgraded dwellings are removed) and Magic Guild.
-   I do not think that this command is really important but added for
-any case.
-    B4/#1/#2/#3/#4/#5...
-      Another way to set dependencies like in B3. The syntax is
-similar to B2 command.
-  You may use command as instructions.
-
-  Example:
-!#CD:B2/0/0/30/31/37;
-  Make Magic Guild Level1 in Castle depends on Dweling 1, Dwelling 2
-and upgraded Dwelling 1.
-
-  Structures list.
-  I checked the help and found incorrect format (Format U) in my
-version. Perhaps it is yet wrong. So here is the list:
-*******************************
-?  - unknown for me.
-#d - index of dword in CD:B1 and CD:B3
-#b - bit reference in dword #d
-#  - index of structure
-+  - upgraded version or version for upgraded dwelling support
-value in parenthesis is town type indexes
-#d-#b--------#--description
-0  00000001  0  Magic Guild Lvl 1
-0  00000002  1  Magic Guild Lvl 2
-0  00000004  2  Magic Guild Lvl 3
-0  00000008  3  Magic Guild Lvl 4
-0  00000010  4  Magic Guild Lvl 5,?(6,7)
-0  00000020  5  Tavern
-0  00000040  6  Shipyard(0,4,7,8),?(1,2,3,5,6)
-0  00000080  7  Fort
-0  00000100  8  Citadel
-0  00000200  9  Castle
-0  00000400 10  Village
-0  00000800 11  Town Hall
-0  00001000 12  City Hall
-0  00002000 13  Capitol
-0  00004000 14  Marketplace
-0  00008000 15  Resource Silo
-0  00010000 16  Blacksmith
-0  00020000 17  Lighthouse(0),Mystic Pond(1),Artifact Merchants(2,5,8),?(3),Cover of Darkness(4),Escape Tunnel (6),Cage of
-Warlords(7)
-0  00040000 18  Griffin Bastion(0),Miner's Guild(1),Sculptor's Wings(2),Birthing Pools(3),Unearthed Graves(4),Mushroom
-Rings(5),Mess Hall(6),Captain's Quarters(7),Garden of Life(8)
-0  00080000 19  Griffin Bastion+(0),Miner's Guild+(1),Sculptor's Wings+(2),Birthing Pools+(3),Unearthed
-Graves+(4),Mushroom Rings+(5),Mess Hall+(6),Captain's Quarters+(7),Garden of Life+(8)
-0  00100000 20  ?(0,1,2,3,4,5,6,7,8)
-0  00200000 21  Stables(0),Fountain of Fortune(1),Lookout Tower(2),Brimstone Storm clouds(3),Necromancy amplifier(4),Mana
-Vortex(5),Freelance Guild (6),Glyphs of Fear(7),Magic University(8)
-0  00400000 22  Brotherhood of the Sword(0),Treasure(1),Library(2),Castle Gate(3),Skeleton Transformer(4),Portal of
-Summoning(5),Ballista Yard(6),Blood Obelisk(7),?(8)
-0  00800000 23  ?(0,1,4,7,8),Wall of Knowledge(2),Order of Fire(3),Battle Scholar Academy(5),Hall of Valhala(6)
-0  01000000 24  ?(0,2,4,5,6,7,8),Dendroid Saplings(1),Cages(3)
-0  02000000 25  ?(0,2,4,5,6,7,8),Dendroid Saplings+(1),Cages+(3)
-0  04000000 26  Grail
-0  08000000 27  ?(x)
-0  10000000 28  ?(x)
-0  20000000 29  ?(x)
-0  40000000 30  Dwelling 1
-0  80000000 31  Dwelling 2
-1  00000001 32  Dwelling 3
-1  00000002 33  Dwelling 4
-1  00000004 34  Dwelling 5
-1  00000008 35  Dwelling 6
-1  00000010 36  Dwelling 7
-1  00000020 37  Dwelling 1+
-1  00000040 38  Dwelling 2+
-1  00000080 39  Dwelling 3+
-1  00000100 40  Dwelling 4+
-1  00000200 41  Dwelling 5+
-1  00000400 42  Dwelling 6+
-1  00000800 43  Dwelling 7+
-*******************************

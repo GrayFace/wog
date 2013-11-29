@@ -1,0 +1,241 @@
+9. I added a control over structure building sequence in towns.
+New command CD:B
+  Syntax:
+    B0/town/struct/ENdis - global enable/disable structure
+    B1/town/struct/$/$ - build dependence
+    B2/town/struct/#/#/#... - build dependence
+    B3/town/struct/$/$ - exclusion dependence
+    B4/town/struct/#/#/#... - exclusion dependence
+  Details:
+    B0/#1/#2/$;
+      Enable/disable #2 structure to build in any towns of #1 type.
+      $ - flag (0=disabled, 1=enabled).
+    B1/#1/#2/$1/$2;
+      #2 structure of town #1 dependencies. Every set bit in $1 (dword 0) or in $2 (dword 1) means that this structure may be build only when a structure represented by this bit is built.
+    Example: $1=0x00000024 means that this structure may be build only when Magic Guild Lvl 3 and Tavern both built.
+    B2/#1/#2/#3/#4/#5...
+      Another way to set dependencies (you cannot check or get it with this command, use B1 for it).
+    #2 structure of town #1 may be built only when #3, #4, #5...structures are built.
+    B3/#1/#2/$1/$2;
+      Exclusive structures. It has the same syntax as B1 but this command means that if this structure is built all dependent structures will be removed from the town screen. Usually it is used for a specific structures like upgraded dwellings (when you build then non-upgraded dwellings are removed) and Magic Guild.
+   I do not think that this command is really important but added for any case.
+    B4/#1/#2/#3/#4/#5...
+      Another way to set dependencies like in B3. The syntax is similar to B2 command.
+  You may use command as instructions.
+
+  Example:
+!#CD:B2/0/0/30/31/37;
+  Make Magic Guild Level1 in Castle depends on Dwelling 1, Dwelling 2 and upgraded Dwelling 1.
+
+  Structures list.
+  I checked the help and found incorrect format (Format U) in my version. Perhaps it is yet wrong. So here is the list:
+*******************************
+?  - unknown for me.
+#d - index of dword in CD:B1 and CD:B3
+#b - bit reference in dword #d
+#  - index of structure
++  - upgraded version or version for upgraded dwelling support
+value in parenthesis is town type indexes
+#d-#b--------#--description
+0  00000001  0  Magic Guild Lvl 1
+0  00000002  1  Magic Guild Lvl 2
+0  00000004  2  Magic Guild Lvl 3
+0  00000008  3  Magic Guild Lvl 4
+0  00000010  4  Magic Guild Lvl 5,?(6,7)
+0  00000020  5  Tavern
+0  00000040  6  Shipyard(0,4,7,8),?(1,2,3,5,6)
+0  00000080  7  Fort
+0  00000100  8  Citadel
+0  00000200  9  Castle
+0  00000400 10  Village
+0  00000800 11  Town Hall
+0  00001000 12  City Hall
+0  00002000 13  Capitol
+0  00004000 14  Marketplace
+0  00008000 15  Resource Silo
+0  00010000 16  Blacksmith
+0  00020000 17  Lighthouse(0),Mystic Pond(1),Artifact Merchants(2,5,8),?(3),Cover of Darkness(4),Escape Tunnel (6),Cage of Warlords(7)
+0  00040000 18  Griffin Bastion(0),Miner's Guild(1),Sculptor's Wings(2),Birthing Pools(3),Unearthed Graves(4),Mushroom Rings(5),Mess Hall(6),Captain's Quarters(7),Garden of Life(8)
+0  00080000 19  Griffin Bastion+(0),Miner's Guild+(1),Sculptor's Wings+(2),Birthing Pools+(3),Unearthed Graves+(4),Mushroom Rings+(5),Mess Hall+(6),Captain's Quarters+(7),Garden of Life+(8)
+0  00100000 20  ?(0,1,2,3,4,5,6,7,8)
+0  00200000 21  Stables(0),Fountain of Fortune(1),Lookout Tower(2),Brimstone Storm clouds(3),Necromancy amplifier(4),Mana Vortex(5),Freelance Guild (6),Glyphs of Fear(7),Magic University(8)
+0  00400000 22  Brotherhood of the Sword(0),Treasure(1),Library(2),Castle Gate(3),Skeleton Transformer(4),Portal of Summoning(5),Ballista Yard(6),Blood Obelisk(7),?(8)
+0  00800000 23  ?(0,1,4,7,8),Wall of Knowledge(2),Order of Fire(3),Battle Scholar Academy(5),Hall of Valhalla(6)
+0  01000000 24  ?(0,2,4,5,6,7,8),Dendroid Saplings(1),Cages(3)
+0  02000000 25  ?(0,2,4,5,6,7,8),Dendroid Saplings+(1),Cages+(3)
+0  04000000 26  Grail
+0  08000000 27  ?(x)
+0  10000000 28  ?(x)
+0  20000000 29  ?(x)
+0  40000000 30  Dwelling 1
+0  80000000 31  Dwelling 2
+1  00000001 32  Dwelling 3
+1  00000002 33  Dwelling 4
+1  00000004 34  Dwelling 5
+1  00000008 35  Dwelling 6
+1  00000010 36  Dwelling 7
+1  00000020 37  Dwelling 1+
+1  00000040 38  Dwelling 2+
+1  00000080 39  Dwelling 3+
+1  00000100 40  Dwelling 4+
+1  00000200 41  Dwelling 5+
+1  00000400 42  Dwelling 6+
+1  00000800 43  Dwelling 7+
+*******************************
+
+The internal structure keeps a two 32 bit values (that you can set or get with B1 command) and ever y bit there means one structure. Then if the bit is set, the structure may be built only after that structure (that bit is set). If the bit is 0, there is not dependence.
+  So all mentioned in B2 structure bits are set to 1. Others are set to 0. If you want to modify the existing sequence, you need to use B1/?$/?$ syntax to get values, set or remove bits that you want and use B1/$/$ to set it back.
+  Also, if you make this structure depends on X structure and X structure in its turn depends on Y structure, so this structure will depends not only on X but also on Y structure and you need not to set Y structure in the command.
+
+ To reset all dependencies you need to use an "empty" syntax like this:
+!!CD:B2/town/struct;
+  You see there is no parameters and thus all will be reset to 0, so the structure does not depend on any other structure.
+  Then, perhaps, it was not clear but you can use up to 14 dependencies. The syntax keeps ... that means that you can more
+parameters like this:
+!!CD:B2/0/10/20/15/26/11/4/2/8;
+
+10. New command.
+  !!IF:L - add a string to a screen log.
+  Syntax:
+  !!IF:L^Message^; - direct
+  !!IF:L$; - Z variable.
+    You may use standard Z vars (z1...z1000),
+    local z vars (z-1...z-10) and
+    static z vars (Z1001...)
+  Comment.
+    It looks as though you press Tab, type a message and press Enter.
+    The message pops up a previous message.
+    You have up to 20 message on the screen.
+    Every message stays on the screen for 20 seconds.
+    It may work at adventure screen and in a battle.
+    When you go to a battle or from a battle, the message should left
+on the screen.
+
+11. New trigger.
+  !?TL#; timer call
+  # = 0 - period of call 1 second
+  # = 1 - period of call 2 seconds
+  # = 2 - period of call 5 seconds
+  # = 3 - period of call 10 seconds
+  # = 4 - period of call 60 seconds
+    Timer is periodically called.
+  Comment.
+    To see how it works, you can use the next ERM code:
+!?TL0;
+!!IF:L^Tick 1 sec^;
+!?TL1;
+!!IF:L^Tick 2 sec^;
+!?TL2;
+!!IF:L^Tick 5 sec^;
+!?TL3;
+!!IF:L^Tick 10 sec^;
+!?TL4;
+!!IF:L^Tick 60 sec^;
+
+
+12.  Now you have if-else-endif functionality.
+
+  To start IF section use the next receiver/instruction:
+!!if&condition:;
+  Note that 'if' is in lower case.
+  Condition is a standard AND and OR condition that you use now in any receiver. If during a script execution the condition evaluation is TRUE, the followed section is executed. If it is FALSE, the followed section is skipped until ELSE section begins or ENDIF found. Note that the ELSE section is optional and the ELSE part only occurs if the original IF condition is false.
+
+  To start ELSE section use the next receiver/instruction:
+!!el:;
+  'el' is in lower case.
+  No condition is evaluated even if present so this is unconditionally executed (if the original IF condition is false).
+  ELSE section always expects IF part and linked to the latest found in the script IF.
+
+  To end IF or IF-ELSE section use the next receiver/instruction:
+!!en:;
+  'en' is in lower case.
+  No condition is evaluated even if present so this is unconditionally executed.
+  ENDIF section always expects IF part or IF_ELSE part and linked to the latest found in the script IF or IF-ELSE.
+
+  You may use included IF-ELSE-ENDIF sections but not deeper than 10 levels.
+  Every trigger (and thus function) has its own set of IF-ELSE-ENDIF and so may have up to 10 levels of included IF-ELSE-ENDIF.
+  When you call a function the caller IF-ELSE-ENDIF state stays active, so when you are back the local IF-ELSE-ENDIF set is used again (a similar way as local function variables).
+
+  Example:
+ZVSE
+
+!?HM-1;
+!!VRv10:S5;
+!!if&v10=5:;
+    !!IF:M^First IF^;
+    !!VRv10:S10;
+    !!if&v10<>10:;
+        !!IF:M^Second IF^;
+    !!el:;
+        !!IF:M^Second ELSE^;
+    !!en:;
+    !!IF:M^Second IF finished^;
+!!el:;
+    !!IF:M^First ELSE^;
+    !!VRv10:S99;
+    !!if&v10=99:;
+        !!IF:M^Third IF^;
+    !!el:;
+        !!IF:M^Third ELSE^;
+    !!en:;
+    !!IF:M^Third IF finished^;
+!!en:;
+!!IF:M^First IF finished^;
+
+  You should see the next messages:
+First IF
+Second ELSE
+Second IF finished
+First IF finished
+
+
+13.   The ERM parser searches for a specific sequences like !?,!#,!!. So if you use something like this: "!!!!!!!!!!!!!!!!", it loads the parser with extra work. To help script writers avoid this problem, an error check has been added that will alert you to these sequences so you can remove them.
+
+14. New command HE:R7/$.
+
+In most cases, setting or clearing these bits won't change Luck, Morale, movement or spell points--they only set (or clear) the record of whether the hero has already visited a given type of structure in a given period, e.g., this week, for next battle, etc. However, it will set or clear any text associated with these structure if you click on the hero's Luck or Morale in the hero screen (e.g., "Temple Visited +1"), but you'll still have to set the hero's temporary Luck or Morale with the HE:R0 and HE:R1 commands.
+
+  $ - modifiers word.
+  Bits:
+  00000001 = 1 MAGIC WELL
+  00000002 = 2 stable
+  00000004 = 4 BOUY
+  00000008 = 8 swan pond
+  00000010 = 16 IDOL OF FORTUNE (DAY 1-6)
+  00000020 = 32 fountain of fortune  (-1 LUCK)
+  00000040 = 64 WATERING HOLE
+  00000080 = 128 oasis
+  00000100 = 256 TEMPLE (DAY 1-6)
+  00000200 = 512 SHIPWRECK
+  00000400 = 1024 CRYPT
+  00000800 = 2048 DERELICT SHIP
+  00001000 = 4096 PYRAMID
+  00002000 = 8192 faerie ring
+  00004000 = 16384 FOUNTAIN OF YOUTH
+  00008000 = 32768 MERMAID
+  00010000 = 65536 RALLY FLAG
+  00020000 = 131072 ? (NO IDEA)
+  00040000 = 262144 in a boat (ONLY SET THIS IF HERO IS ON WATER OR IT CRASHES)
+  00080000 = 524288 ? (NO IDEA)
+  00100000 = 1048576 SIRENS
+  00200000 = 2097152 Warrior's Tomb
+  00400000 = 4194304 Maximum Luck (the same as HE:R6)
+  00800000 = 8388608 Maximum Moral (the same as HE:R5)
+  01000000 = 16772216 WOGSHADOWFAX (THIS RESETS MOVE TO ONE MILLION EACH TURN)
+  02000000 = 33554432 IDOL OF FORTUNE (DAY 7)
+  04000000 = 67108864 TEMPLE (DAY 7)
+  08000000 = 134217728 +1 LUCK FOUNTAIN OF FORTUNE
+  10000000 = 268435456 +2 LUCK FOUNTAIN OF FORTUNE
+  20000000 = 536870912 +3 LUCK FOUNTAIN OF FORTUNE
+  (38000000 = 939524096 mask for a type of fountain of fortune, total of the three values above)
+
+
+Slava writes;  I think it is correct for THIS current day. If you set a "affect a few days" like a Stable, I think the effect will be applied automatically on every next day until the effect ends up.
+
+17. New UN:J11 command (instruction or receiver)
+  UN:J11/$
+    $ is a flag that allows to stay on a battle screen a right mouse
+click stack info dialog (0, default) or work a standard way like in
+SoD (1).
+  This flag is stored in saved game, so you can set it once per a
+game.
