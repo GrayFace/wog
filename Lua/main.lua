@@ -108,6 +108,7 @@ local _G = _G
 local internal = debug.getregistry()
 local mem_internal = mem
 local CoreScriptsPath = internal.CoreScriptsPath
+ModsPath = internal.ModsPath
 
 internal.traceback = debug.traceback
 

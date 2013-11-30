@@ -139,7 +139,7 @@ local CURRENT, INFO = -1, 0
 
 local function CreateModDefs(mod)
 	OptionMods[mod] = {}
-	OptionDefs[mod..".Enabled"] = {Name = "Enabled", Text = mod}
+	OptionDefs[mod..".Enabled"] = {Name = "Enabled", Text = mod, On = true}
 end
 
 local function LoadDefsFile(mod, fname)
@@ -176,6 +176,7 @@ local function LoadDefsFile(mod, fname)
 			-- do nothing
 		elseif t.Name == "Enabled" then
 			OptionDefs[mod..".Enabled"] = t
+			t.On = true
 		elseif NotGroup(t, "^category:(.*)", Cats) and NotGroup(t, "^group:(.*)", NeedCur(Cats)) then
 			local group = NeedCur(NeedCur(Cats))
 			local name = modPt..t.Name
