@@ -1618,11 +1618,7 @@ int BinTree_Add = 0x55DDF0;
 
 static void __fastcall OnLoadDef(char *name)
 {
-	strcpy_s(LastLoadedDefName, 16, name);
-	//adduserlog(Format("%s %d", name, GetTickCount()));
-	//if (strcmpi(name, "AVWmrnd0.def") == 0)
-	//	__asm{xor eax,eax
-	//	mov eax, [eax]}
+	strncpy(LastLoadedDefName, name, sizeof(LastLoadedDefName) - 1);
 }
 
 __declspec(naked) void _OnLoadDef()

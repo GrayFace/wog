@@ -23,7 +23,7 @@ target.internal = debug.getregistry()
 local SodExe
 local FuncsList
 
-function _G.FR(p, p1, start, stop)
+function global.FR(p, p1, start, stop)
 	SodExe = SodExe or io.LoadString(internal.CoreScriptsPath.."../Build/heroes3.ex_")
 	FuncsList = FuncsList or require("FuncsList.lua").Funcs
 	p1 = p1 or p + 1

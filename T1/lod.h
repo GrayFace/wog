@@ -6,24 +6,28 @@
 
 class Lod{
 //    Byte LodInternal[0x190];
-		int     Ind;
+		int Ind;
 
 		int LoadIt(void);
 		void ReloadItems();
 	public:
-	 int     Location;
-	 char    Name[32];
-	 Lod        *Next;
-	 static Lod *First;
+		int Kind;
+		int Location;
+		char Name[32];
+		Lod *Next;
+		static Lod *First;
 
-		Lod(int location,char *name);
+		Lod(int location, char *name, int kind);
 		~Lod();
-		static int  LoadCustomLOD(int location,char *name);
+		static int  LoadCustomLOD(int location, char *name, int kind);
 		static void UnloadCustomLOD(int ind);
+
+		static const int STORED = 0;
+		static const int TEMP = 1;
+		static const int PERM = 2;
 };
 
 #define LODNUM 1000
-extern int LastInd;
 extern Byte LodTable[LODNUM][0x190];
 
 class LodTypes{

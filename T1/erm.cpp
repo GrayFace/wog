@@ -2190,7 +2190,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 					{ char *d;
 						if(Num!=2){ MError("\"!!UN:J3\"-wrong number of parameters."); RETURN(0) }
 						if(Mp->n[1]!=0){ // аргумент - z var
-							if(Apply(&v,4,Mp,1)) break;
+							if(Apply(&v,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
 							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J3\"- z var out of range (-10...-1,1...1000+)."); RETURN(0) }
 							d=GetErmString(v);
 						}else{ // аргумент - ^текст^
@@ -2230,9 +2230,9 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 				case 8: // J8/#(modifier)/#(z var) or J8/#/^text^ set flag 1 - if file exists
 					{ char *d;
 						if(Num!=3){ MError("\"!!UN:J8\"-wrong number of parameters."); RETURN(0) }
-						if(Apply(&t,4,Mp,1)) break;
+						if(Apply(&t,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
 						if(Mp->n[2]!=0){ // аргумент - z var
-							if(Apply(&v,4,Mp,2)) break;
+							if(Apply(&v,4,Mp,2)){ EWrongSyntax(); RETURN(0) }
 							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J8\"- z var out of range (-10...-1,1...1000+)."); RETURN(0) }
 							d=GetErmString(v);
 						}else{ // аргумент - ^текст^
@@ -2245,9 +2245,9 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 				case 9: // J9/#(modifier)/#(z var) - get path to z var
 					{ char *d;
 						if(Num!=3){ MError("\"!!UN:J9\"-wrong number of parameters."); RETURN(0) }
-						if(Apply(&t,4,Mp,1)) break;
+						if(Apply(&t,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
 						if(Mp->n[2]!=0){ // аргумент - z var
-							if(Apply(&v,4,Mp,2)) break;
+							Apply(&v,4,Mp,2);
 							if(BAD_INDEX_LZ(v)||(v>1000)){ MError("\"!!UN:J9\"- z var out of range (-10...-1,1...1000)."); RETURN(0) }
 							d = GetPureErmString(v);
 						}else{ // аргумент - ^текст^
@@ -2273,7 +2273,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 							mov   MapName,eax
 						}
 						if(Mp->n[1]!=0){ // аргумент - z var
-							if(Apply(&v,4,Mp,1)) break;
+							Apply(&v,4,Mp,1);
 							if(GetPureErmString(d, v)) RETURN(0)
 						}else{ // аргумент - ^текст^
 							MError("\"!!UN:J12\"- must be z var."); 
@@ -2767,7 +2767,7 @@ int ERM_Variable(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			}
 			CHECK_ParamsMin(2);
 			ind=GetVarVal(vnp);
-			if(ind>1000){ MError("\"!!VR:M\"- z var out of range (-10...-1,1...1000)."); RETURN(0) }
+			if(BAD_INDEX_LZ(ind)||ind>1000){ MError("\"!!VR:M\"- z var out of range (-10...-1,1...1000)."); RETURN(0) }
 			if(GetPureErmString(d, ind)) RETURN(0)
 			switch(Mp->n[0]){
 				case 1: // взять подстроку из z2 с #3 длинной #4

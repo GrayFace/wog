@@ -649,12 +649,6 @@ static int ERM_CheckWogify(lua_State *L)
 	return 1;
 }
 
-//static int ERM_LoadERS(lua_State *L)
-//{
-//	LoadERSfile(luaL_checkstring(L, 1), luaL_checkint(L, 2));
-//	return 0;
-//}
-
 //-------- Messages ---------
 
 int PanicMessage(lua_State *L)
@@ -792,8 +786,9 @@ typedef struct MY_WIN32_FIND_DATA
 
 static int LuaFindStart(lua_State *L)
 {
-	char file[MAX_PATH + 1];
-	strcpy_s(file, sizeof(file), ToString(L, 1));
+	char file[MAX_PATH];
+	strncpy(file, ToString(L, 1), sizeof(file) - 1);
+	file[sizeof(file) - 1] = 0;
 	DWORD attr = (lua_toboolean(L, 2) ? FILE_ATTRIBUTE_DIRECTORY : 0);
 	lua_settop(L, 0);
 

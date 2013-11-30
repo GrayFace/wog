@@ -52,6 +52,7 @@ local path_find = path.find
 local path_setext = path.setext
 local path_addslash = path.addslash
 local path_name = path.name
+local path_dir = path.dir
 local io_LoadString = io.LoadString
 local call = mem.call
 local pchar = mem.pchar
@@ -471,12 +472,13 @@ local function LoadAllERT()
 	end
 end
 
-local function FromFileERM(path)
+local function FromFileERM(path, mod)
 	local ok, s = pcall2(io_LoadString, path)
 	if ok and internal.ERM_CheckScript(topointer(s), #s) then
 		return {
 			internal.ERM_DynString(topointer(s), #s),  -- str index
 			path,  -- name for error messages
+			mod,  -- mod name
 			erm = true
 		}
 	end
@@ -486,21 +488,11 @@ local function LoadAllERM()
 	local nstored = #StoredScripts
 	for _, t in ipairs(ErmFolders) do
 		for _, name in ipairs(t) do
-			StoredScripts[#StoredScripts + 1] = FromFileERM(name)
+			StoredScripts[#StoredScripts + 1] = FromFileERM(name, t.mod)
 		end
 	end
 	LoadStoredScripts(nstored + 1)
 end
-
--- function internal.LoadAllERS()
-	-- local i = 0
-	-- for _, t in ipairs(ErsFolders) do
-		-- for _, s in ipairs(t) do
-			-- internal.LoadERS(s, i)
-			-- i = i + 1
-		-- end
-	-- end
--- end
 
 
 local EventNames = {}
@@ -526,7 +518,8 @@ local function LoadMapScript(evtName, evt)
 		t = {
 			internal.ERM_DynString(u4[ptext], i4[ptext + 4]),  -- str index
 			"["..evtName.."]",  -- name for error messages
-			erm = true
+			-- no mod name
+			erm = true,
 		}
 	end
 	if t then
@@ -599,7 +592,7 @@ function internal.EnterMap(Loaded)
 	end
 end
 
---------------------------- ERM Errors -------------------------
+--------------------------- ERM Scripts Info -------------------------
 
 local function FindERMScriptInfo(pos)
 	for _, t in ipairs(StoredScripts) do
@@ -629,4 +622,10 @@ function internal.ERMErrorInfo(pos, OneLine)
 		return format(fmt, t[2], n, str)
 	end
 	return str
+end
+
+function internal.GetERMFolder(pos)
+	local t = FindERMScriptInfo(pos)
+	local s = t and t[3]
+	return s and internal.ModsPath..s.."\\ERM\\" or ""
 end

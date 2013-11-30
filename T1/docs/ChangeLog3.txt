@@ -13,6 +13,6 @@ Build 4
 [+] Def frames aren't put into global cache now (that is, 2 defs can have identical frame names).
 [+] The game no longer consumes a full CPU core. (Build 4.1)
 [+] Custom LODs: All def/pcx files get updated no matter what. (Build 4.1)
-[-] SoD bug: Rear crash on map start related to tavern rumors. (Build 4.2)
-[-] Dialog with multiple radio buttons didn't scroll to selected item properly. (Build 4.2)
+[-] SoD bug: Rear crash on map start, related to tavern rumors. (Build 4.2)
 [+] No need for filelist.txt in custom lods anymore. (Build 4.2)
+[+] LD:T - load temporary. Same as LD:L, but LOD name is not stored in savegame and it's not automatically reloaded. (Build 4.3)

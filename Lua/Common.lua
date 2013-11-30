@@ -39,7 +39,6 @@ local bit_And = mem.bit_And
 local bit_Xor = mem.bit_Xor
 local bit_AndNot = mem.bit_AndNot
 local dofile = dofile
-local getinfo = debug.getinfo
 
 local _G = _G
 local internal = debug.getregistry() -- internals

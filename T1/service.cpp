@@ -1635,8 +1635,11 @@ char *GetFolder(int Mod)
 			strncat(FullPath,"GAMES\\",_MAX_PATH);
 			break;
 		case 5: // in Script folder
-			//strncat(FullPath,"DATA\\S\\",_MAX_PATH);
-			strncat(FullPath,"MODS\\WOG\\ERM\\",_MAX_PATH);  // !!!
+			LuaCallStart("GetERMFolder");
+			lua_pushnumber(Lua, (Dword)ErrStringPo);
+			LuaPCall(1, 1);
+			strcpy_s(FullPath, lua_tostring(Lua, -1));
+			lua_pop(Lua, 1);
 			break;
 		case 6: // in Resource folder
 			strncat(FullPath,"DATA\\P\\",_MAX_PATH);

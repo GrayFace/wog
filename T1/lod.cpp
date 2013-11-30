@@ -27,7 +27,8 @@ int LodTypes::Seq[4][3][LODNUM]={
 	{{1,3},{0,2},{1,0}}
 };
 
-int LastInd=8;
+int FreeInd=8;
+int NextInd[LODNUM];
 Byte LodTable[LODNUM][0x190];
 
 #define SOD_LOD_ctor(lod,LODFilename) (((int (__fastcall *)(Byte*,int,char *))0x559420)(lod,0,LODFilename))
@@ -53,24 +54,14 @@ Byte LodTable[LODNUM][0x190];
 
 Lod *Lod::First=0;
 
-Lod::Lod(int location,char *name){
+Lod::Lod(int location, char *name, int kind){
 	Ind=-1;
 	STARTNA(__LINE__, 0)
+	Kind = kind;
 	Location=location;
-	if(name==0){ 
-		Name[0]=0; 
-		TError("No name for LOD");
-		RETURNV
-	}
 	strncpy(Name,name,31); Name[31]=0;
-	Ind=LastInd;
-	if(Ind>=LODNUM){ 
-		TError("Too many loaded LODs");
-		RETURNV
-	}
+	Ind=FreeInd;
 	memset(LodTable[Ind],0,0x190);
-//  void (__fastcall *ctor)(Byte *lodthis,int,char *lodname); *(Dword *)&ctor=0x559420;
-//  ctor(LodTable[Ind],0,Name);
 	SOD_LOD_ctor(LodTable[Ind],Name);
 	Next=First;
 	First=this;
@@ -81,7 +72,8 @@ Lod::Lod(int location,char *name){
 			ret,Name);
 		TError(buf);
 	} else {
-		LastInd++;
+		FreeInd = NextInd[Ind];
+		if (FreeInd == 0) FreeInd = Ind + 1;
 		ReloadItems();
 	}
 	RETURNV
@@ -90,17 +82,10 @@ Lod::Lod(int location,char *name){
 Lod::~Lod(){
 	STARTNA(__LINE__, 0)
 	if(Ind<0 || LodTypes::Del4List(Ind)) RETURNV
+	NextInd[Ind] = FreeInd;
+	FreeInd = Ind;
 	ReloadItems();
 	SOD_LOD_dtor(LodTable[Ind],Name);
-	Lod *cur=First,*prev=0;
-	while(cur!=0){
-		if(cur==this){
-			if(prev==0) First=Next;
-			else prev->Next=Next;
-			break;
-		}
-		prev=cur; cur=Next;
-	}
 	RETURNV
 }
 
@@ -124,40 +109,6 @@ void Lod::ReloadItems()
 	for(; n > 0; n--, name += 32)
 		LodTypes::ReloadItem(name);
 	RETURNV
-}
-
-int LodTypes::Add2List(int ind){
-	STARTNA(__LINE__, 0)
-	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to add"); RETURN(-1); }
-	for(int i=0;i<4;i++){
-		for(int j=0;j<2;j++){
-			int  n=Table[i][j].Num; 
-			int *t=Table[i][j].Inds;
-			if(n>=LODNUM){ Del4List(ind); TError("Too many LODs"); RETURN(-2); }
-			for(int k=n;k>0;k--){ t[k]=t[k-1];}
-			t[0]=ind; Table[i][j].Num++;
-		}
-	}
-	RETURN(0)  
-}
-int LodTypes::Del4List(int ind){
-	STARTNA(__LINE__, 0)
-	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to del"); RETURN(-3); }
-	for(int i=0;i<4;i++){
-		for(int j=0;j<2;j++){
-			int  n=Table[i][j].Num; 
-			int *t=Table[i][j].Inds;
-			for(int k=0;k<n;k++){ 
-				if(t[k]==ind){ // found
-					for(int l=k+1;l<n;l++) t[l-1]=t[l];
-					t[n-1]=0;
-					Table[i][j].Num--;
-					break;
-				}
-			}
-		}
-	}
-	RETURN(0)  
 }
 
 static int BinTree_FindItem(char *name)
@@ -217,9 +168,52 @@ void LodTypes::ReloadItem(char *name){
 }
 
 //////////////////////////////
-int Lod::LoadCustomLOD(int location,char *name){
+int LodTypes::Add2List(int ind){
 	STARTNA(__LINE__, 0)
-	Lod *lp=new Lod(location,name);
+	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to add"); RETURN(-1); }
+	for(int i=0;i<4;i++){
+		for(int j=0;j<2;j++){
+			int  n=Table[i][j].Num; 
+			int *t=Table[i][j].Inds;
+			if(n>=LODNUM){ Del4List(ind); TError("Too many LODs"); RETURN(-2); }
+			for(int k=n;k>0;k--){ t[k]=t[k-1];}
+			t[0]=ind; Table[i][j].Num++;
+		}
+	}
+	RETURN(0)  
+}
+int LodTypes::Del4List(int ind){
+	STARTNA(__LINE__, 0)
+	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to del"); RETURN(-3); }
+	for(int i=0;i<4;i++){
+		for(int j=0;j<2;j++){
+			int  n=Table[i][j].Num; 
+			int *t=Table[i][j].Inds;
+			for(int k=0;k<n;k++){ 
+				if(t[k]==ind){ // found
+					for(int l=k+1;l<n;l++) t[l-1]=t[l];
+					t[n-1]=0;
+					Table[i][j].Num--;
+					break;
+				}
+			}
+		}
+	}
+	RETURN(0)  
+}
+
+//////////////////////////////
+int Lod::LoadCustomLOD(int location, char *name, int kind){
+	STARTNA(__LINE__, 0)
+	if(name==0){ 
+		TError("No name for LOD");
+		RETURN(-1)
+	}
+	if(FreeInd>=LODNUM){ 
+		TError("Too many loaded LODs");
+		RETURN(-1)
+	}
+	Lod *lp=new Lod(location, name, kind);
 	RETURN(lp->Ind);
 }
 
@@ -227,18 +221,24 @@ void Lod::UnloadCustomLOD(int ind){
 	STARTNA(__LINE__, 0)
 	Lod **lp = &First;
 	while(Lod *l = *lp){
-		if(l->Ind==ind){ *lp = l->Next; delete l; break; }
+		if(l->Ind==ind){
+			*lp = l->Next;
+			delete l;
+			break;
+		}
 		lp = &l->Next;
 	}
 	RETURNV
 }
 
+//////////////////////////////
 int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 {
 	STARTNA(__LINE__, 0)
 	switch(Cmd){
 		case 'L': // 3.59 L$1 [var to store index]/$2/$3[z var with name]
-		 { 
+		case 'T': // 3.59 T - temporary LOD, not stored in savegame
+		{
 			int loc=0,ind=-1;
 			Apply(&ind,4,Mp,0);
 			char *name="undefined";
@@ -248,17 +248,18 @@ int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			else if(Mp->n[2]>0) name=ERM2String(ERMString[Mp->n[2]-1],1,0);
 			else name=ERM2String(ERMLString[-Mp->n[2]-1],1,0);
 			Apply(&loc,4,Mp,1);
-			ind=Lod::LoadCustomLOD(loc,name);
+			if(loc==5){ MError2("script folder can't be supplied as LOD base location"); RETURN(0) }
+			ind = Lod::LoadCustomLOD(loc, name, (Cmd == 'L' ? Lod::STORED : Lod::TEMP));
 			Apply(&ind,4,Mp,0);
 			break;
-		 }
+		}
 		case 'U': // 3.59 U$1 [loaded lod index]
-		 {
+		{
 			int ind=-1;
 			Apply(&ind,4,Mp,0);
 			Lod::UnloadCustomLOD(ind);
 			break;
-		 }
+		}
 		default: EWrongCommand(); RETURN(0)
 	}
 	RETURN(1)
@@ -269,14 +270,15 @@ int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 int ResetLODs(void){
 	// unload extra LODs
 	STARTNA(__LINE__, 0)
-	Lod *lod=Lod::First;
-	while(lod!=0){
-		Lod *item=lod;
-		lod=lod->Next;
-		delete item;
+	Lod **lp = &Lod::First;
+	while(Lod *l = *lp){
+		if(l->Kind != Lod::PERM){
+			*lp = l->Next;
+			delete l;
+		}else{
+			lp = &l->Next;
+		}
 	}
-	LastInd=8;
-	Lod::First=0;
 	RETURN(0)
 }
 
@@ -298,7 +300,7 @@ int LoadLODs(int /*ver*/)
 		ar[i].n[31]=0;
 	}
 	for(int i = num - 1; i > 0; i--){
-		Lod::LoadCustomLOD(ar[i].l, ar[i].n);
+		Lod::LoadCustomLOD(ar[i].l, ar[i].n, Lod::STORED);
 	}
 	delete ar;
 	RETURN(0)
@@ -306,16 +308,18 @@ int LoadLODs(int /*ver*/)
 
 int SaveLODs(void){
 	STARTNA(__LINE__, 0)
-	if(Saver("LOD0",4)) RETURN(1)
-	int Num=LastInd-8;
+	if(Saver("LOD0",4)) RETURN(1);
+	int Num = 0;
+	for (Lod* lod = Lod::First; lod; lod = lod->Next)
+		if (lod->Kind == Lod::STORED)
+			Num++;
 	if(Saver(&Num,sizeof(int))) RETURN(1)
 	if(Num==0) RETURN(0)
-	Lod *lod=Lod::First;
-	while(lod!=0){
-		Lod *item=lod;
-		lod=lod->Next;
-		if(Saver(&item->Location,sizeof(int))) RETURN(1)
-		if(Saver(&item->Name,32)) RETURN(1)
+	for (Lod* lod = Lod::First; lod; lod = lod->Next){
+		if (lod->Kind == Lod::STORED){
+			if(Saver(&lod->Location,sizeof(int))) RETURN(1)
+			if(Saver(&lod->Name,32)) RETURN(1)
+		}
 	}
 	RETURN(0)
 }
