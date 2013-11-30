@@ -10908,7 +10908,7 @@ int MainMenuERMResetDone = 1;
 void ResetERMMainMenu()
 {
 	if (MainMenuERMResetDone) return;
-	ResetAll();
+	ResetAll(0);
 	MainMenuERMResetDone = 1;
 }
 

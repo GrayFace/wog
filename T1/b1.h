@@ -41,4 +41,4 @@ extern int NoMoreChecksW;
 int Saver(const void *Po,int Len);
 int Loader(void *Po,int Len);
 int FindManager(Dword po);
-void ResetAll(void);
+void ResetAll(int game = 1);

@@ -6,12 +6,15 @@ local call = mem.call
 
 mem.autohook(0x603210, function(d)
 	local ret = u4[d.esp]
-	if ret >= 0x44D770 and ret < 0x44D990 or ret >= 0x5991B0 and ret < 0x599350 or not Options.FizzleFade then
+	if not Options.FizzleFade or ret >= 0x44D770 and ret < 0x44D990 
+	   or ret >= 0x5991B0 and ret < 0x599350 or ret == 0x4F055A then
 		return
 	end
 	if i4[d.esp + 4] == 1 then
 		mem.call(0x603280, 1, d.ecx, 0, 0, 800, 600)  -- SaveFizzleSource
-		i4[d.ecx + 0x48] = (u1[d.esp + 12] ~= 0 and 1 or 0)
+		if u1[d.esp + 12] ~= 0 then
+			i4[d.ecx + 0x48] = 1
+		end
 	else
 		i4[d.ecx + 0x48] = 0
 		if u4[d.ecx + 0x4C] ~= 0 then

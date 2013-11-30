@@ -2642,25 +2642,29 @@ void Initialize(void)
 //void __stdcall WinMain (int,int,int,int){}
 // сброс всех структур
 int ThisIsNewGame;
-void ResetAll(void)
+void ResetAll(int game = 1)
 {
 	STARTNA(__LINE__, 0)
-	ThisIsNewGame=1; // новая, а не загруженная
-	ResetCastles();
-	ResetMapMon();
-	ResetERM();
-	ResetCurse();
-	ResetB1();
-	ResetWM();
+	if(game){
+		ThisIsNewGame=1; // новая, а не загруженная
+		ResetCastles();
+		ResetMapMon();
+		ResetCurse();
+		ResetB1();
+		ResetWM();
+	}
+	ResetERM(game);
 	ResetMP3();
-	ResetNPC();
-	ResetAI();
-	CrExpoSet::Clear(); // 3.58 R
-	CrExpMod::Clear(); // 3.58 R
-	CrExpBon::Clear(); // 3.58 R
-	ResetA160(); // 3.58
+	if(game){
+		ResetNPC();
+		ResetAI();
+		CrExpoSet::Clear(); // 3.58 R
+		CrExpMod::Clear(); // 3.58 R
+		CrExpBon::Clear(); // 3.58 R
+		ResetA160(); // 3.58
+	}
 	ResetLTimer(); // 3.59
-	ResetNewTownStruct(); // 3.59
+	//ResetNewTownStruct(); // 3.59
 	ResetSpells(); // 3.59
 	ResetLODs(); // 3.59
 	GLB_DisableMouse=0;

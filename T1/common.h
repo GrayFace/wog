@@ -287,8 +287,8 @@ Word *GetVisabilityPosByXYL(int x,int y,int l);
 int StrSkipLead(char *str,int start);
 int StrSkipTrailer(char *str,int start);
 Byte *MonPos2(int Side,int SideIndex);
-void MPHoldONTime(void);
-void MPContinueTime(void);
+void MPPauseTimer(void);
+void MPContinueTimer(void);
 void AdjustAllIfPassDwell(int DwNum,int NewOwner);
 
 void _inline *h3new(size_t sz){

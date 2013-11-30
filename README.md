@@ -21,7 +21,7 @@ ZELP.TXT
 Testing:
 
 If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar
-Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create error logs that I can use. The EIP that the program will show might also help.
+Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHLOG.TXT and WOGERMLOG.TXT logs. The program will also create CrashEIP.txt file in its own folder. Send me all 3 files.
 
 ===
 

@@ -46,6 +46,9 @@ local mem_copy = mem.copy
 local LoadTextTable = LoadTextTable
 local WogOptionsPtr = internal.WogOptionsPtr
 
+local SetupPath = path_AddSlash(ReadIniString("WoGification", "SetupDir", AppPath.."Data/zvs/Setup/"))
+SetupPath = SetupPath..ReadIniString("WoGification", "SetupFile", "Setup.lua")
+
 ----------- No globals from this point ------------
 
 local _NOGLOBALS
@@ -284,7 +287,7 @@ function internal.SaveOptions(fname)
 	t[#t + 1] = "\t},\n\tState = {\n"
 	DoSaveOptions(o.State, t)
 	t[#t + 1] = "\t}\n}"
-	io_SaveString(fname or internal.ModsPath.."Setup.lua", table_concat(t))
+	io_SaveString(fname or SetupPath, table_concat(t))
 end
 
 -- local function LoadOptions(f, mod)
@@ -343,7 +346,7 @@ end
 
 function internal.AllOptionsLoaded()
 	ProcessDefs()
-	local fname = path_FindFirst(internal.ModsPath.."Setup.lua")
+	local fname = path_FindFirst(SetupPath)
 	if fname then
 		internal.LoadOptions(fname)
 		internal.CopyToWogOptions()

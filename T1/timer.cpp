@@ -150,21 +150,6 @@ void MPStartTimerFix(void){
 	}
 }
 
-void PauseTimer(void){
-	STARTNA(__LINE__, 0)
-	void (__fastcall *fp)(_TurnTimeStruct_ *timer); *(Dword *)&fp=0x558170;
-	_TurnTimeStruct_ *tmrp; *(Dword *)&tmrp=0x69D680;
-	fp(tmrp);
-	RETURNV
-}
-void ContinueTimer(void){
-	STARTNA(__LINE__, 0)
-	void (__fastcall *fp)(_TurnTimeStruct_ *timer); *(Dword *)&fp=0x558190;
-//  _TurnTimeStruct_ *tmrp; *(Dword *)&tmrp=0x69D680;
-//  fp(tmrp);
-	fp(TSP);
-	RETURNV
-}
 ///////////////////////////////
 int ERM_TL(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 {
@@ -178,9 +163,9 @@ int ERM_TL(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			if(Apply(&v,4,Mp,0)){ MError("\"!!TL:C\"-cannot get or check control."); RETURN(0) }
 			switch(v){
 				case 0: // continue
-					ContinueTimer(); break;
+					MPContinueTimer(); break;
 				case 1: // pause
-					PauseTimer(); break;
+					MPPauseTimer(); break;
 				default:
 					MError("\"!!TL:C\"-incorrect command."); RETURN(0)
 			}

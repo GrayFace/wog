@@ -5463,7 +5463,7 @@ Word *GetVisabilityPosByXYL(int x,int y,int l)
 	RETURN((Word *)DDummy)
 }
 
-void MPHoldONTime(void)
+void MPPauseTimer(void)
 {
 	__asm{
 		mov   ecx,0x69D680
@@ -5471,7 +5471,7 @@ void MPHoldONTime(void)
 		call  eax
 	}
 }
-void MPContinueTime(void)
+void MPContinueTimer(void)
 {
 	__asm{
 		mov   ecx,0x69D680
