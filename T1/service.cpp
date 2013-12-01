@@ -1534,9 +1534,9 @@ char *GetFullPath(char *file)
 	return fullPathBuf;
 }
 
-void ReadIntINI(int *Value,int DefValue,char *Parameter,char *Section,char *File)
+int ReadIntINI(int DefValue,char *Parameter,char *Section,char *File)
 {
-	*Value = GetPrivateProfileInt(Section, Parameter, DefValue, GetFullPath(File));
+	return GetPrivateProfileInt(Section, Parameter, DefValue, GetFullPath(File));
 }
 
 int ReadStrINI(char *Value,int Len,char *DefValue,char *Parameter,char *Section,char *File)

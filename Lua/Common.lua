@@ -394,13 +394,20 @@ end
 local path_noslash = _G.path.noslash
 local path_dir = _G.path.dir
 local CreateDirectoryPtr = internal.CreateDirectory
+local GetLastErrorPtr = internal.GetLastErrorPtr
+
+local function DoCreateDir(dir)
+	-- 183 = already exists
+	return call(CreateDirectoryPtr, 0, dir, 0) ~= 0 or call(GetLastErrorPtr, 0, dir, 0) == 183
+end
+
 local function CreateDirectory(dir)
 	dir = path_noslash(dir)
-	if dir == "" or string_sub(dir, -1) == ":" or FindFirst(dir, true) then  -- !!! problems: '.', '..'
+	if dir == "" or #dir == 2 and string_sub(dir, -1) == ":" or DoCreateDir(dir) then
 		return true
 	end
 	CreateDirectory(path_dir(dir))
-	return call(CreateDirectoryPtr, 0, dir, 0) ~= 0
+	return DoCreateDir(dir)
 end
 _G.path.CreateDirectory = CreateDirectory
 

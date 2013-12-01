@@ -1116,9 +1116,12 @@ void InitLua()
 	SetCurrentDirectory(ApplicationDir);
 #endif
 
-	*(PROC*)&DebugDialog = DllImport("WogDialogs.dll", "DebugDialog", true);
-	*(PROC*)&DebugDialogResize = DllImport("WogDialogs.dll", "DebugDialogResize", true);
-	*(PROC*)&ReallocMem = DllImport("WogDialogs.dll", "ReallocMem", true);
+	char Path[MAX_PATH];
+	Path[0] = 0;
+	sprintf_s(Path, "%sWogDialogs.dll", (DeveloperPath[0] ? DeveloperPath : ""));
+	*(PROC*)&DebugDialog = DllImport(Path, "DebugDialog", true);
+	*(PROC*)&DebugDialogResize = DllImport(Path, "DebugDialogResize", true);
+	*(PROC*)&ReallocMem = DllImport(Path, "ReallocMem", true);
 	DebugDialogResize(800-40, 600-40);
 
 	for (int i = 0; i < 16; i++)
@@ -1163,6 +1166,7 @@ void InitLua()
 	LuaInternalConst("GetCurrentDirectory", (int)GetCurrentDirectory);
 	LuaInternalConst("SetCurrentDirectory", (int)SetCurrentDirectory);
 	LuaInternalConst("CreateDirectory", (int)CreateDirectory);
+	LuaInternalConst("GetLastErrorPtr", (int)GetLastError);
 	LuaInternalConst("GetKeyStatePtr", (int)GetKeyState);
 	LuaInternalConst("ReadFile", (int)ReadFile);
 	LuaInternalConst("SetFilePointer", (int)SetFilePointer);
@@ -1181,13 +1185,12 @@ void InitLua()
 	LuaInternalConst("ModsPath", ModsPath);
 
 	// Scripts path
-	char ScriptsPath[MAX_PATH];
-	LoadIniPath(ScriptsPath, "LuaScriptsPath", (DeveloperPath[0] ? Format("%sLua\\", DeveloperPath) : "Data\\zvs\\Lua\\"));
-	lua_pushstring(Lua, ScriptsPath);
+	LoadIniPath(Path, "LuaScriptsPath", (DeveloperPath[0] ? Format("%sLua\\", DeveloperPath) : "Data\\zvs\\Lua\\"));
+	lua_pushstring(Lua, Path);
 	lua_setfield(Lua, LUA_REGISTRYINDEX, "CoreScriptsPath");
 
 	// Error function
-	if (luaL_loadfile(L, Format("%sErrorFunction.lua", ScriptsPath)) || lua_pcall(L, 0, 1, 0))
+	if (luaL_loadfile(L, Format("%sErrorFunction.lua", Path)) || lua_pcall(L, 0, 1, 0))
 	{
 		ErrorMessage(Lua);
 		ExitProcess(0);
@@ -1196,7 +1199,7 @@ void InitLua()
 	lua_deferrfunc(L, ErrorFunction);
 
 	// main.lua
-	if (DoFile(Format("%smain.lua", ScriptsPath))) exit(0);
+	if (DoFile(Format("%smain.lua", Path))) exit(0);
 	//LoadLibrary("MallocHook.dll");
 	SetCurrentDirectory(ApplicationDir);
 }

@@ -14,7 +14,7 @@ local And = bit.And
 local ReadFile = internal.ReadFile
 local SetFilePointer = internal.SetFilePointer
 
-local lib = mem.LoadDll("BinkW32new.dll")
+local lib = mem.LoadDll(internal.DeveloperPath.."BinkW32new.dll")
 
 if not lib then
 	return

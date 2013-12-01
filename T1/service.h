@@ -60,7 +60,7 @@ int ChooseFileDlg(_ChooseFile* ChooseFile, char *Default);
 int QuickDialog(_Sphinx1 *Sphinx);
 int ChooseIconDlg(_IconList * IconList);
 int WoGMessage(char *,char * =0,char * =0,char * =0,char * =0);
-void ReadIntINI(int *Value,int DefValue,char *Parameter,char *Section="Common",char *File=".\\WoG.ini");
+int ReadIntINI(int DefValue,char *Parameter,char *Section="Common",char *File=".\\WoG.ini");
 int ReadStrINI(char *Value,int Len,char *DefValue,char *Parameter,char *Section="Common",char *File=".\\WoG.ini");
 int WriteIntINI(int Value,char *Parameter,char *Section="Common",char *File=".\\WoG.ini");
 int WriteStrINI(char *Value,char *Parameter,char *Section="Common",char *File=".\\WoG.ini");

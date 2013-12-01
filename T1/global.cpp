@@ -103,9 +103,7 @@ void newGlobalInitSub()
 	newWriteInMemory();
 	if(newExtendedDebugMod)
 		newWriteInMemory(-1);
-	int No32Bit;
-	ReadIntINI(&No32Bit, 0, "No32Bit");
-	if(!No32Bit)
+	if(!ReadIntINI(1, "No32Bit"))
 		newWriteInMemory(-3);
 	//addlog("prevpath",int(&MapFastLoadingPath));
 	if(MapFastLoadingName)
@@ -1199,9 +1197,7 @@ __declspec(naked) void _OnChangeCursor()
 
 static int __stdcall CanStart(void*, int, int, char* name)
 {
-	int allow;
-	ReadIntINI(&allow, 0, "AllowMultipleCopies");
-	if (allow) return 1;
+	if (ReadIntINI(0, "AllowMultipleCopies")) return 1;
 	HANDLE ret = *(HANDLE*)0x69965C = CreateEvent(0, 0, 0, name);
 	return (ret != 0) && GetLastError() != 0xB7;
 }

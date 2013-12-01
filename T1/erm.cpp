@@ -8225,21 +8225,13 @@ _found3:
 //__asm int 3
 //              Message("Unknown Receiver or Instruction");
 			{
-				char last = 0;
-				if (M.m.l - M.i > 1000) // Format cannot handle strings with more than 10000 chars
-				{
-					last = M.m.s[M.i + 1000];
-					M.m.s[M.i + 1000] = 0;
-				}
+				LuaPushERMInfo(&M.m.s[M.i-4], ErrStringPo == LuaErrorString);
 				if (ErrStringPo == LuaErrorString)
-					LuaLastError(Format("Unknown Reciever or Instruction: %s", &M.m.s[M.i-4]));
-				else if (PL_ERMErrDis == 0 && GameWasLoaded == 0)
-					DumpMessage(Format("Unknown Reciever or Instruction:\n\n%s", &M.m.s[M.i-4]),0);
-
-				if (M.m.l - M.i > 1000)
-				{
-					M.m.s[M.i + 1000] = last;
+					LuaLastError(Format("Unknown Reciever or Instruction: %s", lua_tostring(Lua, -1)));
+				else if (PL_ERMErrDis == 0 && GameWasLoaded == 0){
+					DumpMessage(Format("Unknown Reciever or Instruction:\n\n%s", lua_tostring(Lua, -1)),0);
 				}
+				lua_pop(Lua, 1);
 			}
 			goto _next;
 _addfound:
