@@ -49,6 +49,9 @@ local WogOptionsPtr = internal.WogOptionsPtr
 local SetupPath = path_AddSlash(ReadIniString("WoGification", "SetupDir", AppPath.."Data/zvs/Setup/"))
 SetupPath = SetupPath..ReadIniString("WoGification", "SetupFile", "Setup.lua")
 
+local UN_P = ERM.UN.P
+local ?v = ?v
+
 ----------- No globals from this point ------------
 
 local _NOGLOBALS
@@ -73,7 +76,10 @@ end
 ----------- Options access
 
 local function GetWogOption(k, erm)
-	local v = i4[WogOptionsPtr + erm*4]
+	local v = internal.context == "map" and UN_P(erm, ?v) or i4[WogOptionsPtr + erm*4]
+	if erm >= 1 and erm <= 4 then
+		v = (v == 0 and 1 or 0)
+	end
 	if v == 0 or v == 1 then
 		local v1 = (v == 1)
 		local o = OptionDefs[k]
@@ -87,6 +93,19 @@ local function GetWogOption(k, erm)
 				end
 			end
 		end
+	end
+	return v
+end
+
+local function SetWogOption(erm, v)
+	v = tonumber(v) or v and 1 or 0
+	if erm >= 1 and erm <= 4 then
+		v = (v == 0 and 1 or 0)
+	end
+	if internal.context == "map" then
+		UN_P(erm, v)
+	else
+		i4[WogOptionsPtr + erm*4] = v
 	end
 end
 
@@ -111,7 +130,7 @@ local function Options_newindex(_, k, v)
 	k = AddModName(k)
 	local erm = OptionERM[k]
 	if erm then
-		i4[WogOptionsPtr + erm*4] = tonumber(v) or v and 1 or 0
+		SetWogOption(erm, v)
 	else
 		internal.CurOptions.Active[k] = v
 	end
@@ -264,7 +283,7 @@ local function SetupOptions(t)
 		o[k] = v
 	end
 	local o = internal.CurOptions.State
-	for k, v in pairs(t.State) do
+	for k, v in pairs(t.State or {}) do
 		o[k] = v
 	end
 end
@@ -284,9 +303,10 @@ function internal.SaveOptions(fname)
 	local t, o = {}, internal.CurOptions
 	t[#t + 1] = "return {\n\tActive = {\n"
 	DoSaveOptions(o.Active, t)
-	t[#t + 1] = "\t},\n\tState = {\n"
-	DoSaveOptions(o.State, t)
-	t[#t + 1] = "\t}\n}"
+	t[#t + 1] = "\t}\n\}"
+	-- t[#t + 1] = "\t},\n\tState = {\n"
+	-- DoSaveOptions(o.State, t)
+	-- t[#t + 1] = "\t}\n}"
 	io_SaveString(fname or SetupPath, table_concat(t))
 end
 

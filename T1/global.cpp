@@ -1702,7 +1702,7 @@ _done:
 void __fastcall OnNoNewMessage(int *p)
 {
 	if (p[13] != 1 || p[526] == p[527])
-		Sleep(1);
+		MsgWaitForMultipleObjects(0, 0, 0, 1, QS_ALLINPUT);
 	((void (*)())0x4EDB20)();
 }
 

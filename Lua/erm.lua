@@ -43,6 +43,10 @@ local table_copy = table.copy
 local path_find = path.find
 local path_setext = path.setext
 
+local msg = debug.Message
+local print = print
+local dump = dump
+
 local setmetatable = setmetatable
 local setmetatableW = internal.setmetatableW
 local protectMetatable = internal.protectMetatable

@@ -26,10 +26,10 @@ local loadstring = loadstring
 local table_insert = table.insert
 local table_remove = table.remove
 local table_concat = table.concat
-local math_min = math.min
-local math_floor = math.floor
-local math_ceil = math.ceil
+local floor = math.floor
+local ceil = math.ceil
 local abs = math.abs
+local string_sub = string.sub
 local coroutine_create = coroutine.create
 local coroutine_resume = coroutine.resume
 local coroutine_running = coroutine.running
@@ -270,9 +270,9 @@ end
 
 function _G.math.round(val)
 	if val >= 0 then
-		return math_floor(val + 0.5)
+		return floor(val + 0.5)
 	else
-		return math_ceil(val - 0.5)
+		return ceil(val - 0.5)
 	end
 end
 
@@ -284,9 +284,9 @@ end
 numIndex.tohex = numIndex.ToHex
 
 function numIndex.Div(v1, v2)
-	return math_floor(v1/v2)
+	return floor(v1/v2)
 --	if v1 > v2 then
---		math_floor
+--		floor
 --	else
 --	end
 end
@@ -304,14 +304,14 @@ setmetatable(0, {__index = numIndex})
 --color = {}
 --
 --function color.ToRGB(c)
---	local r = math_floor(c:And(63488)*33/8192)
---	local g = math_floor(c:And(2016)*65/512)
---	local b = math_floor(c:And(31)*33/4)
+--	local r = floor(c:And(63488)*33/8192)
+--	local g = floor(c:And(2016)*65/512)
+--	local b = floor(c:And(31)*33/4)
 --	return r, g, b
 --end
 --
 --function color.RGB(r, g, b)
---	return r:And(248)*256 + g:And(252)*8 + math_floor(b/8)
+--	return r:And(248)*256 + g:And(252)*8 + floor(b/8)
 --end
 --
 ----local function Color16To24(c)
@@ -354,7 +354,7 @@ local function findNext(data)
 	end
 end
 
-function _G.os.find(filter, dir)
+function _G.path.find(filter, dir)
 	local data, path, p = internal.FindStart(filter, not not dir)
 	if data == nil then
 		return nullsub
@@ -366,12 +366,9 @@ function _G.os.find(filter, dir)
 	m.struct = FindStruct:new(p)
 	return findNext, data
 end
-_G.os.Find = _G.os.find
+_G.path.Find = _G.path.find
 
-_G.path.find = _G.os.find
-_G.path.Find = _G.os.find
-
-function _G.path.FindFirst(filter, dir)  -- instead of FileExists/DirectoryExists
+local function FindFirst(filter, dir)  -- instead of FileExists/DirectoryExists
 	local data, path, p = internal.FindStart(filter, not not dir)
 	if data then
 		local r = internal.FindNext(data)
@@ -379,23 +376,38 @@ function _G.path.FindFirst(filter, dir)  -- instead of FileExists/DirectoryExist
 		return r and path..r
 	end
 end
+_G.path.FindFirst = FindFirst
+_G.path.findfirst = FindFirst
 
+local dirBuf
 function _G.path.GetCurrentDirectory()
-	local len = call(internal.GetCurrentDirectory, 0, 0, 0)
-	local buf = malloc(len)
-	u1[buf] = 0
-	call(internal.GetCurrentDirectory, 0, len, buf)
-	local ret = mem_string(buf)
-	free(buf)
-	return ret
+	dirBuf = dirBuf or malloc(260)
+	u1[dirBuf] = 0
+	call(internal.GetCurrentDirectory, 0, 260, dirBuf)
+	return mem_string(dirBuf)
 end
 
 function _G.path.SetCurrentDirectory(dir)
 	return call(internal.SetCurrentDirectory, 0, dir) ~= 0
 end
 
-function _G.path.CreateDirectory(dir)
-	return call(internal.CreateDirectory, 0, dir, 0) ~= 0
+local path_noslash = _G.path.noslash
+local path_dir = _G.path.dir
+local CreateDirectoryPtr = internal.CreateDirectory
+local function CreateDirectory(dir)
+	dir = path_noslash(dir)
+	if dir == "" or string_sub(dir, -1) == ":" or FindFirst(dir, true) then  -- !!! problems: '.', '..'
+		return true
+	end
+	CreateDirectory(path_dir(dir))
+	return call(CreateDirectoryPtr, 0, dir, 0) ~= 0
+end
+_G.path.CreateDirectory = CreateDirectory
+
+local oldSave = _G.io.SaveString
+function _G.io.SaveString(path, ...)
+	CreateDirectory(path_dir(path))
+	return oldSave(path, ...)
 end
 
 local AppPath = _G.AppPath or _G.path.addslash(_G.path.GetCurrentDirectory())

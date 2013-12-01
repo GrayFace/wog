@@ -4738,7 +4738,7 @@ struct _ERM_Trigger_{ // triggers with 1 or no parameters
 //////////////////////////////
 // 0-30000 functions
 // 30000-30100 timers
-// 30100-30300 heroes
+// 30100-30300 heroes (!!! must change for new town)
 // 30300 to battle
 // 30301 from battle
 // 30302 next battle turn
@@ -4790,8 +4790,8 @@ struct _ERM_Trigger_{ // triggers with 1 or no parameters
 // 30376 Dig Grail (!?DG)
 // 30377 Get Map Position Importance for AI (!?AI)
 // ...
-// 30400-30600 hero every movement
-// 30600-30800 hero gain level
+// 30400-30600 hero every movement (!!! must change for new town)
+// 30600-30800 hero gain level (!!! must change for new town)
 // 30800 setup battle field
 // 30801 MFCall(0); !?MF0; - Defence coefficient
 // 30802 MFCall(1); !?MF1; - Block ability
@@ -4800,7 +4800,7 @@ struct _ERM_Trigger_{ // triggers with 1 or no parameters
 // 30900-30904 ; TL - timer #-seconds to call
 // 31000-31099 - 100 local functions
 // 31100-31199 - autotimers (!?TM#1/#2/#3/#4)
-// 31200-31299 - hero gain level post-trigger
+// 31200-31400 - hero gain level post-trigger (!!! must change for new town)
 // ...
 // 0x04000000 ... макс используемый тип - уровень
 // 0x10000000+ OB position enter
