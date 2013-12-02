@@ -382,7 +382,7 @@ const char __stdcall HookCmdLineEnteredText(char *string, int var)
 		call oldAnalizeEnteredTextAddress
 		mov r,al
 	}	
-	addlog("oldAnalizeEnteredTextAddress",r) ;
+	//addlog("oldAnalizeEnteredTextAddress",r) ;
 	return r;
 }
 

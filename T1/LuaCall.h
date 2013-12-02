@@ -62,8 +62,6 @@ int LuaCallEnd(lua_State *L, int code, int nargs);
  Implementation
 */
 
-#define _LuaCall_Index(idx) ((int)idx < 0 && (int)idx > LUA_REGISTRYINDEX ? r->idxstop + (int)idx : (int)idx)
-
 /* Passing params */
 
 _LUACALL_INLINE int _LuaCallParam(lua_State *L, int code, lua_Number param)
@@ -93,7 +91,7 @@ _LUACALL_INLINE int _LuaCallParam(lua_State *L, int code, const char *param)
 
 #ifndef _LuaCall_NoVariadicMacros
 
-/* _LuaCall_PP_NARG returns (n-1) instead of n returned by standard PP_NARG */
+/* _LuaCall_PP_NARG returns (n-1) instead of n returned by 'standard' PP_NARG */
 
 #define _LuaCall_EXPAND(x) x
 #define _LuaCall_PP_NARG(...) \

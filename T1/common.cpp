@@ -1813,48 +1813,54 @@ void DumpMessage(char *txt,int offset){
 	RETURNV
 }
 
-char Format_buffer[10000];
-char Format_buffer1[10000];
-char Format_buffer2[10000];
+char Format_buffer[3*10000];
 int Format_ret;
-char *Format_buf;
+char *Format_buf = Format_buffer;
+const char *Format_buf_end = &Format_buffer[sizeof(Format_buffer)];
 
-__declspec(naked) char* __cdecl FormatBase(const char*, ...)
+// must be called from main thread
+// returned string can be used in subsequent call to Format
+__declspec(naked) char* __cdecl Format(const char*, ...)
 {
 	_asm
 	{
 		pop eax
 		mov Format_ret, eax
 		push 10000
-		push offset Format_buffer
+		mov eax, Format_buf
+		push eax
 		push offset _after
 		jmp sprintf_s
 _after:
-		pop ecx
-		mov [esp], ecx
-		mov ecx, Format_buf
-		mov edx, 10000
-		call StrCopy
+		add esp, 8
 		mov eax, Format_buf
+		lea ecx, [eax + 10000]
+		cmp ecx, Format_buf_end
+		jnz _end
+		lea ecx, Format_buffer
+_end:
+		mov Format_buf, ecx
 		jmp Format_ret
 	}
 }
 
-__declspec(naked) char* __cdecl Format(const char*, ...)
-{
-	_asm
-	{
-		mov Format_buf, offset Format_buffer1
-		jmp FormatBase
-	}
-}
-
+// must be called from main thread
+// returned string can't be used in subsequent call to Format, but doesn't eat up a Format buffer slot
 __declspec(naked) char* __cdecl Format2(const char*, ...)
 {
 	_asm
 	{
-		mov Format_buf, offset Format_buffer2
-		jmp FormatBase
+		pop eax
+		mov Format_ret, eax
+		push 10000
+		mov eax, Format_buf
+		push eax
+		push offset _after
+		jmp sprintf_s
+_after:
+		add esp, 8
+		mov eax, Format_buf
+		jmp Format_ret
 	}
 }
 

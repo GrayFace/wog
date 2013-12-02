@@ -8,7 +8,7 @@ and Hard-Coded Options						This page lets you choose WoGify Settings, Hard-Code
 group:	WoGify Settings						WoGify Settings	WOGIFY SETTINGS
 
 These settings let you determine which maps will be WoGified.	
-o5	WoGify random WoG maps	5	false		true		Only random map and maps with a file name beginning "wogify_" will be WoGified.	WoGIFY RANDOM WoG MAPS
+o5	WoGify random WoG maps	5	0		true	true	Only random map and maps with a file name beginning "wogify_" will be WoGified.	WoGIFY RANDOM WoG MAPS
 
 Option 005-0 by Slava (hard coded)
 
@@ -292,7 +292,7 @@ These settings determine how fast the AI hero and garrison troops gain experienc
 The rate of Human stack experience may also be adjusted by selecting the Custom option.
 
 Note: These difficulty settings are script-based and only work if a map is WoGified. If Stack Experience is used for a non-WoGified map, the default setting (linked to player difficulty level) will be used instead.	
-o229	Default  (Linked to Player Difficulty)	229	false	true			The rate that AI hero and garrison troops gain Stack Experience is determined by the Player Difficulty level chosen.	AI STACK EXPERIENCE DIFFICULTY - DEFAULT
+o229	Default  (Linked to Player Difficulty)	229	0	true		true	The rate that AI hero and garrison troops gain Stack Experience is determined by the Player Difficulty level chosen.	AI STACK EXPERIENCE DIFFICULTY - DEFAULT
 
 Option 229-0 by Timothy Pulver (script00)
 

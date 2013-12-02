@@ -244,7 +244,7 @@ void DumpERMVars(char *Text,char *Text2)
 		sprintf(&ME_Buf2[strlen(ME_Buf2)],"-----Context-----\n%.200s.....\n-----------------\n",Text2);
 	}
 	if(ErrStringPo!=0){
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"Last Executed ERM Receiver:\n\n%s\n-----------------\n", LuaPushERMInfo(ErrStringPo));
+		sprintf(&ME_Buf2[strlen(ME_Buf2)],"Current ERM Receiver:\n\n%s\n-----------------\n", LuaPushERMInfo(ErrStringPo));
 		lua_pop(Lua, 1);
 	}
 	LuaCallStart("traceback");
@@ -8377,6 +8377,7 @@ int ParseERM(Mes &M)
 	_Cmd_  *cp0 = Heap;
 	_IfStruct_    TrigIf;
 	Word OldScope = GlobalCurrentScope;
+	char  *LastErrPo = ErrStringPo;
 
 	GlobalCurrentScope = ScriptIndex4ERM++;
 	TrigIf.Ghost = TrigIf.IsFalse = TrigIf.Total = 0; // init if-el-en
@@ -8486,6 +8487,7 @@ _cont:
 			
 _contnext:
 	GlobalCurrentScope = OldScope;
+	ErrStringPo = LastErrPo;
 	RETURN(0)
 
 l_exit:
@@ -8496,6 +8498,7 @@ l_exit:
 
 l_exit2:
 	GlobalCurrentScope = OldScope;
+	ErrStringPo = LastErrPo;
 	RETURN(1)
 }
 

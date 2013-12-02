@@ -7,7 +7,6 @@
 void clearlog(){DeleteFile("Logger.txt");}
 //#endif
 void adduserlog(const char *s){FILE* f=fopen("Logger.txt", "at"); fprintf(f,"%s\n",s);fclose(f);}
-#define addlog adduserlog
 
 void CLogManager::AddEntry(unsigned char Tab,char* Text,DWORD TextColor,DWORD	BgColor)
 {

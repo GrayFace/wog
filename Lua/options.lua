@@ -244,19 +244,14 @@ local function ProcessDefs()
 	for k, t in pairs(OptionDefs) do
 		defaults[k] = not not t.On
 		if t.Values then
-			local HasFalse = t.Text
 			for _, t1 in ipairs(t.Values) do
 				if t1.On then
 					defaults[k] = t1.Value
 				end
-				HasFalse = HasFalse or (t1.Value == false) or t1.IsFalse
 				local okVal = GoodValTypes[type(t1.Value)]
 				if not okVal or t.ERM and okVal ~= 1 then
 					error("option has an invalid value: "..t.Name)
 				end
-			end
-			if not HasFalse then
-				error("option has no 'false' value: "..k)
 			end
 		end
 	end

@@ -8,13 +8,13 @@
 
 extern void clearlog();
 extern void adduserlog(const char *s);
+#define addlog adduserlog
 
-//#define DebugBuild //tmp
-#ifdef DebugBuild
-extern void addlog(char *s,int flag=0);
-#else
-void __inline addlog(char*,int = 0) {}
-#endif
+//#ifdef DebugBuild
+//extern void addlog(char *s,int flag=0);
+//#else
+//void __inline addlog(char*,int = 0) {}
+//#endif
 
 #define TAB_GENERAL		0
 #define TAB_WOG			1

@@ -122,6 +122,7 @@ static int ERM_Trigger(lua_State *L)
 
 	DoneError = false;
 	GEr.LastERM(LuaErrorString);
+	char *LastErrStringPo = ErrStringPo;
 	ErrStringPo = LuaErrorString;
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
@@ -151,7 +152,7 @@ static int ERM_Trigger(lua_State *L)
 	int insertPos = ToInteger(L, 4);
 	WasErmError = false;
 	int ret = InitTrigger(M, *(Word*)CmdName, n, lua_toboolean(L, 2), insertPos);
-	ErrStringPo = 0;
+	ErrStringPo = LastErrStringPo;
 
 	if (ret == 0)
 	{
@@ -161,17 +162,17 @@ static int ERM_Trigger(lua_State *L)
 		LastAddedTrigger->ToDo[0].Pointer = ToInteger(L, 3);
 		lua_settop(L, 0);
 		lua_pushnumber(L, insertPos == -1 ? insertPos + TriggerCount : insertPos);
+		RETURN(1)
 	}
-	else
-	{
-		lua_settop(L, 0);
-		if (ret == 1)
-			lua_pushboolean(L, false);
-		else
-			lua_pushnil(L);
-	}
-
-	RETURN(1)
+	//else
+	//{
+	//	lua_settop(L, 0);
+	//	if (ret == 1)
+	//		lua_pushboolean(L, false);
+	//	else
+	//		lua_pushnil(L);
+	//}
+	RETURN(0)
 }
 
 bool specialV;
@@ -186,6 +187,7 @@ static int ERM_Reciever(lua_State *L)
 
 	DoneError = false;
 	GEr.LastERM(LuaErrorString);
+	char *LastErrStringPo = ErrStringPo;
 	ErrStringPo = LuaErrorString;
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
@@ -236,7 +238,7 @@ static int ERM_Reciever(lua_State *L)
 	WasErmError = false;
 	lua_pushnumber(L, InitReciever(M, CmdToDo.Type, Num, CmdToDo.Pointer, CmdToDo.ParSet, &CmdToDo.Par[0]));
 
-	ErrStringPo = 0;
+	ErrStringPo = LastErrStringPo;
 	RETURN(1);
 }
 
@@ -249,6 +251,7 @@ static int ERM_Call(lua_State *L)
 	STARTNA(__LINE__, 0)
 
 	GEr.LastERM(LuaErrorString);
+	char *LastErrStringPo = ErrStringPo;
 	ErrStringPo = LuaErrorString;
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
@@ -392,7 +395,7 @@ _error:
 	__finally
 	{
 		IsLuaCall = false;
-		ErrStringPo = 0;
+		ErrStringPo = LastErrStringPo;
 	}
 
 	// Process Get Parameters
@@ -425,6 +428,7 @@ static int ERM_Var(lua_State *L)
 	STARTNA(__LINE__, 0)
 
 	GEr.LastERM(LuaErrorString);
+	char *LastErrStringPo = ErrStringPo;
 	ErrStringPo = LuaErrorString;
 	WasErmError = false;
 	long long oldCmd = ErrorCmd.Cmd;
@@ -555,7 +559,7 @@ _normVar:
 	__finally
 	{
 		ErrorCmd.Cmd = oldCmd;
-		ErrStringPo = 0;
+		ErrStringPo = LastErrStringPo;
 	}
 	RETURN(1)
 }

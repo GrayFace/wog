@@ -127,11 +127,10 @@ local function rec_newindex(t, a, v)
 		error("Trigger must be a function.", 2)
 	end
 	local index = internal.ERM_Trigger(t.name, postFlag, #internal.triggers + 1, ind, unpack(t.params))
-	if LuaGetLastError() then
-		error(LuaGetLastError(), 2)
-	end
 	if index then
 		table_insert(internal.triggers, v)
+	else
+		error(LuaGetLastError() or "failed to add trigger", 2)
 	end
 end
 
