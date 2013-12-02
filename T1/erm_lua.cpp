@@ -37,7 +37,7 @@ char *LuaErrorString = "Lua call";
 #define CHECK_Z    (2)
 #define CHECK_PTR  (3)
 
-int ToInteger(lua_State *L, int i)
+static int ToInteger(lua_State *L, int i)
 {
 	//if (lua_isnumber(L, i))  return (int)lua_tonumber(L, i);
 	//if (lua_isboolean(L, i))  return lua_toboolean(L, i);
@@ -50,7 +50,7 @@ int ToInteger(lua_State *L, int i)
 		return (int)num;
 }
 
-const char* ToString(lua_State *L, int i)
+static const char* ToString(lua_State *L, int i)
 {
 	const char* str = lua_tostring(L, i);
 	if (str)  return str;
@@ -58,6 +58,15 @@ const char* ToString(lua_State *L, int i)
 	int type = lua_type(L, i);
 	if (type == LUA_TBOOLEAN)  return (lua_toboolean(L, i) ? "true" : "false");
 	return lua_typename(L, lua_type(L, i));
+}
+
+static int LuaError(char *text, int level)
+{
+	LuaCall("SetErrorLevel", level + 1);
+	luaL_where(Lua, level);
+	lua_pushstring(Lua, text);
+	lua_concat(Lua, 2);
+	return lua_error(Lua);
 }
 
 void ErrorMessage(const char * msg)
@@ -109,9 +118,8 @@ void LuaLastError(const char *error)
 
 int LuaGetLastError(lua_State *L)
 {
-	lua_settop(L, 0);
 	if (!WasErmError) return 0;
-	lua_pushfstring(L, LastErmError);
+	lua_pushstring(L, LastErmError);
 	return 1;
 }
 
@@ -242,13 +250,15 @@ static int ERM_Reciever(lua_State *L)
 	RETURN(1);
 }
 
+#define ERM_Call_ErrorLevel (3)
+
 // Params: "IF", {"?", 0}
 static int ERM_Call(lua_State *L)
 {
 	if (lua_gettop(L) > 17)
-		return luaL_error(L, "\"%s:%s\"-too many parameters.", CmdToDo.Type, lua_tostring(L, 1));
+		return LuaError(Format("\"%s:%s\"-too many parameters.", CmdToDo.Type, lua_tostring(L, 1)), ERM_Call_ErrorLevel);
 
-	STARTNA(__LINE__, 0)
+	//STARTNA(__LINE__, 0)
 
 	GEr.LastERM(LuaErrorString);
 	char *LastErrStringPo = ErrStringPo;
@@ -375,9 +385,7 @@ _string:
 
 			default:
 _error:
-				LuaLastError(Format("Invalid parameter type: %s", lua_typename(L, ltype)));
-				lua_settop(L, 0);
-				return 0;
+				return LuaError(Format("Invalid parameter type: %s", lua_typename(L, ltype)), ERM_Call_ErrorLevel);
 		}
 
 	}
@@ -387,16 +395,16 @@ _error:
 	lua_settop(L, 0);
 
 	WasErmError = false;
-	IsLuaCall = true;
-	__try
-	{
-		ProcessMes(&CmdToDo, CmdMessage, cmd, k == 0 ? 1 : k);
-	}
-	__finally
-	{
-		IsLuaCall = false;
-		ErrStringPo = LastErrStringPo;
-	}
+	//__try
+	//{
+	int failed = ProcessMes(&CmdToDo, CmdMessage, cmd, k == 0 ? 1 : k);
+	if (failed && !WasErmError)
+		MError2("unknown error.");
+	//}
+	//__finally
+	//{
+	ErrStringPo = LastErrStringPo;
+	//}
 
 	// Process Get Parameters
 
@@ -417,7 +425,11 @@ _error:
 	if (countZ) CopyMem(ERMLString[indexZ - countZ], backZ[0], 512*countZ);
 	if (countV) CopyMem((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
 
-	RETURN(retCount);
+	if (failed)
+		return LuaError(LastErmError, ERM_Call_ErrorLevel);
+
+	return retCount;
+	//RETURN(retCount);
 }
 
 // Params: "v", 5, [new_value]

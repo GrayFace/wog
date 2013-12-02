@@ -15,9 +15,6 @@ __newCallers newCallers[]=
 	//{0x601E07,long(newPaintGetClientRect),H_CALL},//Hook GetClientRect in WM_PAINT message
 	{0x601ACC,long(px_DirectDrawCreate),H_CALL,-3}, //DX Proxy Run
 	//{0x55479B,long(HookCmdLineEnteredText),H_CALL5},  // cause crash in multiplayer!
-	{0x4EEF6E,long(0x4EF3B2),H_JMP5,-200},
-	{0x4EF3E3,long(&MapFastLoadingPath),H_ADRO|H_RADR|H_PTR,-200},
-	{0x4EF419,long(&MapFastLoadingName),H_ADRO|H_RADR|H_PTR,-200},
 	//{0x602181, (long)&OnChangeMode, H_CALL5},
 	//{0x601AA0, (long)&OnChangeMode, H_JMP5},
 
@@ -451,6 +448,9 @@ __newCallers newCallers[]=
 	{0x63D6C0, (long)_OnDefCadreDeref, H_DWORD}, // Don't use global cache for def frames
 	{0x4EC685, (long)OnNoNewMessage, H_CALL5}, // Insert Sleep(1) into message loop
 	{0x4CCC40+3, 0x696DE8, H_DWORD}, // Fix rear crash on map start related to tavern rumors
+	{0x4F0DD0, (long)_FixParseCmdLine, H_CALL5|H_INSR6}, // For paths with "/"; " ?" -> "/?"
+	{0x4EF444, 0x4EF450, H_NOP}, // Bugfix: on start of Tutorial 2 combat options were reset to default values
+	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, -200}, // Command line options: /mapname, /mapdir
 
 	{0}
 };
@@ -467,7 +467,6 @@ __newCopiers newCopiers[]=
 	//{0x4F81C3,"\x00\x03\x00\x00",4,0,-1}, // 0x4F81C3 -  address of old Height - 600
 	//{0x602258,"\x00\x03\x00\x00",4,0,-1}, // 0x4F81C3 -  address of old Height - 600
 
-	{0x4F0F36,"\xEB",1,0,-200},
 /*
 	//Towns
 	{0x5CA902+2,"\x09",1,0},//Count towns attached to TownsHallLoading

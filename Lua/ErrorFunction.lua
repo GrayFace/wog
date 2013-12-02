@@ -59,13 +59,13 @@ local function DefErrorFunction(s, lev)
 	local d, func, funcname
 	local i = lev
 	repeat
-		d = getinfo(i, "fnSL")
+		d = getinfo(i, "fnSl")
 		i = i + 1
 	until d == nil or d.func
 	if d then
 		func = d.func
 		funcname = d.name
-		if funcname == "" then
+		if not funcname or funcname == "" then
 			funcname = d.short_src
 			if d.currentline >= 0 then
 				funcname = funcname..":"..d.currentline
@@ -78,7 +78,7 @@ local function DefErrorFunction(s, lev)
 		i = 1
 		local a, v = getlocal(lev, i)
 		if a then
-			text[#text + 1] = funcname and format("\n\nlocal Variables of '%s':", funcname) or '\n\nlocal variables:'
+			text[#text + 1] = funcname and format("\n\nlocal variables of '%s':", funcname) or '\n\nlocal variables:'
 			repeat
 				text[#text + 1] = "\n\t"..a.." = "..tostring2(v)
 				i = i + 1

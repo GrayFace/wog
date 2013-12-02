@@ -70,24 +70,16 @@ local erm = {}
 
 --local function check_rw(t, a)  error("getters and adders cannot have fields",2) end
 
-local function cmd_call_ret(...)
-	if LuaGetLastError() then
-		error(LuaGetLastError(), 4)
-	end
-	return ...
-end
-
 local function cmd_call(t, cmd, ...)
 	-- local pars = {...}
 	-- if #pars > 16 then
 		-- error(format('"%s:%s"-too many parameters.', t.name, cmd),2)
 	-- end
-	internal.ERM_Reciever(t.name, unpack(t.params))
-	if LuaGetLastError() then
-		error(LuaGetLastError(), 3)
+	if internal.ERM_Reciever(t.name, unpack(t.params)) ~= 0 then
+		error(LuaGetLastError() or "ERM reciever error", 3)
 	end
 	
-	return cmd_call_ret(internal.ERM_Call(cmd, ...))
+	return internal.ERM_Call(cmd, ...)
 end
 
 local function rec_index(t, a)

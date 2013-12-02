@@ -40,7 +40,7 @@
 #define SLCH '/'
 #define STRCH '^'
 #define BASE         0x699538
-#define BaseStruct   (*(void**)0x699538)
+#define BaseStruct   (*(Byte**)0x699538)
 #define combatManager   (*(Byte**)0x699420)
 #define MainWindow   (*(HWND*)0x699650)
 //#define ARTTABLEADR  0x660B68

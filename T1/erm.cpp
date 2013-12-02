@@ -6395,7 +6395,7 @@ int ProcessMes(_ToDo_ *sp, Mes &M, char Cmd, int Num) // returns 1 in case of er
 					}
 				}else if(Cmd==' '){ // пробелы могут быть
 				}else{
-					Mess(&M);
+					EWrongCommand(); goto l_exit;
 				}
 			}
 			break;
@@ -6549,7 +6549,7 @@ int ProcessMes(_ToDo_ *sp, Mes &M, char Cmd, int Num) // returns 1 in case of er
 					pos->OneVisit=(Word)M.n[0];
 				}else if(Cmd==' '){
 				}else{
-					Mess(&M);
+					EWrongCommand(); goto l_exit;
 				}
 			}
 			break;
@@ -6600,7 +6600,7 @@ int ProcessMes(_ToDo_ *sp, Mes &M, char Cmd, int Num) // returns 1 in case of er
 					ns2=M.n[0]/8; p->BuildIt[ns2]&=(Byte)~(1<<(M.n[0]%8));
 				}else if(Cmd==' '){
 				}else{
-					Mess(&M);
+					EWrongCommand(); goto l_exit;
 				}
 			}
 			break;
@@ -6653,7 +6653,7 @@ int ProcessMes(_ToDo_ *sp, Mes &M, char Cmd, int Num) // returns 1 in case of er
 //              MakeWoMoPos(MIp,M.n[0]);
 					}else if(Cmd==' '){
 					}else{
-						Mess(&M);
+						EWrongCommand(); goto l_exit;
 					}
 				}
 			}
@@ -7418,7 +7418,7 @@ int 3
 */
 				}else if(Cmd==' '){
 				}else{
-					Mess(&M);
+					EWrongCommand(); goto l_exit;
 				}
 			}
 			break;
@@ -7768,7 +7768,7 @@ int 3
 						}
 						break;
 						default:
-							Mess(&M);
+							EWrongCommand(); goto l_exit;
 					}
 				}
 			}

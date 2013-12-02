@@ -26,7 +26,7 @@ const	DWORD		oldAnalizeEnteredTextAddress = 0x4022E0;
 const	DWORD		newExtendedWindowSize	=	0x300;//768 - Height
 char	*			ApplicationPath     = NULL;
 char	*			ApplicationDir      = NULL;
-char	*			MapFastLoadingPath  = NULL;
+char	*			MapFastLoadingDir  = "maps";
 char	*			MapFastLoadingName  = NULL;
 
 bool PlayingBM_V = 0;
@@ -54,7 +54,7 @@ int InGame;
 #define H_ADR2		0x00000080//Write address with 2 byte offset(use if set H_ADR flags)
 
 #define H_CALL5	0x00000100//Use 5 byte-size call
-#define H_CALL6	0x00000200//Use 6 byte-size call(not implemented)
+//#define H_CALL6	0x00000200//Use 6 byte-size call(not implemented)
 #define H_JMP2		0x00000400//Use 2 byte-size jump if it's possible (EB00, don't use if you don't how many bytes to offset)
 #define H_JMP5		0x00000800//Use 5 byte-size jump (E900000000)
 
@@ -105,13 +105,8 @@ void newGlobalInitSub()
 		newWriteInMemory(-1);
 	if(!ReadIntINI(1, "No32Bit"))
 		newWriteInMemory(-3);
-	//addlog("prevpath",int(&MapFastLoadingPath));
 	if(MapFastLoadingName)
-	{
-		if (!MapFastLoadingPath) MapFastLoadingPath = "maps";
 		newWriteInMemory(-200);
-	}
-	//addlog("postpath",int(&MapFastLoadingPath));
 }
 
 void newFileLoader()
@@ -178,15 +173,13 @@ void ParseCommandLine()
 	ApplicationDir[len] = 0;
 	SetCurrentDirectory(ApplicationDir);
 
-	for(i=1;i<argc;i++)
+	for(i=1; i<argc; i++)
 	{
-		if(!strcmp(argv[i],"/mappath")&&(i+1)<argc)
-			MapFastLoadingPath=argv[++i];
-		if(!strcmp(argv[i],"/mapname")&&(i+1)<argc)
+		if(i<argc-1 && stricmp(argv[i],"/mapdir")==0)
+			MapFastLoadingDir=argv[++i];
+		if(i<argc-1 && stricmp(argv[i],"/mapname")==0)
 			MapFastLoadingName=argv[++i];
 	}
-	addlog(MapFastLoadingPath);
-	addlog(MapFastLoadingName);
 }
 
 byte charToInt(byte ch)
@@ -1702,6 +1695,60 @@ void __fastcall OnNoNewMessage(int *p)
 	((void (*)())0x4EDB20)();
 }
 
+__declspec(naked) void _FixParseCmdLine()
+{
+	__asm
+	{
+		cmp ebx, 1
+		jz _good
+		mov al, [ebx + ecx - 1]
+		cmp al, ' '
+		jz _good
+		cmp al, '\"'
+		jnz _bad
+_good:
+		mov cl, [ebx + ecx]
+		cmp cl, '/'
+		ret
+_bad:
+		mov dword ptr ds:[esp], 0x4F0F27
+		ret
+	}
+}
+
+static void OnFastMapLoad()
+{
+	strcpy_s((char*)BaseStruct + 0x1F7D4, 251, MapFastLoadingDir);
+	strcpy_s((char*)BaseStruct + 0x1F6D9, 100, MapFastLoadingName);
+	*(int*)0x4EEF4D = 0x1DF4F; // restore original code
+}
+
+__declspec(naked) void _OnFastMapLoad()
+{
+	__asm
+	{
+		pop eax
+		pop eax
+		pop eax
+
+		mov ebx, 1
+		push 1
+		push 1
+		mov ecx, ds:[0x6992B0]
+		mov eax, 0x50CEA0
+		call eax
+
+		mov eax, 0x4ED9E0
+		call eax
+
+		mov cl, 1
+		mov eax, 0x4ED930
+		call eax
+		
+		push 0x4EF43E
+		jmp OnFastMapLoad
+	}
+}
 
 /*
 int tmpLast;

@@ -11,8 +11,6 @@ extern char *LuaErrorString; // const
 extern void LuaLastError(const char *error);
 extern lua_State *Lua;
 
-const char* ToString(lua_State *L, int i);
-int ToInteger(lua_State *L, int i);
 int LuaPCall(int nArgs, int nResults);
 
 int __stdcall OnDialogAction(Dword body, Dword cmd);

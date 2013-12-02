@@ -45,13 +45,6 @@ Byte LodTable[LODNUM][0x190];
 #define SOD_FindDefLod(name) (((int (__fastcall *)(char*))0x55D160)(name))
 #define SOD_FindPcxLod(name) (((int (__fastcall *)(char*))0x55D1F0)(name))
 
-#define SOD_LoadDef(name) (((int (__fastcall *)(char*))0x55C9C0)(name))
-#define SOD_LoadPcx(name) (((int (__fastcall *)(char*))0x55AA10)(name))
-#define SOD_LoadPcx16(name) (((int (__fastcall *)(char*))0x55B1E0)(name))
-
-#define SOD_Deref(item) (((int (__fastcall *)(void *))(((int**)item)[0][1]))((void*)item))
-
-
 Lod *Lod::First=0;
 
 Lod::Lod(int location, char *name, int kind){

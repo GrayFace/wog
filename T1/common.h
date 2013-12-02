@@ -445,3 +445,9 @@ void GoExitS(void);
 void GoExitW(void);
 
 void ErrorMessage(const char * msg);
+
+#define SOD_LoadDef(name) (((int (__fastcall *)(char*))0x55C9C0)(name))
+#define SOD_LoadPcx(name) (((int (__fastcall *)(char*))0x55AA10)(name))
+#define SOD_LoadPcx16(name) (((int (__fastcall *)(char*))0x55B1E0)(name))
+
+#define SOD_Deref(item) (((int (__fastcall *)(void *))(((int**)item)[0][1]))((void*)item))
