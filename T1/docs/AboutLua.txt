@@ -323,17 +323,17 @@ There's also ?ptr to get address of an integer value the reciever operates on. T
 
 Special cases:
 1) Sometimes commands require index of z variable. You can simply pass the string itself or ?z in all or almost all such cases.
-2) The VR reciever still can be used. You must pass a number or a string to VR(). The action would be preformed on it and it will be returned as the first result.
- x = VR(4):R(4)  -- means that random value up to 4 is added to 4 and the result is stored in x
+2) The VR reciever still can be used. You must pass a number or a string to VR(). The action would be performed on it and it will be returned as the first result.
+ x = VR(1):R(4)  -- means that random value up to 4 is added to 1 and the result is stored in x
  token0 = VR(""):M2("A string.of ,,tokens\nand some more tokens", 0)  -- get the first token of the string
 If you use get syntax, the get results would be returned after the VR() operand, even if the command doesn't change the operand:
- local _,i = VR("  sting"):M5(?v)  -- I used the variable '_' as a dummy to keep the first returned valuse witch is the string "  string" itself.
+ local _,i = VR("  sting"):M5(?v)  -- I used the variable '_' as a dummy to keep the first returned value witch is the string "  string" itself.
 3) Also note that ERM strings are limited with 511 characters. All arguments to recievers and returned values are truncated if they take more than 511 characters. In Lua itself strings length isn't limited.
 4) FU:E cannot be used to exit Lua function, you should use 'return' for that. The goto itself works, but happens after the Lua code has done it's job. So, to go to another reciever immediately use code like this:
  do
-	return FU:E(-2)  -- for example we want to get to previous reciever
+	return FU:E(-2)  -- for example we want to get to previous handler of the trigger
  end
-5) MC:S should be used tihs way:
+5) MC:S should be used this way:
  MC("macro"):Sv(555)  -- note that it is reversed and there should be no $ or @ signs around macro name
  MC("macro"):S(555)  -- set macro for number
 When setting a macro for number, MC:S returns the number. So, you can set a macro right in the function declaration:

@@ -8673,7 +8673,7 @@ void ProcessERM(bool needLocals)
 	int    i, j, n;
 	StoredLocalVars vars;
 	int    OldScope;
-	struct _Cmd_ *OldTriggers[256]; // GoTo support
+	struct _Cmd_ *OldTriggers[256]; // FU:E goto support
 	int    OldTrigIndex = 0;
 	int    OldTrigDone = 0;
 	bool   WasLuaCall;
