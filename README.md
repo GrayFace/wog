@@ -4,7 +4,7 @@ Heroes 3.5: In the Wake of Gods 3.59 alpha.
 About:
 
 This is Alpha, so anything may change in future.  
-Team interaction would happen via Skype: sergroj_<my GitHub nickname>. Also, on http://wforum.heroes35.net/ forum.  
+Team interaction would happen via Skype: sergroj_(my GitHub nickname). Also, on http://wforum.heroes35.net/ forum.  
 WoG 3.59 is going to be a platform hosting different mods, somewhat like Era II, but different.  
 Alpha version executable is called WogT1.exe for historic reasons. Executable of final version will be called h3wog.exe as usual.
 
@@ -47,7 +47,7 @@ http://www.microsoft.com/en-us/download/details.aspx?id=804 (Service Pack 1, I d
 
 3) In WoG.ini add these lines:  
 [Common]  
-DeveloperPath=<path to the repository>  
+DeveloperPath=(path to the repository)  
 AllowMultipleCopies=1
 
 Done! Now you can build and run the project. You won't be able to debug with comfort, because WoG exe is composed of 2 executables, resulting in VS not considering it to be related to the source code. The t1.map file found in Build folder can help you with debugging.
