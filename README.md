@@ -1,7 +1,8 @@
 Heroes 3.5: In the Wake of Gods 3.59 alpha.
 ===
 
-About:
+About
+---
 
 This is Alpha, so anything may change in future.  
 Team interaction would happen via Skype: sergroj_(my GitHub nickname). Also, on http://wforum.heroes35.net/ forum.  
@@ -10,7 +11,8 @@ Alpha version executable is called WogT1.exe for historic reasons. Executable of
 
 ===
 
-Installing a release:
+Installing a release
+---
 
 Extract contents to WoG home folder. Using a folder with clean WoG 3.58 install is preferable. Make sure Data folder doesn't contain these files:  
 ARTEVENT.TXT  
@@ -25,7 +27,8 @@ Note: If you build WoG from sources, you don't have to install a release, but yo
 
 ===
 
-Testing:
+Testing
+---
 
 'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
 
@@ -36,7 +39,8 @@ Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 
 
 ===
 
-Building:
+Building
+---
 
 - The project is for Visual Studio 2005. I haven't tried Express edition, but here are some links:  
 http://go.microsoft.com/fwlink/?linkid=57034 (Express Edition)  
@@ -57,7 +61,8 @@ Done! Now you can build and run the project. You won't be able to debug with com
 
 ===
 
-About Code:
+About Code
+---
 
 To find code of a receiver (let's say, 'UX'), search in erm.cpp for its name like this: 'UX'.
 
