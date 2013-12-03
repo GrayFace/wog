@@ -150,10 +150,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\\LogManager.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\\RSMem.cpp"
 				>
 			</File>

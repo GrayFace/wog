@@ -15,11 +15,8 @@
 
 typedef Byte FAR *LPBYTE;
 
-const	bool		newExtendedDebugMod		=	false;
 LPPX_DIRECTDRAW		px_DxObj				=	NULL;
-CLogManager			LogManager;
 const	DWORD		oldMainProcAddress		=	0x4F8290;
-const	DWORD		oldAnalizeEnteredTextAddress = 0x4022E0;
 //const char  (__thiscall * oldAnalizeEnteredTextProc)(char *,int)= (const char (__thiscall *)(char *,int))0x4022E0;
 
 
@@ -101,8 +98,6 @@ void newGlobalInitSub()
 	clearlog();
 	//LoadTownsNames();
 	newWriteInMemory();
-	if(newExtendedDebugMod)
-		newWriteInMemory(-1);
 	if(!ReadIntINI(1, "No32Bit"))
 		newWriteInMemory(-3);
 	if(MapFastLoadingName)
@@ -363,30 +358,24 @@ void newWriteInMemory(int queue)
 }
 
 
-const char __stdcall HookCmdLineEnteredText(char *string, int var)
-{
-	int e;__asm{mov e,esi};char r;
-	LogManager.AddDynEntry(TAB_MSG,string);  
-	__asm
-	{
-		push var
-		push string
-		mov ecx,e
-		call oldAnalizeEnteredTextAddress
-		mov r,al
-	}	
-	//addlog("oldAnalizeEnteredTextAddress",r) ;
-	return r;
-}
+// bad hook code, causes crash in multiplayer
+//const	DWORD		oldAnalizeEnteredTextAddress = 0x4022E0;
 
-BOOL newPaintGetClientRect(HWND hWnd,LPRECT lpRect)
-{
-	addlog(__FUNCTION__);
-	BOOL b=GetClientRect(hWnd,lpRect);
-	if(newExtendedDebugMod&&lpRect)
-		lpRect->bottom=600;
-	return b;	
-}
+//const char __stdcall HookCmdLineEnteredText(char *string, int var)
+//{
+//	int e;__asm{mov e,esi};char r;
+//	LogManager.AddDynEntry(TAB_MSG,string);  
+//	__asm
+//	{
+//		push var
+//		push string
+//		mov ecx,e
+//		call oldAnalizeEnteredTextAddress
+//		mov r,al
+//	}	
+//	//addlog("oldAnalizeEnteredTextAddress",r) ;
+//	return r;
+//}
 
 PCHAR* CommandLineToArgvA(PCHAR CmdLine,int* _argc)
 {

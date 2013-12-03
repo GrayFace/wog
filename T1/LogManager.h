@@ -4,51 +4,22 @@
 //#define DebugBuild
 
 #include <windows.h>
-#include <deque>
+#include <stdio.h>
 
-extern void clearlog();
-extern void adduserlog(const char *s);
 
 #ifdef DebugBuild
-extern void addlog(char *s,int flag=0);
+	void __inline addlog(char *s,int flag){FILE* f=fopen("dxproxylog.txt", "at");if(flag==0)fprintf(f,"%s\n",s);else fprintf(f,"%s:%d\n",s,flag);fclose(f);}
+	void __inline clearlog(){DeleteFile("Logger.txt"); DeleteFile("Logger.txt");}
 #else
-void __inline addlog(char*,int = 0) {}
+	void __inline clearlog(){ DeleteFile("Logger.txt"); }
+	void __inline addlog(char*,int = 0) {}
 #endif
 
-#define TAB_GENERAL		0
-#define TAB_WOG			1
-#define TAB_ERM			2
-#define TAB_LUA			3
-#define TAB_OTHER		4
-#define TAB_CMD			5
-#define TAB_MSG			6
-
-struct SEntry
-{
-	DWORD			TextColor;
-	DWORD			BgColor;
-	char		*	Text;
-	bool			Dyn;
-};
-
-
-class CLogManager
-{
-	public:
-		void 		AddEntry(unsigned char Tab,char* Text,DWORD TextColor=0xFFFFFF,DWORD BgColor=0);
-		void 		AddDynEntry(unsigned char Tab,char* Text,DWORD TextColor=0xFFFFFF,DWORD	BgColor=0);
-		void 		InsertEntry(unsigned char Tab,int num,char* Text,DWORD TextColor=0xFFFFFF,DWORD	BgColor=0);
-		void 		InsertDynEntry(unsigned char Tab,int num,char* Text,DWORD TextColor=0xFFFFFF,DWORD	BgColor=0);
-		SEntry	*	GetEntry(unsigned char Tab,int num);
-		void 		DeleteEntry(unsigned char Tab,int num);
-		void 		ClearTab(unsigned char Tab);
-		int 		GetSize(unsigned char Tab);
-	private:
-		std::deque<SEntry*>	LogEntry[10];
-	protected:
-
-	//friends:
-};
+void __inline adduserlog(const char *s){
+	FILE* f;
+	if(!fopen_s(&f, "Logger.txt", "at"))
+		fprintf(f,"%s\n",s);fclose(f);
+}
 
 
 #endif

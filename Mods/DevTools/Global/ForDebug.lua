@@ -1,17 +1,15 @@
 
-local target = loadstring("return getfenv(1)")()
-local env = getfenv(1)
-local setfenv = setfenv
-local mem = mem
-setfenv(1, target)
-i4, i2, i1, u4, u2, u1, i8, u8, pchar = mem.i4, mem.i2, mem.i1, mem.u4, mem.u2, mem.u1, mem.i8, mem.u8, mem.pchar
-setfenv(1, env)
-
-function target.GetTxt(off)
-	return mem.pchar[mem.u4[mem.u4[0x6A5DC4] + 32] + off]
+local function doit()
+	loadstring("i4, i2, i1, u4, u2, u1, i8, u8, pchar, internal = mem.i4, mem.i2, mem.i1, mem.u4, mem.u2, mem.u1, mem.i8, mem.u8, mem.pchar, debug.getregistry()")()
+end
+doit()
+function global.events.EnterContext()
+	doit()
 end
 
-target.internal = debug.getregistry()
+function global.GetTxt(off)
+	return mem.pchar[mem.u4[mem.u4[0x6A5DC4] + 32] + off]
+end
 
 
 

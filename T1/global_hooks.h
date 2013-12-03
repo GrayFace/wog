@@ -1,20 +1,14 @@
 //include only one and only for global.cpp
 
-//queue=-1 reserved to debug mode
 //queue=-2 reserved to town mode
 //queue=-3 reserved to 32 bit mode
 //queue=-200 reserved to map mode
 
 __newCallers newCallers[]=
 {
-	//{0x4F8171,long(newMainProc),H_ADRO|H_RADR},//Replace MainProc
-	//{0x601E07,long(newPaintGetClientRect),H_CALL},//Hook GetClientRect in WM_PAINT message
-	//{0x601ACC,long(px_DirectDrawCreate),H_CALL}, //DX Proxy Run
-	//{0x55479B,long(HookCmdLineEnteredText),H_CALL5},
 	{0x4F8171,long(newMainProc),H_ADRO|H_RADR},//Replace MainProc
-	//{0x601E07,long(newPaintGetClientRect),H_CALL},//Hook GetClientRect in WM_PAINT message
 	{0x601ACC,long(px_DirectDrawCreate),H_CALL,-3}, //DX Proxy Run
-	//{0x55479B,long(HookCmdLineEnteredText),H_CALL5},  // cause crash in multiplayer!
+	//{0x55479B,long(HookCmdLineEnteredText),H_CALL5},  // bad hook code, causes crash in multiplayer
 	//{0x602181, (long)&OnChangeMode, H_CALL5},
 	//{0x601AA0, (long)&OnChangeMode, H_JMP5},
 
@@ -353,8 +347,7 @@ __newCallers newCallers[]=
 
 
 
-	// GetTerrainOverlayTypeOfMapItem
-	{0x4FD57F, (long)GetTerrainOverlayEnd, H_JMP5},
+	{0x4FD57F, (long)GetTerrainOverlayEnd, H_JMP5}, // GetTerrainOverlayTypeOfMapItem
 	{0x4FD532, (long)GetTerrainOverlaySwitch, H_CALL5},
 	//{0x4F6C05, (long)DisplayDialogHook, H_CALL5},
 	//{0x47FF00, (long)BeforeHeroMove, H_CALL5},
@@ -396,6 +389,7 @@ __newCallers newCallers[]=
 	//{0x602AFB, (long)OnModalDialog, H_CALL5}, // ProcessDialog (bad way to hook)
 	//{0x41B120, (long)_OnDialogAction, H_JMP5}, // Dlg_ProcessAction (bad way to hook)
 
+	// Hook dialogs
 	//{0x6029C7, (long)_OnShowDialog, H_JMP5},
 	{0x6029B6, (long)"6A00 90", H_COPY}, // push 0
 	{0x6029BE, (long)"90", H_COPY},
@@ -451,6 +445,7 @@ __newCallers newCallers[]=
 	{0x4F0DD0, (long)_FixParseCmdLine, H_CALL5|H_INSR6}, // For paths with "/"; " ?" -> "/?"
 	{0x4EF444, 0x4EF450, H_NOP}, // Bugfix: on start of Tutorial 2 combat options were reset to default values
 	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, -200}, // Command line options: /mapname, /mapdir
+	{0x4EEE29, 0xEB, H_BYTE, -200}, // Command line options: /mapname, /mapdir
 
 	{0}
 };
@@ -461,11 +456,6 @@ __newCopiers newCopiers[]=
 	{0x600A55,"\xB3\x01\x90",3,0,-3},
 	{0x601A69,"\xB0\x01\x90",3,0,-3},
 	{0x602117,"\xB0\x01\x90",3,0,-3},
-
-	//{0x601E07,"\xE8\x90\x90\x90\x90\x90",6},//clear hook GetClientRect in WM_PAINT message
-
-	//{0x4F81C3,"\x00\x03\x00\x00",4,0,-1}, // 0x4F81C3 -  address of old Height - 600
-	//{0x602258,"\x00\x03\x00\x00",4,0,-1}, // 0x4F81C3 -  address of old Height - 600
 
 /*
 	//Towns

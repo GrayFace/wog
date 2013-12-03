@@ -41,6 +41,8 @@ AllowMultipleCopies=1
 
 Done! Now you can build and run the project. You won't be able to debug with comfort, because WoG exe is composed of 2 executables, resulting in VS not considering it to be related to the source code. The t1.map file found in Build folder can help you with debugging.
 
+Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 32-bit screen mode. However, 10-60 minutes into the game it will hang.
+
 ===
 
 About Code:

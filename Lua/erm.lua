@@ -67,14 +67,7 @@ local _NOGLOBALS
 
 local erm = {}
 
-
---local function check_rw(t, a)  error("getters and adders cannot have fields",2) end
-
 local function cmd_call(t, cmd, ...)
-	-- local pars = {...}
-	-- if #pars > 16 then
-		-- error(format('"%s:%s"-too many parameters.', t.name, cmd),2)
-	-- end
 	if internal.ERM_Reciever(t.name, unpack(t.params)) ~= 0 then
 		error(LuaGetLastError() or "ERM reciever error", 3)
 	end
