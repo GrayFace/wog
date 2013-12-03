@@ -27,6 +27,8 @@ Note: If you build WoG from sources, you don't have to install a release, but yo
 
 Testing:
 
+'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
+
 If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar
 Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHLOG.TXT and WOGERMLOG.TXT logs. The program will also create CrashEIP.txt file in its own folder. Send me all 3 files.
 
