@@ -30,10 +30,14 @@ Note: If you build WoG from sources, you don't have to install a release, but yo
 Testing
 ---
 
-'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
+'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own debugging convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
+
+Saved games from 3.58 are incompatible and from one version of 3.59a to another saves compatibility may break as well.
 
 If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar  
-Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHLOG.TXT and WOGERMLOG.TXT logs. The program will also create CrashEIP.txt file in its own folder. Send me all 3 files.
+Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHLOG.TXT and WOGERMLOG.TXT logs. The program itself will create CrashEIP.txt file in its own folder. Send me all 3 files.
+
+In addition to sending WOGCRASHLOG.TXT, WOGERMLOG.TXT and/or WOGLUALOG.TXT don't forget to describe what exactly you did that lead to the issue and send the save game and map if they're relevant.
 
 Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 32-bit screen mode. However, 10-60 minutes into the game it will hang. That's ok, 32 bit mode code is temporary. Baratorch's HD Mod does it much better, so it should be the base of future proper 32 bit mode support.
 
@@ -57,7 +61,7 @@ DeveloperPath=(path to the repository)
 AllowMultipleCopies=1
 ```
 
-Done! Now you can build and run the project. You won't be able to debug with comfort, because WoG exe is composed of 2 executables, resulting in VS not considering it to be related to the source code. The t1.map file found in Build folder can help you with debugging.
+Done! Now you can build and run the project. You won't be able to debug with comfort, because WoG exe is composed of 2 executables, resulting in VS not considering it related to the source code. The t1.map file found in Build folder can help you with debugging.
 
 ===
 

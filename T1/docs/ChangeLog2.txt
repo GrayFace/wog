@@ -11,8 +11,6 @@ Build 2
 [+-] MR:N didn't work when a copy of monster was passed to !?MR. Now it returns -1 in this case and BM-1 changes current (from !?MR or currently active) monseter's properties.
 [+] CA:B3/$/1 - check if the structure is built - works for non-upgraded buildings if upgrade is built.
 [+] !?BA54 - called on both sides(?) after showing battlefield (after showing tactics dialog in case tactics is enabled).
-[*] Hard-coded support for hex numbers (it was there before, I just didn't know about it :) ). 0x instead of $. $ isn't supported anymore.
-[*] ?ptr instead of ?address.
 [-] fixed SOD bug: def compression type 1 didn't work when used for map objects.
 [+] now WoG supports locale in edits.
 [+] CA:S# returns town income.

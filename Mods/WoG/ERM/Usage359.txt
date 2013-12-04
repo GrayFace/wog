@@ -1184,7 +1184,7 @@ Used Vars:
 **  FU4057-4058,4060
 **  v4029-4030
 **  TM81 (daily timer for each color from day 2)
-Used as info:
+Mouse-click Location, used as info:
 **  Right click on Adventure Map Options
 
 Script83: Great Tavern v1.26
