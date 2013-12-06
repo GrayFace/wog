@@ -2279,6 +2279,17 @@ Dword InitEnters(void);
 void FixDLLEntries(void);
 void InitCRT(void);
 
+BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID)
+{
+	if (fdwReason == DLL_PROCESS_ATTACH)
+	{
+		GEr.Clear();
+		Initialize();
+		GEr.canLog = true;
+	}
+	return true;
+}
+
 #ifdef _DEBUG_LUA
 
 void RunDebugLua();

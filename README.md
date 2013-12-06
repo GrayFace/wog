@@ -23,7 +23,7 @@ SpTraits.txt
 ZCRTRAIT.TXT  
 ZELP.TXT  
 
-Note: If you build WoG from sources, you don't have to install a release, but you must get rid of text files mentioned above.
+Note: If you're building WoG from sources, you don't have to install a release, but you must get rid of text files mentioned above.
 
 ===
 
@@ -61,7 +61,7 @@ DeveloperPath=(path to the repository)
 AllowMultipleCopies=1
 ```
 
-Done! Now you can build and run the project. You won't be able to debug with comfort, because WoG exe is composed of 2 executables, resulting in VS not considering it related to the source code. The t1.map file found in Build folder can help you with debugging.
+Done! Now you can build and run the project. Use "Dll" configugation for debugging. "Release" configuratin is used for deployment. The t1.map file found in Build folder can help you debug it.
 
 ===
 
