@@ -652,7 +652,7 @@ void HDlg::SendCmd2Item(int cmd,int item,Dword par){
 }
 void HDlg::SendCmd2AllItems(int cmd,int item,Dword par){
 	STARTNA(__LINE__, 0)
-	_MouseStr_ cmdstr; SetMem(&cmdstr,sizeof(cmdstr),0);
+	_MouseStr_ cmdstr; FillMem(&cmdstr,sizeof(cmdstr),0);
 	cmdstr.Type=0x200;
 	cmdstr.SType=cmd;
 	cmdstr.Param=par;

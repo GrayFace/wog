@@ -283,7 +283,7 @@ Option 903 by Slava (hard coded)
 Disables the cheat codes and menu (if normally enabled). If the cheat menu is enabled, it will still appear (even if disabled with this option), but clicking on menu items has no effect.
 
 Note: Although cheat codes do not normally work in multiplayer games, this option will prevent players using the cheat codes and menu by loading saved games in single player mode.	Disable Cheat Codes and Menu        
-o907	Enable new "cover of darkness" hero	907					TODO: Proper text, hint and description
+o907	Enable new "cover of darkness" and "builder" heroes	907					TODO: Proper text, hint and description
 
 group:	AI Stack Experience Difficulty						AI Stack Experience Difficulty	AI STACK EXPERIENCE DIFFICULTY
 

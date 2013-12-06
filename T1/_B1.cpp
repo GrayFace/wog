@@ -2243,6 +2243,7 @@ struct __Copiers{
 	// WoG Lod files
 	{(Byte *)"h3wog.lod",(Byte *)0x682F08,10}, //
 	{(Byte *)"h3custom.lod",(Byte *)0x682EF8,13}, //
+	{(Byte *)"h3std.lod",(Byte *)0x682EE8,10}, //
 
 	{(Byte *)"\xE8\x1\x1\x1\x1\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",(Byte *)0x4472F8,15}, //
 	// Spells support
@@ -2631,7 +2632,8 @@ void Initialize(void)
 	LoadIniPath(DeveloperPath, "DeveloperPath", "");
 	LoadIniPath(ModsPath, "ModsPath", (DeveloperPath[0] ? Format("%sMods\\", DeveloperPath) : "Mods\\"));
 	
-	if(!DeveloperPath[0] && DoesFileExist("h3wog.lod",1))  LodTypes::Add2List(4);
+	if(!DeveloperPath[0] && DoesFileExist("h3std.lod",1))  LodTypes::Add2List(6);
+	if(!DeveloperPath[0])  LodTypes::Add2List(4);
 	if(DoesFileExist("h3custom.lod",1))  LodTypes::Add2List(5);
 
 	newGlobalInitSub();
@@ -2917,14 +2919,14 @@ int FindSignature(char *New,int NLen,char *Old,int OLen)
 {
 	int i;
 	SoDNLen=-1; SoDOLen=-1;
-	for(i=0;i<(NLen-StrLen(Signature));i++){
+	for(i=0;i<(NLen-strlen(Signature));i++){
 		if(New[i]!='Z') continue;
-		if(StrNCmp((Byte *)&New[i],(Byte *)Signature,StrLen(Signature))){ SoDNLen=i; break; }
+		if(StrNCmp((Byte *)&New[i],(Byte *)Signature,strlen(Signature))){ SoDNLen=i; break; }
 	}
 	if(SoDNLen==-1) return 1;
-	for(i=0;i<(OLen-StrLen(Signature));i++){
+	for(i=0;i<(OLen-strlen(Signature));i++){
 		if(Old[i]!='Z') continue;
-		if(StrNCmp((Byte *)&Old[i],(Byte *)Signature,StrLen(Signature))){ SoDOLen=i; break; }
+		if(StrNCmp((Byte *)&Old[i],(Byte *)Signature,strlen(Signature))){ SoDOLen=i; break; }
 	}
 	if(SoDOLen==-1) return 1;
 	return 0;
@@ -3345,7 +3347,7 @@ _Done:
 			}
 		}else{ // совпадение
 			if(NoNum){ // было несовпадение
-				if(StrNCmp(&pnew[i+1],&pold[j+1],23)==1){ // длинная послед совпадений далее >23 - запишем несовпадения
+				if(memcmp(&pnew[i+1],&pold[j+1],23)==0){ // длинная послед совпадений далее >23 - запишем несовпадения
 					dp=(int *)&bp[shift];
 					dp[0]=NoNum; dp[1]=j-jSeqStart; dp[2]=1; shift+=12;
 					for(k=0;k<NoNum;k++) bp[shift+k]=pnew[iSeqStart+k];
@@ -3378,14 +3380,14 @@ int FindSignature(char *New,int NLen,char *Old,int OLen)
 	STARTNA(__LINE__, 0)
 	int i;
 	SoDNLen=-1; SoDOLen=-1;
-	for(i=0;i<(NLen-StrLen(Signature));i++){
+	for(i=0;i<(NLen-(int)strlen(Signature));i++){
 		if(New[i]!='Z') continue;
-		if(StrNCmp((Byte *)&New[i],(Byte *)Signature,StrLen(Signature))){ SoDNLen=i; break; }
+		if(memcmp((Byte *)&New[i],(Byte *)Signature,strlen(Signature))==0){ SoDNLen=i; break; }
 	}
 	if(SoDNLen==-1) RETURN(1)
-	for(i=0;i<(OLen-StrLen(Signature));i++){
+	for(i=0;i<(OLen-(int)strlen(Signature));i++){
 		if(Old[i]!='Z') continue;
-		if(StrNCmp((Byte *)&Old[i],(Byte *)Signature,StrLen(Signature))){ SoDOLen=i; break; }
+		if(memcmp((Byte *)&Old[i],(Byte *)Signature,strlen(Signature))==0){ SoDOLen=i; break; }
 	}
 	if(SoDOLen==-1) RETURN(1)
 	RETURN(0)
@@ -3424,7 +3426,7 @@ Byte * __stdcall BuildAllDiff(int *difflen)
 /*
 int WriteAlignment()
 {
-	if(Saver(Signature,StrLen(Signature))) return 1;
+	if(Saver(Signature,strlen(Signature))) return 1;
 }
 int SkipAlignment()
 {
@@ -3436,10 +3438,10 @@ int SaveSignature(void)
 {
 	STARTNA(__LINE__, 0)
 	char *str=WOG_STRING_VERSION;
-	int len=StrLen(str);
+	int len=strlen(str);
 	if(Saver(&len,sizeof(len))) RETURN(1)
 	if(Saver(str,len)) RETURN(1)
-	if(Saver(Signature,StrLen(Signature))) RETURN(1)
+	if(Saver(Signature,strlen(Signature))) RETURN(1)
 	RETURN(0)
 }
 int LoadSignature(int)
@@ -3449,9 +3451,9 @@ int LoadSignature(int)
 	char buf[64];
 	if(Loader(&len,sizeof(len))) RETURN(1)
 	if(Loader(MapSavedWoG,len)) RETURN(1)
-	if(Loader(buf,StrLen(Signature))) RETURN(1)
+	if(Loader(buf,strlen(Signature))) RETURN(1)
 	buf[63] = 0;
-	if(StrNCmp((Byte *)buf,(Byte *)Signature,StrLen(Signature))==0) RETURN(1)
+	if(memcmp((Byte *)buf,(Byte *)Signature,strlen(Signature))!=0) RETURN(1)
 	RETURN(0)
 }
 
@@ -4864,7 +4866,7 @@ int CheckCheat(Byte *str,Dword Sig)
 	Word  chkw=0;
 	Dword chkd=0;
 	int i;
-	int n=StrLen((char *)str);
+	int n=strlen((char *)str);
 	for(i=0;i<n;i++)   chkb=(Byte)(chkb+(str[i]+(Byte)(i-7)));
 	for(i=0;i<n/2;i++) chkw=(Word)(chkw+(Word)(*(Word*)&str[i*2]-(Word)(i+5)));
 	for(i=0;i<n/4;i++) chkd=chkd+(Dword)(*(Dword*)&str[i*4]*(Dword)(i+3));
@@ -4894,7 +4896,7 @@ int NoMoreChecksS=0;
 void BuildUpNewComboArts(void)
 {
 	STARTNA(__LINE__, 0)
-	SetMem(CArtSetup,sizeof(CArtSetup),0);
+	FillMem(CArtSetup,sizeof(CArtSetup),0);
 	_CArtSetup_ *combo=(_CArtSetup_ *)0x693938;
 	for(int i=0;i<12;i++) CArtSetup[i]=combo[i];
 	int Arts[10]={10,16,22,28};

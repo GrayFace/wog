@@ -4,9 +4,9 @@ function global.events.EnterContext()
 		return
 	end
 	if Options.BrighterTrees then
-		LD:T(?v, 10, ModName.."/Lods/Trees.lod")
+		LD:T(?v, 11, ModName.."/Lods/Trees.lod")
 	end
 	if Options.NewGrid then
-		LD:T(?v, 10, ModName.."/Lods/Grid.lod")
+		LD:T(?v, 11, ModName.."/Lods/Grid.lod")
 	end
 end

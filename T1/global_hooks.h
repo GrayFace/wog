@@ -446,6 +446,10 @@ __newCallers newCallers[]=
 	{0x4EF444, 0x4EF450, H_NOP}, // Bugfix: on start of Tutorial 2 combat options were reset to default values
 	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, -200}, // Command line options: /mapname, /mapdir
 	{0x4EEE29, 0xEB, H_BYTE, -200}, // Command line options: /mapname, /mapdir
+	//{0x4ED190+6, (long)&HeroesGameType, H_DWORD}, // Always allow Conflux
+	//{0x456CAF, (long)&HeroesGameTypeStdPo, H_DWORD}, // Always allow Conflux, but not AB campaign
+	//{0x457228, (long)&HeroesGameTypeStdPo, H_DWORD}, // Always allow Conflux, but not AB campaign
+	{0x4ED2AF+3, 0x63FE20, H_DWORD}, // Don't require h3blade.exe for Conflux and AB campaign
 
 	{0}
 };

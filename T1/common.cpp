@@ -128,7 +128,7 @@ STARTNA(__LINE__, 0)
 			zsize=i;
 			s=&mes[1];
 		}else{
-			zsize=StrLen(mes)+1;
+			zsize=strlen(mes)+1;
 		}
 	}
 
@@ -591,40 +591,6 @@ void Copy(Byte *src,Byte *dst,int sz)
 	RETURNV
 }
 
-void CopyMem(char *dst, const char *src, int len)
-{
-	int *dst4 = (int*)dst;
-	int *src4 = (int*)src;
-	for (int i = len/4; i > 0; i--, dst4++, src4++)
-		*dst4 = *src4;
-	for (int i = 0; i < len%4; i++)
-		*((char*)dst4 + i) = *((char*)src4 + i);
-}
-
-void FillMem(char *dst,int len, char fill)
-{
-	if(dst==0){ MError("FillMem: Null pointer."); return; }
-
-	int i;
-	if (len>8)
-	{
-		int fill4 = fill | fill << 8;
-		fill4 = fill4 | fill4 <<16;
-		i = (int)((Dword)dst%4);
-		len -= i;
-		for (; i > 0; i--) // 4-byte alignment
-		{ *dst = fill; dst++; }
-		
-		int *dst4 = (int*)dst; // 4 bytes fill
-		for (i = len/4; i > 0; i--, dst4++)
-			*dst4 = fill4;
-		dst = (char*)dst4;
-		len = len%4;
-	}
-	for (i = 0; i < len; i++)
-		dst[i] = fill;
-}
-
 ///////////////////////////////////////
 // String functions
 int StrCmp(const char *src, const char *dst)
@@ -642,15 +608,6 @@ int StrCmpOk(const char *src, const char *dst)
 {
 	if(src==dst) return 1;
 	return StrCmp(src, dst);
-}
-
-int StrNCmp(Byte *src,Byte *dst,int len)
-{
-	STARTNA(__LINE__, 0)
-	for(int i=0;i<len;i++){
-		if(src[i]!=dst[i]) RETURN(0)
-	}
-	RETURN(1)
 }
 
 int StrSkipLead(char *str,int start)
@@ -752,29 +709,6 @@ int Search4Substring(char *S,char *D)
 	}
 	RETURN(0)
 }
-
-int StrLen(const char *src)
-{
-	int result;
-	STARTNA(__LINE__, 0)
-	__asm {
-				MOV     EDX,EDI
-        MOV     EDI,src
-        MOV     ECX,0FFFFFFFFH
-        XOR     AL,AL
-        REPNE   SCASB
-        MOV     EAX,0FFFFFFFEH
-        SUB     EAX,ECX
-        MOV     EDI,EDX
-				mov     result,eax
-	}
-	RETURN(result)
-	/*
-	int i=0;
-	while(src[i]!=0) i++;
-	RETURN(i)
-	*/
-}  
 
 int __fastcall StrCopy(char *dst, int len, const char *src)
 {
@@ -888,9 +822,6 @@ void CutWord(char *str)
 //  RETURNV
 }
 
-void SetMem(void *Mem,int Sz,Byte Val){
-	FillMem((char*)Mem, Sz, Val);
-}
 /////////////////////////////
 int LoadFile16k(char *name,char *mode)
 {
@@ -1868,7 +1799,7 @@ char* NewString(const char* str)
 {
 	int len = strlen(str);
 	char* p = (char*)malloc(len + 1);
-	CopyMem(p, str, len + 1);
+	memcpy(p, str, len + 1);
 	return p;
 }
 

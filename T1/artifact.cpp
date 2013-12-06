@@ -373,7 +373,7 @@ void __stdcall AdjustSquarePassability(_MapItem_ *MIp,int ADDremove)
 
 void ResetA160(void){
 	STARTNA(__LINE__, 0)
-	SetMem(ClosedTowns,sizeof(ClosedTowns),0);
+	FillMem(ClosedTowns,sizeof(ClosedTowns),0);
 	RETURNV
 }
 

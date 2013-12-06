@@ -293,8 +293,8 @@ static int ERM_Call(lua_State *L)
 	}
 	if (specialZ)
 	{
-		CopyMem(backZ[countZ], ERMLString[indexZ], 512);
-		CopyMem(ERMLString[indexZ], specZ, 512);
+		memcpy(backZ[countZ], ERMLString[indexZ], 512);
+		memcpy(ERMLString[indexZ], specZ, 512);
 		indexZ++; countZ++;
 	}
 
@@ -375,7 +375,7 @@ _number:
 _string:
 				CmdMessage.VarI[k].Type = 7;
 				// allocate str in Z range
-				CopyMem(backZ[countZ], ERMLString[indexZ], 512);
+				memcpy(backZ[countZ], ERMLString[indexZ], 512);
 				if (CmdMessage.VarI[k].Check != 1) StrCopy(ERMLString[indexZ], 512, paramZ);
 				indexZ++;
 				countZ++;
@@ -422,8 +422,8 @@ _error:
 				lua_pushnumber(L, ERMVar2[ind-1]);
 		}
 
-	if (countZ) CopyMem(ERMLString[indexZ - countZ], backZ[0], 512*countZ);
-	if (countV) CopyMem((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
+	if (countZ) memcpy(ERMLString[indexZ - countZ], backZ[0], 512*countZ);
+	if (countV) memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
 
 	if (failed)
 		return LuaError(LastErmError, ERM_Call_ErrorLevel);

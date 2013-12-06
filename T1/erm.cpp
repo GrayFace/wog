@@ -206,7 +206,7 @@ Byte ArtSlots[]={
 	0x8C,0,0,0,0,     1,6,6,
 	0x99 // последний
 };
-static char ME_Buf2[500000];
+static char ME_Buf2[1000000];
 
 _ErrorCmd_ ErrorCmd;
 
@@ -238,85 +238,86 @@ void DumpERMVars(char *Text,char *Text2)
 	// 3.58
 	STARTNA(__LINE__, 0)
 	int hout;
-	ME_Buf2[0]=0;
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"-----------------------\n%s\n-----------------------\n",Text);
+	char *p = ME_Buf2;
+	char *p2 = p + sizeof(ME_Buf2);
+	p += sprintf_s(p, p2-p, "-----------------------\n%s\n-----------------------\n",Text);
 	if(Text2!=0){
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"-----Context-----\n%.200s.....\n-----------------\n",Text2);
+		p += sprintf_s(p, p2-p, "-----Context-----\n%.200s.....\n-----------------\n",Text2);
 	}
 	if(ErrStringPo!=0){
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"Current ERM Receiver:\n\n%s\n-----------------\n", LuaPushERMInfo(ErrStringPo));
+		p += sprintf_s(p, p2-p, "Current ERM Receiver:\n\n%s\n-----------------\n", LuaPushERMInfo(ErrStringPo));
 		lua_pop(Lua, 1);
 	}
 	LuaCallStart("traceback");
 	LuaPCall(0, 1);
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Lua %s\n-----------------\n", lua_tostring(Lua, -1));
+	p += sprintf_s(p, p2-p, "Lua %s\n-----------------\n", lua_tostring(Lua, -1));
 	lua_pop(Lua, 1);
 
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"COMMON VARS\n");
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"f=%i\ng=%i\nh=%i\ni=%i\nj=%i\nk=%i\nl=%i\nm=%i\nn=%i\no=%i\np=%i\nq=%i\nr=%i\ns=%i\nt=%i\n",
+	p += sprintf_s(p, p2-p, "COMMON VARS\n");
+	p += sprintf_s(p, p2-p, "f=%i\ng=%i\nh=%i\ni=%i\nj=%i\nk=%i\nl=%i\nm=%i\nn=%i\no=%i\np=%i\nq=%i\nr=%i\ns=%i\nt=%i\n",
 		ERMVar[0],ERMVar[1],ERMVar[2],ERMVar[3],ERMVar[4],
 		ERMVar[5],ERMVar[6],ERMVar[7],ERMVar[8],ERMVar[9],
 		ERMVar[10],ERMVar[11],ERMVar[12],ERMVar[13],ERMVar[14]);
 	int i,j;
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Common flags (1...1000)\n");
+	p += sprintf_s(p, p2-p, "Common flags (1...1000)\n");
 	for(i=0;i<1000;i++){ 
 		if(ERMFlags[i]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"flag%i=%i\n",i+1,ERMFlags[i]); 
+		p += sprintf_s(p, p2-p, "flag%i=%i\n",i+1,ERMFlags[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Common v vars (v1...v10000)\n");
+	p += sprintf_s(p, p2-p, "Common v vars (v1...v10000)\n");
 	for(i=0;i<VAR_COUNT_V;i++){ 
 		if(ERMVar2[i]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"v%i=%i\n",i+1,ERMVar2[i]); 
+		p += sprintf_s(p, p2-p, "v%i=%i\n",i+1,ERMVar2[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Hero's vars (w1...w200)\n");
+	p += sprintf_s(p, p2-p, "Hero's vars (w1...w200)\n");
 	for(i=0;i<HERNUM;i++){
 		hout=0;
 		for(j=0;j<200;j++){ 
 			if(ERMVarH[i][j]==0) continue;
-			if(hout==0){ sprintf(&ME_Buf2[strlen(ME_Buf2)],"Hero#=%i\n",i); hout=1; }
-			sprintf(&ME_Buf2[strlen(ME_Buf2)],"w%i=%i\n",j+1,ERMVarH[i][j]); 
+			if(hout==0){ p += sprintf_s(p, p2-p, "Hero#=%i\n",i); hout=1; }
+			p += sprintf_s(p, p2-p, "w%i=%i\n",j+1,ERMVarH[i][j]); 
 		}
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"\nTRIGGER BASED VARS\n");
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Trigger y vars (y-1...y-100)\n");
+	p += sprintf_s(p, p2-p, "\nTRIGGER BASED VARS\n");
+	p += sprintf_s(p, p2-p, "Trigger y vars (y-1...y-100)\n");
 	for(i=0;i<100;i++){ 
 		if(ERMVarYT[i]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"y-%i=\"%i\"\n",i+1,ERMVarYT[i]); 
+		p += sprintf_s(p, p2-p, "y-%i=\"%i\"\n",i+1,ERMVarYT[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Trigger e vars (e-1...e-100)\n");
+	p += sprintf_s(p, p2-p, "Trigger e vars (e-1...e-100)\n");
 	for(i=0;i<100;i++){ 
 		if(ERMVarFT[i]==0.0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"e-%i=\"%f\"\n",i+1,ERMVarFT[i]); 
+		p += sprintf_s(p, p2-p, "e-%i=\"%f\"\n",i+1,ERMVarFT[i]); 
 	}
 
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"\nFUNCTION BASED VARS\n");
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Parameters x vars (x1...x16)\n");
+	p += sprintf_s(p, p2-p, "\nFUNCTION BASED VARS\n");
+	p += sprintf_s(p, p2-p, "Parameters x vars (x1...x16)\n");
 	for(i=0;i<16;i++){ 
 		if(ERMVarX[i]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"x%i=\"%i\"\n",i+1,ERMVarX[i]); 
+		p += sprintf_s(p, p2-p, "x%i=\"%i\"\n",i+1,ERMVarX[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Local y vars (y1...y100)\n");
+	p += sprintf_s(p, p2-p, "Local y vars (y1...y100)\n");
 	for(i=0;i<100;i++){ 
 		if(ERMVarY[i]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"y%i=\"%i\"\n",i+1,ERMVarY[i]); 
+		p += sprintf_s(p, p2-p, "y%i=\"%i\"\n",i+1,ERMVarY[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Local e vars (e1...e100)\n");
+	p += sprintf_s(p, p2-p, "Local e vars (e1...e100)\n");
 	for(i=0;i<100;i++){ 
 		if(ERMVarF[i]==0.0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"e%i=\"%f\"\n",i+1,ERMVarF[i]); 
+		p += sprintf_s(p, p2-p, "e%i=\"%f\"\n",i+1,ERMVarF[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"\nSTRING VARS\n");
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Common z vars (z1...z1000)\n");
+	p += sprintf_s(p, p2-p, "\nSTRING VARS\n");
+	p += sprintf_s(p, p2-p, "Common z vars (z1...z1000)\n");
 	for(i=0;i<1000;i++){ 
 		if(ERMString[i][0]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"z%i=\"%s\"\n",i+1,ERMString[i]); 
+		p += sprintf_s(p, p2-p, "z%i=\"%s\"\n",i+1,ERMString[i]); 
 	}
-	sprintf(&ME_Buf2[strlen(ME_Buf2)],"Local z vars (z-1...z-10)\n");
+	p += sprintf_s(p, p2-p, "Local z vars (z-1...z-10)\n");
 	for(i=0;i<VAR_COUNT_LZ;i++){ 
 		if(ERMLString[i][0]==0) continue;
-		sprintf(&ME_Buf2[strlen(ME_Buf2)],"z-%i=\"%s\"\n",i+1,ERMLString[i]); 
+		p += sprintf_s(p, p2-p, "z-%i=\"%s\"\n",i+1,ERMLString[i]); 
 	}
-	SaveSetupState("WOGERMLOG.TXT",ME_Buf2,StrLen(ME_Buf2));
+	SaveSetupState("WOGERMLOG.TXT",ME_Buf2,strlen(ME_Buf2));
 	RETURNV
 }
 
@@ -386,11 +387,11 @@ void _DoStoreVars(void *loc, void *var, int size, bool restore, bool fill)
 {
 	if (restore)
 	{
-		CopyMem((char*)var, (char*)loc, size);
+		memcpy((char*)var, (char*)loc, size);
 	}
 	else
 	{
-		CopyMem((char*)loc, (char*)var, size);
+		memcpy((char*)loc, (char*)var, size);
 		if (fill) FillMem((char*)var, size, 0);
 	}
 }
@@ -1038,7 +1039,7 @@ void WriteVarUsed(void)
 		if(ERMFunUsed[i]&0x40){ *cp++=' '; *cp++='*'; }
 		*cp++=0x0D; *cp++=0x0A;
 	}
-	if(SaveSetupState("ERMVarsUsed.LOG",VarUsedLog,StrLen(VarUsedLog))){
+	if(SaveSetupState("ERMVarsUsed.LOG",VarUsedLog,strlen(VarUsedLog))){
 		Message(/*ITxt(125,1,&WoGTexts)*/"Cannot write LOG file",1);
 	}
 	RETURNV
@@ -1583,7 +1584,7 @@ int ERM_UniversalEx(char Cmd,int Num,_ToDo_*,Mes *Mp)
 				sprintf(&BUUF[i = i + strlen(&BUUF[i])], "%i\t%s\r\n", j, p);
 				//Message(&BUUF[i], 1);
 			}
-			SaveSetupState("TX_T.TXT", BUUF, StrLen(BUUF));
+			SaveSetupState("TX_T.TXT", BUUF, strlen(BUUF));
 			break;
 		}
 
@@ -1602,7 +1603,7 @@ int ERM_UniversalEx(char Cmd,int Num,_ToDo_*,Mes *Mp)
 				if (store) sprintf(&BUUF[i = i + strlen(&BUUF[i])], "\t\tcase %i: // %s\r\n", j, p);
 				//Message(&BUUF[i], 1);
 			}
-			SaveSetupState("textss.TXT", BUUF, StrLen(BUUF));
+			SaveSetupState("textss.TXT", BUUF, strlen(BUUF));
 			break;
 		}
 		/**/
@@ -3233,7 +3234,7 @@ int ERM_SetObject(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 					CHECK_ParamsMin(3);
 					owner=Mp->n[0];
 					if((owner<-1)||(owner>7)){ MError("\"!!OB:M\"-owner out of range (-1...7)."); RETURN(0) }
-					char ames[8][2]; SetMem(ames,sizeof(ames),0);
+					char ames[8][2]; FillMem(ames,sizeof(ames),0);
 					fl=0;
 					if(owner==-1){ // для всех
 						for(i=0;i<8;i++){
@@ -4624,7 +4625,7 @@ int ERM_StackExperience(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 					 if(CrExpoSet::Find(Type,Crloc)==0){
 						 // not found - nothing to do
 //             RETURN(1)
-						 lmtype=MType; lmnum=0; // undefoned!!!
+						 lmtype=MType; lmnum=0; // undefined!!!
 					 }
 					 lmtype=GetHeroStr(lhind)->Ct[lslot];
 					 lmnum =GetHeroStr(lhind)->Cn[lslot];
@@ -4658,7 +4659,7 @@ int ERM_StackExperience(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 					 if(CrExpoSet::FindType(lx,ly,ll,lslot,&ltype,&lcrloc,&lmtype,&lmnum)==0){  
 						 // not found - nothing to do
 //             RETURN(1)
-						 lmtype=MType; lmnum=0; // undefoned!!!
+						 lmtype=MType; lmnum=0; // undefined!!!
 					 }
 					 if(Num>5) Apply(&nomes,4,Mp,5);
 					 if(lmtype!=MType){ 
@@ -5558,10 +5559,10 @@ int GetFlags(Mes *m)
 	M.m.l=m->m.l;
 	M.i=m->i;
 	for(i=0;i<16;i++){
-		SetMem(&m->Efl[0][i][0],sizeof(VarNum),0);
-		SetMem(&m->Efl[0][i][1],sizeof(VarNum),0);
-		SetMem(&m->Efl[1][i][0],sizeof(VarNum),0);
-		SetMem(&m->Efl[1][i][1],sizeof(VarNum),0);
+		FillMem(&m->Efl[0][i][0],sizeof(VarNum),0);
+		FillMem(&m->Efl[0][i][1],sizeof(VarNum),0);
+		FillMem(&m->Efl[1][i][0],sizeof(VarNum),0);
+		FillMem(&m->Efl[1][i][1],sizeof(VarNum),0);
 //    *(long *)&m->Efl[0][i][0]=0; // не установлен
 //    *(long *)&m->Efl[0][i][1]=0; // не установлен
 //    *(long *)&m->Efl[1][i][0]=0; // не установлен
@@ -5895,7 +5896,7 @@ int MesManOld(Mes *ms,_Mes_ *p)
 			if(SetMes(p,0,0)==-1) RETURN(-1) else RETURN(0)
 		case  0:
 			m.s=ERM2String(&ms->m.s[ms->i],0,&i);
-			m.l=StrLen(m.s); //
+			m.l=strlen(m.s); //
 			if(SetMes(p,&m,0)==-1) RETURN(-1)
 			ms->i+=i;
 			RETURN(0)
@@ -8443,7 +8444,7 @@ int ParseERM(Mes &M)
 //          dp->Pointer[1]=ToDoPo2;
 			dp->ParSet=ParSet;
 			for(k=0;k<ParSet;k++) dp->Par[k]=Par[k];
-			for(   ;k<16    ;k++) /**(Dword *)&dp->Par[k]=0;*/ SetMem(&dp->Par[k],sizeof(VarNum),0);
+			for(   ;k<16    ;k++) /**(Dword *)&dp->Par[k]=0;*/ FillMem(&dp->Par[k],sizeof(VarNum),0);
 			dp->Com.s=&M.m.s[M.i];
 			dp->Self.s=&M.m.s[self];
 			dp->Self.l=M.i-self;

@@ -5,7 +5,7 @@ About
 ---
 
 This is Alpha, so anything may change in future.  
-Team interaction would happen via Skype: sergroj_(my GitHub nickname). Also, on http://wforum.heroes35.net/ forum.  
+Team interaction would happen via Skype: sergroj_(my GitHub nickname).
 WoG 3.59 is going to be a platform hosting different mods, somewhat like Era II, but different.  
 Alpha version executable is called WogT1.exe for historic reasons. Executable of final version will be called h3wog.exe as usual.
 
@@ -76,9 +76,15 @@ All new code hooks are in global_hooks.h and global.cpp files as well as Lua fil
 
 Note the WogNew project. The reason it's there is because t1b project must be built with optimization turned off, due to functions intermixing C code with Asm. This is also one of the reasons the solution is for VS 2005.
 
-Note about Git:  
+===
+
+About Git
+---
+
 You may want to hide a local folder from Git. E.g. I have a mod with my test scripts. To do so, create .gitignore file containing just this:
 
 ```
 /*
 ```
+
+When you are commiting local changes into the master branch it seems you should always use Rebase instead of Merge.

@@ -18,7 +18,7 @@ void __stdcall SpecPicture(Dword po);
 void __stdcall SpecPictureS(Dword,Dword,Dword,Dword,Dword,
 														Dword,Dword,Dword,Dword,Dword,Dword);
 void __stdcall SpecPictureC(Byte *,char *,Dword d3,int,char *,Dword d0);
-void SpecText(char *buf,char *po);
+//void SpecText(char *buf,char *po);
 void MapSetup(void);
 void NextHeroChoosen(void);
 // 3.58

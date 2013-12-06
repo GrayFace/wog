@@ -61,15 +61,13 @@ int QuickBattle(void);
 void SetQuickBattle(int value);
 
 void Copy(Byte *src,Byte *dst,int sz);
-void CopyMem(char *dst,const char *src,int len);
-void FillMem(char *dst,int len,char fill);
+#define FillMem(Dst, Len, Fill)  memset(Dst, Fill, Len)
 int Random(int low,int High);
 int *RandomSeed();
 int Abs(int v);
-int StrLen(const char *src);
 int StrCmp(const char *src, const char *dst);
 int StrCmpOk(const char *src, const char *dst);
-int StrNCmp(Byte *src,Byte *dst,int len);
+// StrNCmp(...) = !memcmp(...)
 int __fastcall StrCopy(char *dst,int len,const char *src);
 void StrCanc(char *dst,int len,char *s1,char *s2);
 void ToUpper(char *str);
@@ -394,7 +392,7 @@ if(AddPar==1) break; // protection
 		struct tm *gmt;  gmt = gmtime( &ltime );
 		Zsprintf2(&Frmt,"Time Stamp: %s\n\n%s",(Dword)asctime(gmt),(Dword)GlbBuf[0]);
 		StrCopy(GlbBuf[0],30000,Frmt.Str);
-		SaveSetupState("WOGCRASHLOG.TXT",GlbBuf[0],StrLen(GlbBuf[0]));
+		SaveSetupState("WOGCRASHLOG.TXT",GlbBuf[0],strlen(GlbBuf[0]));
 		DumpERMVars("CRASH LOG RELATED CONTEXT",asctime(gmt));
 		Message(msg);
 	}

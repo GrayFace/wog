@@ -336,7 +336,7 @@ void CrExpo::SetN(int Type,CRLOC Data,int mtype,int num,int expo,int arts){
 }
 void CrExpo::Clear(){
 	STARTNA(__LINE__, 0)
-	SetMem(this,sizeof(CrExpo),0);
+	FillMem(this,sizeof(CrExpo),0);
 	Fl.Act=0;
 	RETURNV
 }
@@ -1181,8 +1181,8 @@ int  CrExpBon::Clear(){ // из TXT файла
 		if(LoadTXT("CREXPBON.TXT",&CrExpBonFile)) RETURN(1)  // не может загрузить TXT
 		else CrExpBonFileLoaded=1;
 	}
-	SetMem(&Body,sizeof(Body),0);
-	SetMem(&BodyD,sizeof(BodyD),0);
+	FillMem(&Body,sizeof(Body),0);
+	FillMem(&BodyD,sizeof(BodyD),0);
 	for(i=1;i<CrExpBonFile.sn;i++){
 		n=a2i(ITxt(i,0,&CrExpBonFile));
 		if((n<-8)||(n>-1)) continue; // неправильный номер дефаулта монстра
@@ -1455,7 +1455,7 @@ int CrExpBon::PrepareBFExpStructure(Byte *BatMan){
 	Byte *Mon;
 	if(BatMan==0) return 1;
 	for(i=0;i<(21*2);i++){
-		setmem(BFBody[i],sizeof(struct CrExpBonStrBF)*20,0);
+		FillMem(BFBody[i],sizeof(struct CrExpBonStrBF)*20,0);
 		// 3.58 Tower skip
 		if(i==20) continue; // 3.58
 		if(i==41) continue; // 3.58

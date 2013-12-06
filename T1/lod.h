@@ -8,7 +8,7 @@ class Lod{
 //    Byte LodInternal[0x190];
 		int Ind;
 
-		int LoadIt(void);
+		int LoadIt(char *name);
 		void ReloadItems();
 	public:
 		int Kind;

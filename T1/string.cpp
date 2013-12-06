@@ -76,7 +76,7 @@ int StrMan::Push(char * str, int len) // allocates a copy of str and returns its
 	ERMDynString[ret].m.s = 0;
 	ERMDynString[ret].m.l = 0;
 	if (str == 0) str = "";
-	if (len < 0) len = StrLen(str);
+	if (len < 0) len = strlen(str);
 	char* (__fastcall *SetStr)(Dword self, Dword _, const char *a2, int len);  *(Dword*)&SetStr = 0x404180;
 	SetStr((Dword)&ERMDynString[ret].m.s - 4, 0, str, len);
 	return ret;

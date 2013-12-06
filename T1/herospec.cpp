@@ -277,7 +277,7 @@ void MapSetup(void)
 	}
 	if(DDummy!=SOGMAPTYPE) wog=0; else wog=1;
 	STARTNA(__LINE__, 0)
-	//if(PL_ApplyWoG>1) wog=1; // !!!
+	//if(PL_ApplyWoG>1) wog=1; // !!!???
 	if(LoadCustomTxt(1,0)==0) Exit();
 	PrepareSpecWoG(wog);
 	STOP
@@ -520,18 +520,18 @@ char *_SpecText(char *po)
 	RETURN(po)
 }
 
-void SpecText(char *buf,char *po)
-{
-	__asm pusha
-	_EDX(hp);
-	po=_SpecText(po);
-	OriginalCallPointer=Callers[13].forig;
-	__asm popa
-	__asm push po
-	__asm push buf
-	__asm call dword ptr [OriginalCallPointer]
-	__asm add  esp,+8
-}
+//void SpecText(char *buf,char *po)
+//{
+//	__asm pusha
+//	_EDX(hp);
+//	po=_SpecText(po);
+//	OriginalCallPointer=Callers[13].forig;
+//	__asm popa
+//	__asm push po
+//	__asm push buf
+//	__asm call dword ptr [OriginalCallPointer]
+//	__asm add  esp,+8
+//}
 
 static char *nhname;
 static Byte *nhspic;

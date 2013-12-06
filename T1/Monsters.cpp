@@ -6952,7 +6952,7 @@ CrExpo *CrPo,ArmyExpo[7];
 void SendExpo4(int *len,Byte **buf,int Hero)
 {
 	STARTNA(__LINE__, 0)
-	SetMem(ArmyExpo,sizeof(ArmyExpo),0);
+	FillMem(ArmyExpo,sizeof(ArmyExpo),0);
 	int i;
 	if(Hero!=-1){
 		for(i=0;i<7;i++){
@@ -7123,7 +7123,7 @@ struct _Net_1005_Str_{
 void SendExpo5(int *len,Byte **buf)
 {
 	STARTNA(__LINE__, 0)
-	SetMem(ArmyExpo,sizeof(ArmyExpo),0);
+	FillMem(ArmyExpo,sizeof(ArmyExpo),0);
 	int i;
 	if(SP1005->HasDTown){ // есть городской гарнизон
 		_CastleSetup_ *csp=&SP1005->Town;
@@ -7821,7 +7821,7 @@ int _ExpDetailedInfo(void){
 			if(t>=174 && t<=191)/* ShowNPC(&DlgNPC)*/;
 			else CrExpBon::ShowInfo(t,n,SE_Exp,cr);
 		}
-//    setmem(SE_MyBuf,15,' '); SE_MyBuf[15]=0;
+//    FillMem(SE_MyBuf,15,' '); SE_MyBuf[15]=0;
 //    itoa(SE_Exp,SE_MyBuf,10); SE_MyBuf[strlen(SE_MyBuf)]=' ';
 //    itoa(SE_Exp*100/SE_Limit/EXPOMUL,&SE_MyBuf[10],10); SE_MyBuf[strlen(SE_MyBuf)]=' '; SE_MyBuf[13]='%';
 //    Message(SE_MyBuf,1);
@@ -8782,7 +8782,7 @@ int __stdcall ApplyDamage(int dmg)
 //x14 - 0x5A1C17 0x5A1CAC 0x5A1503 0x5A1D63
 //x18 - 0x5A2090 0x5A1E5D 0x5A1F14 0x5A202B
 //x1C - 0x5A203C 0x5A2051 0x5A2066 0x5A207B
-//x20 - 0x5A1401 0x5A18A0 0x5A18D7 0x5A1A8E
+//x20 - 0x5A1401 0x5A18A0 0x5A18D7 0x5A1A8E
 //x24 - 0x5A2180 0x5A2368
 
 // стоимость заклов для героя в зависимости от монстров, что он имеет

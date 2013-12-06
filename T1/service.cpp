@@ -351,18 +351,18 @@ static char *ParseContext(int par,CONTEXT *Cnt){
 		Dword sz=0;
 		if(Service_ReadProcMem(Service_GetCurProc(),(void *)Cnt->Esp,Mem,1000,&sz)){ // read
 //      Zsprintf2(&Frmt,"%s\n\nStack Frame:\n\n",(Dword)Buf,0); StrCopy(Buf,29999,Frmt.Str);
-			sprintf(&Buf[StrLen(Buf)],"\n\nStack Frame:\n\n");
+			sprintf(&Buf[strlen(Buf)],"\n\nStack Frame:\n\n");
 			for(Dword i=0;i<sz/4;i++){
-				int s=StrLen(Buf);
+				int s=strlen(Buf);
 				sprintf(&Buf[s],"0x%08X : 0x%08X\n",Cnt->Esp+i*4,*(int *)&Mem[i*4]);
 /*
-				int s=StrLen(Buf);
+				int s=strlen(Buf);
 				Itoa(Cnt->Esp+i*4,&Buf[s],16);
-				s=StrLen(Buf);
+				s=strlen(Buf);
 				Buf[s]=':'; Buf[s+1]=0;
-				s=StrLen(Buf);
+				s=strlen(Buf);
 				Itoa(*(int *)&Mem[i*4],&Buf[s],16);
-				s=StrLen(Buf);
+				s=strlen(Buf);
 				Buf[s]='\n'; Buf[s+1]=0;
 */
 			}
@@ -585,6 +585,12 @@ int LoadImports()
 }
 */
 
+
+void __cdecl invalid_param_handler(const wchar_t *expr, const wchar_t *fun, const wchar_t *file, unsigned int line, uintptr_t)
+{
+	MError(Format("{Sring Buffer Overflow}\nExpression: %s\nFunction: %s\nFile: %s\nLine: %d", expr, fun, file, line));
+}
+
 int StartDLLService(void)
 {
 	STARTNA(__LINE__, 0)
@@ -603,6 +609,7 @@ int StartDLLService(void)
 	po_SetErrMode=pfun;
 
 	Service_SetExcFilter((Dword)MyExcHandler);
+	_set_invalid_parameter_handler(invalid_param_handler);
 /*
 	hdll=Service_LoadLibrary("user32.dll"); if(hdll==0) return -1;
 	HUser32=hdll;
@@ -911,7 +918,7 @@ int LoadCustomTxt(int NEWload,int Apply)
 			mov   MapName,eax
 		}
 		StrCanc(TxtName,1023,LCT_s1,MapName);
-		i=StrLen(TxtName);
+		i=strlen(TxtName);
 		for(;i>0;i--) if(TxtName[i]=='.') break;
 		i++; TxtName[i++]='C'; TxtName[i++]='M'; TxtName[i]='D';
 		if(LoadFile16k(&TxtName[3],"rb")==0) RETURN(1) // не может загрузить TXT - нету его
@@ -1503,7 +1510,7 @@ int ChooseFileDlg(_ChooseFile* ChooseFile, char *Default)
 	STARTNA(__LINE__, 0)
 	int ret;
 	if(ChooseFile_c==0){
-		StrCopy(ChooseFile->Buf,StrLen(Default)+1,Default);
+		StrCopy(ChooseFile->Buf,strlen(Default)+1,Default);
 		RETURN(0)
 	}
 	BeforeDialog();
@@ -1620,7 +1627,11 @@ static char FullPath[_MAX_PATH+1];
 char *GetFolder(int Mod)
 {
 	STARTNA(__LINE__, 0)
-	strcpy(FullPath, ApplicationDir);
+	if(Mod==10)
+		FullPath[0] = 0;
+	else
+		strcpy(FullPath, ApplicationDir);
+
 	switch(Mod){
 		case 1: // in DATA
 			strncat(FullPath,"DATA\\",_MAX_PATH);
@@ -1653,7 +1664,8 @@ char *GetFolder(int Mod)
 		case 9: // in ERM Help
 			strncat(FullPath,"ERM_HELP\\",_MAX_PATH);
 			break;
-		case 10: // in Mods folder
+		// 10: absolute path
+		case 11: // in Mods folder
 			strcpy(FullPath,ModsPath);
 			break;
 		default: //Heroes home
@@ -1664,11 +1676,7 @@ char *GetFolder(int Mod)
 int DoesFileExist(char *FName,int Mod)
 {
 	STARTNA(__LINE__, 0)
-	if(Mod==10){ // absolute folder
-		FullPath[0]=0;
-	}else{
-		GetFolder(Mod);
-	}
+	GetFolder(Mod);
 	strncat(FullPath,FName,_MAX_PATH);
 	if(GetFileAttributes(FullPath)==0xFFFFFFFF) RETURN(0)
 	RETURN(1)

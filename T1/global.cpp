@@ -29,6 +29,8 @@ char	*			MapFastLoadingName  = NULL;
 bool PlayingBM_V = 0;
 int InGame;
 
+//static const int HeroesGameType = 3; // 3 = SoD + AB, 2 = only SoD
+//static const int HeroesGameTypeStdPo = 0x67F554;
 
 
 //queue=-1 reserved to debug mode
@@ -160,11 +162,11 @@ void ParseCommandLine()
 	if(!argv)//Parse error 
 		return;
 	ApplicationPath = argv[0];
-	int len = StrLen(ApplicationPath);
+	int len = strlen(ApplicationPath);
 	for(len--; ApplicationPath[len]!='\\' && ApplicationPath[len]!='/'; len--) ;
 	len++;
 	ApplicationDir = (char*)malloc(len + 1);
-	CopyMem(ApplicationDir, ApplicationPath, len);
+	memcpy(ApplicationDir, ApplicationPath, len);
 	ApplicationDir[len] = 0;
 	SetCurrentDirectory(ApplicationDir);
 
@@ -653,7 +655,7 @@ int __fastcall MakeMoving()
 	for (int i = 0; i < 42; i++, mon+=0x548)
 		MoveMonster(mon, random);
 	// Set redraw rect to full screen
-	CopyMem((char*)(combatMan + 81208), (char*)0x694F68, 16);
+	memcpy((char*)(combatMan + 81208), (char*)0x694F68, 16);
 	return 1;
 }
 
@@ -1568,11 +1570,21 @@ static void OnLodsLoaded()
 	STARTNA(__LINE__, 0)
 	if(DeveloperPath[0])
 	{
+		char *s = Format("%sData\\h3std.lod", DeveloperPath);
+		if (DoesFileExist(s, 10) && (LodTypes::Load(6, s) || LodTypes::Add2List(6)))
+		{
+			Message(Format("Cannot load %s", s));
+			Exit();
+		}
+
 		if(LodTypes::Load(4, Format("%sData\\h3wog.lod", DeveloperPath)) || LodTypes::Add2List(4))
 		{
 			Message("Cannot load h3wog.lod from DeveloperPath location.");
 			Exit();
 		}
+		// prioritize h3custom.lod over h3wog.lod
+		LodTypes::Del4List(5);
+		LodTypes::Add2List(5);
 	}
 	//BaseFileLoader();
 	LuaCall("LoadScripts", "global");

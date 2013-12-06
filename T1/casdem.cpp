@@ -2299,9 +2299,9 @@ void ResetNewTownStruct(void){
 	memcpy(TownStructOnScreenNum,(void *)0x66D03C,TOWNNUM_0);
 
 	// clean up for testing
-//  SetMem(*or_AllEnBuildings,sizeof(_BuildMask_)*TOWNNUM_0,0);
-//  SetMem(*or_BuildDepends,sizeof(_BuildMask_)*TOWNNUM_0*44,0);
-//  SetMem(*or_BuildExclusions,sizeof(_BuildMask_)*TOWNNUM_0*44,0);
+//  FillMem(*or_AllEnBuildings,sizeof(_BuildMask_)*TOWNNUM_0,0);
+//  FillMem(*or_BuildDepends,sizeof(_BuildMask_)*TOWNNUM_0*44,0);
+//  FillMem(*or_BuildExclusions,sizeof(_BuildMask_)*TOWNNUM_0*44,0);
 	RETURNV
 }
 void AdjustNewTownStructures(void){

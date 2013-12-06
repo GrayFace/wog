@@ -363,7 +363,7 @@ class CrExpBon{
 
 		static void ClearCrExpBonBFStartStat(int Index){
 			if(Index<0 || Index>=BFNUM) return;
-			SetMem(&BFStat[Index],sizeof(CrExpBonBFStartStat),0);
+			FillMem(&BFStat[Index],sizeof(CrExpBonBFStartStat),0);
 		}
 		static int  B2AIndex(int AIndex){
 			for(int i=0;i<BFNUM;i++) if(BFBodyAct[i]==AIndex) return i;

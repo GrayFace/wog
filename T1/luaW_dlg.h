@@ -485,7 +485,7 @@ void __fastcall HookModalDialog(int** dlg)
 	
 	int** dest = (int**)malloc(1024);
 	dest[0] = *dlg;
-	CopyMem((char*)++dest, (char*)*dlg, 1020);
+	memcpy((char*)++dest, (char*)*dlg, 1020);
 	*dlg = (int*)dest;
 
 	dest[0] = (int*)DialogVMT0;

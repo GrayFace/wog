@@ -58,7 +58,7 @@ Lod::Lod(int location, char *name, int kind){
 	SOD_LOD_ctor(LodTable[Ind],Name);
 	Next=First;
 	First=this;
-	int ret=LoadIt();
+	int ret=LoadIt(name);
 	if(ret){ 
 		char buf[1024];
 		sprintf(buf,"Cannot Load LOD file.\nReason : %i\nName : %s\n\nThe game is unstable now!\nPlease fix the problem and run h3WoG.exe again",
@@ -82,12 +82,12 @@ Lod::~Lod(){
 	RETURNV
 }
 
-int Lod::LoadIt(void){
+int Lod::LoadIt(char *name){
 	STARTNA(__LINE__, 0)
 	if(Ind<0) RETURN(1)
 	char fullpathname[256];
 	strncpy(fullpathname,GetFolder(Location),255); fullpathname[255]=0;
-	strcat_s(fullpathname, 256, Name);
+	strcat_s(fullpathname, 256, name); // allow absolute path for temporary LODs
 	if(LodTypes::Load(Ind, fullpathname)) RETURN(2)
 	int ret=LodTypes::Add2List(Ind);
 	RETURN(ret)
@@ -164,7 +164,7 @@ void LodTypes::ReloadItem(char *name){
 int LodTypes::Add2List(int ind){
 	STARTNA(__LINE__, 0)
 	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to add"); RETURN(-1); }
-	for(int i=0;i<4;i++){
+	for(int i=2;i<4;i++){
 		for(int j=0;j<2;j++){
 			int  n=Table[i][j].Num; 
 			int *t=Table[i][j].Inds;
@@ -178,7 +178,7 @@ int LodTypes::Add2List(int ind){
 int LodTypes::Del4List(int ind){
 	STARTNA(__LINE__, 0)
 	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to del"); RETURN(-3); }
-	for(int i=0;i<4;i++){
+	for(int i=2;i<4;i++){
 		for(int j=0;j<2;j++){
 			int  n=Table[i][j].Num; 
 			int *t=Table[i][j].Inds;
@@ -241,7 +241,11 @@ int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			else if(Mp->n[2]>0) name=ERM2String(ERMString[Mp->n[2]-1],1,0);
 			else name=ERM2String(ERMLString[-Mp->n[2]-1],1,0);
 			Apply(&loc,4,Mp,1);
-			if(loc==5){ MError2("script folder can't be supplied as LOD base location"); RETURN(0) }
+			if(Cmd == 'L'){
+				if(loc==5){ MError2("script folder can't be specified as LOD base location"); RETURN(0) }
+				if(loc==10){ MError2("absolute path can't be specified as LOD location"); RETURN(0) }
+				if(strlen(name) > 31){ MError2("LOD path must not exceed 31 character"); RETURN(0) }
+			}
 			ind = Lod::LoadCustomLOD(loc, name, (Cmd == 'L' ? Lod::STORED : Lod::TEMP));
 			Apply(&ind,4,Mp,0);
 			break;
