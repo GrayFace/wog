@@ -275,9 +275,8 @@ void MapSetup(void)
 		mov  eax,[eax]
 		mov  DDummy,eax
 	}
-	if(DDummy!=SOGMAPTYPE) wog=0; else wog=1;
 	STARTNA(__LINE__, 0)
-	//if(PL_ApplyWoG>1) wog=1; // !!!???
+	if(DDummy == SOGMAPTYPE || PL_ApplyWoG>1) wog = PL_NewHero; else wog=0;
 	if(LoadCustomTxt(1,0)==0) Exit();
 	PrepareSpecWoG(wog);
 	STOP
