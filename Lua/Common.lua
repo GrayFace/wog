@@ -380,15 +380,19 @@ _G.path.FindFirst = FindFirst
 _G.path.findfirst = FindFirst
 
 local dirBuf
-function _G.path.GetCurrentDirectory()
+local function GetCurrentDirectory()
 	dirBuf = dirBuf or malloc(260)
 	u1[dirBuf] = 0
 	call(internal.GetCurrentDirectory, 0, 260, dirBuf)
 	return mem_string(dirBuf)
 end
+_G.path.GetCurrentDirectory = GetCurrentDirectory
 
 function _G.path.SetCurrentDirectory(dir)
-	return call(internal.SetCurrentDirectory, 0, dir) ~= 0
+	-- return call(internal.SetCurrentDirectory, 0, dir) ~= 0
+	local s = GetCurrentDirectory()
+	call(internal.SetCurrentDirectory, 0, dir)
+	return s
 end
 
 local path_noslash = _G.path.noslash
