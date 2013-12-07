@@ -99,6 +99,7 @@
 				OmitFramePointers="true"
 				AdditionalIncludeDirectories="&quot;..\lua\src\&quot;;..\dxdep\;..\HDetour\;..\luasocket\src\"
 				StructMemberAlignment="1"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

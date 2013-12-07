@@ -2279,10 +2279,11 @@ Dword InitEnters(void);
 void FixDLLEntries(void);
 void InitCRT(void);
 
-BOOL WINAPI DllMain(HINSTANCE, DWORD fdwReason, LPVOID)
+BOOL WINAPI DllMain(HINSTANCE hInst, DWORD fdwReason, LPVOID)
 {
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
+		if ((int)hInst != 0x7700000)  MessageBox(0, "WogDll.dll got relocated!", 0, 0);
 		GEr.Clear();
 		Initialize();
 		GEr.canLog = true;

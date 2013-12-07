@@ -12,6 +12,7 @@
 #define HeroesWnd MainWindow
 
 //DirectDraw start
+//>	WogDll.exe!00601ad1() 	
 px_IDirectDraw::px_IDirectDraw(LPDIRECTDRAW lplpDD)
 {
 	px_DxDraw=lplpDD;
@@ -107,6 +108,7 @@ ULONG	__stdcall px_IDirectDraw::Release()
 	return ref;
 }
 HRESULT __stdcall px_IDirectDraw::Compact(){return px_DxDraw->Compact();}
+// 	WogDll.exe!00601c10() 	
 HRESULT __stdcall px_IDirectDraw::CreateClipper(DWORD dwFlags,LPDIRECTDRAWCLIPPER FAR *lplpDDClipper,IUnknown FAR *pUnkOuter)
 {
 //	addlog("clip",1);
@@ -122,6 +124,7 @@ HRESULT __stdcall px_IDirectDraw::CreateClipper(DWORD dwFlags,LPDIRECTDRAWCLIPPE
 	return px_DxDraw->CreateClipper(dwFlags,lplpDDClipper,pUnkOuter);
 }
 HRESULT __stdcall px_IDirectDraw::CreatePalette(DWORD dwFlags,LPPALETTEENTRY lpColorTable,LPDIRECTDRAWPALETTE FAR* lplpDDPalette,IUnknown FAR *pUnkOuter){return px_DxDraw->CreatePalette(dwFlags,lpColorTable,lplpDDPalette,pUnkOuter);}
+// 	WogDll.exe!00600c0d() 	
 HRESULT __stdcall px_IDirectDraw::CreateSurface(LPDDSURFACEDESC lpDDSurfaceDesc,LPDIRECTDRAWSURFACE FAR *lplpDDSurface,IUnknown FAR *pUnkOuter)
 {
 	HRESULT hRes;
@@ -263,6 +266,10 @@ HRESULT __stdcall px_IDirectDrawSurface7::GetAttachedSurface(LPDDSCAPS2 lpDDSCap
 		*lplpDDAttachedSurface=(LPDIRECTDRAWSURFACE7)LPPX_DIRECTDRAWSURFACE7(*lplpDDAttachedSurface);
 	return hRes;
 }
+// 	WogDll.exe!006007f5() 	
+// 	WogDll.exe!0050db59() 	
+// 	WogDll.exe!006008b1() 	
+// 	WogDll.exe!00600945() 	
 HRESULT __stdcall px_IDirectDrawSurface7::Blt(LPRECT lpDestRect,LPDIRECTDRAWSURFACE7 lpDDSrcSurface,LPRECT lpSrcRect,DWORD dwFlags,LPDDBLTFX lpDDBltFx)
 {
 	HRESULT hRes;
@@ -411,6 +418,8 @@ HRESULT __stdcall px_IDirectDrawSurface7::GetClipper(LPDIRECTDRAWCLIPPER FAR *lp
 		*lplpDDClipper=(LPDIRECTDRAWCLIPPER)lpipx_DxClipper;
 	return hRes;
 }
+// 	WogDll.exe!00601c60() 	
+// 	On exit: WogDll.exe!00601e8e() 	
 HRESULT __stdcall px_IDirectDrawSurface7::SetClipper(LPDIRECTDRAWCLIPPER lpDDClipper)//
 {
 	if(lpDDClipper&&this==px_DxObj->lpipx_DxPrimarySurface)
@@ -423,6 +432,7 @@ HRESULT __stdcall px_IDirectDrawSurface7::SetClipper(LPDIRECTDRAWCLIPPER lpDDCli
 	return px_DxSurface->SetClipper(lpDDClipper);
 }
 HRESULT __stdcall px_IDirectDrawSurface7::ChangeUniquenessValue(){return px_DxSurface->ChangeUniquenessValue();}
+// 	WogDll.exe!00601bc4() 	
 HRESULT __stdcall px_IDirectDrawSurface7::GetPixelFormat(LPDDPIXELFORMAT lpDDPixelFormat)
 {
 	HRESULT hRes=px_DxSurface->GetPixelFormat(lpDDPixelFormat);
@@ -434,6 +444,8 @@ HRESULT __stdcall px_IDirectDrawSurface7::GetPixelFormat(LPDDPIXELFORMAT lpDDPix
 	lpDDPixelFormat->dwBBitMask=0x1f;
 	return hRes;
 }
+// 	WogDll.exe!0050d4da() 	
+// 	WogDll.exe!0050d1e8() 	
 HRESULT __stdcall px_IDirectDrawSurface7::GetSurfaceDesc(LPDDSURFACEDESC2 lpDDSurfaceDesc)
 {
 	HRESULT hRes;

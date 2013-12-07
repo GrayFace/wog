@@ -66,12 +66,12 @@ Multiple assignment is supported:
 
 Each script has its own set of variables (it's called environment). Variables stored in '_G' (e.g. _G.MyFunction) can be read by all scripts. Variables stored in 'global' (e.g. global.MyFunction) can be read by all scripts, but they aren't bound to the game you play. So, they aren't saved in a savegame, but persist when you start another map.
 Scripts themselves are also saved in savegame and are run each time the game is loaded. This doesn't apply to scripts in "Global" folder, which behave somewhat similar to 'global' variables.
-When the script is run the first time (that is, on map start), the 'start' variable is set to true. Thus, you should initialize variables like this:
- if start then
+The 'new' veriable is true if the script is run the first time (that normally means it's a new game). Thus, you should initialize variables like this:
+ if new then
 	SomeNumber = 0
 	SomeString = ""
  end
-Note that functions aren't saved to savegame, so you wouldn't normally create functions inside "if start then" block.
+Note that functions aren't saved to savegame, so you wouldn't normally create functions inside "if new then" block.
 
 
 === Types ===

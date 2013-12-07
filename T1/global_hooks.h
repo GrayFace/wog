@@ -441,7 +441,7 @@ __newCallers newCallers[]=
 	{0x55CEFA, (long)_OnLoadDefAddCadre, H_CALL5}, // Don't use global cache for def frames
 	{0x63D6C0, (long)_OnDefCadreDeref, H_DWORD}, // Don't use global cache for def frames
 	{0x4EC685, (long)OnNoNewMessage, H_CALL5}, // Insert Sleep(1) into message loop
-	{0x4CCC40+3, 0x696DE8, H_DWORD}, // Fix rear crash on map start related to tavern rumors
+	{0x4CCC40+3, 0x696DE8, H_DWORD}, // Fix rare crash on map start related to tavern rumors
 	{0x4F0DD0, (long)_FixParseCmdLine, H_CALL5|H_INSR6}, // For paths with "/"; " ?" -> "/?"
 	{0x4EF444, 0x4EF450, H_NOP}, // Bugfix: on start of Tutorial 2 combat options were reset to default values
 	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, -200}, // Command line options: /mapname, /mapdir

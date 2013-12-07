@@ -132,10 +132,14 @@ local ScriptPath = {}
 _G.package = nil
 
 local function LoadPackage(ftext, chunkname, name, env)
-	if not env then
-		local ModName = string_match(name, "([^%.]*)%.")
-		env = {start = true, ModName = ModName, ModPath = ModName and internal.ModsPath..ModName.."\\"}
+	if env then
+		env.new = false
+	else
+		env = {new = true}
 	end
+	local ModName = string_match(name, "([^%.]*)%.")
+	env.ModName = ModName
+	env.ModPath = ModName and internal.ModsPath..ModName.."\\"
 	env = scriptenv(env)
 
 	PackageLoaded[name] = env
@@ -146,8 +150,6 @@ local function LoadPackage(ftext, chunkname, name, env)
 	local f = assert(loadstring(ftext, chunkname))
 	setfenv(f, env)
 	pcall2(f)
-	local start = env.start
-	env.start = start ~= true and start
 	return env
 end
 
@@ -240,7 +242,7 @@ local function createMap(cont)
 	internal.map = map
 	triggers = {}
 	internal.triggers = triggers
-	DefScriptEnv = scriptenv{start = true}
+	DefScriptEnv = scriptenv{new = true}
 	internal.context = cont
 	_G.context = cont
 	if internal.BaseOptions then
@@ -271,7 +273,7 @@ end
 local function loadscript(load, ...)
 	local f, err = load(...)
 	if f then
-		rawset(DefScriptEnv, "start", true)
+		rawset(DefScriptEnv, "new", true)
 		setfenv(f, DefScriptEnv)
 	end
 	return f, err
@@ -381,9 +383,9 @@ local function LoadStoredScripts(first)
 			pcall2(LoadPackageScript, t[3])
 		else
 			if LoadGame and t.ReloadFrom then
-				local ok, s = pcall2(io_LoadString, t.ReloadFrom)
+				local ok, s = pcall(io_LoadString, t.ReloadFrom)
 				if ok then
-					mem_DynStrShort[internal.ErmDynString + 12*t[1]] = s;
+					mem_DynStrShort[internal.ErmDynString + 12*t[1]] = s
 				end
 			end
 			internal.ERM_RunScript(t[1])
@@ -533,7 +535,7 @@ end
 
 local function RunMapScripts()
 	local ver = u4[u4[0x699538] + 0x1F86C]
-	map.version = ver
+	map.MapVersion = ver
 
 	LoadAllERT()
 	event("EnterContext")
@@ -553,10 +555,12 @@ local function RunMapScripts()
 		end
 		hasScripts = nstored ~= #StoredScripts
 		-- load mapname.erm
-		for f in path_find(AppPath.."Maps\\"..path_setext(mem_string(u4[0x699538] + 0x1F6D9), ".erm")) do
+		local mapPath = path_addslash(mem_string(u4[0x699538] + 0x1F7D4))..mem_string(u4[0x699538] + 0x1F6D9)
+		map.MapPath = AppPath..mapPath
+		for f in path_find(AppPath..path_setext(mapPath, ".erm")) do
 			local t = FromFileERM(f)
 			if t then
-				t.ReloadFrom = f
+				t.ReloadFrom = mapPath
 				StoredScripts[#StoredScripts + 1] = t
 				hasExternal = true
 			end

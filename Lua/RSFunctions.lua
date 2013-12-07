@@ -179,7 +179,7 @@ function io.SaveString(path, s, translate)
 end
 
 function io.LoadString(path, translate)
-	local f = assert(io.open(path, translate and "rt" or "rb"))
+	local f = assert(io_open(path, translate and "rt" or "rb"))
 	local s = f:read("*a")
 	f:close()
 	return s
