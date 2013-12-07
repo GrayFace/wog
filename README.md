@@ -6,7 +6,7 @@ About
 
 This is Alpha, so anything may change in future.  
 Team interaction would happen via Skype: sergroj_(my GitHub nickname).
-WoG 3.59 is going to be a platform hosting different mods, somewhat like Era II, but different.  
+WoG 3.59 is going to be a platform hosting different mods, somewhat like Era II in that sense, but different.  
 Alpha version executable is called WogT1.exe for historic reasons. Executable of final version will be called h3wog.exe as usual.
 
 ===
@@ -23,7 +23,7 @@ SpTraits.txt
 ZCRTRAIT.TXT  
 ZELP.TXT  
 
-Note: If you're building WoG from sources, you don't have to install a release, but you must get rid of text files mentioned above.
+Note: If you're building WoG from sources, the only thing you'll need from a release is Data\p\ folder, but you must get rid of text files mentioned above.
 
 ===
 
