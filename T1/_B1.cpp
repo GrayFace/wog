@@ -21,7 +21,6 @@
 #include "timer.h"
 #include "lod.h"
 #include "spell.h"
-#include "zzzz.h"
 #include "global.h"
 #include "MONSTRDLL/dll.h"
 #include "TOWNS/towns.h"
@@ -1067,8 +1066,6 @@ struct __Callers{
 	{0x5A87AD,0x0,DP(IsAngel3)}, // *
 // показ инфы о стэке на поле боя по правой кнопке с кнопкой Ок - далее
 // возможность апгрейда существ в городе, если заменен тип - далее
-// фикс падения при выходе при попытке освободить мою статическую память
-	{0x619BB1,0x0,DP(MyStatMemCheck)}, // *
 // снятие закла со стэка после атаки
 	{0x441C79,0x0,DP(ResetSpell)}, // *
 // типы физич атаки - первый удар
@@ -2183,8 +2180,6 @@ struct __Copiers{
 	{(Byte *)"\xE8\x1\x1\x1\x1\x90",(Byte *)0x50CEAA,6}, //
 // расчет силы магии архангела (можно сделать управляемым !!!!)
 	{(Byte *)"\xE8\x1\x1\x1\x1\x90",(Byte *)0x5A87AD,6}, //
-// фикс падения при выходе при попытке освободить мою статическую память
-	{(Byte *)"\xE8\x1\x1\x1\x1\x90",(Byte *)0x619BB1,6}, //
 // fix Win98 quit crash
 	{(Byte *)"\xE8\x1\x1\x1\x1\x85\xC9\x74\x49\x90\x90",(Byte *)0x4F84F4,11}, //
 // new WoG 3.58 art - shield (retailate)

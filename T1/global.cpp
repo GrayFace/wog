@@ -29,6 +29,9 @@ char	*			MapFastLoadingName  = NULL;
 bool PlayingBM_V = 0;
 int InGame;
 
+Byte *WogInstStart;
+Byte *WogInstEnd;
+
 //static const int HeroesGameType = 3; // 3 = SoD + AB, 2 = only SoD
 //static const int HeroesGameTypeStdPo = 0x67F554;
 
@@ -94,6 +97,12 @@ extern struct __newCopiers
   long   queue;
 } newCopiers[];
 
+__inline Byte *FindHInstance(void *p)
+{
+	MEMORY_BASIC_INFORMATION info;
+	VirtualQuery(p, &info, sizeof(info));
+	return (Byte*)info.AllocationBase;
+}
 
 void newGlobalInitSub()
 {
@@ -104,6 +113,11 @@ void newGlobalInitSub()
 		newWriteInMemory(-3);
 	if(MapFastLoadingName)
 		newWriteInMemory(-200);
+
+	// Find start and end of static memory
+	WogInstStart = FindHInstance(&WogInstStart);
+	for (WogInstEnd = WogInstStart + 0x10000; FindHInstance(WogInstEnd) == WogInstStart; )
+		WogInstEnd += 0x1000;
 }
 
 void newFileLoader()
@@ -1748,6 +1762,22 @@ __declspec(naked) void _OnFastMapLoad()
 		
 		push 0x4EF43E
 		jmp OnFastMapLoad
+	}
+}
+
+__declspec(naked) void _MyStatMemCheck()
+{
+	__asm
+	{
+		mov esi, [esp + 0x0C]
+		cmp esi, WogInstStart
+		jb _Fine
+		cmp esi, WogInstEnd
+		jnb _Fine
+		xor esi, esi
+_Fine:
+		test esi, esi
+		ret
 	}
 }
 

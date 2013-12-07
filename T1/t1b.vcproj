@@ -470,10 +470,6 @@
 				RelativePath=".\womo.h"
 				>
 			</File>
-			<File
-				RelativePath=".\zzzz.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -936,10 +932,6 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="zzzz.cpp"
-				>
 			</File>
 		</Filter>
 		<Filter
