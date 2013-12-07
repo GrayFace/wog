@@ -8,7 +8,6 @@
 #include "erm.h"
 #include "sound.h"
 #include "string.h"
-#include "prot.h"
 #define __FILENUM__ 10
 
 /////////////////////////////////////
@@ -81,8 +80,6 @@ int LoadMP3(int /*ver*/)
 	char buf[4]; if(Loader(buf,4)) RETURN(1)
 	if(buf[0]!='L'||buf[1]!='M'||buf[2]!='P'||buf[3]!='3')
 		{MError("LoadMP3 cannot start loading"); RETURN(1)}
-	WOG_CRC(564) 
-		if(__v!=564) EXITERW(835676,edx,__v) // RETURNV
 	for(int i=0;i<MP3NUM;i++){
 		if(Loader(MP3[i].New,256)) RETURN(1)
 	}

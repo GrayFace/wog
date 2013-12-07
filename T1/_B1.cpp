@@ -21,7 +21,6 @@
 #include "timer.h"
 #include "lod.h"
 #include "spell.h"
-#include "prot.h"
 #include "zzzz.h"
 #include "global.h"
 #include "MONSTRDLL/dll.h"
@@ -2352,10 +2351,14 @@ __declspec( naked ) void main(void)
 static __declspec( naked ) void ForAK(void){
 	__asm{ // הכÿ ְÊ
 //    db "ZVS_4_AK_START"
-		_emit WOGCRC & 0xFF
-		_emit (WOGCRC>>8) & 0xFF
-		_emit (WOGCRC>>16) & 0xFF
-		_emit (WOGCRC>>24) & 0xFF
+		_emit 0
+		_emit 0
+		_emit 0
+		_emit 0
+		//_emit WOGCRC & 0xFF
+		//_emit (WOGCRC>>8) & 0xFF
+		//_emit (WOGCRC>>16) & 0xFF
+		//_emit (WOGCRC>>24) & 0xFF
 		_emit 'Z'
 		_emit 'V'
 		_emit 'S'
@@ -4919,14 +4922,6 @@ void BuildUpNewComboArts(void)
 //  ArtTable[16].PartOfSuperN=12;
 //  ArtTable[22].PartOfSuperN=12;
 //  ArtTable[28].PartOfSuperN=12;
-
-//  __asm int 3
-//  __asm nop 
-	SOD_CRC(387656) 
-		if(__v!=(SODCRC+387656)) EXITERS(774653,eax,__v) // RETURNV
-//  SOD_CRC(132) if(__v!=0x1234+132) RETURNV
-//  WOG_CRC(0) if(__v!=0x1234+45678) RETURNV
-//  WOG_CRC(45678) if(__v!=0x1234+45678) RETURNV
 
 	STOP
 }

@@ -13,7 +13,6 @@
 #include "erm.h"
 #include "erm_lua.h"
 #include "string.h"
-#include "prot.h"
 #define __FILENUM__ 14
 ///////////////////////////
 String::~String(){ Clear(); }

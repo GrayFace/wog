@@ -164,10 +164,8 @@ static int ERM_Trigger(lua_State *L)
 
 	if (ret == 0)
 	{
-		LastAddedTrigger->Num = 1;
-		FillMem((char*)&(LastAddedTrigger->ToDo[0]), sizeof(_ToDo_), 0);
-		LastAddedTrigger->ToDo[0].Type = 1;
-		LastAddedTrigger->ToDo[0].Pointer = ToInteger(L, 3);
+		LastAddedTrigger->Efl[0][0][0].Type = 255;
+		LastAddedTrigger->Efl[0][0][0].Num = ToInteger(L, 3);
 		lua_settop(L, 0);
 		lua_pushnumber(L, insertPos == -1 ? insertPos + TriggerCount : insertPos);
 		RETURN(1)

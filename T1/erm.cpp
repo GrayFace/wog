@@ -25,7 +25,6 @@
 #include "dlg.h"
 #include "spell.h"
 #include "lod.h"
-#include "prot.h"
 #include "erm_lua.h"
 #include "global.h"
 
@@ -8606,8 +8605,6 @@ void InitERM(void)
 	//}
 	// иниацмализируем структуры
 	ResetAll();
-	WOG_CRC(8452453) 
-		if(__v!=8452453) EXITERW(847662,ecx,__v) // RETURNV
 // инициализация всего что надо сбросить для новой игры
 	__asm mov edx,BASE
 	__asm mov edx,[edx]
@@ -8718,9 +8715,9 @@ void ProcessERM(bool needLocals)
 				ERMVar2[998] = ERM_LastY = ERM_PosY = PosY;
 				ERMVar2[999] = ERM_LastL = ERM_PosL = PosL;
 
-				if(cp->Num == 1 && cp->ToDo[0].Type == 1) // Lua trigger
+				if(cp->Efl[0][0][0].Type == 255) // Lua trigger
 				{
-					CallLuaTrigger(cp->ToDo[0].Pointer);
+					CallLuaTrigger(cp->Efl[0][0][0].Num);
 					goto _Cont;
 				}
 
@@ -10871,11 +10868,6 @@ int LoadERM(int /*ver*/)
 		if((v<-StrMan::Count)){ MError("TextConst - wrong z var index."); RETURN(1) }
 		if (v!=0) TextConst[i] = StrMan::GetStoredStr(v, TextConst[i]);
 	}
-
-//  __asm int 3
-	SOD_CRC(3434345) 
-		if(__v!=(SODCRC+3434345)) EXITERS(56437,edx,__v) // RETURNV
-
 
 ////  FreeAllScopes();
 ////  if(ver>9){

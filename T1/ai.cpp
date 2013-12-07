@@ -6,7 +6,6 @@
 #include "b1.h"
 #include "womo.h"
 #include "ai.h"
-#include "prot.h"
 #define __FILENUM__ 11
 
 ///////////////////////
@@ -622,8 +621,6 @@ int SaveAI(void)
 
 void ResetAI(void){
 	STARTNA(__LINE__, 0)
-//__asm int 3
-//  WOG_CRC(8452453) if(__v!=8452453) EXITER(847662,ecx,__v) // RETURNV
 	for(int i=0;i<AIRUNNUM;i++){
 		AIRun[i].Used=0;
 		AIRun[i].Owner=0; // -1 -любой

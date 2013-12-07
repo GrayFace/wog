@@ -4,7 +4,6 @@
 #include "erm.h"
 #include "b1.h"
 #include "womo.h"
-#include "prot.h"
 #define __FILENUM__ 7
 
 //#define MS 144
@@ -851,8 +850,6 @@ struct _Monster_{
 void DaylyWoMo(void)
 {
 	STARTNA(__LINE__, 0)
-	WOG_CRC(124356) 
-		if(__v!=124356) EXITERW(6756,edi,__v) // RETURNV
 // инициализация всего что надо сбросить для новой игры
 	AutoWoMo();
 //  for(int i=0;i<8;i++) CompleteWoMo(i);
@@ -1034,8 +1031,6 @@ int SaveWM(void)
 {
 	STARTNA(__LINE__, 0)
 	if(Saver("LWMN",4)) RETURN(1)
-	SOD_CRC(6478) 
-		if(__v!=(SODCRC+6478)) EXITERS(5436,ecx,__v) // RETURNV
 	if(Saver(WoMo,sizeof(WoMo))) RETURN(1)
 	RETURN(0)
 }

@@ -281,7 +281,7 @@
 				AdditionalOptions="/vmg"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;.\lua\src\&quot;;.\dxdep\;.\HDetour\;.\luasocket\src\"
-				PreprocessorDefinitions="NDEBUG,WIN32,_CONSOLE,_CRT_SECURE_NO_WARNINGS,WOG_DIRTY,WOG_DLL"
+				PreprocessorDefinitions="NDEBUG,WIN32,_CONSOLE,_CRT_SECURE_NO_WARNINGS,WOG_DIRTY"
 				ExceptionHandling="0"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="false"
@@ -440,10 +440,6 @@
 			</File>
 			<File
 				RelativePath=".\npc.h"
-				>
-			</File>
-			<File
-				RelativePath="prot.h"
 				>
 			</File>
 			<File
