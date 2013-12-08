@@ -670,7 +670,8 @@ void __fastcall MonFixMouseover(int mon)
 //	addlog("MovingMonsters call:", ret);
 //}
 
-__declspec(naked) static void MovingMonsters() // called when any monster is about to be drawn{__asm
+// called when any monster is about to be drawn
+__declspec(naked) static void MovingMonsters(){__asm
 {
 	//mov ecx, [ebp + 4]
 	//call LogMovingMonsters
@@ -693,7 +694,8 @@ _std:
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters2() // handle AnimationStep{__asm
+// handle AnimationStep
+__declspec(naked) static void MovingMonsters2(){__asm
 {
 	push ecx
 	call MakeMoving
@@ -707,14 +709,16 @@ __declspec(naked) static void MovingMonsters2() // handle AnimationStep{__asm
 	jmp eax
 }}
 
-__declspec(naked) static void MovingMonsters3() // prevent drawing shadow twice while monster is moving and after Catapult shot{__asm
+// prevent drawing shadow twice while monster is moving and after Catapult shot
+__declspec(naked) static void MovingMonsters3(){__asm
 {
 	mov [esp+20], 1
 	push 0x493FC0
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters4() // show animation while flying{__asm
+// show animation while flying
+__declspec(naked) static void MovingMonsters4(){__asm
 {
 	push ecx
 	
@@ -767,7 +771,8 @@ _std:
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters5() // show animation during any kind of shooting, except ray shooting{__asm
+// show animation during any kind of shooting, except ray shooting
+__declspec(naked) static void MovingMonsters5(){__asm
 {
 	call DoAnimationStep
 	push 0x47B610
@@ -783,28 +788,32 @@ __declspec(naked) static void DoSpellTargetScreen(){__asm
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters6() // teleport select monster{__asm
+// teleport select monster
+__declspec(naked) static void MovingMonsters6(){__asm
 {
 	call DoSpellTargetScreen
 	push 0x5A3880
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters7() // teleport select place{__asm
+// teleport select place
+__declspec(naked) static void MovingMonsters7(){__asm
 {
 	call DoSpellTargetScreen
 	push 0x5A3AE0
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters8() // sacrifice select whom to revieve{__asm
+// sacrifice select whom to revieve
+__declspec(naked) static void MovingMonsters8(){__asm
 {
 	call DoSpellTargetScreen
 	push 0x5A3010
 	ret
 }}
 
-__declspec(naked) static void MovingMonsters9() // sacrifice select whom to kill{__asm
+// sacrifice select whom to kill
+__declspec(naked) static void MovingMonsters9(){__asm
 {
 	call DoSpellTargetScreen
 	push 0x5A31A0
