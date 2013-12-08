@@ -972,6 +972,8 @@ __declspec(naked) void * LuaAlloc(void *, void *, size_t, size_t){__asm
 //-------- Other packages ---------
 
 #include "luaW_dlg.h"
+#undef __FILENUM__
+#define __FILENUM__ 25
 
 //-------- ERM to Lua calls ---------
 

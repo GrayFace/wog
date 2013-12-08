@@ -29,8 +29,8 @@ void HideArea(int X,int Y,int Level,int Owner,int Radius);
 int CalcHideArea(_Hero_ *Hp,int Correct);
 void __stdcall HeroCheck(int NewX,int NewY,int Level,int Owner,int Radius,int Flag);
 void MakeDarkness(int Owner);
-void NewSpecPrepare(void);
-void NewSpecPrepare2(void);
+int NewSpecPrepare(void);
+int NewSpecPrepare2(void);
 void NewSpecShow(void);
 void NewSpecDescr(void);
 //////////////////////////

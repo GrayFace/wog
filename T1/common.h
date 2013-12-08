@@ -346,7 +346,7 @@ public:
 	}
 	int Add(char *d,char *t);
 	int AddN(int d,char *t);
-	static void Del(int level);
+	static void __fastcall Del(int level);
 	void Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum);
 };
 extern PEr GEr;
@@ -365,9 +365,9 @@ extern PEr GEr;
 //#define STARTN0() \
 //#define STARTC(x,y) { GEr.Add(x,y); }
 //#define START(x) { GEr.Add(x,0); }
-#define STOP {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL);}
-#define RETURN(x) {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL);return(x);}
-#define RETURNV {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL); return;}
+#define STOP {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa }}
+#define RETURN(x) {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return(x);}
+#define RETURNV {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return;}
 
 #else
 

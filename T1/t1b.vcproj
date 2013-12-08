@@ -247,8 +247,8 @@
 		</Configuration>
 		<Configuration
 			Name="Dll|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="Release"
+			OutputDirectory=".\Release\Dll"
+			IntermediateDirectory=".\Release\Dll"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops"
 			UseOfMFC="0"
@@ -290,12 +290,12 @@
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
 				FloatingPointModel="0"
-				PrecompiledHeaderFile=".\Release/t1b.pch"
+				PrecompiledHeaderFile=".\Release\Dll\t1b.pch"
 				AssemblerOutput="2"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
-				BrowseInformation="2"
+				AssemblerListingLocation=".\Release\Dll\"
+				ObjectFile=".\Release\Dll\"
+				ProgramDataBaseFileName=".\Release\Dll\"
+				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -327,7 +327,7 @@
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Release/WogDll.pdb"
+				ProgramDatabaseFile=".\Release\Dll\WogDll.pdb"
 				GenerateMapFile="true"
 				MapFileName="..\Build/WogDll.map"
 				MapExports="true"
@@ -353,7 +353,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="Release/$(ProjectName).bsc"
+				OutputFile=".\Release\Dll\$(ProjectName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

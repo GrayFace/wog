@@ -706,8 +706,9 @@ void MakeDarkness(int Owner)
 static char *StdSpecDef="UN44.DEF";
 static char *AddSpec1Def="ZGodBon.DEF";
 static char *AddSpec2Def="ZGodBon.DEF";
-void NewSpecPrepare(void)
+int NewSpecPrepare(void)
 {
+	int r;
 	STARTNA(__LINE__, 0)
 	if(PL_NewHero==0){
 		__asm{
@@ -726,6 +727,7 @@ void NewSpecPrepare(void)
 			push   0x41 // x
 			mov    eax,0x4EA800
 			call   eax
+			mov    r, eax
 		}
 	}else{
 		__asm{
@@ -744,13 +746,15 @@ void NewSpecPrepare(void)
 			push   0x3F//0x41+1//0x41 // x
 			mov    eax,0x4EA800
 			call   eax
+			mov    r, eax
 		}
 	}  
-	RETURNV
+	RETURN(r)
 }
 
-void NewSpecPrepare2(void)
+int NewSpecPrepare2(void)
 {
+	int r;
 	STARTNA(__LINE__, 0)
 	if(PL_NewHero==0){
 		__asm{
@@ -769,6 +773,7 @@ void NewSpecPrepare2(void)
 			push   0x70 //0x70 // x
 			mov    eax,0x4EA800
 			call   eax
+			mov    r, eax
 		}  
 	}else{
 		__asm{
@@ -787,9 +792,10 @@ void NewSpecPrepare2(void)
 			push   0x71 // x
 			mov    eax,0x4EA800
 			call   eax
+			mov    r, eax
 		}  
 	}
-	RETURNV
+	RETURN(r)
 }
 
 static _Hero_ *hp_ns;

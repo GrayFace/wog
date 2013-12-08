@@ -8,7 +8,7 @@
 
 
 #ifdef DebugBuild
-	void __inline addlog(char *s,int flag){FILE* f=fopen("dxproxylog.txt", "at");if(flag==0)fprintf(f,"%s\n",s);else fprintf(f,"%s:%d\n",s,flag);fclose(f);}
+	void __inline addlog(char *s,int flag = 0){FILE* f=fopen("dxproxylog.txt", "at");if(flag==0)fprintf(f,"%s\n",s);else fprintf(f,"%s:%d\n",s,flag);fclose(f);}
 	void __inline clearlog(){DeleteFile("Logger.txt"); DeleteFile("Logger.txt");}
 #else
 	void __inline clearlog(){ DeleteFile("Logger.txt"); }

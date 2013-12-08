@@ -313,31 +313,6 @@ typedef struct _EXCEPTION_POINTERS { // exp
 		CONTEXT          *ContextRecord;
 } EXCEPTION_POINTERS;
 */
-PEr GEr;
-void PEr::Del(int level){
-	__asm pusha
-	int i = --GEr.DescrCount;
-	if (i < _countof(GEr.Descr))
-	{
-		if (i != level)
-		{
-			FILE* f;
-			if(!fopen_s(&f, "UnclosedStackLevels.txt", "at"))
-			{
-				if(GEr.AType[i])
-					fprintf(f, "(%i) %s : %i\n", i, SourceFileList[(int)GEr.Descr[i]/1000000], (int)GEr.Descr[i]%1000000);
-				else
-					fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
-				fclose(f);
-			}
-			for(; i > level; i--){ GEr.Descr[i]=0; GEr.Text[i]=0; }
-		}
-		GEr.Descr[i]=0; GEr.Text[i]=0;
-	}
-	__asm popa
-}
-_ZPrintf_ PEr::Frmt;
-char PEr::GlbBuf[2][30000];
 
 //EXCEPTION_CONTINUE_EXECUTION (–1)
 //EXCEPTION_CONTINUE_SEARCH (0)

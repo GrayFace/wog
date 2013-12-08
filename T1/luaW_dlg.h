@@ -1,4 +1,6 @@
 #include "dlg.h"
+#undef __FILENUM__
+#define __FILENUM__ 24
 
 //Dword __fastcall iActivate(_Body_ *body,int,int par1,int par2){
 //	STARTNA(__LINE__, 0)

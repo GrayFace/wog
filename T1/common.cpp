@@ -55,9 +55,20 @@ char *SourceFileList[]={
 	"dlg",       //20
 	"spell",     //21
 	"global",    //22
-	"luaW_debug",//23
+	"?", //23
 	"luaW_dlg",  //24
 	"erm_lua",   //25
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
+	"?",
 	0
 };
 char LastLoadedDefName[16]; // tmp, sometimes LoadDEF crashes
@@ -5465,6 +5476,33 @@ void __fastcall ConvertPalettesOfAllDefs(void* body, int player)
 		DlgItem_ProcessCmd4Item(body, 512, 13, i, player);
 }
 
+
+
+PEr GEr;
+_ZPrintf_ PEr::Frmt;
+char PEr::GlbBuf[2][30000];
+
+void __fastcall PEr::Del(int level){
+	int i = --GEr.DescrCount;
+	if (i < _countof(GEr.Descr))
+	{
+		if (i != level)
+		{
+			FILE* f;
+			if(!fopen_s(&f, "UnclosedStackLevels.txt", "at"))
+			{
+				if(GEr.AType[i])
+					fprintf(f, "(%i) %s : %i\n", i, SourceFileList[(int)GEr.Descr[i]/1000000], (int)GEr.Descr[i]%1000000);
+				else
+					fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
+				fclose(f);
+			}
+			for(; i > level; i--){ GEr.Descr[i]=0; GEr.Text[i]=0; }
+		}
+		GEr.Descr[i]=0; GEr.Text[i]=0;
+	}
+}
+
 int PEr::Add(char *d,char *t){
 	if(InterruptMe){
 		__asm int 3
@@ -5513,6 +5551,7 @@ __declspec(naked) void *PEr::GetStackTop(){__asm
 	mov eax, fs:[4]
 	ret
 }}
+
 
 void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum){
  GlbBuf[0][0]=0;
