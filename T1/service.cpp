@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <direct.h>
 #include <stdio.h>
+#include <DbgHelp.h>
+#include <io.h>
 
 #include "structs.h"
 #include "common.h"
@@ -328,7 +330,7 @@ void PEr::Del(int level){
 					fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
 				fclose(f);
 			}
-			for(; i> level; i--){ GEr.Descr[i]=0; GEr.Text[i]=0; }
+			for(; i > level; i--){ GEr.Descr[i]=0; GEr.Text[i]=0; }
 		}
 		GEr.Descr[i]=0; GEr.Text[i]=0;
 	}
@@ -386,8 +388,34 @@ static char *ParseContext(int par,CONTEXT *Cnt){
 	}
 	return Buf;
 }
+
+void SaveMinidump(EXCEPTION_POINTERS *Reason)
+{
+	BOOL (WINAPI *dump)(
+		IN HANDLE hProcess,
+		IN DWORD ProcessId,
+		IN HANDLE hFile,
+		IN int DumpType,
+		IN CONST PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam, OPTIONAL
+		IN CONST PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam, OPTIONAL
+		IN CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam OPTIONAL
+	);
+	*(PROC*)&dump = DllImport(".\\dbghelp.dll", "MiniDumpWriteDump", false);
+	if (dump == 0) return;
+	FILE* f;
+	if(fopen_s(&f, "WOGCRASHDUMP.DMP", "wb")) return;
+	_MINIDUMP_EXCEPTION_INFORMATION exc;
+	exc.ExceptionPointers = Reason;
+	exc.ClientPointers = false;
+	exc.ThreadId = GetCurrentThreadId();
+	dump(GetCurrentProcess(), GetCurrentProcessId(), (HANDLE)_get_osfhandle(_fileno(f)),
+		MiniDumpWithIndirectlyReferencedMemory|MiniDumpWithDataSegs, &exc, 0, 0);
+	fclose(f);
+}
+
 long MyExcHandler(EXCEPTION_POINTERS *Reason)
 {
+	SaveMinidump(Reason);
 	char fl=0,*po;
 	Dword Par=0;
 	switch(Reason->ExceptionRecord->ExceptionCode){

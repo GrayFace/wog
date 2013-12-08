@@ -5518,6 +5518,75 @@ int PEr::AddN(int d,char *t){
 	return i;
 }
 
+__declspec(naked) void *PEr::GetStackTop() {__asm
+{
+	mov eax, fs:[4]
+	ret
+}}
+
+void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum){
+ GlbBuf[0][0]=0;
+ if(Descr[0]){
+	Zsprintf2(&Frmt,"******************************_Exception_(trace_details)_******************************",0,0);
+	StrCopy(GlbBuf[0],30000,Frmt.Str);
+	for(int i=0;i<50;i++){
+		if(Descr[i]){
+//if(AddPar==1) break; // protection
+			if(AType[i]){
+//          sprintf(&GlbBuf[0][StrLen(GlbBuf[0])],"\n### Location: %i : %i",(int)Descr[i]/1000000,(int)Descr[i]%1000000);
+				Zsprintf3(&Frmt,"%s\n### Location: %s : %i",(Dword)GlbBuf[0],(Dword)SourceFileList[(int)Descr[i]/1000000],(int)Descr[i]%1000000);
+				StrCopy(GlbBuf[0],29999,Frmt.Str);
+			}else{
+				Zsprintf2(&Frmt,"%s\n### Reason  : \"%s\"",(Dword)GlbBuf[0],(Dword)Descr[i]);
+				StrCopy(GlbBuf[0],29999,Frmt.Str);
+			}
+			if(Text[i]){
+				StrCopy(GlbBuf[1],100,Text[i]); GlbBuf[1][100]=0;
+				Zsprintf2(&Frmt,"%s\n***** Context (100 chars) *****\n%s\n***********************",(Dword)GlbBuf[0],(Dword)GlbBuf[1]);
+				StrCopy(GlbBuf[0],29999,Frmt.Str);
+			}
+		}
+	}
+ }
+	if(Reason){
+		Zsprintf2(&Frmt,"%s\n\nEIP = {0x%08X}, ",(Dword)GlbBuf[0],(Dword)Address);
+		StrCopy(GlbBuf[0],30000,Frmt.Str);
+		Zsprintf2(&Frmt,"%s %s",(Dword)GlbBuf[0],(Dword)Reason);
+		StrCopy(GlbBuf[0],30000,Frmt.Str);
+		if(Flag){
+			Zsprintf2(&Frmt,"%s {0x%08X}",(Dword)GlbBuf[0],AddPar);
+			StrCopy(GlbBuf[0],30000,Frmt.Str);
+		}
+	}
+//    CommonDialog(Frmt.Str);
+	if(Erm){
+		Zsprintf2(&Frmt,"%s\n\nLast Executed ERM Receiver:\n\n%s",(Dword)GlbBuf[0],(Dword)LuaPushERMInfo(Erm));
+		lua_pop(Lua, -1);
+		StrCopy(GlbBuf[0],30000,Frmt.Str);
+	}
+	Zsprintf2(&Frmt,"%s%s",(Dword)GlbBuf[0],(Dword)Adendum);
+	StrCopy(GlbBuf[0],30000,Frmt.Str);
+
+	strcat_s(GlbBuf[0], 30000, Format("\nStack Top = %x\n", StackTop));
+
+	strcat_s(GlbBuf[0], 30000, Format("\nLast loaded DEF:\n\n%s", LastLoadedDefName));
+
+	char *msg = Format("%s\n\n%s", (Dword)GlbBuf[0], "PLEASE SEND {WOGCRASHDUMP.DMP}, {WOGCRASHLOG.TXT} AND {WOGERMLOG.TXT} FILES TO {sergroj@mail.ru}");
+	Zsprintf2(&Frmt,"WoG Version: %s\n\n%s",(Dword)WOG_STRING_VERSION,(Dword)msg);
+	StrCopy(GlbBuf[0],30000,Frmt.Str);
+	Zsprintf2(&Frmt,"Map Saved with: %s\n\n%s",(Dword)MapSavedWoG,(Dword)GlbBuf[0]);
+	StrCopy(GlbBuf[0],30000,Frmt.Str);
+	time_t ltime;    time( &ltime );
+	struct tm *gmt;  gmt = gmtime( &ltime );
+	Zsprintf2(&Frmt,"Time Stamp: %s\n\n%s",(Dword)asctime(gmt),(Dword)GlbBuf[0]);
+	StrCopy(GlbBuf[0],30000,Frmt.Str);
+	SaveSetupState("WOGCRASHLOG.TXT",GlbBuf[0],strlen(GlbBuf[0]));
+	DumpERMVars("CRASH LOG RELATED CONTEXT",asctime(gmt));
+	Message(msg);
+}
+
+
+
 static void DllImportHalt(const char * dll, const char * proc)
 {
 	char buf[256];
