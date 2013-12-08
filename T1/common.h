@@ -321,23 +321,29 @@ class PEr{
 	char  AType[50]; // 0 - string, 1 - number
 	char *Descr[50];
 	char *Text[50];
+	int   DescrCount;
 	//char  Erm[100];
 	char *Erm;
 	static _ZPrintf_ Frmt;
 	static char GlbBuf[2][30000];
 public:
 	bool canLog;
-	PEr(){ for(int i=0;i<50;i++){ Descr[i]=Text[i]=0; Sig='PER_';}}
-	void Clear(void){ for(int i=0;i<50;i++){ Descr[i]=Text[i]=0; AType[i]=0; }}
+	PEr(){
+		for(int i=0;i<50;i++){ Descr[i]=Text[i]=0; }
+		Sig='PER_';
+		DescrCount = 0;
+		Erm = 0;
+	}
+	void Clear(void){ for(int i=0;i<50;i++){ Descr[i]=Text[i]=0; AType[i]=0; } DescrCount = 0; }
 	void LastERM(char *s){ Erm = s; }//StrCopy(Erm,99,s); }
 	void WrongYVarUsage(void){ 
 		Zsprintf2(&Frmt,"WARNING!\n\n%s\n\n ERM Receiver is:\n\n%s",(Dword)"Trying to set Y var outside of a function.",(Dword)(Erm ? Erm : ""));
 		StrCopy(GlbBuf[0],30000,Frmt.Str);
 		Message(GlbBuf[0],1,-1);
 	}
-	void Add(char *d,char *t);
-	void AddN(int d,char *t);
-	static void Del(void);
+	int Add(char *d,char *t);
+	int AddN(int d,char *t);
+	static void Del(int level);
 	void Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum){
 	 GlbBuf[0][0]=0;
 	 if(Descr[0]){
@@ -404,28 +410,28 @@ extern PEr GEr;
 #ifdef WOG_DIRTY
 
 // Slava recklessly modifies EBX in a lot of places, so LAStEBX should make things safer
-#define STARTC(x,y) { __asm{ pusha } GEr.Add(x,y); __asm{ popa } }  int LAStEBX; __asm{ mov LAStEBX, ebx}
-#define START(x)    { __asm{ pusha } GEr.Add(x,0); __asm{ popa } }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define STARTC(x,y)  __asm{ pusha } int GErLeveL = GEr.Add(x,y); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define START(x)     __asm{ pusha } int GErLeveL = GEr.Add(x,0); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
 //#define STARTN(x)    { __asm{ pusha } GEr.Add(STRINGER(x),0); __asm{ popa } }
-#define STARTNC(x,y)    { __asm{ pusha } GEr.AddN(x,y); /*_CrtDumpMemoryLeaks();*/ __asm{ popa } }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define STARTNC(x,y)   __asm{ pusha } int GErLeveL = GEr.AddN(x,y); /*_CrtDumpMemoryLeaks();*/ __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
 //#define STARTN(x) { __asm{ pusha } GEr.AddN(x,0); __asm{ popa } }
 #define STARTNA(x,y)    STARTNC(__FILENUM__*1000000 + x, y)
 //#define STARTN0() \
 //#define STARTC(x,y) { GEr.Add(x,y); }
 //#define START(x) { GEr.Add(x,0); }
-#define STOP {__asm{ mov ebx, LAStEBX } PEr::Del();}
-#define RETURN(x) {__asm{ mov ebx, LAStEBX } PEr::Del();return(x);}
-#define RETURNV {__asm{ mov ebx, LAStEBX } PEr::Del(); return;}
+#define STOP {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL);}
+#define RETURN(x) {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL);return(x);}
+#define RETURNV {__asm{ mov ebx, LAStEBX } PEr::Del(GErLeveL); return;}
 
 #else
 
-#define STARTC(x,y) { GEr.Add(x,y); }
-#define START(x)    { GEr.Add(x,0); }
-#define STARTNC(x,y)    { GEr.AddN(x,y); }
+#define STARTC(x,y)  int GErLeveL = GEr.Add(x,y);
+#define START(x)     int GErLeveL = GEr.Add(x,0);
+#define STARTNC(x,y)   int GErLeveL = GEr.AddN(x,y);
 #define STARTNA(x,y)    STARTNC(__FILENUM__*1000000 + x, y)
-#define STOP {PEr::Del();}
-#define RETURN(x) {PEr::Del();return(x);}
-#define RETURNV {PEr::Del(); return;}
+#define STOP {PEr::Del(GErLeveL);}
+#define RETURN(x) {PEr::Del(GErLeveL); return(x);}
+#define RETURNV {PEr::Del(GErLeveL); return;}
 
 #endif
 

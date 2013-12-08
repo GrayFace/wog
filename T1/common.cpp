@@ -5475,7 +5475,7 @@ void __fastcall ConvertPalettesOfAllDefs(void* body, int player)
 		DlgItem_ProcessCmd4Item(body, 512, 13, i, player);
 }
 
-void PEr::Add(char *d,char *t){
+int PEr::Add(char *d,char *t){
 	if(InterruptMe){
 		__asm int 3
 	}
@@ -5487,16 +5487,16 @@ void PEr::Add(char *d,char *t){
 		canLog = true;
 	}
 #endif
-	for(int i=0;i<50;i++){
-		if(Descr[i]==0){ AType[i]=0; Descr[i]=d; Text[i]=t; return; }
-	}
+	int i = DescrCount++;
+	if (i < _countof(Descr)){ AType[i]=0; Descr[i]=d; Text[i]=t; }
+	return i;
 }
 
 #ifdef LogAll
 byte counts[25][12000];
 #endif
 
-void PEr::AddN(int d,char *t){
+int PEr::AddN(int d,char *t){
 	if(InterruptMe){
 		__asm int 3
 	}
@@ -5513,9 +5513,9 @@ void PEr::AddN(int d,char *t){
 		canLog = true;
 	}
 #endif
-	for(int i=0;i<50;i++){
-		if(Descr[i]==0){ AType[i]=1; Descr[i]=(char *)d; Text[i]=t; return; }
-	}
+	int i = DescrCount++;
+	if (i < _countof(Descr)){ AType[i]=1; Descr[i]=(char*)d; Text[i]=t; }
+	return i;
 }
 
 static void DllImportHalt(const char * dll, const char * proc)
