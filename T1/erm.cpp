@@ -9157,22 +9157,19 @@ void DoGainLevel(void)
 	RETURNV
 }
 
-__declspec(naked) void GainLevel(void)
+__declspec(naked) void GainLevel(void){__asm
 {
-	__asm
-	{
-		mov GL_PSkill, esi
-		mov GL_Hp, ebx
-		pusha
-		call DoGainLevel
-		popa
-		mov    eax,GL_PSkill
-		mov    dl,[ebx+eax+0x476]
-		inc    dl
-		mov    [ebx+eax+0x476],dl
-		ret
-	}
-}
+	mov GL_PSkill, esi
+	mov GL_Hp, ebx
+	pusha
+	call DoGainLevel
+	popa
+	mov    eax,GL_PSkill
+	mov    dl,[ebx+eax+0x476]
+	inc    dl
+	mov    [ebx+eax+0x476],dl
+	ret
+}}
 
 int ERM_HeroGainLevel(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 {
@@ -9531,36 +9528,30 @@ void __fastcall HintTrigger(_HC_MsgParams_ *MsgParams)
 	RETURNV;
 }
 
-__declspec(naked) void HintControl()
+__declspec(naked) void HintControl(){__asm
 {
-	_asm
-	{
-		push ecx
-		xor ecx, ecx
-		call HintTrigger
-		pop ecx
-		push 0x5FF400
-		ret
-	}
-}
+	push ecx
+	xor ecx, ecx
+	call HintTrigger
+	pop ecx
+	push 0x5FF400
+	ret
+}}
 
-__declspec(naked) void HintWindow()
+__declspec(naked) void HintWindow(){__asm
 {
-	_asm
-	{
-		call PlaceCreature
-		cmp eax, 0
-		jl _norm
-		ret 0x28
+	call PlaceCreature
+	cmp eax, 0
+	jl _norm
+	ret 0x28
 _norm:
-		lea ecx, [esp + 4]
-		call HintTrigger
-		mov ecx, HC_Buffer
-		mov edx, 4
-		push 0x4F6C00
-		ret
-	}
-}
+	lea ecx, [esp + 4]
+	call HintTrigger
+	mov ecx, HC_Buffer
+	mov edx, 4
+	push 0x4F6C00
+	ret
+}}
 
 
 int AS_CGood[][3]={{12}, {5,1,3},{7,1,3},{9,50,200},{15,1,6},{16,1,6},

@@ -220,14 +220,11 @@ void __fastcall Scroll_Callback(int tick, Dword self)
 	LuaCall("Scroll_Callback", self, tick);
 }
 
-__declspec(naked) void ScrollCallback_asm()
+__declspec(naked) void ScrollCallback_asm(){__asm
 {
-	_asm
-	{
-		mov edx, esi
-		jmp Scroll_Callback
-	}
-}
+	mov edx, esi
+	jmp Scroll_Callback
+}}
 
 /*
 int __fastcall Dlg_Show(_DlgItem_* self, int, int a2, int a3)

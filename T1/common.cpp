@@ -1743,49 +1743,43 @@ const char *Format_buf_end = &Format_buffer[sizeof(Format_buffer)];
 
 // must be called from main thread
 // returned string can be used in subsequent call to Format
-__declspec(naked) char* __cdecl Format(const char*, ...)
+__declspec(naked) char* __cdecl Format(const char*, ...){__asm
 {
-	_asm
-	{
-		pop eax
-		mov Format_ret, eax
-		push 10000
-		mov eax, Format_buf
-		push eax
-		push offset _after
-		jmp sprintf_s
+	pop eax
+	mov Format_ret, eax
+	push 10000
+	mov eax, Format_buf
+	push eax
+	push offset _after
+	jmp sprintf_s
 _after:
-		add esp, 8
-		mov eax, Format_buf
-		lea ecx, [eax + 10000]
-		cmp ecx, Format_buf_end
-		jnz _end
-		lea ecx, Format_buffer
+	add esp, 8
+	mov eax, Format_buf
+	lea ecx, [eax + 10000]
+	cmp ecx, Format_buf_end
+	jnz _end
+	lea ecx, Format_buffer
 _end:
-		mov Format_buf, ecx
-		jmp Format_ret
-	}
-}
+	mov Format_buf, ecx
+	jmp Format_ret
+}}
 
 // must be called from main thread
 // returned string can't be used in subsequent call to Format, but doesn't eat up a Format buffer slot
-__declspec(naked) char* __cdecl Format2(const char*, ...)
+__declspec(naked) char* __cdecl Format2(const char*, ...){__asm
 {
-	_asm
-	{
-		pop eax
-		mov Format_ret, eax
-		push 10000
-		mov eax, Format_buf
-		push eax
-		push offset _after
-		jmp sprintf_s
+	pop eax
+	mov Format_ret, eax
+	push 10000
+	mov eax, Format_buf
+	push eax
+	push offset _after
+	jmp sprintf_s
 _after:
-		add esp, 8
-		mov eax, Format_buf
-		jmp Format_ret
-	}
-}
+	add esp, 8
+	mov eax, Format_buf
+	jmp Format_ret
+}}
 
 char* NewString(const char* str)
 {
@@ -1907,57 +1901,53 @@ void * __fastcall GetAdvMapDlgToRedraw(bool force = false)
 	return 0;
 }
 
-__declspec(naked) void __fastcall RedrawMap(bool /* force */)
+__declspec(naked) void __fastcall RedrawMap(bool /* force */){__asm
 {
-	__asm{
 // перерисовывает экран advanture
 // ecx -> advManager
-		call   GetAdvMapDlgToRedraw
-		mov    ecx,eax
+	call   GetAdvMapDlgToRedraw
+	mov    ecx,eax
 // вылетает, если нуль
-		or     ecx,ecx
-		je     l_not
-	 push   ecx
-		push   1
-		push   1
-		push   0xFFFFFFFF
-		mov    eax,0x4032E0
-		call   eax
-	 pop    ecx
-		push   1
-		push   1
-		push   0xFFFFFFFF
-		mov    eax,0x403420
-		call   eax
+	or     ecx,ecx
+	je     l_not
+ push   ecx
+	push   1
+	push   1
+	push   0xFFFFFFFF
+	mov    eax,0x4032E0
+	call   eax
+ pop    ecx
+	push   1
+	push   1
+	push   0xFFFFFFFF
+	mov    eax,0x403420
+	call   eax
 // перерисовывает правое нижнее окно карты
-		mov    ecx,0x6992B8
-		mov    ecx,[ecx]
+	mov    ecx,0x6992B8
+	mov    ecx,[ecx]
 //    mov    ecx, -> advManager
-		push   1
-		push   1
-		push   1
-		mov    eax,0x415D40
-		call   eax
+	push   1
+	push   1
+	push   1
+	mov    eax,0x415D40
+	call   eax
 l_not:
-		ret
-	}
-}
+	ret
+}}
 
-__declspec(naked) void __fastcall RedrawRes(bool /* force */)
+__declspec(naked) void __fastcall RedrawRes(bool /* force */){__asm
 {
-	__asm{
-		call   GetAdvMapDlgToRedraw
-		test   eax, eax
-		jz    _skip
-		mov    ecx,eax
-		push   1
-		push   1
-		mov    eax,0x403F00
-		call   eax
+	call   GetAdvMapDlgToRedraw
+	test   eax, eax
+	jz    _skip
+	mov    ecx,eax
+	push   1
+	push   1
+	mov    eax,0x403F00
+	call   eax
 _skip:
-		ret
-	}
-}
+	ret
+}}
 
 void RedrawTown(void)
 {
@@ -5518,7 +5508,7 @@ int PEr::AddN(int d,char *t){
 	return i;
 }
 
-__declspec(naked) void *PEr::GetStackTop() {__asm
+__declspec(naked) void *PEr::GetStackTop(){__asm
 {
 	mov eax, fs:[4]
 	ret

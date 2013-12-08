@@ -962,15 +962,12 @@ static int DebugConsole(lua_State *L)
 
 void * ReallocMem; // function MyReallocMem(p: ptr; size: int): ptr;
 
-__declspec(naked) void * LuaAlloc(void *, void *, size_t, size_t)
+__declspec(naked) void * LuaAlloc(void *, void *, size_t, size_t){__asm
 {
-	__asm
-	{
-		mov eax, [esp + 8]
-		mov edx, [esp + 16]
-		jmp ReallocMem
-	}
-}
+	mov eax, [esp + 8]
+	mov edx, [esp + 16]
+	jmp ReallocMem
+}}
 
 //-------- Other packages ---------
 

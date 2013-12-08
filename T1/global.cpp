@@ -472,65 +472,56 @@ PCHAR* CommandLineToArgvA(PCHAR CmdLine,int* _argc)
 	return argv;
 }
 
-__declspec(naked) void GetTerrainOverlayEnd()
+__declspec(naked) static void GetTerrainOverlayEnd(){__asm
 {
-	_asm
-	{
-		mov edx, [ecx+3Ch] // subtype
-		pop edi
-		pop esi
-		pop ebx
-		ret
-	}
-}
+	mov edx, [ecx+3Ch] // subtype
+	pop edi
+	pop esi
+	pop ebx
+	ret
+}}
 
-__declspec(naked) void GetTerrainOverlaySwitch()
+__declspec(naked) static void GetTerrainOverlaySwitch(){__asm
 {
-	_asm
-	{
-		cmp eax, 2Eh
-		jz  _found
+	cmp eax, 2Eh
+	jz  _found
 
-		cmp eax, 40 // new WoG overlays are type 40, subtype 10000+
-		jnz _others
-		mov eax, [ecx+3Ch]
-		cmp eax, 10000
-		mov eax, [ecx+38h]
-		jnb _others
+	cmp eax, 40 // new WoG overlays are type 40, subtype 10000+
+	jnz _others
+	mov eax, [ecx+3Ch]
+	cmp eax, 10000
+	mov eax, [ecx+38h]
+	jnb _others
 
 _found:
-		pop edx
-		jmp GetTerrainOverlayEnd
+	pop edx
+	jmp GetTerrainOverlayEnd
 _others:
-		ret
-	}
-}
+	ret
+}}
 
 /*
-__declspec(naked) void DisplayDialogHook()
+__declspec(naked) static void DisplayDialogHook(){__asm
 {
-	_asm
-	{
-		mov al, HookHintWindow
-		test al, al
-		jz _normal
-		xor al, al
-		mov HookHintWindow, al
+	mov al, HookHintWindow
+	test al, al
+	jz _normal
+	xor al, al
+	mov HookHintWindow, al
 
-		cmp edx, 4 // only change the right-mouse click dialog
-		jnz _normal
+	cmp edx, 4 // only change the right-mouse click dialog
+	jnz _normal
 
-		xor edx, edx
-		call HintTrigger // HintTrigger(msg, 0)
-		mov ecx, eax
-		mov edx, 4
+	xor edx, edx
+	call HintTrigger // HintTrigger(msg, 0)
+	mov ecx, eax
+	mov edx, 4
 
 _normal:
-		pop eax // return address
-		push 0x4F6C05 // code overwritten by hook
-		jmp eax
-	}
-}
+	pop eax // return address
+	push 0x4F6C05 // code overwritten by hook
+	jmp eax
+}}
 */
 
 /*
@@ -541,81 +532,72 @@ void __fastcall ShowItem(_MapItem_ *mi)
 	Message(Format("%d%d%d", x, y, l));
 }
 
-__declspec(naked) void BeforeHeroMove()
+__declspec(naked) static void BeforeHeroMove(){__asm
 {
-	_asm
-	{
-		push ecx
-		mov ecx, [esp+8]
-		call ShowItem
-		mov ecx, [esp+12]
-		call ShowItem
-		mov ecx, [esp+16]
-		call ShowItem
-		mov ecx, [esp+24]
-		call ShowItem
-		pop ecx
+	push ecx
+	mov ecx, [esp+8]
+	call ShowItem
+	mov ecx, [esp+12]
+	call ShowItem
+	mov ecx, [esp+16]
+	call ShowItem
+	mov ecx, [esp+24]
+	call ShowItem
+	pop ecx
 
-		pop eax
-		push ebp
-		mov ebp, esp
-		sub esp, 48h
-		inc eax
-		jmp eax
-	}
-}
+	pop eax
+	push ebp
+	mov ebp, esp
+	sub esp, 48h
+	inc eax
+	jmp eax
+}}
 */
 
-__declspec(naked) void MonDlgBorderColorBug()
+__declspec(naked) static void MonDlgBorderColorBug(){__asm
 {
-	_asm
-	{
-		push ecx
-		push [esp+18h]
-		push [esp+18h]
-		push [esp+18h]
-		push [esp+18h]
-		push [esp+18h]
-		mov eax, 0x48F940
-		call eax // Dlg_0048F940 (this + 5 params)
-		pop ecx
-		call ConvertPalettesOfAllDefs_CurPlayer
-		ret 14h
-	}
-}
+	push ecx
+	push [esp+18h]
+	push [esp+18h]
+	push [esp+18h]
+	push [esp+18h]
+	push [esp+18h]
+	mov eax, 0x48F940
+	call eax // Dlg_0048F940 (this + 5 params)
+	pop ecx
+	call ConvertPalettesOfAllDefs_CurPlayer
+	ret 14h
+}}
 
-__declspec(naked) void GarrisonDlgBorderColorBug()
+__declspec(naked) static void GarrisonDlgBorderColorBug(){__asm
 {
-	_asm
-	{
-		mov eax, 0x44FFA0
-		call eax // DlgPcx_BuildAndLoadPcx
+	mov eax, 0x44FFA0
+	call eax // DlgPcx_BuildAndLoadPcx
 
-		push eax
+	push eax
 
-		mov ecx, eax
-		mov edx, [ebp+8] // gerrison struct
-		xor eax, eax
-		mov al, [edx] // owner
-		cmp eax, 8
-		jb _adjust
+	mov ecx, eax
+	mov edx, [ebp+8] // gerrison struct
+	xor eax, eax
+	mov al, [edx] // owner
+	cmp eax, 8
+	jb _adjust
 
-		mov ecx, BASE
-		mov ecx, [ecx]
-		//mov ecx, dword ptr [BASE]
-		mov eax, 0x4CE6E0
-		call eax // GetHumanPlayerIndex
-		mov ecx, [esp]
+	mov ecx, BASE
+	mov ecx, [ecx]
+	//mov ecx, dword ptr [BASE]
+	mov eax, 0x4CE6E0
+	call eax // GetHumanPlayerIndex
+	mov ecx, [esp]
 _adjust:
-		push eax
-		mov eax, 0x4501D0
-		call eax // DlgItem_AjustBorderColor2Player
+	push eax
+	mov eax, 0x4501D0
+	call eax // DlgItem_AjustBorderColor2Player
 
-		pop eax
-		push 0x530D37
-		ret
-	}
-}
+	pop eax
+	push 0x530D37
+	ret
+}}
 
 int DefGetCadresCount(int def, int group)
 {
@@ -688,186 +670,153 @@ void __fastcall MonFixMouseover(int mon)
 //	addlog("MovingMonsters call:", ret);
 //}
 
-__declspec(naked) void MovingMonsters() // called when any monster is about to be drawn
+__declspec(naked) static void MovingMonsters() // called when any monster is about to be drawn{__asm
 {
-	_asm
-	{
-		//mov ecx, [ebp + 4]
-		//call LogMovingMonsters
+	//mov ecx, [ebp + 4]
+	//call LogMovingMonsters
 
-		mov ecx, ebx
-		call MonFixMouseover
+	mov ecx, ebx
+	call MonFixMouseover
 
-		mov eax, [ebp + 4] // AnimationStep is a special case, handled in MovingMonsters2
-		cmp eax, 0x49446D
-		jz _std
-		cmp eax, 0x494B4E
-		jz _std
-		cmp eax, 0x494BFE
-		jz _std
+	mov eax, [ebp + 4] // AnimationStep is a special case, handled in MovingMonsters2
+	cmp eax, 0x49446D
+	jz _std
+	cmp eax, 0x494B4E
+	jz _std
+	cmp eax, 0x494BFE
+	jz _std
 
-		call MakeMoving
+	call MakeMoving
 _std:
-		mov eax, [ebx+100h]
-		inc [esp]
-		ret
-	}
-}
+	mov eax, [ebx+100h]
+	inc [esp]
+	ret
+}}
 
-__declspec(naked) void MovingMonsters2() // handle AnimationStep
+__declspec(naked) static void MovingMonsters2() // handle AnimationStep{__asm
 {
-	_asm
-	{
-		push ecx
-		call MakeMoving
-		pop ecx
+	push ecx
+	call MakeMoving
+	pop ecx
 
-		pop eax
-		push ebp
-		mov ebp, esp
-		sub esp, 20h
-		inc eax
-		jmp eax
-	}
-}
+	pop eax
+	push ebp
+	mov ebp, esp
+	sub esp, 20h
+	inc eax
+	jmp eax
+}}
 
-__declspec(naked) void MovingMonsters3() // prevent drawing shadow twice while monster is moving and after Catapult shot
+__declspec(naked) static void MovingMonsters3() // prevent drawing shadow twice while monster is moving and after Catapult shot{__asm
 {
-	_asm
-	{
-		mov [esp+20], 1
-		push 0x493FC0
-		ret
-	}
-}
+	mov [esp+20], 1
+	push 0x493FC0
+	ret
+}}
 
-__declspec(naked) void MovingMonsters4() // show animation while flying
+__declspec(naked) static void MovingMonsters4() // show animation while flying{__asm
 {
-	_asm
-	{
-		push ecx
-		
-		push 0
-		push 1
-		push 0
-		push 0
-		push 0
-		push 0
-		mov ecx, 0x699420
-		mov ecx, [ecx]
-		mov eax, 0x493FC0 // AnimationStep
-		call eax
+	push ecx
+	
+	push 0
+	push 1
+	push 0
+	push 0
+	push 0
+	push 0
+	mov ecx, 0x699420
+	mov ecx, [ecx]
+	mov eax, 0x493FC0 // AnimationStep
+	call eax
 
-		pop ecx
+	pop ecx
 
-		push 0x43DE60
-		ret
-	}
-}
+	push 0x43DE60
+	ret
+}}
 
-__declspec(naked) void DoAnimationStep()
+__declspec(naked) static void DoAnimationStep(){__asm
 {
-	_asm
-	{
-		push ecx
+	push ecx
 
-		call MakeMoving
-		test eax, eax
-		jz _std
+	call MakeMoving
+	test eax, eax
+	jz _std
 
-		mov ecx, 0x699420
-		mov ecx, [ecx]
-		lea eax, [ecx + 0x13D30]
-		mov dword ptr [eax], 1
+	mov ecx, 0x699420
+	mov ecx, [ecx]
+	lea eax, [ecx + 0x13D30]
+	mov dword ptr [eax], 1
 
-		push 1
-		push 1
-		push 0
-		push 0
-		push 0
-		push 1
-		mov eax, 0x493FC0 // AnimationStep
-		call eax
+	push 1
+	push 1
+	push 0
+	push 0
+	push 0
+	push 1
+	mov eax, 0x493FC0 // AnimationStep
+	call eax
 
-		mov ecx, 0x699420
-		mov ecx, [ecx]
-		lea eax, [ecx + 0x13D30]
-		mov dword ptr [eax], 0
+	mov ecx, 0x699420
+	mov ecx, [ecx]
+	lea eax, [ecx + 0x13D30]
+	mov dword ptr [eax], 0
 
 _std:
-		pop ecx
-		ret
-	}
-}
+	pop ecx
+	ret
+}}
 
-__declspec(naked) void MovingMonsters5() // show animation during any kind of shooting, except ray shooting
+__declspec(naked) static void MovingMonsters5() // show animation during any kind of shooting, except ray shooting{__asm
 {
-	_asm
-	{
-		call DoAnimationStep
-		push 0x47B610
-		ret
-	}
-}
+	call DoAnimationStep
+	push 0x47B610
+	ret
+}}
 
-__declspec(naked) void DoSpellTargetScreen()
+__declspec(naked) static void DoSpellTargetScreen(){__asm
 {
-	_asm
-	{
-		mov PlayingBM_V, 1
-		call DoAnimationStep
-		mov PlayingBM_V, 0
+	mov PlayingBM_V, 1
+	call DoAnimationStep
+	mov PlayingBM_V, 0
 
-		ret
-	}
-}
+	ret
+}}
 
-__declspec(naked) void MovingMonsters6() // teleport select monster
+__declspec(naked) static void MovingMonsters6() // teleport select monster{__asm
 {
-	_asm
-	{
-		call DoSpellTargetScreen
-		push 0x5A3880
-		ret
-	}
-}
+	call DoSpellTargetScreen
+	push 0x5A3880
+	ret
+}}
 
-__declspec(naked) void MovingMonsters7() // teleport select place
+__declspec(naked) static void MovingMonsters7() // teleport select place{__asm
 {
-	_asm
-	{
-		call DoSpellTargetScreen
-		push 0x5A3AE0
-		ret
-	}
-}
+	call DoSpellTargetScreen
+	push 0x5A3AE0
+	ret
+}}
 
-__declspec(naked) void MovingMonsters8() // sacrifice select whom to revieve
+__declspec(naked) static void MovingMonsters8() // sacrifice select whom to revieve{__asm
 {
-	_asm
-	{
-		call DoSpellTargetScreen
-		push 0x5A3010
-		ret
-	}
-}
+	call DoSpellTargetScreen
+	push 0x5A3010
+	ret
+}}
 
-__declspec(naked) void MovingMonsters9() // sacrifice select whom to kill
+__declspec(naked) static void MovingMonsters9() // sacrifice select whom to kill{__asm
 {
-	_asm
-	{
-		call DoSpellTargetScreen
-		push 0x5A31A0
-		ret
-	}
-}
+	call DoSpellTargetScreen
+	push 0x5A31A0
+	ret
+}}
 
 //void __fastcall LogRedrawPartOfScreen(int ret)
 //{
 //	addlog("RedrawPartOfScreen call:", ret);
 //}
 //
-//__declspec(naked) void onRedrawPartOfScreen()
+//__declspec(naked) static void onRedrawPartOfScreen()
 //{
 //	_asm
 //	{
@@ -898,13 +847,10 @@ __declspec(naked) void MovingMonsters9() // sacrifice select whom to kill
 //	}
 //}
 
-__declspec(naked) void ShortCombatDelays()
+__declspec(naked) static void ShortCombatDelays(){__asm
 {
-	_asm
-	{
-		ret
-	}
-}
+	ret
+}}
 
 //void __fastcall LogWavWait(int ret)
 //{
@@ -920,185 +866,152 @@ void __fastcall SetWaitWav(int timeout)
 	InterlockedIncrement(&WaitForWav);
 }
 
-__declspec(naked) void NoWavWait()
+__declspec(naked) static void NoWavWait(){__asm
 {
-	_asm
-	{
-		//push ecx
-		//mov ecx, [esp+4]
-		//call LogWavWait
-		//pop ecx
-		cmp [esp], 0x462C30
-		jnz _nowait
-		push ecx
-		call SetWaitWav
-		pop ecx
-		ret 8
+	//push ecx
+	//mov ecx, [esp+4]
+	//call LogWavWait
+	//pop ecx
+	cmp [esp], 0x462C30
+	jnz _nowait
+	push ecx
+	call SetWaitWav
+	pop ecx
+	ret 8
 _nowait:
-		ret 8
-	}
-}
+	ret 8
+}}
 
-__declspec(naked) void NoWavWait2()
+__declspec(naked) static void NoWavWait2(){__asm
 {
-	_asm
-	{
-		mov edx, -1
-		push 3
-		mov eax, 0x59A890 // LoadWAVplayAsync
-		call eax
-		xor eax, eax
-		ret
-	}
-}
+	mov edx, -1
+	push 3
+	mov eax, 0x59A890 // LoadWAVplayAsync
+	call eax
+	xor eax, eax
+	ret
+}}
 
 // Play Ballista shot explosion, Quicksand and LandMine sounds asynchronously
 
 char *lastSincSnd;
 
-__declspec(naked) void NoWavWait3a()
+__declspec(naked) static void NoWavWait3a(){__asm
 {
-	_asm
-	{
-		mov lastSincSnd, ecx
-		xor eax, eax
-		ret
-	}
-}
+	mov lastSincSnd, ecx
+	xor eax, eax
+	ret
+}}
 
-__declspec(naked) void NoWavWait3b()
+__declspec(naked) static void NoWavWait3b(){__asm
 {
-	_asm
-	{
-		mov ecx, lastSincSnd
-		mov edx, -1
-		push 3
-		mov eax, 0x59A890 // LoadWAVplayAsync
-		call eax
-		xor eax, eax
-		ret 4
-	}
-}
+	mov ecx, lastSincSnd
+	mov edx, -1
+	push 3
+	mov eax, 0x59A890 // LoadWAVplayAsync
+	call eax
+	xor eax, eax
+	ret 4
+}}
 
-__declspec(naked) void CompleteCombatStartSound()
+__declspec(naked) static void CompleteCombatStartSound(){__asm
 {
-	_asm
-	{
-		inc [esp]
-		ret 4
-	}
-}
+	inc [esp]
+	ret 4
+}}
 
 const int ProcessMessages = 0x4F8980;
 
-__declspec(naked) void CombatStartDelay()
+__declspec(naked) static void CombatStartDelay(){__asm
 {
-	_asm
-	{
-		call ds:[0x63A354]
-		lea ecx, [eax + 200]
-		call ProcessMessages
-		mov edx, 4
-		ret
-	}
-}
+	call ds:[0x63A354]
+	lea ecx, [eax + 200]
+	call ProcessMessages
+	mov edx, 4
+	ret
+}}
 
 void MP3Process(void); // in sound.cpp
 
-__declspec(naked) void OnLoadMP3()
+__declspec(naked) static void OnLoadMP3(){__asm
 {
-	_asm
-	{
-		call MP3Process
-		push 0x61A56C
-		ret
-	}
-}
+	call MP3Process
+	push 0x61A56C
+	ret
+}}
 
 char* __fastcall SoundProcess(char *name); // in sound.cpp
 
-__declspec(naked) void OnLoadWav()
+__declspec(naked) static void OnLoadWav(){__asm
 {
-	_asm
-	{
-		call SoundProcess
-		mov ecx, eax
+	call SoundProcess
+	mov ecx, eax
 
-		pop eax
-		push ebp
-		mov ebp, esp
-		sub esp, 1Ch
-		inc eax
-		jmp eax
-	}
-}
+	pop eax
+	push ebp
+	mov ebp, esp
+	sub esp, 1Ch
+	inc eax
+	jmp eax
+}}
 
-__declspec(naked) void MessagesLoop()
+__declspec(naked) static void MessagesLoop(){__asm
 {
-	_asm
-	{
-		inc InGame
-		pop eax
-		push _after
-		push ebp
-		mov ebp, esp
-		sub esp, 48h
-		inc eax
-		jmp eax
+	inc InGame
+	pop eax
+	push _after
+	push ebp
+	mov ebp, esp
+	sub esp, 48h
+	inc eax
+	jmp eax
 _after:
-		dec InGame
-		cmp InGame, 1
-		jz _mainMenu
-		ret
+	dec InGame
+	cmp InGame, 1
+	jz _mainMenu
+	ret
 _mainMenu:
-		dec InGame // decrease it twice the last time, 'cause it was also increased by FindERM
-		call OnExitToMainMenu
-		ret
-	}
-}
+	dec InGame // decrease it twice the last time, 'cause it was also increased by FindERM
+	call OnExitToMainMenu
+	ret
+}}
 
 /*
-__declspec(naked) void OnModalDialog()
+__declspec(naked) static void OnModalDialog(){__asm
 {
-	_asm
-	{
-		push ecx
-		mov ecx, [ebp + 8]
-		lea edx, [ebp + 12]
-		call HookModalDialog
-		pop ecx
-		mov eax, [0x6AAD88]
-		ret
-	}
-}
+	push ecx
+	mov ecx, [ebp + 8]
+	lea edx, [ebp + 12]
+	call HookModalDialog
+	pop ecx
+	mov eax, [0x6AAD88]
+	ret
+}}
 
-__declspec(naked) void _OnDialogAction()
+__declspec(naked) static void _OnDialogAction(){__asm
 {
-	_asm
-	{
-		pop edx // ret addr
-		mov eax, [esp] // cmd
-		push ecx // dlg
-		push edx // ret addr
+	pop edx // ret addr
+	mov eax, [esp] // cmd
+	push ecx // dlg
+	push edx // ret addr
 
-		push eax // cmd
-		push _after // new return
-		// erased code
-		push ebp
-		mov ebp, esp
-		push ebx
-		mov ebx, eax
+	push eax // cmd
+	push _after // new return
+	// erased code
+	push ebp
+	mov ebp, esp
+	push ebx
+	mov ebx, eax
 
-		push 0x41B127
-		ret
+	push 0x41B127
+	ret
 _after:
-		test eax,eax
-		jnz _noprocess
-		jmp OnDialogAction
+	test eax,eax
+	jnz _noprocess
+	jmp OnDialogAction
 _noprocess:
-		ret 8
-	}
-}
+	ret 8
+}}
 */
 
 void __fastcall OnShowDialog(int dlg, bool draw)
@@ -1107,91 +1020,76 @@ void __fastcall OnShowDialog(int dlg, bool draw)
 	LuaCall("OnShowDialog", dlg, draw);
 }
 
-__declspec(naked) void _OnShowDialog1()
+__declspec(naked) static void _OnShowDialog1(){__asm
 {
-	_asm
-	{
-		mov ecx, [ebp + 8]
-		mov edx, [ebp + 16]
-		call OnShowDialog
-		pop ebx
-		pop ebp
-		ret 0xC
-	}
-}
+	mov ecx, [ebp + 8]
+	mov edx, [ebp + 16]
+	call OnShowDialog
+	pop ebx
+	pop ebp
+	ret 0xC
+}}
 
-__declspec(naked) void _OnShowDialog2()
+__declspec(naked) static void _OnShowDialog2(){__asm
 {
-	_asm
-	{
-		mov [ebx+58h], edi
-		mov [ebx+5Ch], edx
-		mov ecx, edi
-		mov edx, [ebp + 16]
-		push 0x602A50
-		jmp OnShowDialog
-	}
-}
+	mov [ebx+58h], edi
+	mov [ebx+5Ch], edx
+	mov ecx, edi
+	mov edx, [ebp + 16]
+	push 0x602A50
+	jmp OnShowDialog
+}}
 
 void __fastcall OnHideDialog(int dlg)
 {
 	LuaCall("OnHideDialog", dlg);
 }
 
-__declspec(naked) void _OnHideDialog()
+__declspec(naked) static void _OnHideDialog(){__asm
 {
-	_asm
-	{
-		mov esi, [ebp + 8]
-		xor ebx, ebx
-		cmp esi, ebx
-		jz _skip
-		push ecx
-		mov ecx, esi
-		call OnHideDialog
-		pop ecx
+	mov esi, [ebp + 8]
+	xor ebx, ebx
+	cmp esi, ebx
+	jz _skip
+	push ecx
+	mov ecx, esi
+	call OnHideDialog
+	pop ecx
 _skip:
-		ret
-	}
-}
+	ret
+}}
 
 int __fastcall OnDialogCallback(Dword cmd, Dword manager, Dword callback)
 {
 	return LuaCall("DialogCallback", cmd, manager, callback);
 }
 
-__declspec(naked) void _OnDialogCallback()
+__declspec(naked) static void _OnDialogCallback(){__asm
 {
-	_asm
-	{
-		push [ebp + 0xC]
-		call OnDialogCallback
-		cmp eax, 2
-		push 0x602C5C
-		ret
-	}
-}
+	push [ebp + 0xC]
+	call OnDialogCallback
+	cmp eax, 2
+	push 0x602C5C
+	ret
+}}
 
 void __fastcall OnChangeCursor(int cadre, int type, int caller)
 {
 	addlog(Format("SetMouseCursor(%d, %d) at %x", cadre, type, caller));
 }
 
-__declspec(naked) void _OnChangeCursor()
+__declspec(naked) static void _OnChangeCursor(){__asm
 {
-	_asm
-	{
-		push ecx
-		mov ecx, [ebp + 8]
-		mov edx, [ebp + 12]
-		push [ebp + 4]
-		call OnChangeCursor
-		pop ecx
-		pop eax
-		push 0x62E828
-		jmp eax
-	}
-}
+	push ecx
+	mov ecx, [ebp + 8]
+	mov edx, [ebp + 12]
+	push [ebp + 4]
+	call OnChangeCursor
+	pop ecx
+	pop eax
+	push 0x62E828
+	jmp eax
+}}
 
 static int __stdcall CanStart(void*, int, int, char* name)
 {
@@ -1200,21 +1098,18 @@ static int __stdcall CanStart(void*, int, int, char* name)
 	return (ret != 0) && GetLastError() != 0xB7;
 }
 
-__declspec(naked) void _OnStart()
+__declspec(naked) static void _OnStart(){__asm
 {
-	_asm
-	{
-		call CanStart
-		test eax, eax
-		jz _quit
-		call InitLua
-		push 0x4F8104
-		ret
+	call CanStart
+	test eax, eax
+	jz _quit
+	call InitLua
+	push 0x4F8104
+	ret
 _quit:
-		push 0x4F825A
-		ret
-	}
-}
+	push 0x4F825A
+	ret
+}}
 
 void __fastcall OnBattleStart(int log)
 {
@@ -1223,27 +1118,21 @@ void __fastcall OnBattleStart(int log)
 	BACall(54, ERM_HeroStr);
 }
 
-__declspec(naked) void _DrawDef1ToMap1()
+__declspec(naked) static void _DrawDef1ToMap1(){__asm
 {
-	__asm
-	{
-		mov eax, [ebp + 8]
-		mov [esp + 4], eax
-		push 0x47C300
-		ret
-	}
-}
+	mov eax, [ebp + 8]
+	mov [esp + 4], eax
+	push 0x47C300
+	ret
+}}
 
-__declspec(naked) void _DrawDef1ToMap2()
+__declspec(naked) static void _DrawDef1ToMap2(){__asm
 {
-	__asm
-	{
-		mov eax, [ebp + 8]
-		mov [esp + 4], eax
-		push 0x47BE90
-		ret
-	}
-}
+	mov eax, [ebp + 8]
+	mov [esp + 4], eax
+	push 0x47BE90
+	ret
+}}
 
 int GetVKey(int key)
 {
@@ -1283,299 +1172,254 @@ int __fastcall TranslateKey(int key, int shift)
 		return key;
 }
 
-__declspec(naked) void _TranslateKey()
+__declspec(naked) static void _TranslateKey(){__asm
 {
-	__asm
-	{
-		push eax
-		mov ecx, [eax + 4]
-		call TranslateKey
-		mov edx, eax
-		pop eax
-		mov [eax + 4], edx
-		pop ebp
-		ret 4
-	}
-}
+	push eax
+	mov ecx, [eax + 4]
+	call TranslateKey
+	mov edx, eax
+	pop eax
+	mov [eax + 4], edx
+	pop ebp
+	ret 4
+}}
 
-__declspec(naked) void _TranslateKeyPart()
+__declspec(naked) static void _TranslateKeyPart(){__asm
 {
-	__asm
-	{
-		mov edx, [eax + 4]
-		cmp edx, 41
-		jz _mine
-		cmp edx, 0x3B
-		push 0x4EC7CC
-		ret
+	mov edx, [eax + 4]
+	cmp edx, 41
+	jz _mine
+	cmp edx, 0x3B
+	push 0x4EC7CC
+	ret
 _mine:
-		mov [eax + 4], '`'
-		mov edx, [eax + 0xC]
-		and edx, 3
-		jmp _TranslateKey
-	}
-}
+	mov [eax + 4], '`'
+	mov edx, [eax + 0xC]
+	and edx, 3
+	jmp _TranslateKey
+}}
 
-__declspec(naked) void _GetTownIncome()
+__declspec(naked) static void _GetTownIncome(){__asm
 {
-	__asm
-	{
-		push ecx
-		push [esp + 8]
-		push _after
-		push ebp
-		mov ebp, esp
-		push ebx
-		mov ebx, ds:[0x66CDF0]
-		push 0x5BFA0A
-		ret
+	push ecx
+	push [esp + 8]
+	push _after
+	push ebp
+	mov ebp, esp
+	push ebx
+	mov ebx, ds:[0x66CDF0]
+	push 0x5BFA0A
+	ret
 
 _after:
-		pop ecx
-		mov edx, eax
-		call CorrectTownIncome
-		ret 4
-	}
-}
+	pop ecx
+	mov edx, eax
+	call CorrectTownIncome
+	ret 4
+}}
 
-__declspec(naked) void _GetTownGrowth()
+__declspec(naked) static void _GetTownGrowth(){__asm
 {
-	__asm
-	{
-		push ecx
-		push [esp + 8]
-		push _after
-		push ebp
-		mov ebp, esp
-		sub esp, 0xC
-		push 0x5BFF66
-		ret
+	push ecx
+	push [esp + 8]
+	push _after
+	push ebp
+	mov ebp, esp
+	sub esp, 0xC
+	push 0x5BFF66
+	ret
 
 _after:
-		pop ecx
-		mov edx, eax
-		jmp CorrectTownGrowth
-	}
-}
+	pop ecx
+	mov edx, eax
+	jmp CorrectTownGrowth
+}}
 
 static int __fastcall MessagePictureInit(Dword data)
 {
 	return LuaCall("MessagePictureInit", data);
 }
 
-__declspec(naked) void _MessagePictureInit()
+__declspec(naked) static void _MessagePictureInit(){__asm
 {
-	__asm
-	{
-		jnz _stdnorm
-		
-		call MessagePictureInit
-		mov ecx, ebx
-		xor edx, edx
-		mov edi, [ebx]
-		mov [ebp + 8], edi
-		test eax, eax
-		mov eax, [ebx + 4]
-		mov [ebp + 0xC], eax
-		jz _std
-		
-		push 0x4F6229
-		ret
+	jnz _stdnorm
+	
+	call MessagePictureInit
+	mov ecx, ebx
+	xor edx, edx
+	mov edi, [ebx]
+	mov [ebp + 8], edi
+	test eax, eax
+	mov eax, [ebx + 4]
+	mov [ebp + 0xC], eax
+	jz _std
+	
+	push 0x4F6229
+	ret
 
 _std:
-		cmp edi, esi
-		jnz _stdnorm
-		push 0x4F6388
-		ret
+	cmp edi, esi
+	jnz _stdnorm
+	push 0x4F6388
+	ret
 
 _stdnorm:
-		push 0x4F558A
-		ret
-	}
-}
+	push 0x4F558A
+	ret
+}}
 
 static int __fastcall MessagePictureHint(Dword data)
 {
 	return LuaCall("MessagePictureHint", data);
 }
 
-__declspec(naked) void _MessagePictureHint()
+__declspec(naked) static void _MessagePictureHint(){__asm
 {
-	__asm
-	{
-		jna _stdnorm
+	jna _stdnorm
 
-		call MessagePictureHint
-		push 0x4F15C0
-		ret
+	call MessagePictureHint
+	push 0x4F15C0
+	ret
 
 _stdnorm:
-		push 0x4F11ED
-		ret
-	}
-}
+	push 0x4F11ED
+	ret
+}}
 
 static void __fastcall AfterBuildResBar(Dword panel, int IsSmall)
 {
 	LuaCall("AfterBuildResBar", panel, IsSmall);
 }
 
-__declspec(naked) void _BuildResBar()
+__declspec(naked) static void _BuildResBar(){__asm
 {
-	__asm
-	{
-		push [esp + 8]
-		push [esp + 8]
-		push _after
-		push ebp
-		mov ebp, esp
-		push -1
-		push 0x558DF5
-		ret
+	push [esp + 8]
+	push [esp + 8]
+	push _after
+	push ebp
+	mov ebp, esp
+	push -1
+	push 0x558DF5
+	ret
 
 _after:
-		mov edx, [esp + 8]
-		push eax
-		mov ecx, eax
-		call AfterBuildResBar
-		pop eax
-		ret 8
-	}
-}
+	mov edx, [esp + 8]
+	push eax
+	mov ecx, eax
+	call AfterBuildResBar
+	pop eax
+	ret 8
+}}
 
-__declspec(naked) void _GetFlagColor()
+__declspec(naked) static void _GetFlagColor(){__asm
 {
-	__asm
-	{
-		push ecx
-		push _after
-		mov edx, [ecx+1Eh]
-		mov ecx, [ecx]
-		push 0x40FC85
-		ret
+	push ecx
+	push _after
+	mov edx, [ecx+1Eh]
+	mov ecx, [ecx]
+	push 0x40FC85
+	ret
 
 _after:
-		pop ecx
-		mov edx, eax
-		call ChangeFlagColor
-		ret
-	}
-}
+	pop ecx
+	mov edx, eax
+	call ChangeFlagColor
+	ret
+}}
 
-__declspec(naked) void _GetFlagColor1()
+__declspec(naked) static void _GetFlagColor1(){__asm
 {
-	__asm
-	{
-		cmp eax, 54
-		mov eax, 0x410EC1
-		jnz _ok
-		mov eax, 0x41104A
+	cmp eax, 54
+	mov eax, 0x410EC1
+	jnz _ok
+	mov eax, 0x41104A
 _ok:
-		jmp eax
-	}
-}
+	jmp eax
+}}
 
-__declspec(naked) void _GetFlagColor2()
+__declspec(naked) static void _GetFlagColor2(){__asm
 {
-	__asm
-	{
-		cmp eax, 54
-		mov eax, 0x4125C4
-		jnz _ok
-		mov eax, 0x41272D
+	cmp eax, 54
+	mov eax, 0x4125C4
+	jnz _ok
+	mov eax, 0x41272D
 _ok:
-		jmp eax
-	}
-}
+	jmp eax
+}}
 
-__declspec(naked) void _DigGrail()
+__declspec(naked) static void _DigGrail(){__asm
 {
-	__asm
-	{
-		mov edx, 0
-		jz _no
-		inc edx
+	mov edx, 0
+	jz _no
+	inc edx
 _no:
-		mov ecx, [ebp - 0x10]  // hero
-		push [ebp + 0x10]  // L
-		push ebx  // Y
-		push esi  // X
-		call DigGrailTrigger
+	mov ecx, [ebp - 0x10]  // hero
+	push [ebp + 0x10]  // L
+	push ebx  // Y
+	push esi  // X
+	call DigGrailTrigger
 
-		cmp eax, 1
-		jb _fail
-		jz _win
+	cmp eax, 1
+	jb _fail
+	jz _win
 // no standard reaction:
-		push 0x40F080
-		ret
+	push 0x40F080
+	ret
 _win:
-		push 0x40EEE5
-		ret
+	push 0x40EEE5
+	ret
 _fail:
-		mov ecx, ds:[0x69CCFC]
-		push 0x40F051
-		ret
-	}
-}
+	mov ecx, ds:[0x69CCFC]
+	push 0x40F051
+	ret
+}}
 
-__declspec(naked) void _DigGrailFail()
+__declspec(naked) static void _DigGrailFail(){__asm
 {
-	__asm
-	{
-		cmp eax, eax
-		jmp _DigGrail
-	}
-}
+	cmp eax, eax
+	jmp _DigGrail
+}}
 
-__declspec(naked) void _PostGainLevel()
+__declspec(naked) static void _PostGainLevel(){__asm
 {
-	__asm
-	{
-		mov ecx, [ebp - 0x1C]
-		mov edx, [ebp - 0x18]
-		call PostGainLevel
-		mov ax, [ebx + 0x55]
-		mov edx, [ebp - 0x10]
-		push 0x4DAF0D
-		ret
-	}
-}
+	mov ecx, [ebp - 0x1C]
+	mov edx, [ebp - 0x18]
+	call PostGainLevel
+	mov ax, [ebx + 0x55]
+	mov edx, [ebp - 0x10]
+	push 0x4DAF0D
+	ret
+}}
 
-__declspec(naked) void _PostGainLevelChosen()
+__declspec(naked) static void _PostGainLevelChosen(){__asm
 {
-	__asm
-	{
-		mov eax, [esp + 4]
-		mov GL_SSkillResult, eax
-		push 0x4E2540
-		ret
-	}
-}
+	mov eax, [esp + 4]
+	mov GL_SSkillResult, eax
+	push 0x4E2540
+	ret
+}}
 
-__declspec(naked) void _GetAIMapPosValue()
+__declspec(naked) static void _GetAIMapPosValue(){__asm
 {
-	__asm
-	{
-		pop eax // ret
-		push ds:[edx]
-		push edx
-		push eax // ret
-		push ecx
-		push [esp + 16] // param
-		push _after
+	pop eax // ret
+	push ds:[edx]
+	push edx
+	push eax // ret
+	push ecx
+	push [esp + 16] // param
+	push _after
 
-		push ebp
-		mov ebp, esp
-		sub esp, 6Ch
-		push 0x528526
-		ret
+	push ebp
+	mov ebp, esp
+	sub esp, 6Ch
+	push 0x528526
+	ret
 
 _after:
-		mov ecx, eax
-		pop edx
-		jmp GetAIMapPosValue
-	}
-}
+	mov ecx, eax
+	pop edx
+	jmp GetAIMapPosValue
+}}
 
 //void BaseFileLoader(); // in _B1.cpp
 
@@ -1605,14 +1449,11 @@ static void OnLodsLoaded()
 	STOP
 }
 
-__declspec(naked) void _OnLodsLoaded()
+__declspec(naked) static void _OnLodsLoaded(){__asm
 {
-	__asm
-	{
-		push 0x5B9460
-		jmp OnLodsLoaded
-	}
-}
+	push 0x5B9460
+	jmp OnLodsLoaded
+}}
 
 
 int BinTree_Ctor = 0x55D4D0;
@@ -1625,83 +1466,73 @@ static void __fastcall OnLoadDef(char *name)
 	strncpy(LastLoadedDefName, name, sizeof(LastLoadedDefName) - 1);
 }
 
-__declspec(naked) void _OnLoadDef()
+__declspec(naked) static void _OnLoadDef(){__asm
 {
-	__asm
-	{
-		pop eax
-		push 0 // alloc BinTree
-		push 0
-		push 0
-		push 0
-		push _after // new ret address
+	pop eax
+	push 0 // alloc BinTree
+	push 0
+	push 0
+	push 0
+	push _after // new ret address
 
-		push ebp
-		mov ebp, esp
-		push -1
-		push eax
-		push ecx
-		call OnLoadDef
-		pop ecx
-		ret
+	push ebp
+	mov ebp, esp
+	push -1
+	push eax
+	push ecx
+	call OnLoadDef
+	pop ecx
+	ret
 
+	// Logic: create a BinTree for frames on stack on demand. Destroy in _after.
 _after:
-		cmp [esp + 4], 0
-		jz _done
-		mov ecx, esp
-		push eax
-		call BinTree_Dtor
-		pop eax
+	cmp [esp + 4], 0
+	jz _done
+	mov ecx, esp
+	push eax
+	call BinTree_Dtor
+	pop eax
 _done:
-		add esp, 0x10
-		ret
-	}
-}
+	add esp, 0x10
+	ret
+}}
 
-__declspec(naked) void _OnLoadDefFindCadre()
+__declspec(naked) static void _OnLoadDefFindCadre(){__asm
 {
-	__asm
-	{
-		cmp [ebp + 8 + 4], 0
-		jnz _find
-		lea ecx, [ebp + 8]
-		push ecx
-		push ecx
-		call BinTree_Ctor
+	cmp [ebp + 8 + 4], 0
+	jnz _find
+	lea ecx, [ebp + 8]
+	push ecx
+	push ecx
+	call BinTree_Ctor
 _find:
-		lea ecx, [ebp + 8]
-		call BinTree_Find
-		mov eax, [eax]
-		mov ecx, [ebp + 8 + 4]
-		push 0x55CDEF
-		ret
-	}
-}
+	lea ecx, [ebp + 8]
+	call BinTree_Find
+	mov eax, [eax]
+	mov ecx, [ebp + 8 + 4]
+	push 0x55CDEF
+	ret
+}}
 
-__declspec(naked) void _OnLoadDefAddCadre()
+__declspec(naked) static void _OnLoadDefAddCadre(){__asm
 {
-	__asm
-	{
-		lea ecx, [ebp + 8]
-		jmp BinTree_Add
-	}
-}
+	lea ecx, [ebp + 8]
+	jmp BinTree_Add
+}}
 
-__declspec(naked) void _OnDefCadreDeref()
+// Destroy without touching BinTree
+__declspec(naked) static void _OnDefCadreDeref(){__asm
 {
-	__asm
-	{
-		test ecx, ecx
-		jz _done
-		sub [ecx + 0x18], 1
-		jg _done
-		mov eax, ds:[ecx]
-		push 1
-		call ds:[eax]
+	test ecx, ecx
+	jz _done
+	sub [ecx + 0x18], 1
+	jg _done
+	mov eax, ds:[ecx]
+	push 1
+	call ds:[eax]
 _done:
-		ret
-	}
-}
+	ret
+}}
 
 void __fastcall OnNoNewMessage(int *p)
 {
@@ -1710,26 +1541,23 @@ void __fastcall OnNoNewMessage(int *p)
 	((void (*)())0x4EDB20)();
 }
 
-__declspec(naked) void _FixParseCmdLine()
+__declspec(naked) static void _FixParseCmdLine(){__asm
 {
-	__asm
-	{
-		cmp ebx, 1
-		jz _good
-		mov al, [ebx + ecx - 1]
-		cmp al, ' '
-		jz _good
-		cmp al, '\"'
-		jnz _bad
+	cmp ebx, 1
+	jz _good
+	mov al, [ebx + ecx - 1]
+	cmp al, ' '
+	jz _good
+	cmp al, '\"'
+	jnz _bad
 _good:
-		mov cl, [ebx + ecx]
-		cmp cl, '/'
-		ret
+	mov cl, [ebx + ecx]
+	cmp cl, '/'
+	ret
 _bad:
-		mov dword ptr ds:[esp], 0x4F0F27
-		ret
-	}
-}
+	mov dword ptr ds:[esp], 0x4F0F27
+	ret
+}}
 
 static void OnFastMapLoad()
 {
@@ -1738,48 +1566,42 @@ static void OnFastMapLoad()
 	*(int*)0x4EEF4D = 0x1DF4F; // restore original code
 }
 
-__declspec(naked) void _OnFastMapLoad()
+__declspec(naked) static void _OnFastMapLoad(){__asm
 {
-	__asm
-	{
-		pop eax
-		pop eax
-		pop eax
+	pop eax
+	pop eax
+	pop eax
 
-		mov ebx, 1
-		push 1
-		push 1
-		mov ecx, ds:[0x6992B0]
-		mov eax, 0x50CEA0
-		call eax
+	mov ebx, 1
+	push 1
+	push 1
+	mov ecx, ds:[0x6992B0]
+	mov eax, 0x50CEA0
+	call eax
 
-		mov eax, 0x4ED9E0
-		call eax
+	mov eax, 0x4ED9E0
+	call eax
 
-		mov cl, 1
-		mov eax, 0x4ED930
-		call eax
-		
-		push 0x4EF43E
-		jmp OnFastMapLoad
-	}
-}
+	mov cl, 1
+	mov eax, 0x4ED930
+	call eax
+	
+	push 0x4EF43E
+	jmp OnFastMapLoad
+}}
 
-__declspec(naked) void _MyStatMemCheck()
+__declspec(naked) static void _MyStatMemCheck(){__asm
 {
-	__asm
-	{
-		mov esi, [esp + 0x0C]
-		cmp esi, WogInstStart
-		jb _Fine
-		cmp esi, WogInstEnd
-		jnb _Fine
-		xor esi, esi
+	mov esi, [esp + 0x0C]
+	cmp esi, WogInstStart
+	jb _Fine
+	cmp esi, WogInstEnd
+	jnb _Fine
+	xor esi, esi
 _Fine:
-		test esi, esi
-		ret
-	}
-}
+	test esi, esi
+	ret
+}}
 
 /*
 int tmpLast;
@@ -1789,18 +1611,15 @@ void __stdcall tmpDoLog(int tolog)
 	addlog("QuestLog", tolog);
 }
 
-__declspec(naked) void tmpLog()
+__declspec(naked) static void tmpLog(){__asm
 {
-	_asm
-	{
-		mov eax, [esp]
-		push ecx
-		push eax
-		call tmpDoLog
-		pop ecx
-		jmp tmpLast
-	}
-}
+	mov eax, [esp]
+	push ecx
+	push eax
+	call tmpDoLog
+	pop ecx
+	jmp tmpLast
+}}
 
 int tmpVTable[20];
 void __stdcall tmpQuestLogDo(void **obj)
@@ -1811,20 +1630,17 @@ void __stdcall tmpQuestLogDo(void **obj)
 	tmpVTable[9] = (int)tmpLog;
 }
 
-__declspec(naked) void tmpQuestLog()
+__declspec(naked) static void tmpQuestLog(){__asm
 {
-	_asm
-	{
-		pop eax
-		mov eax, 0x455BD0
-		call eax
-		push eax
-		push eax
-		call tmpQuestLogDo
-		pop eax
-		push 0x4017FE
-		ret		
-	}
-}
+	pop eax
+	mov eax, 0x455BD0
+	call eax
+	push eax
+	push eax
+	call tmpQuestLogDo
+	pop eax
+	push 0x4017FE
+	ret		
+}}
 */
 #include "global_hooks.h" // must be in the end
