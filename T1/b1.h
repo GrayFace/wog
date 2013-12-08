@@ -35,9 +35,6 @@ extern _Spell_ Spells[SPELLNUM];
 
 extern char MapSavedWoG[1024];
 
-extern int NoMoreChecksS;
-extern int NoMoreChecksW;
-
 int Saver(const void *Po,int Len);
 int Loader(void *Po,int Len);
 int FindManager(Dword po);

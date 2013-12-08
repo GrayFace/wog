@@ -62,14 +62,6 @@ char *SourceFileList[]={
 };
 char LastLoadedDefName[16]; // tmp, sometimes LoadDEF crashes
 
-__declspec( naked ) void GoExitW(void){
-	//_exit();
-	__asm lea ecx,Exiter+7234
-	__asm sub ecx,8000
-	__asm sub ecx,7234-8000
-	__asm jmp ecx;
-}
-
 void *Alloc(int zsize)
 { 
 STARTNA(__LINE__, 0)
@@ -5469,14 +5461,6 @@ int ChooseCrToAnimDlg(void){
 		break;
 	}
 	RETURN(ind);
-}
-
-__declspec( naked ) void GoExitS(void){
-	//_exit();
-	__asm lea edx,Exiter+943156
-	__asm sub edx,67567
-	__asm sub edx,943156-67567
-	__asm jmp edx;
 }
 
 void __fastcall ConvertPalettesOfAllDefs_CurPlayer(void* body)

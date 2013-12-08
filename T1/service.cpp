@@ -1876,31 +1876,3 @@ int LoadCustom(int /*ver*/)
 	LoadCustomTxt(0,0);
 	RETURN(0)
 }
-
-extern "C"{ 
-__declspec( naked ) void Exiter(void){
-	__asm{
-//    mov  eax,ebx
-		sub  eax,ebx
-//    inc  eax
-		mov  [eax],eax
-	}
-	//_exit();
-//  ExitProcess(0);
-//  TerminateProcess();
-/*
-	__asm{
-//int 3
-		push -1
-		mov  eax,fs:[0x18]
-		mov  eax,[eax+0x20]
-		push eax
-		mov  eax,0xE0
-		mov  edx,esp
-		int  0x2E
-		ret  8
-	}
-*/
-}
-
-}

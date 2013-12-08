@@ -92,9 +92,4 @@ void InitCRT(void);
 
 void TestDlg(void);
 
-extern "C"{ void Exiter(void); }
-
-
-
-
 

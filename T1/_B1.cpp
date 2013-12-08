@@ -4901,8 +4901,6 @@ __declspec( naked ) void FixQuit98Crash(void)
 	}
 }
 
-int NoMoreChecksS=0;
-
 void BuildUpNewComboArts(void)
 {
 	STARTNA(__LINE__, 0)

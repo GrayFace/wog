@@ -12,8 +12,6 @@
 #include "CrExpo.h"
 #define  __FILENUM__ 2
 
-int NoMoreChecksW=0;
-
 struct _HeroSpecWoG_{
 	int    Ind; // +1
 	int    SpecPicInd[2];

@@ -439,9 +439,6 @@ char IsThisGamer2(void *PlStruct);
 int ChooseCrToAnimDlg(void);
 int HasAnyAtThisPC(void);
 
-void GoExitS(void);
-void GoExitW(void);
-
 void ErrorMessage(const char * msg);
 
 #define SOD_LoadDef(name) (((int (__fastcall *)(char*))0x55C9C0)(name))
