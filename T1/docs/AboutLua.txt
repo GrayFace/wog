@@ -7,9 +7,24 @@ Here is also a book about Lua: http://www.lua.org/pil/ (note that this edition a
 --------------- Advantages of Lua ---------------
 
 1) There's no need to reserve variables and function numbers. New towns, new commanders etc. can be scripted right in Lua.
-2) Easy and flexible syntax
-3) It can be the base of many other things. For example, new custom dialogs are based on Lua instead of old patterns.
+2) Easy and flexible syntax.
+3) Some new features are only exposed to Lua scripts. For example, new custom dialogs.
 4) We can also make wrappers for some ERM stuff with human-readable names.
+
+--------------- Editor ---------------
+
+There are many code editors that support Lua. I use SciTE. Here are some of my settings in it:
+Open SciTEGlobal.properties.
+
+Find and set up these settings:
+tabsize=2
+indent.size=2
+braces.autoclose=0
+
+Find user.shortcuts=\
+delete line with Alt+X
+add line: Ctrl+Shift+Z|IDM_REDO|\
+add line: Ctrl+R|IDM_REPLACE|\
 
 --------------- Placement ---------------
 

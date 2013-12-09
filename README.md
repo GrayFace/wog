@@ -48,8 +48,8 @@ Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 
 Building
 ---
 
-- The project is for Visual Studio 2005. I haven't tried Express edition, but here are some links:  
-http://go.microsoft.com/fwlink/?linkid=57034 (Express Edition)  
+- The project is for Visual Studio 2005, Express edition should work fine as well. I haven't tried Express edition, but here are some links:  
+http://go.microsoft.com/fwlink/?linkid=57034 (Visual C++ Express)  
 http://cplus.about.com/od/learnc/ss/vcpppins.htm (About installation)  
 http://www.microsoft.com/en-us/download/details.aspx?id=804 (Service Pack 1, I don't know if the first link includes it or not)
 
@@ -77,6 +77,8 @@ Internal numbers of triggers are listed after ERM_Triggers table in erm.cpp. To 
 All new code hooks are in global_hooks.h and global.cpp files as well as Lua files. Old hooks are in _B1.cpp. Don't do hooks the old way!
 
 Note the WogNew project. The reason it's there is because t1b project must be built with optimization turned off, due to functions intermixing C code with Asm. This is also one of the reasons the solution is for VS 2005.
+
+One thing absolutely necessary in coding style is use of tabs, not spaces (set up in Tools -> Options -> Text Editor -> C/C++ -> Tabs -> Keep Tabs).
 
 ===
 
