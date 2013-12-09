@@ -1,4 +1,4 @@
--- by GrayFace aka sergroj
+-- By GrayFace
 
 local P = require "base.BattlePos"
 

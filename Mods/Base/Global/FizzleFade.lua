@@ -1,4 +1,4 @@
-
+-- By GrayFace
 local i4, i2, i1, u4, u2, u1, i8, u8 = mem.i4, mem.i2, mem.i1, mem.u4, mem.u2, mem.u1, mem.i8, mem.u8
 local call = mem.call
 

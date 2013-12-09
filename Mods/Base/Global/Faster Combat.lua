@@ -1,4 +1,6 @@
--- Shift all speeds, so old Normal becomes new Slow, old Fast becomes new Normal, new Fast is even faster
+-- By GrayFace
+
+-- Shift all speeds, old Fast becomes new Normal, new Fast is even faster
 
 local r4 = mem.r4
 

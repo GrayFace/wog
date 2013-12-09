@@ -1,3 +1,4 @@
+-- By GrayFace
 
 function global.events.EnterContext()
 	if context == "map" then

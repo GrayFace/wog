@@ -1,4 +1,4 @@
--- by GrayFace aka sergroj
+-- By GrayFace
 
 version = 0.0
 
