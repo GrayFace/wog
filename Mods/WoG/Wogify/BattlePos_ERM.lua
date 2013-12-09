@@ -1,6 +1,6 @@
 -- by GrayFace aka sergroj
 
-local P = require "BattlePos"
+local P = require "base.BattlePos"
 
 local arg = ERM.x
 
