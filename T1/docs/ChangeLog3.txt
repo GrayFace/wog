@@ -18,4 +18,5 @@ Build 4
 [+] LD:T - load temporary. Same as LD:L, but LOD name is not stored in savegame and it's not automatically reloaded. (Build 4.4)
 [-] SoD Bug: on start of Tutorial map "Combat Speed" and "Cursor Shadow" options were reset to default values. (Build 4.6)
 [+] /mapname command line option lets you quickly enter the game on the chosen map. /mapdir lets you set a different path to map foldsr. (Build 4.6)
-[+] h3std.lod in addition to h3wog.lod and h3custom.lod, just to undo things WoG changes in RoE.
+[+] h3std.lod in addition to h3wog.lod and h3custom.lod, just to undo some things WoG3.58 installer changes in RoE. (Build 4.7)
+[+] Minidump generation in case of a crash. (Build 4.8)

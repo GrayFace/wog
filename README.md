@@ -81,10 +81,8 @@ Note the WogNew project. The reason it's there is because t1b project must be bu
 About Git
 ---
 
-You may want to hide a local folder from Git. E.g. I have a mod with my test scripts. To do so, create .gitignore file containing just this:
+You may want to hide a local folder from Git. E.g. I have a mod with my test scripts. To do so, create .gitignore file in it containing just this:
 
 ```
 /*
 ```
-
-When you are commiting local changes into the master branch it seems you should always use Rebase instead of Merge.
