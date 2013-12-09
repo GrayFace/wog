@@ -23,7 +23,7 @@ SpTraits.txt
 ZCRTRAIT.TXT  
 ZELP.TXT  
 
-Note: If you're building WoG from sources, the only thing you'll need from a release is Data\p\ folder, but you must get rid of text files mentioned above.
+Note: If you're building WoG from sources, the only things you'll need from a release is Data\p\ folder and dbghelp.dll file, plus you must get rid of text files mentioned above.
 
 ===
 
@@ -32,12 +32,14 @@ Testing
 
 'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own debugging convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
 
-Saved games from 3.58 are incompatible and from one version of 3.59a to another saves compatibility may break as well.
+Saved games from 3.58 are incompatible. From one version of 3.59a to another saves compatibility may break as well.
 
 If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar  
-Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHLOG.TXT and WOGERMLOG.TXT logs. The program itself will create CrashEIP.txt file in its own folder. Send me all 3 files.
+Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT files. The program itself will create CrashEIP.txt file in its own folder. Send me all 4 files.
 
-In addition to sending WOGCRASHLOG.TXT, WOGERMLOG.TXT and/or WOGLUALOG.TXT don't forget to describe what exactly you did that lead to the issue and send the save game and map if they're relevant.
+In addition to sending WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT, WOGERMLOG.TXT and/or WOGLUALOG.TXT don't forget to describe what exactly you did that lead to the issue and send the saved game and map if they're relevant.
+
+At some point you may find UnclosedStackLevels.txt file in your WoG folder. Send it to me if you do.
 
 Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 32-bit screen mode. However, 10-60 minutes into the game it will hang. That's ok, 32 bit mode code is temporary. Baratorch's HD Mod does it much better, so it should be the base of future proper 32 bit mode support.
 
