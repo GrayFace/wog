@@ -11,3 +11,4 @@ group:	Combat
 MonStandAnim	Enable "standing" animation of monsters			true		true	TODO: Proper text, hint and description
 NewGrid	New battlefield grid look			true		true	TODO: Proper text, hint and description
 SoftGridShadow	Soft combat grid shadow			true		true	TODO: Proper text, hint and description
+FasterCombat	Faster combat (changes Normal and Fast combat speeds)					true	TODO: Proper text, hint and description
