@@ -18,7 +18,7 @@ mem.autohook(0x603210, function(d)
 	else
 		i4[d.ecx + 0x48] = 0
 		if u4[d.ecx + 0x4C] ~= 0 then
-			mem.call(0x603380, 1, d.ecx, 0, 0, 800, 600, 25)  -- FizzleForward (25*8 msec)
+			mem.call(0x603380, 1, d.ecx, 0, 0, 800, 600, 20)  -- FizzleForward (20*8 = 160 msec)
 		end
 	end
 	d:ret(0xC)
