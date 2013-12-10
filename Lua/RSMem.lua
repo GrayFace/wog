@@ -1648,7 +1648,7 @@ function _mem.copycode(ptr, size)
 end
 local copycode = _mem.copycode
 
--- jmphook with automatic calling of overwritten code (see mem.copycode note)
+-- hookjmp with automatic calling of overwritten code (see mem.copycode note)
 -- if the function returns 'true', the jump to original code isn't performed
 function _mem.autohook(p, f, size)
 	assert(size == nil or size >= 5)
@@ -1662,7 +1662,7 @@ function _mem.autohook(p, f, size)
 	end, size)
 end
 
--- jmphook with automatic calling of overwritten code (see mem.copycode note)
+-- hookjmp with automatic calling of overwritten code (see mem.copycode note)
 -- the function is called after the overwritten code
 -- if the function returns 'true', the jump to original code isn't performed
 function _mem.autohook2(p, f, size)

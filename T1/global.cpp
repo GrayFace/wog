@@ -577,7 +577,7 @@ __declspec(naked) static void GarrisonDlgBorderColorBug(){__asm
 	push eax
 
 	mov ecx, eax
-	mov edx, [ebp+8] // gerrison struct
+	mov edx, [ebp+8] // garrison struct
 	xor eax, eax
 	mov al, [edx] // owner
 	cmp eax, 8
