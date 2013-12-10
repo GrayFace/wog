@@ -1181,8 +1181,7 @@ end
 -- returns height for a given width
 local function GetTextHeight(font, text, width)
 	local lh = u1[font + 33]
-	-- !!! tmp workaround
-	width = max(lh*2, width or internal.ScreenWidth)  -- any charecter must fit into width, otherwise it'll hang
+	width = width or 0x7FFF0000--internal.ScreenWidth
 	return min(max(1, call(0x4B5580, 1, font, text, width))*lh, internal.ScreenHeight)
 end
 

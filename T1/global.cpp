@@ -1612,6 +1612,17 @@ _Fine:
 	ret
 }}
 
+__declspec(naked) static void _FixTextLinesCount(){__asm
+{
+	mov edi, [ebp - 0x8] // stdcode
+	mov ecx, [ebp - 0xC] // stdcode
+	cmp esi, [ebp - 0x4] // i < LineStart
+	jnl _std
+	mov esi, [ebp - 0x4] // i = LineStart
+_std:
+	ret
+}}
+
 /*
 int tmpLast;
 

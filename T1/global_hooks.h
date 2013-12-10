@@ -451,6 +451,7 @@ __newCallers newCallers[]=
 	//{0x457228, (long)&HeroesGameTypeStdPo, H_DWORD}, // Always allow Conflux, but not AB campaign
 	{0x4ED2AF+3, 0x63FE20, H_DWORD}, // Don't require h3blade.exe for Conflux and AB campaign
 	{0x619BB1, (long)_MyStatMemCheck, H_CALL5|H_INSR6}, // фикс падения при выходе при попытке освободить нашу статическую память
+	{0x4B5654, (long)_FixTextLinesCount, H_CALL5|H_INSR6}, // GetLinesCountInText hanging if Width is too small
 
 	{0}
 };
