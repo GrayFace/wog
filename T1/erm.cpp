@@ -44,10 +44,6 @@ int        ERM_LastX=0,ERM_LastY=0,ERM_LastL=0;
 int        ERM_GM_ai=-1;   // кто посетил объект
 //int        ERM_This=-1;    // это тот, кто перед монитором?
 _Hero_    *ERM_HeroStr=0;  // герой, посетивший объект
-//int        PL_ExtDwellStd=0; // 1-стандартные двелинги 8-го уровня
-//int        PL_TowerStd=0; // 1-стандартный стрелковые башни
-//int        PL_MLeaveStd=0; // 1-стандартное оставление монстров
-//int        PL_NoNPC=0; // 1-нельзя NPC
 int   PL_OptionReset[11];
 #define PL_OptionReset2Size (8)
 int   PL_OptionReset2[PL_OptionReset2Size];

@@ -22,3 +22,14 @@ Build 4
 [+] Minidump generation in case of a crash. (Build 4.8)
 [+] Commander, God Bonus, Blessings and Curses buttons have proper hint and aren't displayed if not needed. (Build 4.9)
 [-] SoD bug: When you load a game the first hero was selected. (Build 4.9)
+[!] For help: CO:E command can have 3 values: -1 means 'disabled', 0 means 'can be hired', 1 means 'exists'.
+
+
+
+Commander, God Bonus, Blessings and Curses buttons have proper hint and aren't displayed if not needed. (Build 4.9)
+Changes in CM ids for hero screen:
+107 Speciality (caption)
+139 Speciality
+150 Commander button
+151 God Bonus button
+152 Blessings and Curses button

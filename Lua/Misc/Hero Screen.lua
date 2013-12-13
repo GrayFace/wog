@@ -68,6 +68,8 @@ local structs_enum = structs.enum
 
 local WogOptionsPtr = internal.WogOptionsPtr
 local TEXT = internal.TEXT
+local CO_E = ERM.CO(-1).E
+local ?v = ?v
 
 ----------- No globals from this point ------------
 
@@ -79,38 +81,37 @@ local CommanderId = 150
 local GodBonId = 151
 local GodBlessId = 152
 
+local function SetVisible(dlg, id, v, x)
+	local it = dlg.Items[id]
+	it.Visible = v
+	it.X = (x or it.X % 20000) + (v and 0 or 20000)
+	return it
+end
+
+local function UpdateCommander(dlg, h)
+	SetVisible(dlg, CommanderId, (CO_E(?v) >= 0))
+end
+
 local function UpdateBlesses(dlg, h)
 	local g, c = internal.GetHeroGod(h), internal.HeroHasBlessCurse(h)
 	local spec = not (g or c)
-	local it = dlg.Items[107]
-	it.Visible = spec
-	it.Active = spec
-	local it = dlg.Items[139]
-	it.Visible = spec
-	it.Active = spec
-	local it = dlg.Items[GodBonId]
-	it.Visible = not not g
-	it.Active = not not g
-	it.X = c and 67 or 88
-	it.Frame = g or 6
-	local it = dlg.Items[GodBlessId]
-	it.Visible = c
-	it.Active = c
-	it.X = g and 110 or 88
+	SetVisible(dlg, 107, spec)
+	SetVisible(dlg, 139, spec)
+	SetVisible(dlg, GodBonId, not not g, (c and 67 or 88)).Frame = g or 6
+	SetVisible(dlg, GodBlessId, c, (g and 111 or 88))
 end
 
 mem_autohook(0x4E2476, function(d)
 	local dlg = d_ByHandle(d.ebx)
 	if not dlg.Items[GodBonId] then
 		dlg.Items.HintControl = dlg.Items[115]
-		if i4[WogOptionsPtr + 3*4] == 0 then
-			dlg:Add(d_Pcx{Id = CommanderId, File = "ZCmndBtn.pcx", X = 330, Y = 17, Hint = TEXT.CommanderBtnHint})
-		end
+		dlg:Add(d_Pcx{Id = CommanderId, File = "ZCmndBtn.pcx", X = 330, Y = 17, Hint = TEXT.CommanderBtnHint})
 		dlg:Add(d_Def{Id = GodBonId, File = "ZGodBon.DEF", Y = 180, Hint = TEXT.GodBonusBtnHint})
 		dlg:Add(d_Def{Id = GodBlessId, File = "ZGodBon.DEF", Y = 180, Frame = 5, Hint = TEXT.BlessCurseBtnHint})
 	end
 	local h = u4[0x698B70]
-	
+	u4[internal.ERM_HeroStr] = h
+	UpdateCommander(dlg, h)
 	UpdateBlesses(dlg, h)
 	internal.event("HeroScreenUpdate", dlg)
 end)
