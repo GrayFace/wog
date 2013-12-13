@@ -140,11 +140,11 @@ _G.Options = setmetatableW({}, {__index = Options_index, __newindex = Options_ne
 
 function internal.CopyToWogOptions()
 	local base = WogOptionsPtr + 1000*4
-	for k, erm in pairs(OptionERM) do
-		local v = internal.CurOptions.Active[k]
-		i4[base + erm*4] = tonumber(v) or v and 1 or 0
-	end
 	mem_copy(WogOptionsPtr, base, 1000*4)
+	for k, erm in pairs(OptionERM) do
+		SetWogOption(erm, internal.CurOptions.Active[k])
+	end
+	mem_copy(base, WogOptionsPtr, 1000*4)
 end
 
 function internal.CopyFromWogOptions()
