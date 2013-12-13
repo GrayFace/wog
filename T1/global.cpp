@@ -1455,7 +1455,7 @@ static void OnLodsLoaded()
 	}
 	//BaseFileLoader();
 	LuaCall("LoadScripts", "global");
-	STOP
+	RETURNV
 }
 
 __declspec(naked) static void _OnLodsLoaded(){__asm

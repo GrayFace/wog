@@ -356,28 +356,21 @@ extern PEr GEr;
 #ifdef WOG_DIRTY
 
 // Slava recklessly modifies EBX in a lot of places, so LAStEBX should make things safer
-#define STARTC(x,y)  __asm{ pusha } int GErLeveL = GEr.Add(x,y); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
-#define START(x)     __asm{ pusha } int GErLeveL = GEr.Add(x,0); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
-//#define STARTN(x)    { __asm{ pusha } GEr.Add(STRINGER(x),0); __asm{ popa } }
-#define STARTNC(x,y)   __asm{ pusha } int GErLeveL = GEr.AddN(x,y); /*_CrtDumpMemoryLeaks();*/ __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
-//#define STARTN(x) { __asm{ pusha } GEr.AddN(x,0); __asm{ popa } }
-#define STARTNA(x,y)    STARTNC(__FILENUM__*1000000 + x, y)
-//#define STARTN0() \
-//#define STARTC(x,y) { GEr.Add(x,y); }
-//#define START(x) { GEr.Add(x,0); }
-#define STOP {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa }}
-#define RETURN(x) {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return(x);}
-#define RETURNV {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return;}
+#define STARTC(x,y)   __asm{ pusha } int GErLeveL = GEr.Add(x,y); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define START(x)      __asm{ pusha } int GErLeveL = GEr.Add(x,0); __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define STARTNA(x,y)  __asm{ pusha } int GErLeveL = GEr.AddN(__FILENUM__*1000000 + x,y); /*_CrtDumpMemoryLeaks();*/ __asm{ popa }  int LAStEBX; __asm{ mov LAStEBX, ebx}
+#define STOP          {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa }}
+#define RETURN(x)     {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return(x);}
+#define RETURNV       {__asm{ mov ebx, LAStEBX } __asm{ pusha }  PEr::Del(GErLeveL);  __asm{ popa } return;}
 
 #else
 
-#define STARTC(x,y)  int GErLeveL = GEr.Add(x,y);
-#define START(x)     int GErLeveL = GEr.Add(x,0);
-#define STARTNC(x,y)   int GErLeveL = GEr.AddN(x,y);
-#define STARTNA(x,y)    STARTNC(__FILENUM__*1000000 + x, y)
-#define STOP {PEr::Del(GErLeveL);}
-#define RETURN(x) {PEr::Del(GErLeveL); return(x);}
-#define RETURNV {PEr::Del(GErLeveL); return;}
+#define STARTC(x,y)   int GErLeveL = GEr.Add(x,y);
+#define START(x)      int GErLeveL = GEr.Add(x,0);
+#define STARTNA(x,y)  int GErLeveL = GEr.AddN(__FILENUM__*1000000 + x,y);
+//#define STOP          {PEr::Del(GErLeveL);}  // use RETURNV instead
+#define RETURN(x)     {PEr::Del(GErLeveL); return(x);}
+#define RETURNV       {PEr::Del(GErLeveL); return;}
 
 #endif
 

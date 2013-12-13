@@ -3206,7 +3206,6 @@ int ERM_MAction(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 		MError("ERROR! Attempt to use \"!!BG\" in non-human battle (use flag 1000 for checking)."); RETURN(0)
 	}
 	bm = combatManager;
-	STOP
 	switch(Cmd){
 		case 'A': Apply((int *)&bm[0x3C],4,Mp,0); break; // тип атаки
 		case 'S': Apply((int *)&bm[0x40],4,Mp,0); break; // номер закл
@@ -9755,7 +9754,7 @@ int __stdcall FixNoHero4SpellPower(int Spell,int Par2,int Par3)
 //__asm int 3
 	_ECX(FNH4SP_Hp);
 	if(FNH4SP_Hp==0){ // no hero - monster
-	STARTNA(__LINE__, 0)
+		STARTNA(__LINE__, 0)
 		Byte *AMon;
 		int mside,msideind,var=0;
 		switch(Spell){

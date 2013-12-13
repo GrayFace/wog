@@ -161,7 +161,7 @@ static char  CSBuffer[2048];
 
 void PrepareCastle(_CastleSetup_ *CStructure)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 //  STARTN(__FILENUM__*1000000+__LINE__) //  START("PrepareCastle")
 	int CType=CStructure->Type;
 	Dword Mask;
@@ -177,7 +177,7 @@ STARTNA(__LINE__, 0)
 
 int GetCastleNumber(_CastleSetup_ *CStructure)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 //  STARTN(__FILENUM__*1000000+__LINE__) //  START("GetCastleNumber")
 	int Cnum;
 	Cnum=CStructure->Number;

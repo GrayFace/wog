@@ -48,7 +48,7 @@ char *SourceFileList[]={
 	"Setup",     //13
 	"String",    //14
 	"CrExpo",    //15
-	"Arts",      //16
+	"artifact",  //16
 	"txtfile",   //17
 	"timer",     //18 3.59+
 	"lod",       //19
@@ -75,8 +75,8 @@ char LastLoadedDefName[16]; // tmp, sometimes LoadDEF crashes
 
 void *Alloc(int zsize)
 { 
-STARTNA(__LINE__, 0)
-void *po;
+	STARTNA(__LINE__, 0)
+	void *po;
 	__asm{
 		mov    eax,zsize
 		push   eax
@@ -91,7 +91,7 @@ void *po;
 
 void Free(void *po)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 	if(po==0) RETURNV;
 	__asm{
 		mov    edx,po
@@ -105,7 +105,7 @@ STARTNA(__LINE__, 0)
 
 int MesMan(_AMes_ *mp,char *mes,int zsize)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 	int i;
 	char *s,bt;
 	//char *d,*s,*c,bt;
@@ -181,7 +181,7 @@ int Message(const char *zmes,int n,int showtime)
  10-можно и выбрать и отказаться
 */
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 	if (MainWindow == 0)
 	{
 		MessageBox(0, zmes, "Heroes of Might and Magic III", 0);
@@ -244,7 +244,7 @@ __declspec( naked ) void Check4MessageEnable(void)
 static int i2a_eax;
 int a2i(char *val)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 	__asm{
 		mov    eax,val
 		push   eax
@@ -258,7 +258,7 @@ STARTNA(__LINE__, 0)
 
 int i2a(int val,char *str)
 {
-STARTNA(__LINE__, 0)
+	STARTNA(__LINE__, 0)
 	int i=0,k,d;
 	char ch,ds[16];
 
@@ -5491,10 +5491,22 @@ void __fastcall PEr::Del(int level){
 			FILE* f;
 			if(!fopen_s(&f, "UnclosedStackLevels.txt", "at"))
 			{
-				if(GEr.AType[i])
-					fprintf(f, "(%i) %s : %i\n", i, SourceFileList[(int)GEr.Descr[i]/1000000], (int)GEr.Descr[i]%1000000);
-				else
-					fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
+				if (i < level){
+					i = level;
+					fprintf(f, "Removed twice:");
+				}
+				if (level - i > 1){
+					fprintf(f, "Multiple:");
+				}
+				for(int i = i; i >= level; i--){
+					if(GEr.AType[i])
+						fprintf(f, "(%i) %s : %i\n", i, SourceFileList[(int)GEr.Descr[i]/1000000], (int)GEr.Descr[i]%1000000);
+					else
+						fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
+				}
+				if (level - i > 1){
+					fprintf(f, "----------");
+				}
 				fclose(f);
 			}
 			for(; i > level; i--){ GEr.Descr[i]=0; GEr.Text[i]=0; }

@@ -209,7 +209,7 @@ void CloseCastleGate(_Hero_ *hp,_CastleSetup_ *Cstr)
 			if(ClosedTowns[Cstr->Number].HoldLen!=0){ // ключ еще не возвращен
 				sprintf(Buf,ITxt(238,0,&Strings),ClosedTowns[Cstr->Number].HoldLen);
 				Request2Pic(Buf,22+Cstr->Type,7,8,160,1);
-				RETURNV 
+				RETURNV
 			}
 			if(Request2Pic(ITxt(237,0,&Strings),22+Cstr->Type,7,8,160,2)){
 				ClosedTowns[Cstr->Number].Closed=5;
@@ -233,6 +233,7 @@ void CloseCastleGate(_Hero_ *hp,_CastleSetup_ *Cstr)
 		}
 	}else{ // AI
 	}
+	RETURNV
 }
 
 void DaylyCastleKey(void/*int User*/)

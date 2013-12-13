@@ -21,11 +21,7 @@ extern Dword pointer;
 extern int ERM_GM_ai;   // кто посетил объект
 extern _Hero_ *ERM_HeroStr;  // герой, посетивший объект
 extern int ERM_PosX, ERM_PosY, ERM_PosL;
-//extern int PL_ExtDwellStd; // 1-стандартные двелинги 8-го уровня
 extern int EnableMithrill;
-//extern int PL_TowerStd;
-//extern int PL_MLeaveStd;
-//extern int PL_NoNPC;
 #define PL_WONUM 1000
 #define PL_ExtDwellStd PL_WoGOptions[0][0]// 0-стандартные двелинги 8-го уровня
 #define PL_TowerStd    PL_WoGOptions[0][1]

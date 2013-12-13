@@ -6371,8 +6371,8 @@ int ProcessMes(_ToDo_ *sp, Mes &M, char Cmd, int Num) // returns 1 in case of er
 				}else if(Cmd=='R'){ // R$ периодичность появления
 					Apply(&p->Repeater,2,&M,0);
 				}else if(Cmd=='B'){ // B#1/$2 ресурсы
-					if(Num<2) goto l_exit;
-					if((M.n[0]<0)||(M.n[0]>6)) goto l_exit;
+					if(Num<2){ EWrongParamsNum(); goto l_exit; }
+					if((M.n[0]<0)||(M.n[0]>6)){ EWrongParam(); goto l_exit; }
 					Apply(&p->Res[M.n[0]],4,&M,1);
 				}else if(Cmd=='E'){ // E$ разрешить игрокам цветов
 					if(M.f[0]) p->Colors|=(Byte)(M.n[0]&0x0FF);
@@ -6804,7 +6804,7 @@ Ok_11:
 					Apply(&p->y0,1,&M,1);
 					Apply(&p->Run,1,&M,2);
 				}else if(Cmd=='C'){ // C модефикация существ
-					if(Num<4) goto l_exit;
+					if(Num<4){ EWrongParamsNum(); goto l_exit; }
 					if(Num==14){
 						CrChangeDialog(p,M.n[0],M.n[1],M.n[2],M.n[3],M.n[4],M.n[5],M.n[6],M.n[7],
 														 M.n[8],M.n[9],M.n[10],M.n[11],M.n[12],M.n[13]);
@@ -6813,7 +6813,7 @@ Ok_11:
 						if(Num>5) Apply(&Mod,4,&M,5);
 						if(M.n[0]==0){ // C0/#2/$3/$4{/$5{/$6}} модефикация существ по позиции
 							{
-								if((M.n[1]<0)||(M.n[1]>7)) goto l_exit;
+								if((M.n[1]<0)||(M.n[1]>7)){ EWrongParam(); goto l_exit; }
 								if(M.f[2]==0){
 									// 3.59 fix -1 only if a constant
 									if((M.n[2]==-1)&&(M.VarI[2].Type==0)){ // апгрейд

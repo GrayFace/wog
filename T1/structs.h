@@ -948,7 +948,7 @@ struct _Hero_{
 		Dword  PlSetUp; // dd +0 с карты
 	Word   SpPoints; //   +18  dw    = баллы заклинаний
 	int    Number;   //   +1A  dd    = номер подтипа (конкретный герой)
-	Dword  Id;       //   +1E  dd    = Id
+	Dword  _unk_Id;       //   +1E  dd    = Id (при чЄм тут Id???)
 	char   Owner;    //   +22  db    = ноз€ин (цвет)
 	char   Name[13]; //*   +23  db*D  = им€,0
 	long   Spec;     //   +30  dd    = str[8] str=(*[67CD08])[номер подтипа *5C]
