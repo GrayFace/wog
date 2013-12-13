@@ -1623,6 +1623,20 @@ _std:
 	ret
 }}
 
+__declspec(naked) static void _FixLoadActiveHero(){__asm
+{
+	cmp eax, -1
+	jz _skip
+	mov ecx, ds:[0x69CCFC]
+	mov ecx, [ecx + 4]
+	cmp ecx, 0
+	jnl _skip
+	ret
+_skip:
+	mov dword ptr ds:[esp], 0x407721
+	ret
+}}
+
 /*
 int tmpLast;
 
