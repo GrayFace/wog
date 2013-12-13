@@ -539,6 +539,7 @@ local function RunMapScripts()
 
 	LoadAllERT()
 	event("EnterContext")
+	event("EnterMap")
 	
 	LoadScripts("map")
 	event("BeforeMapScripts")
@@ -591,6 +592,7 @@ function internal.EnterMap(Loaded)
 		RunMapScripts()
 	else
 		event("EnterContext")
+		event("EnterMap")
 		LoadStoredScripts()
 		event("LoadGame", call(internal.HasAnyAtThisPCPtr, 0) ~= 0)
 	end

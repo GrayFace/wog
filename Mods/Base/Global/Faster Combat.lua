@@ -4,11 +4,7 @@
 
 local r4 = mem.r4
 
-function global.events.EnterContext()
-	if context ~= "map" then
-		return
-	end
-
+function global.events.EnterMap()
 	mem.IgnoreProtection(true)
 
 	-- r4[0x63CF7C] = 0.63  -- keep slow speed at 1 for graphics tests

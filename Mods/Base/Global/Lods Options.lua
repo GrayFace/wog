@@ -1,9 +1,6 @@
 -- By GrayFace
 
-function global.events.EnterContext()
-	if context ~= "map" then
-		return
-	end
+function global.events.EnterMap()
 	if Options.Trees == "bright" then
 		LD:T(?v, 11, ModName.."/Lods/Trees.lod")
 	elseif Options.Trees == "move" then
