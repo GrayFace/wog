@@ -445,7 +445,7 @@ void __stdcall EventERM(_Hero_ *Hp,_MapItem_ *MIp,Dword MixPos,Dword _n1);
 //int  CheckSOG(void);
 void SaveGame(void);
 void LoadGame(void);
-void FileLoad(void);
+void FileLoader(void);
 //void FileTypeN(void);
 //void FileTypeL(void);
 int CheckFileTypeN(void);
@@ -585,7 +585,7 @@ struct __Callers{
 	{0x5D38AD,0x0,DP(CastleService)},
 	{0x5D6B90,0x0,DP(CastleService2)},
 // FileLoader
-	{0x47A6B3,0x0,DP(FileLoad)},
+	{0x47A6B3,0x0,DP(FileLoader)},
 // Game New/Load
 ////  {0x4C413E,0x0,(long)FileTypeN},
 ////  {0x4C5323,0x0,(long)FileTypeL},
@@ -603,11 +603,6 @@ struct __Callers{
 	{0x408B84,0x0,DP(CalledAfterTurn)},
 	{0x4CC404,0x0,DP(CalledAfterTurn)},
 	{0x556B36,0x0,DP(CalledAfterTurn)},
-// Addition Speciality Picture
-	{0x4E11E0,0x0,DP(NewSpecPrepare)}, // Prepare 1
-	{0x4E1F38,0x0,DP(NewSpecShow)},    // Show 1,2
-	{0x4DED05,0x0,DP(NewSpecPrepare2)}, // Prepare 2
-	{0x4DDA15,0x0,DP(NewSpecDescr)}, // Text 1,2
 // Картинка спец. Героя при встрече двух привязано к 12
 	{0x5AEC9F,0,DP(SpecPicture)},
 // Картинка атаки монстра (AvWattak.def)
@@ -1965,12 +1960,6 @@ struct __Copiers{
 	{(Byte *)"\xE8\x1\x1\x1\x1\x33\xC0\x90\x3B\xDF",(Byte *)0x5D6B90,10},
 // NextHeroChoosen
 	{(Byte *)"\xE8\x1\x1\x1\x1\x90\x90",(Byte *)0x58DF33,7},
-// New Speciality
-	{(Byte *)"\xE8\x1\x1\x1\x1\xEB\x20",(Byte *)0x4E11E0,7}, //Picture 1 Prepare
-	{(Byte *)"\x8D\x4D\xD8\xE8\x1\x1\x1\x1\xEB\x14",(Byte *)0x4E1F35,10}, //Picture 1,2 Show
-	{(Byte *)"\x6C",(Byte *)0x68C782,1}, //Original Picture 2 Disable
-	{(Byte *)"\xE8\x1\x1\x1\x1\xEB\x1D",(Byte *)0x4DED05,7}, //Picture 2 Prepare
-	{(Byte *)"\xE8\x1\x1\x1\x1\x8B\xF8\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90",(Byte *)0x4DDA15,18}, //Text 1,2
 // FileLoader
 	{(Byte *)"\xE8\x1\x1\x1\x1\xC3",(Byte *)0x47A6B3,6},
 // New/Load Map/Game

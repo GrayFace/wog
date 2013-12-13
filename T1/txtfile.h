@@ -30,4 +30,3 @@ struct TxtFile{
 int LoadTXT(const char *name, TxtFile *tf);
 void UnloadTXT(TxtFile *tf);
 char *ITxt(int StrNum,int ItemNum,TxtFile *tf);
-

@@ -975,6 +975,10 @@ __declspec(naked) void * LuaAlloc(void *, void *, size_t, size_t){__asm
 #undef __FILENUM__
 #define __FILENUM__ 25
 
+int LuaGetHeroGod(lua_State *L);
+int LuaHeroHasBlessCurse(lua_State *L);
+int LuaITxt(lua_State *L);
+
 //-------- ERM to Lua calls ---------
 
 int LuaCallTop;
@@ -1077,7 +1081,6 @@ void CallLuaTrigger(int index)
 	WasErmError = false;
 }
 
-
 static const struct luaL_reg LuaLib_general [] =
 {
 	{"xpcall", lua_xpcall},
@@ -1119,6 +1122,9 @@ static const struct luaL_reg LuaLib_internal [] =
 	{"GetDrawPosVTables", LuaGetLastError},
 	{"GetEditVTables", LuaGetLastError},
 #endif
+	{"GetHeroGod", LuaGetHeroGod},
+	{"HeroHasBlessCurse", LuaHeroHasBlessCurse},
+	{"ITxt", LuaITxt},
 	{0, 0}
 };
 

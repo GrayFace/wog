@@ -60,13 +60,8 @@ char *ITxt(int StrNum,int ItemNum,TxtFile *tf)
 	RETURN(strpo->Start[ItemNum])
 }
 
-void FileLoader(void);
-
-void FileLoad(void)
+int LuaITxt(lua_State *L)
 {
-	__asm pusha
-	FileLoader();
-	__asm popa
+	lua_pushstring(L, ITxt(lua_tointeger(L, 1), 0, &Strings));
+	return 1;
 }
-
-

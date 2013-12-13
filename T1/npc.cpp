@@ -2623,6 +2623,9 @@ void _ClickNPC(void)
 		RETURNV
 	}
 	if(CNPC_ms->Type!=0x200) RETURNV
+	if(CNPC_ms->SType == 12 || CNPC_ms->SType == 14){
+		BlessesDescr(CNPC_ms, CNPC_hp);
+	}
 	if(CNPC_ms->Item>=0x44 && CNPC_ms->Item<=0x4A){ // ckick to a stack
 		// кидали ли артифакт
 		__asm    mov    eax,0x698AD8
@@ -2647,12 +2650,7 @@ void _ClickNPC(void)
 			CNPC_ms->Item=0x6E;
 		}
 	}
-	if(CNPC_ms->Item!=0x0) RETURNV
-//  if(CNPC_ms->Flags!=0) return;
-	if(CNPC_ms->Xabs<0x181) RETURNV
-	if(CNPC_ms->Xabs>0x1D4) RETURNV
-	if(CNPC_ms->Yabs<0x1D) RETURNV
-	if(CNPC_ms->Yabs>0x3B) RETURNV
+	if(CNPC_ms->Item!=150) RETURNV
 // кидали ли артифакт на NPC?
 	__asm    mov    eax,0x698AD8
 	__asm    mov    eax,[eax]

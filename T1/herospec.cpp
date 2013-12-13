@@ -703,163 +703,6 @@ void MakeDarkness(int Owner)
 	RETURNV
 }
 
-static char *StdSpecDef="UN44.DEF";
-static char *AddSpec1Def="ZGodBon.DEF";
-static char *AddSpec2Def="ZGodBon.DEF";
-int NewSpecPrepare(void)
-{
-	int r;
-	STARTNA(__LINE__, 0)
-	if(PL_NewHero==0){
-		__asm{
-			mov    ecx,eax
-			mov    eax,StdSpecDef
-			push   0x10
-			push   0
-			push   0
-			push   0
-			push   0
-			push   eax
-			push   0x8B // номер
-			push   0x2C // dy
-			push   0x2C //5A // dx
-			push   0xB4 // y
-			push   0x41 // x
-			mov    eax,0x4EA800
-			call   eax
-			mov    r, eax
-		}
-	}else{
-		__asm{
-			mov    ecx,eax
-			mov    eax,AddSpec1Def
-			push   0x10
-			push   0
-			push   0
-			push   0
-			push   0
-			push   eax
-			push   0x8B // номер
-			push   0x2C//0x2C // dy
-			push   0x2C//0x2C //5A // dx
-			push   0xB4//0xB4 // y
-			push   0x3F//0x41+1//0x41 // x
-			mov    eax,0x4EA800
-			call   eax
-			mov    r, eax
-		}
-	}  
-	RETURN(r)
-}
-
-int NewSpecPrepare2(void)
-{
-	int r;
-	STARTNA(__LINE__, 0)
-	if(PL_NewHero==0){
-		__asm{
-			mov    ecx,eax
-			mov    eax,StdSpecDef
-			push   0x10
-			push   0
-			push   0
-			push   0
-			push   0
-			push   eax
-			push   0x6B // номер
-			push   0x2C // dy
-			push   0x2C //5A // dx
-			push   0xB4 // y
-			push   0x70 //0x70 // x
-			mov    eax,0x4EA800
-			call   eax
-			mov    r, eax
-		}  
-	}else{
-		__asm{
-			mov    ecx,eax
-			mov    eax,AddSpec2Def
-			push   0x10
-			push   0
-			push   0
-			push   0
-			push   0
-			push   eax
-			push   0x6B // номер
-			push   0x2C // dy
-			push   0x2C //5A // dx
-			push   0xB4 // y
-			push   0x71 // x
-			mov    eax,0x4EA800
-			call   eax
-			mov    r, eax
-		}  
-	}
-	RETURN(r)
-}
-
-static _Hero_ *hp_ns;
-static Dword  *bf_ns;
-static Dword   ebx_ns;
-static void _NewSpecShow(int god,int curse)
-{
-	STARTNA(__LINE__, 0)
-	if(PL_NewHero==0){
-		__asm{
-			mov  ecx,bf_ns
-			mov  dword ptr [ecx+4],4
-			mov  dword ptr [ecx+8],0x8B
-			mov  eax,hp_ns
-			mov  eax,[eax+0x1A]
-			mov  [ecx+0x18],eax
-			mov  ebx,ebx_ns
-			push ecx
-			mov  ecx,ebx
-			mov  eax,0x5FF3A0
-			call eax
-		}
-		__asm{
-			mov  ecx,bf_ns
-			mov  dword ptr [ecx+4],4
-			mov  dword ptr [ecx+8],0x6B
-			mov  eax,hp_ns
-			mov  eax,[eax+0x1A]
-			mov  [ecx+0x18],eax
-			mov  ebx,ebx_ns
-			push ecx
-			mov  ecx,ebx
-			mov  eax,0x5FF3A0
-			call eax
-		}
-	}else{ // WoG
-		__asm{
-			mov  ecx,bf_ns
-			mov  dword ptr [ecx+4],4
-			mov  dword ptr [ecx+8],0x8B
-			mov  eax,god
-			mov  [ecx+0x18],eax
-			mov  ebx,ebx_ns
-			push ecx
-			mov  ecx,ebx
-			mov  eax,0x5FF3A0
-			call eax
-		}
-		__asm{
-			mov  ecx,bf_ns
-			mov  dword ptr [ecx+4],4
-			mov  dword ptr [ecx+8],0x6B
-			mov  eax,curse
-			mov  [ecx+0x18],eax
-			mov  ebx,ebx_ns
-			push ecx
-			mov  ecx,ebx
-			mov  eax,0x5FF3A0
-			call eax
-		}
-	}  
-	RETURNV
-}
-
 //static int DoesHeroHas(_Hero_ *hr,int type);
 static int FillCurseStruct(_Hero_ *hr);
 static char *_GC_Pics[]={ // шаблоны
@@ -1007,92 +850,36 @@ int ChooseArt(_Hero_ *hp,int Remove)
 	RETURN(art)
 }
 /////////
-void NewSpecShow(void)
-{
-	_EDX(hp_ns);
-	_ECX(bf_ns);
-	_EBX(ebx_ns);
-	__asm pusha
-	STARTNA(__LINE__, 0)
-	int gt=DoesHeroGot(hp_ns);
-//  int cr=DoesHeroHas(hp_ns->Number,0);
-//  if(gt!=0) gt-=GODMONTSTRT; else gt=4;
-//  if(cr==-1) cr=6; else cr=5;
-	if(gt!=0) gt-=GODMONTSTRT; else gt=6;
-//  if(cr==-1) cr=6; else cr=5;
-//  cr=5;
-	_NewSpecShow(gt,/*cr*/5);
-	STOP
-	__asm popa
-}
-
-//char *NSdescr[2]={"This is a first additional field","This is a second additional field"};
-static Dword fn_ns;  // номер поля
-static Dword ret_ns;
-char *_NewSpecDescr(char *string1,char *string2)
-{
-	STARTNA(__LINE__, 0)
-	char *zret;
-	if(PL_NewHero==0) fn_ns=0x76;
-	switch(fn_ns){
-		case 0x8B: zret=string1;
-			break;
-		case 0x6B: zret=string2;
-			break;
-		default:
-			__asm{
-				mov  ecx,hp_ns 
-				mov  eax,[ecx+0x1A]
-				lea  edx,[eax+4*eax]
-				mov  eax,0x679C80
-				mov  eax,[eax]
-				mov  eax,[eax+8*edx+0x24]
-			}  
-			_EAX(zret);
-	}
-	RETURN(zret)
-}
-
 _ZPrintf_ Descr1;
-void NewSpecDescr(void)
+void BlessesDescr(_MouseStr_ *ms, _Hero_ *hp)
 {
-	_EAX(fn_ns);
-	_ECX(hp_ns);
-	__asm pusha
+	if (ms->Item != 151 && ms->Item != 152)
+		return;
+
 	STARTNA(__LINE__, 0)
-	int gt=DoesHeroGot(hp_ns);
-	char *string1;
-	if(gt==0){ 
-		string1=ITxt(53,0,&Strings);
-	}else{
-		Zsprintf2(&Descr1,ITxt(54,0,&Strings),(Dword)ITxt(55+gt-GODMONTSTRT,0,&Strings),
-							 GetGodBonus(hp_ns->Number,0));
-		string1=Descr1.Str;
-	}  
-	int cr=DoesHeroHas(hp_ns->Number,0);
-	char *string2;
-	if(cr==-1){ 
-		string2=ITxt(70,0,&Strings);
-	}else{
-/*
-		Zsprintf2(&Descr1,ITxt(54,0,&Strings),(Dword)ITxt(55+-GODMONTSTRT,0,&Strings),
-							 GetGodBonus(hp_ns->Number,0));
-		string2=Descr1.Str;
-*/    
-//    string2=ITxt(53,0,&Strings);
-		string2=" ";
-		if(fn_ns==0x6B){
-			FillCurseStruct(hp_ns);
-			ShowCurse(&CurseShow);
-			M_MDisabled=1;
-			M_MDisabledNext=0;
+	char *str;
+	if (ms->Item == 151){
+		int gt=DoesHeroGot(hp);
+		if(gt==0){ 
+			str=ITxt(53,0,&Strings);
+		}else{
+			Zsprintf2(&Descr1,ITxt(54,0,&Strings),(Dword)ITxt(55+gt-GODMONTSTRT,0,&Strings),
+								 GetGodBonus(hp->Number,0));
+			str=Descr1.Str;
 		}
-	}  
-	ret_ns=(Dword)_NewSpecDescr(string1,string2);
-	STOP
-	__asm popa
-	__asm mov  ecx,-1
-	__asm mov  eax,ret_ns
+	}
+	if (ms->Item == 152){
+		int cr=DoesHeroHas(hp->Number,0);
+		if(cr==-1 || ms->Flags & 512){ 
+			str=ITxt(70,0,&Strings);
+		}else{
+			FillCurseStruct(hp);
+			ShowCurse(&CurseShow);
+			RETURNV
+		}  
+	}
+	Message(str, ((ms->Flags & 512) ? 4 : 1));
+	RETURNV
 }
 
 // Рисует картинку - название специализации
@@ -1482,6 +1269,22 @@ void DaylyCurse(int Owner)
 		MagicWonder(hr);
 	}
 	RETURNV
+}
+
+int LuaGetHeroGod(lua_State *L)
+{
+	int gt = DoesHeroGot((_Hero_*)lua_tointeger(L, 1));
+	if(gt){
+		lua_pushinteger(L, gt - GODMONTSTRT);
+		return 1;
+	}
+	return 0;
+}
+
+int LuaHeroHasBlessCurse(lua_State *L)
+{
+	lua_pushboolean(L, DoesHeroHas(((_Hero_*)lua_tointeger(L, 1))->Number, 0) >= 0);
+	return 1;
 }
 
 ////////////////////

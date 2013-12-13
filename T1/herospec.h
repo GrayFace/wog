@@ -32,7 +32,7 @@ void MakeDarkness(int Owner);
 int NewSpecPrepare(void);
 int NewSpecPrepare2(void);
 void NewSpecShow(void);
-void NewSpecDescr(void);
+void BlessesDescr(_MouseStr_ *ms, _Hero_ *hp);
 //////////////////////////
 int AddCurse(int cr,int val,int len,int flag,int hi);
 int ERM_Curse(Mes &M, int Num, int hn);
@@ -48,7 +48,4 @@ void RefreshHeroPic(void);
 void InitHeroLocal(void);
 // 3.58
 int ChooseArt(_Hero_ *hp,int Remove);
-
-
-
 
