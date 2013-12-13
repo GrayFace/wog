@@ -5,10 +5,15 @@ group:	General
 FizzleFade	Replace fade-to-black animation with blending when entering/leaving a town or combat			true		true	TODO: Proper text, hint and description
 ChooseRMGTemplate	Choose RMG template when starting a random map			true			TODO: Proper text, hint and description
 group:	Adventure Map
-BrighterTrees	Better green trees, with less black in them			true		true	TODO: Proper text, hint and description
-SoftShadow	Soft shadows on adventure map (for use with brighter trees)			true		true	TODO: Proper text, hint and description
+SoftShadow	Light shadows on adventure map			true		true	TODO: Proper text, hint and description		
+group:	Trees
+Trees	Standard trees		false			true	TODO: Proper text, hint and description
+Trees	A bit brighter green trees		"bright"	true		true	TODO: Proper text, hint and description	Made for "Soft shadows on adventure map" option
+Trees	Moving trees (modified)		"move"			true	TODO: Proper text, hint and description	Modified by hippox89
+
+http://heroescommunity.com/viewthread.php3?TID=39579
 group:	Combat
 MonStandAnim	Enable "standing" animation of monsters			true		true	TODO: Proper text, hint and description
 NewGrid	New battlefield grid look			true		true	TODO: Proper text, hint and description
-SoftGridShadow	Soft combat grid shadow			true		true	TODO: Proper text, hint and description
+SoftGridShadow	Light combat grid shadow			true		true	TODO: Proper text, hint and description
 FasterCombat	Faster combat (changes Normal and Fast combat speeds)					true	TODO: Proper text, hint and description
