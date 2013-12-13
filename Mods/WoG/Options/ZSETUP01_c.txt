@@ -34,6 +34,134 @@ The choice to WoGify or not is given whenever you start a map.
 PLEASE NOTE:
 With this WoGify Option setting, RoE, AB and SoD maps will be converted to WoG format even if you choose NOT to WoGify them, and all hard-coded WoG options will be taken from the WoG Option screen settings.	Apply WoGification to ALL maps but always ask
 
+group:	Hard-Coded Options						Hard-Coded Options	HARD-CODED OPTIONS
+
+These WoG options are hard-coded into the game and not script-based.	
+o0	Level 8 dwellings function as normal	0			true		Level 8 creature dwellings function the same as all other external creature dwellings.	LEVEL 8 DWELLINGS FUNCTION AS NORMAL
+
+Option 000 by Slava (hard coded)
+
+Level 8 dwellings function the same as all other external creature dwellings in the game.
+
+If this option is NOT selected, creatures can only be recruited once from the dwelling itself, but can be bought each week from an upgraded level 7 dwelling within a town of the same town type.
+
+The upgraded level 7 dwelling must be built before the start of a new week for level 8 creatures to show up there.
+
+For more details, see the "New Features for Heroes III: In the Wake of Gods" file in the "New Life of Heroes" folder, accessible from the Start menu.	Level 8 dwellings function as normal
+o1	Arrow towers gain experience	1		true			Arrow towers gain experience based on game time and battles won. Experienced towers do more damage.	ARROW TOWERS GAIN EXPERIENCE
+
+Option 001 by Slava (hard coded)
+
+Arrow towers gain experience based on game time and battles won. Experienced arrow towers deliver more damage per shot.
+
+If the player keeps control of a town for one week, the arrow towers on day 1 will receive additional experience and are amplified according to the following formula:
+
+No Bonus:  100% damage
+After 1 week:  200% damage
+After 2 weeks:  300% damage
+After 3 weeks:  400% damage
+After 4 weeks:  500% damage
+And so on.
+
+If a town successfully defends against a siege, it gets better as though one week had passed. If a town is captured, all saved up experience for towers is lost. The central shooting tower receives experience irrespective of the lower towers. The lower arrow towers receive experience simultaneously since they were both built at the same time.
+
+Multiplayer Note: The option is not currently compatible with network human vs. human battles and may cause the game to go out of sync. If the map is WoGified, this option will be auto-disabled if a network game is detected. If not WoGified, you should disable it yourself.	Arrow towers gain experience    
+o2	Leave troops by right-clicking on adventure map	2		true			A single stack of troops can be left on an empty square adjacent to the hero by right-clicking on the map.	TROOPS CAN BE LEFT BY RIGHT-CLICKING
+
+Option 002 by Slava (hard coded)
+
+A single stack of troops can be left on an empty square adjacent to the hero by right-clicking on the map.
+
+The troops will not rejoin the player who left them but will instead vanish if attacked by that player unless the "rejoin owner" option is also selected.	Troops can be left by right-clicking
+o10	Troops left will rejoin their owner	10		true			If a hero "attacks" a stack of troops previously left on an empty square by the same player, the troops will rejoin the hero.	TROOPS LEFT WILL REJOIN THEIR OWNER
+
+Option 010 by Slava (hard coded)
+
+If a hero "attacks" a stack of troops previously left on an empty square by the same player, the troops will join the hero free of charge.	Troops left will rejoin their owner     
+o902	Artifacts may be left by right-clicking	902		true			A single artifact may be left on an empty square adjacent to the hero by right-clicking on the map.	ARTIFACTS CAN BE LEFT BY RIGHT-CLICKING
+
+Optio 902 by Slava (hard coded)
+
+A single artifact may be left on an empty square adjacent to the hero by right-clicking on the map.
+
+Note: Only Artifacts in a hero's backpack can be left. If the artifact is equipped, it must first be placed in the hero's backpack.
+
+Warning: If you use this option as well as the Map Rule "Heroes pick up double artifacts," it's possible to create unlimited copies of almost any artifact, therefore we strongly advise against combining these two options.	Artifacts may be left by right-clicking
+o3	Commanders are enabled	3		true			Commanders are enabled and each hero begins the game with one unless the "must be hired" option is also selected.	COMMANDERS ARE ENABLED
+
+Option 003 by Slava (hard coded)
+
+Commanders are enabled and each hero begins the game with one unless the "must be hired" option is also selected.	Commanders are enabled              
+o6	Commanders must be hired	6			true		Commanders are enabled but heroes do not start with them. They may be hired for 1000 gold from any town a player owns.	COMMANDERS MUST BE HIRED
+
+Option 006 by Slava (hard coded)
+
+Commanders are enabled but heroes do not start with them.
+
+A Commander may be hired for 1000 gold from any town a player owns.	Commanders must be hired        
+o4	Demolish town buildings by right-clicking	4		true			Players can demolish towns by right-clicking on a town building while a hero is visiting the town.	PLAYERS CAN DEMOLISH TOWNS
+
+Option 004 by Slava (hard coded)
+
+Players can demolish towns by right-clicking on a town building while a hero is visiting the town.
+
+A minimum hero level and army size may be required for demolition, and only a certain number of demolitions are allowed each day.
+
+A completely destroyed town may be rebuilt a week later as a town of the hero's own town type.
+
+For more details, see the "New Features for Heroes III: In the Wake of Gods" file in the "New Life of Heroes" folder, accessible from the Start menu.	Players can demolish towns      
+o7	Creature Dwellings accumulate creatures	7			true		External Creature Dwellings will accumulate unbought creatures from week to week, excluding L8 creatures.	CREATURE DWELLINGS ACCUMULATE CREATURES
+
+Option 007 by Slava (hard coded)
+
+External Creature Dwellings will accumulate unbought creatures from week to week.
+
+Note: Unbought Level 8 WoG creatures (aside from the Dracolich) will NOT accumulate in dwellings.	Creature Dwellings accumulate creatures
+o8	Creature Dwellings accumulate guards	8			true		External Creature Dwellings that are guarded (Level 5+) will accumulate undefeated guards from week to week.	CREATURE DWELLINGS ACCUMULATE GUARDS
+
+Option 008 by Slava (hard coded)
+
+External Creature Dwellings that are guarded (Level 5+) will accumulate undefeated guards from week to week.	Creature Dwellings accumulate guards
+o9	Sylvan Centaur creation is allowed	9		true			Grand Elves may be combined with Centaur Captains to create Sylvan Centaurs at no cost. Control-click on a stack in the Hero screen to combine them.	SYLVAN CENTAUR CREATION IS ALLOWED
+
+Option 009 by Slava (hard coded)
+
+Grand Elves may be combined with Centaur Captains to create Sylvan Centaurs at no cost. In the Hero screen, hold down the Control Key and click the Left Mouse Button on any stack of Grand Elves or Centaur Captains to combine them; they will be combined at a ratio of 1:1, so if you have, for example, 42 Centaur Captains and 14 Grand Elves, you will end up with 14 Sylvan Centaurs and 28 Centaur Captains after combining.
+
+Note: if Stack Experience is enabled, Sylvan Centaurs (upon creation) will lose ALL experience that the Grand Elves and Centaur Captains had accumulated, but they will gain experience normally after that.
+
+Important: creation of Sylvan Centaurs MUST be done in the Hero screen. The control-click for combining Centaur Captains with Grand Elves will not work in the town garrison screen or any other screen.	Sylvan Centaur creation is allowed
+o900	Troop Stacks gain Experience	900		true			Troop stacks gain experience after each battle and may go up in rank, improving their stats and/or abilities.	TROOP STACKS GAIN EXPERIENCE
+
+Option 900 by Slava (hard coded)
+
+Troop stacks lead by a hero will gain experience after each battle and may go up in rank, improving their stats and/or special abilities. Bonuses will only be visible in combat and may be different for each type of creature. Creatures without a hero never gain experience.
+
+Battle experience is awarded to each surviving creature after winning a battle. Stacks start at rank 0 and there are 10 ranks in total. It takes 1000 experience for a stack of rank 0 level 1 creatures to advance to rank 1 and this number increases each rank, much as a hero's experience does. Higher level creatures require more experience (see table below). There's a maximum limit (cap) on the amount of experience that may be gained from a single battle: 50% for level 1 creatures, 45% for level 2 and so on, with level 7's having a cap of 20%.
+
+The current rank (if above 0) is indicated by yellow carets (^) on the troop's stack icon. At 5th rank, the carets are replaced with a yellow sword and at 10th rank, two yellow swords. If you combine troops with different amounts of experience, the experience of the stacks will be averaged; this may result in a lower rank for the new combined stack. If experienced troops are upgraded, they lose 25% of their experience. If you leave a stack on an empty map square, the stack loses all experience.
+
+To see a troop stack's current experience and list of rank bonuses (in or out of combat), double-click on it to bring up the info screen, then right-click on the creature's portrait.
+
+Creature     Experience     Experience
+      Level        for Rank 1      for Rank 10
+    1                 1000                 17500
+    2                 2000                 35000
+    3                 3000                 52500
+    4                 4000                 70000
+    5                 5000                 87500
+     6                 6000               105000
+     7                 7000               122500
+     8                 8400               147000	Stack Experience        
+o903	Disable Cheat Codes and Menu	903			true		Disables the cheat codes and cheat menu (if normally enabled).	DISABLE CHEAT CODES AND MENU
+
+Option 903 by Slava (hard coded)
+
+Disables the cheat codes and menu (if normally enabled). If the cheat menu is enabled, it will still appear (even if disabled with this option), but clicking on menu items has no effect.
+
+Note: Although cheat codes do not normally work in multiplayer games, this option will prevent players using the cheat codes and menu by loading saved games in single player mode.	Disable Cheat Codes and Menu        
+o907	Enable new "cover of darkness" and "builder" heroes	907					TODO: Proper text, hint and description
+
 group:	Game Enhancements						Game Enhancements	GAME ENHANCEMENTS
 
 These scripts add extra functionality to the game without significantly changing the game itself.	
@@ -156,134 +284,6 @@ If you want to set the Quick Combat option and not see a message each time, righ
 
 Note 1: the Script Message Disabling option (page 1, Game Enhancements) must be enabled for the disabling feature to work. It's recommended that you turn this on so you can choose to disable the Quick Combat message during the game if you wish.
 Note 2: this option is disabled for multiplayer network battles.	Quick Combat Battle Options    
-
-group:	Hard-Coded Options						Hard-Coded Options	HARD-CODED OPTIONS
-
-These WoG options are hard-coded into the game and not script-based.	
-o0	Level 8 dwellings function as normal	0			true		Level 8 creature dwellings function the same as all other external creature dwellings.	LEVEL 8 DWELLINGS FUNCTION AS NORMAL
-
-Option 000 by Slava (hard coded)
-
-Level 8 dwellings function the same as all other external creature dwellings in the game.
-
-If this option is NOT selected, creatures can only be recruited once from the dwelling itself, but can be bought each week from an upgraded level 7 dwelling within a town of the same town type.
-
-The upgraded level 7 dwelling must be built before the start of a new week for level 8 creatures to show up there.
-
-For more details, see the "New Features for Heroes III: In the Wake of Gods" file in the "New Life of Heroes" folder, accessible from the Start menu.	Level 8 dwellings function as normal
-o1	Arrow towers gain experience	1		true			Arrow towers gain experience based on game time and battles won. Experienced towers do more damage.	ARROW TOWERS GAIN EXPERIENCE
-
-Option 001 by Slava (hard coded)
-
-Arrow towers gain experience based on game time and battles won. Experienced arrow towers deliver more damage per shot.
-
-If the player keeps control of a town for one week, the arrow towers on day 1 will receive additional experience and are amplified according to the following formula:
-
-No Bonus:  100% damage
-After 1 week:  200% damage
-After 2 weeks:  300% damage
-After 3 weeks:  400% damage
-After 4 weeks:  500% damage
-And so on.
-
-If a town successfully defends against a siege, it gets better as though one week had passed. If a town is captured, all saved up experience for towers is lost. The central shooting tower receives experience irrespective of the lower towers. The lower arrow towers receive experience simultaneously since they were both built at the same time.
-
-Multiplayer Note: The option is not currently compatible with network human vs. human battles and may cause the game to go out of sync. If the map is WoGified, this option will be auto-disabled if a network game is detected. If not WoGified, you should disable it yourself.	Arrow towers gain experience    
-o2	Leave troops by right-clicking on adventure map	2		true			A single stack of troops can be left on an empty square adjacent to the hero by right-clicking on the map.	TROOPS CAN BE LEFT BY RIGHT-CLICKING
-
-Option 002 by Slava (hard coded)
-
-A single stack of troops can be left on an empty square adjacent to the hero by right-clicking on the map.
-
-The troops will not rejoin the player who left them but will instead vanish if attacked by that player unless the "rejoin owner" option is also selected.	Troops can be left by right-clicking
-o10	Troops left will rejoin their owner	10		true			If a hero "attacks" a stack of troops previously left on an empty square by the same player, the troops will rejoin the hero.	TROOPS LEFT WILL REJOIN THEIR OWNER
-
-Option 010 by Slava (hard coded)
-
-If a hero "attacks" a stack of troops previously left on an empty square by the same player, the troops will join the hero free of charge.	Troops left will rejoin their owner     
-o3	Commanders are enabled	3		true			Commanders are enabled and each hero begins the game with one unless the "must be hired" option is also selected.	COMMANDERS ARE ENABLED
-
-Option 003 by Slava (hard coded)
-
-Commanders are enabled and each hero begins the game with one unless the "must be hired" option is also selected.	Commanders are enabled              
-o6	Commanders must be hired	6			true		Commanders are enabled but heroes do not start with them. They may be hired for 1000 gold from any town a player owns.	COMMANDERS MUST BE HIRED
-
-Option 006 by Slava (hard coded)
-
-Commanders are enabled but heroes do not start with them.
-
-A Commander may be hired for 1000 gold from any town a player owns.	Commanders must be hired        
-o4	Demolish town buildings by right-clicking	4		true			Players can demolish towns by right-clicking on a town building while a hero is visiting the town.	PLAYERS CAN DEMOLISH TOWNS
-
-Option 004 by Slava (hard coded)
-
-Players can demolish towns by right-clicking on a town building while a hero is visiting the town.
-
-A minimum hero level and army size may be required for demolition, and only a certain number of demolitions are allowed each day.
-
-A completely destroyed town may be rebuilt a week later as a town of the hero's own town type.
-
-For more details, see the "New Features for Heroes III: In the Wake of Gods" file in the "New Life of Heroes" folder, accessible from the Start menu.	Players can demolish towns      
-o7	Creature Dwellings accumulate creatures	7			true		External Creature Dwellings will accumulate unbought creatures from week to week, excluding L8 creatures.	CREATURE DWELLINGS ACCUMULATE CREATURES
-
-Option 007 by Slava (hard coded)
-
-External Creature Dwellings will accumulate unbought creatures from week to week.
-
-Note: Unbought Level 8 WoG creatures (aside from the Dracolich) will NOT accumulate in dwellings.	Creature Dwellings accumulate creatures
-o8	Creature Dwellings accumulate guards	8			true		External Creature Dwellings that are guarded (Level 5+) will accumulate undefeated guards from week to week.	CREATURE DWELLINGS ACCUMULATE GUARDS
-
-Option 008 by Slava (hard coded)
-
-External Creature Dwellings that are guarded (Level 5+) will accumulate undefeated guards from week to week.	Creature Dwellings accumulate guards
-o9	Sylvan Centaur creation is allowed	9		true			Grand Elves may be combined with Centaur Captains to create Sylvan Centaurs at no cost. Control-click on a stack in the Hero screen to combine them.	SYLVAN CENTAUR CREATION IS ALLOWED
-
-Option 009 by Slava (hard coded)
-
-Grand Elves may be combined with Centaur Captains to create Sylvan Centaurs at no cost. In the Hero screen, hold down the Control Key and click the Left Mouse Button on any stack of Grand Elves or Centaur Captains to combine them; they will be combined at a ratio of 1:1, so if you have, for example, 42 Centaur Captains and 14 Grand Elves, you will end up with 14 Sylvan Centaurs and 28 Centaur Captains after combining.
-
-Note: if Stack Experience is enabled, Sylvan Centaurs (upon creation) will lose ALL experience that the Grand Elves and Centaur Captains had accumulated, but they will gain experience normally after that.
-
-Important: creation of Sylvan Centaurs MUST be done in the Hero screen. The control-click for combining Centaur Captains with Grand Elves will not work in the town garrison screen or any other screen.	Sylvan Centaur creation is allowed
-o900	Troop Stacks gain Experience	900		true			Troop stacks gain experience after each battle and may go up in rank, improving their stats and/or abilities.	TROOP STACKS GAIN EXPERIENCE
-
-Option 900 by Slava (hard coded)
-
-Troop stacks lead by a hero will gain experience after each battle and may go up in rank, improving their stats and/or special abilities. Bonuses will only be visible in combat and may be different for each type of creature. Creatures without a hero never gain experience.
-
-Battle experience is awarded to each surviving creature after winning a battle. Stacks start at rank 0 and there are 10 ranks in total. It takes 1000 experience for a stack of rank 0 level 1 creatures to advance to rank 1 and this number increases each rank, much as a hero's experience does. Higher level creatures require more experience (see table below). There's a maximum limit (cap) on the amount of experience that may be gained from a single battle: 50% for level 1 creatures, 45% for level 2 and so on, with level 7's having a cap of 20%.
-
-The current rank (if above 0) is indicated by yellow carets (^) on the troop's stack icon. At 5th rank, the carets are replaced with a yellow sword and at 10th rank, two yellow swords. If you combine troops with different amounts of experience, the experience of the stacks will be averaged; this may result in a lower rank for the new combined stack. If experienced troops are upgraded, they lose 25% of their experience. If you leave a stack on an empty map square, the stack loses all experience.
-
-To see a troop stack's current experience and list of rank bonuses (in or out of combat), double-click on it to bring up the info screen, then right-click on the creature's portrait.
-
-Creature     Experience     Experience
-      Level        for Rank 1      for Rank 10
-    1                 1000                 17500
-    2                 2000                 35000
-    3                 3000                 52500
-    4                 4000                 70000
-    5                 5000                 87500
-     6                 6000               105000
-     7                 7000               122500
-     8                 8400               147000	Stack Experience        
-o902	Artifacts may be left by right-clicking	902		true			A single artifact may be left on an empty square adjacent to the hero by right-clicking on the map.	ARTIFACTS CAN BE LEFT BY RIGHT-CLICKING
-
-Optio 902 by Slava (hard coded)
-
-A single artifact may be left on an empty square adjacent to the hero by right-clicking on the map.
-
-Note: Only Artifacts in a hero's backpack can be left. If the artifact is equipped, it must first be placed in the hero's backpack.
-
-Warning: If you use this option as well as the Map Rule "Heroes pick up double artifacts," it's possible to create unlimited copies of almost any artifact, therefore we strongly advise against combining these two options.	Artifacts may be left by right-clicking
-o903	Disable Cheat Codes and Menu	903			true		Disables the cheat codes and cheat menu (if normally enabled).	DISABLE CHEAT CODES AND MENU
-
-Option 903 by Slava (hard coded)
-
-Disables the cheat codes and menu (if normally enabled). If the cheat menu is enabled, it will still appear (even if disabled with this option), but clicking on menu items has no effect.
-
-Note: Although cheat codes do not normally work in multiplayer games, this option will prevent players using the cheat codes and menu by loading saved games in single player mode.	Disable Cheat Codes and Menu        
-o907	Enable new "cover of darkness" and "builder" heroes	907					TODO: Proper text, hint and description
 
 group:	AI Stack Experience Difficulty						AI Stack Experience Difficulty	AI STACK EXPERIENCE DIFFICULTY
 
