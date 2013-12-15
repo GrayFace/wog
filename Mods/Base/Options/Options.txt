@@ -12,9 +12,7 @@ FasterAdvMap	Faster adventure map animation			true		true	1.2 times faster	TODO: 
 group:	Trees
 Trees	Standard trees		false			true	TODO: Proper text, hint and description
 Trees	A bit brighter green trees		"bright"			true	TODO: Proper text, hint and description	Made for "Soft shadows on adventure map" option
-Trees	Moving trees (modified)		"move"	true		true	TODO: Proper text, hint and description	Modified by hippox89
-
-http://heroescommunity.com/viewthread.php3?TID=39579
+Trees	Moving brighter trees		"move"	true		true	TODO: Proper text, hint and description
 
 group:	Combat
 MonStandAnim	Enable "standing" animation of monsters			true		true	TODO: Proper text, hint and description
