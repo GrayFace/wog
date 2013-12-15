@@ -63,8 +63,10 @@ local OptionDefs = internal.OptionDefs
 -- local Defaults = {}
 --local Options = internal.Options
 
-local cancel = false
-local FillColor = RGB(102, 72, 54)
+local BlueStyle = nil
+local FillColor = BlueStyle and RGB(20, 20, 54) or RGB(102, 72, 54)
+local BorderLColor = BlueStyle and RGB(99, 113, 173) or 33574
+local BorderSColor = BlueStyle and RGB(16, 32, 74) or 10434
 local ItemFont --= "Small.fnt"
 local CaptionFont = "MedFont.fnt"
 local DlgF = {mod = "wog", cat = 1}
@@ -117,9 +119,12 @@ end
 
 local function BuildDlg()
 	return d_new(table_copy(DlgF, {ExpandWidth = 1, ExpandHeight = 1,
+		Border = true,
 		BorderHint = true,
+		PlayerColor = BlueStyle and 1,
 		ShowLongHints = true,
 		DropShadow = false,
+		BackgroundPcx = BlueStyle and "DiBoxBlu.pcx",
 
 		OnKeyUp = function(t, cmd)
 			cmd.CloseDialog = cmd.Key == 1
@@ -148,6 +153,8 @@ local function BuildDlg()
 							--ScrollBar = "Scroll",
 							Radio = true,
 							FillColor = FillColor,
+							BorderLColor = BorderLColor,
+							BorderSColor = BorderSColor,
 							Font = ItemFont,
 							-- States = 1,
 							-- OnClick = ModTagClick,
@@ -160,7 +167,7 @@ local function BuildDlg()
 								dlg:Redraw()
 							end
 						},
-						d_ScrollBar{Name = "ScrollMods", ExpandHeight = 1},
+						d_ScrollBar{Name = "ScrollMods", ExpandHeight = 1, Blue = BlueStyle},
 					},
 					17,
 					d_Text{Name = "CatsCaption", Font = CaptionFont, Color = 19, ExpandWidth = 1, Visible = false,
@@ -176,6 +183,8 @@ local function BuildDlg()
 							ScrollBar = "ScrollCats",
 							Radio = true,
 							FillColor = FillColor,
+							BorderLColor = BorderLColor,
+							BorderSColor = BorderSColor,
 							Font = ItemFont,
 							OnClick = function(it)
 								local dlg = it.Parent
@@ -187,7 +196,7 @@ local function BuildDlg()
 							end
 							-- AllIndex = 1,
 						},
-						d_ScrollBar{Name = "ScrollCats", ExpandHeight = 1, Visible = false},
+						d_ScrollBar{Name = "ScrollCats", ExpandHeight = 1, Visible = false, Blue = BlueStyle},
 					},
 				},
 				d_AlignV{Name = "OptionsOuter", ExpandWidth = 1, ExpandHeight = 1, MinWidth = 0,
@@ -197,7 +206,7 @@ local function BuildDlg()
 						ScrollBar = "Scroll",
 						FullPageScroll = true,
 					},
-					d_ScrollBar{Name = "Scroll", CatchKeys = true, ExpandWidth = 1, Visible = false},
+					d_ScrollBar{Name = "Scroll", CatchKeys = true, ExpandWidth = 1, Visible = false, Blue = BlueStyle},
 				},
 			},
 			d_AlignH{SpaceX = 16,
@@ -403,8 +412,8 @@ function DlgF.updateOptions(dlg)
 		y = y - GroupMargin
 		local t = {
 			d_Frame{Width = FullItemWidth, Color = FillColor, Fill = true},
-			d_Frame{Width = FullItemWidth - 1, Color = 10434},
-			d_Frame{Width = FullItemWidth - 1, Color = 33574},
+			d_Frame{Width = FullItemWidth - 1, Color = BorderSColor},
+			d_Frame{Width = FullItemWidth - 1, Color = BorderLColor},
 			y
 		}
 		PlaceItem(x, y, t[1])

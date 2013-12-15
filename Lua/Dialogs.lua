@@ -706,7 +706,7 @@ local function dlg_BuildDefaultBox(t, setX, setY, setW, setH)
 	end
 	
 	-- Border
-	if t.Border or (t.Border ~= false and not t.Transparent and t.BackgroundPcx == nil) then
+	if t.Border or t.BorderHint or (t.Border ~= false and not t.Transparent and t.BackgroundPcx == nil) then
 		local w, h = t.Width, t.Height
 		local hint = t.BorderHint
 		local borderDef = t.BorderDef or "dialgbox.def"
@@ -1133,7 +1133,7 @@ local function f_DlgTextScroll(define)
 end
 
 local DlgTextScroll, PreDlgTextScroll = ItemClass(f_DlgTextScroll, "ScrollableText")
-makeParams._[0x5BA360].Text[""].X[0].Y[0].Width[200].Height[200].Font[{"SmalFont.fnt"}].Color[1].IsBlue[0] ()
+makeParams._[0x5BA360].Text[""].X[0].Y[0].Width[200].Height[200].Font[{"SmalFont.fnt"}].Color[1].Blue[0] ()
 
 function PreDlgTextScroll.NeedSize(t)
 	t.Width = t.Width or 200
@@ -1414,7 +1414,7 @@ local function f_DlgScroll(define)
 end
 
 local DlgScroll, PreDlgScroll = ItemClass(f_DlgScroll, "ScrollBar")
-makeParams._[0x5963C0].X.Y.Width[16].Height[16].Id[-1].TicksCount[1]._[scrollCallbackPtr].IsBlue.BigStepSize.CatchKeys ()
+makeParams._[0x5963C0].X.Y.Width[16].Height[16].Id[-1].TicksCount[1]._[scrollCallbackPtr].Blue.BigStepSize.CatchKeys ()
 DlgScroll.OnScroll = nullsub
 
 function PreDlgScroll.NeedSize(t)
