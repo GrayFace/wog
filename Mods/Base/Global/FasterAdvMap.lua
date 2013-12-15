@@ -30,4 +30,7 @@ function global.events.EnterMap()
 	
 	i4[0x4060C7+3] = delay
 	i4[0x4060E0+1] = delay
+	
+	i4[0x40F213+3] = delay
+	i4[0x40F22C+1] = delay
 end
