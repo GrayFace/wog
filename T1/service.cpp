@@ -121,20 +121,6 @@ static void Service_GetForegroundWindowExt(void)
 	RETURNV
 }
 */
-//The timeGetTime function retrieves the system time, in milliseconds.
-//The system time is the time elapsed since Windows was started.
-//DWORD timeGetTime(VOID);
-Dword Service_timeGetTime(void)
-{
-	STARTNA(__LINE__, 0)
-	__asm{
-		mov  eax,0x63A354
-		mov  eax,[eax]
-		call eax
-		mov  DDummy,eax
-	}
-	RETURN(DDummy)
-}
 
 //int DialogBox(
 //  HINSTANCE hInstance,  // handle to application instance
@@ -375,7 +361,7 @@ void SaveMinidump(EXCEPTION_POINTERS *Reason)
 		IN CONST PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam, OPTIONAL
 		IN CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam OPTIONAL
 	);
-	*(PROC*)&dump = DllImport(".\\dbghelp.dll", "MiniDumpWriteDump", false);
+	*(PROC*)&dump = DllImport(Format("%sdbghelp.dll", AppPath), "MiniDumpWriteDump", false);
 	if (dump == 0) return;
 	FILE* f;
 	if(fopen_s(&f, "WOGCRASHDUMP.DMP", "wb")) return;
@@ -1649,7 +1635,7 @@ char *GetFolder(int Mod)
 	if(Mod==10)
 		FullPath[0] = 0;
 	else
-		strcpy(FullPath, ApplicationDir);
+		strcpy(FullPath, AppPath);
 
 	switch(Mod){
 		case 1: // in DATA
@@ -1832,14 +1818,10 @@ _CRTIMP BOOL __cdecl _IsNonwritableInCurrentImage(
 
 void InitCRT(void)
 {
-#ifndef _DEBUG_LUA
 	Dword old = *(Dword*)&_IsNonwritableInCurrentImage;
 	*(Dword*)&_IsNonwritableInCurrentImage = 0xC340C033; // 0xC340C033  =  xor eax,eax ; inc eax ; ret
 	_CRT_INIT((HANDLE)0x700000, DLL_PROCESS_ATTACH, 0);
 	*(Dword*)&_IsNonwritableInCurrentImage = old;
-#else
-	_CRT_INIT((HANDLE)0x700000, DLL_PROCESS_ATTACH, 0);
-#endif
 }
 
 /* 

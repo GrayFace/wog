@@ -27,7 +27,6 @@ Dword Service_LoadLibrary(char *DLLName);
 Dword Service_GetProcAddress(Dword Handle,char *FunName);
 int   Service_FreeLibrary(Dword Handle);
 int Service_GetForegroundWindow(void);
-Dword Service_timeGetTime(void);
 int Service_GetFileAttributes(char *FileName);
 ///////////////////////
 int LoadZVSDialogs(void);

@@ -21,8 +21,7 @@ const	DWORD		oldMainProcAddress		=	0x4F8290;
 
 
 const	DWORD		newExtendedWindowSize	=	0x300;//768 - Height
-char	*			ApplicationPath     = NULL;
-char	*			ApplicationDir      = NULL;
+char	      AppPath[MAX_PATH];
 char	*			MapFastLoadingDir  = "maps";
 char	*			MapFastLoadingName  = NULL;
 
@@ -116,8 +115,15 @@ void newGlobalInitSub()
 
 	// Find start and end of static memory
 	WogInstStart = FindHInstance(&WogInstStart);
-	for (WogInstEnd = WogInstStart + 0x10000; FindHInstance(WogInstEnd) == WogInstStart; )
+	for (WogInstEnd = (Byte*)(((DWORD)&WogInstStart) & ~0xFFF); FindHInstance(WogInstEnd) == WogInstStart; )
 		WogInstEnd += 0x1000;
+
+	// AppPath
+	GetModuleFileName(0, AppPath, sizeof(AppPath));
+	int len = strlen(AppPath) - 1;
+	for(; AppPath[len]!='\\' && AppPath[len]!='/'; len--) ;
+	AppPath[len + 1] = 0;
+	SetCurrentDirectory(AppPath);
 }
 
 void newFileLoader()
@@ -175,14 +181,6 @@ void ParseCommandLine()
 	argv=CommandLineToArgvA(GetCommandLineA(),&argc);
 	if(!argv)//Parse error 
 		return;
-	ApplicationPath = argv[0];
-	int len = strlen(ApplicationPath);
-	for(len--; ApplicationPath[len]!='\\' && ApplicationPath[len]!='/'; len--) ;
-	len++;
-	ApplicationDir = (char*)malloc(len + 1);
-	memcpy(ApplicationDir, ApplicationPath, len);
-	ApplicationDir[len] = 0;
-	SetCurrentDirectory(ApplicationDir);
 
 	for(i=1; i<argc; i++)
 	{
@@ -641,7 +639,7 @@ int __fastcall MakeMoving()
 	//*(int*)0x6989E8 = 0; // !!! possible option: faster combat (in MovingMonsters, not here)
 	if (!EnableMovingMonsters) return 0;
 
-	Dword t = getTime();
+	Dword t = timeGetTime();
 	if (t - lastMove < 80) return 0;
 
 	bool random = (t - lastMove >= 500);
@@ -871,7 +869,7 @@ volatile long WaitForWavTimeout;
 
 void __fastcall SetWaitWav(int timeout)
 {
-	InterlockedExchange(&WaitForWavTimeout, GetTickCount() + (timeout < 0 ? 4000 : timeout));
+	InterlockedExchange(&WaitForWavTimeout, timeGetTime() + (timeout < 0 ? 4000 : timeout));
 	InterlockedIncrement(&WaitForWav);
 }
 

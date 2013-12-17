@@ -3487,7 +3487,7 @@ int TimeRandom(int Low, int High)
 	STARTNA(__LINE__, 0)
 	if(High<=Low) RETURN(Low)
 	int del=High-Low+1;
-	Dword ctime=Service_timeGetTime();
+	Dword ctime=timeGetTime();
 	int ret=((int)((ctime/100)&0x7FFFFFFF))%del+Low;
 	RETURN(ret)
 }
@@ -5431,11 +5431,6 @@ char MarkedAsChiter(void){
 	return *po;
 }
 
-Dword getTime(void){
-	STARTNA(__LINE__, 0)
-	Dword (*p)(void); *(Dword *)&p=0x4F8970;
-	RETURN(p());
-}
 char IsThisGamer2(void *PlStruct){
 	STARTNA(__LINE__, 0)
 	char (__fastcall *p)(void *PlStruct); *(Dword *)&p=0x4BAA40;
@@ -5498,11 +5493,11 @@ void __fastcall PEr::Del(int level){
 				if (level - i > 1){
 					fprintf(f, "Multiple:");
 				}
-				for(int i = i; i >= level; i--){
-					if(GEr.AType[i])
-						fprintf(f, "(%i) %s : %i\n", i, SourceFileList[(int)GEr.Descr[i]/1000000], (int)GEr.Descr[i]%1000000);
+				for(int j = i; j >= level; j--){
+					if(GEr.AType[j])
+						fprintf(f, "(%d) %s : %d\n", j, SourceFileList[(int)GEr.Descr[j]/1000000], (int)GEr.Descr[j]%1000000);
 					else
-						fprintf(f, "(%i) Reason : %s\n", i, GEr.Descr[i]);
+						fprintf(f, "(%d) Reason : %s\n", j, GEr.Descr[j]);
 				}
 				if (level - i > 1){
 					fprintf(f, "----------");

@@ -14,8 +14,7 @@ void ParseCommandLine();
 PCHAR* CommandLineToArgvA(PCHAR CmdLine,int* _argc);
 
 
-extern char	*ApplicationPath;
-extern char	*ApplicationDir;
+extern char	AppPath[MAX_PATH];
 
 extern char HookHintWindow; // set to 1 inside HintWindow
 extern bool PlayingBM_V;

@@ -21,11 +21,7 @@
 // set panic (&error) function, error function
 // specials: FU:E; IF:M,Q;
 
-#ifdef _DEBUG_LUA
-#define GameLoaded  false
-#else
 #define GameLoaded  MainWindow
-#endif
 lua_State *Lua;
 Word CmdCmd;
 _ToDo_ CmdToDo;
@@ -1091,11 +1087,7 @@ static const struct luaL_reg LuaLib_internal [] =
 {
 	{"ERM_Reciever", ERM_Reciever},
 	{"ERM_Call", ERM_Call},
-#ifndef _DEBUG_LUA
 	{"ERM_Trigger", ERM_Trigger},
-#else
-	{"ERM_Trigger", LuaGetLastError},
-#endif
 	{"ERM_Var", ERM_Var},
 	{"ERM_SetMacro", ERM_SetMacro},
 	{"ERM_CheckScript", ERM_CheckScript},
@@ -1113,15 +1105,9 @@ static const struct luaL_reg LuaLib_internal [] =
 	{"MultiPicMessage", MultiPicMessage},
 	{"ErrorMessage", ErrorMessageLua},
 	{"DebugConsole", DebugConsole},
-#ifndef _DEBUG_LUA
 	{"GetTileVTables", GetTileVTables},
 	{"GetDrawPosVTables", GetDrawPosVTables},
 	{"GetEditVTables", GetEditVTables},
-#else
-	{"GetTileVTables", LuaGetLastError},
-	{"GetDrawPosVTables", LuaGetLastError},
-	{"GetEditVTables", LuaGetLastError},
-#endif
 	{"GetHeroGod", LuaGetHeroGod},
 	{"HeroHasBlessCurse", LuaHeroHasBlessCurse},
 	{"ITxt", LuaITxt},
@@ -1130,11 +1116,6 @@ static const struct luaL_reg LuaLib_internal [] =
 
 void InitLua()
 {
-#ifdef _DEBUG_LUA
-	ApplicationDir = "C:\\_WoG\\wog359\\trunk\\"; //"!\\..\\";
-	SetCurrentDirectory(ApplicationDir);
-#endif
-
 	char Path[MAX_PATH];
 	Path[0] = 0;
 	sprintf_s(Path, "%sWogDialogs.dll", (DeveloperPath[0] ? DeveloperPath : ""));
@@ -1221,28 +1202,5 @@ void InitLua()
 	// main.lua
 	if (DoFile(Format("%smain.lua", Path))) exit(0);
 	//LoadLibrary("MallocHook.dll");
-	SetCurrentDirectory(ApplicationDir);
+	SetCurrentDirectory(AppPath);
 }
-
-#ifdef _DEBUG_LUA
-void RunDebugLua()
-{
-	InitLua();
-
-	//RunMapLua();
-	//RunLuaString("ZVSL()\n\n", "Map script");
-	//RunWogifyLua();
-	/** /
-	RunMapLua();
-	//RunLuaString("ZVSL()\n\n", "Map script");
-	RunWogifyLua();
-	SaveMapLua();
-	/**/
-
-	/**/
-	LoadMapLua();
-	/**/
-
-	exit(0);
-}
-#endif

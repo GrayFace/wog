@@ -133,7 +133,7 @@ void Mp3WaitForWav()
 	LPCRITICAL_SECTION cs = (LPCRITICAL_SECTION)(sndMan + 144);
 	int (__stdcall *AIL_sample_status)(int wav);
 	*(int*)&AIL_sample_status = *(int*)0x63A424;
-	while (timeout > (int)getTime())
+	while (timeout > (int)timeGetTime())
 	{
 		if (*(int*)0x6992E0)  return;
 		if (*(int*)(sndMan + 60) == 0)  return;

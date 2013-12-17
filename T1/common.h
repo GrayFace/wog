@@ -379,7 +379,6 @@ extern PEr GEr;
 
 // 3.59
 char MarkedAsChiter(void);
-Dword getTime(void);
 char IsThisGamer2(void *PlStruct);
 int ChooseCrToAnimDlg(void);
 int HasAnyAtThisPC(void);
@@ -391,3 +390,5 @@ void ErrorMessage(const char * msg);
 #define SOD_LoadPcx16(name) (((int (__fastcall *)(char*))0x55B1E0)(name))
 
 #define SOD_Deref(item) (((int (__fastcall *)(void *))(((int**)item)[0][1]))((void*)item))
+
+#define timeGetTime ((DWORD (*)())(*(int*)0x63A354))

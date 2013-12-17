@@ -24,9 +24,6 @@
 #include "global.h"
 #include "MONSTRDLL/dll.h"
 #include "TOWNS/towns.h"
-#ifdef _DEBUG_LUA
-	#include "erm_lua.h"
-#endif
 #define __FILENUM__ 8
 
 #ifdef DEBUG
@@ -2274,18 +2271,6 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD fdwReason, LPVOID)
 	return true;
 }
 
-#ifdef _DEBUG_LUA
-
-void RunDebugLua();
-
-void main()
-{
-	InitCRT();
-	RunDebugLua();
-}
-
-#else
-
 __declspec( naked ) void main(void)
 {
 // переход на ориг обработчик
@@ -2330,7 +2315,6 @@ __declspec( naked ) void main(void)
 #endif
 //  }catch(...){ GEr.Show(); }
 }
-#endif
 
 static __declspec( naked ) void ForAK(void){
 	__asm{ // для АК

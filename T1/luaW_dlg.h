@@ -303,7 +303,7 @@ Dword __fastcall DialogVMT3(void *self,int,_MouseStr_ *cmd)
 
 /*
 	Byte *mman=*(Byte **)0x6992D0;
-	int  ct=getTime();
+	int  ct=timeGetTime();
 	int *nt=(int *)0x6989E8;
 	if(*nt==0){ *nt=ct+100; RETURN(1) }
 	int  dif=ct- *nt;

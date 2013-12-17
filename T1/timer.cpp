@@ -55,7 +55,7 @@ void __fastcall MPProcessTimeAndRemind(_TurnTimeStruct_ *timer)
 	int timeleft;
 	MPProcessTimeAndRemind_ptr orfun; *((Dword *)&orfun)=0x557E90;
 	do{
-		Dword curtime=getTime()/1000;
+		Dword curtime=timeGetTime()/1000;
 		if(curtime!=LastSec){
 			TLCall(curtime);
 			LastSec=curtime;
@@ -69,7 +69,7 @@ void __fastcall MPProcessTimeAndRemind(_TurnTimeStruct_ *timer)
 		void *plstr=*((void **)0x69CCFC);
 		if(plstr == 0) break;
 		if(IsThisGamer2(plstr) == 0) break;
-		curtime=getTime();
+		curtime=timeGetTime();
 		if(timer->BattleStartTime != 0){
 			pausedshift=1;
 			timeleft=timer->TurnLimit-(timer->BattleStartTime-timer->StartTimeMain);
@@ -175,9 +175,9 @@ int ERM_TL(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			if(Apply(&v,4,Mp,0)){ MError("\"!!TL:T\"-cannot get or check index."); RETURN(0) }
 			switch(v){
 				case 0: // current time in ms (get)
-					v2=getTime(); Apply(&v2,4,Mp,1); break;
+					v2=timeGetTime(); Apply(&v2,4,Mp,1); break;
 				case 1: // current time in sec (get)
-					v2=getTime()/1000; Apply(&v2,4,Mp,1); break;
+					v2=timeGetTime()/1000; Apply(&v2,4,Mp,1); break;
 				case 2: // Player Start Time ms (get/set)
 					Apply(&TSP->StartTimeMain,4,Mp,1); break;
 				case 3: // Player Start Time sec (get/set)

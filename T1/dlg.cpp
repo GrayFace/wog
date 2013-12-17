@@ -394,7 +394,7 @@ Dword __fastcall HDlg::iFunction2(HDlg::_Body_ *body,int,_MouseStr_ *cmd){
 	int ret=dlg_StdProcCmd(body,0,cmd);
 	if(ret) RETURN(ret);
 	Byte *mman=*(Byte **)0x6992D0;
-	int  ct=getTime();
+	int  ct=timeGetTime();
 	int *nt=(int *)0x6989E8;
 	if(*nt==0){ *nt=ct+100; RETURN(1) }
 	int  dif=ct- *nt;
@@ -1016,7 +1016,7 @@ Dword __fastcall TranspDlgOverMap(void *body,int,_MouseStr_ *cmd){
 	if(ret) RETURN(ret);
 	Byte *mman=*(Byte **)0x6992D0;
 	Byte *ustr=*(Byte **)0x6992B8;
-	int  ct=getTime();
+	int  ct=timeGetTime();
 	int *nt=(int *)0x6989E8;
 //  if(*nt==0){ *nt=ct+100; RETURN(1) }
 	int  dif=ct- *nt;

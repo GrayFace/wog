@@ -10046,12 +10046,7 @@ void ReceiveERMWVars(void){
 }
 // set random seed
 void SyncRGSeed(void){
-	Dword val;
-	__asm{
-		mov   eax,0x4F8970
-		call  eax // timeGetTime
-		mov   val,eax
-	}
+	Dword val = timeGetTime();
 	NetData nd=NetData(NM_RGSEED,Send2Player,&val,1);
 	nd.SendTo();
 	__asm{

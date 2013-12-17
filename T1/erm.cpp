@@ -1524,9 +1524,9 @@ int ERM_UniversalEx(char Cmd,int Num,_ToDo_*,Mes *Mp)
 		case 'T': // T$ GetTickCount
 		{
 			CHECK_ParamsNum(1);
-			v = getTime();
+			v = timeGetTime();
 			if (Apply(&v, 4, Mp, 0)) break;
-			Message(Format("Time delta: %d", getTime() - v));
+			Message(Format("Time delta: %d", timeGetTime() - v));
 			break;
 		}
 
