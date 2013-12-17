@@ -614,7 +614,7 @@ int StartDLLService(void)
 	po_SetErrMode=pfun;
 
 	Service_SetExcFilter((Dword)MyExcHandler);
-	_set_invalid_parameter_handler(invalid_param_handler);
+	//_set_invalid_parameter_handler(invalid_param_handler);
 /*
 	hdll=Service_LoadLibrary("user32.dll"); if(hdll==0) return -1;
 	HUser32=hdll;

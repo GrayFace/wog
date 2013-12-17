@@ -5477,7 +5477,9 @@ PEr GEr;
 _ZPrintf_ PEr::Frmt;
 char PEr::GlbBuf[2][30000];
 
-void __fastcall PEr::Del(int level){
+void __fastcall PEr::Del(int level)
+{
+	GEr.LastStackPtr = GetStackPtr();
 	int i = --GEr.DescrCount;
 	if (i < _countof(GEr.Descr))
 	{
@@ -5510,7 +5512,9 @@ void __fastcall PEr::Del(int level){
 	}
 }
 
-int PEr::Add(char *d,char *t){
+int PEr::Add(char *d,char *t)
+{
+	LastStackPtr = GetStackPtr();
 	if(InterruptMe){
 		__asm int 3
 	}
@@ -5531,7 +5535,9 @@ int PEr::Add(char *d,char *t){
 byte counts[25][12000];
 #endif
 
-int PEr::AddN(int d,char *t){
+int PEr::AddN(int d,char *t)
+{
+	LastStackPtr = GetStackPtr();
 	if(InterruptMe){
 		__asm int 3
 	}
@@ -5559,8 +5565,15 @@ __declspec(naked) void *PEr::GetStackTop(){__asm
 	ret
 }}
 
+__declspec(naked) void *PEr::GetStackPtr(){__asm
+{
+	mov eax, esp
+	ret
+}}
 
-void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum){
+
+void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum)
+{
  GlbBuf[0][0]=0;
  if(Descr[0]){
 	Zsprintf2(&Frmt,"******************************_Exception_(trace_details)_******************************",0,0);
@@ -5603,6 +5616,7 @@ void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum){
 	Zsprintf2(&Frmt,"%s%s",(Dword)GlbBuf[0],(Dword)Adendum);
 	StrCopy(GlbBuf[0],30000,Frmt.Str);
 
+	strcat_s(GlbBuf[0], 30000, Format("\nLast PEr Call ESP = %x", LastStackPtr));
 	strcat_s(GlbBuf[0], 30000, Format("\nStack Top = %x\n", StackTop));
 
 	strcat_s(GlbBuf[0], 30000, Format("\nLast loaded DEF:\n\n%s", LastLoadedDefName));

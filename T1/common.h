@@ -326,10 +326,12 @@ class PEr{
 	char *Erm;
 	static _ZPrintf_ Frmt;
 	static char GlbBuf[2][30000];
-	void *GetStackTop();
+	static void *GetStackTop();
+	static void *GetStackPtr();
 public:
 	bool canLog;
 	void *StackTop;
+	void *LastStackPtr;
 	PEr(){
 		for(int i=0;i<50;i++){ Descr[i]=Text[i]=0; }
 		Sig='PER_';
