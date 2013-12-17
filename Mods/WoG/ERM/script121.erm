@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
-ERMS_ScriptDate=29.11(November).2013
+ERMS_ScriptDate=17.12(December).2013
 
 ** More Map Options Version .94
 ** By Timothy Pulver
@@ -303,10 +303,10 @@ ERMS_ScriptDate=29.11(November).2013
 !!FU&x2<>y1:E; [Skip if not an upgrade match]
 
  [Determine resource cost of current troop type and store in y10 to y17]
-!!MA:Cx1/0/?y10 Cx1/1/?y11 Cx1/2/?y12 Cx1/3/?y13 Cx1/4/?y14 Cx1/5/?y15 Cx1/6/?y16 Cx1/7/?y17;
+!!MA:Cx1/0/?y10 Cx1/1/?y11 Cx1/2/?y12 Cx1/3/?y13 Cx1/4/?y14 Cx1/5/?y15 Cx1/6/?y16;
 
  [Determine resource cost of upgraded troop type and store in y20 to y27]
-!!MA:Cx2/0/?y20 Cx2/1/?y21 Cx2/2/?y22 Cx2/3/?y23 Cx2/4/?y24 Cx2/5/?y25 Cx2/6/?y26 Cx2/7/?y27;
+!!MA:Cx2/0/?y20 Cx2/1/?y21 Cx2/2/?y22 Cx2/3/?y23 Cx2/4/?y24 Cx2/5/?y25 Cx2/6/?y26;
 
  [Determine resource cost difference (actual cost of upgrade) and store in y30 to y36]
 !!VRy30:Sy20 -y10 *x3; !!VRy30&y30<0:S0; [Wood: y30]
