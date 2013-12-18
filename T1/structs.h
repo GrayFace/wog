@@ -22,14 +22,14 @@
 // disable for english
 //#define RUS
 #define WOG_VERSION 359
-#define WOG_STRING_VERSION "3 . 59a Build 4.9\nBuilt on "__DATE__/*""BETAVERSION""*/
+#define WOG_STRING_VERSION "3 . 59a Build 5\nBuilt on "__DATE__/*""BETAVERSION""*/
 #define TE_STRING_VERSION "1 . 03\nBuilt on "__DATE__/*""BETAVERSION""*/
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x38\x0\x66\x0"
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x39\x0\x0\x0"
 
 // !release! ERM_VERSION = 300 + build number.
-#define ERM_VERSION 304
-#define ERM_STRING_VERSION "304"/*BETAVERSION""*/
+#define ERM_VERSION 305
+#define ERM_STRING_VERSION "305"/*BETAVERSION""*/
 
 #define SAVEWOGLETTER 'S'
 #define SAVEWOG359    (SAVEWOGLETTER-'A')
