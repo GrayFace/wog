@@ -16,7 +16,6 @@
 #include "erm_lua.h"
 #define __FILENUM__ 4
 
-_Date_    *CurDate;
 int   IDummy;
 Dword DDummy;
 char  CDummy;
@@ -91,8 +90,8 @@ void *Alloc(int zsize)
 
 void Free(void *po)
 {
+	if(po==0) return;
 	STARTNA(__LINE__, 0)
-	if(po==0) RETURNV;
 	__asm{
 		mov    edx,po
 		push   edx
@@ -547,30 +546,19 @@ void SetCurDate(int Month,int Week,int Day){
 	RETURNV
 }
 
-int Random(int ZLow,int ZHigh)
+__declspec(naked)  int __fastcall Random(int ZLow,int ZHigh){__asm
 {
-	STARTNA(__LINE__, 0)
-	__asm{
-		mov    ecx,ZLow
-		mov    edx,ZHigh
-		mov    eax,0x50C7C0
-		call   eax
-		mov    IDummy,eax
-	}
-	RETURN(IDummy)
-}
+	push 0x50C7C0
+	ret
+}}
 
-int *RandomSeed()
+__declspec(naked) int *RandomSeed(){__asm
 {
-	int *pseed;
-	__asm{ // get random seed
-		mov   eax,0x61D8C3
-		call  eax // __getptd
-		add   eax,0x14
-		mov   pseed,eax
-	}
-	return pseed;
-}
+	mov   eax,0x61D8C3
+	call  eax // __getptd
+	add   eax,0x14
+	ret
+}}
 
 int Abs(int v)
 {

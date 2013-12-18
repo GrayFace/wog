@@ -9,7 +9,7 @@
 #define STRINGER( x ) #x
 
 ///////////////////////////////
-extern  _Date_    *CurDate;
+#define CurDate ((_Date_*)(BaseStruct + 0x1F63E))
 extern   int       M_MDisabled;
 extern   int       M_MDisabledNext;
 extern   char     *ErrStringPo;
@@ -62,7 +62,7 @@ void SetQuickBattle(int value);
 
 void Copy(Byte *src,Byte *dst,int sz);
 #define FillMem(Dst, Len, Fill)  memset(Dst, Fill, Len)
-int Random(int low,int High);
+int __fastcall Random(int low,int High);
 int *RandomSeed();
 int Abs(int v);
 int StrCmp(const char *src, const char *dst);

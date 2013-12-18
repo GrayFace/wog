@@ -8602,10 +8602,6 @@ void InitERM(void)
 	// иниацмализируем структуры
 	ResetAll();
 // инициализация всего что надо сбросить для новой игры
-	__asm mov edx,BASE
-	__asm mov edx,[edx]
-	__asm add edx,0x1F63E
-	_EDX(CurDate);
 	InitCastles();
 	RETURNV
 }
