@@ -71,14 +71,15 @@ void px_IDirectDraw::MakeScreenShot()
 		sBMPH.MaskR=0xF800;
 		sBMPH.MaskG=0x07E0;
 		sBMPH.MaskB=0x001F;
-   	 	sBMPH.CompType=BI_BITFIELDS;
+		sBMPH.CompType=BI_BITFIELDS;
 		fwrite(&sBMPH,sizeof(BMPhead),1,f);
 		DDSURFACEDESC2 DDSurfaceDesc;
 		ZeroMemory(&DDSurfaceDesc,sizeof(DDSURFACEDESC2)); 
 		DDSurfaceDesc.dwSize=sizeof(DDSURFACEDESC2);
-		if(px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->IsLost())
-			px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->Restore(); 
-		hRes=px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->Lock(NULL,&DDSurfaceDesc,DDLOCK_WAIT|DDLOCK_DISCARDCONTENTS|DDLOCK_READONLY,NULL);
+		LPDIRECTDRAWSURFACE7 surf = (px_DxObj ? px_DxObj->lpipx_DxPrimarySurface->px_DxSurface : *(LPDIRECTDRAWSURFACE7*)0x6AAD24);
+		if(surf->IsLost())
+			surf->Restore(); 
+		hRes = surf->Lock(NULL,&DDSurfaceDesc,DDLOCK_WAIT|DDLOCK_DISCARDCONTENTS|DDLOCK_READONLY,NULL);
 		if(hRes!=DD_OK)
 		{
 			fclose(f);
@@ -90,9 +91,9 @@ void px_IDirectDraw::MakeScreenShot()
 			memcpy(buffer,((char*)DDSurfaceDesc.lpSurface)+DDSurfaceDesc.lPitch*i, HeroesW*2);
 			fwrite(buffer, HeroesW*2, 1, f);;
 		}
-		hRes=px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->Unlock(NULL);
-		if(px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->IsLost())
-				px_DxObj->lpipx_DxPrimarySurface->px_DxSurface->Restore(); 
+		hRes = surf->Unlock(NULL);
+		if(surf->IsLost())
+			surf->Restore(); 
 		fclose(f);
 		free(buffer);
 	}
