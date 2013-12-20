@@ -239,9 +239,13 @@ void DumpERMVars(char *Text,char *Text2)
 	if(Text2!=0){
 		p += sprintf_s(p, p2-p, "-----Context-----\n%.200s.....\n-----------------\n",Text2);
 	}
-	if(ErrStringPo!=0){
-		p += sprintf_s(p, p2-p, "Current ERM Receiver:\n\n%s\n-----------------\n", LuaPushERMInfo(ErrStringPo));
-		lua_pop(Lua, 1);
+	if(ErrString.str!=0){
+		p += sprintf_s(p, p2-p, "ERM stack traceback:\n");
+		for(ErrStringInfo *e = &ErrString; e && e->str; e = e->last){
+			p += sprintf_s(p, p2-p, "\n%s", LuaPushERMInfo(e->str));
+			lua_pop(Lua, 1);
+		}
+		p += sprintf_s(p, p2-p, "\n-----------------\n");
 	}
 	LuaCallStart("traceback");
 	LuaPCall(0, 1);
@@ -7806,7 +7810,7 @@ void ProcessCmd(_ToDo_ *sp)
 // disable to process
 	do{
 		Start=Ind=M.i;
-		ErrStringPo=&M.m.s[Ind]; // 3.57f extended error log
+		ErrString.str=&M.m.s[Ind]; // 3.57f extended error log
 		Cmd=M.m.s[M.i++];
 		M.c[0]=1;
 		if((Num=GetNumAuto(&M))==0) goto l_exit;
@@ -7826,7 +7830,7 @@ void ProcessCmd(_ToDo_ *sp)
 l_exit:
 	ErrorCmd.Cmd = oldCmd;
 	M.i=Ind;
-	if(PL_ERMErrDis==0 && ErrStringPo!=LuaErrorString){
+	if(PL_ERMErrDis==0 && ErrString.str!=LuaErrorString){
 		Mess(&M);
 	}
 	RETURNV
@@ -8221,8 +8225,8 @@ _found3:
 //__asm int 3
 //              Message("Unknown Receiver or Instruction");
 			{
-				LuaPushERMInfo(&M.m.s[M.i-4], ErrStringPo == LuaErrorString);
-				if (ErrStringPo == LuaErrorString)
+				LuaPushERMInfo(&M.m.s[M.i-4], ErrString.str == LuaErrorString);
+				if (ErrString.str == LuaErrorString)
 					LuaLastError(Format("Unknown Reciever or Instruction: %s", lua_tostring(Lua, -1)));
 				else if (PL_ERMErrDis == 0 && GameWasLoaded == 0){
 					DumpMessage(Format("Unknown Reciever or Instruction:\n\n%s", lua_tostring(Lua, -1)),0);
@@ -8373,7 +8377,8 @@ int ParseERM(Mes &M)
 	_Cmd_  *cp0 = Heap;
 	_IfStruct_    TrigIf;
 	Word OldScope = GlobalCurrentScope;
-	char  *LastErrPo = ErrStringPo;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(&M.m.s[M.i], &LastErrString);
 
 	GlobalCurrentScope = ScriptIndex4ERM++;
 	TrigIf.Ghost = TrigIf.IsFalse = TrigIf.Total = 0; // init if-el-en
@@ -8382,12 +8387,13 @@ int ParseERM(Mes &M)
 	do{ // найти генератор действия
 		M.c[0]='!';
 		// 3.58 correction to skip ^ in comments
-		if(SkipUntil2(&M) || M.i>(M.m.l+5)) // нет генератора или нет места для команды - к след событию
+		if(SkipUntil2(&M) || M.i>=(M.m.l-4)) // нет генератора или нет места для команды - к след событию
 		{
 			if (TrigIf.Total)  MError("no ENDIF for IF");
 			break;
 		}
-		
+
+		ErrString.str = &M.m.s[M.i];		
 //    GEr.LastERM(sp->Self.s); // 3.58
 		if((M.m.s[M.i]=='?')||(M.m.s[M.i]=='$'))  // событие-генератор ****************************
 		{
@@ -8483,7 +8489,7 @@ _cont:
 			
 _contnext:
 	GlobalCurrentScope = OldScope;
-	ErrStringPo = LastErrPo;
+	ErrString = LastErrString;
 	RETURN(0)
 
 l_exit:
@@ -8494,7 +8500,7 @@ l_exit:
 
 l_exit2:
 	GlobalCurrentScope = OldScope;
-	ErrStringPo = LastErrPo;
+	ErrString = LastErrString;
 	RETURN(1)
 }
 
@@ -8674,7 +8680,8 @@ void ProcessERM(bool needLocals)
 	int    labels[50];
 	char   labelIf[50];
 	int    needLabel = -1;
-	char  *LastErrPo = ErrStringPo;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo("ProcessERM", &LastErrString);
 
 	STARTNA(__LINE__, 0)
 	ev=pointer; // ук на стр евента
@@ -8697,7 +8704,7 @@ void ProcessERM(bool needLocals)
 
 			if(cp->Disabled==0) // разрешен генератор?
 			{
-				ErrStringPo = "(error in trigger conditions)";
+				ErrString.str = "(error in trigger conditions)";
 
 				if(GM_ai>=0) ERMFlags[999]=(char)GM_ai;
 				else ERMFlags[999]=(char)(!IsAI(CurrentUser()));
@@ -8709,6 +8716,7 @@ void ProcessERM(bool needLocals)
 
 				if(cp->Efl[0][0][0].Type == 255) // Lua trigger
 				{
+					ErrString.str = "Lua trigger";
 					CallLuaTrigger(cp->Efl[0][0][0].Num);
 					goto _Cont;
 				}
@@ -8735,7 +8743,7 @@ void ProcessERM(bool needLocals)
 					// execute
 					for(i=0, n=cp->Num; i<n; i++){
 						//if(ERMEnabled==0) RETURNV // ERM был выключен
-						ErrStringPo=cp->ToDo[i].Com.s;
+						ErrString.str=cp->ToDo[i].Com.s;
 						Word cmd = cp->ToDo[i].Type;
 
 						if(cmd=='al'){ // la - label
@@ -8792,7 +8800,7 @@ _Cont:;
 		StoreVars(&vars, (ev<30000)||((ev>=31000)&&(ev<31100)), true);
 	}
 	IsLuaCall = WasLuaCall;
-	ErrStringPo = LastErrPo;
+	ErrString = LastErrString;
 	TriggerBreak = TriggerGoTo = 0;
 	ERM_LastX = ERM_PosX = LastX;
 	ERM_LastY = ERM_PosY = LastY;

@@ -17,6 +17,8 @@ Builds from 3
 [+] Better error reporting, minidump generation in case of a crash. (Build 4.8)
 [+] Commander, God Bonus, Blessings and Curses buttons have proper hint and aren't displayed if not needed. (Build 4.9)
 [-] SoD bug: When you load a game the first hero was selected. (Build 4.9)
+[+] New [Common]ReloadScripts parameter in WoG.ini. Set it to 1 to make WoG reload all scipts from files (but not from map) when you load a saved game. (Build 5.1)
+[+] ERM stack traceback reported in WOGERMLOG.TXT. (Build 5.1)
 [!] For help: CO:E command can have 3 values: -1 means 'disabled', 0 means 'can be hired', 1 means 'exists'.
 
 

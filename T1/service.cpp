@@ -1652,7 +1652,7 @@ char *GetFolder(int Mod)
 			break;
 		case 5: // in Script folder
 			LuaCallStart("GetERMFolder");
-			lua_pushnumber(Lua, (Dword)ErrStringPo);
+			lua_pushnumber(Lua, (Dword)ErrString.str);
 			LuaPCall(1, 1);
 			strcpy_s(FullPath, lua_tostring(Lua, -1));
 			lua_pop(Lua, 1);

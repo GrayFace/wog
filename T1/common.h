@@ -12,8 +12,19 @@
 #define CurDate ((_Date_*)(BaseStruct + 0x1F63E))
 extern   int       M_MDisabled;
 extern   int       M_MDisabledNext;
-extern   char     *ErrStringPo;
 extern   bool      DoneError;
+
+extern struct ErrStringInfo{
+	char *str;
+	ErrStringInfo *last;
+} ErrString;
+
+void __inline NewErrStringInfo(char *str, ErrStringInfo *backup)
+{
+	*backup = ErrString;
+	ErrString.str = str;
+	ErrString.last = backup;
+}
 
 extern   int   IDummy;
 extern   Dword DDummy;

@@ -126,8 +126,8 @@ static int ERM_Trigger(lua_State *L)
 
 	DoneError = false;
 	GEr.LastERM(LuaErrorString);
-	char *LastErrStringPo = ErrStringPo;
-	ErrStringPo = LuaErrorString;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
 
@@ -156,7 +156,7 @@ static int ERM_Trigger(lua_State *L)
 	int insertPos = ToInteger(L, 4);
 	WasErmError = false;
 	int ret = InitTrigger(M, *(Word*)CmdName, n, lua_toboolean(L, 2), insertPos);
-	ErrStringPo = LastErrStringPo;
+	ErrString = LastErrString;
 
 	if (ret == 0)
 	{
@@ -189,8 +189,8 @@ static int ERM_Reciever(lua_State *L)
 
 	DoneError = false;
 	GEr.LastERM(LuaErrorString);
-	char *LastErrStringPo = ErrStringPo;
-	ErrStringPo = LuaErrorString;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
 
@@ -240,7 +240,7 @@ static int ERM_Reciever(lua_State *L)
 	WasErmError = false;
 	lua_pushnumber(L, InitReciever(M, CmdToDo.Type, Num, CmdToDo.Pointer, CmdToDo.ParSet, &CmdToDo.Par[0]));
 
-	ErrStringPo = LastErrStringPo;
+	ErrString = LastErrString;
 	RETURN(1);
 }
 
@@ -255,8 +255,8 @@ static int ERM_Call(lua_State *L)
 	//STARTNA(__LINE__, 0)
 
 	GEr.LastERM(LuaErrorString);
-	char *LastErrStringPo = ErrStringPo;
-	ErrStringPo = LuaErrorString;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
 	LuaLastError(WrongParamsError);
 
@@ -397,7 +397,7 @@ _error:
 	//}
 	//__finally
 	//{
-	ErrStringPo = LastErrStringPo;
+	ErrString = LastErrString;
 	//}
 
 	// Process Get Parameters
@@ -434,8 +434,8 @@ static int ERM_Var(lua_State *L)
 	STARTNA(__LINE__, 0)
 
 	GEr.LastERM(LuaErrorString);
-	char *LastErrStringPo = ErrStringPo;
-	ErrStringPo = LuaErrorString;
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
 	long long oldCmd = ErrorCmd.Cmd;
 
@@ -565,7 +565,7 @@ _normVar:
 	__finally
 	{
 		ErrorCmd.Cmd = oldCmd;
-		ErrStringPo = LastErrStringPo;
+		ErrString = LastErrString;
 	}
 	RETURN(1)
 }

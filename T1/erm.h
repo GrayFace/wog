@@ -1,8 +1,8 @@
 #define VAR_COUNT_V 10000
 #define VAR_COUNT_LZ 10
-#define BAD_INDEX_V(vi) ((vi<1) || (vi > VAR_COUNT_V + (ErrStringPo == LuaErrorString ? 16 : 0) ))
-#define BAD_INDEX_LZ(vi) ((vi < -VAR_COUNT_LZ - (ErrStringPo == LuaErrorString ? 16 : 0)) || (vi==0))
-#define BAD_INDEX_LZ_ALLOW_0(vi) (vi < -VAR_COUNT_LZ - (ErrStringPo == LuaErrorString ? 16 : 0))
+#define BAD_INDEX_V(vi) ((vi<1) || (vi > VAR_COUNT_V + (ErrString.str == LuaErrorString ? 16 : 0) ))
+#define BAD_INDEX_LZ(vi) ((vi < -VAR_COUNT_LZ - (ErrString.str == LuaErrorString ? 16 : 0)) || (vi==0))
+#define BAD_INDEX_LZ_ALLOW_0(vi) (vi < -VAR_COUNT_LZ - (ErrString.str == LuaErrorString ? 16 : 0))
 
 extern int NextWeekOf;   // неделя кого-то
 extern int NextWeekMess; // сообщение

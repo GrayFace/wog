@@ -546,7 +546,7 @@ void SetCurDate(int Month,int Week,int Day){
 	RETURNV
 }
 
-__declspec(naked)  int __fastcall Random(int ZLow,int ZHigh){__asm
+__declspec(naked)  int __fastcall Random(int,int){__asm
 {
 	push 0x50C7C0
 	ret
@@ -1682,8 +1682,9 @@ void _Error(int File,int Line)
 	ErrMessage(TermStruct.Str);
 	RETURNV
 }
-char *ErrStringPo=0;
+
 bool DoneError;
+ErrStringInfo ErrString;
 static char ME_Buf[2000];
 void _MError(int File,int Line,char *Txt)
 {
@@ -1691,7 +1692,7 @@ void _MError(int File,int Line,char *Txt)
 	STARTNA(__LINE__, 0)
 	PL_ERMError=1;
 	DoneError = true;
-	if(ErrStringPo == LuaErrorString)
+	if(ErrString.str == LuaErrorString)
 	{
 		LuaLastError(Txt);
 		RETURNV
