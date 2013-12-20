@@ -1,8 +1,8 @@
 ZVSE
 
-ERMS_ScriptDate=13.10(October).2006
+ERMS_ScriptDate=20.12(December).2013
 
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 
@@ -385,23 +385,23 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 ! !IF&v913=0:V5/1;     [set flag 5 if attacker is human]
 
 !!HEv900&v900>=0:S26/?v901;     [get resistance skill level]
-!!VRv911:S28;
-!!FU658&v900>=0/v901>=1:P1/0/28;     [call function once per skill level]
+!!VRv911:S7;
+!!FU658&v900>=0/v901>=1:P1/0/7;     [call function once per skill level]
 !!VRv489:Sv911;     [remember slot changed if any]
-!!VRv911:S28;
-!!FU658&v900>=0/v901>=2:P1/0/28;
+!!VRv911:S7;
+!!FU658&v900>=0/v901>=2:P1/0/7;
 !!VRv488:Sv911;     [remember slot changed if any]
-!!VRv911:S28;
-!!FU658&v900>=0/v901=3:P1/0/28;
+!!VRv911:S7;
+!!FU658&v900>=0/v901=3:P1/0/7;
 !!VRv487:Sv911;     [remember slot changed if any]
-!!BA&v489<28:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
-!!BA&v488<28:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
-!!BA&v487<28:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!BA&v489<7:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v488<7:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v487<7:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
 !!VRz472:Sz103033;
  !!IP&270:Dy-99; !!IP&270:V487/489; [ZVS: send info to defender]
-!!IF&5/v489<28/v488=28:Q2/21/v902/1^%Z472^;
-!!IF&5/v488<28/v487=28:Q2/21/v902/21/v903/1^%Z472^;
-!!IF&5/v487<28:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+!!IF&5/v489<7/v488=7:Q2/21/v902/1^%Z472^;
+!!IF&5/v488<7/v487=7:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&5/v487<7:Q2/21/v902/21/v903/21/v904/1^%Z472^;
 ** Alexis Koz end
 
 !?BA50;     [ZVS: Pre-battle trigger for resistance (defender side)]
@@ -490,6 +490,7 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 ** End of post-battle trigger for resistance
 
 
+* x1 = not used, x2 = attacker(0)/defender(1), x2 = default value of v911 (7)
 !?FU658;     [Function to downgrade one defending troop stack in battle]
 
 !!VRv902:Sx2 *20 R6;     [random slot # to start search from]
@@ -501,7 +502,6 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 !?FU659;     [Function to check one stack for downgrading]
 
 !!VRv912:Sv902 %7;     [get an actual slot number]
-!!VRv912&x2=1: +21;
 !!BA:Mx2/v912/?v913/?v914;     [get v913 type and v914 qty in slot]
 !!VRv915:S1;     [assume creature is upgraded]
 !!VRv915&v913<0:S0;     [treat no creature as a downgraded one]
