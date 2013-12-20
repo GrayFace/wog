@@ -1,7 +1,7 @@
 ZVSE
-ERMS_ScriptDate=18.1(January).2007
+ERMS_ScriptDate=20.12(December).2013
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 WoGify Name: script01.erm
 Last Updated:18.1(Jan.).2007 by Thomas Franz - Double Artifact: if guarded give only if you win the battle
 Last Updated: 6.7(July).2006 by Thomas Franz - script complet rewritten
@@ -486,7 +486,7 @@ WoGify ERM code: 101 (0-5) plus 111-130 (0-1) for individual rules
 ** function to make hero's upgraded 7th level troops into 8th level
 ** x1 = Neutral Town active
 !!OW:H-1/1/x16; [get the x16th hero of current player to v1]
-!!DO6169/0/6/1:Px16/x1; [check each slot]
+!!DO6169/0/6/1:Pv1/x1; [check each slot]
 
 ** end of function FU6168
 
