@@ -54,6 +54,7 @@ local path_addslash = path.addslash
 local path_name = path.name
 local path_dir = path.dir
 local io_LoadString = io.LoadString
+local io_open = io.open
 local call = mem.call
 local pchar = mem.pchar
 local topointer = mem.topointer
@@ -80,6 +81,8 @@ local LoadModOptions = internal.LoadModOptions
 
 local print = print
 local dump = dump
+
+local ShouldReloadScripts = (ReadIniString("Common", "ReloadScripts", "0") ~= "0")
 
 ----------- No globals from this point ------------
 
@@ -124,14 +127,14 @@ end
 
 ----------- require ------------
 
-local StoredScripts  -- {chunk text, chunk name, package name, env} or {ERM dyn string id, reload path (for mapnam.lua script)}
+local StoredScripts  -- {chunk text, chunk name, package name, env, ReloadFrom = reload path, erm = is erm script}
 local PackageLoadedGlobal
 local PackageLoaded = {}
 local PackageScripts = {}
 local ScriptPath = {}
 _G.package = nil
 
-local function LoadPackage(ftext, chunkname, name, env)
+local function LoadPackage(fname, ftext, chunkname, name, env)
 	if env then
 		env.new = false
 	else
@@ -144,7 +147,7 @@ local function LoadPackage(ftext, chunkname, name, env)
 
 	PackageLoaded[name] = env
 	if PackageLoadedGlobal then
-		StoredScripts[#StoredScripts + 1] = {ftext, chunkname, name, env}
+		StoredScripts[#StoredScripts + 1] = {ftext, chunkname, name, env, ReloadFrom = fname}
 	end
 
 	local f = assert(loadstring(ftext, chunkname))
@@ -157,13 +160,17 @@ local function LoadPackageScript(name)
 	local r = PackageScripts[name]
 	if r then
 		PackageScripts[name] = nil
-		return LoadPackage(unpack(r))
+		return LoadPackage(r.ReloadFrom, unpack(r))
 	end
 end
 
 local function AddModName(name)
 	local mod = getfenv(debug_getinfo(3, 'f').func).ModName
 	return mod and format("%s.%s", mod, name)
+end
+
+local function GetChunkName(fname)
+	return string_match(fname, "[^\\/:]*.[^\\/:]*.[^\\/:]*.[^\\/:]*$")
 end
 
 local function require(name)
@@ -176,7 +183,7 @@ local function require(name)
 		return r
 	end
 	local fname = ScriptPath[name] or	error(format("%q script not found", name), 2)
-	return LoadPackage(io_LoadString(fname), '@'..path_name(fname), name)
+	return LoadPackage(fname, io_LoadString(fname), '@'..GetChunkName(fname), name)
 end
 _G.require = require
 
@@ -379,15 +386,21 @@ local function LoadStoredScripts(first)
 	end
 	for i = first or 1, #StoredScripts do
 		local t = StoredScripts[i]
+		if ShouldReloadScripts and LoadGame and t.ReloadFrom then
+			local f = io_open(t.ReloadFrom, "rb")
+			if f then
+				local s = f:read("*a")
+				if not t.erm then
+					t[1] = s
+				else
+					mem_DynStrShort[internal.ErmDynString + 12*t[1]] = s
+				end
+				f:close()
+			end
+		end
 		if not t.erm then
 			pcall2(LoadPackageScript, t[3])
 		else
-			if LoadGame and t.ReloadFrom then
-				local ok, s = pcall(io_LoadString, t.ReloadFrom)
-				if ok then
-					mem_DynStrShort[internal.ErmDynString + 12*t[1]] = s
-				end
-			end
 			internal.ERM_RunScript(t[1])
 		end
 	end
@@ -474,13 +487,14 @@ local function LoadAllERT()
 	end
 end
 
-local function FromFileERM(path, mod)
+local function FromFileERM(path, mod, chunkname)
 	local ok, s = pcall2(io_LoadString, path)
 	if ok and internal.ERM_CheckScript(topointer(s), #s) then
 		return {
 			internal.ERM_DynString(topointer(s), #s),  -- str index
-			path,  -- name for error messages
+			chunkname or GetChunkName(path),  -- name for error messages
 			mod,  -- mod name
+			ReloadFrom = path,
 			erm = true
 		}
 	end
@@ -558,10 +572,10 @@ local function RunMapScripts()
 		-- load mapname.erm
 		local mapPath = path_addslash(mem_string(u4[0x699538] + 0x1F7D4))..mem_string(u4[0x699538] + 0x1F6D9)
 		map.MapPath = AppPath..mapPath
-		for f in path_find(AppPath..path_setext(mapPath, ".erm")) do
-			local t = FromFileERM(f)
+		local pathERM = path_setext(mapPath, ".erm")
+		for f in path_find(AppPath..pathERM) do
+			local t = FromFileERM(f, nil, pathERM)
 			if t then
-				t.ReloadFrom = mapPath
 				StoredScripts[#StoredScripts + 1] = t
 				hasExternal = true
 			end
