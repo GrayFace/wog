@@ -1,6 +1,6 @@
 ZVSE
 
-ERMS_ScriptDate=20.12(December).2013
+ERMS_ScriptDate=23.12(December).2013
 
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
@@ -449,13 +449,13 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 
 !!HEv900&v900>=0:S26/?v901;     [get resistance skill level]
 ** ZVS: v487,v488,v489 are transfered from the attacker side
-!!BA&v489<28:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
-!!BA&v488<28:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
-!!BA&v487<28:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
+!!BA&v489<7:M0/v489/?v902/?v914;     [get v902 type and v914 qty in slot]
+!!BA&v488<7:M0/v488/?v903/?v914;     [get v903 type and v914 qty in slot]
+!!BA&v487<7:M0/v487/?v904/?v914;     [get v904 type and v914 qty in slot]
 !!VRz472:Sz103033;
-!!IF&v489<28/v488=28:Q2/21/v902/1^%Z472^;
-!!IF&v488<28/v487=28:Q2/21/v902/21/v903/1^%Z472^;
-!!IF&v487<28:Q2/21/v902/21/v903/21/v904/1^%Z472^;
+!!IF&v489<7/v488=28:Q2/21/v902/1^%Z472^;
+!!IF&v488<7/v487=28:Q2/21/v902/21/v903/1^%Z472^;
+!!IF&v487<7:Q2/21/v902/21/v903/21/v904/1^%Z472^;
 
 ** End of pre-battle trigger for resistance for Attacker
 
@@ -477,14 +477,14 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 
 ** Alexis Koz
 !!VRv901:Sv487;
-!!FU660&v487<28:P1/0;     [re-upgrade creatures if need be]
-!!VRv487:S28;
+!!FU660&v487<7:P1/0;     [re-upgrade creatures if need be]
+!!VRv487:S7;
 !!VRv901:Sv488;
-!!FU660&v488<28:P1/0;
-!!VRv488:S28;
+!!FU660&v488<7:P1/0;
+!!VRv488:S7;
 !!VRv901:Sv489;
-!!FU660&v489<28:P1/0;
-!!VRv489:S28;
+!!FU660&v489<7:P1/0;
+!!VRv489:S7;
 ** Alexis Koz
 
 ** End of post-battle trigger for resistance
@@ -524,6 +524,7 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 !?FU660;     [Function to reupgrade creatures in defender's slot v901]
 
 !!BA:Mx2/v901/?v913/?v914;     [get v913 type and v914 qty in slot]
+* TODO: get upgrade number with UN
 !!VRv913:+1;     [usually this gets us upgraded version]
 !!VRv913&v913=113:S127;     [handle elementals]
 !!VRv913&v913=114:S125;
