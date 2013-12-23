@@ -5,10 +5,10 @@ mem.u1[<address>] - unsigned integer 1 byte
 mem.u2 - unsigned 2 bytes
 mem.u4 - unsigned 4 bytes
 mem.u8 - unsigned 8 bytes
-mem.s1 - unsigned 1 byte
-mem.s2 - unsigned 2 bytes
-mem.s4 - unsigned 4 bytes
-mem.s8 - unsigned 8 bytes
+mem.i1 - unsigned 1 byte
+mem.i2 - unsigned 2 bytes
+mem.i4 - unsigned 4 bytes
+mem.i8 - unsigned 8 bytes
 mem.r4 - real number, 4 bytes
 mem.r8 - real number, 8 bytes
 mem.pchar
@@ -69,10 +69,10 @@ mem.autohook2(ptr, f, [size])
  f(HookData, retaddr)
  return true to supress jump to standard code
 
-mem.hookfunction(p, nreg, nstack, f, [size])
+mem.hookfunction(ptr, nreg, nstack, f, [size])
  f(HookData, original_function, params...)
 
-mem.hookcall(p, nreg, nstack, f)
+mem.hookcall(ptr, nreg, nstack, f)
  f(HookData, original_function, params...)
 
 mem.hook(ptr, f, [size])
@@ -81,10 +81,10 @@ mem.hook(ptr, f, [size])
 mem.jmphook(ptr, f, [size])
  f(HookData)
 
-mem.nop(p, n)
+mem.nop(ptr, n)
 
 mem.hookalloc()
-mem.hookfree(p)
+mem.hookfree(ptr)
 
 
 Structures...
