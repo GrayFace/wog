@@ -2,11 +2,11 @@ ZVSE
 ERMS_ScriptName=script20
 ERMS_ScriptAuthor=Timothy Pulver
 ERMS_ScriptVersion=1.8
-ERMS_ScriptDate=22.11(November).2006
+ERMS_ScriptDate=24.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English or Magyar (native)
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 ** Updated: November 22, 2006
 
 ** Week of Monsters ERM Script Version 1.8 created by Timothy Pulver
@@ -99,7 +99,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 Flags Used in this Script: 1, 2, 56, 170-172, 205, 412
 v Variables used: v1-v7, v166-v200, v205, v361-v367, v372-v373, v1200-v1210
 z Variables used: z190-z199, z495
-Functions used: FU180-FU184, FU5300-FU5310, FU8000
+Functions used: FU180-FU184, FU5300-FU5307 (FU5308-FU5310 reserved), FU8000
 Timers used: TM61-TM63
 ERM Numbers used: 20, 134, 135, 136, 172, 200
 ; v1.8: v variables: v24-v25, v27-v29 as temporary
@@ -663,38 +663,8 @@ ERM Numbers used: 20, 134, 135, 136, 172, 200
 !!VRy11:Sv2;
 !!VRy12:Sv3;
 
- [Check if a hero is visiting the camp - if so, get]
- [his number and owner, store his creatures, then kill him (temporarily)]
-!!OBy10/y11/y12:T?y2;
-!!DO5308/0/6/1&y2=34:Py10/y11/y12;
-!!HEy10/y11/y12&y2=34:N?y3 O?y4 K;
-
  [Change each camp to this week's monster (subtype) and growth number (control word)]
-!!OBy10/y11/y12:Ux3 Cx1;
-
- [Restore hero and creatures if one was visiting the camp]
-!!HEy3&y2=34:Py10/y11/y12 Oy4;
-!!DO5309/0/6/1&y2=34:Py10/y11/y12;
-
---------------------------------------------------------------------------------------
-
->>[Store hero's troops]
-!?FU5308;
-
- [Store each slot's type in v1-v7, number in v361-v367]
-!!VRy1:S1 +x16;
-!!VRy2:S361 +x16;
-!!HEx1/x2/x3:C0/x16/?vy1/?vy2;
-
---------------------------------------------------------------------------------------
-
->>[Restore hero's troops]
-!?FU5309;
-
- [Restore each slot's type from v1-v7, and number from v361-v367]
-!!VRy1:S1 +x16;
-!!VRy2:S361 +x16;
-!!HEx1/x2/x3:C0/x16/vy1/vy2;
+!!OBy10/y11/y12:Ux3 Cx1/1;
 
 ** End of Script **
 
