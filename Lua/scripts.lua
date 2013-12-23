@@ -558,7 +558,12 @@ local function RunMapScripts()
 	LoadScripts("map")
 	event("BeforeMapScripts")
 	
-	local hasScripts, hasExternal, hasLua = false, false, false
+	local hasScripts, hasExternal, hasLua, isSpecMap = false, false, false, false
+	local mapName = mem_string(u4[0x699538] + 0x1F6D9)
+	do
+		local s = string_lower(mapName)
+		isSpecMap = string_match(s, "^random_map_") or string_match(s, "^wogify_")
+	end
 	-- execute map scripts if it's a WoG map
 	if ver == 0x33 then
 		local nstored = #StoredScripts
@@ -570,7 +575,7 @@ local function RunMapScripts()
 		end
 		hasScripts = nstored ~= #StoredScripts
 		-- load mapname.erm
-		local mapPath = path_addslash(mem_string(u4[0x699538] + 0x1F7D4))..mem_string(u4[0x699538] + 0x1F6D9)
+		local mapPath = path_addslash(mem_string(u4[0x699538] + 0x1F7D4))..mapName
 		map.MapPath = AppPath..mapPath
 		local pathERM = path_setext(mapPath, ".erm")
 		for f in path_find(AppPath..pathERM) do
@@ -586,7 +591,7 @@ local function RunMapScripts()
 	EventNames = {}
 	event("AfterMapScripts")
 	-- check if it should be WoGified
-	local wogify = internal.ERM_CheckWogify(hasScripts, hasExternal, hasLua)
+	local wogify = internal.ERM_CheckWogify(hasScripts, hasExternal, hasLua, isSpecMap)
 	map.wogified = wogify
 	internal.wogified = wogify
 	-- load WoGification scripts

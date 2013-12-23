@@ -655,7 +655,7 @@ static int ERM_RunScript(lua_State *L)
 
 static int ERM_CheckWogify(lua_State *L)
 {
-	lua_pushboolean(L, CheckWogify(lua_toboolean(L, 1), lua_toboolean(L, 2), lua_toboolean(L, 3)));
+	lua_pushboolean(L, CheckWogify(lua_toboolean(L, 1), lua_toboolean(L, 2), lua_toboolean(L, 3), lua_toboolean(L, 4)));
 	return 1;
 }
 

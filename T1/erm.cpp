@@ -51,7 +51,6 @@ int   PL_NPCOptionWasSet=0;
 int   PL_CustomOptionWasSet=0; // 3.58
 int   PL_DisableWogifyWasSet=0; // 3.58
 int   PL_ExpoWasSet=0; // 3.58
-int   WoGSpecMap=0; // карта random_... или wogify_...
 int   PL_WoGOptions[2][PL_WONUM]; // все опции
 // на самом деле используются с 1 по 20 вкл
 char  ERMMacroName[1000][16];
@@ -8504,7 +8503,7 @@ l_exit2:
 	RETURN(1)
 }
 
-bool CheckWogify(int HasInternalScripts, int YesERMFile, int HasLua)
+bool CheckWogify(int HasInternalScripts, int YesERMFile, int HasLua, int WoGSpecMap)
 {
 	// сделаем ее типа ВоГ
 	__asm{
