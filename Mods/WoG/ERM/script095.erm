@@ -2,7 +2,7 @@ ZVSE
 ERMS_ScriptName=script82 - Mills
 ERMS_ScriptAuthor=Thomas Franz (alias samot)
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=17.12(December).2013
+ERMS_ScriptDate=24.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English (United States) or English (native)
 ERMS_ScriptUsedFunctions=
@@ -114,13 +114,13 @@ ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 !!FU&x1<>112:E; // exit if no Windmill
 
 ** Windmills
-!!OBv900/v901/v902:C?y-10; // get control word
+!!OBv900/v901/v902:C?y-10/1; // get control word
 !!FU3333:P14; // calc 14th bit to y-100
 !!VRy-10:|y-100; // set it
 !!FU3333:P16; // calc 16th bit to y-100
 !!VRy-10:|y-100; // set it
 !!VRy-10:&-33; // remove 6th bit
-!!OBv900/v901/v902:Cy-10; // set control word
+!!OBv900/v901/v902:Cy-10/1; // set control word
 
 
 ********** end FU6130 ***********
