@@ -1490,6 +1490,7 @@ void _TextFiles_SetValid()
 	TextConstValid[2829] = 0; // (not a pointer)
 }
 
+static int GrailEnabled[9] = {1,1,1,1,1,1,1,1,1};
 static Dword GrailEffectsList[9][9] = {
 	{0x4DCB4D, 0x74, 0x4E3E49, 0x74, 0},
 	{0x4DD31E, 0x74, 0x4E3BAD, 0x74, 0},
@@ -1501,6 +1502,27 @@ static Dword GrailEffectsList[9][9] = {
 	{0x463A5A, 0x74, 0},
 	{0x5BE50A, 0x74, 0x5CE635, 0x74, 0x5CE842, 0x840F, 0x5D745F, 0x74, 0}
 };
+
+void UpdateGrailEnabled(int n)
+{
+	int v = GrailEnabled[n];
+	Dword* list = GrailEffectsList[n];
+	while (*list)
+	{
+		Dword ptr = *list++;
+		Dword std = *list++;
+		if (std <= 0xFF)
+			if (v)
+				*(byte*)ptr = std;
+			else
+				*(byte*)ptr = 0xEB;
+		else
+			if (v)
+				*(Word*)ptr = std;
+			else
+				*(Word*)ptr = 0xE990;
+	}
+}
 
 //char BUUF[15000000];
 
@@ -1553,24 +1575,8 @@ int ERM_UniversalEx(char Cmd,int Num,_ToDo_*,Mes *Mp)
 			CHECK_ParamsNum(2);
 			int n = Mp->n[0];
 			if(n < 0 || n > 8){ MError2("town type out of range (0...8)."); RETURN(0) }
-			Dword* list = GrailEffectsList[n];
-			v = (*(unsigned char *)*list == (*(list + 1) & 0xFF));
-			if (Apply(&v, 4, Mp, 1)) break;
-			while (*list)
-			{
-				Dword ptr = *list++;
-				Dword std = *list++;
-				if (std <= 0xFF)
-					if (v)
-						*(byte*)ptr = std;
-					else
-						*(byte*)ptr = 0xEB;
-				else
-					if (v)
-						*(Word*)ptr = std;
-					else
-						*(Word*)ptr = 0xE990;
-			}
+			if (Apply(&GrailEnabled[n], 4, Mp, 1)) break;
+			UpdateGrailEnabled(n);
 			break;
 		}
 
@@ -10601,8 +10607,6 @@ int SaveERM(void)
 	int i;
 ////  _Scope_ *sp;
 
-	for (i = 0; i<TextConstCount; i++)  if (TextConstVars[i])  TextConst[i] = TextConstBackup[i]; // Resore texts
-
 	if(Saver("LERM",4)) RETURN(1)
 	LuaCall("SaveGame");
 	if(StrMan::Save()) RETURN(1)
@@ -10661,6 +10665,7 @@ int SaveERM(void)
 	if(Saver(&AutoSaveFlag,sizeof(AutoSaveFlag))) RETURN(1)
 // 3.59
 	if(Saver(&TextConstVars,sizeof(TextConstVars))) RETURN(1)
+	if(Saver(&GrailEnabled,sizeof(GrailEnabled))) RETURN(1)
 
 ////  v=CalculateScopes();
 ////  if(Saver(&v,sizeof(v))) return 1;
@@ -10858,6 +10863,10 @@ int LoadERM(int /*ver*/)
 	if(Loader(&AutoSaveFlag,sizeof(AutoSaveFlag))) RETURN(1)
 	SetAutoSave(AutoSaveFlag);
 // 3.59
+	for (i = 0; i<TextConstCount; i++)
+	{
+		if (TextConstVars[i])  TextConst[i] = TextConstBackup[i]; // Restore texts
+	}
 	if(Loader(&TextConstVars,sizeof(TextConstVars))) RETURN(1)
 	for (i = 0; i < TextConstCount; i++)
 	{
@@ -10865,6 +10874,11 @@ int LoadERM(int /*ver*/)
 		if((v<-StrMan::Count)){ MError("TextConst - wrong z var index."); RETURN(1) }
 		if (v!=0) TextConst[i] = StrMan::GetStoredStr(v, TextConst[i]);
 	}
+
+	if(Loader(&GrailEnabled,sizeof(GrailEnabled))) RETURN(1)
+	for (int i = 0; i < 9; i++)
+		UpdateGrailEnabled(i);
+
 
 ////  FreeAllScopes();
 ////  if(ver>9){
@@ -11035,6 +11049,12 @@ void ResetERM(int game)
 		}
 		TextConstBackupDone = 1;
 		_TextFiles_SetValid();
+	}
+
+	for (int i = 0; i < 9; i++)
+	{
+		GrailEnabled[i] = 1;
+		UpdateGrailEnabled(i);
 	}
 
 	AI_Delay=0x1000;
