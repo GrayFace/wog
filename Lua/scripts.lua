@@ -515,7 +515,9 @@ local EventNames = {}
 
 mem_hookcall(0x4FC86F, 2, 0, function(d, def, stream, p)
 	def(stream, p)
-	EventNames[#EventNames + 1] = mem_DynStrShort[p + 4]
+	if u4[d.ebp + 4] == 0x4FC807 then
+		EventNames[#EventNames + 1] = mem_DynStrShort[p + 4]
+	end
 end)
 
 local function LoadMapScript(evtName, evt)
