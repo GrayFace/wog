@@ -2,11 +2,11 @@ ZVSE
 ERMS_ScriptName=script99 Starting Artifact selection
 ERMS_ScriptAuthor=Thomas Franz (alias samot)
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=23.8(August).2006
+ERMS_ScriptDate=25.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English (United States) or English (native)
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 ** last update 23.8(August).2006 - fixed minor bug in Magog Protection, added DracoLich and MR-Trigger
 ** last update 1.8(August).2006 - fixed ERM-Error in the downgrade creatures (at hill)
 ** last update 18.7(July).2006
@@ -225,7 +225,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!UN:P94/?y-1; !!FU&y-1=0:E; // check if script is active
 !!CM:I?y-1 F?y-2; // get the field you clicked and the flag value
 !!VRy-2:&4; // check if bit for Ctrl+Left is set
-!!FU&y-2<>4|y-1>44:E; // exit if not or not an aritfact slot (body or backpack)
+!!FU|y-2=0/y-1>44/y-1<2:E; // exit if not or not an aritfact slot (body or backpack)
 !!VRy-2:Sy-1 -2; // get artifact pos (Format AP)
 !!VRy-7:S0; // init
    !!VRy-7&y-1>39/y-2<45:Sy-1 -21; // correction of artifact pos (Format AP) for backpack
