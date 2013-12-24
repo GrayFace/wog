@@ -640,7 +640,7 @@ int __fastcall MakeMoving()
 	if (!EnableMovingMonsters) return 0;
 
 	Dword t = timeGetTime();
-	if (t - lastMove < 80) return 0;
+	if (t - lastMove < 100) return 0;
 
 	bool random = (t - lastMove >= 500);
 	lastMove = t;
