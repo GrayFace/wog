@@ -2995,12 +2995,12 @@ int ERM_NPC(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			if(ind==-2){ MError("\"!!CO:S\"-cannot be got or checked for all Commanders."); RETURN(0) }
 			if(Mp->VarI[0].Check==1){ // ?
 				sind=GetVarVal(&Mp->VarI[0]);
-				if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"CO:N\"-wrong z var index (-10...-1,1...1000)."); RETURN(0) }
+				if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"CO:N\"-wrong z var index (-20...-1,1...1000)."); RETURN(0) }
 				if(sind>0){ StrCopy(ERMString[sind-1],31,npc->Name); ERMString[sind-1][31]=0; }
 				else      { StrCopy(ERMLString[-sind-1],31,npc->Name); ERMLString[-sind-1][31]=0; }
 			}else{
 				sind=Mp->n[0];
-				if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"CO:N\"-wrong z var index (-10...-1,1...1000)."); RETURN(0) }
+				if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"CO:N\"-wrong z var index (-20...-1,1...1000)."); RETURN(0) }
 				if(sind>0) StrCopy(npc->Name,31,ERMString[sind-1]);
 				else       StrCopy(npc->Name,31,ERMLString[-sind-1]);
 			}

@@ -5630,7 +5630,7 @@ int ERM_BUniversal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 			CHECK_ParamsNum(1);
 			if(Mp->VarI[0].Type!=7){ MError("\"!!BU:\"- not a Z variable."); RETURN(0) }
 			sind=GetVarVal(&Mp->VarI[0]);
-			if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"!!BU:\"-wrong z (destination) index (-10...-1,1...1000)."); RETURN(0) }
+			if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError("\"!!BU:\"-wrong z (destination) index (-20...-1,1...1000)."); RETURN(0) }
 			if(Mp->VarI[0].Check!=0){ MError("\"!!BU:\"- can use only set syntax."); RETURN(0) }
 			if(sind>0) txtp=ERMString[sind-1];
 			else       txtp=ERMLString[-sind-1];

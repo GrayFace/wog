@@ -216,7 +216,7 @@ static int ERM_Reciever(lua_State *L)
 		{
 			case LUA_TSTRING:
 				M.VarI[0].Type = vtZ;
-				M.VarI[0].Num = -VAR_COUNT_LZ - 1;
+				M.VarI[0].Num = -1;
 				StrCopy(specZ, 512, lua_tostring(L, 2));
 				specialZ = true;
 				break;
@@ -252,13 +252,7 @@ static int ERM_Call(lua_State *L)
 	if (lua_gettop(L) > 17)
 		return LuaError(Format("\"%s:%s\"-too many parameters.", CmdToDo.Type, lua_tostring(L, 1)), ERM_Call_ErrorLevel);
 
-	//STARTNA(__LINE__, 0)
-
-	GEr.LastERM(LuaErrorString);
-	ErrStringInfo LastErrString;
-	NewErrStringInfo(LuaErrorString, &LastErrString);
-	WasErmError = false;
-	LuaLastError(WrongParamsError);
+	STARTNA(__LINE__, 0)
 
 	const char *str = lua_tostring(L, 1);
 	char cmd = *str;
@@ -269,13 +263,14 @@ static int ERM_Call(lua_State *L)
 	CmdMessage.m.l = 8;
 	CmdMessage.i = 0;
 	
+	int backV[16];
+	char StrVar[VAR_COUNT_LZ][512];
+	for (int i = 0; i < VAR_COUNT_LZ; i++)
+		StrVar[i][0] = 0;
+
 	int indexV = VAR_COUNT_V;
-	int indexZ = VAR_COUNT_LZ;
 	int countV = 0;
 	int countZ = 0;
-
-	char backZ[16][512];
-	int backV[16];
 	const char *paramZ;
 	int paramV;
 
@@ -287,9 +282,7 @@ static int ERM_Call(lua_State *L)
 	}
 	if (specialZ)
 	{
-		memcpy(backZ[countZ], ERMLString[indexZ], 512);
-		memcpy(ERMLString[indexZ], specZ, 512);
-		indexZ++; countZ++;
+		memcpy(StrVar[countZ++], specZ, 512);
 	}
 
 	// Prepare Message Parameters
@@ -369,17 +362,16 @@ _number:
 _string:
 				CmdMessage.VarI[k].Type = 7;
 				// allocate str in Z range
-				memcpy(backZ[countZ], ERMLString[indexZ], 512);
-				if (CmdMessage.VarI[k].Check != 1) StrCopy(ERMLString[indexZ], 512, paramZ);
-				indexZ++;
+				if (CmdMessage.VarI[k].Check != 1) StrCopy(StrVar[countZ], 512, paramZ);
 				countZ++;
-				CmdMessage.VarI[k].Num = -indexZ;
-				CmdMessage.n[k] = -indexZ;
+				CmdMessage.VarI[k].Num = -countZ;
+				CmdMessage.n[k] = -countZ;
 				break;
 
 			default:
 _error:
-				return LuaError(Format("Invalid parameter type: %s", lua_typename(L, ltype)), ERM_Call_ErrorLevel);
+				if (countV)  memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
+				RETURN(LuaError(Format("Invalid parameter type: %s", lua_typename(L, ltype)), ERM_Call_ErrorLevel))
 		}
 
 	}
@@ -388,7 +380,12 @@ _error:
 
 	lua_settop(L, 0);
 
+	GEr.LastERM(LuaErrorString);
+	ErrStringInfo LastErrString;
+	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
+	char (*LastStrVar)[512] = ERMLString;
+	ERMLString = StrVar;
 	//__try
 	//{
 	int failed = ProcessMes(&CmdToDo, CmdMessage, cmd, k == 0 ? 1 : k);
@@ -398,32 +395,31 @@ _error:
 	//__finally
 	//{
 	ErrString = LastErrString;
+	ERMLString = LastStrVar;
 	//}
 
 	// Process Get Parameters
 
 	int retCount = 0;
 	if (specialV) { retCount++; lua_pushnumber(L, ERMVar2[VAR_COUNT_V]); }
-	if (specialZ) { retCount++; lua_pushfstring(L, ERMLString[VAR_COUNT_LZ]); }
+	if (specialZ) { retCount++; lua_pushfstring(L, StrVar[0]); }
 	for (int i = 0; i < k; i++)
 		if (CmdMessage.VarI[i].Check)
 		{
 			retCount++;
 			int ind = CmdMessage.VarI[i].Num;
 			if (CmdMessage.VarI[i].Type == 7)
-				lua_pushstring(L, ERMLString[-ind-1]);
+				lua_pushstring(L, StrVar[-ind-1]);
 			else
 				lua_pushnumber(L, ERMVar2[ind-1]);
 		}
 
-	if (countZ) memcpy(ERMLString[indexZ - countZ], backZ[0], 512*countZ);
-	if (countV) memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
+	if (countV)  memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
 
 	if (failed)
-		return LuaError(LastErmError, ERM_Call_ErrorLevel);
+		RETURN(LuaError(LastErmError, ERM_Call_ErrorLevel))
 
-	return retCount;
-	//RETURN(retCount);
+	RETURN(retCount)
 }
 
 // Params: "v", 5, [new_value]
@@ -443,8 +439,8 @@ static int ERM_Var(lua_State *L)
 	char c = *ToString(L, 1);
 	int i;
 
-	__try
-	{
+	//__try
+	//{
 		if (c == '$') // macro
 		{
 			char dest[16];
@@ -491,7 +487,7 @@ _string:
 				if(lua_gettop(L) < 3)
 				{
 					lua_settop(L, 0);
-					if((i<-VAR_COUNT_LZ)||(i==0)){ MError2("wrong z index."); RETURN(0) }
+					if((i<-VAR_COUNT_LZ)||(i==0)){ MError2("wrong z var index (-20...-1,1...1000+)."); RETURN(0) }
 					char buf[512];
 					StrCopy(buf, 512, GetErmString(i));
 					lua_pushstring(L, buf);
@@ -499,14 +495,14 @@ _string:
 				else
 				{ // set
 					const char* str = lua_tostring(L, 3);
-					if((i<-VAR_COUNT_LZ)||(i==0)||(i>1000)){ lua_settop(L, 0); MError("wrong z index (-10...-1,1...1000)."); RETURN(0) }
+					if((i<-VAR_COUNT_LZ)||(i==0)||(i>1000)){ lua_settop(L, 0); MError("wrong z var index (-20...-1,1...1000)."); RETURN(0) }
 					StrCopy(GetPureErmString(i),512,str);
 					lua_settop(L, 0);
 					lua_pushboolean(L, 1);
 				}
 				RETURN(1)
 			case 'e':
-				if((i<-100)||(i==0)||(i>100)){ lua_settop(L, 0); MError("wrong e index (-100...-1,1...100)."); RETURN(0) }
+				if((i<-100)||(i==0)||(i>100)){ lua_settop(L, 0); MError("wrong e var index (-100...-1,1...100)."); RETURN(0) }
 				float *var;
 				if(i>0) var = &ERMVarF[i-1];
 				else    var = &ERMVarFT[-i-1];
@@ -561,12 +557,12 @@ _normVar:
 			lua_settop(L, 0);
 			lua_pushboolean(L, 1);
 		}
-		}
-	__finally
-	{
+	//}
+	//__finally
+	//{
 		ErrorCmd.Cmd = oldCmd;
 		ErrString = LastErrString;
-	}
+	//}
 	RETURN(1)
 }
 

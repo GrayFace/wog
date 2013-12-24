@@ -1,8 +1,8 @@
-#define VAR_COUNT_V 10000
-#define VAR_COUNT_LZ 10
+#define VAR_COUNT_V (10000)
+#define VAR_COUNT_LZ (20)
 #define BAD_INDEX_V(vi) ((vi<1) || (vi > VAR_COUNT_V + (ErrString.str == LuaErrorString ? 16 : 0) ))
-#define BAD_INDEX_LZ(vi) ((vi < -VAR_COUNT_LZ - (ErrString.str == LuaErrorString ? 16 : 0)) || (vi==0))
-#define BAD_INDEX_LZ_ALLOW_0(vi) (vi < -VAR_COUNT_LZ - (ErrString.str == LuaErrorString ? 16 : 0))
+#define BAD_INDEX_LZ(vi) ((vi < -VAR_COUNT_LZ) || (vi==0))
+#define BAD_INDEX_LZ_ALLOW_0(vi) (vi < -VAR_COUNT_LZ)
 
 extern int NextWeekOf;   // неделя кого-то
 extern int NextWeekMess; // сообщение
@@ -11,12 +11,12 @@ extern int NextMonthOfMonster; // монстр *2
 extern int MonsterUpgradeTable[MONNUM];
 extern int ERMVar2[];  extern char ERMVar2Macro[VAR_COUNT_V][16];  extern char ERMVarMacro[20][16];
 extern int   ERMVarX[16];
-extern int   ERMVarY[100],ERMVarYT[100];
-extern float ERMVarF[100],ERMVarFT[100];
+extern int   *ERMVarY,*ERMVarYT;  // [100]
+extern float *ERMVarF,*ERMVarFT;  // [100]
 
 extern int ERMVarH[HERNUM][200];  extern int ERMW;  extern char ERMVarHMacro[200][16];
 extern char ERMString[1000][512];
-extern char ERMLString[][512];  extern char ERMStringMacro[1000][16];
+extern char (*ERMLString)[512];  extern char ERMStringMacro[1000][16];
 extern Dword pointer;
 extern int ERM_GM_ai;   // кто посетил объект
 extern _Hero_ *ERM_HeroStr;  // герой, посетивший объект

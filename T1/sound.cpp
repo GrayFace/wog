@@ -195,7 +195,7 @@ int ERM_MP3(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			CHECK_ParamsMax(2);
 			if(Num==2){ // с переменной (устарело)
 				if(Mp->n[0]==1){
-					if(BAD_INDEX_LZ(Mp->n[1])){ MError("\"MP:P\"-wrong z var index (-10...-1, 1...1000+)."); RETURN(0) }
+					if(BAD_INDEX_LZ(Mp->n[1])){ MError("\"MP:P\"-wrong z var index (-20...-1, 1...1000+)."); RETURN(0) }
 					const char * str = GetErmString(Mp->n[1]);
 					if (str) StrCopy(MP3Name,256,str);
 				}else{ MError("\"MP:P\"-wrong syntax (P1/$)."); RETURN(0) }

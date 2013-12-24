@@ -66,7 +66,8 @@ int   ERMVarH[HERNUM][200]; char ERMVarHMacro[200][16];
 char  ERMVarHUsed[200];
 char  ERMString[1000][512];  char ERMStringMacro[1000][16];
 char  ERMStringUsed[1000];
-char  ERMLString[VAR_COUNT_LZ + 16][512];
+static char  Std_ERMLString[VAR_COUNT_LZ][512];
+char  (*ERMLString)[512] = Std_ERMLString;
 char  ERMFunUsed[30000];
 char  ERMTimerUsed[100];
 int   ERMVarUsedStore=0; //делать ли дамп использования переменных
@@ -102,8 +103,10 @@ struct _Timer_{
 } ERMTimer[200];
 // не надо запоминать
 int   ERMVarX[16];
-int   ERMVarY[100],ERMVarYT[100];
-float ERMVarF[100],ERMVarFT[100];
+static int Std_ERMVarY[100], Std_ERMVarYT[100];
+int   *ERMVarY = Std_ERMVarY, *ERMVarYT = Std_ERMVarYT;
+static float Std_ERMVarF[100], Std_ERMVarFT[100];
+float *ERMVarF = Std_ERMVarF, *ERMVarFT = Std_ERMVarFT;
 
 int EnableMithrill=0;
 int EnableChest[20]={0,0,0,0,0};
@@ -310,7 +313,7 @@ void DumpERMVars(char *Text,char *Text2)
 		if(ERMString[i][0]==0) continue;
 		p += sprintf_s(p, p2-p, "z%i=\"%s\"\n",i+1,ERMString[i]); 
 	}
-	p += sprintf_s(p, p2-p, "Local z vars (z-1...z-10)\n");
+	p += sprintf_s(p, p2-p, "Local z vars (z-1...z-20)\n");
 	for(i=0;i<VAR_COUNT_LZ;i++){ 
 		if(ERMLString[i][0]==0) continue;
 		p += sprintf_s(p, p2-p, "z-%i=\"%s\"\n",i+1,ERMLString[i]); 
@@ -332,7 +335,7 @@ char *GetInternalErmString(int index)
 {
 	if(BAD_INDEX_LZ(index))
 	{
-		MError2("wrong z var index (-10...-1,1...1000+).");
+		MError2("wrong z var index (-20...-1,1...1000+).");
 		return 0;
 	}
 
@@ -376,33 +379,36 @@ char* GetErmString(int index)
 
 struct StoredLocalVars
 {
-	int    OldY[100];
-	float  OldF[100];
-	char   OldString[10][512];
+	int    Y[100];
+	float  F[100];
+	char   String[VAR_COUNT_LZ][512];
+	void  *LastY;
+	void  *LastF;
+	void  *LastString;
 };
 
-void _DoStoreVars(void *loc, void *var, int size, bool restore, bool fill)
+void __inline _DoStoreVars(void *loc, void **last, void *var, int size, bool restore, bool fill)
 {
 	if (restore)
 	{
-		memcpy((char*)var, (char*)loc, size);
+		*(void**)var = *last;
 	}
 	else
 	{
-		memcpy((char*)loc, (char*)var, size);
-		if (fill) FillMem((char*)var, size, 0);
+		*last = *(void**)var;
+		*(void**)var = loc;
+		if (fill) FillMem((char*)loc, size, 0);
 	}
 }
 
-int TriggerDepth = 0;
-
 void StoreVars(StoredLocalVars *vars, bool fu, bool restore = false)
 {
-	TriggerDepth += (restore ? -1 : 1);
-	if (!fu && TriggerDepth == (restore ? 0 : 1)) return;
-	_DoStoreVars(vars->OldY, (fu ? ERMVarY : ERMVarYT), 4*100, restore, fu);
-	_DoStoreVars(vars->OldF, (fu ? ERMVarF : ERMVarFT), 4*100, restore, fu);
-	_DoStoreVars(vars->OldString, ERMLString, 10*512, restore, false);
+	_DoStoreVars(vars->Y, &vars->LastY, (fu ? &ERMVarY : &ERMVarYT), sizeof(vars->Y), restore, fu);
+	_DoStoreVars(vars->F, &vars->LastF, (fu ? &ERMVarF : &ERMVarFT), sizeof(vars->F), restore, fu);
+	_DoStoreVars(vars->String, &vars->LastString, &ERMLString, 0, restore, false);
+	if (!restore)
+		for (int i = 0; i < VAR_COUNT_LZ; i++)
+			vars->String[i][0] = 0;
 }
 
 ///////////////////////////
@@ -564,7 +570,7 @@ int ERM_Do(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 						if(Mp->VarI[i].Check!=1) continue; // не ?
 						int t = Mp->VarI[i].IType;
 						if(t == 0) t = Mp->VarI[i].Type;
-						if(t == 6 && Mp->n[i] > 0 || t == 7 && Mp->n[i] < 0) continue; // не y1..y100, z-1..z-10
+						if(t == 6 && Mp->n[i] > 0 || t == 7 && Mp->n[i] < 0) continue; // не y1..y100, z-1..z-20
 						Apply(&ERMVarX[i],4,Mp,(char)i);
 					}
 				}
@@ -610,11 +616,11 @@ int CheckVarIndex(int vi, int vtype, bool allowBigZ)
 		case 7: // z1...500
 			if (allowBigZ)
 			{
-				if(BAD_INDEX_LZ(vi)){ MError2("Var is out of set (z-10...z-1,z1...z1000+) in CheckVarIndex."); RETURN(0) }
+				if(BAD_INDEX_LZ(vi)){ MError2("Var is out of set (z-20...z-1,z1...z1000+) in CheckVarIndex."); RETURN(0) }
 			}
 			else
 			{
-				if(BAD_INDEX_LZ(vi)||(vi>1000)){ MError2("Var is out of set (z-10...z-1,z1...z1000) in CheckVarIndex."); RETURN(0) }
+				if(BAD_INDEX_LZ(vi)||(vi>1000)){ MError2("Var is out of set (z-20...z-1,z1...z1000) in CheckVarIndex."); RETURN(0) }
 			}
 			break;
 		case 8: // e1...100
@@ -698,8 +704,8 @@ int SetVarVal(VarNum *vnp,int Val)
 	int vi = GetVarIndex(vnp, true);
 	if(vnp->Type != 0 && vi == 0) RETURN(0)
 	switch(vnp->Type){
-		case 7: // z-10..z-1,z1...1000
-			if(BAD_INDEX_LZ(Val)){ MError2("Var z is out of set (-10...-1,1...1000+) as source in SetVarVal."); RETURN(0) }
+		case 7: // z-20..z-1,z1...1000
+			if(BAD_INDEX_LZ(Val)){ MError2("Var z is out of set (-20...-1,1...1000+) as source in SetVarVal."); RETURN(0) }
 			if(Val>1000) txt=ERM2String(StringSet::GetText(Val),1,0);
 			else if(Val<0) txt=ERMLString[-Val-1];
 			else txt=ERMString[Val-1];
@@ -1757,7 +1763,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 		case 'N': // N#/z/subtype/...
 			CHECK_ParamsMin(3);
 			zi=0; Apply(&zi,4,Mp,1);
-			if(BAD_INDEX_LZ(zi)||(zi>1000)){ MError("\"!!UN:N\"-z var index out of range (-10...-1,1...1000)."); RETURN(0) }
+			if(BAD_INDEX_LZ(zi)||(zi>1000)){ MError("\"!!UN:N\"-z var index out of range (-20...-1,1...1000)."); RETURN(0) }
 			v=-1; Apply(&v,4,Mp,2);
 			if(v<0){ MError("\"!!UN:N\"-incorrect type of object (<0)."); RETURN(0) }
 			str = GetPureErmString(zi);
@@ -2190,7 +2196,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 						if(Num!=2){ MError("\"!!UN:J3\"-wrong number of parameters."); RETURN(0) }
 						if(Mp->n[1]!=0){ // аргумент - z var
 							if(Apply(&v,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
-							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J3\"- z var out of range (-10...-1,1...1000+)."); RETURN(0) }
+							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J3\"- z var out of range (-20...-1,1...1000+)."); RETURN(0) }
 							d=GetErmString(v);
 						}else{ // аргумент - ^текст^
 							d=ERM2String(&Mp->m.s[Mp->i],0,&v);
@@ -2232,7 +2238,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 						if(Apply(&t,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
 						if(Mp->n[2]!=0){ // аргумент - z var
 							if(Apply(&v,4,Mp,2)){ EWrongSyntax(); RETURN(0) }
-							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J8\"- z var out of range (-10...-1,1...1000+)."); RETURN(0) }
+							if(BAD_INDEX_LZ(v)){ MError("\"!!UN:J8\"- z var out of range (-20...-1,1...1000+)."); RETURN(0) }
 							d=GetErmString(v);
 						}else{ // аргумент - ^текст^
 							d=ERM2String(&Mp->m.s[Mp->i],0,&v);
@@ -2247,7 +2253,7 @@ int ERM_Universal(char Cmd,int Num,_ToDo_*,Mes *Mp)
 						if(Apply(&t,4,Mp,1)){ EWrongSyntax(); RETURN(0) }
 						if(Mp->n[2]!=0){ // аргумент - z var
 							Apply(&v,4,Mp,2);
-							if(BAD_INDEX_LZ(v)||(v>1000)){ MError("\"!!UN:J9\"- z var out of range (-10...-1,1...1000)."); RETURN(0) }
+							if(BAD_INDEX_LZ(v)||(v>1000)){ MError("\"!!UN:J9\"- z var out of range (-20...-1,1...1000)."); RETURN(0) }
 							d = GetPureErmString(v);
 						}else{ // аргумент - ^текст^
 							MError("\"!!UN:J9\"- must be z var."); 
@@ -2583,7 +2589,7 @@ int ERM_Variable(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 					SetVarVal(vnp,vv);
 				}else{           // копируем сам текст
 					ind=GetVarVal(vnp);
-					if((ind<-VAR_COUNT_LZ)||(ind==0)||(ind>1000)){ MError("\"!!VR:S\"-var is out of set (z-10...-1,1...z1000)."); RETURN(0) }
+					if((ind<-VAR_COUNT_LZ)||(ind==0)||(ind>1000)){ MError("\"!!VR:S\"-var is out of set (z-20...-1,1...z1000)."); RETURN(0) }
 					StrCopy(GetPureErmString(ind),512,ERM2String(&Mp->m.s[Mp->i],0,&vv));
 					Mp->i+=vv;
 				}
@@ -2619,12 +2625,12 @@ int ERM_Variable(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			if(Num!=1){ MError("\"!!VR\"-wrong number of parameters."); RETURN(0) }
 			if(vnp->Type==7){  // строка
 				ind = GetVarVal(vnp);
-				if(BAD_INDEX_LZ(ind)||(ind>1000)){ MError("\"!!VR:+\"-var is out of set (z-10...-1,1...z1000)."); RETURN(0) }
+				if(BAD_INDEX_LZ(ind)||(ind>1000)){ MError("\"!!VR:+\"-var is out of set (z-20...-1,1...z1000)."); RETURN(0) }
 				txt = GetPureErmString(ind);
 				if(Mp->n[0]!=0){ // добавляем одну к другой
 					vv=ind;
 					if(Apply(&vv,4,Mp,0)) break;
-					if(BAD_INDEX_LZ(vv)){ MError("\"!!VR:+\"-var is out of set (z-10...-1,1...z1000+)."); RETURN(0) }
+					if(BAD_INDEX_LZ(vv)){ MError("\"!!VR:+\"-var is out of set (z-20...-1,1...z1000+)."); RETURN(0) }
 					StrCanc(txt, 512, txt, GetPureErmString(vv));
 				}else{           // добавляем сам текст
 					StrCanc(txt, 512, txt, ERM2String(&Mp->m.s[Mp->i],0,&vv));
@@ -2747,7 +2753,7 @@ int ERM_Variable(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 				if(GetPureErmString(s, ind)) RETURN(0)
 				if(Mp->n[0]!=0){ // аргумент - z var
 					if(Apply(&vv,4,Mp,0)) break;
-					if(BAD_INDEX_LZ(vv)){ MError("\"!!VR:U\"- z var out of range (-10...-1,1...)."); RETURN(0) }
+					if(BAD_INDEX_LZ(vv)){ MError("\"!!VR:U\"- z var out of range (-20...-1,1...)."); RETURN(0) }
 					d=GetErmString(vv);
 				}else{ // аргумент - ^текст^
 					d=ERM2String(&Mp->m.s[Mp->i],0,&vv);
@@ -2766,7 +2772,7 @@ int ERM_Variable(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			}
 			CHECK_ParamsMin(2);
 			ind=GetVarVal(vnp);
-			if(BAD_INDEX_LZ(ind)||ind>1000){ MError("\"!!VR:M\"- z var out of range (-10...-1,1...1000)."); RETURN(0) }
+			if(BAD_INDEX_LZ(ind)||ind>1000){ MError("\"!!VR:M\"- z var out of range (-20...-1,1...1000)."); RETURN(0) }
 			if(GetPureErmString(d, ind)) RETURN(0)
 			switch(Mp->n[0]){
 				case 1: // взять подстроку из z2 с #3 длинной #4
@@ -5044,7 +5050,7 @@ char *_Message2ERM(char *str)
 					case 'Z': // Z#
 						++i;
 						v=a2i(&str[i]); i+=SkipNumbers(&str[i])-1;
-						if((v<-VAR_COUNT_LZ)||(v==0)){ MError("\"String 2ERM\"-wrong %Z# number (-10...-1,1...1000)."); }
+						if((v<-VAR_COUNT_LZ)||(v==0)){ MError("\"String 2ERM\"-wrong %Z# number (-20...-1,1...1000)."); }
 						if(v>1000)   j+=a2a(StringSet::GetText(v),&/*ERMMesBuf*/stro[j])-1;
 						else if(v>0) j+=a2a(ERMString[v-1],&/*ERMMesBuf*/stro[j])-1;
 						else         j+=a2a(ERMLString[-v-1],&/*ERMMesBuf*/stro[j])-1;
@@ -5161,13 +5167,13 @@ int ApplyString(Mes *Mp,int ind,_AMes_ *amp)
 	int sind;
 	if(Mp->VarI[ind].Check==1){ // ?
 		sind=GetVarVal(&Mp->VarI[ind]);
-		if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError2("wrong z (destination) index (-10...-1,1...1000) in ApplyString."); RETURN(0) }
+		if(BAD_INDEX_LZ(sind)||(sind>1000)){ MError2("wrong z (destination) index (-20...-1,1...1000) in ApplyString."); RETURN(0) }
 		if(sind>0) StrCopy(ERMString[sind-1],512,amp->m.s);
 		else       StrCopy(ERMLString[-sind-1],512,amp->m.s);
 		RETURN(1)
 	}else{
 		sind=Mp->n[ind];
-		if(BAD_INDEX_LZ(sind)){ MError2("wrong z (sourse) index (-10...-1,1...1000) in ApplyString."); RETURN(0) }
+		if(BAD_INDEX_LZ(sind)){ MError2("wrong z (sourse) index (-20...-1,1...1000) in ApplyString."); RETURN(0) }
 		MesMan(amp, GetErmString(sind), 0);
 		RETURN(0)
 	}
@@ -7209,8 +7215,8 @@ _ok103:;
 						RedrawMap();
 					}else if(M.n[0]==5){ // установить оба в строковые переменные (0-не уст.)
 						if(Num<3){ MError("\"HE:L5\"-wrong syntax."); goto l_exit; }
-						if(BAD_INDEX_LZ_ALLOW_0(M.n[1])){ MError("\"HE:L5\"-wrong z var index (-10...-1,(0),1...1000)."); goto l_exit; }
-						if(BAD_INDEX_LZ_ALLOW_0(M.n[2])){ MError("\"HE:L5\"-wrong z var index (-10...-1,(0),1...1000)."); goto l_exit; }
+						if(BAD_INDEX_LZ_ALLOW_0(M.n[1])){ MError("\"HE:L5\"-wrong z var index (-20...-1,(0),1...1000)."); goto l_exit; }
+						if(BAD_INDEX_LZ_ALLOW_0(M.n[2])){ MError("\"HE:L5\"-wrong z var index (-20...-1,(0),1...1000)."); goto l_exit; }
 						char *s1=0,*s2=0;
 						if(M.n[1]!=0) s1 = GetInternalErmString(M.n[1]);
 						if(M.n[2]!=0) s2 = GetInternalErmString(M.n[2]);
@@ -7561,7 +7567,7 @@ int 3
 							break;
 						case 'B': // B#/pic/rep установить картинку
 							if(Num<3){ EWrongParamsNum(); goto l_exit; }
-							if(BAD_INDEX_LZ(M.n[1])){ MError("\"IF:B\"-wrong z var index (-10...-1,1...1000)."); goto l_exit; }
+							if(BAD_INDEX_LZ(M.n[1])){ MError("\"IF:B\"-wrong z var index (-20...-1,1...1000)."); goto l_exit; }
 							if(M.n[1]>1000)                AddExtCMDPic(M.n[0],ERM2String2(0,StringSet::GetText(M.n[1])),M.n[2]);
 							else if(M.n[1]>0)              AddExtCMDPic(M.n[0],ERMString[M.n[1]-1],M.n[2]);
 							else if(M.n[1]>=-VAR_COUNT_LZ) AddExtCMDPic(M.n[0],ERMLString[-M.n[1]-1],M.n[2]);
@@ -7607,7 +7613,7 @@ int 3
 							if(Apply(&chRAD,4,&M,0)){ MError("\"IF:G\"-cannot get or check var."); goto l_exit; }
 							if(Apply(&state,4,&M,2)){ MError("\"IF:G\"-cannot get or check var."); goto l_exit; }
 							if(Apply(&v,4,&M,3)){ MError("\"IF:G\"-cannot get or check var."); goto l_exit; }
-							if(BAD_INDEX_LZ_ALLOW_0(v)){ MError("\"IF:G\"-wrong z var index (-10...-1,(0),1...1000+)."); goto l_exit; }
+							if(BAD_INDEX_LZ_ALLOW_0(v)){ MError("\"IF:G\"-wrong z var index (-20...-1,(0),1...1000+)."); goto l_exit; }
 							htxt = (v ? ERM2String2(5, GetPureErmString(v)) : "");
 							for(j=0;j<(Num-4);j++){
 								if(Apply(&v,4,&M,(char)(j+4))){ MError("\"IF:G\"-cannot get or check var."); goto l_exit; }
@@ -7615,7 +7621,7 @@ int 3
 								if(j>11){ MError("\"IF:G\"-too many items."); goto l_exit; }
 								if(v==0) txt[j]=0;
 								else{
-									if(BAD_INDEX_LZ(v)){ MError("\"IF:G\"-wrong z var index (-10...-1,1...1000+)."); goto l_exit; }
+									if(BAD_INDEX_LZ(v)){ MError("\"IF:G\"-wrong z var index (-20...-1,1...1000+)."); goto l_exit; }
 									txt[j] = ERM2String2(6+j,GetPureErmString(v));
 								}
 							}
@@ -7646,77 +7652,77 @@ int 3
 							 tv=0;
 							 if(Num>15){
 								 if(Apply(&tv,4,&M,15)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index1(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index1(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 but4 = (tv ? ERM2String2(18,GetPureErmString(tv)) : 0);
 							 }else but4=0;
 							 if(Num>14){
 								 if(Apply(&tv,4,&M,14)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index2(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index2(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 but3 = (tv ? ERM2String2(19,GetPureErmString(tv)) : 0);
 							 }else but3=0;
 							 if(Num>13){
 								 if(Apply(&tv,4,&M,13)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index3(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index3(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 but2 = (tv ? ERM2String2(20,GetPureErmString(tv)) : 0);
 							 }else but2=0;
 							 if(Num>12){
 								 if(Apply(&tv,4,&M,12)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index4(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index4(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 but1 = (tv ? ERM2String2(21,GetPureErmString(tv)) : 0);
 							 }else but1=0;
 							 if(Num>11){
 								 if(Apply(&tv,4,&M,11)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index5(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index5(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pch4 = (tv ? ERM2String2(22,GetPureErmString(tv)) : 0);
 							 }else pch4=0;
 							 if(Num>10){
 								 if(Apply(&tv,4,&M,10)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index6(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index6(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pch3 = (tv ? ERM2String2(23,GetPureErmString(tv)) : 0);
 							 }else pch3=0;
 							 if(Num>9){
 								 if(Apply(&tv,4,&M,9)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index7(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index7(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pch2 = (tv ? ERM2String2(24,GetPureErmString(tv)) : 0);
 							 }else pch2=0;
 							 if(Num>8){
 								 if(Apply(&tv,4,&M,8)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index8(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index8(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pch1 = (tv ? ERM2String2(25,GetPureErmString(tv)) : 0);
 							 }else pch1=0;
 							 if(Num>7){
 								 if(Apply(&tv,4,&M,7)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index9(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var index9(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pic4 = (tv ? ERM2String2(26,GetPureErmString(tv)) : 0);
 							 }else pic4=0;
 							 if(Num>6){
 								 if(Apply(&tv,4,&M,6)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexA(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexA(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pic3 = (tv ? ERM2String2(27,GetPureErmString(tv)) : 0);
 							 }else pic3=0;
 							 if(Num>5){
 								 if(Apply(&tv,4,&M,5)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexB(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexB(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pic2 = (tv ? ERM2String2(28,GetPureErmString(tv)) : 0);
 							 }else pic2=0;
 							 if(Num>4){
 								 if(Apply(&tv,4,&M,4)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexC(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexC(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 pic1 = (tv ? ERM2String2(29,GetPureErmString(tv)) : 0);
 							 }else pic1=0;
 							 if(Num>3){
 								 if(Apply(&tv,4,&M,3)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexD(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexD(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 txt3 = (tv ? ERM2String2(30,GetPureErmString(tv)) : 0);
 							 }else txt3=0;
 							 if(Num>2){
 								 if(Apply(&tv,4,&M,2)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexE(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexE(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 txt2 = (tv ? ERM2String2(31,GetPureErmString(tv)) : 0);
 							 }else txt2=0;
 							 if(Num>1){
 								 if(Apply(&tv,4,&M,1)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
-								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexF(-10...-1,(0),1...1000+)."); goto l_exit; }
+								 if(BAD_INDEX_LZ_ALLOW_0(tv)){ MError("\"IF:D\"-wrong z var indexF(-20...-1,(0),1...1000+)."); goto l_exit; }
 								 txt1 = (tv ? ERM2String2(32,GetPureErmString(tv)) : 0);
 							 }else txt1=0;
 							 if(Apply(&tv,4,&M,0)){ MError("\"IF:D\"-cannot get or check var."); goto l_exit; }
@@ -7752,7 +7758,7 @@ int 3
 						break;
 						case 'L':{ // L#   3.59 - put message to log
 							char *lcstr="";
-							if(BAD_INDEX_LZ_ALLOW_0(M.n[0])){ MError("\"IF:L\"-wrong z var index (-10...-1,1...1000)."); goto l_exit; }
+							if(BAD_INDEX_LZ_ALLOW_0(M.n[0])){ MError("\"IF:L\"-wrong z var index (-20...-1,1...1000)."); goto l_exit; }
 							if(M.n[0]!=0)   lcstr=GetErmString(M.n[0]);
 							else{ lcstr=ERM2String(&M.m.s[M.i],0,&i); M.i+=i; }
 							_asm{
@@ -8713,6 +8719,12 @@ void ProcessERM(bool needLocals)
 				ERMVar2[998] = ERM_LastY = ERM_PosY = PosY;
 				ERMVar2[999] = ERM_LastL = ERM_PosL = PosL;
 
+				if(!LocalsStored && needLocals)
+				{
+					LocalsStored = true;
+					StoreVars(&vars, (cp->Event<30000)||((cp->Event>=31000)&&(cp->Event<31100)));
+				}
+
 				if(cp->Efl[0][0][0].Type == 255) // Lua trigger
 				{
 					ErrString.str = "Lua trigger";
@@ -8725,11 +8737,6 @@ void ProcessERM(bool needLocals)
 					OldScope=GlobalCurrentScope;
 					GlobalCurrentScope=cp->Scope;
 
-					if(!LocalsStored && needLocals)
-					{
-						LocalsStored = true;
-						StoreVars(&vars, (cp->Event<30000)||((cp->Event>=31000)&&(cp->Event<31100)));
-					}
 					// backward compatibility - zero out y-1..y-100, f-1..f-100
 					if(cp->Event >= 30000 && (cp->Event < 31000 || cp->Event >= 31100))
 					{
@@ -8814,9 +8821,9 @@ void FUCall(int n, Mes *Mp, int Num, bool needLocals)
 	int lastNum = LastFUNum;
 	LastFUMes = Mp;
 	LastFUNum = Num;
-	if(n>30000){ MError("Fuction Index out of range (1...30000)"); RETURNV }
+	if(n>30000){ MError("Function Index out of range (1...30000)"); RETURNV }
 	if(n<0){ // 3.59
-		if(n<-100){ MError("Local Fuction Index out of range (-1...-100)"); RETURNV }
+		if(n<-100){ MError("Local Function Index out of range (-100...-1)"); RETURNV }
 		n=-n+31000-1;
 	}
 	pointer=n;

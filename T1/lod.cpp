@@ -236,7 +236,7 @@ int ERM_LODs(char Cmd,int Num,_ToDo_* /*sp*/,Mes *Mp)
 			Apply(&ind,4,Mp,0);
 			char *name="undefined";
 			CHECK_ParamsNum(3);
-			if(BAD_INDEX_LZ(Mp->n[2])){ MError("\"LD:L\"-wrong z var index (-10...-1,1...1000)."); RETURN(0) }
+			if(BAD_INDEX_LZ(Mp->n[2])){ MError("\"LD:L\"-wrong z var index (-20...-1,1...1000)."); RETURN(0) }
 			if(Mp->n[2]>1000) name=ERM2String(StringSet::GetText(Mp->n[2]),1,0);
 			else if(Mp->n[2]>0) name=ERM2String(ERMString[Mp->n[2]-1],1,0);
 			else name=ERM2String(ERMLString[-Mp->n[2]-1],1,0);
