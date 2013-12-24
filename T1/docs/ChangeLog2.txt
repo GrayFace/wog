@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 Build 2
 --------------------------------------------------------------------------------
-[+] Reworked Lua.
+[+] Reworked Lua stuff.
 [+] New Lua-based custom dialogs engine.
 [+] dialogs.CheckBoxesDialog. IF:G implementation swithed to dialogs.CheckBoxesDialog.
 [+] Lua memory-management functions, hooks, Default metatable for numbers, bit.ToTable, bit.FromTable, Color functions, os.writelog, events support.

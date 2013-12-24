@@ -6,28 +6,16 @@
 //#define DEBUG // !!! разрешаем отладку
 //#define BETAVERSION " BETAVERSION (NOT FOR PUBLIC USE!!!) " 
 
-//#define VERSION " 1.4" // 2 до и 1 после точки
-//#define SUBVERSION "c"
 // 3.58 std definition
 #define  MAX_PATH       260
-//#define _MAX_PATH       80
-//#define _MAX_DRIVE      3
-//#define _MAX_DIR        66
-//#define _MAX_FNAME      9
-//#define _MAX_EXT        5
 
-// запуск больше чем 1-го приложения:
-//000F80FA: B8 B7
-
-// disable for english
-//#define RUS
 #define WOG_VERSION 359
-#define WOG_STRING_VERSION "3 . 59a Build 5.2\nBuilt on "__DATE__/*""BETAVERSION""*/
+#define WOG_STRING_VERSION "3 . 59 Alpha 5.3\nBuilt on "__DATE__/*""BETAVERSION""*/
 #define TE_STRING_VERSION "1 . 03\nBuilt on "__DATE__/*""BETAVERSION""*/
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x38\x0\x66\x0"
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x39\x0\x0\x0"
 
-// !release! ERM_VERSION = 300 + build number.
+// !release! ERM_VERSION = 300 + major build version. When scripts API changes a new version version must start.
 #define ERM_VERSION 305
 #define ERM_STRING_VERSION "305"/*BETAVERSION""*/
 
