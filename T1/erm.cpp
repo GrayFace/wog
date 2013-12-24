@@ -92,7 +92,7 @@ int NextWeekOf=0;   // неделя кого-то
 int NextWeekMess=0; // сообщение
 int NextMonthOf=0;  // тип месяца
 int NextMonthOfMonster=0; // монстр *2
-int AI_Delay=0x1000;
+int AI_Delay=0x7D00;
 int AutoSaveFlag=1;
 //char Load2Path[MAX_PATH]; // 3.58 alternate path for loading scripts
 struct _Timer_{
@@ -11057,7 +11057,7 @@ void ResetERM(int game)
 		UpdateGrailEnabled(i);
 	}
 
-	AI_Delay=0x1000;
+	AI_Delay=0x7D00;
 	SetDelay(AI_Delay);
 	AutoSaveFlag=1;
 	SetAutoSave(AutoSaveFlag);
