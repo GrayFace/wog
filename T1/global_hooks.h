@@ -454,6 +454,7 @@ __newCallers newCallers[]=
 	{0x4B5654, (long)_FixTextLinesCount, H_CALL5|H_INSR6}, // GetLinesCountInText hanging if Width is too small
 	{0x40770E, (long)_FixLoadActiveHero, H_CALL5}, // Don't reset current hero when loading a game
 	{0x600530, 0x600532, H_NOP}, // Strange hanging bug
+	{0x4C5D09, 0x4C5D0F, H_NOP}, // Don't limit events text length to 65535 characters
 
 	{0}
 };
