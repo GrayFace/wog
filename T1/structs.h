@@ -10,14 +10,14 @@
 #define  MAX_PATH       260
 
 #define WOG_VERSION 359
-#define WOG_STRING_VERSION "3 . 59 Alpha 5.3\nBuilt on "__DATE__/*""BETAVERSION""*/
+#define WOG_STRING_VERSION "3 . 59 Alpha 6\nBuilt on "__DATE__/*""BETAVERSION""*/
 #define TE_STRING_VERSION "1 . 03\nBuilt on "__DATE__/*""BETAVERSION""*/
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x38\x0\x66\x0"
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x39\x0\x0\x0"
 
 // !release! ERM_VERSION = 300 + major build version. When scripts API changes a new version version must start.
-#define ERM_VERSION 305
-#define ERM_STRING_VERSION "305"/*BETAVERSION""*/
+#define ERM_VERSION 306
+#define ERM_STRING_VERSION "306"/*BETAVERSION""*/
 
 #define SAVEWOGLETTER 'S'
 #define SAVEWOG359    (SAVEWOGLETTER-'A')
@@ -353,15 +353,15 @@ struct _Types_{
 	char   *defname; //+4
 	long    deflen;  //+8
 	Dword  _u2;      //+C
-	Byte   _u3,_u4,_u5,_u6; //+10
-	Byte    bits1[8]; //+14
-	Byte    bits2[8]; //+1C
-	Byte    bits3[8]; //+24
+	Byte    Width,Height,_u5,_u6; //+10
+	Byte    MaskObject[8]; //+14
+	Byte    MaskShadow[8]; //+1C
+	Byte    MaskEmpty[8]; //+24
 	Byte    EnterMask[8]; //+2C
 	Dword  _u7;
 	long    type;
 	long    subtype; 
-	Byte   _u9,_u10,_u11,_u12;
+	Byte    Flat,_u10,_u11,_u12;
 };
 
 //    [P1+24] - начальный адрес указатели на имя DEF файла для типа (длина 4h)
