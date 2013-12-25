@@ -1,4 +1,4 @@
-Name$	Text$	ERM	Value	On	NoMP	IsFalse	Hint$	LongHint$	(comment)-
+Name$	Text$	ERM	Value	On	NoMP	IsFalse	Hint$	LongHint$	(comment)-	*
 Enabled	In the Wake of Gods						In the Wake of Gods	TODO: Proper description?
 
 
@@ -2409,14 +2409,14 @@ Option 84 by Perfect0  (script 84)
 
 Sets hero movement points according to the smallest hero's unit speed (including commander).
 If hero has not any unit or commander then he will get 1300 movement points If summary value of hero's attack and defense less then quantity of his artifacts then the difference will be subtracted from movement points Logistic Specialization gives 3% of Logistic skill per level (instead of 5%) (supports Pathfinding (I))
-	GAME BALANCE
+	GAME BALANCE	Name = nil
 o270	Movement Artifacts equiping	270		true			Movements Artifacts are working on the same day too	Movement Artifacts equiping
 Option 270 by Perfect0  (script 84)
 
 If you equip/unequip some movement artifact then you will get the movement bonus at the same turn. If after unequiping movement artifact hero will get negative amount of movement points then he will get one day curse with this amount of movement points.
 
 This corrects Admiral's Hat + some movement artifact bug and don't let player to use these artefacts without carrying them all day long. DON'T play with equiping/unequiping because curse will grow if the previous curse hasn't expired.
-	GAME BALANCE
+	GAME BALANCE	Name = nil
 o999	Navigation Boost	999		true			If hero is boarding on boat with Navigation skill then he will still get some movement points.	Navigation Boost
 Option 271 by Perfect0  (script 84)
 
@@ -2427,14 +2427,14 @@ Advanced - 50% of movement points before boarding
 Expert - 100% of movement points before boarding
 
 If you forgot to equip Admiral's Hat then it will go the way like you didn't but Admiral's Hat will be still in a backpack and you will see notification.
-	GAME BALANCE
+	GAME BALANCE	Name = nil
 o998	Movement Balancing	998		true			Sets hero movement points according to the smallest hero's unit speed (including commander)	Movement Balancing
 Option 84 by Perfect0  (script 84)
 
 If you equip/unequip some movement artifact then you will get the movement bonus at the same turn. If after unequiping movement artifact hero will get negative amount of movement points then he will get one day curse with this amount of movement points.
 
 This corrects Admiral's Hat + some movement artifact bug and don't let player to use these artefacts without carrying them all day long. DON'T play with equiping/unequiping because curse will grow if the previous curse hasn't expired.
-	GAME BALANCE
+	GAME BALANCE	Name = nil
 o86	Feral Habiat	86		true			You'll get experience in some special Zoos	FERAL HABITAT (script86.erm)
 Option 86 by Rich Reed (a.k.a. "NexusPurple")
 
@@ -2970,7 +2970,7 @@ o289	AI Speed+Mana Boost	289					The AI is faster and has more mana	(not-human-p
 
 Depending on the game difficulty every AI-hero gets additional mana and spell points every day.	AI Speed+Mana Boost
 o291	Increased AI Thinking Radius	291					Increased AI thinking power. Better AI.	Increased AI Thinking Radius
-(Script128 - Option 291 by Doom3d)
+(Script127 - Option 291 by Doom3d)
 
 Increased AI thinking power.  AI takes a greater map area into account when making decisions.	AI Thinking Radius
 o331	Reminders, Town and Hero Notes version	331					Allows to apply some minor notes to your towns and heroes	Reminders, Town and Hero Notes version
