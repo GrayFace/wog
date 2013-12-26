@@ -1,6 +1,6 @@
 
 CampaignPacks.WogStandard = {
-	Button = {X = 100, Y = 400, File = "ztcampn.def", Name = "WogStandard", Hint = "Select In The Wake Of Gods campaign"},
+	Button = {X = 100, Y = 400, File = "ZSSSOD.DEF", Name = "WogStandard", Hint = "Select In The Wake Of Gods campaign"},
 	Picture = "campzall.pcx",
 	Campaigns = {
 		{
