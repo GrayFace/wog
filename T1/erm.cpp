@@ -8555,6 +8555,15 @@ bool CheckWogify(int HasInternalScripts, int YesERMFile, int HasLua, int WoGSpec
 	return true;
 }
 
+void ResetTriggers()
+{
+	ZeroMemory(Heap, ERMHeapSize);
+	Heap->Event=0;
+	FirstTrigger = LastAddedTrigger = lastTrigger = 0;
+	TriggerCount = 0;
+	memset(TriggerLists, -1, sizeof(TriggerLists));
+}
+
 void FindERM(void)
 {
 	STARTNA(__LINE__, 0)
@@ -8570,10 +8579,7 @@ void FindERM(void)
 	// 3.56 теперь ERM только на WoG картах
 	//if(WoG==0) RETURNV
 	// очищаем доп память
-	ZeroMemory(Heap, ERMHeapSize);
-	Heap->Event=0;
-	FirstTrigger = LastAddedTrigger = lastTrigger = 0;
-	TriggerCount = 0;
+	ResetTriggers();
 	if(GameWasLoaded==0) ResetWogify(); // настройки (копирует установленные)
 
 	PL_NPCOptionWasSet=0; // если будет установлен, то не сбрасывать опции в 3.56
@@ -10917,6 +10923,7 @@ void ResetERM(int game)
 	int i,j,k;
 	// !!! Exit/Enter Lua context?
 	MainMenuERMResetDone = 0;
+	ResetTriggers();
 	YVarInsideFunction=1; // disable wrong y var usage message
 	StrMan::Reset();
 	FillMem(ERMMacroName[0], sizeof(ERMMacroName), 0);
