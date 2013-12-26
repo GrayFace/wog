@@ -577,7 +577,7 @@ end
 function internal.events.ShowDialog(t)
 	local info = t.ClassPtr == 0x641720
 	if info or t.ClassPtr == 0x641CBC then
-		t:Add(d_MainMenuButton{X = (info and 619 or 622), Y = (info and 99 or 105), File = "ZWogOpt.def", OnClick = BtnClick})
+		t:Add(d_MainMenuButton{Name = "WogOptions", X = (info and 619 or 622), Y = (info and 99 or 105), File = "ZWogOpt.def", OnClick = BtnClick})
 	end
 end
 
