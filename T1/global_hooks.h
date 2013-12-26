@@ -455,6 +455,8 @@ __newCallers newCallers[]=
 	{0x40770E, (long)_FixLoadActiveHero, H_CALL5}, // Don't reset current hero when loading a game
 	{0x600530, 0x600532, H_NOP}, // Strange hanging bug
 	{0x4C5D09, 0x4C5D0F, H_NOP}, // Don't limit events text length to 65535 characters
+	{0x684AF8, 0xAC44, H_DWORD}, // Use 44khz
+	{0x684B00, 2, H_DWORD}, // Use stereo
 
 	{0}
 };
