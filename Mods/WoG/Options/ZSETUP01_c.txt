@@ -2912,7 +2912,7 @@ This script is made to help the players that use Neutral Units script and provid
 -Heroes with spell book have magic arrow from start
 
 Furthermore the movement points of heroes increases while leveling up.
-The new Formula for movement is based on hero's level (20 movement from start +1 movement at every 3 levels until lvl 11 and after level 11 is +1 movement at every 2 levels).	STARTING HERO BOOST
+The new Formula for movement is based on hero's level (20 movement from start +1 movement at every 3 levels until lvl 11 and after level 11 is +1 movement at every 2 levels).	STARTING HERO BOOST	Name = nil
 o326	Heavily Guarded Dwellings	326		true			Every dwelling on the map will be guarded.	Heavily Guarded Dwellings
 (Script126 - Option 326 by Steven Lynch)
 
