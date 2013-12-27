@@ -10,7 +10,7 @@
 #define  MAX_PATH       260
 
 #define WOG_VERSION 359
-#define WOG_STRING_VERSION "3 . 59 Alpha 6\nBuilt on "__DATE__/*""BETAVERSION""*/
+#define WOG_STRING_VERSION "3 . 59 Alpha 6.1\nBuilt on "__DATE__/*""BETAVERSION""*/
 #define TE_STRING_VERSION "1 . 03\nBuilt on "__DATE__/*""BETAVERSION""*/
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x38\x0\x66\x0"
 //#define WOG_VERSION_WIDE "\x33\x0\x2E\x0\x35\x0\x39\x0\x0\x0"

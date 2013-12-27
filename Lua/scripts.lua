@@ -571,6 +571,7 @@ local function RunMapScripts()
 		local nstored = #StoredScripts
 		-- load scripts from global events
 		local evt = u4[u4[0x699538] + 0x1FBF4]
+		assert((u4[u4[0x699538] + 0x1FBF8] - evt)/0x34 == #EventNames)
 		for i = 1, #EventNames do
 			hasLua = LoadMapScript(EventNames[i], evt) or hasLua
 			evt = evt + 0x34
