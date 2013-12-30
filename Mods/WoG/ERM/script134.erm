@@ -2,12 +2,12 @@ ZVSE
 ERMS_ScriptName=Peasants
 ERMS_ScriptAuthor=siegfried
 ERMS_ScriptVersion=1.3.3
-ERMS_ScriptDate=18.3(March).2008
+ERMS_ScriptDate=31.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=German or Deutsch (native)
 ERMS_ScriptUsedVariables=v1000(alltemporary);v1260;v13;v998;v999
 ERMS_ScriptUsedFunctions=FU614-FU619;FU817-FU818
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 
 ** Peasant script
@@ -344,26 +344,10 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 !!FU&y-3=0:E;                          Exit if not enabled
 !!UN:P185/?y-4;                        Messages disabled?
 ** Set peasant speciality text:
-!!VRz78&y-2=0/y-3=1/y-4=0:S^Produces resources in towns and mines.^;
+!!VRz78&y-2=0/y-3=1/y-4=0:Sz234000;
 !!UN&y-2=0/y-3=1/y-4=0:G1/139/2/78;
-!!IF&y-2=0/y-3=1/y-4=0:M^Peasants in this land may produce gold and resources:
-In villages, they produce 1 gold per peasant.
-In towns, they produce 1.1 gold per peasant.
-In cities, they produce 1.2 gold per peasant.
-In the capitol, they produce 1.4 gold per peasant.
-Peasants with higher ranks do produce more: 10%% per rank.
-A market place increases the production by 10%%.
-The grail increases the production by 100%%.
-The resource silo enables enough peasants to produce that resource, too.
-Heroes in town garrison may increase production further.
-Heroes with resource speciality enable enough peasants to produce that resource too, if the resource silo is built.^;
-!!IF&y-2=0/y-3=1/y-4=0:M^Peasants in mines may increase mine resource production:
-Sawmill production is increased by 1 wood per 500 peasants.
-Alchemist lab production is increased by 1 mercury per 1000 peasants.
-Ore pit production is increased by 1 ore per 500 peasants.
-Sulfur mine production is increased by 1 sulfur per 1000 peasants.
-Crystal mine production is increased by 1 crystal per 1000 peasants.
-Gem pond production is increased by 1 gem per 1000 peasants.^;
+!!IF&y-2=0/y-3=1/y-4=0:M1/z234001;
+!!IF&y-2=0/y-3=1/y-4=0:M1/z234002;
 !!MA:G139/?y-5;                        y-5 = Peasant growth rate
 !!UN:P284/?y-6;                        Growth in town dwelling option
 !!UN:P285/?y-7;                        Growth in hero army and garrison
@@ -634,8 +618,8 @@ Gem pond production is increased by 1 gem per 1000 peasants.^;
 !!VRyy17&y25>0:Sy25;                   Gems amount
 !!CA998:N?z1;                          Name of town
 !!HEv1260&v1260>=0:B0/?z2;                 Name of hero (if any)
-!!VRz3&v1260<0:S^%Y2 peasants in %Z1 produced some resources^;
-!!VRz3&v1260>=0:S^%Z2s %Y2 peasants in %Z1 produced some resources^;
+!!VRz3&v1260<0:Sz234003;
+!!VRz3&v1260>=0:Sz234004;
 ** y18 > 29 if any resources (display message), max 36
 !!IF&y19=1/y18=30:Q1/y30/y40/1^%Z3^;   If one resource, display single pic msg
 !!IF&y19=1/y18=31:Ny30/y40/y31/y41;    More resources...
@@ -703,7 +687,7 @@ Gem pond production is increased by 1 gem per 1000 peasants.^;
 !!OW&y5>0/y1>=0:Ry1/y8/dy5;            Add resource
 !!OW:Gy1/?y19;                         y19 = 1 if player here
 !!UN:P185/?y18;                        Messages disabled?
-!!VRz1&y19=1/y18<>1:S^The peasants in the mine produced some resources^;
+!!VRz1&y19=1/y18<>1:Sz234005;
 !!IF&y19=1/y18<>1/y5>0:Q1/y8/y5/1^%Z1^;Message
 !!FU&$weekday$<>$monday$:E;            Weekly part:
 ** Apply growth rate:

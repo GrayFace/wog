@@ -1,0 +1,249 @@
+#	Text resource for "script116.erm" document		
+216000	{Dwarven Treasury Bank}
+
+This branch of the Dwarven Treasury Bank has been ransacked and cleaned out. There's nobody here to conduct business with you.
+
+If you have money deposited with the Dwarves, you'll need to locate a working bank branch before you can withdraw it.	!!M	31.12.2013
+216001	{Dwarven Treasury Bank}
+
+I am %Z3 and will be your banker for today. Our records show that you have %Y-9 gold deposited in your account. The current interest rate on your money is %Y-14%% and the next payment of %Y-15 gold will be in %Y-11 days.
+
+Would you like to withdraw all your money?	!!Q	31.12.2013
+216002	{Dwarven Treasury Bank}
+
+Thank you for doing business with us %Z2. Here's your money and we hope you will deposit with us again.	!!Q	31.12.2013
+216003	{Dwarven Treasury Bank}
+
+Thank you for doing business with us %Z2. Please return when you wish to withdraw your money. Until then, we will keep it safe.	!!Q	31.12.2013
+216004	{Dwarven Treasury Bank}
+
+I am %Z3 and will be your banker for today. Our records show that you don't have an account with us right now. We pay 25% interest for each full week plus 3% more for each subsequent week thereafter. You may withdraw your money at any time but must close out your account before depositing more. This policy simplifies our bookkeeping.
+
+Do you wish to open an account and make a deposit?	!!Q	31.12.2013
+216005	{Dwarven Treasury Bank}
+
+I hope you will do business with us another day.	!!Q	31.12.2013
+216006	Dwarven Treasury Bank	!!S	31.12.2013
+216007	How much do you want to deposit?	!!S	31.12.2013
+216008	{Dwarven Treasury Bank}
+
+I'm sorry but you can't deposit more gold than you own. Please return when you have sorted out your financial records.
+
+We look forward to doing business with you soon. Have a good day.	!!Q	31.12.2013
+216009	{Dwarven Treasury Bank}
+
+You are depositing nothing at this time? Well then, we look forward to doing business with you soon. Have a good day.	!!Q	31.12.2013
+216010	{Dwarven Treasury Bank}
+
+Thank you for your deposit of %Y-12 gold, %Z2. In one full week it will earn %Y-13 additional gold for you.
+
+We hope to see you again soon.	!!Q	31.12.2013
+216011	Goth	!!S	31.12.2013
+216012	Woob	!!S	31.12.2013
+216013	Grond	!!S	31.12.2013
+216014	Gorg	!!S	31.12.2013
+216015	Ming	!!S	31.12.2013
+216016	Gind	!!S	31.12.2013
+216017	Lard	!!S	31.12.2013
+216018	Rand	!!S	31.12.2013
+216019	Ping	!!S	31.12.2013
+216020	Boll	!!S	31.12.2013
+216021	Nath	!!S	31.12.2013
+216022	Crab	!!S	31.12.2013
+216023	Ax	!!S	31.12.2013
+216024	Sam	!!S	31.12.2013
+216025	Till	!!S	31.12.2013
+216026	Jon	!!S	31.12.2013
+216027	Jim	!!S	31.12.2013
+216028	Morg	!!S	31.12.2013
+216029	Glib	!!S	31.12.2013
+216030	Zam	!!S	31.12.2013
+216031	Vind	!!S	31.12.2013
+216032	Ick	!!S	31.12.2013
+216033	Jig	!!S	31.12.2013
+216034	Laft	!!S	31.12.2013
+216035	Ard	!!S	31.12.2013
+216036	Weft	!!S	31.12.2013
+216037	Drip	!!S	31.12.2013
+216038	Slik	!!S	31.12.2013
+216039	Dorp	!!S	31.12.2013
+216040	Noil	!!S	31.12.2013
+216041	Arv	!!S	31.12.2013
+216042	Parb	!!S	31.12.2013
+216043	Herb	!!S	31.12.2013
+216044	Ryl	!!S	31.12.2013
+216045	Velp	!!S	31.12.2013
+216046	Varg	!!S	31.12.2013
+216047	Stor	!!S	31.12.2013
+216048	Hilt	!!S	31.12.2013
+216049	Pet	!!S	31.12.2013
+216050	Rent	!!S	31.12.2013
+216051	Swift	!!S	31.12.2013
+216052	Ark	!!S	31.12.2013
+216053	Kiln	!!S	31.12.2013
+216054	Corn	!!S	31.12.2013
+216055	Clad	!!S	31.12.2013
+216056	Than	!!S	31.12.2013
+216057	Bald	!!S	31.12.2013
+216058	Oog	!!S	31.12.2013
+216059	Simp	!!S	31.12.2013
+216060	Bong	!!S	31.12.2013
+216061	Wazz	!!S	31.12.2013
+216062	Hal	!!S	31.12.2013
+216063	weed	!!S	31.12.2013
+216064	wort	!!S	31.12.2013
+216065	alar	!!S	31.12.2013
+216066	ant	!!S	31.12.2013
+216067	taran	!!S	31.12.2013
+216068	elan	!!S	31.12.2013
+216069	wump	!!S	31.12.2013
+216070	abot	!!S	31.12.2013
+216071	pong	!!S	31.12.2013
+216072	woval	!!S	31.12.2013
+216073	nack	!!S	31.12.2013
+216074	creen	!!S	31.12.2013
+216075	ellan	!!S	31.12.2013
+216076	smith	!!S	31.12.2013
+216077	ofex	!!S	31.12.2013
+216078	athan	!!S	31.12.2013
+216079	orfin	!!S	31.12.2013
+216080	nelp	!!S	31.12.2013
+216081	wert	!!S	31.12.2013
+216082	ifan	!!S	31.12.2013
+216083	ylart	!!S	31.12.2013
+216084	rasp	!!S	31.12.2013
+216085	alig	!!S	31.12.2013
+216086	alot	!!S	31.12.2013
+216087	varkan	!!S	31.12.2013
+216088	weird	!!S	31.12.2013
+216089	ingan	!!S	31.12.2013
+216090	glick	!!S	31.12.2013
+216091	bean	!!S	31.12.2013
+216092	parth	!!S	31.12.2013
+216093	erly	!!S	31.12.2013
+216094	oomp	!!S	31.12.2013
+216095	ivore	!!S	31.12.2013
+216096	and	!!S	31.12.2013
+216097	untor	!!S	31.12.2013
+216098	islarg	!!S	31.12.2013
+216099	astin	!!S	31.12.2013
+216100	ernie	!!S	31.12.2013
+216101	doggoth	!!S	31.12.2013
+216102	ispade	!!S	31.12.2013
+216103	onent	!!S	31.12.2013
+216104	enclark	!!S	31.12.2013
+216105	sore	!!S	31.12.2013
+216106	doggel	!!S	31.12.2013
+216107	blackin	!!S	31.12.2013
+216108	atoth	!!S	31.12.2013
+216109	hair	!!S	31.12.2013
+216110	isploog	!!S	31.12.2013
+216111	son	!!S	31.12.2013
+216112	isgon	!!S	31.12.2013
+216113	itfore	!!S	31.12.2013
+216114	nowk	!!S	31.12.2013
+216115	%Z1%Z2	!!S	31.12.2013
+216116	Jen	!!S	31.12.2013
+216117	Pink	!!S	31.12.2013
+216118	Selip	!!S	31.12.2013
+216119	Perr	!!S	31.12.2013
+216120	Jinn	!!S	31.12.2013
+216121	Tin	!!S	31.12.2013
+216122	Sand	!!S	31.12.2013
+216123	Bett	!!S	31.12.2013
+216124	Nymph	!!S	31.12.2013
+216125	Sab	!!S	31.12.2013
+216126	Grace	!!S	31.12.2013
+216127	Lean	!!S	31.12.2013
+216128	Jess	!!S	31.12.2013
+216129	Sam	!!S	31.12.2013
+216130	Amber	!!S	31.12.2013
+216131	Lemon	!!S	31.12.2013
+216132	Tess	!!S	31.12.2013
+216133	Liz	!!S	31.12.2013
+216134	Mari	!!S	31.12.2013
+216135	Zam	!!S	31.12.2013
+216136	Vind	!!S	31.12.2013
+216137	Hir	!!S	31.12.2013
+216138	Jig	!!S	31.12.2013
+216139	Kar	!!S	31.12.2013
+216140	Flor	!!S	31.12.2013
+216141	Weft	!!S	31.12.2013
+216142	Cath	!!S	31.12.2013
+216143	Silk	!!S	31.12.2013
+216144	Petal	!!S	31.12.2013
+216145	Daph	!!S	31.12.2013
+216146	Tar	!!S	31.12.2013
+216147	Zir	!!S	31.12.2013
+216148	Herb	!!S	31.12.2013
+216149	Rion	!!S	31.12.2013
+216150	Merb	!!S	31.12.2013
+216151	Lov	!!S	31.12.2013
+216152	Stor	!!S	31.12.2013
+216153	Felt	!!S	31.12.2013
+216154	Lin	!!S	31.12.2013
+216155	Ren	!!S	31.12.2013
+216156	Sweet	!!S	31.12.2013
+216157	Ark	!!S	31.12.2013
+216158	Kiln	!!S	31.12.2013
+216159	Con	!!S	31.12.2013
+216160	Clov	!!S	31.12.2013
+216161	Nan	!!S	31.12.2013
+216162	Christ	!!S	31.12.2013
+216163	Jil	!!S	31.12.2013
+216164	Dar	!!S	31.12.2013
+216165	Bint	!!S	31.12.2013
+216166	Wuzz	!!S	31.12.2013
+216167	Hil	!!S	31.12.2013
+216168	ie	!!S	31.12.2013
+216169	aling	!!S	31.12.2013
+216170	ina	!!S	31.12.2013
+216171	nine	!!S	31.12.2013
+216172	eena	!!S	31.12.2013
+216173	elane	!!S	31.12.2013
+216174	ephine	!!S	31.12.2013
+216175	ily	!!S	31.12.2013
+216176	a	!!S	31.12.2013
+216177	amth	!!S	31.12.2013
+216178	whip	!!S	31.12.2013
+216179	grass	!!S	31.12.2013
+216180	elia	!!S	31.12.2013
+216181	iris	!!S	31.12.2013
+216182	ena	!!S	31.12.2013
+216183	ina	!!S	31.12.2013
+216184	wood	!!S	31.12.2013
+216185	lin	!!S	31.12.2013
+216186	iper	!!S	31.12.2013
+216187	ifan	!!S	31.12.2013
+216188	ine	!!S	31.12.2013
+216189	sel	!!S	31.12.2013
+216190	issy	!!S	31.12.2013
+216191	appla	!!S	31.12.2013
+216192	virka	!!S	31.12.2013
+216193	wirda	!!S	31.12.2013
+216194	ing	!!S	31.12.2013
+216195	ette	!!S	31.12.2013
+216196	bean	!!S	31.12.2013
+216197	etta	!!S	31.12.2013
+216198	spice	!!S	31.12.2013
+216199	locki	!!S	31.12.2013
+216200	ivora	!!S	31.12.2013
+216201	andi	!!S	31.12.2013
+216202	rose	!!S	31.12.2013
+216203	puff	!!S	31.12.2013
+216204	asti	!!S	31.12.2013
+216205	erni	!!S	31.12.2013
+216206	dogga	!!S	31.12.2013
+216207	ispa	!!S	31.12.2013
+216208	onenti	!!S	31.12.2013
+216209	enlara	!!S	31.12.2013
+216210	orenna	!!S	31.12.2013
+216211	ispi	!!S	31.12.2013
+216212	eela	!!S	31.12.2013
+216213	atothi	!!S	31.12.2013
+216214	haira	!!S	31.12.2013
+216215	isplooga	!!S	31.12.2013
+216216	ily	!!S	31.12.2013
+216217	isgona	!!S	31.12.2013
+216218	itfora	!!S	31.12.2013
+216219	nowkee	!!S	31.12.2013

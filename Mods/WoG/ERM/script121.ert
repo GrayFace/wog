@@ -1,0 +1,80 @@
+#	Text resource for "script121.erm" document		
+221000	{Upgrade Troops at %Z-5}
+
+	!!S	31.12.2013
+221001	%Z-6%Z-1 has no troops that can be upgraded here.	!!M	31.12.2013
+221002	%Z-6You can't afford to upgrade all of %Z-1 troops.	!!M	31.12.2013
+221003	%Z-6%Z-1 has no troops that can be upgraded here.	!!M	31.12.2013
+221004	%Z-6There are no garrison troops that can be upgraded here.	!!M	31.12.2013
+221005	%Z-6You can't afford to upgrade all of %Z-1 troops.	!!M	31.12.2013
+221006	%Z-6You can't afford to upgrade all garrison troops.	!!M	31.12.2013
+221007	%Z-6Upgrade %Z-1's troops for %Y-16 gold	!!S	31.12.2013
+221008	%Z-6Upgrade the garrison troops for %Y-16 gold	!!S	31.12.2013
+221009	, %Y-10 wood	!!S	31.12.2013
+221010	, %Y-11 mercury	!!S	31.12.2013
+221011	, %Y-12 ore	!!S	31.12.2013
+221012	, %Y-13 sulfur	!!S	31.12.2013
+221013	, %Y-14 crystal	!!S	31.12.2013
+221014	, %Y-15 gems	!!S	31.12.2013
+221015	?
+%Z1	!!S	31.12.2013
+221016	
+%Y10 %Z-3 {»»»} %Y10 %Z-4	!!S	31.12.2013
+221017	 (at no cost)	!!S	31.12.2013
+221018	{Upgrade Troops}
+
+Do you wish to upgrade %Z-1 to %Z-2%Z-3?	!!Q	31.12.2013
+221019	You don't have enough resources to upgrade these troops.	!!Q	31.12.2013
+221020	You don't have enough resources to upgrade these troops.	!!Q	31.12.2013
+221021	%Z1 receives %V64 experience for the fleeing %Z2.	!!Q	31.12.2013
+221022	The %Z4 had resources. Do you want to collect them?
+
+(Right-click System Options to enable/disable option display)	!!S	31.12.2013
+221023	Yes, collect the resources. This uses up to 500 movement points (5 tiles).	!!S	31.12.2013
+221024	No, don't collect the resources, I'm in a hurry!	!!S	31.12.2013
+221025	Yes, collect them every time and don't display these options again.	!!S	31.12.2013
+221026	No, don't collect them and don't display these options again.	!!S	31.12.2013
+221027	Message Disabling	!!S	31.12.2013
+221028	After the %Z4 flee, %Z1's army searches the camp and finds some treasure they left behind!	!!S	31.12.2013
+221029	After defeating the %Z4, %Z1's army searches the camp and finds treasure!	!!S	31.12.2013
+221030	As you approach the %Z-1, you can see that it's jealously guarding the %Z-2!	!!S	31.12.2013
+221031	As you approach the %Z-1, you can see that they're jealously guarding the %Z-2!	!!S	31.12.2013
+221032	After defeating the %Z-2, %Z-1 captures the %Z-3!	!!Q	31.12.2013
+221033	NO	!!S	31.12.2013
+221034	YES	!!S	31.12.2013
+221035	NO	!!S	31.12.2013
+221036	YES	!!S	31.12.2013
+221037	NO	!!S	31.12.2013
+221038	YES	!!S	31.12.2013
+221039	NO	!!S	31.12.2013
+221040	YES	!!S	31.12.2013
+221041	NO	!!S	31.12.2013
+221042	YES	!!S	31.12.2013
+221043	NO	!!S	31.12.2013
+221044	YES	!!S	31.12.2013
+221045	NO	!!S	31.12.2013
+221046	YES	!!S	31.12.2013
+221047	NO	!!S	31.12.2013
+221048	YES	!!S	31.12.2013
+221049	{KEYMASTER TENTS VISITED}
+
+Light Blue: %Z-1    Dark Blue: %Z-4
+Red: %Z-3    Green: %Z-2
+Brown: %Z-5    Purple: %Z-6
+White: %Z-7    Black: %Z-8	!!Q	31.12.2013
+221050	Light Blue	!!S	31.12.2013
+221051	Green	!!S	31.12.2013
+221052	Red	!!S	31.12.2013
+221053	Dark Blue	!!S	31.12.2013
+221054	Brown	!!S	31.12.2013
+221055	Purple	!!S	31.12.2013
+221056	White	!!S	31.12.2013
+221057	Black	!!S	31.12.2013
+221058	%Z-1 Border Guard	!!S	31.12.2013
+221059	%Z-1 Border Gate	!!S	31.12.2013
+221060	%Z-1
+
+(Keymaster not visited)	!!S	31.12.2013
+221061	%Z-1
+
+(Keymaster visited)	!!S	31.12.2013

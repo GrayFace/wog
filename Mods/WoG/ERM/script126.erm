@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
-ERMS_ScriptDate=23.11(November).2013
+ERMS_ScriptDate=31.12(December).2013
 
 ** Heavily Guarded Dwellings
 ** Last updated: 31.7(July).2006 by Thomas Franz - fixed Wog-Option number and bug regarding L8-Dwellings
@@ -43,7 +43,7 @@ ERMS_ScriptDate=23.11(November).2013
 !!DW998:O=-1; !!VRv75&1:S0;  !!FU&1:E;  // exit, if dwelling is not owned (hero did not fight)
 
 !!FU$Get4ByteVar$:Pv75/?y-2/?y-3/?y-4/?y-5; // extract y-2 - y-5 from v75
-!!IF:Q1/21/y-4/1^%Z326001^;
+!!IF:Q1/21/y-4/1^%Z226001^;
 !!HE-1:C2/y-4/y-5/1/5/10; // give y-6 creatures as reward (they'll have 6200 exp. = Rank 5)
 !!VRv75&-1:S0; // reinit reward var.
 ** end $OB17
@@ -131,7 +131,7 @@ ERMS_ScriptDate=23.11(November).2013
 !?FU-3; // for L8-dwellings the battle has to been provoked manual, because WOG overwrites the Guard settings of the dwelling
 ** x1 = type of creatures inside the dwelling
 !!OBv998/v999/v1000:M-1/1/0; // disable next message (do you want to fight the guards)
-!!IF:Q1/21/x1/2^%Z326002^;
+!!IF:Q1/21/x1/2^%Z226002^;
 !!FU&-1:E; // exit, if No is chosen
 !!HE-1:Tv998/v999/v1000/0/1; // provoke a dummy battle (1 Pikemen), the true guards are set below in the BA-trigger
 !!HE-1:O=-1; !!FU&1:E; // exit, if hero had not won (no owner)

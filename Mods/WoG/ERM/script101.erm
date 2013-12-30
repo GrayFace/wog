@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
-ERMS_ScriptDate=21.6(June).2006
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+ERMS_ScriptDate=31.12(December).2013
 
 ** Frozen Food version 0.5
 ** script101.erm by Timothy Pulver
@@ -88,15 +88,10 @@ ERMS_ScriptDate=21.6(June).2006
 !!PO998:S?y-1; [Check if there's any Frozen Food: y-1=1 if yes]
 !!FU|y-1<>1/-999:E; [Exit if no Frozen Food or not current Human player]
 !!OB998:M-1/1/0; [Disable standard message]
-!!VRz1:S^At the back of the Lean To you find some frozen food.
-If your army eats it, they'll have the energy to travel further.
-You can thaw it for use at any time.
-
-To see how much frozen food you have or to thaw and eat the food,
-right-click the ADVENTURE screen Quest Log button.^;
+!!VRz1:Sz110000;
 !!VRz2:S^^; [Set z2 to null]
 !!VRz3:S^..\data\p\s101_frozen.jpg^;
-!!VRz4:S^Frozen Food^;
+!!VRz4:Sz110001;
 !!IF:D12/1/2/2/3/2/2/2/4/2/2/2/2/2/2/2; [Set up dialog box]
 !!IF:E1/12; [Display Dialog]
 
@@ -113,28 +108,22 @@ right-click the ADVENTURE screen Quest Log button.^;
 !!FU|y-1<>5/y-2<0/-999:E; [Exit if not Quest Log button, no Active Hero or not current player]
 !!CM:R0; [Disable standard click response]
 !!HEy-2:B0/?z-1 R2/?y-7; [Name of active hero: z-1, Sex of hero: y-7]
-!!VRz-7&y-7=0:S^he^;
-!!VRz-7&y-7=1:S^she^;
-!!VRz-8&y-7=0:S^his^;
-!!VRz-8&y-7=1:S^her^;
+!!VRz-7&y-7=0:Sz110002;
+!!VRz-7&y-7=1:Sz110003;
+!!VRz-8&y-7=0:Sz110004;
+!!VRz-8&y-7=1:Sz110005;
 !!IF:Wy-2; [Set w variables for current hero]
-!!IF&w109<1:M^%Z-1 doesn't have any frozen food. Try looking for some at an abandoned Lean To.^;
-!!IF&w109=1:Q2^%Z-1 has %W109 ration of
-frozen food.
-
-Would %Z-7 like to thaw it for %Z-8 army to eat so they can travel a bit further today?^;
-!!IF&w109>1:Q2^%Z-1 has %W109 rations of
-frozen food.
-
-Would %Z-7 like to thaw one for %Z-8 army to eat so they can travel a bit further today?^;
+!!IF&w109<1:M1/z110006;
+!!IF&w109=1:Q2/z110007;
+!!IF&w109>1:Q2/z110008;
 !!FU|-2/w109<1:E; [Exit if player chooses No or has no food]
 
  [Generate Adjective 1: z-1]
 !!VRy-4:S1 R10;
-!!VRz-1&y-4=1:S^mouth watering^; !!VRz-1&y-4=2:S^succulent^;  !!VRz-1&y-4=3:S^delicious^;
-!!VRz-1&y-4=4:S^irresistable^;   !!VRz-1&y-4=5:S^aromatic^;   !!VRz-1&y-4=6:S^delectable^;
-!!VRz-1&y-4=7:S^delightful^;     !!VRz-1&y-4=8:S^juicy^;      !!VRz-1&y-4=9:S^scrumptious^;
-!!VRz-1&y-4=10:S^yummy^;         !!VRz-1&y-4=11:S^fragrant^;
+!!VRz-1&y-4=1:Sz110009; !!VRz-1&y-4=2:Sz110010;  !!VRz-1&y-4=3:Sz110011;
+!!VRz-1&y-4=4:Sz110012;   !!VRz-1&y-4=5:Sz110013;   !!VRz-1&y-4=6:Sz110014;
+!!VRz-1&y-4=7:Sz110015;     !!VRz-1&y-4=8:Sz110016;      !!VRz-1&y-4=9:Sz110017;
+!!VRz-1&y-4=10:Sz110018;         !!VRz-1&y-4=11:Sz110019;
 
  [Generate Creature type: z-2]
 !!VRy-5:S0 R187;
@@ -147,42 +136,42 @@ Would %Z-7 like to thaw one for %Z-8 army to eat so they can travel a bit furthe
 
  [Generate Type of Cut: z-3]
 !!VRy-4:S1 R11;
-!!VRz-3&y-4=1:S^chops^;     !!VRz-3&y-4=2:S^burgers^; !!VRz-3&y-4=3:S^rib roast^;
-!!VRz-3&y-4=4:S^cutlets^;   !!VRz-3&y-4=5:S^steaks^;  !!VRz-3&y-4=6:S^thighs^;
-!!VRz-3&y-4=7:S^breasts^;   !!VRz-3&y-4=8:S^stew^;    !!VRz-3&y-4=9:S^casserole^;
-!!VRz-3&y-4=10:S^stir fry^; !!VRz-3&y-4=11:S^legs^;   !!VRz-3&y-4=12:S^pie^;
+!!VRz-3&y-4=1:Sz110020;     !!VRz-3&y-4=2:Sz110021; !!VRz-3&y-4=3:Sz110022;
+!!VRz-3&y-4=4:Sz110023;   !!VRz-3&y-4=5:Sz110024;  !!VRz-3&y-4=6:Sz110025;
+!!VRz-3&y-4=7:Sz110026;   !!VRz-3&y-4=8:Sz110027;    !!VRz-3&y-4=9:Sz110028;
+!!VRz-3&y-4=10:Sz110029; !!VRz-3&y-4=11:Sz110030;   !!VRz-3&y-4=12:Sz110031;
 
  [Generate Adjective 2: z-4]
 !!VRy-4:S1 R35;
-!!VRz-4&y-4=1:S^white^;   !!VRz-4&y-4=2:S^black^;     !!VRz-4&y-4=3:S^red^;      !!VRz-4&y-4=4:S^blue^;
-!!VRz-4&y-4=5:S^green^;   !!VRz-4&y-4=6:S^purple^;    !!VRz-4&y-4=7:S^orange^;   !!VRz-4&y-4=8:S^pink^;
-!!VRz-4&y-4=9:S^brown^;   !!VRz-4&y-4=10:S^yellow^;   !!VRz-4&y-4=11:S^gray^;    !!VRz-4&y-4=12:S^sour^;
-!!VRz-4&y-4=13:S^salty^;  !!VRz-4&y-4=14:S^spicy^;    !!VRz-4&y-4=15:S^hot^;     !!VRz-4&y-4=16:S^sweet^;
-!!VRz-4&y-4=17:S^cold^;   !!VRz-4&y-4=18:S^buttery^;  !!VRz-4&y-4=19:S^stinky^;  !!VRz-4&y-4=20:S^pungent^;
-!!VRz-4&y-4=21:S^sticky^; !!VRz-4&y-4=22:S^barbeque^; !!VRz-4&y-4=23:S^peppery^; !!VRz-4&y-4=24:S^sweet and sour^;
-!!VRz-4&y-4=25:S^greasy^; !!VRz-4&y-4=26:S^bubbly^;   !!VRz-4&y-4=27:S^rich^;    !!VRz-4&y-4=28:S^creamy^;
-!!VRz-4&y-4=29:S^lumpy^;  !!VRz-4&y-4=30:S^smooth^;   !!VRz-4&y-4=31:S^thin^;    !!VRz-4&y-4=32:S^thick^;
-!!VRz-4&y-4=33:S^oily^;   !!VRz-4&y-4=34:S^tangy^;    !!VRz-4&y-4=35:S^tart^;    !!VRz-4&y-4=36:S^watery^;
+!!VRz-4&y-4=1:Sz110032;   !!VRz-4&y-4=2:Sz110033;     !!VRz-4&y-4=3:Sz110034;      !!VRz-4&y-4=4:Sz110035;
+!!VRz-4&y-4=5:Sz110036;   !!VRz-4&y-4=6:Sz110037;    !!VRz-4&y-4=7:Sz110038;   !!VRz-4&y-4=8:Sz110039;
+!!VRz-4&y-4=9:Sz110040;   !!VRz-4&y-4=10:Sz110041;   !!VRz-4&y-4=11:Sz110042;    !!VRz-4&y-4=12:Sz110043;
+!!VRz-4&y-4=13:Sz110044;  !!VRz-4&y-4=14:Sz110045;    !!VRz-4&y-4=15:Sz110046;     !!VRz-4&y-4=16:Sz110047;
+!!VRz-4&y-4=17:Sz110048;   !!VRz-4&y-4=18:Sz110049;  !!VRz-4&y-4=19:Sz110050;  !!VRz-4&y-4=20:Sz110051;
+!!VRz-4&y-4=21:Sz110052; !!VRz-4&y-4=22:Sz110053; !!VRz-4&y-4=23:Sz110054; !!VRz-4&y-4=24:Sz110055;
+!!VRz-4&y-4=25:Sz110056; !!VRz-4&y-4=26:Sz110057;   !!VRz-4&y-4=27:Sz110058;    !!VRz-4&y-4=28:Sz110059;
+!!VRz-4&y-4=29:Sz110060;  !!VRz-4&y-4=30:Sz110061;   !!VRz-4&y-4=31:Sz110062;    !!VRz-4&y-4=32:Sz110063;
+!!VRz-4&y-4=33:Sz110064;   !!VRz-4&y-4=34:Sz110065;    !!VRz-4&y-4=35:Sz110066;    !!VRz-4&y-4=36:Sz110067;
 
  [Generate Noun: z-5]
 !!VRy-4:S1 R17;
-!!VRz-5&y-4=1:S^wine^;      !!VRz-5&y-4=2:S^terriyaki^; !!VRz-5&y-4=3:S^basil^;   !!VRz-5&y-4=4:S^cheese^;
-!!VRz-5&y-4=5:S^apple^;     !!VRz-5&y-4=6:S^lemon^;     !!VRz-5&y-4=7:S^curry^;   !!VRz-5&y-4=8:S^garlic^;
-!!VRz-5&y-4=9:S^olive oil^; !!VRz-5&y-4=10:S^tomato^;   !!VRz-5&y-4=11:S^ragu^;   !!VRz-5&y-4=12:S^meat^;
-!!VRz-5&y-4=13:S^parsley^;  !!VRz-5&y-4=14:S^mint^;     !!VRz-5&y-4=15:S^onion^;  !!VRz-5&y-4=16:S^fish^;
-!!VRz-5&y-4=17:S^cream^;    !!VRz-5&y-4=18:S^plum^;
+!!VRz-5&y-4=1:Sz110068;      !!VRz-5&y-4=2:Sz110069; !!VRz-5&y-4=3:Sz110070;   !!VRz-5&y-4=4:Sz110071;
+!!VRz-5&y-4=5:Sz110072;     !!VRz-5&y-4=6:Sz110073;     !!VRz-5&y-4=7:Sz110074;   !!VRz-5&y-4=8:Sz110075;
+!!VRz-5&y-4=9:Sz110076; !!VRz-5&y-4=10:Sz110077;   !!VRz-5&y-4=11:Sz110078;   !!VRz-5&y-4=12:Sz110079;
+!!VRz-5&y-4=13:Sz110080;  !!VRz-5&y-4=14:Sz110081;     !!VRz-5&y-4=15:Sz110082;  !!VRz-5&y-4=16:Sz110083;
+!!VRz-5&y-4=17:Sz110084;    !!VRz-5&y-4=18:Sz110085;
 
  [Generate Other Effect: z-6]
 !!VRy-4:S1 R19;
-!!VRz-6&y-4=1:S^a hunger for more^; !!VRz-6&y-4=2:S^the hiccups^; !!VRz-6&y-4=3:S^terrible bad breath^;
-!!VRz-6&y-4=4:S^puts a smile on their faces^; !!VRz-6&y-4=5:S^causes them break out in song^;
-!!VRz-6&y-4=6:S^itchy toes^; !!VRz-6&y-4=7:S^a raspy throat^; !!VRz-6&y-4=8:S^a swollen tongue^;
-!!VRz-6&y-4=9:S^watery eyes^; !!VRz-6&y-4=10:S^a feeling of euphoria^; !!VRz-6&y-4=11:S^a thirst for blood^;
-!!VRz-6&y-4=12:S^causes a brief (but powerful) sneezing fit^; !!VRz-6&y-4=13:S^an incredible thirst^;
-!!VRz-6&y-4=14:S^grows hair on their ears^; !!VRz-6&y-4=15:S^acts as an aphrodesiac^;
-!!VRz-6&y-4=16:S^turns them temporarily orange^; !!VRz-6&y-4=17:S^indigestion^;
-!!VRz-6&y-4=18:S^makes them want to dance^; !!VRz-6&y-4=19:S^makes them feel giddy^;
-!!VRz-6&y-4=20:S^a bad case of dandruff^;
+!!VRz-6&y-4=1:Sz110086; !!VRz-6&y-4=2:Sz110087; !!VRz-6&y-4=3:Sz110088;
+!!VRz-6&y-4=4:Sz110089; !!VRz-6&y-4=5:Sz110090;
+!!VRz-6&y-4=6:Sz110091; !!VRz-6&y-4=7:Sz110092; !!VRz-6&y-4=8:Sz110093;
+!!VRz-6&y-4=9:Sz110094; !!VRz-6&y-4=10:Sz110095; !!VRz-6&y-4=11:Sz110096;
+!!VRz-6&y-4=12:Sz110097; !!VRz-6&y-4=13:Sz110098;
+!!VRz-6&y-4=14:Sz110099; !!VRz-6&y-4=15:Sz110100;
+!!VRz-6&y-4=16:Sz110101; !!VRz-6&y-4=17:Sz110102;
+!!VRz-6&y-4=18:Sz110103; !!VRz-6&y-4=19:Sz110104;
+!!VRz-6&y-4=20:Sz110105;
 
 
 !!VRw109:-1; [Reduce number of hero's Frozen Foods by 1]
@@ -190,11 +179,9 @@ Would %Z-7 like to thaw one for %Z-8 army to eat so they can travel a bit furthe
 !!VRy-6:*50 +300; [Calculate bonus movement points (300-600): y-6]
 !!HE-1:Wdy-6;  [Give hero bonus movement points: y-6]
 
-!!VRz1:S^%Y-6 Extra Movement^;
+!!VRz1:Sz110106;
 !!UN:A98/9/1 A98/10/1; [Change Boots of Speed name/description to z1]
-!!IF:Q1/21/y-5/8/98/1^Thawing the frozen food reveals %Z-1 %Z-2 %Z-3 in %Z-4 %Z-5 sauce.
-
-Eating the %Z-2 %Z-3 gives your army %Y-6 extra movement points and %Z-6.^;
+!!IF:Q1/21/y-5/8/98/1/z110107;
 !!UN:A98/9/0 A98/10/0; [Restore Boots of Speed name/description]
 !!VRz1:S^^; [Set z1 to null]
 

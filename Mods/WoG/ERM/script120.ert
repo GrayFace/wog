@@ -1,0 +1,23 @@
+#	Text resource for "script120.erm" document		
+220000	HUMAN TRUCE OPTIONS	!!S	31.12.2013
+220001	Human Truce lasts the entire game.	!!S	31.12.2013
+220002	Human Truce ends when all AI computer players are eliminated.	!!S	31.12.2013
+220003	Human Truce ends after a specific number of days.	!!S	31.12.2013
+220004	Human Truce ends when the Victory Points "end-game" period is reached	!!S	31.12.2013
+220005	How many days before the Human Truce ends?	!!S	31.12.2013
+220006	Enter a number between 3 and %Y1.	!!S	31.12.2013
+220007	You must enter a number between 3 and %Y1.	!!M	31.12.2013
+220008	Human Truce is in effect and will last the entire game.	!!S	31.12.2013
+220009	Human Truce is in effect but ends when all AI players are eliminated.	!!S	31.12.2013
+220010	Human Truce is in effect but ends when the end-game period begins.	!!S	31.12.2013
+220011	Human Truce is in effect but will end Month %Y-3, Week %Y-4, Day %Y-5.	!!S	31.12.2013
+220012	{Human Truce}
+
+%Z-1
+
+Human players cannot attack (or capture) human-owned towns, garrisons, or heroes except when a human hero is on the other end of a monolith that you've entered. External garrisons may be entered and mines may be captured but mine guards cannot be left. Ctrl-click on a human hero blocking your path to temporarily remove them (only affects heroes not visiting an object, other than a garrison or border gate).	!!M	31.12.2013
+220013	{WARNING: Human Truce has Ended!}
+
+The Human Truce has ended. For the rest of the game, human-controlled heroes can attack other human-controlled heroes, and can attack and capture human-controlled towns and garrisons.
+
+Troops may be left in mines and ctrl-clicking on enemy heroes will no longer cause them to temporarily vanish.	!!M	31.12.2013

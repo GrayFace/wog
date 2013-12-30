@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
-ERMS_ScriptDate=21.6(June).2006
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+ERMS_ScriptDate=31.12(December).2013
 
 ** Command Points version 0.2
 ** by Timothy Pulver
@@ -123,37 +123,31 @@ ERMS_ScriptDate=21.6(June).2006
 
 !!HEx1&x4=0:B0/?z5 R2/?y18; [Hero's name: z5, Hero's sex: y18]
 !!CA-1&x4=1:N?z5; [Name of Town: z5]
-!!VRz6&y18=0:S^His^; [His: z6]
-!!VRz6&y18=1:S^Her^; [Her: z6]
-!!VRz6&x4=1:S^This^; [This: z6]
-!!VRz7&y18=0:S^He^; [He: z7]
-!!VRz7&y18=1:S^She^; [She: z7]
+!!VRz6&y18=0:Sz222000; [His: z6]
+!!VRz6&y18=1:Sz222001; [Her: z6]
+!!VRz6&x4=1:Sz222002; [This: z6]
+!!VRz7&y18=0:Sz222003; [He: z7]
+!!VRz7&y18=1:Sz222004; [She: z7]
 !!VRz7&x4=1:S^%Z5^; [Name of Town: z6]
-!!VRz9&y18=0:S^his^; [his: z9]
-!!VRz9&y18=1:S^her^; [her: z9]
-!!VRz9&x4=1:S^its^; [its: z9]
-!!VRz10:S^lead^; [lead: z10]
-!!VRz10&x4=1:S^send^; [send: z10]
+!!VRz9&y18=0:Sz222005; [his: z9]
+!!VRz9&y18=1:Sz222006; [her: z9]
+!!VRz9&x4=1:Sz222007; [its: z9]
+!!VRz10:Sz222008; [lead: z10]
+!!VRz10&x4=1:Sz222009; [send: z10]
 
 !!VRy19&y11>=y-2:Sy11 -y-2; [If hero has excess command points: y19]
 !!VRy19&y11<y-2:Sy-2 -y11; [If hero doesn't have enough command points: y19]
-!!VRz8&x2=0/y11=y-2:S^(%Z7 cannot command any additional troops in battle.)^;
-!!VRz8&x2=0/y11>y-2:S^(%Z7 can command up to %Y19 more points of troops in battle.)^;
-!!VRz8&x2=0/y11<y-2:S^(This exceeds %Z5's total by %Y19 points.)^;
+!!VRz8&x2=0/y11=y-2:Sz222010;
+!!VRz8&x2=0/y11>y-2:Sz222011;
+!!VRz8&x2=0/y11<y-2:Sz222012;
 
-!!VRz1&x2=0:S^Command Points: %Y11^; [Abassadore's Sash name: z1]
-!!VRz2&x2=0:S^%Z5 can command up to %Y11 points of troops.^; [Abassadore's Sash right-click text: z2]
-!!VRz3&x2=0:S^Army's Points: %Y-2^; [Titan's Gladius name: z3]
-!!VRz4&x2=0:S^%Z5's army requires %Y-2 command points to lead into battle.^; [Titan's Gladius right-click text: z4]
+!!VRz1&x2=0:Sz222013; [Abassadore's Sash name: z1]
+!!VRz2&x2=0:Sz222014; [Abassadore's Sash right-click text: z2]
+!!VRz3&x2=0:Sz222015; [Titan's Gladius name: z3]
+!!VRz4&x2=0:Sz222016; [Titan's Gladius right-click text: z4]
 !!UN&x2=0:A68/9/1 A68/10/2 A12/9/3 A12/10/4; [Set Ambassadore's Sash and Titan's Gladius text: z1-z4]
 
-!!IF&x2=0:Q1/8/68/8/12/1^{C o m m a n d    P o i n t s}
-
-%Z5 can command up to %Y11 points of troops.
-
-%Z6 army requires %Y-2 command points to lead them into the terrifying heat of battle.
-
-%Z8^;
+!!IF&x2=0:Q1/8/68/8/12/1/z222017;
 
 !!UN&x2=0:A68/9/0 A68/10/0 A12/9/0 A12/10/0; [Restore Ambassadore's Sash and Titan's Gladius text]
 
@@ -280,9 +274,7 @@ ERMS_ScriptDate=21.6(June).2006
 
 !!DO320/0/6/1&y-3>=0:Py-3; [Setup Display Variables for Attacker's Deserting Troops]
 !!IF&y-7>=0/y-3>=0:Ny-30/y-40/y-31/y-41/y-32/y-42/y-33/y-43/y-34/y-44/y-35/y-45/y-36/y-46/-1/-1; [Set up Attacker's Deserting Troops Display]
-!!IF&y-7>=0/y-3>=0:N^{D e s e r t i n g   T r o o p s}
-
-%Z5 doesn't have enough Command Points to lead all of %Z9 troops into the terrifying heat of battle and some of them desert!^; [Display Attacker's Deserting Troops dialog]
+!!IF&y-7>=0/y-3>=0:Nz222018; [Display Attacker's Deserting Troops dialog]
 
 
  [Defender]
@@ -305,9 +297,7 @@ ERMS_ScriptDate=21.6(June).2006
 !!DO320/0/6/1&y-4>=0:Py-4/0; [Setup Display Variables for Defender's Deserting Troops]
 !!DO320/0/6/1&y-4=-2/y-9=98/y-28>=0:Py-4/1; [Setup Display Variables for Defender's Deserting Troops: Town Battle with no Defending Hero]
 !!IF&y-7>=0:Ny-30/y-40/y-31/y-41/y-32/y-42/y-33/y-43/y-34/y-44/y-35/y-45/y-36/y-46/-1/-1; [Set up Defender's Deserting Troops Display]
-!!IF&y-7>=0:N^{D e s e r t i n g   T r o o p s}
-
-%Z5 doesn't have enough Command Points to %Z10 all of %Z9 troops into the terrifying heat of battle and some of them desert!^; [Display Defender's Deserting Troops dialog]
+!!IF&y-7>=0:Nz222019; [Display Defender's Deserting Troops dialog]
 
 --------------------------------------------------------------------------------
 

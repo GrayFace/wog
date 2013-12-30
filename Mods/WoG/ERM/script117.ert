@@ -1,0 +1,77 @@
+#	Text resource for "script117.erm" document		
+217000	Ginko's Training Facility	!#S	31.12.2013
+217001	{Ginko's Training Facility}
+
+When you enter the admissions building, the facility's director, rushes over to greet you and pumps your hand vigorously.
+
+"Welcome, welcome, welcome, my friend, it's great to see you here again!  I'm Ginko Baloba and I'm sure you'll love our new courses.  I can't stay and chat this morning but all you have to do is fill in these registration forms and Bob's your uncle!  Have a wonderful day and don't forget to try our complimentary tea.  The instructors will be in shortly."	!!M	31.12.2013
+217002	{Ginko's Training Facility}
+
+When you enter the admissions building you note the exquisitely crafted door handles, expensive furniture and finely woven tapestries on the wall, as well as a display case filled with various awards and trophies.
+
+A bright and boisterous young man sitting at a mahogany desk leaps to his feet when you enter, and effortlessly bounds towards you, grabbing your hand and pumping it vigorously.  He's dressed very well, impeccably groomed and his perfectly straight teeth are so white they're almost blinding.
+
+"Welcome to Ginko's Training Facility.  Baloba's the name, Ginko Baloba--I'm the director of this world renowned educational institution--{world} {renowned} I say!  We offer fast and complete training with hand-picked instructors from the far corners of the land, complete with a money-back guarantee if you're not {completely} satisified--100% guaranteed, I assure you!"
+
+"My facility has trained literally millions of soliders from every part of the world--millions I tell you!  We have an incredible 148% success rate (independently verified) and can teach your young men (and women) combat tricks they've never even dreamed of in a million years--a million years I say!"
+
+Well, it all sounds a bit too good to be true but you {have} actually heard positive things about the place.  The director's obviously a bit of a twerp but since you're here now you might as well give the training a go--god knows, in this war you can use every little advantage you can get.	!!M	31.12.2013
+217003	Ginko Baloba informs you that the troop instructors need to rest and so there will be no more classes available today.
+
+"But be sure to come back bright and early tomorrow!" he calls as he cheerfully waves and vanishes into his office.	!!M	31.12.2013
+217004	You study the available courses but don't see anything for the troops you have with you.
+
+The Director suddenly reappears beside you and announces, "I see you don't have any soldiers my instructors can train.  That's too bad, too bad I say!"
+
+Ginko looks a little miffed that you don't have any business for him today, but it only lasts for a moment.  His face breaks out into a broad grin and he enthuses "Just remember, our doors are always open...so do hurry back with some young lads and ladies or seasoned veterans if you wish--we'll train them all.  We have lessons for your pikemen and halberdiers, tips and pointers for your archers and marksmen, strategy and tactics for your swordsmen and crusaders, obstacles and tournaments for your cavaliers and champions, and plenty of arrows for your sharpshooters to lose (just kidding).  Well, I'm sure we'll do business soon!"
+
+Ginko ushers you out and waves goodbye as you head off down the road.	!!M	31.12.2013
+217005	G i n k o ' s   T r a i n i n g   F a c i l i t y
+
+Select stacks to train to the next rank. Current maximum rank is %Y-25.	!!S	31.12.2013
+217006	sir	!!S	31.12.2013
+217007	lady	!!S	31.12.2013
+217008	Train all stacks listed above for %Y-24 gold.	!!S	31.12.2013
+217009	The ever-bubbly director, Mr Ginko Baloba, pokes his head out when he sees you leaving.  "Now I know what you're thinking," he says, "You're thinking that this is too great a deal and you can't possibly take advantage of me and my low low rates by enrolling more troops in my classes.  Well let me tell you, good %Z-7, that's what we're here for!  Set your mind at ease and we'll do our best to please."
+
+Ginko chuckles at his catchy rhyme and then hastily adds before you're out of earshot, "Think it over and come back soon--we're open all day and most nights too!"	!!M	31.12.2013
+217010	man	!!S	31.12.2013
+217011	woman	!!S	31.12.2013
+217012	"Oh dear oh dear oh dear oh dear oh dear!" cries Mr. Ginko Baloba, obviously perplexed. "I'm sooooooo sorry, but it seems you don't have the required class fees.  If it were just myself I would be happy to give you a discount--{more} than happy I say, but I'm duty-bound to pay these talented and hard-working instructors so that they can support their families, care for their sick and elderly relations and eke out an existence in these most troubled of times.  Well, I'm sure you understand, for you seem like a very understanding %Z-8.  Please do hurry back when you've sorted out your  finances." Ginko shakes your hand and quickly shoos you out the door.	!!S	31.12.2013
+217013	You hand over the {gold} (all %Y-8 of it) and the troops begin their training classes while you take a break to relax, eat a meal and drink some herbal tea ("Supplied at no extra charge and imported from exotic lands far to the east.").
+
+Before you know it, your army returns, a bit tired but excited to begin using their new found skills--these classes really work!	!!S	31.12.2013
+217014	Train  %X2  %Z8  to  Rank  %Y5  for  %Y8  gold.	!!S	31.12.2013
+217015	{Hero Training}
+
+"While your troops are busy training, how about we give you some top-notch instruction too?" suggests Ginko Baloba, smiling broadly.
+
+"For a mere 1000 gold coins, our incredible instructors can train you in either Attack or Defense.  What do you say?"	!!Q	31.12.2013
+217016	"No? That's too bad, too bad, too bad indeed. Troops need to see their leader training too you know," chides Ginko, shaking his head sadly.
+
+"Well, if you change your mind, we're always ready to teach willing pupils a lesson or two.  Think it over and come back soon!"	!!M	31.12.2013
+217017	man	!!S	31.12.2013
+217018	woman	!!S	31.12.2013
+217019	"Ah," says Ginko Baloba looking a little perplexed. "I'm terribly sorry but it seems you don't have the required fee."
+
+"Please come back again when you've sorted out your finances.  After all, we're always ready to teach paying pupils a lesson or two!"	!!Q	31.12.2013
+217020	"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your attack training's completed!"
+
+"Of course, you do realize that this is a one-time deal? Our instructors here can only teach a seasoned hero like yourself so much you know."
+
+"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"	!!Q	31.12.2013
+217021	"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your defense training's completed!"
+
+"Of course you do realize that this is a one-time deal. Our instructors here can only teach a seasoned hero like yourself so much you know."
+
+"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"	!!Q	31.12.2013
+217022	Training is available here for %Z1.
+	!!S	31.12.2013
+217023	No additional hero training is available here for %Z1.
+	!!S	31.12.2013
+217024	Instructors are available for troop training.	!!S	31.12.2013
+217025	Instructors are unavailable for troop training until tomorrow.	!!S	31.12.2013
+217026	{Ginko's Training Facility}
+
+%Z3
+%Z4	!!S	31.12.2013

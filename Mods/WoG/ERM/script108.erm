@@ -1,5 +1,5 @@
 ZVSE
-ERMS_ScriptDate=22.11(November).2013
+ERMS_ScriptDate=31.12(December).2013
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 
@@ -29,181 +29,181 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 
 *Summon Boat
 !#SS0:D0/?y-2;
-!#VRy-2:Sz308001;
+!#VRy-2:Sz208001;
 !#SS0:D0/y-2;
 
 !#SS0:D1/?y-2;
-!#VRy-2:Sz308002;
+!#VRy-2:Sz208002;
 !#SS0:D1/y-2;
 
 !#SS0:D2/?y-2;
-!#VRy-2:Sz308003;
+!#VRy-2:Sz208003;
 !#SS0:D2/y-2;
 
 !#SS0:D3/?y-2;
-!#VRy-2:Sz308004;
+!#VRy-2:Sz208004;
 !#SS0:D3/y-2;
 
 
 *Scuttle Boat
 !#SS1:D0/?y-2;
-!#VRy-2:Sz308005;
+!#VRy-2:Sz208005;
 !#SS1:D0/y-2;
 
 !#SS1:D1/?y-2;
-!#VRy-2:Sz308006;
+!#VRy-2:Sz208006;
 !#SS1:D1/y-2;
 
 !#SS1:D2/?y-2;
-!#VRy-2:Sz308007;
+!#VRy-2:Sz208007;
 !#SS1:D2/y-2;
 
 !#SS1:D3/?y-2;
-!#VRy-2:Sz308008;
+!#VRy-2:Sz208008;
 !#SS1:D3/y-2;
 
 
 *Visions
 !#SS2:D0/?y-2;
-!#VRy-2:Sz308009;
+!#VRy-2:Sz208009;
 !#SS2:D0/y-2;
 
 !#SS2:D1/?y-2;
-!#VRy-2:Sz308010;
+!#VRy-2:Sz208010;
 !#SS2:D1/y-2;
 
 !#SS2:D2/?y-2;
-!#VRy-2:Sz308011;
+!#VRy-2:Sz208011;
 !#SS2:D2/y-2;
 
 !#SS2:D3/?y-2;
-!#VRy-2:Sz308012;
+!#VRy-2:Sz208012;
 !#SS2:D3/y-2;
 
 
 *View Earth
 !#SS3:D0/?y-2;
-!#VRy-2:Sz308013;
+!#VRy-2:Sz208013;
 !#SS3:D0/y-2;
 
 !#SS3:D1/?y-2;
-!#VRy-2:Sz308014;
+!#VRy-2:Sz208014;
 !#SS3:D1/y-2;
 
 !#SS3:D2/?y-2;
-!#VRy-2:Sz308015;
+!#VRy-2:Sz208015;
 !#SS3:D2/y-2;
 
 !#SS3:D3/?y-2;
-!#VRy-2:Sz308016;
+!#VRy-2:Sz208016;
 !#SS3:D3/y-2;
 
 
 *Disguise
 !#SS4:D0/?y-2;
-!#VRy-2:Sz308017;
+!#VRy-2:Sz208017;
 !#SS4:D0/y-2;
 
 !#SS4:D1/?y-2;
-!#VRy-2:Sz308018;
+!#VRy-2:Sz208018;
 !#SS4:D1/y-2;
 
 !#SS4:D2/?y-2;
-!#VRy-2:Sz308019;
+!#VRy-2:Sz208019;
 !#SS4:D2/y-2;
 
 !#SS4:D3/?y-2;
-!#VRy-2:Sz308020;
+!#VRy-2:Sz208020;
 !#SS4:D3/y-2;
 
 
 *View Air
 !#SS5:D0/?y-2;
-!#VRy-2:Sz308021;
+!#VRy-2:Sz208021;
 !#SS5:D0/y-2;
 
 !#SS5:D1/?y-2;
-!#VRy-2:Sz308022;
+!#VRy-2:Sz208022;
 !#SS5:D1/y-2;
 
 !#SS5:D2/?y-2;
-!#VRy-2:Sz308023;
+!#VRy-2:Sz208023;
 !#SS5:D2/y-2;
 
 !#SS5:D3/?y-2;
-!#VRy-2:Sz308024;
+!#VRy-2:Sz208024;
 !#SS5:D3/y-2;
 
 
 *Fly
 !#SS6:D0/?y-2;
-!#VRy-2:Sz308025;
+!#VRy-2:Sz208025;
 !#SS6:D0/y-2;
 
 !#SS6:D1/?y-2;
-!#VRy-2:Sz308026;
+!#VRy-2:Sz208026;
 !#SS6:D1/y-2;
 
 !#SS6:D2/?y-2;
-!#VRy-2:Sz308027;
+!#VRy-2:Sz208027;
 !#SS6:D2/y-2;
 
 !#SS6:D3/?y-2;
-!#VRy-2:Sz308028;
+!#VRy-2:Sz208028;
 !#SS6:D3/y-2;
 
 
 *Water Walk
 !#SS7:D0/?y-2;
-!#VRy-2:Sz308029;
+!#VRy-2:Sz208029;
 !#SS7:D0/y-2;
 
 !#SS7:D1/?y-2;
-!#VRy-2:Sz308030;
+!#VRy-2:Sz208030;
 !#SS7:D1/y-2;
 
 !#SS7:D2/?y-2;
-!#VRy-2:Sz308031;
+!#VRy-2:Sz208031;
 !#SS7:D2/y-2;
 
 !#SS7:D3/?y-2;
-!#VRy-2:Sz308032;
+!#VRy-2:Sz208032;
 !#SS7:D3/y-2;
 
 
 *Dimension Door
 !#SS8:D0/?y-2;
-!#VRy-2:Sz308033;
+!#VRy-2:Sz208033;
 !#SS8:D0/y-2;
 
 !#SS8:D1/?y-2;
-!#VRy-2:Sz308034;
+!#VRy-2:Sz208034;
 !#SS8:D1/y-2;
 
 !#SS8:D2/?y-2;
-!#VRy-2:Sz308035;
+!#VRy-2:Sz208035;
 !#SS8:D2/y-2;
 
 !#SS8:D3/?y-2;
-!#VRy-2:Sz308036;
+!#VRy-2:Sz208036;
 !#SS8:D3/y-2;
 
 
 *Town Portal
 !#SS9:D0/?y-2;
-!#VRy-2:Sz308037;
+!#VRy-2:Sz208037;
 !#SS9:D0/y-2;
 
 !#SS9:D1/?y-2;
-!#VRy-2:Sz308038;
+!#VRy-2:Sz208038;
 !#SS9:D1/y-2;
 
 !#SS9:D2/?y-2;
-!#VRy-2:Sz308039;
+!#VRy-2:Sz208039;
 !#SS9:D2/y-2;
 
 !#SS9:D3/?y-2;
-!#VRy-2:Sz308040;
+!#VRy-2:Sz208040;
 !#SS9:D3/y-2;
 
 
@@ -213,1081 +213,1081 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 
 *Quick Sand
 !#SS10:D0/?y-2;
-!#VRy-2:Sz308041;
+!#VRy-2:Sz208041;
 !#SS10:D0/y-2;
 
 !#SS10:D1/?y-2;
-!#VRy-2:Sz308042;
+!#VRy-2:Sz208042;
 !#SS10:D1/y-2;
 
 !#SS10:D2/?y-2;
-!#VRy-2:Sz308043;
+!#VRy-2:Sz208043;
 !#SS10:D2/y-2;
 
 !#SS10:D3/?y-2;
-!#VRy-2:Sz308044;
+!#VRy-2:Sz208044;
 !#SS10:D3/y-2;
 
 
 *Land Mine
 !#SS11:D0/?y-2;
-!#VRy-2:Sz308045;
+!#VRy-2:Sz208045;
 !#SS11:D0/y-2;
 
 !#SS11:D1/?y-2;
-!#VRy-2:Sz308046;
+!#VRy-2:Sz208046;
 !#SS11:D1/y-2;
 
 !#SS11:D2/?y-2;
-!#VRy-2:Sz308047;
+!#VRy-2:Sz208047;
 !#SS11:D2/y-2;
 
 !#SS11:D3/?y-2;
-!#VRy-2:Sz308048;
+!#VRy-2:Sz208048;
 !#SS11:D3/y-2;
 
 
 *Force Field
 !#SS12:D0/?y-2;
-!#VRy-2:Sz308049;
+!#VRy-2:Sz208049;
 !#SS12:D0/y-2;
 
 !#SS12:D1/?y-2;
-!#VRy-2:Sz308050;
+!#VRy-2:Sz208050;
 !#SS12:D1/y-2;
 
 !#SS12:D2/?y-2;
-!#VRy-2:Sz308051;
+!#VRy-2:Sz208051;
 !#SS12:D2/y-2;
 
 !#SS12:D3/?y-2;
-!#VRy-2:Sz308052;
+!#VRy-2:Sz208052;
 !#SS12:D3/y-2;
 
 
 *Fire Wall
 !#SS13:D0/?y-2;
-!#VRy-2:Sz308053;
+!#VRy-2:Sz208053;
 !#SS13:D0/y-2;
 
 !#SS13:D1/?y-2;
-!#VRy-2:Sz308054;
+!#VRy-2:Sz208054;
 !#SS13:D1/y-2;
 
 !#SS13:D2/?y-2;
-!#VRy-2:Sz308055;
+!#VRy-2:Sz208055;
 !#SS13:D2/y-2;
 
 !#SS13:D3/?y-2;
-!#VRy-2:Sz308056;
+!#VRy-2:Sz208056;
 !#SS13:D3/y-2;
 
 
 *Earthquake
 !#SS14:D0/?y-2;
-!#VRy-2:Sz308057;
+!#VRy-2:Sz208057;
 !#SS14:D0/y-2;
 
 !#SS14:D1/?y-2;
-!#VRy-2:Sz308058;
+!#VRy-2:Sz208058;
 !#SS14:D1/y-2;
 
 !#SS14:D2/?y-2;
-!#VRy-2:Sz308059;
+!#VRy-2:Sz208059;
 !#SS14:D2/y-2;
 
 !#SS14:D3/?y-2;
-!#VRy-2:Sz308060;
+!#VRy-2:Sz208060;
 !#SS14:D3/y-2;
 
 
 *Magic Arrow
 !#SS15:D0/?y-2;
-!#VRy-2:Sz308061;
+!#VRy-2:Sz208061;
 !#SS15:D0/y-2;
 
 !#SS15:D1/?y-2;
-!#VRy-2:Sz308062;
+!#VRy-2:Sz208062;
 !#SS15:D1/y-2;
 
 !#SS15:D2/?y-2;
-!#VRy-2:Sz308063;
+!#VRy-2:Sz208063;
 !#SS15:D2/y-2;
 
 !#SS15:D3/?y-2;
-!#VRy-2:Sz308064;
+!#VRy-2:Sz208064;
 !#SS15:D3/y-2;
 
 
 *Ice Bolt
 !#SS16:D0/?y-2;
-!#VRy-2:Sz308065;
+!#VRy-2:Sz208065;
 !#SS16:D0/y-2;
 
 !#SS16:D1/?y-2;
-!#VRy-2:Sz308066;
+!#VRy-2:Sz208066;
 !#SS16:D1/y-2;
 
 !#SS16:D2/?y-2;
-!#VRy-2:Sz308067;
+!#VRy-2:Sz208067;
 !#SS16:D2/y-2;
 
 !#SS16:D3/?y-2;
-!#VRy-2:Sz308068;
+!#VRy-2:Sz208068;
 !#SS16:D3/y-2;
 
 
 *Lightning Bolt
 !#SS17:D0/?y-2;
-!#VRy-2:Sz308069;
+!#VRy-2:Sz208069;
 !#SS17:D0/y-2;
 
 !#SS17:D1/?y-2;
-!#VRy-2:Sz308070;
+!#VRy-2:Sz208070;
 !#SS17:D1/y-2;
 
 !#SS17:D2/?y-2;
-!#VRy-2:Sz308071;
+!#VRy-2:Sz208071;
 !#SS17:D2/y-2;
 
 !#SS17:D3/?y-2;
-!#VRy-2:Sz308072;
+!#VRy-2:Sz208072;
 !#SS17:D3/y-2;
 
 
 *Implosion
 !#SS18:D0/?y-2;
-!#VRy-2:Sz308073;
+!#VRy-2:Sz208073;
 !#SS18:D0/y-2;
 
 !#SS18:D1/?y-2;
-!#VRy-2:Sz308074;
+!#VRy-2:Sz208074;
 !#SS18:D1/y-2;
 
 !#SS18:D2/?y-2;
-!#VRy-2:Sz308075;
+!#VRy-2:Sz208075;
 !#SS18:D2/y-2;
 
 !#SS18:D3/?y-2;
-!#VRy-2:Sz308076;
+!#VRy-2:Sz208076;
 !#SS18:D3/y-2;
 
 
 *Chain Lightning
 !#SS19:D0/?y-2;
-!#VRy-2:Sz308077;
+!#VRy-2:Sz208077;
 !#SS19:D0/y-2;
 
 !#SS19:D1/?y-2;
-!#VRy-2:Sz308078;
+!#VRy-2:Sz208078;
 !#SS19:D2/y-2;
 
 !#SS19:D2/?y-2;
-!#VRy-2:Sz308079;
+!#VRy-2:Sz208079;
 !#SS19:D2/y-2;
 
 !#SS19:D3/?y-2;
-!#VRy-2:Sz308080;
+!#VRy-2:Sz208080;
 !#SS19:D3/y-2;
 
 
 *Frost Ring
 !#SS20:D0/?y-2;
-!#VRy-2:Sz308081;
+!#VRy-2:Sz208081;
 !#SS20:D0/y-2;
 
 !#SS20:D1/?y-2;
-!#VRy-2:Sz308082;
+!#VRy-2:Sz208082;
 !#SS20:D1/y-2;
 
 !#SS20:D2/?y-2;
-!#VRy-2:Sz308083;
+!#VRy-2:Sz208083;
 !#SS20:D2/y-2;
 
 !#SS20:D3/?y-2;
-!#VRy-2:Sz308084;
+!#VRy-2:Sz208084;
 !#SS20:D3/y-2;
 
 
 *Fireball
 !#SS21:D0/?y-2;
-!#VRy-2:Sz308085;
+!#VRy-2:Sz208085;
 !#SS21:D0/y-2;
 
 !#SS21:D1/?y-2;
-!#VRy-2:Sz308086;
+!#VRy-2:Sz208086;
 !#SS21:D1/y-2;
 
 !#SS21:D2/?y-2;
-!#VRy-2:Sz308087;
+!#VRy-2:Sz208087;
 !#SS21:D2/y-2;
 
 !#SS21:D3/?y-2;
-!#VRy-2:Sz308088;
+!#VRy-2:Sz208088;
 !#SS21:D3/y-2;
 
 
 *Inferno
 !#SS22:D0/?y-2;
-!#VRy-2:Sz308089;
+!#VRy-2:Sz208089;
 !#SS22:D0/y-2;
 
 !#SS22:D1/?y-2;
-!#VRy-2:Sz308090;
+!#VRy-2:Sz208090;
 !#SS22:D1/y-2;
 
 !#SS22:D2/?y-2;
-!#VRy-2:Sz308091;
+!#VRy-2:Sz208091;
 !#SS22:D2/y-2;
 
 !#SS22:D3/?y-2;
-!#VRy-2:Sz308092;
+!#VRy-2:Sz208092;
 !#SS22:D3/y-2;
 
 
 *Meteor Shower
 !#SS23:D0/?y-2;
-!#VRy-2:Sz308093;
+!#VRy-2:Sz208093;
 !#SS23:D0/y-2;
 
 !#SS23:D1/?y-2;
-!#VRy-2:Sz308094;
+!#VRy-2:Sz208094;
 !#SS23:D1/y-2;
 
 !#SS23:D2/?y-2;
-!#VRy-2:Sz308095;
+!#VRy-2:Sz208095;
 !#SS23:D2/y-2;
 
 !#SS23:D3/?y-2;
-!#VRy-2:Sz308096;
+!#VRy-2:Sz208096;
 !#SS23:D3/y-2;
 
 
 *Death Ripple
 !#SS24:D0/?y-2;
-!#VRy-2:Sz308097;
+!#VRy-2:Sz208097;
 !#SS24:D0/y-2;
 
 !#SS24:D1/?y-2;
-!#VRy-2:Sz308098;
+!#VRy-2:Sz208098;
 !#SS24:D1/y-2;
 
 !#SS24:D2/?y-2;
-!#VRy-2:Sz308099;
+!#VRy-2:Sz208099;
 !#SS24:D2/y-2;
 
 !#SS24:D3/?y-2;
-!#VRy-2:Sz308100;
+!#VRy-2:Sz208100;
 !#SS24:D3/y-2;
 
 
 *Destroy Undead
 !#SS25:D0/?y-2;
-!#VRy-2:Sz308101;
+!#VRy-2:Sz208101;
 !#SS25:D0/y-2;
 
 !#SS25:D1/?y-2;
-!#VRy-2:Sz308102;
+!#VRy-2:Sz208102;
 !#SS25:D1/y-2;
 
 !#SS25:D2/?y-2;
-!#VRy-2:Sz308103;
+!#VRy-2:Sz208103;
 !#SS25:D2/y-2;
 
 !#SS25:D3/?y-2;
-!#VRy-2:Sz308104;
+!#VRy-2:Sz208104;
 !#SS25:D3/y-2;
 
 
 *Armageddon
 !#SS26:D0/?y-2;
-!#VRy-2:Sz308105;
+!#VRy-2:Sz208105;
 !#SS26:D0/y-2;
 
 !#SS26:D1/?y-2;
-!#VRy-2:Sz308106;
+!#VRy-2:Sz208106;
 !#SS26:D1/y-2;
 
 !#SS26:D2/?y-2;
-!#VRy-2:Sz308107;
+!#VRy-2:Sz208107;
 !#SS26:D2/y-2;
 
 !#SS26:D3/?y-2;
-!#VRy-2:Sz308108;
+!#VRy-2:Sz208108;
 !#SS26:D3/y-2;
 
 
 *Shield
 !#SS27:D0/?y-2;
-!#VRy-2:Sz308109;
+!#VRy-2:Sz208109;
 !#SS27:D0/y-2;
 
 !#SS27:D1/?y-2;
-!#VRy-2:Sz308110;
+!#VRy-2:Sz208110;
 !#SS27:D1/y-2;
 
 !#SS27:D2/?y-2;
-!#VRy-2:Sz308111;
+!#VRy-2:Sz208111;
 !#SS27:D2/y-2;
 
 !#SS27:D3/?y-2;
-!#VRy-2:Sz308112;
+!#VRy-2:Sz208112;
 !#SS27:D3/y-2;
 
 
 *Air Shield
 !#SS28:D0/?y-2;
-!#VRy-2:Sz308113;
+!#VRy-2:Sz208113;
 !#SS28:D0/y-2;
 
 !#SS28:D1/?y-2;
-!#VRy-2:Sz308114;
+!#VRy-2:Sz208114;
 !#SS28:D1/y-2;
 
 !#SS28:D2/?y-2;
-!#VRy-2:Sz308115;
+!#VRy-2:Sz208115;
 !#SS28:D2/y-2;
 
 !#SS28:D3/?y-2;
-!#VRy-2:Sz308116;
+!#VRy-2:Sz208116;
 !#SS28:D3/y-2;
 
 
 *Fire Shield
 !#SS29:D0/?y-2;
-!#VRy-2:Sz308117;
+!#VRy-2:Sz208117;
 !#SS29:D0/y-2;
 
 !#SS29:D1/?y-2;
-!#VRy-2:Sz308118;
+!#VRy-2:Sz208118;
 !#SS29:D1/y-2;
 
 !#SS29:D2/?y-2;
-!#VRy-2:Sz308119;
+!#VRy-2:Sz208119;
 !#SS29:D2/y-2;
 
 !#SS29:D3/?y-2;
-!#VRy-2:Sz308120;
+!#VRy-2:Sz208120;
 !#SS29:D3/y-2;
 
 
 *Protection from Air
 !#SS30:D0/?y-2;
-!#VRy-2:Sz308121;
+!#VRy-2:Sz208121;
 !#SS30:D0/y-2;
 
 !#SS30:D1/?y-2;
-!#VRy-2:Sz308122;
+!#VRy-2:Sz208122;
 !#SS30:D1/y-2;
 
 !#SS30:D2/?y-2;
-!#VRy-2:Sz308123;
+!#VRy-2:Sz208123;
 !#SS30:D2/y-2;
 
 !#SS30:D3/?y-2;
-!#VRy-2:Sz308124;
+!#VRy-2:Sz208124;
 !#SS30:D3/y-2;
 
 
 *Protection from Fire
 !#SS31:D0/?y-2;
-!#VRy-2:Sz308125;
+!#VRy-2:Sz208125;
 !#SS31:D0/y-2;
 
 !#SS31:D1/?y-2;
-!#VRy-2:Sz308126;
+!#VRy-2:Sz208126;
 !#SS31:D1/y-2;
 
 !#SS31:D2/?y-2;
-!#VRy-2:Sz308127;
+!#VRy-2:Sz208127;
 !#SS31:D2/y-2;
 
 !#SS31:D3/?y-2;
-!#VRy-2:Sz308128;
+!#VRy-2:Sz208128;
 !#SS31:D3/y-2;
 
 
 *Protection from Water
 !#SS32:D0/?y-2;
-!#VRy-2:Sz308129;
+!#VRy-2:Sz208129;
 !#SS32:D0/y-2;
 
 !#SS32:D1/?y-2;
-!#VRy-2:Sz308130;
+!#VRy-2:Sz208130;
 !#SS32:D1/y-2;
 
 !#SS32:D2/?y-2;
-!#VRy-2:Sz308131;
+!#VRy-2:Sz208131;
 !#SS32:D2/y-2;
 
 !#SS32:D3/?y-2;
-!#VRy-2:Sz308132;
+!#VRy-2:Sz208132;
 !#SS32:D3/y-2;
 
 
 *Protection from Earth
 !#SS33:D0/?y-2;
-!#VRy-2:Sz308133;
+!#VRy-2:Sz208133;
 !#SS33:D0/y-2;
 
 !#SS33:D1/?y-2;
-!#VRy-2:Sz308134;
+!#VRy-2:Sz208134;
 !#SS33:D1/y-2;
 
 !#SS33:D2/?y-2;
-!#VRy-2:Sz308135;
+!#VRy-2:Sz208135;
 !#SS33:D2/y-2;
 
 !#SS33:D3/?y-2;
-!#VRy-2:Sz308136;
+!#VRy-2:Sz208136;
 !#SS33:D3/y-2;
 
 
 *Anti-Magic
 !#SS34:D0/?y-2;
-!#VRy-2:Sz308137;
+!#VRy-2:Sz208137;
 !#SS34:D0/y-2;
 
 !#SS34:D1/?y-2;
-!#VRy-2:Sz308138;
+!#VRy-2:Sz208138;
 !#SS34:D1/y-2;
 
 !#SS34:D2/?y-2;
-!#VRy-2:Sz308139;
+!#VRy-2:Sz208139;
 !#SS34:D2/y-2;
 
 !#SS34:D3/?y-2;
-!#VRy-2:Sz308140;
+!#VRy-2:Sz208140;
 !#SS34:D3/y-2;
 
 
 *Dispel
 !#SS35:D0/?y-2;
-!#VRy-2:Sz308141;
+!#VRy-2:Sz208141;
 !#SS35:D0/y-2;
 
 !#SS35:D1/?y-2;
-!#VRy-2:Sz308142;
+!#VRy-2:Sz208142;
 !#SS35:D1/y-2;
 
 !#SS35:D2/?y-2;
-!#VRy-2:Sz308143;
+!#VRy-2:Sz208143;
 !#SS35:D2/y-2;
 
 !#SS35:D3/?y-2;
-!#VRy-2:Sz308144;
+!#VRy-2:Sz208144;
 !#SS35:D3/y-2;
 
 
 *Magic Mirror
 !#SS36:D0/?y-2;
-!#VRy-2:Sz308145;
+!#VRy-2:Sz208145;
 !#SS36:D0/y-2;
 
 !#SS36:D1/?y-2;
-!#VRy-2:Sz308146;
+!#VRy-2:Sz208146;
 !#SS36:D1/y-2;
 
 !#SS36:D2/?y-2;
-!#VRy-2:Sz308147;
+!#VRy-2:Sz208147;
 !#SS36:D2/y-2;
 
 !#SS36:D3/?y-2;
-!#VRy-2:Sz308148;
+!#VRy-2:Sz208148;
 !#SS36:D3/y-2;
 
 
 *Cure
 !#SS37:D0/?y-2;
-!#VRy-2:Sz308149;
+!#VRy-2:Sz208149;
 !#SS37:D0/y-2;
 
 !#SS37:D1/?y-2;
-!#VRy-2:Sz308150;
+!#VRy-2:Sz208150;
 !#SS37:D1/y-2;
 
 !#SS37:D2/?y-2;
-!#VRy-2:Sz308151;
+!#VRy-2:Sz208151;
 !#SS37:D2/y-2;
 
 !#SS37:D3/?y-2;
-!#VRy-2:Sz308152;
+!#VRy-2:Sz208152;
 !#SS37:D3/y-2;
 
 
 *Resurrection
 !#SS38:D0/?y-2;
-!#VRy-2:Sz308153;
+!#VRy-2:Sz208153;
 !#SS38:D0/y-2;
 
 !#SS38:D1/?y-2;
-!#VRy-2:Sz308154;
+!#VRy-2:Sz208154;
 !#SS38:D1/y-2;
 
 !#SS38:D2/?y-2;
-!#VRy-2:Sz308155;
+!#VRy-2:Sz208155;
 !#SS38:D2/y-2;
 
 !#SS38:D3/?y-2;
-!#VRy-2:Sz308156;
+!#VRy-2:Sz208156;
 !#SS38:D3/y-2;
 
 
 *Animate Dead
 !#SS39:D0/?y-2;
-!#VRy-2:Sz308157;
+!#VRy-2:Sz208157;
 !#SS39:D0/y-2;
 
 !#SS39:D1/?y-2;
-!#VRy-2:Sz308158;
+!#VRy-2:Sz208158;
 !#SS39:D1/y-2;
 
 !#SS39:D2/?y-2;
-!#VRy-2:Sz308159;
+!#VRy-2:Sz208159;
 !#SS39:D2/y-2;
 
 !#SS39:D3/?y-2;
-!#VRy-2:Sz308160;
+!#VRy-2:Sz208160;
 !#SS39:D3/y-2;
 
 
 *Sacrifice
 !#SS40:D0/?y-2;
-!#VRy-2:Sz308161;
+!#VRy-2:Sz208161;
 !#SS40:D0/y-2;
 
 !#SS40:D1/?y-2;
-!#VRy-2:Sz308162;
+!#VRy-2:Sz208162;
 !#SS40:D1/y-2;
 
 !#SS40:D2/?y-2;
-!#VRy-2:Sz308163;
+!#VRy-2:Sz208163;
 !#SS40:D2/y-2;
 
 !#SS40:D3/?y-2;
-!#VRy-2:Sz308164;
+!#VRy-2:Sz208164;
 !#SS40:D3/y-2;
 
 
 *Bless
 !#SS41:D0/?y-2;
-!#VRy-2:Sz308165;
+!#VRy-2:Sz208165;
 !#SS41:D0/y-2;
 
 !#SS41:D1/?y-2;
-!#VRy-2:Sz308166;
+!#VRy-2:Sz208166;
 !#SS41:D1/y-2;
 
 !#SS41:D2/?y-2;
-!#VRy-2:Sz308167;
+!#VRy-2:Sz208167;
 !#SS41:D2/y-2;
 
 !#SS41:D3/?y-2;
-!#VRy-2:Sz308168;
+!#VRy-2:Sz208168;
 !#SS41:D3/y-2;
 
 
 *Curse
 !#SS42:D0/?y-2;
-!#VRy-2:Sz308169;
+!#VRy-2:Sz208169;
 !#SS42:D0/y-2;
 
 !#SS42:D1/?y-2;
-!#VRy-2:Sz308170;
+!#VRy-2:Sz208170;
 !#SS42:D1/y-2;
 
 !#SS42:D2/?y-2;
-!#VRy-2:Sz308171;
+!#VRy-2:Sz208171;
 !#SS42:D2/y-2;
 
 !#SS42:D3/?y-2;
-!#VRy-2:Sz308172;
+!#VRy-2:Sz208172;
 !#SS42:D3/y-2;
 
 
 *Bloodlust
 !#SS43:D0/?y-2;
-!#VRy-2:Sz308173;
+!#VRy-2:Sz208173;
 !#SS43:D0/y-2;
 
 !#SS43:D1/?y-2;
-!#VRy-2:Sz308174;
+!#VRy-2:Sz208174;
 !#SS43:D1/y-2;
 
 !#SS43:D2/?y-2;
-!#VRy-2:Sz308175;
+!#VRy-2:Sz208175;
 !#SS43:D2/y-2;
 
 !#SS43:D3/?y-2;
-!#VRy-2:Sz308176;
+!#VRy-2:Sz208176;
 !#SS43:D3/y-2;
 
 
 *Precision
 !#SS44:D0/?y-2;
-!#VRy-2:Sz308177;
+!#VRy-2:Sz208177;
 !#SS44:D0/y-2;
 
 !#SS44:D1/?y-2;
-!#VRy-2:Sz308178;
+!#VRy-2:Sz208178;
 !#SS44:D1/y-2;
 
 !#SS44:D2/?y-2;
-!#VRy-2:Sz308179;
+!#VRy-2:Sz208179;
 !#SS44:D2/y-2;
 
 !#SS44:D3/?y-2;
-!#VRy-2:Sz308180;
+!#VRy-2:Sz208180;
 !#SS44:D3/y-2;
 
 
 *Weakness
 !#SS45:D0/?y-2;
-!#VRy-2:Sz308181;
+!#VRy-2:Sz208181;
 !#SS45:D0/y-2;
 
 !#SS45:D1/?y-2;
-!#VRy-2:Sz308182;
+!#VRy-2:Sz208182;
 !#SS45:D1/y-2;
 
 !#SS45:D2/?y-2;
-!#VRy-2:Sz308183;
+!#VRy-2:Sz208183;
 !#SS45:D2/y-2;
 
 !#SS45:D3/?y-2;
-!#VRy-2:Sz308184;
+!#VRy-2:Sz208184;
 !#SS45:D3/y-2;
 
 
 *Stone Skin
 !#SS46:D0/?y-2;
-!#VRy-2:Sz308185;
+!#VRy-2:Sz208185;
 !#SS46:D0/y-2;
 
 !#SS46:D1/?y-2;
-!#VRy-2:Sz308186;
+!#VRy-2:Sz208186;
 !#SS46:D1/y-2;
 
 !#SS46:D2/?y-2;
-!#VRy-2:Sz308187;
+!#VRy-2:Sz208187;
 !#SS46:D2/y-2;
 
 !#SS46:D3/?y-2;
-!#VRy-2:Sz308188;
+!#VRy-2:Sz208188;
 !#SS46:D3/y-2;
 
 
 *Disrupting Ray
 !#SS47:D0/?y-2;
-!#VRy-2:Sz308189;
+!#VRy-2:Sz208189;
 !#SS47:D0/y-2;
 
 !#SS47:D1/?y-2;
-!#VRy-2:Sz308190;
+!#VRy-2:Sz208190;
 !#SS47:D1/y-2;
 
 !#SS47:D2/?y-2;
-!#VRy-2:Sz308191;
+!#VRy-2:Sz208191;
 !#SS47:D2/y-2;
 
 !#SS47:D3/?y-2;
-!#VRy-2:Sz308192;
+!#VRy-2:Sz208192;
 !#SS47:D3/y-2;
 
 
 *Prayer
 !#SS48:D0/?y-2;
-!#VRy-2:Sz308193;
+!#VRy-2:Sz208193;
 !#SS48:D0/y-2;
 
 !#SS48:D1/?y-2;
-!#VRy-2:Sz308194;
+!#VRy-2:Sz208194;
 !#SS48:D1/y-2;
 
 !#SS48:D2/?y-2;
-!#VRy-2:Sz308195;
+!#VRy-2:Sz208195;
 !#SS48:D2/y-2;
 
 !#SS48:D3/?y-2;
-!#VRy-2:Sz308196;
+!#VRy-2:Sz208196;
 !#SS48:D3/y-2;
 
 
 *Mirth
 !#SS49:D0/?y-2;
-!#VRy-2:Sz308197;
+!#VRy-2:Sz208197;
 !#SS49:D0/y-2;
 
 !#SS49:D1/?y-2;
-!#VRy-2:Sz308198;
+!#VRy-2:Sz208198;
 !#SS49:D1/y-2;
 
 !#SS49:D2/?y-2;
-!#VRy-2:Sz308199;
+!#VRy-2:Sz208199;
 !#SS49:D2/y-2;
 
 !#SS49:D3/?y-2;
-!#VRy-2:Sz308200;
+!#VRy-2:Sz208200;
 !#SS49:D3/y-2;
 
 
 *Sorrow
 !#SS50:D0/?y-2;
-!#VRy-2:Sz308201;
+!#VRy-2:Sz208201;
 !#SS50:D0/y-2;
 
 !#SS50:D1/?y-2;
-!#VRy-2:Sz308202;
+!#VRy-2:Sz208202;
 !#SS50:D1/y-2;
 
 !#SS50:D2/?y-2;
-!#VRy-2:Sz308203;
+!#VRy-2:Sz208203;
 !#SS50:D2/y-2;
 
 !#SS50:D3/?y-2;
-!#VRy-2:Sz308204;
+!#VRy-2:Sz208204;
 !#SS50:D3/y-2;
 
 
 *Fortune
 !#SS51:D0/?y-2;
-!#VRy-2:Sz308205;
+!#VRy-2:Sz208205;
 !#SS51:D0/y-2;
 
 !#SS51:D1/?y-2;
-!#VRy-2:Sz308206;
+!#VRy-2:Sz208206;
 !#SS51:D1/y-2;
 
 !#SS51:D2/?y-2;
-!#VRy-2:Sz308207;
+!#VRy-2:Sz208207;
 !#SS51:D2/y-2;
 
 !#SS51:D3/?y-2;
-!#VRy-2:Sz308208;
+!#VRy-2:Sz208208;
 !#SS51:D3/y-2;
 
 
 *Misfortune
 !#SS52:D0/?y-2;
-!#VRy-2:Sz308209;
+!#VRy-2:Sz208209;
 !#SS52:D0/y-2;
 
 !#SS52:D1/?y-2;
-!#VRy-2:Sz308210;
+!#VRy-2:Sz208210;
 !#SS52:D1/y-2;
 
 !#SS52:D2/?y-2;
-!#VRy-2:Sz308211;
+!#VRy-2:Sz208211;
 !#SS52:D2/y-2;
 
 !#SS52:D3/?y-2;
-!#VRy-2:Sz308212;
+!#VRy-2:Sz208212;
 !#SS52:D3/y-2;
 
 
 *Haste
 !#SS53:D0/?y-2;
-!#VRy-2:Sz308213;
+!#VRy-2:Sz208213;
 !#SS53:D0/y-2;
 
 !#SS53:D1/?y-2;
-!#VRy-2:Sz308214;
+!#VRy-2:Sz208214;
 !#SS53:D1/y-2;
 
 !#SS53:D2/?y-2;
-!#VRy-2:Sz308215;
+!#VRy-2:Sz208215;
 !#SS53:D2/y-2;
 
 !#SS53:D3/?y-2;
-!#VRy-2:Sz308216;
+!#VRy-2:Sz208216;
 !#SS53:D3/y-2;
 
 
 *Slow
 !#SS54:D0/?y-2;
-!#VRy-2:Sz308217;
+!#VRy-2:Sz208217;
 !#SS54:D0/y-2;
 
 !#SS54:D1/?y-2;
-!#VRy-2:Sz308218;
+!#VRy-2:Sz208218;
 !#SS54:D1/y-2;
 
 !#SS54:D2/?y-2;
-!#VRy-2:Sz308219;
+!#VRy-2:Sz208219;
 !#SS54:D2/y-2;
 
 !#SS54:D3/?y-2;
-!#VRy-2:Sz308220;
+!#VRy-2:Sz208220;
 !#SS54:D3/y-2;
 
 
 *Slayer
 !#SS55:D0/?y-2;
-!#VRy-2:Sz308221;
+!#VRy-2:Sz208221;
 !#SS55:D0/y-2;
 
 !#SS55:D1/?y-2;
-!#VRy-2:Sz308222;
+!#VRy-2:Sz208222;
 !#SS55:D1/y-2;
 
 !#SS55:D2/?y-2;
-!#VRy-2:Sz308223;
+!#VRy-2:Sz208223;
 !#SS55:D2/y-2;
 
 !#SS55:D3/?y-2;
-!#VRy-2:Sz308224;
+!#VRy-2:Sz208224;
 !#SS55:D3/y-2;
 
 
 *Frenzy
 !#SS56:D0/?y-2;
-!#VRy-2:Sz308225;
+!#VRy-2:Sz208225;
 !#SS56:D0/y-2;
 
 !#SS56:D1/?y-2;
-!#VRy-2:Sz308226;
+!#VRy-2:Sz208226;
 !#SS56:D1/y-2;
 
 !#SS56:D2/?y-2;
-!#VRy-2:Sz308227;
+!#VRy-2:Sz208227;
 !#SS56:D2/y-2;
 
 !#SS56:D3/?y-2;
-!#VRy-2:Sz308228;
+!#VRy-2:Sz208228;
 !#SS56:D3/y-2;
 
 
 *Titan's Lightning Bolt
 !#SS57:D0/?y-2;
-!#VRy-2:Sz308229;
+!#VRy-2:Sz208229;
 !#SS57:D0/y-2;
 
 !#SS57:D1/?y-2;
-!#VRy-2:Sz308230;
+!#VRy-2:Sz208230;
 !#SS57:D1/y-2;
 
 !#SS57:D2/?y-2;
-!#VRy-2:Sz308231;
+!#VRy-2:Sz208231;
 !#SS57:D2/y-2;
 
 !#SS57:D3/?y-2;
-!#VRy-2:Sz308232;
+!#VRy-2:Sz208232;
 !#SS57:D3/y-2;
 
 
 *Counterstrike
 !#SS58:D0/?y-2;
-!#VRy-2:Sz308233;
+!#VRy-2:Sz208233;
 !#SS58:D0/y-2;
 
 !#SS58:D1/?y-2;
-!#VRy-2:Sz308234;
+!#VRy-2:Sz208234;
 !#SS58:D1/y-2;
 
 !#SS58:D2/?y-2;
-!#VRy-2:Sz308235;
+!#VRy-2:Sz208235;
 !#SS58:D2/y-2;
 
 !#SS58:D3/?y-2;
-!#VRy-2:Sz308236;
+!#VRy-2:Sz208236;
 !#SS58:D3/y-2;
 
 
 *Berserk
 !#SS59:D0/?y-2;
-!#VRy-2:Sz308237;
+!#VRy-2:Sz208237;
 !#SS59:D0/y-2;
 
 !#SS59:D1/?y-2;
-!#VRy-2:Sz308238;
+!#VRy-2:Sz208238;
 !#SS59:D1/y-2;
 
 !#SS59:D2/?y-2;
-!#VRy-2:Sz308239;
+!#VRy-2:Sz208239;
 !#SS59:D2/y-2;
 
 !#SS59:D3/?y-2;
-!#VRy-2:Sz308240;
+!#VRy-2:Sz208240;
 !#SS59:D3/y-2;
 
 
 *Hypnotize
 !#SS60:D0/?y-2;
-!#VRy-2:Sz308241;
+!#VRy-2:Sz208241;
 !#SS60:D0/y-2;
 
 !#SS60:D1/?y-2;
-!#VRy-2:Sz308242;
+!#VRy-2:Sz208242;
 !#SS60:D1/y-2;
 
 !#SS60:D2/?y-2;
-!#VRy-2:Sz308243;
+!#VRy-2:Sz208243;
 !#SS60:D2/y-2;
 
 !#SS60:D3/?y-2;
-!#VRy-2:Sz308244;
+!#VRy-2:Sz208244;
 !#SS60:D3/y-2;
 
 
 *Forgetfulness
 !#SS61:D0/?y-2;
-!#VRy-2:Sz308245;
+!#VRy-2:Sz208245;
 !#SS61:D0/y-2;
 
 !#SS61:D1/?y-2;
-!#VRy-2:Sz308246;
+!#VRy-2:Sz208246;
 !#SS61:D1/y-2;
 
 !#SS61:D2/?y-2;
-!#VRy-2:Sz308247;
+!#VRy-2:Sz208247;
 !#SS61:D2/y-2;
 
 !#SS61:D3/?y-2;
-!#VRy-2:Sz308248;
+!#VRy-2:Sz208248;
 !#SS61:D3/y-2;
 
 
 *Blind
 !#SS62:D0/?y-2;
-!#VRy-2:Sz308249;
+!#VRy-2:Sz208249;
 !#SS62:D0/y-2;
 
 !#SS62:D1/?y-2;
-!#VRy-2:Sz308250;
+!#VRy-2:Sz208250;
 !#SS62:D1/y-2;
 
 !#SS62:D2/?y-2;
-!#VRy-2:Sz308251;
+!#VRy-2:Sz208251;
 !#SS62:D2/y-2;
 
 !#SS62:D3/?y-2;
-!#VRy-2:Sz308252;
+!#VRy-2:Sz208252;
 !#SS62:D3/y-2;
 
 
 *Teleport
 !#SS63:D0/?y-2;
-!#VRy-2:Sz308253;
+!#VRy-2:Sz208253;
 !#SS63:D0/y-2;
 
 !#SS63:D1/?y-2;
-!#VRy-2:Sz308254;
+!#VRy-2:Sz208254;
 !#SS63:D1/y-2;
 
 !#SS63:D2/?y-2;
-!#VRy-2:Sz308255;
+!#VRy-2:Sz208255;
 !#SS63:D2/y-2;
 
 !#SS63:D3/?y-2;
-!#VRy-2:Sz308256;
+!#VRy-2:Sz208256;
 !#SS63:D3/y-2;
 
 
 *Remove Obstacle
 !#SS64:D0/?y-2;
-!#VRy-2:Sz308257;
+!#VRy-2:Sz208257;
 !#SS64:D0/y-2;
 
 !#SS64:D1/?y-2;
-!#VRy-2:Sz308258;
+!#VRy-2:Sz208258;
 !#SS64:D1/y-2;
 
 !#SS64:D2/?y-2;
-!#VRy-2:Sz308259;
+!#VRy-2:Sz208259;
 !#SS64:D2/y-2;
 
 !#SS64:D3/?y-2;
-!#VRy-2:Sz308260;
+!#VRy-2:Sz208260;
 !#SS64:D3/y-2;
 
 
 *Clone
 !#SS65:D0/?y-2;
-!#VRy-2:Sz308261;
+!#VRy-2:Sz208261;
 !#SS65:D0/y-2;
 
 !#SS65:D1/?y-2;
-!#VRy-2:Sz308262;
+!#VRy-2:Sz208262;
 !#SS65:D1/y-2;
 
 !#SS65:D2/?y-2;
-!#VRy-2:Sz308263;
+!#VRy-2:Sz208263;
 !#SS65:D2/y-2;
 
 !#SS65:D3/?y-2;
-!#VRy-2:Sz308264;
+!#VRy-2:Sz208264;
 !#SS65:D3/y-2;
 
 
 *Fire Elemental
 !#SS66:D0/?y-2;
-!#VRy-2:Sz308265;
+!#VRy-2:Sz208265;
 !#SS66:D0/y-2;
 
 !#SS66:D1/?y-2;
-!#VRy-2:Sz308266;
+!#VRy-2:Sz208266;
 !#SS66:D1/y-2;
 
 !#SS66:D2/?y-2;
-!#VRy-2:Sz308267;
+!#VRy-2:Sz208267;
 !#SS66:D2/y-2;
 
 !#SS66:D3/?y-2;
-!#VRy-2:Sz308268;
+!#VRy-2:Sz208268;
 !#SS66:D3/y-2;
 
 
 *Earth Elemental
 !#SS67:D0/?y-2;
-!#VRy-2:Sz308269;
+!#VRy-2:Sz208269;
 !#SS67:D0/y-2;
 
 !#SS67:D1/?y-2;
-!#VRy-2:Sz308270;
+!#VRy-2:Sz208270;
 !#SS67:D1/y-2;
 
 !#SS67:D2/?y-2;
-!#VRy-2:Sz308271;
+!#VRy-2:Sz208271;
 !#SS67:D2/y-2;
 
 !#SS67:D3/?y-2;
-!#VRy-2:Sz308272;
+!#VRy-2:Sz208272;
 !#SS67:D3/y-2;
 
 
 *Water Elemental
 !#SS68:D0/?y-2;
-!#VRy-2:Sz308273;
+!#VRy-2:Sz208273;
 !#SS68:D0/y-2;
 
 !#SS68:D1/?y-2;
-!#VRy-2:Sz308274;
+!#VRy-2:Sz208274;
 !#SS68:D1/y-2;
 
 !#SS68:D2/?y-2;
-!#VRy-2:Sz308275;
+!#VRy-2:Sz208275;
 !#SS68:D2/y-2;
 
 !#SS68:D3/?y-2;
-!#VRy-2:Sz308276;
+!#VRy-2:Sz208276;
 !#SS68:D3/y-2;
 
 
 *Air Elemental
 !#SS69:D0/?y-2;
-!#VRy-2:Sz308277;
+!#VRy-2:Sz208277;
 !#SS69:D0/y-2;
 
 !#SS69:D1/?y-2;
-!#VRy-2:Sz308278;
+!#VRy-2:Sz208278;
 !#SS69:D1/y-2;
 
 !#SS69:D2/?y-2;
-!#VRy-2:Sz308279;
+!#VRy-2:Sz208279;
 !#SS69:D2/y-2;
 
 !#SS69:D3/?y-2;
-!#VRy-2:Sz308280;
+!#VRy-2:Sz208280;
 !#SS69:D3/y-2;
 
 

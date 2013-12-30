@@ -1,7 +1,7 @@
 ZVSE
-ERMS_ScriptDate=21.6(June).2006
+ERMS_ScriptDate=31.12(December).2013
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
 ** Ginko's Training Facility version 0.2
 ** Script117.erm
@@ -23,7 +23,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 
 !#UN:P900/?v1; [Check if Stack Experience is enabled: v1]
 !#UN:P317/?v2; [Check if Ginko's script is enabled: v2]
-!#VRz187&v1=1/v2=1:S^Ginko's Training Facility^;
+!#VRz187&v1=1/v2=1:Sz217000;
 !#HT107/-1&v1=1/v2=1:T187; [Set hint text to z187]
 
 --------------------------------------------------------------------------------
@@ -46,31 +46,15 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!VRy-3:Sv151; [Copy v151 to y-3]
 !!VRy-3:&y-100; [See if player's bit number is stored in v151: y-3]
 
-!!IF&y-3>0/y-18=0:M^{Ginko's Training Facility}
-
-When you enter the admissions building, the facility's director, rushes over to greet you and pumps your hand vigorously.
-
-"Welcome, welcome, welcome, my friend, it's great to see you here again!  I'm Ginko Baloba and I'm sure you'll love our new courses.  I can't stay and chat this morning but all you have to do is fill in these registration forms and Bob's your uncle!  Have a wonderful day and don't forget to try our complimentary tea.  The instructors will be in shortly."^;
+!!IF&y-3>0/y-18=0:M1/z217001;
 
  [Display intro text first time visited]
-!!IF&y-3=0/y-18=0:M^{Ginko's Training Facility}
-
-When you enter the admissions building you note the exquisitely crafted door handles, expensive furniture and finely woven tapestries on the wall, as well as a display case filled with various awards and trophies.
-
-A bright and boisterous young man sitting at a mahogany desk leaps to his feet when you enter, and effortlessly bounds towards you, grabbing your hand and pumping it vigorously.  He's dressed very well, impeccably groomed and his perfectly straight teeth are so white they're almost blinding.
-
-"Welcome to Ginko's Training Facility.  Baloba's the name, Ginko Baloba--I'm the director of this world renowned educational institution--{world} {renowned} I say!  We offer fast and complete training with hand-picked instructors from the far corners of the land, complete with a money-back guarantee if you're not {completely} satisified--100% guaranteed, I assure you!"
-
-"My facility has trained literally millions of soliders from every part of the world--millions I tell you!  We have an incredible 148% success rate (independently verified) and can teach your young men (and women) combat tricks they've never even dreamed of in a million years--a million years I say!"
-
-Well, it all sounds a bit too good to be true but you {have} actually heard positive things about the place.  The director's obviously a bit of a twerp but since you're here now you might as well give the training a go--god knows, in this war you can use every little advantage you can get.^;
+!!IF&y-3=0/y-18=0:M1/z217002;
 !!VRv151&y-3=0:|y-100; [Add player's bit number to v151 so intro message won't repeat]
 
 !!FU-5:P; [Hero training (+1 to Attack or Defense once per hero for 1000 gold]
 
-!!IF&y-18=1:M^Ginko Baloba informs you that the troop instructors need to rest and so there will be no more classes available today.
-
-"But be sure to come back bright and early tomorrow!" he calls as he cheerfully waves and vanishes into his office.^;
+!!IF&y-18=1:M1/z217003;
 !!FU&y-18=1:E; [Exit if no more Training available for today]
 
 !!VRy-21:S0; [Initialize y-21 to 0]
@@ -78,26 +62,16 @@ Well, it all sounds a bit too good to be true but you {have} actually heard posi
 !!VRy-25:+5; [Add 5 to maximum training rank: y-25]
 !!VRy-25&y-25>10:S10; [Maximum training rank of 10 regardless: y-25]
 !!DO-1/0/6/1:P; [Build text strings for dialogue box: y-21=0 if no creatures]
-!!IF&y-21=0:M^You study the available courses but don't see anything for the troops you have with you.
-
-The Director suddenly reappears beside you and announces, "I see you don't have any soldiers my instructors can train.  That's too bad, too bad I say!"
-
-Ginko looks a little miffed that you don't have any business for him today, but it only lasts for a moment.  His face breaks out into a broad grin and he enthuses "Just remember, our doors are always open...so do hurry back with some young lads and ladies or seasoned veterans if you wish--we'll train them all.  We have lessons for your pikemen and halberdiers, tips and pointers for your archers and marksmen, strategy and tactics for your swordsmen and crusaders, obstacles and tournaments for your cavaliers and champions, and plenty of arrows for your sharpshooters to lose (just kidding).  Well, I'm sure we'll do business soon!"
-
-Ginko ushers you out and waves goodbye as you head off down the road.^;
+!!IF&y-21=0:M1/z217004;
 !!FU&y-21=0:E; [Exit if no creatures to train]
 
-!!VRz-1:S^G i n k o ' s   T r a i n i n g   F a c i l i t y
-
-Select stacks to train to the next rank. Current maximum rank is %Y-25.^;
+!!VRz-1:Sz217005;
 !!HE-1:R2/?y-12; [Hero's sex: 0=male, 1=female]
-!!VRz-7&y-12=0:S^sir^;
-!!VRz-7&y-12=1:S^lady^;
-!!VRz-2:S^Train all stacks listed above for %Y-24 gold.^;
+!!VRz-7&y-12=0:Sz217006;
+!!VRz-7&y-12=1:Sz217007;
+!!VRz-2:Sz217008;
 !!IF:G0/1/0/-1/1/2/3/4/5/6/7/-2/0/0/0/0; [Display dialogue box: checkboxes chosen stored in v1]
-!!IF&v1=0:M^The ever-bubbly director, Mr Ginko Baloba, pokes his head out when he sees you leaving.  "Now I know what you're thinking," he says, "You're thinking that this is too great a deal and you can't possibly take advantage of me and my low low rates by enrolling more troops in my classes.  Well let me tell you, good %Z-7, that's what we're here for!  Set your mind at ease and we'll do our best to please."
-
-Ginko chuckles at his catchy rhyme and then hastily adds before you're out of earshot, "Think it over and come back soon--we're open all day and most nights too!"^;
+!!IF&v1=0:M1/z217009;
 !!VRv1&v1>=128:Sy-19; [Set v1 (checkboxes selected) to value for all of them selected if "train all stacks" option is chosen]
 !!FU&v1=0:E; [Exit if player didn't choose any stacks to train]
 
@@ -107,20 +81,18 @@ Ginko chuckles at his catchy rhyme and then hastily adds before you're out of ea
 !!VRy-38:S0; [Initialize y-38 to 0]
 !!DO-6/1/7/1:Pv1; [Determine total cost for all stack training: y-8]
 
-!!VRz-8&y-12=0:S^man^;
-!!VRz-8&y-12=1:S^woman^;
+!!VRz-8&y-12=0:Sz217010;
+!!VRz-8&y-12=1:Sz217011;
 !!OW:R-1/6/?y-11; [Player's gold: y-11]
 !!VRy-26:Sy-8; [Copy y-8 to y-26]
 !!VRy-26&y-11>=y-8:*-1 -100000; [Convert gold to negative number for IF:N display if player can afford cost: y-26]
 !!IF:N36/y-26/y-40/y-50/y-41/y-51/y-42/y-52/y-43/y-53/y-44/y-54/y-45/y-55/y-46/y-56; [Set up IF:N display dialog]
-!!IF&y-11<y-8:N^"Oh dear oh dear oh dear oh dear oh dear!" cries Mr. Ginko Baloba, obviously perplexed. "I'm sooooooo sorry, but it seems you don't have the required class fees.  If it were just myself I would be happy to give you a discount--{more} than happy I say, but I'm duty-bound to pay these talented and hard-working instructors so that they can support their families, care for their sick and elderly relations and eke out an existence in these most troubled of times.  Well, I'm sure you understand, for you seem like a very understanding %Z-8.  Please do hurry back when you've sorted out your  finances." Ginko shakes your hand and quickly shoos you out the door.^;
+!!IF&y-11<y-8:Nz217012;
 !!FU&y-11<y-8:E; [Exit if player doesn't have enough gold]
 
 !!VRy-13:Sy-11 -y-8; [Player's new gold: y-13]
 !!OW:R-1/6/y-13; [Set player's new gold: y-13]
-!!IF:N^You hand over the {gold} (all %Y-8 of it) and the troops begin their training classes while you take a break to relax, eat a meal and drink some herbal tea ("Supplied at no extra charge and imported from exotic lands far to the east.").
-
-Before you know it, your army returns, a bit tired but excited to begin using their new found skills--these classes really work!^;
+!!IF:Nz217013;
 
 !!DO-8/1/7/1:Pv1; [Add one rank to each trained stack]
 
@@ -215,7 +187,7 @@ Before you know it, your army returns, a bit tired but excited to begin using th
 !!FU$bit$:Py10; [Convert stack number to a bit value: y-100]
 !!VRy-19:+y-100; [Add total bit values for each "checkbox" (trainable) stack: y-19]
 !!VRy-24:+y8; [Add total gold cost for training all trainable stacks: y-24]
-!!VRzx4:S^Train  %X2  %Z8  to  Rank  %Y5  for  %Y8  gold.^;
+!!VRzx4:Sz217014;
 
 --------------------------------------------------------------------------------
 
@@ -248,32 +220,16 @@ Before you know it, your army returns, a bit tired but excited to begin using th
 !!OB998:Dy1 C?y2; [Disable object for this player, School of War's number: y2]
 !!HE-1:V9/y2/?y3; [Check if hero has gained a bonus at this school yet: y3]
 !!FU&y3=1:E; [Exit if hero has already gained a bonus here]
-!!IF:Q2/31/1/32/1/10^{Hero Training}
+!!IF:Q2/31/1/32/1/10/z217015;
 
-"While your troops are busy training, how about we give you some top-notch instruction too?" suggests Ginko Baloba, smiling broadly.
-
-"For a mere 1000 gold coins, our incredible instructors can train you in either Attack or Defense.  What do you say?"^;
-
-!!IF&v2=0:M^"No? That's too bad, too bad, too bad indeed. Troops need to see their leader training too you know," chides Ginko, shaking his head sadly.
-
-"Well, if you change your mind, we're always ready to teach willing pupils a lesson or two.  Think it over and come back soon!"^;
+!!IF&v2=0:M1/z217016;
 !!OW:R-1/6/?y4; [Player's gold: y4]
 !!HE-1:R2/?y5; [Hero's sex: y5]
-!!VRz1&y5=0:S^man^;
-!!VRz1&y5=1:S^woman^;
-!!IF&v2>0/y4<1000:Q1/6/1000/1^"Ah," says Ginko Baloba looking a little perplexed. "I'm terribly sorry but it seems you don't have the required fee."
-
-"Please come back again when you've sorted out your finances.  After all, we're always ready to teach paying pupils a lesson or two!"^;
-!!IF&v2=1/y4>=1000:Q1/31/1/6/-101000/1^"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your attack training's completed!"
-
-"Of course, you do realize that this is a one-time deal? Our instructors here can only teach a seasoned hero like yourself so much you know."
-
-"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"^;
-!!IF&v2=2/y4>=1000:Q1/32/1/6/-101000/1^"Excellent," enthuses Ginko Baloba, beaming proudly. "You'll feel like a new %Z1 after your defense training's completed!"
-
-"Of course you do realize that this is a one-time deal. Our instructors here can only teach a seasoned hero like yourself so much you know."
-
-"But don't let that worry you," continues Ginko, smiling brightly, "Bring your army back for more training anytime you like!"^;
+!!VRz1&y5=0:Sz217017;
+!!VRz1&y5=1:Sz217018;
+!!IF&v2>0/y4<1000:Q1/6/1000/1/z217019;
+!!IF&v2=1/y4>=1000:Q1/31/1/6/-101000/1/z217020;
+!!IF&v2=2/y4>=1000:Q1/32/1/6/-101000/1/z217021;
 !!OW&v2>0/y4>=1000:R-1/6/d-1000; [Remove 1000 gold from player]
 !!HE-1&v2=1/y4>=1000:Fd1/d/d/d; [Give hero +1 Attack]
 !!HE-1&v2=2/y4>=1000:Fd/d1/d/d; [Give hero +1 Defense]
@@ -308,17 +264,12 @@ Before you know it, your army returns, a bit tired but excited to begin using th
 !!VRy-18:S0; [Initialize y-18 to 0]
 !!VRy-18&y-15=y-5/y-16=y-17:S1; [If this player has already visited this training facility, set y-18 to 1]
 
-!!VRz3&y-8=0:S^Training is available here for %Z1.
-^;
-!!VRz3&y-8<>0:S^No additional hero training is available here for %Z1.
-^;
+!!VRz3&y-8=0:Sz217022;
+!!VRz3&y-8<>0:Sz217023;
 !!VRz3&y-6<0:S^^;
-!!VRz4&y-18=0:S^Instructors are available for troop training.^;
-!!VRz4&y-18=1:S^Instructors are unavailable for troop training until tomorrow.^;
-!!VRz2:S^{Ginko's Training Facility}
-
-%Z3
-%Z4^;
+!!VRz4&y-18=0:Sz217024;
+!!VRz4&y-18=1:Sz217025;
+!!VRz2:Sz217026;
 !!IF&y-8=0/y-6>=0:Q1/31/1/17/0/32/1/4^%Z2^; [Display right-click hint message for Training Facility]
 !!IF|y-8=1/y-6<0:Q1/31/0/17/0/32/0/4^%Z2^; [Display right-click hint message for Training Facility]
 !!CM:R0; [Disable standard right-click response]

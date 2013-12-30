@@ -3,7 +3,7 @@ Updated for ERM Option Clash, January 28 2007
 ERMS_ScriptName=Script127
 ERMS_ScriptAuthor=Doom3d
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=28.1(January).2007
+ERMS_ScriptDate=31.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English or Magyar (native)
 ERMS_ScriptUsedVariables=v263-265
@@ -12,7 +12,7 @@ ERMS_ScriptUsedFlags=none
 ERMS_ScriptUsedTimers=TM1
 ERMS_ScriptUsedFunctions=642-643
 ERMS_ScriptUsedMacroNames=none
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 *  | (or= alt+w on my pc, used as hotkey)
 
@@ -197,7 +197,7 @@ _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any ed
 !!VRy-7:S2;  min value
 !!VRy-8:S10; max value
 !!VRy-9:Sc;
-!!VRz78&y-3=1:S^Pays taxes(%Y-7-%Y-8 gold per day).^; y-9 free
+!!VRz78&y-3=1:Sz227000; y-9 free
 !!UN&y-3=1/y-9=1:G1/139/2/78;      set it on first day (more, then once :)
 
 !!FU&y-9=1:E; exit if first day;  y-9 free

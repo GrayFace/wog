@@ -2,11 +2,11 @@ ZVSE
 ERMS_ScriptName=script110 Change Hero Class
 ERMS_ScriptAuthor=Thomas Franz (alias samot)
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=16.6(June).2006
+ERMS_ScriptDate=31.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English (United States) or English (native)
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
 ***************** Change Hero Class  *****************
 ** Written by Thomas Franz (alias samot)
@@ -29,11 +29,11 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!HE-1:O?y3 B0/?z-1; // get hero's owner and Name (to Z-1)
 !!OW:C=y3; !!FU&-1:E; // exit, if owner not = current player
 
-!!IF:Q1/34/0/2/z310019; // Do you want to change the class of %Z-1?
+!!IF:Q1/34/0/2/z210019; // Do you want to change the class of %Z-1?
 !!FU&-1:E; // exit, if no
-!!IF:Q1/31/0/33/0/7/z310020; // Do you want to change to a {might} or {magic} class?
-!!IF&1:G1/1/512/310021/310001/310002/310003/310004/310005/310006/310007/310008/310009/310022;  // might classes
-!!IF&-1:G1/1/512/310021/310010/310011/310012/310013/310014/310015/310016/310017/310018/310022; // magic classes
+!!IF:Q1/31/0/33/0/7/z210020; // Do you want to change to a {might} or {magic} class?
+!!IF&1:G1/1/512/210021/210001/210002/210003/210004/210005/210006/210007/210008/210009/210022;  // might classes
+!!IF&-1:G1/1/512/210021/210010/210011/210012/210013/210014/210015/210016/210017/210018/210022; // magic classes
 
 !!FU&v1=512:E; // exit, if cancel
 

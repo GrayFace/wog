@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
-ERMS_ScriptDate=17.12(December).2013
+ERMS_ScriptDate=31.12(December).2013
 
 ** More Map Options Version .94
 ** By Timothy Pulver
@@ -91,29 +91,26 @@ ERMS_ScriptDate=17.12(December).2013
 !!VRy-20&y-19<0:S-1; !!VRy-23&y-22<0:S-1; [If there's no additional resource picture, change picture amount to -1: y-20, y-23]
 
  [Display troop upgrade message]
-!!VRz-6:S^{Upgrade Troops at %Z-5}
-
-^; [Upgrade Troops at town x]
-!!IF&x1=0/y-5=0:M^%Z-6%Z-1 has no troops that can be upgraded here.^; [None of hero's troops to upgrade]
-!!IF&x1=0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all of %Z-1 troops.^; [Can't afford to upgrade hero's troops]
-!!IF&x1=1/y-4<0/y-3>=0/y-5=0:M^%Z-6%Z-1 has no troops that can be upgraded here.^; [None of hero's troops to upgrade]
-!!IF&x1=1/y-4<0/y-3<0/y-5=0:M^%Z-6There are no garrison troops that can be upgraded here.^; [No garrison troops can be upgraded here]
-!!IF&x1=1/y-3>=0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all of %Z-1 troops.^; [You can't afford to upgrade all hero's troops]
-!!IF&x1=1/y-3<0/y-5>0/y-18=1:M^%Z-6You can't afford to upgrade all garrison troops.^; [You can't afford to upgrade all garrison troops]
+!!VRz-6:Sz221000; [Upgrade Troops at town x]
+!!IF&x1=0/y-5=0:M1/z221001; [None of hero's troops to upgrade]
+!!IF&x1=0/y-5>0/y-18=1:M1/z221002; [Can't afford to upgrade hero's troops]
+!!IF&x1=1/y-4<0/y-3>=0/y-5=0:M1/z221003; [None of hero's troops to upgrade]
+!!IF&x1=1/y-4<0/y-3<0/y-5=0:M1/z221004; [No garrison troops can be upgraded here]
+!!IF&x1=1/y-3>=0/y-5>0/y-18=1:M1/z221005; [You can't afford to upgrade all hero's troops]
+!!IF&x1=1/y-3<0/y-5>0/y-18=1:M1/z221006; [You can't afford to upgrade all garrison troops]
 
 !!FU|y-5<1/y-18=1:E; [Exit if no troops to upgrade or can't afford cost]
 
  [Set up z-2 string with resource cost message]
-!!VRz-2|x1=0/y-3>=0:S^%Z-6Upgrade %Z-1's troops for %Y-16 gold^; [Upgrade hero's troops for x gold]
-!!VRz-2&x1=1/y-3=-1:S^%Z-6Upgrade the garrison troops for %Y-16 gold^; [Upgrade garrison troops for x gold]
-!!VRz-2&y-10>0:+^, %Y-10 wood^; [Wood cost]
-!!VRz-2&y-11>0:+^, %Y-11 mercury^; [Mercury cost]
-!!VRz-2&y-12>0:+^, %Y-12 ore^; [Ore cost]
-!!VRz-2&y-13>0:+^, %Y-13 sulfur^; [Sulfur cost]
-!!VRz-2&y-14>0:+^, %Y-14 crystal^; [Crystal cost]
-!!VRz-2&y-15>0:+^, %Y-15 gems^; [Gems cost]
-!!VRz-2:+^?
-%Z1^; [List of troops to upgrade]
+!!VRz-2|x1=0/y-3>=0:Sz221007; [Upgrade hero's troops for x gold]
+!!VRz-2&x1=1/y-3=-1:Sz221008; [Upgrade garrison troops for x gold]
+!!VRz-2&y-10>0:+z221009; [Wood cost]
+!!VRz-2&y-11>0:+z221010; [Mercury cost]
+!!VRz-2&y-12>0:+z221011; [Ore cost]
+!!VRz-2&y-13>0:+z221012; [Sulfur cost]
+!!VRz-2&y-14>0:+z221013; [Crystal cost]
+!!VRz-2&y-15>0:+z221014; [Gems cost]
+!!VRz-2:+z221015; [List of troops to upgrade]
 !!IF:Q2/36/y-16/y-19/y-20/y-22/y-23/2^%Z-2^; [Ask if player wishes to upgrade hero/garrison troops]
 !!DO196/0/6/1&x1=0/2:Py-4/1; [Upgrade visiting hero's troops]
 !!DO196/0/6/1&x1=1/2:Py-3/1; [Upgrade garrison/garrison hero's troops]
@@ -157,8 +154,7 @@ ERMS_ScriptDate=17.12(December).2013
 !!UN&y10=1/x2=0:N3/-3/y1/0; [Name of current troop type (singular): z-3]
 !!UN&y10>1/x2=0:N3/-4/y8/1; [Name of upgraded troop type (plural): z-4]
 !!UN&y10=1/x2=0:N3/-4/y8/0; [Name of upgraded troop type (singular): z-4]
-!!VRz1&x2=0:+^
-%Y10 %Z-3 {»»»} %Y10 %Z-4^; [String for troop type and upgrade: z-5]
+!!VRz1&x2=0:+z221016; [String for troop type and upgrade: z-5]
 !!VRy-5&x2=0:+1; [Increment number of upgrades: y-5]
 
 !!HEx1&x1>=0/x2=1:C0/x16/y8/d; [Upgrade creature (Hero)]
@@ -342,18 +338,16 @@ ERMS_ScriptDate=17.12(December).2013
 
 !!UN:N3/-1/x1/1 N3/-2/x2/1; [Name of current troop type: z-1, Upgraded: z-2]
 !!VRz-3:S^^; [Initialize z-3 to null string]
-!!VRz-3&y36<1/y2<0:S^ (at no cost)^; [Set z-3 to "(at no cost)" if there's no cost]
+!!VRz-3&y36<1/y2<0:Sz221017; [Set z-3 to "(at no cost)" if there's no cost]
 
 !!IF:V2/0; [Initialize Flag 2 to False]
 !!IF&-1000:V2/1; [AI always upgrades]
-!!IF&1000:Q2/21/y5/y8/y36/y2/y4/2^{Upgrade Troops}
-
-Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
+!!IF&1000:Q2/21/y5/y8/y36/y2/y4/2/z221018;
 !!OW:R-1/6/?y6; [Player's gold: y6]
 !!OW&y2>=0:R-1/y2/?y7; [Player's other resource: y7]
 !!FU&-2:E; [Exit if player doesn't wish to upgrade]
-!!IF&y6<y36/1000:Q1/6/y36/y2/y4/1^You don't have enough resources to upgrade these troops.^;
-!!IF&y6>=y36/y7<y4/1000:Q1/6/y36/y2/y4/1^You don't have enough resources to upgrade these troops.^;
+!!IF&y6<y36/1000:Q1/6/y36/y2/y4/1/z221019;
+!!IF&y6>=y36/y7<y4/1000:Q1/6/y36/y2/y4/1/z221020;
 !!FU|y6<y36/y7<y4:E; [Exit if player doesn't have enough resources]
 
 !!HE-1:C0/x4/x2/d/0/5; [Upgrade stack, adjusting stack XP as per a normal upgrade]
@@ -468,7 +462,7 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 !!VRy-4:Sv64 :20; [5% of experience: y-4]
 !!VRy-5:Sy-4 *y-3; [0%/5%/10%/15% XP bonus for Learning skill: y-5]
 !!VRv64:+y-5; [Add Learning skill bonus (if any): v64]
-!!IF&1000:Q1/17/v64/21/y-1/1^%Z1 receives %V64 experience for the fleeing %Z2.^;
+!!IF&1000:Q1/17/v64/21/y-1/1/z221021;
 !!HEy-2:Edv64; [Give hero half XP]
 !!UN:P49/=1; [Check if Henchmen are enabled: Flag 1=True if yes]
 !!IF&1:Wy-2; [Set w variables to this hero]
@@ -657,13 +651,11 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
  [** If y-20=y-100, messages are disabled for current player **]
 
 !!UN:N3/4/y-1/1; [Name of Monster: z4]
-!!VRz-1:S^The %Z4 had resources. Do you want to collect them?
-
-(Right-click System Options to enable/disable option display)^;
-!!VRz-2:S^Yes, collect the resources. This uses up to 500 movement points (5 tiles).^;
-!!VRz-3:S^No, don't collect the resources, I'm in a hurry!^;
-!!VRz-4:S^Yes, collect them every time and don't display these options again.^;
-!!VRz-5:S^No, don't collect them and don't display these options again.^;
+!!VRz-1:Sz221022;
+!!VRz-2:Sz221023;
+!!VRz-3:Sz221024;
+!!VRz-4:Sz221025;
+!!VRz-5:Sz221026;
 !!VRv1:S0; [Initialize v1 to 0]
 !!IF&y-20<>y-100/1000:G1/1/y-18/-1/-2/-3/-4/-5/0/0/0/0/0/0/0/0; [Display option list unless disabled: choice in v1]
 !!VRy-21&v1=0:S2; [Default to no for AI]
@@ -672,7 +664,7 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 !!VRvy-17&1000/y-20<>y-100:Sy-21; [Store selected option in vy-17 (v762-v769) unless disabled]
 !!VRy-21&1000/y-20=y-100:Sy-18; [If message disabled, use last selected option for human hero: y-21]
 
-!!VRz1:S^Message Disabling^; [Section name: z1]
+!!VRz1:Sz221027; [Section name: z1]
 !!DO10938/3320/3328/1|v1=4/v1=8:P0; [Load the disabling state variables from disk file]
 !!VRv3328|v1=4/v1=8:|y-100; [Add message disabled state to v3328 for this player: v3328]
 !!DO10938/3320/3328/1|v1=4/v1=8:P1; [Save the disabling state variables to disk file]
@@ -688,8 +680,8 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 
 !!HEy-2:B0/?z1; [Hero's name]
 
-!!VRz3&y-3=1:S^After the %Z4 flee, %Z1's army searches the camp and finds some treasure they left behind!^;
-!!VRz3&y-3=2:S^After defeating the %Z4, %Z1's army searches the camp and finds treasure!^;
+!!VRz3&y-3=1:Sz221028;
+!!VRz3&y-3=2:Sz221029;
 
 !!IF&1000/y-11=0:Q1/6/y-4/1^%Z3^; [Gold alone]
 !!IF&1000/y-11>=1/y-11<=2:Q1/6/y-4/y-5/y-7/1^%Z3^; [Gold + Wood/Ore]
@@ -922,8 +914,8 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 !!UN&y-3=1:N3/-1/y-4/0; [Name of monsters (singular): z-1]
 !!UN&y-3>1:N3/-1/y-4/1; [Name of monsters (plural): z-1]
 !!UN:N0/-2/y-1; [Name of artifact: z-2]
-!!VRz-3&y-3=1:S^As you approach the %Z-1, you can see that it's jealously guarding the %Z-2!^;
-!!VRz-3&y-3>1:S^As you approach the %Z-1, you can see that they're jealously guarding the %Z-2!^;
+!!VRz-3&y-3=1:Sz221030;
+!!VRz-3&y-3>1:Sz221031;
 !!VRy-5:S65536 *y-3 +y-4; [Display variable for monster subtype showing numbers: y-5]
 !!IF&1000:Q1/21/y-5/8/y-1/1^%Z-3^; [Display artifact message when monster stack is attacked]
 
@@ -952,7 +944,7 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 !!UN&y-10=1:N3/-2/y-9/0; [Name of monsters (singular): z-2]
 !!UN&y-10>1:N3/-2/y-9/1; [Name of monsters (plural): z-2]
 !!UN:N0/-3/y-7; [Name of artifact: z-3]
-!!IF&1000:Q1/8/y-7/1^After defeating the %Z-2, %Z-1 captures the %Z-3!^;
+!!IF&1000:Q1/8/y-7/1/z221032;
 !!HEy-4:A4/y-7; [Give artifact to hero]
 
 --------------------------------------------------------------------------------
@@ -1122,21 +1114,16 @@ Do you wish to upgrade %Z-1 to %Z-2%Z-3?^;
 !!OW:Ky-100/0/?y-10 Ky-100/1/?y-11 Ky-100/2/?y-12 Ky-100/3/?y-13; [Get state of Keymaster Tents 0-3: y-10..y-13]
 !!OW:Ky-100/4/?y-14 Ky-100/5/?y-15 Ky-100/6/?y-16 Ky-100/7/?y-17; [Get state of Keymaster Tents 4-7: y-14..y-17]
 
-!!VRz-1&y-10=0:S^NO^; !!VRz-1&y-10=1:S^YES^; [Light Blue]
-!!VRz-2&y-11=0:S^NO^; !!VRz-2&y-11=1:S^YES^; [Green]
-!!VRz-3&y-12=0:S^NO^; !!VRz-3&y-12=1:S^YES^; [Red]
-!!VRz-4&y-13=0:S^NO^; !!VRz-4&y-13=1:S^YES^; [Dark Blue]
-!!VRz-5&y-14=0:S^NO^; !!VRz-5&y-14=1:S^YES^; [Brown]
-!!VRz-6&y-15=0:S^NO^; !!VRz-6&y-15=1:S^YES^; [Purple]
-!!VRz-7&y-16=0:S^NO^; !!VRz-7&y-16=1:S^YES^; [White]
-!!VRz-8&y-17=0:S^NO^; !!VRz-8&y-17=1:S^YES^; [Black]
+!!VRz-1&y-10=0:Sz221033; !!VRz-1&y-10=1:Sz221034; [Light Blue]
+!!VRz-2&y-11=0:Sz221035; !!VRz-2&y-11=1:Sz221036; [Green]
+!!VRz-3&y-12=0:Sz221037; !!VRz-3&y-12=1:Sz221038; [Red]
+!!VRz-4&y-13=0:Sz221039; !!VRz-4&y-13=1:Sz221040; [Dark Blue]
+!!VRz-5&y-14=0:Sz221041; !!VRz-5&y-14=1:Sz221042; [Brown]
+!!VRz-6&y-15=0:Sz221043; !!VRz-6&y-15=1:Sz221044; [Purple]
+!!VRz-7&y-16=0:Sz221045; !!VRz-7&y-16=1:Sz221046; [White]
+!!VRz-8&y-17=0:Sz221047; !!VRz-8&y-17=1:Sz221048; [Black]
 
-!!IF:Q1/10/y-100/1^{KEYMASTER TENTS VISITED}
-
-Light Blue: %Z-1    Dark Blue: %Z-4
-Red: %Z-3    Green: %Z-2
-Brown: %Z-5    Purple: %Z-6
-White: %Z-7    Black: %Z-8^; [Display dialog showing which keymaster tents player has visited]
+!!IF:Q1/10/y-100/1/z221049; [Display dialog showing which keymaster tents player has visited]
 !!CM:R0; [Disable standard right-click display]
 
 --------------------------------------------------------------------------------
@@ -1165,24 +1152,20 @@ White: %Z-7    Black: %Z-8^; [Display dialog showing which keymaster tents playe
 !!FU$LocalPlayer$:P;
 !!OW:Ky-100/y-7/?y-8; [Get state of corresponding Keymaster Tent: y-8 (0=not visited, 1=visited]
 
-!!VRz-1&y-7=0:S^Light Blue^; [Light Blue: z-1]
-!!VRz-1&y-7=1:S^Green^; [Green: z-1]
-!!VRz-1&y-7=2:S^Red^; [Red: z-1]
-!!VRz-1&y-7=3:S^Dark Blue^; [Dark Blue: z-1]
-!!VRz-1&y-7=4:S^Brown^; [Brown: z-1]
-!!VRz-1&y-7=5:S^Purple^; [Purple: z-1]
-!!VRz-1&y-7=6:S^White^; [White: z-1]
-!!VRz-1&y-7=7:S^Black^; [Black: z-1]
+!!VRz-1&y-7=0:Sz221050; [Light Blue: z-1]
+!!VRz-1&y-7=1:Sz221051; [Green: z-1]
+!!VRz-1&y-7=2:Sz221052; [Red: z-1]
+!!VRz-1&y-7=3:Sz221053; [Dark Blue: z-1]
+!!VRz-1&y-7=4:Sz221054; [Brown: z-1]
+!!VRz-1&y-7=5:Sz221055; [Purple: z-1]
+!!VRz-1&y-7=6:Sz221056; [White: z-1]
+!!VRz-1&y-7=7:Sz221057; [Black: z-1]
 
-!!VRz-1&y-6=9:S^%Z-1 Border Guard^; [Colour + Border Guard: z-1]
-!!VRz-1&y-6=212:S^%Z-1 Border Gate^; [Colour + Border Gate: z-1]
+!!VRz-1&y-6=9:Sz221058; [Colour + Border Guard: z-1]
+!!VRz-1&y-6=212:Sz221059; [Colour + Border Gate: z-1]
 
-!!VRz-1&y-8=0:S^%Z-1
-
-(Keymaster not visited)^; [Keymaster tent not visited: z-1]
-!!VRz-1&y-8=1:S^%Z-1
-
-(Keymaster visited)^; [Keymaster tent visited: z-1]
+!!VRz-1&y-8=0:Sz221060; [Keymaster tent not visited: z-1]
+!!VRz-1&y-8=1:Sz221061; [Keymaster tent visited: z-1]
 
 !!IF:Q1/-1/-1/4^%Z-1^; [Display right-click dialog for Border Guard or Border Gate]
 

@@ -1,0 +1,17 @@
+#	Text resource for "script107.erm" document		
+207000	Starting Hero Boost requires:
+ 	!#S	31.12.2013
+207001	Starting Hero Boost
+	!#S	31.12.2013
+207002	Starting Hero Boost is not compatible with:
+ 	!#S	31.12.2013
+207003	{Neutra Units Bonuses (script57)}
+	!#S	31.12.2013
+207004	{Neutra Stack Size (script57)}
+	!#S	31.12.2013
+207005	{Map Rule Double Movement}
+	!#S	31.12.2013
+207006	%Z-1 %Z-3 %Z-4	!#S	31.12.2013
+207007	%Z-2 {is turned off}	!#S	31.12.2013
+207008	%Z-9 %Z-5 %Z-6	!#S	31.12.2013
+207009	Because of extra health for %Z1 from Neutral Units Bonuses, you gain extra experience.	!!Q	31.12.2013

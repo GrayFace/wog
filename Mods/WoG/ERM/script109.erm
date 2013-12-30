@@ -2,11 +2,11 @@ ZVSE
 ERMS_ScriptName=script109 Random Monster King
 ERMS_ScriptAuthor=Thomas Franz (alias samot)
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=14.12(December).2006
+ERMS_ScriptDate=31.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English (United States) or English (native)
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
 ** Updated 14.12(December).2006: reduced chance to get the better commander artifacts
 
@@ -126,7 +126,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!VRy-5|y-3=0/y-3=2:*2; // double for wood / ore
 !!VRy-5&y-3=6:*100; // *100 for gold
 
-!!IF:Q1/17/v113/21/v114/y-3/y-5/1/309001; // show reward-message (exp, treasures)
+!!IF:Q1/17/v113/21/v114/y-3/y-5/1/209001; // show reward-message (exp, treasures)
 !!HEy-1:Edv113; // give additional exp.
 
 !!OW:Ry-2/y-3/?y-6; // get amount of the resource that the player has
@@ -136,7 +136,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!VRy-7:S0 R2; !!FU|y-7>0/v113<500:E; // if king has more then 500 HP then 33 % chance for one of the new artifacts (except the combination Barbarian Lord's Axe of Ferocity) as reward
 !!DO-3/1/100/1:P; // get (not disabled) reward artifact
 !!FU&y-100=0:E; // exit, if not at least one enabled new artifact was found
-!!IF:Q1/8/y-100/1/z309002;
+!!IF:Q1/8/y-100/1/z209002;
 !!HEy-1:Ay-100; // give artifact
 
 *************** end BA1 ***************

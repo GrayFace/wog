@@ -1,0 +1,99 @@
+#	Text resource for "script131.erm" document		
+231000	Red	!!S	31.12.2013
+231001	Blue	!!S	31.12.2013
+231002	Tan	!!S	31.12.2013
+231003	Green	!!S	31.12.2013
+231004	Orange	!!S	31.12.2013
+231005	Purple	!!S	31.12.2013
+231006	Teal	!!S	31.12.2013
+231007	Pink	!!S	31.12.2013
+231008	%Z-5 Heroes	!!S	31.12.2013
+231009	%Z-5 Towns	!!S	31.12.2013
+231010	{Note for %Z2}
+
+%Z6
+
+{Replace with a new note?}	!!Q	31.12.2013
+231011	Enter a note for %Z2?	!!Q	31.12.2013
+231012	Enter a new note for %Z2 or Cancel to keep old note.	!!S	31.12.2013
+231013	Enter a note for %Z2.	!!S	31.12.2013
+231014	You may enter up to 510 characters.	!!S	31.12.2013
+231015	{WARNING}
+
+Your note has been truncated to 510 characters.	!!M	31.12.2013
+231016	Set up a Reminder Message?	!!Q	31.12.2013
+231017	Red	!!S	31.12.2013
+231018	Blue	!!S	31.12.2013
+231019	Tan	!!S	31.12.2013
+231020	Green	!!S	31.12.2013
+231021	Orange	!!S	31.12.2013
+231022	Purple	!!S	31.12.2013
+231023	Teal	!!S	31.12.2013
+231024	Pink	!!S	31.12.2013
+231025	%Z7 Timed Reminder Messages	!!S	31.12.2013
+231026	Daily	!!S	31.12.2013
+231027	Start of Week (Day 1)	!!S	31.12.2013
+231028	End of Week (Day 7)	!!S	31.12.2013
+231029	Start of Month (Week 1, Day 1)	!!S	31.12.2013
+231030	End of Month (Week 4, Day 7)	!!S	31.12.2013
+231031	Day 1 (one time only)	!!S	31.12.2013
+231032	Day 2 (one time only)	!!S	31.12.2013
+231033	Day 3 (one time only)	!!S	31.12.2013
+231034	Day 4 (one time only)	!!S	31.12.2013
+231035	Day 5 (one time only)	!!S	31.12.2013
+231036	Day 6 (one time only)	!!S	31.12.2013
+231037	Day 7 (one time only)	!!S	31.12.2013
+231038	Select an option for displaying a Timed Reminder Message	!!S	31.12.2013
+231039	Enter a Reminder Message to be displayed every day.	!!S	31.12.2013
+231040	Enter a Reminder Message to be at the start of every week.	!!S	31.12.2013
+231041	Enter a Reminder Message to be displayed at the end of every week.	!!S	31.12.2013
+231042	Enter a Reminder Message to be displayed at the start of every month.	!!S	31.12.2013
+231043	Enter a Reminder Message to be displayed at the end of every month.	!!S	31.12.2013
+231044	Enter a Reminder Message to be displayed on the next Day 1.	!!S	31.12.2013
+231045	Enter a Reminder Message to be displayed on the next Day 2.	!!S	31.12.2013
+231046	Enter a Reminder Message to be displayed on the next Day 3.	!!S	31.12.2013
+231047	Enter a Reminder Message to be displayed on the next Day 4.	!!S	31.12.2013
+231048	Enter a Reminder Message to be displayed on the next Day 5.	!!S	31.12.2013
+231049	Enter a Reminder Message to be displayed on the next Day 6.	!!S	31.12.2013
+231050	Enter a Reminder Message to be displayed on the next Day 7.	!!S	31.12.2013
+231051	Enter up to 510 characters or Cancel to keep old message.	!!S	31.12.2013
+231052	{WARNING}
+
+Your note has been truncated to 510 characters.	!!M	31.12.2013
+231053	Red	!!S	31.12.2013
+231054	Blue	!!S	31.12.2013
+231055	Tan	!!S	31.12.2013
+231056	Green	!!S	31.12.2013
+231057	Orange	!!S	31.12.2013
+231058	Purple	!!S	31.12.2013
+231059	Teal	!!S	31.12.2013
+231060	Pink	!!S	31.12.2013
+231061	%Z-5 Timed Reminder Messages	!!S	31.12.2013
+231062	{Start of Month Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}	!!Q	31.12.2013
+231063	{End of Month Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}	!!Q	31.12.2013
+231064	{Start of Week Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}	!!Q	31.12.2013
+231065	{End of Week Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}	!!Q	31.12.2013
+231066	{Daily Reminder Message}
+
+%Z2
+
+{(CANCEL to erase message.)}	!!Q	31.12.2013
+231067	{Day %Y-1 One-Time Reminder}
+
+%Z2	!!M	31.12.2013

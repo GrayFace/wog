@@ -1,0 +1,122 @@
+#	Text resource for "script101.erm" document		
+201000	At the back of the Lean To you find some frozen food.
+If your army eats it, they'll have the energy to travel further.
+You can thaw it for use at any time.
+
+To see how much frozen food you have or to thaw and eat the food,
+right-click the ADVENTURE screen Quest Log button.	!!S	31.12.2013
+201001	Frozen Food	!!S	31.12.2013
+201002	he	!!S	31.12.2013
+201003	she	!!S	31.12.2013
+201004	his	!!S	31.12.2013
+201005	her	!!S	31.12.2013
+201006	%Z-1 doesn't have any frozen food. Try looking for some at an abandoned Lean To.	!!M	31.12.2013
+201007	%Z-1 has %W109 ration of
+frozen food.
+
+Would %Z-7 like to thaw it for %Z-8 army to eat so they can travel a bit further today?	!!Q	31.12.2013
+201008	%Z-1 has %W109 rations of
+frozen food.
+
+Would %Z-7 like to thaw one for %Z-8 army to eat so they can travel a bit further today?	!!Q	31.12.2013
+201009	mouth watering	!!S	31.12.2013
+201010	succulent	!!S	31.12.2013
+201011	delicious	!!S	31.12.2013
+201012	irresistable	!!S	31.12.2013
+201013	aromatic	!!S	31.12.2013
+201014	delectable	!!S	31.12.2013
+201015	delightful	!!S	31.12.2013
+201016	juicy	!!S	31.12.2013
+201017	scrumptious	!!S	31.12.2013
+201018	yummy	!!S	31.12.2013
+201019	fragrant	!!S	31.12.2013
+201020	chops	!!S	31.12.2013
+201021	burgers	!!S	31.12.2013
+201022	rib roast	!!S	31.12.2013
+201023	cutlets	!!S	31.12.2013
+201024	steaks	!!S	31.12.2013
+201025	thighs	!!S	31.12.2013
+201026	breasts	!!S	31.12.2013
+201027	stew	!!S	31.12.2013
+201028	casserole	!!S	31.12.2013
+201029	stir fry	!!S	31.12.2013
+201030	legs	!!S	31.12.2013
+201031	pie	!!S	31.12.2013
+201032	white	!!S	31.12.2013
+201033	black	!!S	31.12.2013
+201034	red	!!S	31.12.2013
+201035	blue	!!S	31.12.2013
+201036	green	!!S	31.12.2013
+201037	purple	!!S	31.12.2013
+201038	orange	!!S	31.12.2013
+201039	pink	!!S	31.12.2013
+201040	brown	!!S	31.12.2013
+201041	yellow	!!S	31.12.2013
+201042	gray	!!S	31.12.2013
+201043	sour	!!S	31.12.2013
+201044	salty	!!S	31.12.2013
+201045	spicy	!!S	31.12.2013
+201046	hot	!!S	31.12.2013
+201047	sweet	!!S	31.12.2013
+201048	cold	!!S	31.12.2013
+201049	buttery	!!S	31.12.2013
+201050	stinky	!!S	31.12.2013
+201051	pungent	!!S	31.12.2013
+201052	sticky	!!S	31.12.2013
+201053	barbeque	!!S	31.12.2013
+201054	peppery	!!S	31.12.2013
+201055	sweet and sour	!!S	31.12.2013
+201056	greasy	!!S	31.12.2013
+201057	bubbly	!!S	31.12.2013
+201058	rich	!!S	31.12.2013
+201059	creamy	!!S	31.12.2013
+201060	lumpy	!!S	31.12.2013
+201061	smooth	!!S	31.12.2013
+201062	thin	!!S	31.12.2013
+201063	thick	!!S	31.12.2013
+201064	oily	!!S	31.12.2013
+201065	tangy	!!S	31.12.2013
+201066	tart	!!S	31.12.2013
+201067	watery	!!S	31.12.2013
+201068	wine	!!S	31.12.2013
+201069	terriyaki	!!S	31.12.2013
+201070	basil	!!S	31.12.2013
+201071	cheese	!!S	31.12.2013
+201072	apple	!!S	31.12.2013
+201073	lemon	!!S	31.12.2013
+201074	curry	!!S	31.12.2013
+201075	garlic	!!S	31.12.2013
+201076	olive oil	!!S	31.12.2013
+201077	tomato	!!S	31.12.2013
+201078	ragu	!!S	31.12.2013
+201079	meat	!!S	31.12.2013
+201080	parsley	!!S	31.12.2013
+201081	mint	!!S	31.12.2013
+201082	onion	!!S	31.12.2013
+201083	fish	!!S	31.12.2013
+201084	cream	!!S	31.12.2013
+201085	plum	!!S	31.12.2013
+201086	a hunger for more	!!S	31.12.2013
+201087	the hiccups	!!S	31.12.2013
+201088	terrible bad breath	!!S	31.12.2013
+201089	puts a smile on their faces	!!S	31.12.2013
+201090	causes them break out in song	!!S	31.12.2013
+201091	itchy toes	!!S	31.12.2013
+201092	a raspy throat	!!S	31.12.2013
+201093	a swollen tongue	!!S	31.12.2013
+201094	watery eyes	!!S	31.12.2013
+201095	a feeling of euphoria	!!S	31.12.2013
+201096	a thirst for blood	!!S	31.12.2013
+201097	causes a brief (but powerful) sneezing fit	!!S	31.12.2013
+201098	an incredible thirst	!!S	31.12.2013
+201099	grows hair on their ears	!!S	31.12.2013
+201100	acts as an aphrodesiac	!!S	31.12.2013
+201101	turns them temporarily orange	!!S	31.12.2013
+201102	indigestion	!!S	31.12.2013
+201103	makes them want to dance	!!S	31.12.2013
+201104	makes them feel giddy	!!S	31.12.2013
+201105	a bad case of dandruff	!!S	31.12.2013
+201106	%Y-6 Extra Movement	!!S	31.12.2013
+201107	Thawing the frozen food reveals %Z-1 %Z-2 %Z-3 in %Z-4 %Z-5 sauce.
+
+Eating the %Z-2 %Z-3 gives your army %Y-6 extra movement points and %Z-6.	!!Q	31.12.2013

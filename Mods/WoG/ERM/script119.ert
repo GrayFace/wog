@@ -1,0 +1,127 @@
+#	Text resource for "script119.erm" document		
+219000	How many Victory Points are needed to Win?
+
+TIP: 100-300 points are good for a large map.	!!S	31.12.2013
+219001	Enter a number between 25 and 5000.	!!S	31.12.2013
+219002	How many Victory Points MORE than other players are needed to Win?
+
+TIP: 25-50 points is usually a good number.	!!S	31.12.2013
+219003	Enter a number between 25 and 1000.	!!S	31.12.2013
+219004	How many Days will the game be played?	!!S	31.12.2013
+219005	Enter a number between 14 and 1000.	!!S	31.12.2013
+219006	You must enter a number between 25 and 5000.	!!M	31.12.2013
+219007	You must enter a number between 25 and 5000.	!!M	31.12.2013
+219008	You must enter a number between 25 and 1000.	!!M	31.12.2013
+219009	You must enter a number between 25 and 1000.	!!M	31.12.2013
+219010	You must enter a number between 14 and 1000.	!!M	31.12.2013
+219011	You must enter a number between 14 and 1000.	!!M	31.12.2013
+219012	V I C T O R Y   P O I N T S
+
+Select type of Victory Point game to play.	!!S	31.12.2013
+219013	Play until one player reaches a set number of Victory Points (e.g., 1000).	!!S	31.12.2013
+219014	Play until one player has MORE VPs than any other player (e.g., 100 more).	!!S	31.12.2013
+219015	Play for a set number of days (e.g., 90). The player with the most VPs wins.	!!S	31.12.2013
+219016	Victory Points do NOT determine a winner and are for information use only.	!!S	31.12.2013
+219017	VICTORY POINT OPTIONS
+
+Enable/Disable Desired Options for this game.	!!S	31.12.2013
+219018	AI (computer) players CAN win the game with Victory Points.	!!S	31.12.2013
+219019	No human mine or dwelling recapture from human players in end-game period.	!!S	31.12.2013
+219020	Victory Point totals of other players are HIDDEN during the game.	!!S	31.12.2013
+219021	Note: Although computer players cannot win the game, the winning human player must still beat the computer players' Victory Point totals. In a time-limited game, the game will continue beyond the time-limit until a human player has more points than computer players.	!!M	31.12.2013
+219022	The first player to have %V63 Victory Points at the start of their turn will win the game. In the case of a tie, the game will continue until one player has %V63 points AND at least one more Victory Point than any other player.	!!S	31.12.2013
+219023	The first player to have %V63 {more} Victory Points than any other player at the start of their turn will win the game.	!!S	31.12.2013
+219024	The game will end Month %Y-4, Week %Y-5, Day %Y-6. The player with the most Victory Points at this time will win the game. In the case of a tie, the game continues until one player has at least one point more than any other player.	!!S	31.12.2013
+219025	Victory Points are for information only in this game.	!!S	31.12.2013
+219026	Computer players CANNOT win the game by gaining Victory Points but you must still beat their Victory Point total to win.	!!S	31.12.2013
+219027	Computer players CAN win the game by gaining Victory Points.	!!S	31.12.2013
+219028	all players'	!!S	31.12.2013
+219029	your own	!!S	31.12.2013
+219030	{Victory Points}
+
+%Z-1 %Z-2
+
+To see %Z-3 current Victory Points, right-click on the Adventure Options button. To see a list of Victory Point values, press Ctrl-A.	!!Q	31.12.2013
+219031	The end-game period begins when any player reaches %Y-7 Victory Points (ten points less than the number needed to win).	!!S	31.12.2013
+219032	The end-game period begins when one player has %Y-7 Victory Points more than other players (ten points less than the number needed to win).	!!S	31.12.2013
+219033	The end-game period begins on Month %Y-4, Week %Y-7, Day %Y-6 (one week before the game is scheduled to end).	!!S	31.12.2013
+219034	{End-Game Period}
+
+%Z-4
+
+Once the end-game period begins, human players cannot recapture mines or dwellings owned by other human players for the rest of the game. Unowned and computer-owned mines and dwellings may continue to be captured, however, and computer players may likewise capture human-owned mines and dwellings.	!!M	31.12.2013
+219035	{WARNING: End-Game Period in Effect!}
+
+The end-game period is now in effect. For the rest of the game, human controlled mines and dwellings cannot be captured by other human players.
+
+AI and unowned mines and dwellings may continue to be captured and AI players may capture human-controlled mines and dwellings.	!!M	31.12.2013
+219036	RED	!!S	31.12.2013
+219037	BLUE	!!S	31.12.2013
+219038	TAN	!!S	31.12.2013
+219039	GREEN	!!S	31.12.2013
+219040	ORANGE	!!S	31.12.2013
+219041	PURPLE	!!S	31.12.2013
+219042	TEAL	!!S	31.12.2013
+219043	PINK	!!S	31.12.2013
+219044	points	!!S	31.12.2013
+219045	point	!!S	31.12.2013
+219046	Most Recent Victory Points Recorded	!!S	31.12.2013
+219047	The %Z-1 player won the game on Month %X1, Week %X2, Day %X3 with %X4 Victory Points! (%X6 %Z-2 more than the next highest player.)	!!S	31.12.2013
+219048	The %Z-1 player WINS the game with %X4 Victory Points!
+
+(%X6 %Z-2 more than the next highest player.)	!!Q	31.12.2013
+219049	The %Z-1 player WINS the game with %X4 Victory Points, %X6 %Z-2 MORE than any other player!	!!Q	31.12.2013
+219050	The %Z-1 player WINS the game on Month %X1, Week %X2, Day %X3 with %X4 points!
+
+(%X6 %Z-2 more than the next highest player.)	!!Q	31.12.2013
+219051	The %Z-1 player WINS the game with %X4 Victory Points!
+
+(%X6 %Z-2 more than the next highest player.)	!!Q	31.12.2013
+219052	The %Z-1 player WINS the game with %X4 Victory Points, %X6 %Z-2 MORE than any other player!	!!Q	31.12.2013
+219053	The %Z-1 player WINS the game on Month %X1, Week %X2, Day %X3 with %X4 points!
+
+(%X6 %Z-2 more than the next highest player.)	!!Q	31.12.2013
+219054	RED	!!S	31.12.2013
+219055	BLUE	!!S	31.12.2013
+219056	TAN	!!S	31.12.2013
+219057	GREEN	!!S	31.12.2013
+219058	ORANGE	!!S	31.12.2013
+219059	PURPLE	!!S	31.12.2013
+219060	TEAL	!!S	31.12.2013
+219061	PINK	!!S	31.12.2013
+219062	%Z-5's Victory Points: %Y2	!!S	31.12.2013
+219063	V I C T O R Y   P O I N T   V A L U E S
+{Heroes:} 1 pt per Level
+{Town (no Fort):} 5 pts   {Town+Fort:} 10 pts
+{Town+Citadel:} 15 pts   {Town+Castle:} 20 pts
+{Town+Capitol:} 25 pts   {Grail Building:} 25 pts
+{Mine (not Gold):} 2 pts {Gold Mine:} 5 pts
+{External Dwelling:} 1-7 pts (by creature level)
+{Garrison, Shipyard, Lighthouse:} 1 pt
+{Wood/Ore (100):} 1 pt  {Mithril (20):} 1 pt
+{Precious Resource (50):} 1 pt  {Gold (20,000):} 1 pt	!!Q	31.12.2013
+219064	{Get %V63 points to Win!}	!!S	31.12.2013
+219065	{Get %V63 points MORE than other players to Win!}	!!S	31.12.2013
+219066	{Have most points Month %Y-20, Week %Y-21, Day %Y-22 to Win!}	!!S	31.12.2013
+219067	{Victory Points are for information only in this game!}	!!S	31.12.2013
+219068	V I C T O R Y   P O I N T S
+
+%Z2
+
+	!!S	31.12.2013
+219069	
+(Press Ctrl-A for List of Victory Point Values)	!!S	31.12.2013
+219070	Red	!!S	31.12.2013
+219071	Blue	!!S	31.12.2013
+219072	Tan	!!S	31.12.2013
+219073	Green	!!S	31.12.2013
+219074	Orange	!!S	31.12.2013
+219075	Purple	!!S	31.12.2013
+219076	Teal	!!S	31.12.2013
+219077	Pink	!!S	31.12.2013
+219078	%Z-1's Points: {%Y4}	!!S	31.12.2013
+219079	%Z-1's Points: {???}	!!S	31.12.2013
+219080	Human controlled mines cannot be captured by human players during the end-game period.	!!M	31.12.2013
+219081	Human controlled mines cannot be captured by human players during the end-game period.	!!M	31.12.2013
+219082	Human controlled dwellings cannot be captured by human players during the end-game period.	!!M	31.12.2013
+219083	Human controlled dwellings cannot be captured by human players during the end-game period.	!!M	31.12.2013

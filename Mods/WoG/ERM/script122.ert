@@ -1,0 +1,31 @@
+#	Text resource for "script122.erm" document		
+222000	His	!!S	31.12.2013
+222001	Her	!!S	31.12.2013
+222002	This	!!S	31.12.2013
+222003	He	!!S	31.12.2013
+222004	She	!!S	31.12.2013
+222005	his	!!S	31.12.2013
+222006	her	!!S	31.12.2013
+222007	its	!!S	31.12.2013
+222008	lead	!!S	31.12.2013
+222009	send	!!S	31.12.2013
+222010	(%Z7 cannot command any additional troops in battle.)	!!S	31.12.2013
+222011	(%Z7 can command up to %Y19 more points of troops in battle.)	!!S	31.12.2013
+222012	(This exceeds %Z5's total by %Y19 points.)	!!S	31.12.2013
+222013	Command Points: %Y11	!!S	31.12.2013
+222014	%Z5 can command up to %Y11 points of troops.	!!S	31.12.2013
+222015	Army's Points: %Y-2	!!S	31.12.2013
+222016	%Z5's army requires %Y-2 command points to lead into battle.	!!S	31.12.2013
+222017	{C o m m a n d    P o i n t s}
+
+%Z5 can command up to %Y11 points of troops.
+
+%Z6 army requires %Y-2 command points to lead them into the terrifying heat of battle.
+
+%Z8	!!Q	31.12.2013
+222018	{D e s e r t i n g   T r o o p s}
+
+%Z5 doesn't have enough Command Points to lead all of %Z9 troops into the terrifying heat of battle and some of them desert!	!!S	31.12.2013
+222019	{D e s e r t i n g   T r o o p s}
+
+%Z5 doesn't have enough Command Points to %Z10 all of %Z9 troops into the terrifying heat of battle and some of them desert!	!!S	31.12.2013

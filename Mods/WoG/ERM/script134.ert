@@ -1,0 +1,23 @@
+#	Text resource for "script134.erm" document		
+234000	Produces resources in towns and mines.	!!S	31.12.2013
+234001	Peasants in this land may produce gold and resources:
+In villages, they produce 1 gold per peasant.
+In towns, they produce 1.1 gold per peasant.
+In cities, they produce 1.2 gold per peasant.
+In the capitol, they produce 1.4 gold per peasant.
+Peasants with higher ranks do produce more: 10%% per rank.
+A market place increases the production by 10%%.
+The grail increases the production by 100%%.
+The resource silo enables enough peasants to produce that resource, too.
+Heroes in town garrison may increase production further.
+Heroes with resource speciality enable enough peasants to produce that resource too, if the resource silo is built.	!!M	31.12.2013
+234002	Peasants in mines may increase mine resource production:
+Sawmill production is increased by 1 wood per 500 peasants.
+Alchemist lab production is increased by 1 mercury per 1000 peasants.
+Ore pit production is increased by 1 ore per 500 peasants.
+Sulfur mine production is increased by 1 sulfur per 1000 peasants.
+Crystal mine production is increased by 1 crystal per 1000 peasants.
+Gem pond production is increased by 1 gem per 1000 peasants.	!!M	31.12.2013
+234003	%Y2 peasants in %Z1 produced some resources	!!S	31.12.2013
+234004	%Z2s %Y2 peasants in %Z1 produced some resources	!!S	31.12.2013
+234005	The peasants in the mine produced some resources	!!S	31.12.2013

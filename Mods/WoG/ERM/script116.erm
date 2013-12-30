@@ -1,7 +1,7 @@
 ZVSE
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
-ERMS_ScriptDate=21.6(June).2006
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
+ERMS_ScriptDate=31.12(December).2013
 
 ** Dwarven Treasury Banks version 0.2
 ** Script116 by Timothy Pulver
@@ -50,11 +50,7 @@ ERMS_ScriptDate=21.6(June).2006
 !?OB16/1&1000; [Dwarven Treasury Trigger for Human players]
 !!UN:P316/=1; !!FU&-1:E; [Exit if script is not enabled]
 !!CB998:T?y-16; [Check if Dwarven Treasury has been taken: y-16=1 if taken]
-!!IF&y-16=1:M^{Dwarven Treasury Bank}
-
-This branch of the Dwarven Treasury Bank has been ransacked and cleaned out. There's nobody here to conduct business with you.
-
-If you have money deposited with the Dwarves, you'll need to locate a working bank branch before you can withdraw it.^;
+!!IF&y-16=1:M1/z111000;
 !!FU&y-16=1:E; [Exit if branch is closed]
 
 !!OW:C?y-1; [Current player: y-1]
@@ -84,17 +80,9 @@ If you have money deposited with the Dwarves, you'll need to locate a working ba
 
 !!UN:G1/16/1/3; [Temporarily change name of Dwarves to random banker name: z3]
 
-!!IF&y-3>0/y-9>0:Q2/21/16/6/y-9/36/e-4/2^{Dwarven Treasury Bank}
-
-I am %Z3 and will be your banker for today. Our records show that you have %Y-9 gold deposited in your account. The current interest rate on your money is %Y-14%% and the next payment of %Y-15 gold will be in %Y-11 days.
-
-Would you like to withdraw all your money?^;
-!!IF&y-3>0/y-9>0/2:Q1/21/16/36/y-9/1^{Dwarven Treasury Bank}
-
-Thank you for doing business with us %Z2. Here's your money and we hope you will deposit with us again.^;
-!!IF&y-3>0/y-9>0/-2:Q1/21/16/1^{Dwarven Treasury Bank}
-
-Thank you for doing business with us %Z2. Please return when you wish to withdraw your money. Until then, we will keep it safe.^;
+!!IF&y-3>0/y-9>0:Q2/21/16/6/y-9/36/e-4/2/z111001;
+!!IF&y-3>0/y-9>0/2:Q1/21/16/36/y-9/1/z111002;
+!!IF&y-3>0/y-9>0/-2:Q1/21/16/1/z111003;
 !!OW&y-3>0/y-9>0/2:R-1/6/dy-9; [Give player their gold]
 !!VRvy-2&y-3>0/y-9>0/2:S0; [Set date of deposit back to 0: vy-2]
 !!VRvy-8&y-3>0/y-9>0/2:S0; [Set amount of deposit back to 0: vy-8]
@@ -102,42 +90,26 @@ Thank you for doing business with us %Z2. Please return when you wish to withdra
 !!FU&y-3>0/y-9>0:E; [Exit if player has money or withdrew money]
 
 !!IF:V3/0; [Initialize Flag 3 to false]
-!!IF&y-3<1|y-9<1:Q3/21/16/36/0/2^{Dwarven Treasury Bank}
-
-I am %Z3 and will be your banker for today. Our records show that you don't have an account with us right now. We pay 25% interest for each full week plus 3% more for each subsequent week thereafter. You may withdraw your money at any time but must close out your account before depositing more. This policy simplifies our bookkeeping.
-
-Do you wish to open an account and make a deposit?^;
-!!IF&-3:Q3/21/16/36/0/1^{Dwarven Treasury Bank}
-
-I hope you will do business with us another day.^;
+!!IF&y-3<1|y-9<1:Q3/21/16/36/0/2/z111004;
+!!IF&-3:Q3/21/16/36/0/1/z111005;
 !!UN&-3:G1/16/1/0; [Restore name of Dwarves]
 !!FU&-3:E; [Exit if player isn't making a deposit]
 
 !!VRz4:S^^; [Null string: z4]
-!!VRz-1:S^Dwarven Treasury Bank^;
-!!VRz-2:S^How much do you want to deposit?^;
+!!VRz-1:Sz111006;
+!!VRz-2:Sz111007;
 !!IF:D1/-1/-2/4/4/4/4/4/4/4/4/4/4/4/4/4; [Set up input dialog for entering deposit amount]
 !!IF:E1/1; [Display input dialog and store result in v1, amount player wishes to deposit is stored in z1]
 !!VRy-12:Vz1; [Convert deposit amount text entered (z1) to a number: y-12]
 !!OW:R-1/6/?y-17; [Player's current gold: y-17]
-!!IF&y-12>y-17:Q3/21/16/36/y-12/1^{Dwarven Treasury Bank}
-
-I'm sorry but you can't deposit more gold than you own. Please return when you have sorted out your financial records.
-
-We look forward to doing business with you soon. Have a good day.^;
-!!IF&y-12<1:Q3/21/16/1^{Dwarven Treasury Bank}
-
-You are depositing nothing at this time? Well then, we look forward to doing business with you soon. Have a good day.^;
+!!IF&y-12>y-17:Q3/21/16/36/y-12/1/z111008;
+!!IF&y-12<1:Q3/21/16/1/z111009;
 !!UN&y-12<1|y-12>y-17:G1/16/1/0; [Restore name of Dwarves]
 !!FU&y-12<1|y-12>y-17:E; [Exit if player isn't making a deposit or is trying to deposit more gold than he or she has]
 
 !!VRe-5:Sy-12 *e-1; [Calculate Interest amount on new deposit for one week (25%): e-5]
 !!VRy-13:Se-5; [Convert interest to an integer: y-13]
-!!IF:Q2/21/16/36/y-12/1^{Dwarven Treasury Bank}
-
-Thank you for your deposit of %Y-12 gold, %Z2. In one full week it will earn %Y-13 additional gold for you.
-
-We hope to see you again soon.^;
+!!IF:Q2/21/16/36/y-12/1/z111010;
 !!VRy-15:Sy-12 *-1; [Convert deposit to a negative value: y-15]
 !!OW:R-1/6/dy-15; [Remove gold from player]
 !!VRvy-2:Sc; [Set date of deposit back to current date: vy-2]
@@ -149,35 +121,35 @@ We hope to see you again soon.^;
 !?FU-1;
 !!VRy1:S0 T51; [First part of name: y1]
 !!VRy2:S0 R51; [Second part of name: y2]
-!!VRz1&y1=0:S^Goth^; !!VRz1&y1=1:S^Woob^; !!VRz1&y1=2:S^Grond^; !!VRz1&y1=3:S^Gorg^;
-!!VRz1&y1=4:S^Ming^; !!VRz1&y1=5:S^Gind^; !!VRz1&y1=6:S^Lard^; !!VRz1&y1=7:S^Rand^;
-!!VRz1&y1=8:S^Ping^; !!VRz1&y1=9:S^Boll^; !!VRz1&y1=10:S^Nath^; !!VRz1&y1=11:S^Crab^;
-!!VRz1&y1=12:S^Ax^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Till^; !!VRz1&y1=15:S^Jon^;
-!!VRz1&y1=16:S^Jim^; !!VRz1&y1=17:S^Morg^; !!VRz1&y1=18:S^Glib^; !!VRz1&y1=19:S^Zam^;
-!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Ick^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Laft^;
-!!VRz1&y1=24:S^Ard^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Drip^; !!VRz1&y1=27:S^Slik^;
-!!VRz1&y1=28:S^Dorp^; !!VRz1&y1=29:S^Noil^; !!VRz1&y1=30:S^Arv^; !!VRz1&y1=31:S^Parb^;
-!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Ryl^; !!VRz1&y1=34:S^Velp^; !!VRz1&y1=35:S^Varg^;
-!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Hilt^; !!VRz1&y1=38:S^Pet^; !!VRz1&y1=39:S^Rent^;
-!!VRz1&y1=40:S^Swift^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Corn^;
-!!VRz1&y1=44:S^Clad^; !!VRz1&y1=45:S^Than^; !!VRz1&y1=46:S^Bald^; !!VRz1&y1=47:S^Oog^;
-!!VRz1&y1=48:S^Simp^; !!VRz1&y1=49:S^Bong^; !!VRz1&y1=50:S^Wazz^; !!VRz1&y1=51:S^Hal^;
+!!VRz1&y1=0:Sz111011; !!VRz1&y1=1:Sz111012; !!VRz1&y1=2:Sz111013; !!VRz1&y1=3:Sz111014;
+!!VRz1&y1=4:Sz111015; !!VRz1&y1=5:Sz111016; !!VRz1&y1=6:Sz111017; !!VRz1&y1=7:Sz111018;
+!!VRz1&y1=8:Sz111019; !!VRz1&y1=9:Sz111020; !!VRz1&y1=10:Sz111021; !!VRz1&y1=11:Sz111022;
+!!VRz1&y1=12:Sz111023; !!VRz1&y1=13:Sz111024; !!VRz1&y1=14:Sz111025; !!VRz1&y1=15:Sz111026;
+!!VRz1&y1=16:Sz111027; !!VRz1&y1=17:Sz111028; !!VRz1&y1=18:Sz111029; !!VRz1&y1=19:Sz111030;
+!!VRz1&y1=20:Sz111031; !!VRz1&y1=21:Sz111032; !!VRz1&y1=22:Sz111033; !!VRz1&y1=23:Sz111034;
+!!VRz1&y1=24:Sz111035; !!VRz1&y1=25:Sz111036; !!VRz1&y1=26:Sz111037; !!VRz1&y1=27:Sz111038;
+!!VRz1&y1=28:Sz111039; !!VRz1&y1=29:Sz111040; !!VRz1&y1=30:Sz111041; !!VRz1&y1=31:Sz111042;
+!!VRz1&y1=32:Sz111043; !!VRz1&y1=33:Sz111044; !!VRz1&y1=34:Sz111045; !!VRz1&y1=35:Sz111046;
+!!VRz1&y1=36:Sz111047; !!VRz1&y1=37:Sz111048; !!VRz1&y1=38:Sz111049; !!VRz1&y1=39:Sz111050;
+!!VRz1&y1=40:Sz111051; !!VRz1&y1=41:Sz111052; !!VRz1&y1=42:Sz111053; !!VRz1&y1=43:Sz111054;
+!!VRz1&y1=44:Sz111055; !!VRz1&y1=45:Sz111056; !!VRz1&y1=46:Sz111057; !!VRz1&y1=47:Sz111058;
+!!VRz1&y1=48:Sz111059; !!VRz1&y1=49:Sz111060; !!VRz1&y1=50:Sz111061; !!VRz1&y1=51:Sz111062;
 
-!!VRz2&y2=0:S^weed^; !!VRz2&y2=1:S^wort^; !!VRz2&y2=2:S^alar^; !!VRz2&y2=3:S^ant^;
-!!VRz2&y2=4:S^taran^; !!VRz2&y2=5:S^elan^; !!VRz2&y2=6:S^wump^; !!VRz2&y2=7:S^abot^;
-!!VRz2&y2=8:S^pong^; !!VRz2&y2=9:S^woval^; !!VRz2&y2=10:S^nack^; !!VRz2&y2=11:S^creen^;
-!!VRz2&y2=12:S^ellan^; !!VRz2&y2=13:S^smith^; !!VRz2&y2=14:S^ofex^; !!VRz2&y2=15:S^athan^;
-!!VRz2&y2=16:S^orfin^; !!VRz2&y2=17:S^nelp^; !!VRz2&y2=18:S^wert^; !!VRz2&y2=19:S^ifan^;
-!!VRz2&y2=20:S^ylart^; !!VRz2&y2=21:S^rasp^; !!VRz2&y2=22:S^alig^; !!VRz2&y2=23:S^alot^;
-!!VRz2&y2=24:S^varkan^; !!VRz2&y2=25:S^weird^; !!VRz2&y2=26:S^ingan^; !!VRz2&y2=27:S^glick^;
-!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^parth^; !!VRz2&y2=30:S^erly^; !!VRz2&y2=31:S^oomp^;
-!!VRz2&y2=32:S^ivore^; !!VRz2&y2=33:S^and^; !!VRz2&y2=34:S^untor^; !!VRz2&y2=35:S^islarg^;
-!!VRz2&y2=36:S^astin^; !!VRz2&y2=37:S^ernie^; !!VRz2&y2=38:S^doggoth^; !!VRz2&y2=39:S^ispade^;
-!!VRz2&y2=40:S^onent^; !!VRz2&y2=41:S^enclark^; !!VRz2&y2=42:S^sore^; !!VRz2&y2=43:S^doggel^;
-!!VRz2&y2=44:S^blackin^; !!VRz2&y2=45:S^atoth^; !!VRz2&y2=46:S^hair^; !!VRz2&y2=47:S^isploog^;
-!!VRz2&y2=48:S^son^; !!VRz2&y2=49:S^isgon^; !!VRz2&y2=50:S^itfore^; !!VRz2&y2=51:S^nowk^;
+!!VRz2&y2=0:Sz111063; !!VRz2&y2=1:Sz111064; !!VRz2&y2=2:Sz111065; !!VRz2&y2=3:Sz111066;
+!!VRz2&y2=4:Sz111067; !!VRz2&y2=5:Sz111068; !!VRz2&y2=6:Sz111069; !!VRz2&y2=7:Sz111070;
+!!VRz2&y2=8:Sz111071; !!VRz2&y2=9:Sz111072; !!VRz2&y2=10:Sz111073; !!VRz2&y2=11:Sz111074;
+!!VRz2&y2=12:Sz111075; !!VRz2&y2=13:Sz111076; !!VRz2&y2=14:Sz111077; !!VRz2&y2=15:Sz111078;
+!!VRz2&y2=16:Sz111079; !!VRz2&y2=17:Sz111080; !!VRz2&y2=18:Sz111081; !!VRz2&y2=19:Sz111082;
+!!VRz2&y2=20:Sz111083; !!VRz2&y2=21:Sz111084; !!VRz2&y2=22:Sz111085; !!VRz2&y2=23:Sz111086;
+!!VRz2&y2=24:Sz111087; !!VRz2&y2=25:Sz111088; !!VRz2&y2=26:Sz111089; !!VRz2&y2=27:Sz111090;
+!!VRz2&y2=28:Sz111091; !!VRz2&y2=29:Sz111092; !!VRz2&y2=30:Sz111093; !!VRz2&y2=31:Sz111094;
+!!VRz2&y2=32:Sz111095; !!VRz2&y2=33:Sz111096; !!VRz2&y2=34:Sz111097; !!VRz2&y2=35:Sz111098;
+!!VRz2&y2=36:Sz111099; !!VRz2&y2=37:Sz111100; !!VRz2&y2=38:Sz111101; !!VRz2&y2=39:Sz111102;
+!!VRz2&y2=40:Sz111103; !!VRz2&y2=41:Sz111104; !!VRz2&y2=42:Sz111105; !!VRz2&y2=43:Sz111106;
+!!VRz2&y2=44:Sz111107; !!VRz2&y2=45:Sz111108; !!VRz2&y2=46:Sz111109; !!VRz2&y2=47:Sz111110;
+!!VRz2&y2=48:Sz111111; !!VRz2&y2=49:Sz111112; !!VRz2&y2=50:Sz111113; !!VRz2&y2=51:Sz111114;
 
-!!VRz3:S^%Z1%Z2^; [Male name: z1]
+!!VRz3:Sz111115; [Male name: z1]
 
 --------------------------------------------------------------------------------
 
@@ -185,33 +157,33 @@ We hope to see you again soon.^;
 !?FU-2;
 !!VRy1:S0 T51; [First part of name: y1]
 !!VRy2:S0 R51; [Second part of name: y2]
-!!VRz1&y1=0:S^Jen^; !!VRz1&y1=1:S^Pink^; !!VRz1&y1=2:S^Selip^; !!VRz1&y1=3:S^Perr^;
-!!VRz1&y1=4:S^Jinn^; !!VRz1&y1=5:S^Tin^; !!VRz1&y1=6:S^Sand^; !!VRz1&y1=7:S^Bett^;
-!!VRz1&y1=8:S^Nymph^; !!VRz1&y1=9:S^Sab^; !!VRz1&y1=10:S^Grace^; !!VRz1&y1=11:S^Lean^;
-!!VRz1&y1=12:S^Jess^; !!VRz1&y1=13:S^Sam^; !!VRz1&y1=14:S^Amber^; !!VRz1&y1=15:S^Lemon^;
-!!VRz1&y1=16:S^Tess^; !!VRz1&y1=17:S^Liz^; !!VRz1&y1=18:S^Mari^; !!VRz1&y1=19:S^Zam^;
-!!VRz1&y1=20:S^Vind^; !!VRz1&y1=21:S^Hir^; !!VRz1&y1=22:S^Jig^; !!VRz1&y1=23:S^Kar^;
-!!VRz1&y1=24:S^Flor^; !!VRz1&y1=25:S^Weft^; !!VRz1&y1=26:S^Cath^; !!VRz1&y1=27:S^Silk^;
-!!VRz1&y1=28:S^Petal^; !!VRz1&y1=29:S^Daph^; !!VRz1&y1=30:S^Tar^; !!VRz1&y1=31:S^Zir^;
-!!VRz1&y1=32:S^Herb^; !!VRz1&y1=33:S^Rion^; !!VRz1&y1=34:S^Merb^; !!VRz1&y1=35:S^Lov^;
-!!VRz1&y1=36:S^Stor^; !!VRz1&y1=37:S^Felt^; !!VRz1&y1=38:S^Lin^; !!VRz1&y1=39:S^Ren^;
-!!VRz1&y1=40:S^Sweet^; !!VRz1&y1=41:S^Ark^; !!VRz1&y1=42:S^Kiln^; !!VRz1&y1=43:S^Con^;
-!!VRz1&y1=44:S^Clov^; !!VRz1&y1=45:S^Nan^; !!VRz1&y1=46:S^Christ^; !!VRz1&y1=47:S^Jil^;
-!!VRz1&y1=48:S^Dar^; !!VRz1&y1=49:S^Bint^; !!VRz1&y1=50:S^Wuzz^; !!VRz1&y1=51:S^Hil^;
+!!VRz1&y1=0:Sz111116; !!VRz1&y1=1:Sz111117; !!VRz1&y1=2:Sz111118; !!VRz1&y1=3:Sz111119;
+!!VRz1&y1=4:Sz111120; !!VRz1&y1=5:Sz111121; !!VRz1&y1=6:Sz111122; !!VRz1&y1=7:Sz111123;
+!!VRz1&y1=8:Sz111124; !!VRz1&y1=9:Sz111125; !!VRz1&y1=10:Sz111126; !!VRz1&y1=11:Sz111127;
+!!VRz1&y1=12:Sz111128; !!VRz1&y1=13:Sz111129; !!VRz1&y1=14:Sz111130; !!VRz1&y1=15:Sz111131;
+!!VRz1&y1=16:Sz111132; !!VRz1&y1=17:Sz111133; !!VRz1&y1=18:Sz111134; !!VRz1&y1=19:Sz111135;
+!!VRz1&y1=20:Sz111136; !!VRz1&y1=21:Sz111137; !!VRz1&y1=22:Sz111138; !!VRz1&y1=23:Sz111139;
+!!VRz1&y1=24:Sz111140; !!VRz1&y1=25:Sz111141; !!VRz1&y1=26:Sz111142; !!VRz1&y1=27:Sz111143;
+!!VRz1&y1=28:Sz111144; !!VRz1&y1=29:Sz111145; !!VRz1&y1=30:Sz111146; !!VRz1&y1=31:Sz111147;
+!!VRz1&y1=32:Sz111148; !!VRz1&y1=33:Sz111149; !!VRz1&y1=34:Sz111150; !!VRz1&y1=35:Sz111151;
+!!VRz1&y1=36:Sz111152; !!VRz1&y1=37:Sz111153; !!VRz1&y1=38:Sz111154; !!VRz1&y1=39:Sz111155;
+!!VRz1&y1=40:Sz111156; !!VRz1&y1=41:Sz111157; !!VRz1&y1=42:Sz111158; !!VRz1&y1=43:Sz111159;
+!!VRz1&y1=44:Sz111160; !!VRz1&y1=45:Sz111161; !!VRz1&y1=46:Sz111162; !!VRz1&y1=47:Sz111163;
+!!VRz1&y1=48:Sz111164; !!VRz1&y1=49:Sz111165; !!VRz1&y1=50:Sz111166; !!VRz1&y1=51:Sz111167;
 
-!!VRz2&y2=0:S^ie^; !!VRz2&y2=1:S^aling^; !!VRz2&y2=2:S^ina^; !!VRz2&y2=3:S^nine^;
-!!VRz2&y2=4:S^eena^; !!VRz2&y2=5:S^elane^; !!VRz2&y2=6:S^ephine^; !!VRz2&y2=7:S^ily^;
-!!VRz2&y2=8:S^a^; !!VRz2&y2=9:S^amth^; !!VRz2&y2=10:S^whip^; !!VRz2&y2=11:S^grass^;
-!!VRz2&y2=12:S^elia^; !!VRz2&y2=13:S^iris^; !!VRz2&y2=14:S^ena^; !!VRz2&y2=15:S^ina^;
-!!VRz2&y2=16:S^wood^; !!VRz2&y2=17:S^lin^; !!VRz2&y2=18:S^iper^; !!VRz2&y2=19:S^ifan^;
-!!VRz2&y2=20:S^ine^; !!VRz2&y2=21:S^sel^; !!VRz2&y2=22:S^issy^; !!VRz2&y2=23:S^appla^;
-!!VRz2&y2=24:S^virka^; !!VRz2&y2=25:S^wirda^; !!VRz2&y2=26:S^ing^; !!VRz2&y2=27:S^ette^;
-!!VRz2&y2=28:S^bean^; !!VRz2&y2=29:S^etta^; !!VRz2&y2=30:S^spice^; !!VRz2&y2=31:S^locki^;
-!!VRz2&y2=32:S^ivora^; !!VRz2&y2=33:S^andi^; !!VRz2&y2=34:S^rose^; !!VRz2&y2=35:S^puff^;
-!!VRz2&y2=36:S^asti^; !!VRz2&y2=37:S^erni^; !!VRz2&y2=38:S^dogga^; !!VRz2&y2=39:S^ispa^;
-!!VRz2&y2=40:S^onenti^; !!VRz2&y2=41:S^enlara^; !!VRz2&y2=42:S^orenna^; !!VRz2&y2=43:S^ispi^;
-!!VRz2&y2=44:S^eela^; !!VRz2&y2=45:S^atothi^; !!VRz2&y2=46:S^haira^; !!VRz2&y2=47:S^isplooga^;
-!!VRz2&y2=48:S^ily^; !!VRz2&y2=49:S^isgona^; !!VRz2&y2=50:S^itfora^; !!VRz2&y2=51:S^nowkee^;
+!!VRz2&y2=0:Sz111168; !!VRz2&y2=1:Sz111169; !!VRz2&y2=2:Sz111170; !!VRz2&y2=3:Sz111171;
+!!VRz2&y2=4:Sz111172; !!VRz2&y2=5:Sz111173; !!VRz2&y2=6:Sz111174; !!VRz2&y2=7:Sz111175;
+!!VRz2&y2=8:Sz111176; !!VRz2&y2=9:Sz111177; !!VRz2&y2=10:Sz111178; !!VRz2&y2=11:Sz111179;
+!!VRz2&y2=12:Sz111180; !!VRz2&y2=13:Sz111181; !!VRz2&y2=14:Sz111182; !!VRz2&y2=15:Sz111183;
+!!VRz2&y2=16:Sz111184; !!VRz2&y2=17:Sz111185; !!VRz2&y2=18:Sz111186; !!VRz2&y2=19:Sz111187;
+!!VRz2&y2=20:Sz111188; !!VRz2&y2=21:Sz111189; !!VRz2&y2=22:Sz111190; !!VRz2&y2=23:Sz111191;
+!!VRz2&y2=24:Sz111192; !!VRz2&y2=25:Sz111193; !!VRz2&y2=26:Sz111194; !!VRz2&y2=27:Sz111195;
+!!VRz2&y2=28:Sz111196; !!VRz2&y2=29:Sz111197; !!VRz2&y2=30:Sz111198; !!VRz2&y2=31:Sz111199;
+!!VRz2&y2=32:Sz111200; !!VRz2&y2=33:Sz111201; !!VRz2&y2=34:Sz111202; !!VRz2&y2=35:Sz111203;
+!!VRz2&y2=36:Sz111204; !!VRz2&y2=37:Sz111205; !!VRz2&y2=38:Sz111206; !!VRz2&y2=39:Sz111207;
+!!VRz2&y2=40:Sz111208; !!VRz2&y2=41:Sz111209; !!VRz2&y2=42:Sz111210; !!VRz2&y2=43:Sz111211;
+!!VRz2&y2=44:Sz111212; !!VRz2&y2=45:Sz111213; !!VRz2&y2=46:Sz111214; !!VRz2&y2=47:Sz111215;
+!!VRz2&y2=48:Sz111216; !!VRz2&y2=49:Sz111217; !!VRz2&y2=50:Sz111218; !!VRz2&y2=51:Sz111219;
 
 !!VRz3:S^%Z1%Z2^; [Female name: z3]
 

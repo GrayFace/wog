@@ -2,7 +2,7 @@ ZVSE
 ERMS_ScriptName=script124
 ERMS_ScriptAuthor=BAD
 ERMS_ScriptVersion=1.0.0
-ERMS_ScriptDate=22.11(November).2013
+ERMS_ScriptDate=31.12(December).2013
 ERMS_ScriptERMVersion=2.70
 ERMS_ScriptLanguage=English (United States) or English (native)
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
@@ -106,28 +106,22 @@ bonuses so sorcery is a need after month 4 and so on...)
 !#UN:P084/?y-6;    [Check if map rule for movement balancing is Enabled]
 
 
-!#VRz-1:S^Starting Hero Boost requires:
- ^;
-!#VRz-2:S^Starting Hero Boost
-^;
-!#VRz-9:S^Starting Hero Boost is not compatible with:
- ^;
+!#VRz-1:Sz110000;
+!#VRz-2:Sz110001;
+!#VRz-9:Sz110002;
 
 #VRz-3:S^^;
 #VRz-4:S^^;
 
-!#VRz-3&y-3=0:S^{Neutra Units Bonuses (script57)}
-^;
-!#VRz-4&y-4=0:S^{Neutra Stack Size (script57)}
-^;
-!#VRz-5&y-5=1:S^{Map Rule Double Movement}
-^;
+!#VRz-3&y-3=0:Sz110003;
+!#VRz-4&y-4=0:Sz110004;
+!#VRz-5&y-5=1:Sz110005;
 #VRz-6&y-6=1:S^{Movement Balancing}
 ^;
 
-!#VRz-7:S^%Z-1 %Z-3 %Z-4^;
+!#VRz-7:Sz110006;
 !#IF&y-1=1/y-3=0:M^%Z-7^; !#IF&y-1=1/y-4=0:M^%Z-7^;
-!#VRz-8:S^%Z-2 {is turned off}^; !#VRz-10:S^%Z-9 %Z-5 %Z-6^; !#IF&y-1=1/y-5=1:M^%Z-10^; !#IF&y-1=1/y-5=1:M^%Z-8^;
+!#VRz-8:Sz110007; !#VRz-10:Sz110008; !#IF&y-1=1/y-5=1:M^%Z-10^; !#IF&y-1=1/y-5=1:M^%Z-8^;
 !#IF&y-1=1/y-3=0:M^%Z-8^; !#IF&y-1=1/y-4=0:M^%Z-8^;   #IF&v116=1/y-5=1/y-6=1:M^%Z-10^;  #IF&v116=1/y-5=1/y-6=1:M^%Z-8^;
 #UNy-1=1/y-3=0/y-4=0:P307/0;
 !#UN&y-1=1/y-5=1:P307/0; !#UN&y-1=1/y-6=1:P084/0;
@@ -262,7 +256,7 @@ bonuses so sorcery is a need after month 4 and so on...)
 !!VRv1420&y-7=5:Sy-8:5; Set the new extra experience(20% from bonuses) from level 6 creatures
 !!VRv1420&y-7=6:Sy-8; Set the new extra experience(100% from bonuses) from level 7 and 8 creatures
 !!UN:N3/1/y-3/1; Plural of creatures
-!!IF:Q1/17/v1420/21/y-3/1^Because of extra health for %Z1 from Neutral Units Bonuses, you gain extra experience.^;
+!!IF:Q1/17/v1420/21/y-3/1/z110009;
 !!HE-1:N?y-8; Check number of hero
 !!HEy-8:Edv1420; New extra experience
 
