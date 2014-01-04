@@ -838,16 +838,16 @@ WoGify ERM code: 101 (0-5) plus 111-130 (0-1) for individual rules
 !!FU709&x1=0:P17; [check for rule 17]
 !!FU&-3:E; // exit, if not enabled
 
-!!OW:I-1/?y2; [get AI 1 or human 0]
-!!VRy1&y2=0:S0 R16; [1 in 16 chance for human]
+!!OW:I-1/?y2 G-1/?y10; [get AI 1 or human 0] [get Me 1 or remote human/AI 0]
+!!VRy1&y2=0:S0 R16; [1 in 17 chance for human]
 !!VRy1&y2=1:S0 R63; [1 in 64 chance for AI]
 !!FU|y1<>0/$day$=v69:E; // exit, if odds are not met or there was already an ambush today
 
 !!VRv69:S$day$; // set day of last Rogue fight
 
 !!HE-1:B0/?z1; [get hero name]
-!!IF&1000/x1=0:Q1/21/143/1^%Z101049^; // Rogues message
-!!IF&1000/x1=1:Q1/21/115/1^%Z101056^; // Water Elementals message
+!!IF&y10=1/x1=0:Q1/21/143/1^%Z101049^; // Rogues message
+!!IF&y10=1/x1=1:Q1/21/115/1^%Z101056^; // Water Elementals message
 
 !!VRy3&x1=0:S$weeks$ *10; [10 Rogues elapsed per week]
 !!VRy3&x1=1:S$weeks$ *7;  [7 Water Elementals elapsed per week]
@@ -869,8 +869,8 @@ WoGify ERM code: 101 (0-5) plus 111-130 (0-1) for individual rules
 !!VRy3&x1=0:*10 +300; [10 gold per Rogue + 300]
 !!VRy3&x1=1:*25; [25 gold per Water Elemental]
 
-!!IF&1000/x1=0:Q2/6/y3/1/z101050;
-!!IF&1000/x1=1:Q2/6/y3/1/z101057;
+!!IF&y10=1/x1=0:Q2/6/y3/1/z101050;
+!!IF&y10=1/x1=1:Q2/6/y3/1/z101057;
 !!OW:R-1/6/dy3; [give gold]
 
 ** end of function FU6183
