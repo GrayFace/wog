@@ -1,5 +1,5 @@
 ZVSE
-ERMS_ScriptDate=20.12(December).2013
+ERMS_ScriptDate=4.1(January).2014
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
 ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 WoGify Name: script01.erm
@@ -860,8 +860,8 @@ WoGify ERM code: 101 (0-5) plus 111-130 (0-1) for individual rules
 !!HE-1:P?y5/?y6/?y7; [get hero location]
 !!HE-1:N?y8; [get hero number]
 
-!!HE-1&x1=0:Ty2/y3/y4/143/y3; [provoke Rogue battle]
-!!HE-1&x1=1:Ty2/y3/y4/115/y3; [provoke Water Elemental battle]
+!!HE-1&x1=0:Ty5/y6/y7/143/y3; [provoke Rogue battle]
+!!HE-1&x1=1:Ty5/y6/y7/115/y3; [provoke Water Elemental battle]
 
 !!HEy8:O?y9; [get hero owner]
 !!FU&y9<0:E; // exit, if the hero lost the battle
