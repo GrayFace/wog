@@ -74,10 +74,11 @@ Lod::Lod(int location, char *name, int kind){
 
 Lod::~Lod(){
 	STARTNA(__LINE__, 0)
-	if(Ind<0 || LodTypes::Del4List(Ind)) RETURNV
+	if(Ind<0 || LodTypes::Move2ListEnd(Ind)) RETURNV
+	ReloadItems();
+	LodTypes::Del4List(Ind);
 	NextInd[Ind] = FreeInd;
 	FreeInd = Ind;
-	ReloadItems();
 	SOD_LOD_dtor(LodTable[Ind],Name);
 	RETURNV
 }
@@ -171,6 +172,24 @@ int LodTypes::Add2List(int ind){
 			if(n>=LODNUM){ Del4List(ind); TError("Too many LODs"); RETURN(-2); }
 			for(int k=n;k>0;k--){ t[k]=t[k-1];}
 			t[0]=ind; Table[i][j].Num++;
+		}
+	}
+	RETURN(0)  
+}
+int LodTypes::Move2ListEnd(int ind){
+	STARTNA(__LINE__, 0)
+	if((ind<0)||(ind>=LODNUM)){ TError("Incorrect LOD index to move"); RETURN(-3); }
+	for(int i=2;i<4;i++){
+		for(int j=0;j<2;j++){
+			int  n=Table[i][j].Num; 
+			int *t=Table[i][j].Inds;
+			for(int k=0;k<n;k++){ 
+				if(t[k]==ind){ // found
+					for(int l=k+1;l<n;l++) t[l-1]=t[l];
+					t[n-1]=ind;
+					break;
+				}
+			}
 		}
 	}
 	RETURN(0)  

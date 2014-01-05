@@ -35,6 +35,7 @@ class LodTypes{
 		static struct _Table{ int Num,*Inds; } Table[4][3];
 		static int Seq[4][3][LODNUM];
 		static int Add2List(int ind);
+		static int Move2ListEnd(int ind);
 		static int Del4List(int ind);
 		static void ReloadItem(char *name);
 		static int __inline Load(int ind, char *filename)
