@@ -30,7 +30,7 @@ Note: If you're building WoG from sources, the only things you'll need from a re
 Testing
 ---
 
-'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own debugging convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.
+'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own debugging convenience). Mods folder contains all scripts, Data\s\ isn't used anymore. An intermediate version of ERM help is available at https://dl.dropboxusercontent.com/u/44735333/wog/erm_help_1_Mar_2006.zip Currently no-one is taking care of it.
 
 Saved games from 3.58 are incompatible. From one version of 3.59a to another saves compatibility may break as well.
 
@@ -79,6 +79,14 @@ All new code hooks are in global_hooks.h and global.cpp files as well as Lua fil
 Note the WogNew project. The reason it's there is because t1b project must be built with optimization turned off, due to functions intermixing C code with Asm. This is also one of the reasons the solution is for VS 2005.
 
 One thing absolutely necessary in coding style is use of tabs, not spaces (set up in Tools -> Options -> Text Editor -> C/C++ -> Tabs -> Keep Tabs).
+
+===
+
+IDA Database
+---
+
+My database of executable can be found at https://dl.dropboxusercontent.com/u/44735333/wog/Heroes3f.rar
+I update it very rarely.
 
 ===
 
