@@ -435,7 +435,7 @@ __newCallers newCallers[]=
 	{0x5776EF, 0x57772F, H_JMP5}, // remove buggy disk space check
 	{0x4FBDCF, 0xEB, H_BYTE}, // remove buggy disk space check
 	//{0x4FDF2C, (long)_OnEarlyNewGame, H_CALL5}, // New Game before loading placed objects
-	{0x4EDD65, (long)_OnLodsLoaded, H_CALL5}, // Load h3wog.lod from DeveloperPath
+	{0x4EDD65, (long)_OnLodsLoaded, H_CALL5}, // Load h3wog.lod from DeveloperPath, run Global scripts
 	{0x55C9C0, (long)_OnLoadDef, H_CALL5}, // Don't use global cache for def frames
 	{0x55CDE2, (long)_OnLoadDefFindCadre, H_JMP5}, // Don't use global cache for def frames
 	{0x55CEFA, (long)_OnLoadDefAddCadre, H_CALL5}, // Don't use global cache for def frames
@@ -457,7 +457,8 @@ __newCallers newCallers[]=
 	{0x4C5D09, 0x4C5D0F, H_NOP}, // Don't limit events text length to 65535 characters
 	{0x684AF8, 0xAC44, H_DWORD}, // Use 44khz
 	{0x684B00, 2, H_DWORD}, // Use stereo
-	{0x660DFC, (long)"C", H_STR}, // classic SoD campaign button
+	{0x660DFC, (long)"C", H_STR}, // Classic SoD campaign button
+	{0x50C674, 0x50C67F, H_NOP}, // SoD bug: 3 seconds startup delay
 
 	{0}
 };

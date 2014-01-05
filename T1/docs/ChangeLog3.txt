@@ -24,6 +24,7 @@ Alpha 3+
 [*] Default AI thinking radius returned to SoD value. (Alpha 6)
 [-] SoD limitation: events texts were limited to 65535 characters. (Alpha 6)
 [-] SoD bug: sound quality was low (22kHz, mono). (Alpha 6.1)
+[-] SoD bug: 3 seconds startup delay. (Alpha 6.2)
 [!] For help: CO:E command can have 3 values: -1 means 'disabled', 0 means 'can be hired', 1 means 'exists'.
 
 
