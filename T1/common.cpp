@@ -5557,6 +5557,11 @@ __declspec(naked) void *PEr::GetStackTop(){__asm
 __declspec(naked) void *PEr::GetStackPtr(){__asm
 {
 	mov eax, esp
+	cmp eax, GEr.StackTop
+	ja _bad
+	ret
+_bad:
+	mov eax, ds:[0]  // provoke exception
 	ret
 }}
 
