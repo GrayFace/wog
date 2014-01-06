@@ -108,6 +108,7 @@ function P.CheckBoxesDialog(t)
 	if t.SelectedItem then
 		t.On[t.SelectedItem] = true
 	end
+	t.SelectedItem = nil
 	t.Disabled = t.Disabled or {}
 	t.Shaded = t.Shaded or {}
 
@@ -123,9 +124,14 @@ function P.CheckBoxesDialog(t)
 		local j = 1
 		local texts = t.Texts
 		for i = 1, tcount do
-			if texts[i] then
+			if texts[i] and texts[i] ~= "" then
+				if t.On[i] then
+					t.SelectedItem = i
+				end
 				map[j] = i
 				j = j + 1
+			else
+				t.On[i] = false  -- behave the same as IF:G
 			end
 		end
 		vcount = j - 1
