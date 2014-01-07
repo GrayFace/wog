@@ -7825,7 +7825,7 @@ void ProcessCmd(_ToDo_ *sp)
 		Cmd=M.m.s[M.i++];
 		M.c[0]=1;
 		if((Num=GetNumAuto(&M))==0) goto l_exit;
-		if(Cmd=='Z' && (sp->Type == 'EG' || sp->Type == 'EL')){
+		if(Cmd=='Z' && (sp->Type == 'UF' || sp->Type == 'EG' || sp->Type == 'EL')){
 			SetErrorCmd(sp->Type, Cmd);
 			if(Num!=1){ EWrongParamsNum(); goto l_exit; }
 			if(ProcessDisable(sp,M.n[0])) goto l_exit;
