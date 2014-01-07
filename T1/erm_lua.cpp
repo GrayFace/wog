@@ -264,9 +264,7 @@ static int ERM_Call(lua_State *L)
 	CmdMessage.i = 0;
 	
 	int backV[16];
-	char StrVar[VAR_COUNT_LZ][512];
-	for (int i = 0; i < VAR_COUNT_LZ; i++)
-		StrVar[i][0] = 0;
+	StoreVars(false);
 
 	int indexV = VAR_COUNT_V;
 	int countV = 0;
@@ -282,7 +280,7 @@ static int ERM_Call(lua_State *L)
 	}
 	if (specialZ)
 	{
-		memcpy(StrVar[countZ++], specZ, 512);
+		memcpy(ERMLString[countZ++], specZ, 512);
 	}
 
 	// Prepare Message Parameters
@@ -362,7 +360,7 @@ _number:
 _string:
 				CmdMessage.VarI[k].Type = 7;
 				// allocate str in Z range
-				if (CmdMessage.VarI[k].Check != 1) StrCopy(StrVar[countZ], 512, paramZ);
+				if (CmdMessage.VarI[k].Check != 1) StrCopy(ERMLString[countZ], 512, paramZ);
 				countZ++;
 				CmdMessage.VarI[k].Num = -countZ;
 				CmdMessage.n[k] = -countZ;
@@ -371,6 +369,7 @@ _string:
 			default:
 _error:
 				if (countV)  memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
+				StoreVars(false, true);
 				RETURN(LuaError(Format("Invalid parameter type: %s", lua_typename(L, ltype)), ERM_Call_ErrorLevel))
 		}
 
@@ -384,39 +383,33 @@ _error:
 	ErrStringInfo LastErrString;
 	NewErrStringInfo(LuaErrorString, &LastErrString);
 	WasErmError = false;
-	char (*LastStrVar)[512] = ERMLString;
-	ERMLString = StrVar;
-	//__try
-	//{
+
 	int failed = ProcessMes(&CmdToDo, CmdMessage, cmd, k == 0 ? 1 : k);
 	if (failed && !WasErmError)
 		MError2("unknown error.");
-	//}
-	//__finally
-	//{
+
 	ErrString = LastErrString;
-	ERMLString = LastStrVar;
-	//}
 
 	// Process Get Parameters
 
 	int retCount = 0;
 	if (specialV) { retCount++; lua_pushnumber(L, ERMVar2[VAR_COUNT_V]); }
-	if (specialZ) { retCount++; lua_pushfstring(L, StrVar[0]); }
+	if (specialZ) { retCount++; lua_pushfstring(L, ERMLString[0]); }
 	for (int i = 0; i < k; i++)
 		if (CmdMessage.VarI[i].Check)
 		{
 			retCount++;
 			int ind = CmdMessage.VarI[i].Num;
 			if (CmdMessage.VarI[i].Type == 7)
-				lua_pushstring(L, StrVar[-ind-1]);
+				lua_pushstring(L, ERMLString[-ind-1]);
 			else
 				lua_pushnumber(L, ERMVar2[ind-1]);
 		}
 
 	if (countV)  memcpy((char*)&ERMVar2[indexV - countV], (char*)&backV[0], 4*countV);
+	StoreVars(false, true);
 
-	if (failed)
+	if (WasErmError)
 		RETURN(LuaError(LastErmError, ERM_Call_ErrorLevel))
 
 	RETURN(retCount)

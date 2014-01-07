@@ -377,7 +377,7 @@ char* GetErmString(int index)
 }
 
 
-struct StoredLocalVars
+struct LocalVarsBlock
 {
 	int    Y[100];
 	float  F[100];
@@ -385,7 +385,21 @@ struct StoredLocalVars
 	void  *LastY;
 	void  *LastF;
 	void  *LastString;
+	LocalVarsBlock *Last;
 };
+
+static LocalVarsBlock *MoveVars(LocalVarsBlock* &CurVars, LocalVarsBlock* &NextVars)
+{
+	LocalVarsBlock *vars = NextVars;
+	if(vars)
+		NextVars = vars->Last;
+	else
+		vars = (LocalVarsBlock *)malloc(sizeof(LocalVarsBlock));
+
+	vars->Last = CurVars;
+	CurVars = vars;
+	return vars;
+}
 
 void __inline _DoStoreVars(void *loc, void **last, void *var, int size, bool restore, bool fill)
 {
@@ -401,8 +415,11 @@ void __inline _DoStoreVars(void *loc, void **last, void *var, int size, bool res
 	}
 }
 
-void StoreVars(StoredLocalVars *vars, bool fu, bool restore = false)
+LocalVarsBlock *CurVars, *NextVars;
+
+void StoreVars(bool fu, bool restore)
 {
+	LocalVarsBlock *vars = (restore ? MoveVars(CurVars, NextVars) : MoveVars(NextVars, CurVars));
 	_DoStoreVars(vars->Y, &vars->LastY, (fu ? &ERMVarY : &ERMVarYT), sizeof(vars->Y), restore, fu);
 	_DoStoreVars(vars->F, &vars->LastF, (fu ? &ERMVarF : &ERMVarFT), sizeof(vars->F), restore, fu);
 	_DoStoreVars(vars->String, &vars->LastString, &ERMLString, 0, restore, false);
@@ -535,7 +552,6 @@ int ERM_Do(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 	int   _lYVarInsideFunction;
 	int   OldX[16];
 	int   NewX[16];
-	StoredLocalVars vars;
 	int   haveEqual; // have a = parameter (P=v1;)
 	switch(Cmd){
 		case 'P': // вызвать функцию
@@ -543,7 +559,7 @@ int ERM_Do(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			from=GetVarVal(&sp->Par[1]);
 			to=GetVarVal(&sp->Par[2]);
 			step=GetVarVal(&sp->Par[3]);
-			StoreVars(&vars, true);
+			StoreVars(true);
 			for(i=0;i<16;i++) { OldX[i]=ERMVarX[i]; }
 			for(i=0;i<16;i++){ ERMVarX[i]=0; }
 			for(i=0;i<Num;i++){ ERMVarX[i]=Mp->n[i]; }
@@ -577,7 +593,7 @@ int ERM_Do(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			}
 			YVarInsideFunction=_lYVarInsideFunction;
 			for(i=0;i<16;i++) { NewX[i]=ERMVarX[i]; ERMVarX[i]=OldX[i]; }
-			StoreVars(&vars, true, true);
+			StoreVars(true, true);
 			// now if ?y or ?x is used, it will be stored correctly
 			for(i=0;i<Num;i++){
 				if(Mp->VarI[i].Check!=1) continue; // не ?
@@ -8684,7 +8700,6 @@ void ProcessERM(bool needLocals)
 	struct _Cmd_ *cp;
 	Dword  ev;
 	int    i, j, n;
-	StoredLocalVars vars;
 	int    OldScope;
 	struct _Cmd_ *OldTriggers[256]; // FU:E goto support
 	int    OldTrigIndex = 0;
@@ -8734,7 +8749,7 @@ void ProcessERM(bool needLocals)
 				if(!LocalsStored && needLocals)
 				{
 					LocalsStored = true;
-					StoreVars(&vars, (cp->Event<30000)||((cp->Event>=31000)&&(cp->Event<31100)));
+					StoreVars((cp->Event<30000)||((cp->Event>=31000)&&(cp->Event<31100)));
 				}
 
 				if(cp->Efl[0][0][0].Type == 255) // Lua trigger
@@ -8815,7 +8830,7 @@ _Cont:;
 
 	if (LocalsStored)
 	{
-		StoreVars(&vars, (ev<30000)||((ev>=31000)&&(ev<31100)), true);
+		StoreVars((ev<30000)||((ev>=31000)&&(ev<31100)), true);
 	}
 	IsLuaCall = WasLuaCall;
 	ErrString = LastErrString;

@@ -50,6 +50,7 @@ extern union _ErrorCmd_{
 	long long  Cmd;
 } ErrorCmd;
 
+void StoreVars(bool fu, bool restore = false);
 int CheckPlace4Hero(_MapItem_ *mip,Dword **stp);
 int Apply(void *dp,char size,Mes *mp,char ind);
 int NewMesMan(Mes *ms,_AMes_ *ap,int ind);
