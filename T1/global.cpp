@@ -1628,7 +1628,9 @@ __declspec(naked) static void _FixLoadActiveHero(){__asm
 	mov ecx, ds:[0x69CCFC]
 	mov ecx, [ecx + 4]
 	cmp ecx, 0
-	jnl _skip
+	jl _std
+	mov eax, ecx
+_std:
 	ret
 _skip:
 	mov dword ptr ds:[esp], 0x407721
