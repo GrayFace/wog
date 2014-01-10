@@ -27,6 +27,7 @@ Alpha 3+
 [-] SoD bug: 3 seconds startup delay. (Alpha 6.2)
 [-] Crash if garrison dialog is shown during town demolition. (Alpha 7.0)
 [+] HE:C command with 14 parameters now supports check syntax that lets you find out which troops were left. (Alpha 7.0)
+[-] SoD bug: in a very rear situation a non-existant skill 27 could be chosen. (Alpha 7.1)
 [!] For help: CO:E command can have 3 values: -1 means 'disabled', 0 means 'can be hired', 1 means 'exists'.
 
 

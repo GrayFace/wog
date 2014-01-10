@@ -466,6 +466,8 @@ __newCallers newCallers[]=
 	{0x5D15B2, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
 	{0x5D1693, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
 	{0x5D173F, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x4DB17F+2, 27, H_BYTE}, // don't choose skill 27 for level up
+	{0x4DB1E2+2, 27, H_BYTE}, // don't choose skill 27 for level up
 
 	{0}
 };
