@@ -459,6 +459,13 @@ __newCallers newCallers[]=
 	{0x684B00, 2, H_DWORD}, // Use stereo
 	{0x660DFC, (long)"C", H_STR}, // Classic SoD campaign button
 	{0x50C674, 0x50C67F, H_NOP}, // SoD bug: 3 seconds startup delay
+	{0x5CEC63, (long)_GarrisonDlgPreserveTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D09D6, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D11E6, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D1516, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D15B2, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D1693, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
+	{0x5D173F, (long)_GarrisonDlgRestoreTown, H_CALL5}, // crash if garrison dialog is shown during town demolition
 
 	{0}
 };

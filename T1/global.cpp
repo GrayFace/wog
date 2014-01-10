@@ -1635,6 +1635,37 @@ _skip:
 	ret
 }}
 
+
+char TownManBackup[472];
+
+void GarrisonDlgPreserveTown()
+{
+	memcpy(TownManBackup, *(void**)0x69954C, sizeof(TownManBackup));
+}
+
+__declspec(naked) static void _GarrisonDlgPreserveTown(){__asm
+{
+	call GarrisonDlgPreserveTown
+	mov ecx, edi
+	push 0x41AFA0
+	ret
+}}
+
+void GarrisonDlgRestoreTown()
+{
+	memcpy(*(void**)0x69954C, TownManBackup, sizeof(TownManBackup));
+}
+
+__declspec(naked) static void _GarrisonDlgRestoreTown(){__asm
+{
+	push ecx
+	call GarrisonDlgRestoreTown
+	pop ecx
+	push 0x41B080
+	ret
+}}
+
+
 /*
 int tmpLast;
 
