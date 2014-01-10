@@ -3501,12 +3501,25 @@ char *GetSSkillName(int number)
 	RETURN(zret)
 }  
 //////////////////////////////
-static int LeftCr[2][7];
+int CrChangeDialogResult[2][7];
 //static char CrBuffer[1024];
-void CrChangeDialog(_Hero_ *hp,int Mt0,int Mn0,int Mt1,int Mn1,int Mt2,int Mn2,
-int Mt3,int Mn3,int Mt4,int Mn4,int Mt5,int Mn5,int Mt6,int Mn6)
+void CrChangeDialog(_Hero_ *hp)
 {
 	STARTNA(__LINE__, 0)
+	__asm{
+		mov    ecx,hp
+		lea    edx,CrChangeDialogResult
+		push   1
+		mov    eax,0x5D16B0
+		call   eax
+	} 
+	RETURNV
+}
+void CrChangeDialog(_Hero_ *hp,int Mt0,int Mn0,int Mt1,int Mn1,int Mt2,int Mn2,
+	int Mt3,int Mn3,int Mt4,int Mn4,int Mt5,int Mn5,int Mt6,int Mn6)
+{
+	STARTNA(__LINE__, 0)
+	int (*LeftCr)[7] = CrChangeDialogResult;
 	LeftCr[0][0]=Mt0; 
 	LeftCr[1][0]=Mn0; 
 	LeftCr[0][1]=Mt1; 
@@ -3521,13 +3534,7 @@ int Mt3,int Mn3,int Mt4,int Mn4,int Mt5,int Mn5,int Mt6,int Mn6)
 	LeftCr[1][5]=Mn5; 
 	LeftCr[0][6]=Mt6; 
 	LeftCr[1][6]=Mn6; 
-	__asm{
-		mov    ecx,hp
-		lea    edx,LeftCr
-		push   1
-		mov    eax,0x5D16B0
-		call   eax
-	} 
+	CrChangeDialog(hp);
 	RETURNV
 }
 

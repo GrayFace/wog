@@ -6833,12 +6833,29 @@ Ok_11:
 				}else if(Cmd=='C'){ // C модефикация существ
 					if(Num<4){ EWrongParamsNum(); goto l_exit; }
 					if(Num==14){
-						CrChangeDialog(p,M.n[0],M.n[1],M.n[2],M.n[3],M.n[4],M.n[5],M.n[6],M.n[7],
-														 M.n[8],M.n[9],M.n[10],M.n[11],M.n[12],M.n[13]);
+						int check = 0;
+						int (*LeftCr)[7] = CrChangeDialogResult;
+						check |= Apply(&LeftCr[0][0], 4, &M, 0);
+						check |= Apply(&LeftCr[1][0], 4, &M, 1);
+						check |= Apply(&LeftCr[0][1], 4, &M, 2);
+						check |= Apply(&LeftCr[1][1], 4, &M, 3);
+						check |= Apply(&LeftCr[0][2], 4, &M, 4);
+						check |= Apply(&LeftCr[1][2], 4, &M, 5);
+						check |= Apply(&LeftCr[0][3], 4, &M, 6);
+						check |= Apply(&LeftCr[1][3], 4, &M, 7);
+						check |= Apply(&LeftCr[0][4], 4, &M, 8);
+						check |= Apply(&LeftCr[1][4], 4, &M, 9);
+						check |= Apply(&LeftCr[0][5], 4, &M, 10);
+						check |= Apply(&LeftCr[1][5], 4, &M, 11);
+						check |= Apply(&LeftCr[0][6], 4, &M, 12);
+						check |= Apply(&LeftCr[1][6], 4, &M, 13);
+						if(!check){
+							CrChangeDialog(p);
+						}
 					}else{
 						int check=0,Exp=0,Mod=0,OldNum;
 						if(Num>5) Apply(&Mod,4,&M,5);
-						if(M.n[0]==0){ // C0/#2/$3/$4{/$5{/$6}} модефикация существ по позиции
+						if(M.n[0]==0){ // C0/#2/$3/$4{/$5{/$6}} модификация существ по позиции
 							{
 								if((M.n[1]<0)||(M.n[1]>7)){ EWrongParam(); goto l_exit; }
 								if(M.f[2]==0){
@@ -6866,7 +6883,7 @@ Ok_11:
 									CrExpoSet::Modify(5,CE_HERO,MAKEHS(p->Number,M.n[1]),Exp,Mod,p->Ct[M.n[1]],OldNum,p->Cn[M.n[1]]);
 								}
 							}
-						}else if(M.n[0]==1){ // C1/#2/$3/$4{/$5} модефикация существ по типу
+						}else if(M.n[0]==1){ // C1/#2/$3/$4{/$5} модификация существ по типу
 							{
 								for(i=0;i<7;i++){
 									if(p->Ct[i]==M.n[1]){

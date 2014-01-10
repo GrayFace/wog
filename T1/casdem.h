@@ -40,8 +40,10 @@ int ERM_Castle(char Cmd,int Num,_ToDo_*sp,Mes *Mp);
 void SetTowerBunus(_CastleSetup_ *Castle,Byte *MonStr);
 void NextTowerState(_CastleSetup_ *Castle);
 void CastleTowers(void);
+extern int CrChangeDialogResult[2][7];
+void CrChangeDialog(_Hero_ *hp);
 void CrChangeDialog(_Hero_ *hp,int Mt0,int Mn0,int Mt1,int Mn1,int Mt2,int Mn2,
-int Mt3,int Mn3,int Mt4,int Mn4,int Mt5,int Mn5,int Mt6,int Mn6);
+	int Mt3,int Mn3,int Mt4,int Mn4,int Mt5,int Mn5,int Mt6,int Mn6);
 int GetCastleNumber(_CastleSetup_ *CStructure);
 // 3.58
 void __stdcall SoDFix_SpaceInAlliedTown(int par1,int par2,int par3);
