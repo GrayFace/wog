@@ -8424,7 +8424,7 @@ int ParseERM(Mes &M)
 	ErrStringInfo LastErrString;
 	NewErrStringInfo(&M.m.s[M.i], &LastErrString);
 
-	GlobalCurrentScope = ScriptIndex4ERM++;
+	GlobalCurrentScope = ++ScriptIndex4ERM;
 	TrigIf.Ghost = TrigIf.IsFalse = TrigIf.Total = 0; // init if-el-en
 	TriggerBreak=0;
 

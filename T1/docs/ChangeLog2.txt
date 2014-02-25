@@ -28,7 +28,7 @@ Alpha 2
 [+] OB:T$/1, OB:C$/1 - type and control word of object, ignoring hero on top of it (works as usual if there's no hero standing on the object)
 [+] !?FC trigger - change flag color, !!FC reciever
 [+] !?DG trigger - digging for Grail, !!DG reciever
-[+] flawed support for new Bink format
+[+] Modern Bink format support
 [+] !$HL post-trigger, getting skills in !?HL trigger
 [-] Using UN:L inside !?OB trigger with enabled standard reaction caused a trade dialog of the hero with himself to occur.
 [+] New HE:Y syntax: HE:Y$1/$2/$3, HE:Y0/0/0/3.

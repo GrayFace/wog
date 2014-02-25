@@ -362,6 +362,7 @@ void SaveMinidump(EXCEPTION_POINTERS *Reason)
 		IN CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam OPTIONAL
 	);
 	*(PROC*)&dump = DllImport(Format("%sdbghelp.dll", AppPath), "MiniDumpWriteDump", false);
+	if (dump == 0) *(PROC*)&dump = DllImport("dbghelp.dll", "MiniDumpWriteDump", false);
 	if (dump == 0) return;
 	FILE* f;
 	if(fopen_s(&f, "WOGCRASHDUMP.DMP", "wb")) return;

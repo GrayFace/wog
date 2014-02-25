@@ -13,6 +13,12 @@
 #include "lod.h"
 #define __FILENUM__ 22
 
+// Queue values
+#define Q_Color32 (1)
+#define Q_FastMap (2)
+#define Q_FastMapRestore (3)
+
+
 typedef Byte FAR *LPBYTE;
 
 LPPX_DIRECTDRAW		px_DxObj				=	NULL;
@@ -22,7 +28,7 @@ const	DWORD		oldMainProcAddress		=	0x4F8290;
 
 const	DWORD		newExtendedWindowSize	=	0x300;//768 - Height
 char	      AppPath[MAX_PATH];
-char	*			MapFastLoadingDir  = "maps";
+char	*			MapFastLoadingDir  = "Maps";
 char	*			MapFastLoadingName  = NULL;
 
 bool PlayingBM_V = 0;
@@ -31,13 +37,6 @@ int InGame;
 Byte *WogInstStart;
 Byte *WogInstEnd;
 
-//static const int HeroesGameType = 3; // 3 = SoD + AB, 2 = only SoD
-//static const int HeroesGameTypeStdPo = 0x67F554;
-
-
-//queue=-1 reserved to debug mode
-//queue=-2 reserved to town mode
-//queue=-200 reserved to map mode
 
 #define H_PASS1	0x00000000//First pass(default)
 #define H_PASS2	0x00000001//Second pass
@@ -109,9 +108,9 @@ void newGlobalInitSub()
 	//LoadTownsNames();
 	newWriteInMemory();
 	if(!ReadIntINI(1, "No32Bit"))
-		newWriteInMemory(-3);
+		newWriteInMemory(Q_Color32);
 	if(MapFastLoadingName)
-		newWriteInMemory(-200);
+		newWriteInMemory(Q_FastMap);
 
 	// Find start and end of static memory
 	WogInstStart = FindHInstance(&WogInstStart);
@@ -1428,6 +1427,17 @@ _after:
 	jmp GetAIMapPosValue
 }}
 
+// 3 = SoD + AB, 2 = only SoD
+#define HeroesGameType (*(int*)0x67F554)
+
+static void ConfluxCheck()
+{
+	if (HeroesGameType == 3)  return;
+	HeroesGameType = 3;
+	// remove AB archives from list
+	// patch version check in campaigns screen
+}
+
 //void BaseFileLoader(); // in _B1.cpp
 
 static void OnLodsLoaded()
@@ -1570,7 +1580,7 @@ static void OnFastMapLoad()
 {
 	strcpy_s((char*)BaseStruct + 0x1F7D4, 251, MapFastLoadingDir);
 	strcpy_s((char*)BaseStruct + 0x1F6D9, 100, MapFastLoadingName);
-	*(int*)0x4EEF4D = 0x1DF4F; // restore original code
+	newWriteInMemory(Q_FastMapRestore); // restore original code
 }
 
 __declspec(naked) static void _OnFastMapLoad(){__asm

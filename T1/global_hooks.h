@@ -1,13 +1,11 @@
 //include only one and only for global.cpp
 
 //queue=-2 reserved to town mode
-//queue=-3 reserved to 32 bit mode
-//queue=-200 reserved to map mode
 
 __newCallers newCallers[]=
 {
 	{0x4F8171,long(newMainProc),H_ADRO|H_RADR},//Replace MainProc
-	{0x601ACC,long(px_DirectDrawCreate),H_CALL,-3}, //DX Proxy Run
+	{0x601ACC,long(px_DirectDrawCreate),H_CALL,Q_Color32}, //DX Proxy Run
 	//{0x55479B,long(HookCmdLineEnteredText),H_CALL5},  // bad hook code, causes crash in multiplayer
 	//{0x602181, (long)&OnChangeMode, H_CALL5},
 	//{0x601AA0, (long)&OnChangeMode, H_JMP5},
@@ -444,8 +442,9 @@ __newCallers newCallers[]=
 	{0x4CCC40+3, 0x696DE8, H_DWORD}, // Fix rare crash on map start related to tavern rumors
 	{0x4F0DD0, (long)_FixParseCmdLine, H_CALL5|H_INSR6}, // For paths with "/"; " ?" -> "/?"
 	{0x4EF444, 0x4EF450, H_NOP}, // Bugfix: on start of Tutorial 2 combat options were reset to default values
-	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, -200}, // Command line options: /mapname, /mapdir
-	{0x4EEE29, 0xEB, H_BYTE, -200}, // Command line options: /mapname, /mapdir
+	{0x4EEE29, 0xEB, H_BYTE, Q_FastMap}, // Command line options: /mapname, /mapdir
+	{0x4EEF4C, (long)_OnFastMapLoad, H_CALL5, Q_FastMap}, // Command line options: /mapname, /mapdir
+	{0x4EEF4D, 0x1DF4F, H_DWORD, Q_FastMapRestore}, // (restore original) Command line options: /mapname, /mapdir
 	//{0x4ED190+6, (long)&HeroesGameType, H_DWORD}, // Always allow Conflux
 	//{0x456CAF, (long)&HeroesGameTypeStdPo, H_DWORD}, // Always allow Conflux, but not AB campaign
 	//{0x457228, (long)&HeroesGameTypeStdPo, H_DWORD}, // Always allow Conflux, but not AB campaign
@@ -475,9 +474,9 @@ __newCallers newCallers[]=
 __newCopiers newCopiers[]=
 {
 	//Bit per pixel ignored
-	{0x600A55,"\xB3\x01\x90",3,0,-3},
-	{0x601A69,"\xB0\x01\x90",3,0,-3},
-	{0x602117,"\xB0\x01\x90",3,0,-3},
+	{0x600A55,"\xB3\x01\x90",3,0,Q_Color32},
+	{0x601A69,"\xB0\x01\x90",3,0,Q_Color32},
+	{0x602117,"\xB0\x01\x90",3,0,Q_Color32},
 
 /*
 	//Towns

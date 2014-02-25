@@ -2316,59 +2316,6 @@ __declspec( naked ) void main(void)
 //  }catch(...){ GEr.Show(); }
 }
 
-static __declspec( naked ) void ForAK(void){
-	__asm{ // הכÿ ְÊ
-//    db "ZVS_4_AK_START"
-		_emit 0
-		_emit 0
-		_emit 0
-		_emit 0
-		//_emit WOGCRC & 0xFF
-		//_emit (WOGCRC>>8) & 0xFF
-		//_emit (WOGCRC>>16) & 0xFF
-		//_emit (WOGCRC>>24) & 0xFF
-		_emit 'Z'
-		_emit 'V'
-		_emit 'S'
-		_emit '_'
-		_emit '4'
-		_emit '_'
-		_emit 'A'
-		_emit 'K'
-		_emit '_'
-		_emit 'S'
-		_emit 'T'
-		_emit 'A'
-		_emit 'R'
-		_emit 'T'
-//    db 10000 dup (0)
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-#include "space1k.cpp"
-//    db "ZVS_4_AK_STOP"
-		_emit 'Z'
-		_emit 'V'
-		_emit 'S'
-		_emit '_'
-		_emit '4'
-		_emit '_'
-		_emit 'A'
-		_emit 'K'
-		_emit '_'
-		_emit 'S'
-		_emit 'T'
-		_emit 'O'
-		_emit 'P'
-	}
-}
-
 /*
 extern "C" int  _heap_init(int mtflag);
 extern "C" int  _mtinit(void);
@@ -2484,14 +2431,12 @@ void FixDLLEntries(void){
 //  }catch(...){ GEr.Add("FixDLLEntries",0); throw __LINE__; } 
 }
 
-Dword Initialize_P=0;
 void Initialize(void)
 {
 	int   i,j;
 	long  del;
 	Byte *s,*d;
 
-	Initialize_P=(Dword)ForAK; // to prevent removing of ForAK
 	StartDLLService();
 	if(LoadZVSDialogs()) return /*Exit()*/;
 	//  CommonDialog("Hi from a Heroes3 extension!");
