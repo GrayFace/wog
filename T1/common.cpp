@@ -1160,6 +1160,21 @@ _Hero_ *GetHeroStr(int n)
 	RETURN(chp)
 }
 
+_Boat_ *GetBoatStr(int n)
+{
+	STARTNA(__LINE__, 0)
+	_Boat_ *boats = *((_Boat_ **)(BaseStruct + 0x4E3BC));
+	RETURN(&boats[n])
+}
+
+_Hero_ *GetHeroOrBoat(_MapItem_ *mip)
+{
+	STARTNA(__LINE__, 0)
+	if (mip->OType == 0x22) RETURN(GetHeroStr(mip->SetUp)); // герой
+	if (mip->OType == 8) RETURN((_Hero_*)GetBoatStr(mip->SetUp)); // лодка
+	RETURN(0)
+}
+
 _Hero_ *FindHeroNum(int x,int y,int l)
 {
 	STARTNA(__LINE__, 0)

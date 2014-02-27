@@ -1166,8 +1166,7 @@ struct _MapItem_{
 	ODraw   *Draw;     // +12
 	ODraw   *DrawEnd;  // +16
 	ODraw   *DrawEnd2; // +1A
-	Word    OType;     // +1E
-	Word   _u3;        // +20
+	int     OType;     // +1E
 	Word    OSType;    // +22
 	Word    DrawNum;   // +24
 };

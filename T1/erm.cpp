@@ -793,9 +793,7 @@ int CheckPlace4Hero(_MapItem_ *mip,Dword **stp)
 {
 	STARTNA(__LINE__, 0)
 	int tp=mip->OType;
-	if(tp==0x22){ // герой стоит на объекте
-		int v=*(int *)mip;
-		_Hero_ *hp=GetHeroStr(v);
+	if(_Hero_ *hp = GetHeroOrBoat(mip)){ // герой или лодка стоит на объекте
 		tp=hp->PlOType;
 		if(stp!=0) *stp=&hp->PlSetUp;
 	}
@@ -807,12 +805,8 @@ int IsObjectType(_MapItem_ *mip,int t,int st)
 	STARTNA(__LINE__, 0)
 	int stp=mip->OSType,tp=mip->OType;
 	Byte at=mip->Attrib;
-	if(tp==0x22){ // герой стоит на объекте
-		int v=*(int *)mip;
-		_Hero_ *hp=GetHeroStr(v);
-		tp=hp->PlOType;
-//    stp=hp->PlOSType;
-//    at=(Byte)(hp->Pl0Cflag>>8);
+	if(_Hero_ *hp = GetHeroOrBoat(mip)) { // герой или лодка стоит на объекте
+		tp = hp->PlOType;
 	}
 	if(tp==t){
 		if(at&0x10){
@@ -3235,11 +3229,11 @@ int ERM_SetObject(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 	Dword MixPos=GetDinMixPos(sp);
 	_MapItem_ *mip=GetMapItem2(MixPos);
 	_ERM_Object_ *obj=0;
-
+	
 	switch(Cmd){
 		case 'T': // T$ тип
-			if (mip->OType == 34 && Num >= 2 && Mp->n[1] == 1)
-				Apply(&GetHeroStr(mip->SetUp)->PlOType,4,Mp,0);
+			if (Num >= 2 && Mp->n[1] == 1 && (mip->OType == 34 || mip->OType == 8))
+				Apply(&GetHeroOrBoat(mip)->PlOType,4,Mp,0);
 			else
 				Apply(&mip->OType,2,Mp,0);
 			break;
@@ -3247,8 +3241,8 @@ int ERM_SetObject(char Cmd,int Num,_ToDo_*sp,Mes *Mp)
 			Apply(&mip->OSType,2,Mp,0);
 			break;
 		case 'C': // C$ упр.слово
-			if (mip->OType == 34 && Num >= 2 && Mp->n[1] == 1)
-				Apply(&GetHeroStr(mip->SetUp)->PlSetUp,4,Mp,0);
+			if (Num >= 2 && Mp->n[1] == 1 && (mip->OType == 34 || mip->OType == 8))
+				Apply(&GetHeroOrBoat(mip)->PlSetUp,4,Mp,0);
 			else
 				Apply(&mip->SetUp,4,Mp,0);
 			break;
@@ -9456,12 +9450,12 @@ int CheckObjHint(_MapItem_ *Mp,char *Buf,_MapItem_ *MpOrig)
 // 3.52 +3.56 (если объект просто добавлен, то хинт равен 0)
 	if((op==0)||(op->HintVar==0)){
 //    mp=((Mp->OType&0xFFF)<<16)+(Mp->OType&0xFFFF)+0x10000000;
-		flag=0;
-		if(Mp->OType==0x22){ // герой стоит на входе объекта
-			int v=*(int *)Mp; _Hero_ *hp=GetHeroStr(v); Mp->OType=(Word)hp->PlOType; flag=1;
+		flag = (Mp->OType==0x22);
+		if(flag){ // герой стоит на входе объекта
+			int v=*(int *)Mp; _Hero_ *hp=GetHeroStr(v); Mp->OType=(Word)hp->PlOType;
 		}
 		op=FindObjExt(Mp,x,y,l);
-		if(flag==1) Mp->OType=0x22;
+		if(flag) Mp->OType=0x22;
 		if(op==0) RETURN(0) // не нашли
 	}
 // if(op==0) return 0; // не нашли

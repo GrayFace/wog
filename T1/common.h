@@ -100,6 +100,8 @@ int EmptyPlaceWater(_MapItem_ *mp);
 int EmptyPlaceAny(_MapItem_ *mp);
 int EmptyPlace2(_MapItem_ *mp);
 _Hero_ *GetHeroStr(int n);
+_Boat_ *GetBoatStr(int n);
+_Hero_ *GetHeroOrBoat(_MapItem_ *mip);
 _Hero_ *FindHeroNum(int x,int y,int l);
 void KillHero(int Number);
 void Hero2Town(Dword TownManager);
