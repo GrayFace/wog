@@ -859,7 +859,7 @@ char *NPC::PrepareArtText(int Slot)
 	ind=ArtNum-NPCARTBASE;
 	char *templ=ITxt(226+ind,1,&NPCTexts);
 	strcpy(ArtTextBuffer[Slot], templ);
-	ArtTextBuffer[Slot][i]=0;
+	//ArtTextBuffer[Slot][i]=0;
 	switch(ArtNum){
 		case NPCARTBASE: // +5 Attack + 1 for 6 battles
 			val=ArtCalcSkill(Slot,0);

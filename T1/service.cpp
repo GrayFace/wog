@@ -1421,7 +1421,7 @@ int PrepareDP(int Gamer)
 	}
 	for(i=0;i<8;i++) for(j=0;j<7;j++) DP.Resources[i][j]=GetRes(i,j);
 	for(i=0;i<7;i++) for(j=0;j<8;j++) for(k=0;k<8;k++) DP.ResSent[i][j][k]=0;
-	for(i=0;i<8;i++) DP.GamerEnable[i][0]=0; DP.GamerEnable[i][1]=0;
+	for(i=0;i<8;i++) { DP.GamerEnable[i][0]=0; DP.GamerEnable[i][1]=0; }
 	for(i=0;i<8;i++) if(DP.ResvMessage[Gamer][i]!=-1) DP.GamerEnable[Gamer][1]=1;
 	for(i=0;i<8;i++) if(DP.SentMessage[Gamer][i]!=-1) DP.GamerEnable[Gamer][0]=0;
 

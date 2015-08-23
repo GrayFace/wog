@@ -311,8 +311,8 @@ int LoadLODs(int /*ver*/)
 	_lod_ *ar=(_lod_ *) new _lod_[num];
 	if(ar==0) RETURN(1)
 	for(int i=0;i<num;i++){
-		if(Loader(&ar[i].l,sizeof(int))) RETURN(1)
-		if(Loader(ar[i].n,32)) RETURN(1)
+		if(Loader(&ar[i].l,sizeof(int))){ delete ar; RETURN(1) }
+		if(Loader(ar[i].n,32)){ delete ar; RETURN(1) }
 		ar[i].n[31]=0;
 	}
 	for(int i = num - 1; i > 0; i--){
