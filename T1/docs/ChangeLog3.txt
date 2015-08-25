@@ -20,7 +20,7 @@ Alpha 3+
 [+] New [Common]ReloadScripts parameter in WoG.ini. Set it to 1 to make WoG reload all scripts from files (but not from map) when you load a saved game. (Alpha 5.2)
 [+] ERM stack traceback reported in WOGERMLOG.TXT. (Alpha 5.2)
 [*] Slower 'standing' animation of monsters. (Alpha 6)
-[+] 20 local z vars instead of 10. z-20..z-1 now. (Alpha 6)
+[+] 20 local z vars instead of 10. z-20..z-1 now. New vars z-20..z-11 are initializad with empty strings on function start. z-10..z-1 are not, for backward compatibility (script005 for example). (Alpha 6)
 [*] Default AI thinking radius returned to SoD value. (Alpha 6)
 [-] SoD limitation: events texts were limited to 65535 characters. (Alpha 6)
 [-] SoD bug: sound quality was low (22kHz, mono). (Alpha 6.1)

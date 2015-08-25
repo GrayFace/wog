@@ -19,7 +19,7 @@ Alpha 1
 [+] FU:X#/?$ get type of argument x#
 [+] !?TM#/#/#/# new syntax - automatic constant timer. The parameters are similar to TM:S.
 [+] if-el-en changes
-[+] z-1 - z-10 are now local variables for both functions and triggers
+[+] z-1 - z-20 are now local variables for both functions and triggers
 [+] UX:K#/?$ - check if key is pressed right now
 [+] UX:M$1/$2 - get/check/set mouse coordinates
 [+] UX:T - get current time or show dialog with time delta
@@ -41,7 +41,7 @@ Alpha 1
 [+] MP reciever only accepted z1-z1000 strings, now it accepts any strings
 [+] MM:S and DL:H now accept constant and local strings
 [-] TR:T road subtype wasn't handled correctly
-[-] DO:P didn't restore z-1..z-10
+[-] DO:P didn't restore z-1..z-20
 [-] FU:P and DO:P didn't set unspecified parameters to zero
 [-] DO:P ?y1 bug fixed
 [-] FUy1:P didn't work

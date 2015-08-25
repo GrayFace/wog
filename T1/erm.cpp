@@ -416,6 +416,8 @@ void __inline _DoStoreVars(void *loc, void **last, void *var, int size, bool res
 }
 
 LocalVarsBlock *CurVars, *NextVars;
+// CurVars is call stack list. Last points to the outer scope of recursion.
+// NextVars is free vars blocks list. Last points to next allocated vars block.
 
 void StoreVars(bool fu, bool restore)
 {
@@ -424,8 +426,12 @@ void StoreVars(bool fu, bool restore)
 	_DoStoreVars(vars->F, &vars->LastF, (fu ? &ERMVarF : &ERMVarFT), sizeof(vars->F), restore, fu);
 	_DoStoreVars(vars->String, &vars->LastString, &ERMLString, 0, restore, false);
 	if (!restore)
-		for (int i = 0; i < VAR_COUNT_LZ; i++)
+	{
+		if(fu)
+			memcpy(vars->String, vars->LastString, 10*sizeof(vars->String[0])); // backward compatibility
+		for (int i = (fu ? 10 : 0); i < VAR_COUNT_LZ; i++)
 			vars->String[i][0] = 0;
+	}
 }
 
 ///////////////////////////
