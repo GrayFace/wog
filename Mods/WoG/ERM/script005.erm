@@ -1,7 +1,7 @@
 ZVSE
-ERMS_ScriptDate=9.7(July).2006
+ERMS_ScriptDate=25.8(August).2015
 _WARNING_#1=IMPORTANT! This file is not in a plain text format. NEVER use any editor except ERM_S for making any kind of changes!
-ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
+ERMS_PoweredBy=ERM Scripter v. 2004.8.11.911
 
 ** Bank, Transfer all resources button and Resource trading post
 ** by Donald X. Vaccarino, Timothy E. Pulver and Hermann the Weird
@@ -221,6 +221,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!OW:R-1/6/dv1; [give current player gold]
 !!VRy2:Sv1 *30 :100 +v1; [calculate interest]
 !!VRvy1:Sy2; [set payback value]
+!!UN:R4; [redraw town screen]
 
 ** End of function for borrowing gold **
 
@@ -293,6 +294,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!IF:Q1/y2/v1/1/z105028;
 
 !!OW:R-1/y2/dv1; [give current player resources]
+!!UN:R4; [redraw town screen]
 
 !!VRy3:Sv1 *30 :100 +v1; [calc interest]
 !!VRy3&y3=v1:+1; [if payback=loan, than add 1 to payback]
@@ -316,6 +318,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 
 !!OW:Rx1/6/dy4; [deduct calculated money]
 !!VRy4:*-1;
+!!UN:R2; [redraw resources]
 
 !!VRy5:Svx2 -y4;
 
@@ -358,6 +361,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 
 !!OW:Rx1/y2/dy4; [deduct calculated resource]
 !!VRy4:*-1;
+!!UN:R2; [redraw resources]
 
 ** set variable and strings for message **
 !!VRy5:Sy1 -y4;
@@ -546,6 +550,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!OW:Ry9/y20/dv1; [add resource to receiving player]
 !!VRv1:*-1;
 !!OW:Ry10/y20/dv1; [subtract resource from giving player]
+!!UN:R4; [redraw town screen]
 
 ** End of Resource trading post function **
 
@@ -628,6 +633,7 @@ ERMS_PoweredBy=ERM Scripter v. 2004.10.5.945
 !!OW:Rx2/x16/dy1; [Give resource to player x2]
 !!VRy1:*-1; [Multiply resource by -1]
 !!OW:Rx1/x16/dy1; [Take resource from player x1]
+!!UN:R4; [redraw town screen]
 
 ** End of Transfer all resources section **
 
