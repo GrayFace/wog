@@ -39,7 +39,7 @@ Saved games from 3.58 are incompatible. From one version of 3.59a to another sav
 If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar  
 Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT files. The program itself will create CrashEIP.txt file in its own folder. Send me all 4 files.
 
-In addition to sending WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT, WOGERMLOG.TXT and/or WOGLUALOG.TXT don't forget to describe what exactly you did that lead to the issue and send the saved game and map if they're relevant.
+In addition to sending WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT don't forget to describe what exactly you did that lead to the issue and send the saved game and map if they're relevant.
 
 At some point you may find UnclosedStackLevels.txt file in your WoG folder. Send it to me if you do.
 
