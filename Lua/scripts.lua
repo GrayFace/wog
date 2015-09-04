@@ -291,7 +291,7 @@ function _G.dofile(path, ...)
 	if f then
 		return f(...)
 	end
-	error(err)
+	error(err, 2)
 end
 
 function _G.dofile2(path, ...)
@@ -334,7 +334,7 @@ local function FetchModScripts(mask, mod)
 		local name = string_lower(string_match(t.FileName, "[^%.]*"))
 		local fullname = mod.."."..name
 		if ScriptPath[fullname] then
-			error(format("duplicate script name found: %s, %s", ScriptPath[fullname], f))
+			error(format("duplicate script name found: %s, %s", ScriptPath[fullname], f), 0)
 		end
 		ScriptPath[fullname] = f
 		files[#files + 1] = fullname

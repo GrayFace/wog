@@ -38,7 +38,7 @@ function isclear(pos, AvoidCorpses)
 		local x = pos % 17
 		return x ~= 0 and x ~= 16 and -- inaccessible first and last hexes in a row
 		       BU:O(pos, ?v) == 0 and -- obstacle
-		       BU:E(pos, ?v) < 0 and  -- alive monster
+		       BU:E(pos, ?v) < 0 and  -- living monster
 		       (not AvoidCorpses or BU:D(pos, ?v) < 0) -- corpse
 	end
 end

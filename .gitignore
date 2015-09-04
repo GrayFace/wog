@@ -1,7 +1,6 @@
 ## Ignore files
 
 HDetour.lib
-lua.lib
 socket.lib
 vc80.idb
 Build/addon.dat

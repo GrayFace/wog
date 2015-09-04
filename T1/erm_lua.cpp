@@ -8,17 +8,20 @@
 #include "erm.h"
 #include "b1.h"
 #include "erm_lua.h"
+extern "C"
+{
+	#include "lualib.h"
+	#include "lauxlib.h"
+	#include "luasocket.h"
+	extern unsigned char *lj_get_char_bits();
+}
+
 #include "global.h"
 #include "wogsetup.h"
-#include "lualib.h"
-#include "lauxlib.h"
-#include "lupvaluejoin.h"
 #include "RSMem.h"
-#include "luasocket.h"
 //#include "afx.h"
 #define __FILENUM__ 25
 
-// set panic (&error) function, error function
 // specials: FU:E; IF:M,Q;
 
 #define GameLoaded  MainWindow
@@ -82,17 +85,12 @@ static void ErrorMessageExe(lua_State *L)
 
 static void ErrorMessage(lua_State *L)
 {
-	int param = lua_gettop(L);
-
 	lua_getfield(L, LUA_REGISTRYINDEX, "ErrorMessage"); // get 'internal.ErrorMessage'
-	lua_pushvalue(L, param);
-	if (lua_pcall(L, 1, 0, 0) == 0)
-	{
-		lua_settop(L, param - 1);
-		return;
-	}
-	lua_settop(L, param);
-	ErrorMessageExe(L);
+	lua_pushvalue(L, -2);
+	int err = lua_pcall(L, 1, 0, 0);
+	lua_pop(L, 1);
+	if (err)
+		ErrorMessageExe(L);
 }
 
 static int ErrorMessageLua(lua_State *L)
@@ -708,71 +706,6 @@ static int MultiPicMessage(lua_State *L)
 	RETURN(0)
 }
 
-//-------- Error Function ---------
-
-static int ErrorFunction(lua_State *L)
-{
-	lua_checkstack(L, 2);
-	lua_rawgeti(L, LUA_REGISTRYINDEX, ErrfIndex);
-	if (lua_type(L, -1) == LUA_TNIL)
-	{
-		ErrorMessage("Fatal Lua error: error function is missing");
-		lua_pop(L, 1);
-		return 1;
-	}
-	lua_insert(L, -2);
-	lua_pcall(L, 1, 1, 0);
-	return 1;
-}
-
-//-------- Remove Error Function ---------
-
-//static int RemoveDefErrf(lua_State *L)
-//{
-//	luaL_checktype(L, 1, LUA_TTHREAD);
-//	lua_deferrfunc(lua_tothread(L, 1), 0);
-//	lua_settop(L, 0);
-//	return 0;
-//}
-
-//-------- xpcall ---------
-
-static int lua_xpcall (lua_State *L) {
-	luaL_checktype(L, 2, LUA_TFUNCTION);
-
-	// switch function & error function
-	lua_pushvalue(L, 1);
-	lua_pushvalue(L, 2);
-	lua_replace(L, 1);
-	lua_replace(L, 2);
-
-	// call
-	lua_pushboolean(L, 0 == lua_pcall(L, lua_gettop(L) - 2, LUA_MULTRET, 1));
-	lua_replace(L, 1);
-	return lua_gettop(L);
-}
-
-//-------- random support ---------
-
-int DelphiRSeed;
-
-_declspec( naked ) int __fastcall DelphiRand(int /*range*/)
-{
-	_asm
-	{
-		mov eax, ecx
-		push ebx
-		xor ebx, ebx
-		imul edx, DelphiRSeed[ebx], 0x08088405
-		inc edx
-		mov DelphiRSeed, edx
-		mul edx
-		mov eax, edx
-		pop ebx
-		ret
-	}
-}
-
 //-------- os.find support ---------
 
 typedef struct MY_WIN32_FIND_DATA
@@ -920,6 +853,7 @@ static int MyLoader(lua_State *L)
 //-------- Debug Console ---------
 
 char * (__stdcall *DebugDialog)(HWND wnd, const char * text, int top);
+void (__stdcall *DebugDialogAnswer)(const char * text, long selpos);
 void (__stdcall *DebugDialogResize)(long w, long h);
 
 static int DebugConsole(lua_State *L)
@@ -943,16 +877,151 @@ static int DebugConsole(lua_State *L)
 	return 1;
 }
 
-//-------- Delphi Memory Manager ---------
-
-void * ReallocMem; // function MyReallocMem(p: ptr; size: int): ptr;
-
-__declspec(naked) void * LuaAlloc(void *, void *, size_t, size_t){__asm
+static int DebugConsoleAnswer(lua_State *L)
 {
-	mov eax, [esp + 8]
-	mov edx, [esp + 16]
-	jmp ReallocMem
-}}
+	DebugDialogAnswer(lua_tostring(L, 1), lua_gettop(L) > 1 ? (long)lua_tonumber(L, 2) : 0);
+	return 0;
+}
+
+//-------- Asm compiler ---------
+
+int (__stdcall *fasm_Assemble)(LPCCH source, byte *memory, int MemorySize, int PassesLimit, int DisplayPipe);
+
+struct LINE_HEADER
+{
+	LPCCH file_path;
+	int line_number;
+	union
+	{
+		int file_offset;
+		LINE_HEADER* macro_calling_line;
+	};
+	LINE_HEADER* macro_line;
+};
+
+static struct FASM_STATE
+{
+	int condition;
+	union
+	{
+		int output_length;
+		int error_code;
+	};
+	union
+	{
+		char *output_data;
+		LINE_HEADER *error_line;
+	};
+	byte CodeBuffer[0x10000]; // my addition. The size is mentioned in AsmGenErrors error message
+} fasm_state;
+
+static void AsmPushLineNumber(lua_State *L, LINE_HEADER* a, int BaseLine)
+{
+	if (a->line_number >= 0)
+	{
+		lua_pushnumber(L, a->line_number - BaseLine);
+	}
+	else
+	{
+		AsmPushLineNumber(L, a->macro_calling_line, BaseLine);
+		lua_pushstring(L, ":macro:");
+		AsmPushLineNumber(L, a->macro_line, BaseLine);
+	}
+}
+
+static const int AsmGenErrorsSize = 9;
+static const char *AsmGenErrors[AsmGenErrorsSize] = {
+	"asm: unknown error",
+	"asm: invalid parameter",
+	"asm: output size exceeds 64KB limit",
+	"asm: stack overflow",
+	"asm: source not found",
+	"asm: unexpected end of source",
+	"asm: cannot generate code",
+	"asm: format limitations excedded",
+	"asm: write failed"
+};
+
+static const int AsmErrorsSize = 42;
+static const char *AsmErrors[AsmErrorsSize] = {
+	"unknown error",
+	"file not found",
+	"error reading file",
+	"invalid file format",
+	"invalid macro arguments ",
+	"incomplete macro",
+	"unexpected characters",
+	"invalid argument",
+	"illegal instruction",
+	"invalid operand ",
+	"invalid operand size",
+	"operand size not specified",
+	"operand sizes do not match",
+	"invalid address size",
+	"address sizes do not agree",
+	"disallowed combination of registers = -115",
+	"long immediate not encodable",
+	"relative jump out of range",
+	"invalid expression",
+	"invalid address ",
+	"invalid value",
+	"value out of range",
+	"undefined symbol",
+	"invalid use of symbol",
+	"name too long",
+	"invalid name",
+	"reserved word used as symbol",
+	"symbol already defined",
+	"missing end quote",
+	"missing end directive",
+	"unexpected instruction",
+	"extra characters on line",
+	"section not aligned enough",
+	"setting already specified",
+	"data already defined",
+	"too many repeats",
+	"symbol out of scope",
+	"unknown error",
+	"unknown error",
+	"unknown error",
+	"user error",
+	"assertion failed"
+};
+
+static int CompileAsm(lua_State *L)
+{
+	int r = fasm_Assemble(lua_tostring(L, 1), (byte*)&fasm_state, sizeof(fasm_state), 100, 0);
+	int BaseLine = (int)lua_tonumber(L, 2);
+	lua_settop(L, 0);
+	
+	if (r == 0)
+	{
+		lua_pushlstring(L, fasm_state.output_data, fasm_state.output_length);
+		return 1;
+	}
+	lua_pushnil(L);
+	if (r == 2)
+	{
+		lua_pushstring(L, "asm:");
+		AsmPushLineNumber(L, fasm_state.error_line, BaseLine);
+		lua_pushstring(L, ": ");
+		r = -fasm_state.error_code - 100;
+		if (r > 0 && r < AsmErrorsSize)
+			lua_pushstring(L, AsmErrors[r]);
+		else
+			lua_pushstring(L, AsmErrors[0]);
+		lua_concat(L, lua_gettop(L) - 1);
+	}
+	else
+	{
+		r = -r;
+		if (r > 0 && r < AsmGenErrorsSize)
+			lua_pushstring(L, AsmGenErrors[r]);
+		else
+			lua_pushstring(L, AsmGenErrors[0]);
+	}
+	return 2;
+}
 
 //-------- Other packages ---------
 
@@ -970,15 +1039,16 @@ int LuaCallTop;
 
 int LuaCallStart(lua_State *L, const char *name)
 {
+	lua_rawgeti(Lua, LUA_REGISTRYINDEX, ErrfIndex); // error function
 	lua_getfield(L, LUA_REGISTRYINDEX, name); // get 'internal'.name
 	if (lua_type(L, -1) != LUA_TFUNCTION)
 	{
+		lua_pop(Lua, 2);
 		lua_pushstring(L, "Fatal Lua error: \"");
 		lua_pushstring(L, name);
 		lua_pushstring(L, "\" internal function is missing");
 		lua_concat(L, 3);
 		ErrorMessageExe(L);
-		lua_pop(L, 1);
 		return 1;
 	}
 	LuaCallTop = lua_gettop(L);
@@ -993,11 +1063,13 @@ int LuaCallStart(const char *name)
 
 int LuaPCall(int nArgs, int nResults)
 {
-	if (lua_pcall(Lua, nArgs, nResults, 0))
+	if (lua_pcall(Lua, nArgs, nResults, -2 - nArgs))
 	{
 		ErrorMessage(Lua);
+		lua_pop(Lua, 1);
 		return 1;
 	}
+	lua_remove(Lua, -1 - nResults);
 	return 0;
 }
 
@@ -1021,9 +1093,11 @@ int LuaCallEnd()
 
 int DoFile(const char *path)
 {
+	lua_rawgeti(Lua, LUA_REGISTRYINDEX, ErrfIndex);
 	if (luaL_loadfile(Lua, path))
 	{
 		ErrorMessage(Lua);
+		lua_pop(Lua, 1);
 		return 1;
 	}
 	return LuaPCall(0, 0);
@@ -1068,7 +1142,6 @@ void CallLuaTrigger(int index)
 
 static const struct luaL_reg LuaLib_general [] =
 {
-	{"xpcall", lua_xpcall},
 	{0, 0}
 };
 
@@ -1092,7 +1165,6 @@ static const struct luaL_reg LuaLib_internal [] =
 	{"FindClose", LuaFindClose},
 	{"LuaMessage", LuaMessage},
 	{"MultiPicMessage", MultiPicMessage},
-	{"ErrorMessage", ErrorMessageLua},
 	{"DebugConsole", DebugConsole},
 	{"GetTileVTables", GetTileVTables},
 	{"GetDrawPosVTables", GetDrawPosVTables},
@@ -1109,21 +1181,21 @@ void InitLua()
 	Path[0] = 0;
 	sprintf_s(Path, "%sWogDialogs.dll", (DeveloperPath[0] ? DeveloperPath : ""));
 	*(PROC*)&DebugDialog = DllImport(Path, "DebugDialog", true);
+	*(PROC*)&DebugDialogAnswer = DllImport(Path, "DebugDialogAnswer", true);
 	*(PROC*)&DebugDialogResize = DllImport(Path, "DebugDialogResize", true);
-	*(PROC*)&ReallocMem = DllImport(Path, "ReallocMem", true);
+	sprintf_s(Path, "%sFASM.dll", (DeveloperPath[0] ? DeveloperPath : ""));
+	*(PROC*)&fasm_Assemble = DllImport(Path, "fasm_Assemble", true);
 	DebugDialogResize(800-40, 600-40);
 
 	for (int i = 0; i < 16; i++)
 		CmdMessage.c[i] = 1;
 
-	lua_State* L = Lua = lua_newstate(LuaAlloc, 0);  // Open Lua
+	lua_State* L = Lua = luaL_newstate();
 	lua_atpanic(L, PanicMessage);
-	lua_ignorelocale(L);
-	lua_alnum(L)['?'] = 1;
-	lua_alnum(L)['$'] = 1;
+	lj_get_char_bits()['?'] = 128;
+	lj_get_char_bits()['$'] = 128;
 
 	luaL_openlibs(L); // Open all standard libraries
-	luaopen_upvaluejoin(L); // for more RSPersist power that isn't actually used
 	lua_pushvalue(L, LUA_GLOBALSINDEX);
 	luaL_register(L, 0, LuaLib_general);
 	lua_pop(L, 1);
@@ -1173,6 +1245,7 @@ void InitLua()
 	LuaInternalConst("DeveloperPath", DeveloperPath);
 	LuaInternalConst("ModsPath", ModsPath);
 	LuaInternalConst("ERM_HeroStr", (int)&ERM_HeroStr);
+	LuaInternalConst("DumpERMVars", (int)DumpERMVars);
 
 	// Scripts path
 	LoadIniPath(Path, "LuaScriptsPath", (DeveloperPath[0] ? Format("%sLua\\", DeveloperPath) : "Data\\zvs\\Lua\\"));
@@ -1186,7 +1259,6 @@ void InitLua()
 		ExitProcess(0);
 	}
 	ErrfIndex = luaL_ref(L, LUA_REGISTRYINDEX);
-	lua_deferrfunc(L, ErrorFunction);
 
 	// main.lua
 	if (DoFile(Format("%smain.lua", Path))) exit(0);

@@ -117,7 +117,7 @@ local set
 -- Object Model: Object -index- Fields Table -index- Class
 -- Class Private contains setters
 
-local function Composite_AddItem(t, it, name)
+local function Composite_DoAddItem(t, it, name)
 	local items = t.Items
 	name = name or it.Name
 	if name and items[name] then
@@ -130,6 +130,10 @@ local function Composite_AddItem(t, it, name)
 	if t.Parent and not it.Parent then
 		t.Parent:Add(it)
 	end
+end
+
+local function Composite_AddItem(t, it, name)  -- for proper error level
+	Composite_DoAddItem(t, it, name)
 end
 
 local function Composite_RemoveItem(t, it)
@@ -599,7 +603,7 @@ set.Active = set.Visible
 function Aligner:AddItem(it, name)
 	self[#self + 1] = it
 	if type(it) ~= "number" then
-		Composite_AddItem(self, it, name)
+		Composite_DoAddItem(self, it, name)
 	end
 end
 function Aligner:RemoveItem(it)
@@ -631,11 +635,11 @@ local function dialogs_Aligner(fields)
 	local t = {Items = {}}
 	for _, v in ipairs(fields) do
 		if type(v) ~= "number" then
-			Composite_AddItem(t, v)
+			Composite_DoAddItem(t, v)
 		end
 	end
 	if fields.ScrollBar and type(fields.ScrollBar) ~= "string" and not fields.ScrollBar.Owner then
-		Composite_AddItem(t, fields.ScrollBar)
+		Composite_DoAddItem(t, fields.ScrollBar)
 	end
 	
 	Composite_InitObject(t, fields, Aligner)
@@ -843,12 +847,12 @@ local function dialogs_CheckBox(fields)
 	local t = {}
 	t.RawFields = fields
 	t.Items = {}
-	--Composite_AddItem(t, P.Frame{Color = 20899, Fill = true}, "Fill")
-	Composite_AddItem(t, P.Frame{Color = 25158, Fill = true}, "Fill")
-	Composite_AddItem(t, P.Text{Align = 4, Color = 1 --[[19]], Text = fields.Text}, "Text")
-	Composite_AddItem(t, P.Frame{Color = 10434}, "BorderS")
-	Composite_AddItem(t, P.Frame{Color = 33574}, "BorderL")
-	Composite_AddItem(t, P.Button{DrawX = 3, OnClick = CheckBox_OnClick}, "Button")
+	--Composite_DoAddItem(t, P.Frame{Color = 20899, Fill = true}, "Fill")
+	Composite_DoAddItem(t, P.Frame{Color = 25158, Fill = true}, "Fill")
+	Composite_DoAddItem(t, P.Text{Align = 4, Color = 1 --[[19]], Text = fields.Text}, "Text")
+	Composite_DoAddItem(t, P.Frame{Color = 10434}, "BorderS")
+	Composite_DoAddItem(t, P.Frame{Color = 33574}, "BorderL")
+	Composite_DoAddItem(t, P.Button{DrawX = 3, OnClick = CheckBox_OnClick}, "Button")
 	t.RadioDefs = {"ZRadOff.def", "ZRadOn.def"}
 	t.CheckDefs = {"ZChkClr.def", "ZChkOn.def", "ZChkOff.def"}
 	return Composite_InitObject(t, fields, CheckBox)
@@ -980,7 +984,7 @@ function P.CheckGroup(fields)
 	end
 	if sb then
 		t.Items[0] = nil
-		Composite_AddItem(t, sb)
+		Composite_DoAddItem(t, sb)
 	end
 	return t
 end

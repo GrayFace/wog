@@ -2,9 +2,13 @@ local co_running = coroutine.running
 local co_wrap = coroutine.wrap
 local co_yield = coroutine.yield
 local type = type
+local assert = assert
+local select = select
 local u4 = mem.u4
 
 local internal = debug.getregistry()
+
+local _KNOWNGLOBALS
 
 local function DebugRet(ok, ...)
 	return {ok and select('#', ...), ...}
@@ -32,11 +36,7 @@ local function DoDebug(str)
 		return DoDebug(err.."\n")
 	end
 	assert(type(f)=="function")
-	local function onYield(...)
-		HideConsole()
-		return co_yield(...)
-	end
-	local ret = DebugRet(ypcall(f, nil, onYield))
+	local ret = DebugRet(pcall(f))
 	if ret[1] then
 		str = ""
 		for i = 2, ret[1] + 1 do

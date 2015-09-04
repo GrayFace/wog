@@ -66,6 +66,18 @@ prepare permanents
 load everything
 
 ]]--
+local internal = debug.getregistry()
+local CoreScriptsPath = internal.CoreScriptsPath
+
+-- dofile(CoreScriptsPath.."RSFunctions.lua")
+-- PrintToFile("InternalLog.txt")  -- temporary
+
+local NoGlobals = dofile(CoreScriptsPath.."RSNoGlobals.lua")
+NoGlobals.Options.NameCharCodes[("?"):byte()] = true
+NoGlobals.Activate()
+NoGlobals.CheckChunkFile(1, 1)
+NoGlobals.CheckChunkFile(NoGlobals.CheckChunkFile, 1)
+NoGlobals.CheckChunkFile(pcall, 1)
 
 local type = type
 local unpack = unpack
@@ -103,12 +115,11 @@ local coroutine_resume = coroutine.resume
 local coroutine_running = coroutine.running
 local d_debug
 local dofile = dofile
+local ffi = require("ffi")
 
 local _G = _G
-local internal = debug.getregistry()
+internal.require = require
 local mem_internal = mem
-local CoreScriptsPath = internal.CoreScriptsPath
-ModsPath = internal.ModsPath
 
 internal.traceback = debug.traceback
 
@@ -458,9 +469,10 @@ function _G.debug.ErrorMessage(msg)
 	if internal.OnError then
 		internal.OnError(msg)
 	end
-	msg = msg..'\n\nPLEASE SEND "WOGLUALOG.TXT" FILE TO "sergroj@mail.ru"'
-	io_SaveString(AppPath.."WOGLUALOG.TXT",
-		format("Time Stamp: %s\nWoG Version: %s\n\n%s", os_date(), internal.WogVersion, msg))
+	call(internal.DumpERMVars, 0, msg.."\n", true);
+	msg = msg..'\n\nPLEASE SEND "WOGERMLOG.TXT" FILE TO "sergroj@mail.ru"'
+	-- io_SaveString(AppPath.."WOGLUALOG.TXT",
+	-- 	format("Time Stamp: %s\nWoG Version: %s\n\n%s", os_date(), internal.WogVersion, msg))
 	if d_debug then
 		d_debug(msg)
 	else
@@ -482,6 +494,7 @@ dofile(CoreScriptsPath.."ert.lua")
 dofile(CoreScriptsPath.."erm.lua")
 dofile(CoreScriptsPath.."options.lua")
 dofile(CoreScriptsPath.."scripts.lua")  -- also load/save game, mods
+-- dofile(CoreScriptsPath.."DefReplace.lua")
 dofile(CoreScriptsPath.."Dialogs.lua")
 
 for f in path_find(CoreScriptsPath.."Misc/*.lua") do

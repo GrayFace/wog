@@ -3,7 +3,10 @@
 
 #include "structs.h"
 //#include "luaW_debug.h"
-#include "lua.h"
+extern "C"
+{
+	#include "lua.h"
+}
 //#include "lualib.h"
 //#include "lauxlib.h"
 
@@ -20,7 +23,6 @@ void InitLua();
 //void RunLuaString(const char *chunk, const char *name);
 void CallLuaTrigger(int index);
 
-#define _LuaCall_LuaCpp
 #define LUACALL_LUA Lua
 #include "LuaCall.h"
 int LuaCallStart(const char *name);

@@ -69,7 +69,7 @@ local erm = {}
 
 local function cmd_call(t, cmd, ...)
 	if internal.ERM_Reciever(t.name, unpack(t.params)) ~= 0 then
-		error(LuaGetLastError() or "ERM reciever error", 3)
+		error(LuaGetLastError() or "ERM reciever error", 2)
 	end
 	
 	return internal.ERM_Call(cmd, ...)
@@ -106,7 +106,7 @@ local function rec_newindex(t, a, v)
 	elseif a == "first$" or a == "First$" then
 		postFlag, ind = true, 0
 	else
-		error(format('"%s.%s"-unknown trigger type.', t.name, a),2)
+		error(format('"%s.%s"-unknown trigger type.', t.name, a), 2)
 	end
 	if type(v) ~= "function" then
 		error("Trigger must be a function.", 2)
@@ -145,7 +145,7 @@ local function vaValue(name, index, val)
 		ret = internal.ERM_Var(name, index, val)
 	end
 	if LuaGetLastError() then
-		error(LuaGetLastError(), 3)
+		error(LuaGetLastError(), 2)
 	end
 	return ret
 end
@@ -156,7 +156,7 @@ local function varArray_index(t, vtype)
 	end
 
 	local function va_newindex(t, a, v)
-		vaValue(vtype, a, v)
+		return vaValue(vtype, a, v)
 	end
 
 	local function va_call2(a, b)
@@ -214,13 +214,13 @@ end
 
 local function erm_newindex(t, a, v)
 	if type(a) == "number" then
-		vaValue("", a, v)
+		return vaValue("", a, v)
 	end
 	local s = string_sub(a, 1, 1)
 	if a == s then
-		vaValue(s, 0, v)
+		return vaValue(s, 0, v)
 	else
-		vaValue(s, string_sub(a, 2), v)
+		return vaValue(s, string_sub(a, 2), v)
 	end
 end
 

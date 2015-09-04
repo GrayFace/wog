@@ -1,6 +1,6 @@
 local type = type
 local unpack = unpack
-local error
+local error = error
 local assert = assert
 local format = string.format
 local string_byte = string.byte
@@ -37,8 +37,11 @@ local abs = math.abs
 local coroutine_create = coroutine.create
 local coroutine_resume = coroutine.resume
 local coroutine_running = coroutine.running
+local coroutine_yield = coroutine.yield
 local io_open = io.open
 local select = select
+
+local _KNOWNGLOBALS_F = nil, path
 
 --------- table
 

@@ -32,6 +32,8 @@ define.CustomType('Name', size, function(offset, obj, name, val))
 
 local internal = mem
 
+local print = print
+
 local type = type
 local unpack = unpack
 local error = error
@@ -56,6 +58,8 @@ local table_insert = table.insert
 local math_floor = math.floor
 local math_ceil = math.ceil
 local abs = math.abs
+local max = math.max
+local min = math.min
 local bit_Or = internal.bit_Or
 local bit_And = internal.bit_And
 local bit_AndNot = internal.bit_AndNot
@@ -65,6 +69,7 @@ local IsBadCodePtr = internal.IsBadCodePtr
 local IsBadReadPtr = internal.IsBadReadPtr
 local IsBadWritePtr = internal.IsBadWritePtr
 local GetHookSize = internal.GetHookSize or function()  return 5  end
+local GetInstructionSize = internal.GetInstructionSize
 
 local function nocallback(a)
 	return a
@@ -100,13 +105,11 @@ local general = mem.general  -- general scripts
 
 local _NOGLOBALS
 
-
 -----------------------------------------------------
 -- General functions
 -----------------------------------------------------
 
 local function roError(a, lev)  error('attempt to modify a read-only field "'..a..'".', lev + 1)  end
-local function readonly(t, a)  roError(a, 2)  end
 
 local function setmetatable(t, m)
 	d_setmetatable(t, m)
@@ -114,11 +117,7 @@ local function setmetatable(t, m)
 end
 
 local function assertnum(v, level, msg)
-	local v1 = tonumber(v)
-	if v1 then
-		return v1
-	end
-	error(msg or "number expected, got "..type(v), (level or 1) + 1)
+	return tonumber(v) or (error(msg or "number expected, got "..type(v), (level or 1) + 1))
 end
 
 local function tostring2(v)
@@ -244,7 +243,7 @@ end
 
 local function call(t, ...)
 	local ist = type(t) == "table"
-	local p = assertnum(ist and t.p or t)
+	local p = assertnum(ist and t.p or t, 2)
 	if rawcall(IsBadCodePtr, 0, p) ~= 0 then
 		error(format("attempt to call invalid address %X", p), 2)
 	end
@@ -282,6 +281,7 @@ local function malloc(size)
 	return ucall(internal.malloc, 0, assertnum(size, 2))
 end
 _mem.malloc = malloc
+_mem.alloc = malloc
 
 function _mem.free(p)
 	rawcall(internal.free, 0, assertnum(p, 2))
@@ -322,6 +322,10 @@ local function write_error(p, size, level)
 	error(format('memory at address %X of size %d cannot be written to', p, size), level + 1)
 end
 
+local function code_error(p, level)
+	error(format('memory at address %X is not executable', p), level + 1)
+end
+
 local VirtualProtect_tmp = StaticAlloc(4)
 local VirtualProtect_ptr = internal.VirtualProtect
 -- local function VirtualProtect(p, size, prot)
@@ -360,6 +364,13 @@ local function Unprotect(p, size, ret)
 end
 
 function _mem.copy(dest, src, count)
+	local st = type(src)
+	if st == "table" then
+		count = count or src["?size"]
+		src = src["?ptr"]
+	elseif st == "string" then
+		count = count or #src
+	end
 	dest, count = assertnum(dest, 2), assertnum(count, 2)
 	if rawcall(IsBadReadPtr, 0, src, count) ~= 0 then
 		read_error(src, count, 2)
@@ -398,7 +409,7 @@ local function memarr(x)
 	
 	local function index(t, a)
 		local ret = Mem_GetNum(x, assertnum(a, 2))
-		return ret or read_error(a, size, 3)
+		return ret or (read_error(a, size, 3))
 	end
 
 	local function newindex(t, a, v)
@@ -528,7 +539,7 @@ local function mem_function(def)
 end
 
 function _mem.func(...)
-	return mem_function(...)
+	return (mem_function(...))
 end
 
 -----------------------------------------------------
@@ -555,8 +566,13 @@ local dll_meta = {
 	end
 }
 
+-- local DllNameBuf
+
 local function mem_LoadDll(name, cc)
-	local p = ucall(internal.LoadLibrary, 0, string_gsub(name, "/", "\\"))
+	local p = name
+	if type(p) ~= "number" then
+		p = ucall(internal.LoadLibrary, 0, string_gsub(name, "/", "\\"))
+	end
 	if p ~= 0 then
 		return setmetatable({["?ptr"] = p, ["?cc"] = tonumber(cc) or 0, ["?path"] = name}, dll_meta)
 	end
@@ -565,7 +581,7 @@ _mem.LoadDll = mem_LoadDll
 
 local mem_dll = setmetatable({}, {__index = function(t, k)
 	-- append .dll if no extension is specified
-	local v = mem_LoadDll(string_match(k, "%.[^%.\\/:]*$") and k or k..".dll")
+	local v = mem_LoadDll(type(k) ~= "number" and not string_match(k, "%.[^%.\\/:]*$") and k..".dll" or k)
 	rawset(t, k, v)
 	return v
 end})
@@ -639,7 +655,9 @@ do -- mem.struct
 	local declare_array
 
 	local function member(name, size, f)
-		if define.members[name] and name ~= '' then  error("Field already exists", 2)  end
+		if define.members[name] and name ~= '' then
+			error("Field already exists", 2)
+		end
 		member_callback(name, define)
 		if unions and unions.amin then
 			size, f = declare_array(size, f)
@@ -852,14 +870,16 @@ do -- mem.struct
 	end
 	
 	function types.uany(size)
-		return any(false, size)
+		return (any(false, size))
 	end
 
 	function types.iany(size)
-		return any(true, size)
+		return (any(true, size))
 	end
 
-	local function nonewf(t, a)  error('field "'..tostring(a)..'" doesn\'t exist', 3)  end
+	local function nonewf(t, a)
+		error('field "'..tostring(a)..'" doesn\'t exist', 3)
+	end
 	
 	local function mem_struct(f, class, p)
 		local old, def = define, setmetatable({}, definemeta)
@@ -1144,12 +1164,12 @@ do -- mem.struct
 	
 	-- types.array([length func/mem.*, length offset, ] low, high, sz)  (if high = nil then  low is interpreted as Count)
 	function types.array(...)
-		return DoArray(nil, ...)
+		return (DoArray(nil, ...))
 	end
 	local array = types.array
 
 	function types.parray(...)
-		return DoArray(true, ...)
+		return (DoArray(true, ...))
 	end
 
 	local sOutOfBounds = "array index (%s) out of bounds [%s, %s]"	
@@ -1224,13 +1244,13 @@ do -- mem.struct
 							if v == nil then
 								return low + GetLen(obj) - 1
 							else
-								return SetLen(obj, v - low + 1, lenP and obj["?ptr"] + lenP, lenA)
+								return (SetLen(obj, v - low + 1, lenP and obj["?ptr"] + lenP, lenA))
 							end
 						elseif a == "length" or a == "Length" or a == "count" or a == "Count" then
 							if v == nil then
 								return GetLen(obj)
 							else
-								return SetLen(obj, v, lenP and obj["?ptr"] + lenP, lenA)
+								return (SetLen(obj, v, lenP and obj["?ptr"] + lenP, lenA))
 							end
 						elseif v == nil then
 							if a == "low" or a == "Low" then
@@ -1371,25 +1391,62 @@ end -- mem.struct
 -- mem.hook
 -----------------------------------------------------
 
+local OpCALL, OpJMP = 0xE8, 0xE9
 local Mem_HookProc = internal.Mem_HookProc
 
 local mem_hooks = {}
 _mem.hooks = mem_hooks
 
+if internal.GetHookSize then
+
+	function _mem.GetHookSize(p)
+		if rawcall(IsBadCodePtr, 0, p) ~= 0 then
+			code_error(p, 2)
+		end
+		return GetHookSize(p)
+	end
+	
+end
+
+local GetHookSize = function(p)
+	if rawcall(IsBadCodePtr, 0, p) ~= 0 then
+		code_error(p, 3)
+	end
+	return GetHookSize(p)
+end
+
+if GetInstructionSize then
+
+	function _mem.GetInstructionSize(p)
+		if rawcall(IsBadCodePtr, 0, p) ~= 0 then
+			code_error(p, 2)
+		end
+		return GetInstructionSize(p)
+	end
+	
+end
+
+local GetInstructionSize = GetInstructionSize and function(p)
+	if rawcall(IsBadCodePtr, 0, p) ~= 0 then
+		code_error(p, 3)
+	end
+	return GetInstructionSize(p)
+end
+
 function _mem.hook(p, f, size)
 	assert(size == nil or size >= 5)
 	size = size or GetHookSize(p)
 	if mem_hooks[p] then
-		error(format("Hook at address %X is already set", p), 2)
+		error(format("hook at address %X is already set", p), 2)
 	end
 	for i = p - 4, p + size - 1 do
 		if mem_hooks[i] then
-			error(format("Attempt to set hook at address %X, that intercepts with existing hook at %X", i), 2)
+			error(format("attempt to set hook at address %X, that intercepts with existing hook at %X", p, i), 2)
 		end
 	end
 	mem_hooks[p] = f
 	IgnoreCount = IgnoreCount + 1
-	u1[p] = 0xE8
+	u1[p] = OpCALL
 	local std = i4[p + 1] + p + 5
 	i4[p + 1] = Mem_HookProc - p - 5
 	for i = p + 5, p + size - 1 do
@@ -1406,6 +1463,7 @@ function _mem.hookjmp(p, f, size)
 		return f(data)
 	end, size)
 end
+local mem_hookjmp = _mem.hookjmp
 
 local HookData = _mem.struct(function(define)
 	define
@@ -1535,161 +1593,348 @@ local HookMem, HookMemEnd
 local VirtualAlloc = internal.VirtualAlloc
 _mem.VirtualAllocPtr = internal.VirtualAlloc
 local PageSize = internal.PageSize
-local FreeHook = 0
 
-function _mem.hookalloc()
-	local p
-	if FreeHook ~= 0 then
-		p = FreeHook
-		FreeHook = u4[p]
-	else
-		if HookMem == HookMemEnd then
-			HookMem = ucall(VirtualAlloc, 0, 0, PageSize, 0x1000, 0x40)
-			mem_fill(HookMem, PageSize, 0x90)
-			HookMemEnd = HookMem + PageSize - PageSize % 5
-		end
-		p = HookMem
-		HookMem = p + 5
+local FreeHook = {}
+local NextFreeHook = {}
+local HookSizes = {}
+
+local block, blocksize = nil, 0
+
+function _mem.hookalloc(size)
+	local f = (type(size) == "function" and size)
+	size = (not f and size or 5)
+	local p = FreeHook[size]
+	if p then
+		FreeHook[size] = NextFreeHook[p]
+		mem_fill(p, size, 0x90)
+		return p
+	end
+	blocksize = blocksize - size
+	if blocksize < 0 then
+		blocksize = (size + PageSize - 1):AndNot(PageSize - 1)
+		block, blocksize = ucall(VirtualAlloc, 0, 0, blocksize, 0x1000, 0x40), blocksize - size
+	end
+	p = block
+	mem_fill(p, size, 0x90)
+	if size ~= 5 then
+		HookSizes[p] = size
+	end
+	block = block + size
+	if f then
+		mem_hookjmp(p, f, 5)
 	end
 	return p
 end
 local mem_hookalloc = _mem.hookalloc
 
 function _mem.hookfree(p)
-	u4[p] = FreeHook
-	FreeHook = p
+	local size = HookSizes[p] or 5
+	NextFreeHook[p] = FreeHook[size]
+	FreeHook[size] = p
 end
 local mem_hookfree = _mem.hookfree
 
 
+-- absolete
 
-local function hookarounddestructor(info)
-	local p = info.buffer
-	mem_hooks[p] = nil
-	mem_hookfree(p)
-end
+-- local function hookarounddestructor(info)
+	-- local p = info.buffer
+	-- mem_hooks[p] = nil
+	-- mem_hookfree(p)
+-- end
 
--- !!! delete?
-function _mem.hookaround(p, nreg, nstack, f1, f2, size, keepParams)
-	assert(nreg <= 2)
-	local after = mem_hookalloc()
-	local info = {f1 = f1, f2 = f2, buffer = after}
-	info.destructor = table_destructor(info, hookarounddestructor)
-	setmetatable(info, info)
+-- function _mem.hookaround(p, nreg, nstack, f1, f2, size, keepParams)
+	-- assert(nreg <= 2)
+	-- local after = mem_hookalloc()
+	-- local info = {f1 = f1, f2 = f2, buffer = after}
+	-- info.destructor = table_destructor(info, hookarounddestructor)
+	-- setmetatable(info, info)
 	
-	function info.__call(_, d)  -- before
-		local par = {}
-		local p = d.esp + 4
-		d.esp = p
-		if nreg >= 2 then
-			d:push(d.edx)
-		end
-		if nreg >= 1 then
-			d:push(d.ecx)
-		end
-		for i = 1, nreg do
-			par[i] = i4[d.esp + (i-1)*4]
-		end
-		d.esp = d.esp - nstack*4
-		mem_copy(d.esp, p + 4, nstack*4)
-		d:push(after)
-		local n, esp = #par, d.esp
-		for i = 1, nstack do
-			par[n + i] = i4[esp + i*4]
-		end
-		return info.f1(d, unpack(par))
-	end
+	-- function info.__call(_, d)  -- before
+		-- local par = {}
+		-- local p = d.esp + 4
+		-- d.esp = p
+		-- if nreg >= 2 then
+			-- d:push(d.edx)
+		-- end
+		-- if nreg >= 1 then
+			-- d:push(d.ecx)
+		-- end
+		-- for i = 1, nreg do
+			-- par[i] = i4[d.esp + (i-1)*4]
+		-- end
+		-- d.esp = d.esp - nstack*4
+		-- mem_copy(d.esp, p + 4, nstack*4)
+		-- d:push(after)
+		-- local n, esp = #par, d.esp
+		-- for i = 1, nstack do
+			-- par[n + i] = i4[esp + i*4]
+		-- end
+		-- return info.f1(d, unpack(par))
+	-- end
 	
-	local function h2(d)  -- after
-		d:pop()  -- return address
-		local par = {}
-		for i = 1, nreg do
-			par[i] = d:pop()
-		end
-		local n, esp = #par, d.esp
-		for i = 1, nstack do
-			par[n + i] = i4[esp + i*4]
-		end
-		if not keepParams then
-			d:ret(nstack*4)
-		end
-		return info.f2(d, unpack(par))
-	end
+	-- local function h2(d)  -- after
+		-- d:pop()  -- return address
+		-- local par = {}
+		-- for i = 1, nreg do
+			-- par[i] = d:pop()
+		-- end
+		-- local n, esp = #par, d.esp
+		-- for i = 1, nstack do
+			-- par[n + i] = i4[esp + i*4]
+		-- end
+		-- if not keepParams then
+			-- d:ret(nstack*4)
+		-- end
+		-- return info.f2(d, unpack(par))
+	-- end
 	
-	mem_hook(after, h2, size)
-	mem_hook(p, info)
-end
+	-- mem_hook(after, h2, size)
+	-- mem_hook(p, info)
+-- end
 
 local function GetNoJumpSize(p)
+	local byte1 = u1[p]
+	if byte1 == OpCALL or byte1 == OpJMP then  -- allow standard jump / call
+		return 5
+	end
 	local n, j = GetHookSize(p)
 	assert(not j, "call or jump in original code")
 	return n
 end
 
-local block, blocksize = nil, 0
-
 -- copies standard code into a memory block that then jumps to the regular function
 -- (the copied code must not contain jumps or calls)
-function _mem.copycode(ptr, size)
-	assert(size == nil or size >= 5)
-	size = (size or GetHookSize(ptr)) + 5
-	assert(u1[ptr] ~= 0xE8 and u1[ptr] ~= 0xE9, "call or jump in original code")  -- a little check for already existing hook
-	blocksize = blocksize - size
-	if blocksize < 0 then
-		blocksize = (size + 0xFFF):AndNot(0xFFF)
-		block, blocksize = ucall(VirtualAlloc, 0, 0, blocksize, 0x1000, 0x40), blocksize - size
+function _mem.copycode(ptr, size, MemPtr, NoJumpBack)
+	size = size or GetHookSize(ptr)
+	local FullSize = size + (NoJumpBack and 0 or 5)
+	for i = ptr - 4, ptr + size - 1 do
+		if mem_hooks[i] then
+			error(format("attempt to copy code containing a hook at address %X", i), 2)
+		end
 	end
-	local std = block
-	mem_copy(std, ptr, size - 5)
-	u1[std + size - 5] = 0xE9  -- long jump
-	i4[std + size - 4] = ptr - std - 5
-	block = block + size
+	--assert(u1[ptr] ~= OpCALL and u1[ptr] ~= OpJMP, "call or jump in original code")  -- a little check for already existing hook
+	local std = MemPtr or mem_hookalloc(FullSize)
+	mem_copy(std, ptr, size)
+	if size >= 5 then
+		local byte1 = u1[std]
+		if byte1 == OpCALL or byte1 == OpJMP then  -- fix standard jump / call at the beginning
+			local addr = i4[std + 1] + 5
+			if addr < 0 or addr >= size then
+				i4[std + 1] = i4[std + 1] + ptr - std
+			end
+		end
+	end
+	if not NoJumpBack then
+		u1[std + size] = OpJMP
+		i4[std + size + 1] = ptr - std - 5
+	end
 	return std
 end
 local copycode = _mem.copycode
 
+local function MyCopyCode(p, size, MemPtr, NoJumpBack)
+	if size < 5 then
+		local size1 = GetHookSize(p)
+		for i = p + size, p + size1 - 1 do
+			if mem_hooks[i] then
+				error(format("attempt to set hook at address %X, which intercepts with existing hook at %X", p, i), 3)
+			end
+		end
+		MemPtr = copycode(p, size, MemPtr, true)
+		if not NoJumpBack then
+			copycode(p + size1, 0, MemPtr)
+		end
+		return MemPtr, size1
+	else
+		return copycode(p, size, MemPtr), size
+	end
+end
+
 -- hookjmp with automatic calling of overwritten code (see mem.copycode note)
 -- if the function returns 'true', the jump to original code isn't performed
 function _mem.autohook(p, f, size)
-	assert(size == nil or size >= 5)
 	size = size or GetNoJumpSize(p)
-	local code = copycode(p, size)
+	local code, size1
+	local byte1 = (size == 5 and u1[p])
+	-- CALL and JMP can be hooked without copying
+	if byte1 == OpCALL then
+		code = p + 5 + i4[p + 1]
+		mem_hook(p, function(d)
+			d.esp = d.esp + 4
+			if not f(d, code) then
+				d:push(p + 5)
+				d:push(code)
+			end
+		end, size)
+		return
+	elseif byte1 == OpJMP then
+		code = p + 5 + i4[p + 1]
+		size1 = size
+	else
+		code, size1 = MyCopyCode(p, size)
+	end
 	mem_hook(p, function(d)
 		d.esp = d.esp + 4
 		if not f(d, code) then
 			d:push(code)
 		end
-	end, size)
+	end, size1)
+	if byte1 ~= OpJMP then
+		return code
+	end
+end
+
+local function PlaceJMP(p, code, size)
+	IgnoreCount = IgnoreCount + 1
+	u1[p] = OpJMP
+	i4[p + 1] = code - p - 5
+	for i = p + 5, p + size - 1 do
+		u1[i] = 0x90
+	end
+	IgnoreCount = IgnoreCount - 1
+	-- In .text:
+	--   call Mem_HookProc
+	-- In block:
+	--   std_code
+	--   jmp .text
 end
 
 -- hookjmp with automatic calling of overwritten code (see mem.copycode note)
 -- the function is called after the overwritten code
 -- if the function returns 'true', the jump to original code isn't performed
 function _mem.autohook2(p, f, size)
-	assert(size == nil or size >= 5)
 	size = size or GetNoJumpSize(p)
-	local code = copycode(p, size)
-	local retaddr = p + size
+	local code, size1 = MyCopyCode(p, size)
+	local retaddr = p + size1
 	mem_hook(code + size, function(d)
 		d.esp = d.esp + 4
 		if not f(d, retaddr) then
 			d:push(retaddr)
 		end
-	end, size)
-	-- long jump to original code
-	IgnoreCount = IgnoreCount + 1
-	u1[p] = 0xE9
-	i4[p + 1] = code - p - 5
-	for i = p + 5, p + size - 1 do
-		u1[i] = 0x90
+	end, 5)
+	PlaceJMP(p, code, size1)
+	-- In .text:
+	--   jmp block
+	-- In block:
+	--   std_code
+	--   call Mem_HookProc
+	return code
+end
+
+-- like autohook, but takes a compiled Asm code string as parameter
+-- 'code' can be a function f(ptr) where ptr is the address of memory allocated for hook code or nil (to calculate size)
+function _mem.bytecodehook(p, code, size)
+	local codef = (type(code) == "function" and code)
+	code = (codef and codef() or code)
+	size = size or GetNoJumpSize(p)
+	local new = mem_hookalloc(#code + size + 5)
+	mem_copy(new, codef and codef(new) or code, #code)
+	local _, size1 = MyCopyCode(p, size, new + #code)
+	PlaceJMP(p, new, size1)
+	-- In .text:
+	--   jmp block
+	-- In block:
+	--   code
+	--   std_code
+	--   jmp .text
+	return new
+end
+local mem_bytecodehook = _mem.bytecodehook
+
+-- like autohook2, but takes a compiled Asm code string as parameter
+-- see note of bytecodehook about 'code' 
+function _mem.bytecodehook2(p, code, size)
+	local codef = (type(code) == "function" and code)
+	code = (codef and codef() or code)
+	size = size or GetNoJumpSize(p)
+	local new = mem_hookalloc(size + #code + 5)
+	local _, size1 = MyCopyCode(p, size, new, true)
+	mem_copy(new + size, codef and codef(new + size) or code, #code)
+	copycode(p + size1, 0, new + size + #code)  -- put jmp
+	PlaceJMP(p, new, size1)
+	-- In .text:
+	--   jmp block
+	-- In block:
+	--   std_code
+	--   code
+	--   jmp .text
+	return new
+end
+local mem_bytecodehook2 = _mem.bytecodehook2
+
+-- replaces original instructions with new ones, jumping out if needed
+-- see note of bytecodehook about 'code' 
+function _mem.bytecodepatch(p, code, size)
+	local codef = (type(code) == "function" and code)
+	code = (codef and codef() or code)
+	local size1 = size or GetHookSize(p)
+	if #code <= size1 then  -- patch in place
+		if not size and GetInstructionSize then
+			size = 0
+			repeat
+				size = size + GetInstructionSize(p + size)
+			until #code <= size
+		elseif not size then
+			size = size1
+		end
+		for i = p - 4, p + size - 1 do
+			if mem_hooks[i] then
+				error(format("attempt to patch address %X, which intercepts with existing hook at %X", p, i), 2)
+			end
+		end
+		IgnoreCount = IgnoreCount + 1
+		mem_copy(p, codef and codef(p) or code, #code)
+		for i = p + #code, p + size - 1 do
+			u1[i] = 0x90
+		end
+		IgnoreCount = IgnoreCount - 1
+		return
 	end
-	IgnoreCount = IgnoreCount - 1
+	local new = mem_hookalloc(#code + 5)
+	mem_copy(new, codef and codef(new) or code, #code)
+	copycode(p + size1, 0, new + #code)  -- put jmp
+	PlaceJMP(p, new, size1)
+	return new
+end
+local mem_bytecodepatch = _mem.bytecodepatch
+
+-- asm
+if internal.CompileAsm then
+	_mem.asm = internal.CompileAsm(1)
+	local toasm = internal.CompileAsm(2, 3)
+	local toasm2 = internal.CompileAsm(2, 2)
+	
+	-- like autohook, but takes an Asm code string as parameter
+	function _mem.asmhook(p, code, size)
+		return mem_bytecodehook(p, toasm(code), size)
+	end
+
+	-- like autohook2, but takes an Asm code string as parameter
+	function _mem.asmhook2(p, code, size)
+		return mem_bytecodehook2(p, toasm(code), size)
+	end
+	
+	-- replaces original instructions with new ones, jumping out if needed
+	function _mem.asmpatch(p, code, size)
+		return mem_bytecodepatch(p, toasm(code), size)
+	end
+	
+	-- creates an Asm function
+	function _mem.asmproc(code)
+		code = toasm2(code)
+		local codef = (type(code) == "function" and code)
+		code = (codef and codef() or code)
+		local p = mem_hookalloc(#code)
+		mem_copy(p, codef and codef(p) or code, #code)
+		return p, #code
+	end
 end
 
 -- set hook at the beginning of a function, allows calling the original function (see mem.copycode note)
 function _mem.hookfunction(p, nreg, nstack, f, size)
-	assert(size == nil or size >= 5)
 	size = size or GetNoJumpSize(p)
+	assert(size >= 5)
 	local code = copycode(p, size)
 	local function def(...)
 		return call(code, nreg, ...)
@@ -1703,7 +1948,7 @@ end
 
 -- replaces an existing CALL instruction and uses the same protocol as mem.hookfunction
 function _mem.hookcall(p, nreg, nstack, f)
-	assert(u1[p] == 0xE8)
+	assert(u1[p] == OpCALL)
 	local code = i4[p + 1] + p + 5
 	local function def(...)
 		return call(code, nreg, ...)
@@ -1714,7 +1959,7 @@ function _mem.hookcall(p, nreg, nstack, f)
 	end, 5)
 end
 
--- pust 'n' NOPs
+-- writes 'n' NOPs
 function _mem.nop(p, n)
 	IgnoreCount = IgnoreCount + 1
 	for i = p, p + n - 1 do
@@ -1722,6 +1967,3 @@ function _mem.nop(p, n)
 	end
 	IgnoreCount = IgnoreCount - 1
 end
-
-_mem.GetHookSize = internal.GetHookSize
-_mem.GetInstructionSize = internal.GetInstructionSize

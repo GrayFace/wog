@@ -56,7 +56,7 @@ function internal.LoadERT(path, replace)
 		k = tonumber(k)
 		if k then
 			if not replace and internal.ERT[k] then
-				error(path..": ERT string index z"..k.." is already used")
+				error(path..": ERT string index z"..k.." is already used", 0)
 			end
 			internal.ERT[k] = v
 			local p = ERTBuf[k]

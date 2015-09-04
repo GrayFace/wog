@@ -1,8 +1,11 @@
 //#include "stdafx.h"
 #include <stdlib.h>
 #include <windows.h>
-#include "lua.h"
-#include "lauxlib.h"
+extern "C"
+{
+	#include "lua.h"
+	#include "lauxlib.h"
+}
 #include "RSMemHDetour.h"
 
 typedef unsigned char byte;

@@ -206,7 +206,7 @@ Length operator: #
 For a string it returns number of characters.
  i = #"Hello"   -- i = 5
 For tables it returns number of integer keys starting with 1 and going without gaps:
- i = #{"a", "b", "c", d = 5, e = 6}  -- i = 3, cause "a", "b", "c" are at indexes 1,2,3 and "d" and "e" aren't numerical.
+ i = #{"a", "b", "c", d = 5, e = 6}  -- i = 3, because "a", "b", "c" are at indexes 1,2,3 and "d" and "e" aren't numerical.
  i = #{"a", "b", "c", nil, "d"}  -- i may be 3 or 5. In case there are gaps (nil's) the result is undefined.
 
 
@@ -394,18 +394,6 @@ Macros:
 
 You can also get a range of variables:
  x,y,z = ERM.v(998, 1000) -- get v998 - v1000
-
---------------- Performance ---------------
-
-The general performance advices are to use local variables and to use Lua analogs of ERM functions if they exist.
-In pieces of code critical to performance (like complex loops) it's good to put recievers and ?v, ?z into local variables.
-Example:
- TM1.? = function()
-	local ?v, ?z, OB, TR, FU, UN = ?v, ?z, OB, TR, FU, UN
-	-- now calls to these recievers would be faster
- end
-You don't have to declare the local variables inside each function, you can declare them for whole script before starting functions declarations.
-Lua calls ERM commands about 1.4 (when using local variables) or 1.7 (otherwise) times slower than ERM, but operations with variables are faster in Lua. Loops are faster too, especially compared to DO reciever loops.
 
 --------------- Scripts Organization ---------------
 

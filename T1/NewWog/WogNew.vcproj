@@ -40,7 +40,7 @@
 				Name="VCCLCompilerTool"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="&quot;..\lua\src\&quot;;..\dxdep\;..\HDetour\;..\luasocket\src\"
+				AdditionalIncludeDirectories="&quot;..\luaJIT\src\&quot;;..\dxdep\;..\HDetour\;..\luasocket\src\"
 				StructMemberAlignment="1"
 			/>
 			<Tool
@@ -97,7 +97,7 @@
 				Name="VCCLCompilerTool"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="&quot;..\lua\src\&quot;;..\dxdep\;..\HDetour\;..\luasocket\src\"
+				AdditionalIncludeDirectories="&quot;..\luaJIT\src\&quot;;..\dxdep\;..\HDetour\;..\luasocket\src\"
 				StructMemberAlignment="1"
 				BrowseInformation="1"
 				DebugInformationFormat="3"

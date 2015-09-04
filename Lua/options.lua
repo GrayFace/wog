@@ -298,7 +298,7 @@ function internal.SaveOptions(fname)
 	local t, o = {}, internal.CurOptions
 	t[#t + 1] = "return {\n\tActive = {\n"
 	DoSaveOptions(o.Active, t)
-	t[#t + 1] = "\t}\n\}"
+	t[#t + 1] = "\t}\n}"
 	-- t[#t + 1] = "\t},\n\tState = {\n"
 	-- DoSaveOptions(o.State, t)
 	-- t[#t + 1] = "\t}\n}"

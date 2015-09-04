@@ -9,12 +9,24 @@ local tostring = tostring
 local error = error
 local assert = assert
 local format = string.format
+local sub = string.sub
 local traceback = debug.traceback
+local rawget = rawget
+local getmetatable = debug.getmetatable
+local xpcall = xpcall
 local co_create = coroutine.create
 local co_yield = coroutine.yield
 local co_resume = coroutine.resume
 local co_status = coroutine.status
 local co_running = coroutine.running
+local co_main = coroutine.main
+local _G = _G
+
+----------- No globals from this point ------------
+
+local _NOGLOBALS
+
+-- ErrorLevel
 
 local ErrorLevel = 1
 
@@ -22,46 +34,75 @@ function internal.SetErrorLevel(level)
 	ErrorLevel = level
 end
 
-local function GetErrorLevel(handlerLevel)
+local function GetErrorLevel(co)
 	local lev = ErrorLevel
 	ErrorLevel = 1
 	if lev <= 0 then
 		return 0
 	end
-	lev = lev + 2
-	local d = getinfo(3, "f")
+	if not co then  -- not a 'remote' error
+		lev = lev + 1
+		co = co_running() or co_main
+	end
+	local d = getinfo(co, 3, "f")
 	if d ~= nil then
 		d = d.func
 		if d == error or d == assert then
 			lev = lev + 1
 		end
 	end
-	return lev
+	return lev, co
 end
 
-local function tostring2(v)
+-- errorinfo (e.g. pass a file name to it before processing a file and file name would be appended in case of an error)
+
+local errorExtraInfo = ""
+
+function _G.errorinfo(s)
+	local old = errorExtraInfo
+	if s ~= nil then
+		errorExtraInfo = tostring(s)
+	end
+	return old
+end
+_G.ErrorInfo = _G.errorinfo
+
+-- tostring2
+
+local function ShortenStr(s, lim)
+	if not lim or #s <= lim then
+		return format("%q", s)
+	end
+	local L = (lim - lim % 2)/2
+	return format("%q..[%d symbols cut]..%q", sub(s, 1, L), #s - lim, sub(s, L - lim))
+end
+
+local function tostring2(v, lim)
 	local t = type(v)
 	if v == nil or t == "number" or t == "boolean" then
 		return tostring(v)
 	elseif t == "string" then
-		return format("%q", v)
+		return ShortenStr(v, lim)
 	else
-		return '('..tostring(v)..')'
+		local t = getmetatable(v)
+		if t and rawget(t, "__tostring") then
+			return '('..ShortenStr(tostring(v), lim)..')'
+		else
+			return '('..tostring(v)..')'
+		end
 	end
 end
+_G.tostring2 = tostring2
 
-local function DefErrorFunction(s, lev)
-	if lev == 0 then
-		return s
-	end
-	local text = {traceback(tostring(s).."\n", 2)}
-	
+-- DefErrorFunction
+
+local function OutputVars(text, co, lev)
 	local d, func, funcname
 	local i = lev
 	repeat
-		d = getinfo(i, "fnSl")
+		d = getinfo(co, i, "fnSlu")
 		i = i + 1
-	until d == nil or d.func
+	until d == nil or d.func and d.what ~= "C"
 	if d then
 		func = d.func
 		funcname = d.name
@@ -74,140 +115,111 @@ local function DefErrorFunction(s, lev)
 		lev = i - 1
 	end
 
-	if func then
-		i = 1
-		local a, v = getlocal(lev, i)
-		if a then
-			text[#text + 1] = funcname and format("\n\nlocal variables of '%s':", funcname) or '\n\nlocal variables:'
-			repeat
-				text[#text + 1] = "\n\t"..a.." = "..tostring2(v)
-				i = i + 1
-				a, v = getlocal(lev, i)
-			until a == nil
-		end
+	if not func then
+		return
+	end
 
-		i = 1
-		local a, v = getupvalue(func, i)
-		if a then
-			text[#text + 1] = funcname and format("\n\nupvalues of '%s':", funcname) or '\n\nupvalues:'
-			repeat
-				text[#text + 1] = "\n\t"..a.." = "..tostring2(v)
-				i = i + 1
-				a, v = getupvalue(func, i)
-			until a == nil
+	if d.nparams > 0 or getlocal(co, lev, -1) then
+		text[#text + 1] = funcname and format("\n\narguments of '%s':", funcname) or '\n\narguments:'
+		for i = 1, d.nparams do
+			local a, v = getlocal(co, lev, i)
+			text[#text + 1] = "\n\t"..a.." = "..tostring2(v, 1000)
+		end
+		for i = 1, 1000 do
+			local a, v = getlocal(co, lev, -i)
+			if not a then
+				break
+			end
+			text[#text + 1] = "\n\t... = "..tostring2(v, 1000)
 		end
 	end
-
-	return concat(text)
-end
-
--------------------------------------------------------------------------------
--- My implementation of copcall. Partially based on www.keplerproject.org
--------------------------------------------------------------------------------
-
-local pcallErr, pcallCo
-
-local function co_resumeEx_ret(old1, old2, ...)
-	pcallErr, pcallCo = old1, old2
-	return ...
-end
-
-local function co_resumeEx(err, baseco, ...)
-	local old1, old2 = pcallErr, pcallCo
-	if old1 == err and old2 == baseco then
-		return co_resume(...)
+	i = d.nparams + 1
+	local a, v = getlocal(co, lev, i)
+	if a then
+		text[#text + 1] = funcname and format("\n\nlocal variables of '%s':", funcname) or '\n\nlocal variables:'
+		repeat
+			text[#text + 1] = "\n\t"..a.." = "..tostring2(v, 1000)
+			i = i + 1
+			a, v = getlocal(co, lev, i)
+		until a == nil
 	end
-	pcallErr, pcallCo = err, baseco
-	return co_resumeEx_ret(old1, old2, co_resume(...))
-end
 
-function coroutine.resume(...)
-	local old1, old2 = pcallErr, pcallCo
-	if old1 == nil and old2 == nil then
-		return co_resume(...)
-	end
-	pcallErr, pcallCo = nil, nil
-	return co_resumeEx_ret(old1, old2, co_resume(...))
-end
-
-function coroutine.running()
-	return pcallCo or co_running()
-end
-
--------------------------------------------------------------------------------
--- Implements ypcall - pcall with custom yield function
--------------------------------------------------------------------------------
-
-local oldpcall, oldxpcall = pcall, xpcall
-
-local function handleReturnValue(yf, err, pco, co, status, ...)
-	if status and co_status(co) == 'suspended' then
-		return handleReturnValue(yf, err, pco, co, co_resumeEx(err, pco, co, yf(...)))
-	end
-	return status, ...
-end
-
-function ypcall(f, err, yf, ...)
-	local res, co = oldpcall(co_create, f)
-	if not res then  -- C function
-		assert(type(f) == "function")
-		co = co_create(function(...)  return f(...)  end)
-	end
-	local pco = pcallCo or co_running()
-	
-	return handleReturnValue(yf or co_yield, err, pco, co, co_resumeEx(err, pco, co, ...))
-end
-local ypcall = ypcall
-
--------------------------------------------------------------------------------
--- Implements pcall and xpcall with coroutines
--------------------------------------------------------------------------------
-
-function pcall(f, ...)
-	if co_running() then
-		return ypcall(f, nil, nil, ...)
-	else
-		return oldpcall(f, ...)
+	i = 1
+	local a, v = getupvalue(func, i)
+	if a then
+		text[#text + 1] = funcname and format("\n\nupvalues of '%s':", funcname) or '\n\nupvalues:'
+		repeat
+			text[#text + 1] = "\n\t"..a.." = "..tostring2(v, 1000)
+			i = i + 1
+			a, v = getupvalue(func, i)
+		until a == nil
 	end
 end
 
-function xpcall(f, err, ...)
-	if co_running() then
-		return ypcall(f, err, nil, ...)
-	elseif err ~= nil then
-		local function callErr(s)
-			return err(s, GetErrorLevel())
-		end
-		return oldxpcall(f, callErr, ...)
-	else
-		return oldxpcall(f, nil, ...)
-	end
-end
-
--------------------------------------------------------------------------------
--- Extra information for errors
--------------------------------------------------------------------------------
-
-local errorExtraInfo = ""
-
-function errorinfo(s)
-	local old = errorExtraInfo
-	if s ~= nil then
-		errorExtraInfo = tostring(s)
-	end
-	return old
-end
-ErrorInfo = errorinfo
-
--------------------------------------------------------------------------------
-
-local function ErrorFunction(s)
+local function DefErrorFunction(s, co1)
+	_G.print(s)
 	if errorExtraInfo ~= "" then
 		s = s.." ("..errorExtraInfo..")"
 		errorExtraInfo = ""
 	end
-	local f = pcallErr or DefErrorFunction
-	return f(s, GetErrorLevel())
+	local lev, co = GetErrorLevel(co1)
+	if lev == 0 then
+		return s
+	end
+	local text = {traceback(co, tostring(s).."\n", co1 and 0 or 2)}
+	OutputVars(text, co, (co1 and lev - 1 or lev + 1))
+	return concat(text)
 end
 
-return ErrorFunction
+-------------------------------------------------------------------------------
+-- Call default error function if no error function is supplied
+-------------------------------------------------------------------------------
+
+local function handler(f)
+	return function(s)
+		if errorExtraInfo ~= "" then
+			s = s.." ("..errorExtraInfo..")"
+			errorExtraInfo = ""
+		end
+		return f(s, (GetErrorLevel()))
+	end
+end
+
+_G.pcall = function(f, ...)
+	return xpcall(f, DefErrorFunction, ...)
+end
+
+_G.xpcall = function(f, errf, ...)
+	return xpcall(f, errf and handler(errf) or DefErrorFunction, ...)
+end
+
+local function resume_ret(co, ok, ...)
+	if ok then
+		return ok, ...
+	end
+	return ok, DefErrorFunction(..., co)
+end
+
+function _G.coroutine.resume(...)
+	return resume_ret(..., co_resume(...))
+end
+
+local function wrap_ret(co, ok, ...)
+	if ok then
+		return ...
+	end
+	local msg = DefErrorFunction(..., co)
+	ErrorLevel = 1
+	return error(msg, 2)
+end
+
+function _G.coroutine.wrap(f)
+	local co = co_create(f)
+	return function(...)
+		return wrap_ret(co, co_resume(co, ...))
+	end
+end
+
+-------------------------------------------------------------------------------
+
+return DefErrorFunction

@@ -23,6 +23,7 @@ local d_getinfo = debug.getinfo
 local os_time = os.time
 local loadfile = loadfile
 local loadstring = loadstring
+local require = require
 local table_insert = table.insert
 local table_remove = table.remove
 local table_concat = table.concat
@@ -30,14 +31,13 @@ local floor = math.floor
 local ceil = math.ceil
 local abs = math.abs
 local string_sub = string.sub
+local string_gsub = string.gsub
+local string_match = string.match
+local string_lower = string.lower
 local coroutine_create = coroutine.create
 local coroutine_resume = coroutine.resume
 local coroutine_running = coroutine.running
 local coroutine_main = coroutine.main
-local bit_Or = mem.bit_Or
-local bit_And = mem.bit_And
-local bit_Xor = mem.bit_Xor
-local bit_AndNot = mem.bit_AndNot
 local dofile = dofile
 
 local _G = _G
@@ -52,22 +52,16 @@ end
 
 ----------- Error function ------------
 
-local errorSt = _G.error
+local error = _G.error
 local SetErrorLevel = internal.SetErrorLevel
 
-local function error(msg, level) -- defined before
-	if level ~= 0 then
-		level = (level or 1) + 1
-	end
-	SetErrorLevel(level)
-	return errorSt(msg, level)
+local error = function(msg, level)
+	SetErrorLevel(level or 1)
+	return error(msg, level)
 end
 _G.error = error
 
 -----------
-
-local function roError(a, lev)  error('attempt to modify a read-only field "'..a..'".', lev + 1)  end
-local function readonly(t, a)  roError(a, 2)  end
 
 local function nullsub()
 end
@@ -103,6 +97,7 @@ end
 dofile(CoreScriptsPath.."RSFunctions.lua")
 local table_swap = table.swap
 local table_move = table.move
+PrintToFile("InternalLog.txt")  -- temporary
 
 ----------- No globals from this point ------------
 
@@ -115,20 +110,13 @@ local function assertnum(v, level, msg)
 	if v1 then
 		return v1
 	end
-	error(msg or "number expected, got "..type(v), (level or 1) + 1)
+	return error(msg or "number expected, got "..type(v), level or 1)
 end
 _G.assertnum = assertnum
 
-local function NilOrNum(i)
-	if i ~= nil then
-		return assertnum(i, 3)
-	end
-end
-
 local function pcall2_ret(ok, ...)
 	if not ok then
-		local err = ...
-		internal.ErrorMessage(err)
+		internal.ErrorMessage((...))
 	end
 	return ok, ...
 end
@@ -157,18 +145,6 @@ local function coroutine_resume2(...)
 end
 _G.coroutine.resume2 = coroutine_resume2
 
-local function tostring2(v)
-	local t = type(v)
-	if v == nil or t == "number" or t == "boolean" then
-		return tostring(v)
-	elseif t == "string" then
-		return format("%q", v)
-	else
-		return '('..tostring(v)..')'
-	end
-end
-_G.tostring2 = tostring2
-
 ----------- mem ------------
 
 local mem_internal = _G.mem
@@ -180,6 +156,80 @@ mem.StaticAlloc = mem.malloc
 mem.malloc = offsets.malloc or mem.malloc
 mem.realloc = offsets.realloc or mem.realloc
 mem.new = offsets.new or mem.new
+do
+	-- compile Asm string into bytecode string
+	local CompileAsm = internal.CompileAsm
+	
+	mem.AsmProlog = [[
+		use32
+		ptr equ
+		macro pushstr string
+		{
+			local ..after
+			call ..after
+			db string,0
+		..after:
+		}
+		_loadreg_ equ
+		_loadreg_end_ equ
+		macro savereg a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20
+		{
+			if a1 eq
+			else
+				push a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 a16 a17 a18 a19 a20
+			end if
+			_loadreg_ equ pop a20 a19 a18 a17 a16 a15 a14 a13 a12 a11 a10 a9 a8 a7 a6 a5 a4 a3 a2 a1
+			_loadreg_end_ equ _loadreg_
+		}
+		macro loadreg
+		{
+			if _loadreg_ eq pop
+			else
+				_loadreg_
+			end if
+			_loadreg_end_ equ
+		}
+	]]
+	mem.AsmEpilog = [[
+	
+		if _loadreg_end_ eq pop
+		else
+			_loadreg_end_
+		end if]]
+	
+	local StartCode, StartLines
+	
+	local function check(s, level)
+		if type(s) ~= "string" then
+			error("string expected, got "..type(s), level + 1)
+		end
+		
+		if mem.AsmProlog ~= StartCode then
+			StartCode, StartLines = string_gsub(mem.AsmProlog, "\n", "\n")
+		end
+		return StartCode..s..mem.AsmEpilog, StartLines
+	end
+	
+	function mem.CompileAsm(level, FromMem)
+		if FromMem then
+			local macro, MacroLines = string_gsub([[
+				absolute equ near -%d + 
+			]], "\n", "\n")
+			return function(s)
+				local s, n = check(s, level + 1)
+				return function(p)
+					local r, err = CompileAsm(format(macro, p or 0)..s, n + MacroLines)
+					return r or (error(err, FromMem + 1))
+				end
+			end
+		else
+			return function(s)
+				local r, err = CompileAsm(check(s, level + 1))
+				return r or (error(err, level + 1))
+			end
+		end
+	end
+end
 
 function mem.struct_callback(t, class, fields, offs, rofields)
 	local meta = getmetatable(t)
@@ -210,19 +260,17 @@ dofile(CoreScriptsPath.."dump.lua")
 
 --------- bit
 
-local bit = {}
+local bit = require("bit")
+local bit_And = bit.band
+local bit_Not = bit.bnot
 _G.bit = bit
-bit.Or = bit_Or
-bit.And = bit_And
-bit.Xor = bit_Xor
-bit.AndNot = bit_AndNot
-
-function bit.Not(a)
-	if a <= 2147483647 then
-		return -a-1
-	end
-	return 4294967295 - a
+bit.Or = bit.bor
+bit.And = bit.band
+bit.Xor = bit.bxor
+bit.AndNot = function(a, b)
+	return bit_And(a, bit_Not(b))
 end
+bit.Not = bit.bnot
 
 local numIndex = _G.table.copy(bit)
 
@@ -268,13 +316,14 @@ end
 
 --------- math
 
-function _G.math.round(val)
-	if val >= 0 then
-		return floor(val + 0.5)
-	else
-		return ceil(val - 0.5)
-	end
-end
+-- function _G.math.round(val)
+-- 	if val >= 0 then
+-- 		return floor(val + 0.5)
+-- 	else
+-- 		return ceil(val - 0.5)
+-- 	end
+-- end
+_G.math.round = bit.tobit
 
 --------- numIndex
 
@@ -402,7 +451,7 @@ local GetLastErrorPtr = internal.GetLastErrorPtr
 
 local function DoCreateDir(dir)
 	-- 183 = already exists
-	return call(CreateDirectoryPtr, 0, dir, 0) ~= 0 or call(GetLastErrorPtr, 0, dir, 0) == 183
+	return call(CreateDirectoryPtr, 0, dir, 0) ~= 0 or GetLastErrorPtr and call(GetLastErrorPtr, 0, dir, 0) == 183
 end
 
 local function CreateDirectory(dir)
@@ -410,7 +459,10 @@ local function CreateDirectory(dir)
 	if dir == "" or #dir == 2 and string_sub(dir, -1) == ":" or DoCreateDir(dir) then
 		return true
 	end
-	CreateDirectory(path_dir(dir))
+	local dir1 = path_dir(dir)
+	if dir1 ~= dir then
+		CreateDirectory(dir1)
+	end
 	return DoCreateDir(dir)
 end
 _G.path.CreateDirectory = CreateDirectory

@@ -100,12 +100,12 @@ local function GetItemByHandle(p)
 end
 
 local function callVMT(p, i, ...)
-	return call(u4[u4[p] + i*4], 1, p, ...)
+	return (call(u4[u4[p] + i*4], 1, p, ...))
 end
 internal.CallDialogVMT = callVMT
 
 local function callDefVMT(p, i, ...)
-	return call(u4[u4[u4[p]-4] + i*4], 1, p, ...)
+	return (call(u4[u4[u4[p]-4] + i*4], 1, p, ...))
 end
 
 local function GetPrivate(t)
@@ -364,7 +364,7 @@ function preitem.NeedSize(t)
 end
 
 local function item_cmd_std(t, subtype, par)
-	return call(0x5FF400, 1, t.Parent.?ptr, 512, subtype, t.Id, par)
+	return (call(0x5FF400, 1, t.Parent.?ptr, 512, subtype, t.Id, par))
 end
 
 local cmdbuf = malloc(0x20)
@@ -552,7 +552,7 @@ end
 local function GetHumanPlayer()  -- !!! move to other file
 	local p = u4[0x699538]
 	if p ~= 0 and call(0x4CE670, 1, p) ~= 0 then
-		return call(0x4CE6E0, 1, p)
+		return (call(0x4CE6E0, 1, p))
 	end
 end
 _G.GetHumanPlayer = GetHumanPlayer
@@ -1880,7 +1880,7 @@ local function InvokeDialogCallback(d, cmdptr, defHandler)
 		end
 
 		if cmdrec.CloseDialog then
-			return call(0x41B0F0, 1, d, cmdptr)
+			return (call(0x41B0F0, 1, d, cmdptr))
 		end
 
 		return cmdrec.Result
@@ -1938,7 +1938,7 @@ local BadDialogCallbacks = _G.table.invert{
 function internal.DialogCallback(cmdptr, manager, callback)
 	local d = u4[cmdptr + 0x1C]
 	local function defHandler()
-		return call(callback, 2, cmdptr, manager)
+		return (call(callback, 2, cmdptr, manager))
 	end
 	--_G.LastDialogCallback = callback
 	

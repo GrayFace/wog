@@ -1,5 +1,7 @@
 DumpLimit = 10000
 
+local _KNOWNGLOBALS = dump, structs
+
 -- For debugging and expirimenting. Shows 't', expanding all tables in it up to the 'depth' level.
 function dump(t, depth)
 	local buf = {}
@@ -120,7 +122,6 @@ function dump(t, depth)
 		ShowN = bufn
 		space = space.."  "
 		if not structs or not pcall(ShowStruct, t, space) and not pcall(ShowArray, t, space) then  -- !!!
-		--do
 			local i = 1
 			for k, v in sortpairs(t) do
 				if k == i then
