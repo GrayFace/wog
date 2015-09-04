@@ -375,16 +375,17 @@ You can also insert triggers in the beginning of triggers list. For example, thi
 
 --------------- ERM Variables ---------------
 
-You can access all ERM variables from Lua. However, you should avoid using local variables as they aren't guaranteed to be local in case of Lua.
+You can access all ERM variables from Lua. However, you should avoid using local ERM variables as they aren't guaranteed to be local in case of Lua.
 Here's how you do it:
  ERM.v15 = 5  -- set v15
  ERM.v[15] = 5  -- another way to set v15, the number can be a variable here
- i = ERM.v15  -- of caurse you can also get value of v15
-The same thing with z,y,e:
+ i = ERM.v15  -- of course you can also get value of v15
+Same thing with z,y,e:
  ERM.z5 = "my string"  -- set z5
- ERM.flags[1] = true  -- set flag 1
- ERM.flags[1] = false  -- reset flag 1
-Similar way you can work with simple variables and 'c':
+ ERM[1] = true  -- set flag 1
+ ERM[1] = false  -- reset flag 1
+ ERM.flags[1] = false  -- same as above
+In similar way you can work with simple variables and 'c':
  day = ERM.c  -- get current day
  ERM.c = ERM.c + 1  -- you can set current day from Lua, but be careful with that. I haven't tested this much. Maybe this won't work in multiplayer, maybe it will cause bugs in some scripts. Dunno if it can cause game bugs some way.
  ERM.i = 5  -- set i

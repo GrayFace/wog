@@ -199,15 +199,15 @@ local function erm_index(t, a)
 	end
 
 	-- vars and flags
-	if a == "Flags" or a == "flags" then
-		return varArray[""]
-	end
 	if len == 1 then
 		if a1 >= bytef and a1 <= bytet or a == 'c' then
 			return vaValue(a, 0)
 		end
 		
 		return varArray[a]
+	end
+	if a == "Flags" or a == "flags" then
+		return varArray[""]
 	end
 	return vaValue(string_sub(a, 1, 1), string_sub(a, 2))
 end
