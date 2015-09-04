@@ -854,7 +854,7 @@ char  NPC::ArtTextBuffer[10][512];
 char *NPC::PrepareArtText(int Slot)
 {
 	STARTNA(__LINE__, 0)
-	int i,val,days,ind;
+	int val,days,ind;
 	int ArtNum=Arts[Slot][ARTNUMINDEX];
 	ind=ArtNum-NPCARTBASE;
 	char *templ=ITxt(226+ind,1,&NPCTexts);

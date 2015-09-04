@@ -5643,11 +5643,10 @@ void PEr::Show(char *Reason,void *Address,int Flag,Dword AddPar,char *Adendum)
 	Zsprintf2(&Frmt,"Map Saved with: %s\n\n%s",(Dword)MapSavedWoG,(Dword)GlbBuf[0]);
 	StrCopy(GlbBuf[0],30000,Frmt.Str);
 	time_t ltime;    time( &ltime );
-	struct tm *gmt;  gmt = gmtime( &ltime );
-	Zsprintf2(&Frmt,"Time Stamp: %s\n\n%s",(Dword)asctime(gmt),(Dword)GlbBuf[0]);
+	Zsprintf2(&Frmt,"Time Stamp: %s\n%s",(Dword)asctime(gmtime( &ltime )),(Dword)GlbBuf[0]);
 	StrCopy(GlbBuf[0],30000,Frmt.Str);
 	SaveSetupState("WOGCRASHLOG.TXT",GlbBuf[0],strlen(GlbBuf[0]));
-	DumpERMVars("CRASH LOG RELATED CONTEXT",asctime(gmt));
+	DumpERMVars("CRASH LOG RELATED CONTEXT",0);
 	Message(msg);
 }
 

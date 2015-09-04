@@ -230,7 +230,7 @@ int SetErrorTrigger(Word trigId, char triggerSign)
 	return last;
 }
 
-void DumpERMVars(char *Text,char *Text2)
+void DumpERMVars(char *Text, bool NoLuaTraceback)
 {
 	// 3.58
 	STARTNA(__LINE__, 0)
@@ -238,9 +238,12 @@ void DumpERMVars(char *Text,char *Text2)
 	char *p = ME_Buf2;
 	char *p2 = p + sizeof(ME_Buf2);
 	p += sprintf_s(p, p2-p, "-----------------------\n%s\n-----------------------\n",Text);
-	if(Text2!=0){
-		p += sprintf_s(p, p2-p, "-----Context-----\n%.200s.....\n-----------------\n",Text2);
-	}
+	time_t ltime;
+	time(&ltime);
+	p += sprintf_s(p, p2-p, "Time Stamp: %s\n", asctime(gmtime( &ltime )));
+	p += sprintf_s(p, p2-p, "WoG Version: %s\n\n", WOG_STRING_VERSION);
+	p += sprintf_s(p, p2-p, "Map Saved with: %s\n\n", MapSavedWoG);
+
 	if(ErrString.str!=0){
 		p += sprintf_s(p, p2-p, "ERM stack traceback:\n");
 		for(ErrStringInfo *e = &ErrString; e && e->str; e = e->last){
@@ -249,10 +252,12 @@ void DumpERMVars(char *Text,char *Text2)
 		}
 		p += sprintf_s(p, p2-p, "\n-----------------\n");
 	}
-	LuaCallStart("traceback");
-	LuaPCall(0, 1);
-	p += sprintf_s(p, p2-p, "Lua %s\n-----------------\n", lua_tostring(Lua, -1));
-	lua_pop(Lua, 1);
+	if(!NoLuaTraceback){
+		LuaCallStart("traceback");
+		LuaPCall(0, 1);
+		p += sprintf_s(p, p2-p, "Lua %s\n-----------------\n", lua_tostring(Lua, -1));
+		lua_pop(Lua, 1);
+	}
 
 	p += sprintf_s(p, p2-p, "COMMON VARS\n");
 	p += sprintf_s(p, p2-p, "f=%i\ng=%i\nh=%i\ni=%i\nj=%i\nk=%i\nl=%i\nm=%i\nn=%i\no=%i\np=%i\nq=%i\nr=%i\ns=%i\nt=%i\n",

@@ -168,7 +168,7 @@ int __stdcall MouseClick3(int p3,int p2,int p1);
 void SaveManager(void);
 void GameAfterLoad(void);
 void GameBeforeSave(void);
-void DumpERMVars(char *Text,char *Text2);
+void DumpERMVars(char *Text, bool NoLuaTraceback);
 int Call_Function(int ind,int *var,int num);
 // 3.59
 void TLCall(Dword timesec);

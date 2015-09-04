@@ -38,7 +38,7 @@ extern   int   GLB_DisableMouse;
 extern   char *SourceFileList[];
 extern   char LastLoadedDefName[16]; // tmp, sometimes LoadDEF crashes
 
-extern void DumpERMVars(char *Text,char *Text2);
+extern void DumpERMVars(char *Text, bool NoLuaTraceback);
 
 void *Alloc(int size);
 void Free(void *po);
