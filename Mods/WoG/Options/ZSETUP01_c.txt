@@ -2972,7 +2972,7 @@ Depending on the game difficulty every AI-hero gets additional mana and spell po
 o291	Increased AI Thinking Radius	291					Increased AI thinking power. Better AI.	Increased AI Thinking Radius
 (Script127 - Option 291 by Doom3d)
 
-Increased AI thinking power.  AI takes a greater map area into account when making decisions.	AI Thinking Radius
+Increased AI thinking power.  AI takes a greater map area into account when making decisions.	AI Thinking Radius	Name = nil
 o331	Reminders, Town and Hero Notes version	331					Allows to apply some minor notes to your towns and heroes	Reminders, Town and Hero Notes version
 (Script131 - Option 331 by Timothy Pulver (Fnord))
 
