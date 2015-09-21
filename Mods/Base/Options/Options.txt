@@ -3,7 +3,7 @@ Enabled	Neutral Options						TODO: Proper text, hint and description
 
 group:	General
 FizzleFade	Replace fade-to-black animation with blending when entering/leaving a town or combat			true		true	TODO: Proper text, hint and description
-ChooseRMGTemplate	Choose RMG template when starting a random map			true		true	TODO: Proper text, hint and description
+ChooseRMGTemplate	Choose RMG template when starting a random map					true	TODO: Proper text, hint and description
 FasterAI	Faster AI (smaller thinking radius)						TODO: Proper text, hint and description	Sets thinking radius to WoG 3.58 default (4096) instead of SoD default (32000).
 WoG 3.59 normally uses SoD default.
 

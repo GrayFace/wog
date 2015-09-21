@@ -64,7 +64,7 @@ local mem_hookcall = mem.hookcall
 local mem_string = mem.string
 
 local getmetatable = debug.getmetatable
-local setmetatable = setmetatable
+local setmetatable = internal.setmetatable
 local ErrorMessage = ErrorMessage
 
 local AppPath = AppPath
@@ -134,6 +134,11 @@ local PackageScripts = {}
 local ScriptPath = {}
 _G.package = nil
 
+function _G.GetModPath(mod)
+	mod = mod or getfenv(debug_getinfo(2, 'f').func).ModName
+	return internal.ModsPath..mod.."\\"
+end
+
 local function LoadPackage(fname, ftext, chunkname, name, env)
 	if env then
 		env.new = false
@@ -142,7 +147,8 @@ local function LoadPackage(fname, ftext, chunkname, name, env)
 	end
 	local ModName = string_match(name, "([^%.]*)%.")
 	env.ModName = ModName
-	env.ModPath = ModName and internal.ModsPath..ModName.."\\"
+	env.ScriptName = name
+	-- env.ModPath = ModName and internal.ModsPath..ModName.."\\"
 	env = scriptenv(env)
 
 	PackageLoaded[name] = env
@@ -315,6 +321,93 @@ function _G.load(...)
 	return loadscript(load, ...)
 end
 
+----------- Localization ------------
+
+local PackageLoc = {}
+_G.PackageLoc = PackageLoc
+
+local function CopyLoc(loc, t, over)
+	for k, v in pairs(loc) do
+		if t[k] == nil then
+			t[k] = v
+		elseif type(v) == "table" then
+			CopyLoc(v, t[k], over)
+		elseif over then
+			t[k] = v
+		end
+	end
+end
+
+local function DoLoc(name, t1, over)
+	name = string_lower(name)
+	local t = PackageLoc[name] or {}
+	CopyLoc(t1, t, over)
+	PackageLoc[name] = t
+	return t
+end
+
+local function GetLocName(name)
+	if not name then
+		name = getfenv(debug_getinfo(3, 'f').func).ScriptName
+	elseif not string_find(name, ".", 1, true) then
+		name = format("%s.%s", getfenv(debug_getinfo(3, 'f').func).ModName, name)
+	end
+	return tostring(name)
+end
+
+local function NewLoc(name)
+	return setmetatableW({}, {
+		__index = function(_, k, v)
+			return NewLoc(name and format("%s.%s", name, k) or k)
+		end,
+		__call = function(_, t1, over)
+			return DoLoc(GetLocName(name), t1, over)
+		end,
+		__newindex = function(_, k, t1)
+			DoLoc(GetLocName(name and format("%s.%s", name, k) or k), t1, true)
+		end,
+	})
+end
+
+local Localize = NewLoc()
+_G.Localize = Localize
+local LoadTextTable
+
+local function LoadLocScript(fname, ModName, name, first)
+	local env = scriptenv{ModName = ModName, ScriptName = name, new = first}
+	local f = assert(loadfile(fname))
+	setfenv(f, env)
+	pcall2(f)
+end
+
+local function LoadLocTxt(fname, ModName, name, first)
+	_G.ModName, _G.ScriptName, _G.new = ModName, name, first
+	LoadTextTable = LoadTextTable or _G.LoadTextTable
+	local t = {}
+	local function NewTxtLoc(name)
+		return setmetatableW({}, {
+			__index = function(_, k, v)
+				return NewTxtLoc(name and format("%s.%s", name, k) or k)
+			end,
+			__newindex = function(_, k, t1)
+				t[name and format("%s.%s", name, k) or k] = t1
+			end,
+		})
+	end
+	LoadTextTable(fname, NewTxtLoc())
+	table_copy(t, Localize, true)
+	_G.ModName, _G.ScriptName, _G.new = nil
+end
+
+local function DoLoadLocalization(folders, isLua, first)
+	for _, t in ipairs(folders) do
+		for _, s in ipairs(t) do
+			local name = format("%s.%s", t.mod, string_lower(string_match(path_name(s), "[^%.]*")))
+			;(isLua and LoadLocScript or LoadLocTxt)(s, t.mod, name, first)
+		end
+	end
+end
+
 --------------------------- Load Mods -------------------------
 
 local ScriptFolders = {
@@ -327,6 +420,8 @@ local ScriptFolders = {
 local ErmFolders = {}
 local ErtFolders = {}
 -- local ErsFolders = {}
+local LocTxtFolders = {}
+local LocLuaFolders = {}
 
 local function FetchModScripts(mask, mod)
 	local files = {mod = mod}
@@ -360,6 +455,8 @@ local function LoadMod(path, name)
 	end
 	ErmFolders[#ErmFolders + 1] = FetchFiles(path.."erm\\*.erm", name)
 	ErtFolders[#ErtFolders + 1] = FetchFiles(path.."replace\\*.ert", name)
+	LocTxtFolders[#LocTxtFolders + 1] = FetchFiles(path.."Localization\\*.txt", name)
+	LocLuaFolders[#LocLuaFolders + 1] = FetchFiles(path.."Localization\\*.lua", name)
 	-- ErsFolders[#ErsFolders + 1] = FetchFiles(path.."erm\\*.ers", name)
 	LoadModOptions(name, path)
 end
@@ -406,7 +503,17 @@ local function LoadStoredScripts(first)
 	end
 end
 
+local LocLoaded
+local function LoadLocalization()
+	DoLoadLocalization(LocTxtFolders, false, not LocLoaded)
+	DoLoadLocalization(LocLuaFolders, true, not LocLoaded)
+	LocLoaded = true
+end
+
 local function LoadScripts(folder)
+	if folder == "global" then
+		LoadLocalization()
+	end
 	for _, t in ipairs(ScriptFolders[folder]) do
 		for _, s in ipairs(t) do
 			pcall2(require, s)
