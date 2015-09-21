@@ -2,8 +2,8 @@ DumpLimit = 10000
 
 local _KNOWNGLOBALS = dump, structs
 
--- For debugging and expirimenting. Shows 't', expanding all tables in it up to the 'depth' level.
-function dump(t, depth)
+-- Mostly for debugging and expirimenting. Shows 't', expanding all tables in it up to the 'depth' level.
+function dump(t, depth, exact)
 	local buf = {}
 	local bufn = 0
 	local ShowN
@@ -19,9 +19,8 @@ function dump(t, depth)
 	
 	local function Key(v)
 		if type(v) == "string" and v ~= "" then
-			local v1 = ("[%q]"):format(v)
-			if string.sub(v1, 3, -3) ~= v then
-				v = v1
+			if not v:match("^%w+$") or v:match("^%d") then
+				v = ("[%q]"):format(v)
 			end
 			return v..' = '
 		elseif v == nil then
@@ -34,6 +33,9 @@ function dump(t, depth)
 	
 	local function Val(v)
 		if type(v) == "string" then
+			if exact then
+				return ("%q"):format(v)
+			end
 			return '"'..v..'"'
 		else
 			return tostring(v)

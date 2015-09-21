@@ -432,7 +432,7 @@ void StoreVars(bool fu, bool restore)
 	_DoStoreVars(vars->String, &vars->LastString, &ERMLString, 0, restore, false);
 	if (!restore)
 	{
-		if(fu)
+		if (fu)
 			memcpy(vars->String, vars->LastString, 10*sizeof(vars->String[0])); // backward compatibility
 		for (int i = (fu ? 10 : 0); i < VAR_COUNT_LZ; i++)
 			vars->String[i][0] = 0;

@@ -315,25 +315,27 @@ As you see, there are no "!#" or "!!" and we simply put the parameters in parent
 Note that we still must use parentheses after the command letter, even if the command doesn't have any parameters:
  FU:E()  -- !!FU:E;
 
-Now, this is what we do if the reciever need parameters itself:
+Now, this is what we do if the reciever itself needs parameters:
  FU(555):P(1,2)  -- !!FU555:P1/2;
 
-A convinience feature: you can put the first numerical parameter right after the command letter:
+A convenience feature: you can put the first numerical parameter right after the command letter:
  CA(4,5,0):M2(0, 1, 10)  -- !!CA4/5/0:M2/0/1/10;
-As you can see, "M1" and "M2" are written in this menner in Help too: M2/$1/$2/$3; So, it's natural to write such commands this way. However, use this feature only where it fits. ( e.g. here's one of the worst ways to use it: FU(555):P1(2) )
+As you can see, "M1" and "M2" are written in this manner in Help too: M2/$1/$2/$3; So, it's natural to write such commands this way. However, use this feature only where it fits. ( e.g. don't do this: FU(555):P1(2) )
 
 Now here is some get syntax:
  local t, st = CA(4,5,0):M2(0, ?v, ?v)  -- !!CA4/5/0:M2/0/?y1/?y2;
  local name = UN:A(2, 9, ?z)  -- !!UN:A2/9/?z-1;
  "?v" means that it's a get syntax for an integer. "?z" is a get syntax for string variables. Instead of being written to some variable, the value is returned from the function.
-I used "t","st" insted of "y1","y2" just to make an example simplier, cause' they are all local variables after all. In fact the two strings in the example do different things. The y-variables can be accessed as ERM.y1 and ERM.y2 from Lua. So, they would do the same only if we write "ERM.v1, ERM.v2 = CA(4,5,0):M2(0, ?v, ?v)".
+I used "t","st" instead of "y1","y2" in Lua code. To make Lua example completely identical to ERM (if you need to access y1 and y2 from ERM for some reason) you can set actual "y1" and "y2" ERM vars. The y-variables can be accessed as ERM.y1 and ERM.y2 from Lua. So, the first example would look like
+ ERM.y1, ERM.y2 = CA(4,5,0):M2(0, ?v, ?v)
+ ERM["z-1"] = UN:A(2, 9, ?z)
 
 Add syntax:
  CA(4,5,0):M2(0, nil, {5})  -- !!CA4/5/0:M2/0/d/d5;
 Here you can see "{5}" as equivalent of "d5" in ERM and "nil" is interpretated as "d0" in ERM calls, so the value is kept unchanged.
 
 ?ptr:
-There's also ?ptr to get address of an integer value the reciever operates on. This is for use with UN:C. 0 is returned if the reciever doesn't sypport ?ptr.
+There's also ?ptr to get address of an integer value the reciever operates on. This is for use with mem module in Lua or UN:C command. 0 is returned if the reciever doesn't support ?ptr.
  ptr = MA:P(13, ?ptr)
 
 Special cases:
@@ -387,7 +389,7 @@ Same thing with z,y,e:
  ERM.flags[1] = false  -- same as above
 In similar way you can work with simple variables and 'c':
  day = ERM.c  -- get current day
- ERM.c = ERM.c + 1  -- you can set current day from Lua, but be careful with that. I haven't tested this much. Maybe this won't work in multiplayer, maybe it will cause bugs in some scripts. Dunno if it can cause game bugs some way.
+ ERM.c = ERM.c + 1  -- you can set current day from Lua, but be careful with that. I haven't tested this much. Maybe this won't work in multiplayer, maybe it will cause bugs in some scripts. Dunno if it can cause game bugs somehow.
  ERM.i = 5  -- set i
 Macros:
  ERM.$macro$ = 5  -- set macro variable $macro$ to 5
@@ -428,8 +430,12 @@ There is also a table called "scriptvars", but I won't go into detail about it h
 
 === Instead of ERT ===
 
-Instead of ERT file you can make a separate .lua file with a table of strings and use "require" to load it. "Scripts\text_ChooseRMGTemplate.lua" is an example of this, it's loaded by "Global\ChooseRMGTemplate.lua" script.
-
+For localizetion you can use Localize function. Here's an example from ChooseRMGTemplate.lua script:
+TXT = Localize{
+	Caption = "Choose random map template",
+}
+The text can be localized by a script or a text table file in Localization folder. It can be a part of a completely different mod.
+To be implemented...
 
 --------------- Lua Functions (added in WoG) ---------------
 

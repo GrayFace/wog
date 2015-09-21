@@ -257,7 +257,7 @@ local function make_events(evt)
 	local function RemoveFiles(files)
 		for a, f in next, t do
 			for i = f.from, f.to do
-				if files[FunctionFile(f[i])] then
+				if f[i] and files[FunctionFile(f[i])] then
 					f[i] = nil
 					removed(f, i)
 				end

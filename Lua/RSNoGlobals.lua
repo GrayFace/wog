@@ -57,6 +57,7 @@ local unpack = unpack
 local concat = table.concat
 local table_sort = table.sort
 local debug_getinfo = debug and debug.getinfo
+local debug_getupvalue = debug and debug.getupvalue
 local io_open = io.open
 local sub = string.sub
 local match = string.match
@@ -66,20 +67,23 @@ local HasGoto = _loadstring("::a::") and true
 local Lua52 = HasGoto and (_VERSION ~= "Lua 5.1")
 local LuaJIT = _loadstring("#") and true  -- jit.* might be hidden
 
-local getfenv = getfenv or function(f)
-	f = (type(f) == 'function' and f or assert(f ~= 0) and debug.getinfo(f + 1, 'f').func)
+local getfenv = getfenv or debug_getinfo and debug_getupvalue and function(f)
+	f = (type(f) == 'function' and f or assert(f ~= 0) and debug_getinfo(f + 1, 'f').func)
 	local name, val
 	local up = 0
 	repeat
 		up = up + 1
-		name, val = debug.getupvalue(f, up)
+		name, val = debug_getupvalue(f, up)
 	until name == '_ENV' or name == nil
 	return val
+end
+getfenv = getfenv or function()
+	return _ENV
 end
 
 ----------- No globals from this point ------------
 
--- local _NOGLOBALS
+local _NOGLOBALS
 
 ----------- Main Vars ------------
 
@@ -106,7 +110,7 @@ P.Options.NameCharCodes = NameCodes
 local function MatchStr(s)
 	if sub(str, pos, pos + #s - 1) == s then
 		pos = pos + #s
-		return true
+		return s
 	end
 end
 
@@ -144,9 +148,7 @@ local function Space()
 		if SpaceCodes[v] then
 			pos = pos + 1
 		elseif v == 0x2D and MatchStr("--") then
-			if MatchPattern("^%[(=*)%[") then
-				MatchPattern("%]"..C.LastCapture.."%]")
-			elseif not MatchPattern("[\r\n]") then
+			if not MatchPattern("^%[(=*)%[.-%]%1%]") and not MatchPattern("[\r\n]") then
 				pos = #str + 1
 			end
 		else
@@ -215,13 +217,14 @@ local function VarName(s, newF)
 	if E.Token == "{" and abs(E.State) < SRightSide and Space() and match(str, "^=", pos) then
 		-- table field declaration (do nothing)
 	elseif s == "" then
+		-- pos = #str + 1
 		if pos <= #str then
 			s = Name()
 			Error("%d: NoGlobals parser failure near %q", (s ~= "" and s or sub(str, pos, pos)))
 		end
 	elseif abs(byte(s) - 0x35 + 0.5) < 5 then  -- number
 		MatchPattern("^%.[0-9a-fA-FpP]*")
-		s = match(str, "^[eEpP]", pos - 1) and MatchStr("^[%+%-][0-9]+")  -- general form
+		s = match(str, "^[eEpP]", pos - 1) and MatchPattern("^[%+%-][0-9]+")  -- general form
 	elseif E.State == SLocals then  -- new local
 		E.Locals[s] = true
 		if s == "_NOGLOBALS_END" then
@@ -266,7 +269,7 @@ end
 
 -- string
 Reg(function(chr)
-	while MatchPattern("(["..chr.."\\])") and C.LastCapture ~= chr do
+	while MatchPattern("(["..chr.."\\])") and C.LastCapture == "\\" do
 		pos = pos + 1
 	end
 	E.State = -SRightSide
@@ -279,11 +282,11 @@ end, ".", ":")
 
 -- brackets
 Reg(function()
-	if MatchPattern("^(=*)%[") then  -- long string
+	if MatchPattern("^(=*)%[.-%]%1%]") then  -- long string
 		E.State = -SRightSide
-		return MatchPattern("%]"..C.LastCapture.."%]")
+	else
+		ExpList(SRightSide)
 	end
-	ExpList(SRightSide)
 end, "[")
 
 Reg(function()
@@ -366,24 +369,17 @@ end, "for")
 Reg(function()
 	local self
 	if E.State ~= SRightSide then
-		local s, set = Name(Space()), true
-		while Space() and MatchStr(".") do
+		local s = Name(Space())
+		while Space() and MatchPattern("^([%.:])") do
+			self = (C.LastCapture == ":")
 			Name(Space())
-			set = false
 		end
-		if MatchStr(":") then
-			Space(Name(Space()))
-			set = false
-			self = true
-		end
-		VarName(s, set)
+		VarName(s, self == nil)
 	end
 	Block(SNewLine, (E.State == SRightSide and -SRightSide or SNewLine))
-	locals.self = self
-	if Space() and not MatchStr("(") then
-		VarName ""  -- error
-	end
-	C.Token = "("
+	locals.self = self or nil
+	Space()
+	C.Token = MatchStr("(")
 	ExpList(SLocals, SNewLine)
 end, "function")
 
@@ -475,9 +471,7 @@ local function CheckStr(fstr, chunk)
 		locals._ENV = true
 	end
 	MatchStr("\239\187\191")  -- UTF-8 BOM
-	if byte(str, pos) == 0x23 then  -- Unix exec. file?
-		MatchPattern("[\r\n]")
-	end
+	MatchPattern("^#[^\r\n]*")  -- Unix exec. file?
 	Block()
 	ParseLoop()
 	if C.Error and chunk then
@@ -535,7 +529,7 @@ function P.Activate()
 
 	local function myloadstring(ld, ...)
 		local f, err = _loadstring(ld, ...)
-		err = err or CheckStr(ld, debug_getinfo and f or match((...) or "", "^@?.*"))
+		err = not f and err or CheckStr(ld, debug_getinfo and f or match((...) or "", "^@?.*"))
 		if err then
 			return nil, err
 		end
@@ -649,9 +643,11 @@ function P.Activate()
 		loading[name] = nil
 		if t ~= nil then
 			loaded[name] = t
-		elseif loaded[name] == nil then
-			t = true
-			loaded[name] = t
+		else
+			t = loaded[name]
+			if t == nil then
+				t, loaded[name] = true, true
+			end
 		end
 		return t
 	end

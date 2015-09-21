@@ -70,6 +70,7 @@ local IsBadReadPtr = internal.IsBadReadPtr
 local IsBadWritePtr = internal.IsBadWritePtr
 local GetHookSize = internal.GetHookSize or function()  return 5  end
 local GetInstructionSize = internal.GetInstructionSize
+local ffi = jit and require("ffi")
 
 local function nocallback(a)
 	return a
@@ -93,11 +94,10 @@ function internal.UpdateCallbacks()
 end
 internal.UpdateCallbacks()
 
-mem = {}
+mem = {general = {}}
 local pkl = (package or {}).loaded or {}
 local _mem = mem
 pkl.mem = mem
-mem.general = {}
 local general = mem.general  -- general scripts
 
 
@@ -409,11 +409,10 @@ local function memarr(x)
 	
 	local function index(t, a)
 		local ret = Mem_GetNum(x, assertnum(a, 2))
-		return ret or (read_error(a, size, 3))
+		return ret or (read_error(a, size, 2))
 	end
 
 	local function newindex(t, a, v)
-		local ret
 		a, v = assertnum(a, 2), assertnum(v, 2)
 		local a1, a2 = Protect(a, size)
 		Unprotect(a1, a2, Mem_SetNum(x, a, v))
@@ -463,6 +462,29 @@ _mem.u1 = memarr(-1)
 _mem.r4 = memarr(5)
 _mem.r8 = memarr(6)
 _mem.r10 = memarr(7)
+
+if ffi then
+	local function ffiarr(type)
+		local function index(t, a)
+			a = assertnum(a, 2)
+			if rawcall(IsBadReadPtr, 0, a, 8) ~= 0 then
+				read_error(a, 8, 2)
+			end
+			return ffi.cast(type, a)[0]
+		end
+		local function newindex(t, a, v)
+			a = assertnum(a, 2)
+			local a1, a2 = Protect(a, 8)
+			ffi.cast(type, a)[0] = v
+			Unprotect(a1, a2)
+		end
+		return setmetatable({}, {__index = index, __newindex = newindex})
+	end
+	
+	_mem.i8x = ffiarr("int64_t*")
+	_mem.u8x = ffiarr("uint64_t*")
+end
+
 local i4, i2, i1, u8, u4, u2, u1 = _mem.i4, _mem.i2, _mem.i1, _mem.u8, _mem.u4, _mem.u2, _mem.u1
 
 local function pchar_index(t, a)
@@ -723,6 +745,8 @@ do -- mem.struct
 	types.r10 = arraydef(10, _mem.r10)
 	types.pchar = arraydef(4, _mem.pchar)
 	types.PChar = types.pchar
+	types.i8x = _mem.i8x and arraydef(8, _mem.i8x)
+	types.u8x = _mem.u8x and arraydef(8, _mem.u8x)
 
 	function types.string(len)
 		len = assertnum(len, 2)

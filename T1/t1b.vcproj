@@ -311,6 +311,7 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -339,6 +340,7 @@
 				OptimizeForWindows98="2"
 				EntryPointSymbol=""
 				BaseAddress="0x7700000"
+				ImportLibrary=".\Release\Dll\WogDll.lib"
 				TargetMachine="1"
 				FixedBaseAddress="0"
 			/>

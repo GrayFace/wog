@@ -39,6 +39,7 @@ local coroutine_resume = coroutine.resume
 local coroutine_running = coroutine.running
 local coroutine_main = coroutine.main
 local dofile = dofile
+local ffi = require "ffi"
 
 local _G = _G
 local internal = debug.getregistry() -- internals
@@ -66,33 +67,6 @@ _G.error = error
 local function nullsub()
 end
 local offsets = offsets or {}
-
--- function _G.print(s)  -- report mobdebug errors
-	-- error(s)
--- end
-package.path = CoreScriptsPath.."?.lua"
-debug.mobdebug = require("mobdebug")
-local mobstart = debug.mobdebug.start
-local mobon = debug.mobdebug.on
-local moboff = debug.mobdebug.off
-function debug.start()
-	mobstart()
-	if coroutine_running() then
-		debug.sethook(coroutine_main, debug.gethook())
-	end
-end
-function debug.on()
-	mobon()
-	if coroutine_running() then
-		debug.sethook(coroutine_main, debug.gethook())
-	end
-end
-function debug.off()
-	moboff()
-	if coroutine_running() then
-		debug.sethook(coroutine_main)
-	end
-end
 
 dofile(CoreScriptsPath.."RSFunctions.lua")
 local table_swap = table.swap
@@ -256,6 +230,29 @@ local mem_copy = mem.copy
 local mem_fill = mem.fill
 local IgnoreProtection = mem.IgnoreProtection
 
+_G.package.path = CoreScriptsPath.."?.lua"
+-- mobdebug
+do
+	-- function _G.print(s)  -- report mobdebug errors
+		-- error(s)
+	-- end
+	local debug = _G.debug
+	local mobdebug = require("mobdebug")
+	debug.mobdebug = mobdebug
+	debug.start = debug.mobdebug.start
+	debug.on = debug.mobdebug.on
+	debug.off = debug.mobdebug.off
+	debug.done = debug.mobdebug.done
+	debug.stop = debug.mobdebug.done
+	mobdebug.connecttimeout = 0.001
+	local serv = mobdebug.connect("localhost", mobdebug.port)
+	if serv then
+		serv:close()
+	else
+		_G.jit.on()
+	end
+end
+
 dofile(CoreScriptsPath.."dump.lua")
 
 --------- bit
@@ -381,10 +378,13 @@ end
 local FindStruct = mem.struct(function(define)
 	define
 	.u4  'FileAttributes'
+	.alt.u8x  'CreationTime'
 	.u4  'CreationTimeLow'
 	.u4  'CreationTimeHigh'
+	.alt.u8x  'LastAccessTime'
 	.u4  'LastAccessTimeLow'
 	.u4  'LastAccessTimeHigh'
+	.alt.u8x  'LastWriteTime'
 	.u4  'LastWriteTimeLow'
 	.u4  'LastWriteTimeHigh'
 	.i8  'FileSize'
@@ -472,6 +472,66 @@ function _G.io.SaveString(path, ...)
 	CreateDirectory(path_dir(path))
 	return oldSave(path, ...)
 end
+
+ffi.cdef[[
+typedef enum {
+	FO_MOVE         = 0x0001,
+	FO_COPY         = 0x0002,
+	FO_DELETE       = 0x0003,
+	FO_RENAME       = 0x0004,
+	___size         = 0xFFFFFFFF
+} FILEOP_FUNC;
+
+typedef enum {
+	FOF_MULTIDESTFILES        = 0x0001,
+	FOF_CONFIRMMOUSE          = 0x0002,
+	FOF_SILENT                = 0x0004,  // don't create progress/report
+	FOF_RENAMEONCOLLISION     = 0x0008,
+	FOF_NOCONFIRMATION        = 0x0010,  // Don't prompt the user.
+	FOF_WANTMAPPINGHANDLE     = 0x0020,  // Fill in SHFILEOPSTRUCT.hNameMappings
+                                      // Must be freed using SHFreeNameMappings
+	FOF_ALLOWUNDO             = 0x0040,
+	FOF_FILESONLY             = 0x0080,  // on *.*, do only files
+	FOF_SIMPLEPROGRESS        = 0x0100,  // means don't show names of files
+	FOF_NOCONFIRMMKDIR        = 0x0200,  // don't confirm making any needed dirs
+	FOF_NOERRORUI             = 0x0400,  // don't put up error UI
+	FOF_NOCOPYSECURITYATTRIBS = 0x0800,  // dont copy NT file Security Attributes
+	FOF_NORECURSION           = 0x1000  // don't recurse into directories.
+} FILEOP_FLAGS;
+
+typedef struct {
+	void *          hwnd;
+	FILEOP_FUNC     wFunc;
+	const char *    pFrom;
+	const char *    pTo;
+	FILEOP_FLAGS    fFlags;
+	bool            fAnyOperationsAborted;
+	void *          hNameMappings;
+	const char *    lpszProgressTitle; // only used if FOF_SIMPLEPROGRESS
+} SHFILEOPSTRUCTA, *LPSHFILEOPSTRUCTA;
+
+int __stdcall SHFileOperationA(LPSHFILEOPSTRUCTA lpFileOp);
+bool __stdcall DeleteFileA(const char *lpFileName);
+bool __stdcall MoveFileA(const char *lpExistingFileName, const char *lpNewFileName);
+bool __stdcall CopyFileA(const char *lpExistingFileName, const char *lpNewFileName, bool bFailIfExists);
+]]
+
+local SHFileOperation = ffi.load("Shell32", true).SHFileOperationA
+local SHDeleteFlags = ffi.C.FOF_NOCONFIRMATION + ffi.C.FOF_NOERRORUI + ffi.C.FOF_SILENT
+local DeleteFile = ffi.C.DeleteFileA
+function _G.path.DeleteFile(fname, NoRecycle)
+	if not NoRecycle then
+		local fos = ffi.new("SHFILEOPSTRUCTA")
+		fos.wFunc = "FO_DELETE"
+		fos.pFrom = path_noslash(fname).."\000"
+		fos.fFlags = SHDeleteFlags
+		return SHFileOperation(fos) == 0;
+	else
+		return DeleteFile(fname);
+	end
+end
+_G.path.MoveFile = ffi.C.MoveFileA
+_G.path.CopyFile = ffi.C.CopyFileA
 
 local AppPath = _G.AppPath or _G.path.addslash(_G.path.GetCurrentDirectory())
 _G.AppPath = AppPath
