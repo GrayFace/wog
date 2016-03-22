@@ -4644,8 +4644,8 @@ void ShowVersion(void)
 	if(WoGType){ Message("{Текущая версия}\n\nHoMM III\nTournament Edition : "TE_STRING_VERSION"\nERM : "ERM_STRING_VERSION,4); }
 	else{ Message("{Current version}\n\nHoMM III\nTournament Edition : "TE_STRING_VERSION"\nERM : "ERM_STRING_VERSION,4); }
 #else
-	if(WoGType){ Message("{Текущая версия}\n\nWoG : "WOG_STRING_VERSION"\nERM : "ERM_STRING_VERSION,4); }
-	else{ Message("{Current version}\n\nWoG : "WOG_STRING_VERSION"\nERM : "ERM_STRING_VERSION,4); }
+	if(WoGType){ Message("{Текущая версия}\n\nWoG : " WOG_STRING_VERSION "\nERM : " ERM_STRING_VERSION,4); }
+	else{ Message("{Current version}\n\nWoG : " WOG_STRING_VERSION "\nERM : " ERM_STRING_VERSION,4); }
 #endif
 	STOP
 	__asm popa
