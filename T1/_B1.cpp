@@ -2446,6 +2446,7 @@ void Initialize(void)
 //UseWogSetup(&DlgSetup);
 
 	ParseCommandLine();
+	SetProcessAffinityMask(GetCurrentProcess(), (1 << GetCurrentProcessorNumber()));  // to avoid some problems
 
 	for(i=0;;i++){
 		if(Accessers[i].where==0) break;
