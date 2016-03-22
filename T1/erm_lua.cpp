@@ -1185,7 +1185,7 @@ void InitLua()
 	*(PROC*)&DebugDialogResize = DllImport(Path, "DebugDialogResize", true);
 	sprintf_s(Path, "%sFASM.dll", (DeveloperPath[0] ? DeveloperPath : ""));
 	*(PROC*)&fasm_Assemble = DllImport(Path, "fasm_Assemble", true);
-	DebugDialogResize(800-40, 600-40);
+	DebugDialogResize(800-30, 600-30);
 
 	for (int i = 0; i < 16; i++)
 		CmdMessage.c[i] = 1;

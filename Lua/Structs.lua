@@ -78,10 +78,6 @@ setmetatable(structs, {__index = structs_index})
 local EditablePCharText = {}
 internal.EditablePCharText = EditablePCharText
 
-local function EditPChar_index(_, a)
-	return pchar[a]
-end
-
 local function EditPChar_newindex(_, o, val)
 	local p = u4[o]
 	local s = mem_string(p)
@@ -108,26 +104,24 @@ local function EditConstPChar_newindex(_, o, v)
 	IgnoreProtection(false)
 end
 
-_G.mem.EditPChar = setmetatable({}, {__index = EditPChar_index, __newindex = EditPChar_newindex})
-_G.mem.EditConstPChar = setmetatable({}, {__index = EditPChar_index, __newindex = EditConstPChar_newindex})
+_G.mem.EditPChar = setmetatable({}, {__index = pchar, __newindex = EditPChar_newindex})
+_G.mem.EditConstPChar = setmetatable({}, {__index = pchar, __newindex = EditConstPChar_newindex})
 
 function mem_structs.types.EditPChar(name)
 	return mem_structs.CustomType(name, 4, function(o, obj, name, val)
 		if val == nil then
-			return EditPChar_index(nil, obj["?ptr"] + o)
-		else
-			EditPChar_newindex(nil, obj["?ptr"] + o, val)
+			return pchar[obj["?ptr"] + o]
 		end
+		EditPChar_newindex(nil, obj["?ptr"] + o, val)
 	end)
 end
 
 function mem_structs.types.EditConstPChar(name)
 	return mem_structs.CustomType(name, 4, function(o, obj, name, val)
 		if val == nil then
-			return EditPChar_index(nil, obj["?ptr"] + o)
-		else
-			EditConstPChar_newindex(nil, obj["?ptr"] + o, val)
+			return pchar[obj["?ptr"] + o]
 		end
+		EditConstPChar_newindex(nil, obj["?ptr"] + o, val)
 	end)
 end
 
@@ -154,9 +148,8 @@ function mem_structs.types.DynStrShort(name)
 	return mem_structs.CustomType(name, 12, function(o, obj, name, val)
 		if val == nil then
 			return DynStrShort_index(nil, obj["?ptr"] + o)
-		else
-			DynStrShort_newindex(nil, obj["?ptr"] + o, val)
 		end
+		DynStrShort_newindex(nil, obj["?ptr"] + o, val)
 	end)
 end
 
@@ -176,9 +169,8 @@ function mem_structs.types.DynStr(name)
 	return mem_structs.CustomType(name, 16, function(o, obj, name, val)
 		if val == nil then
 			return DynStrShort_index(nil, obj["?ptr"] + o + 4)
-		else
-			DynStr_newindex(nil, obj["?ptr"] + o, val)
 		end
+		DynStr_newindex(nil, obj["?ptr"] + o, val)
 	end)
 end
 

@@ -232,7 +232,7 @@ end
 
 local function ManagerAttachElement(m, name, id)
 	if not m.Elements[name] then
-		error("name not found") -- !!!
+		error("name not found: "..name)
 	end
 	local NameID = m.NameID
 	if NameID[name] then  -- already attached
@@ -397,7 +397,7 @@ local function f_TownTypes(define)
 	Array{0x6818D0} pc  'PuzzleNamePart'
 	Ref{0x52C9CD, 0x52CF5C}
 	
-	Array{0x6818F4}.array(2).array(48).i2  'PuzzlePieces'
+	Array{0x6818F4}.array(2).array(48).i2  'PuzzlePiecesXY'
 	Ref{0x52CC05, 0x52CC0C, 0x52CF97, 0x52CF9E}
 	
 	Array{0x681FB4}.array(48).i2  'PuzzlePiecesOrder'
@@ -481,6 +481,7 @@ local function f_TownTypes(define)
 
 	Array{0x688F04}.struct(ResourcesData)  'ResourceSilo'
 	Ref{0x5BFA94, 0x5C1690}
+	RelocInfo.InitZero = true
 	
 	Array{0x688910}.struct(TownSetupMapping)  'SetupMapping'
 	Ref{0x484327, 0x5C0323, 0x5C0E23, 0x5C0EFD}
@@ -573,10 +574,6 @@ local function f_TownTypes(define)
 end
 
 local TownTemplate = {
-	ResourceSilo = {
-		Wood = 0,
-		Ore = 0,
-	},
 	SetupMapping = {
 		ArtifactMerchant = 44,
 		Special = {44, 44, 44, 44},
@@ -716,7 +713,7 @@ local function ChooseBuilding(t, town)
 	-- for horde buildings
 	for _, i in ipairs(t.Replace) do
 		-- built, but not shown => assume it's been upgraded and so this structure offer should be skipped
-		if And(u8[town + 0x158], 2^n) ~= 0 and And(u8[town + 0x150], 2^n) == 0 then
+		if And(u8[town + 0x158], 2^i) ~= 0 and And(u8[town + 0x150], 2^i) == 0 then
 			return ChooseBuilding(t.Next, town) or n
 		end
 	end
@@ -787,12 +784,10 @@ local function hook_TownTypes(m)
 		local town = u4[d.ebx + 0x38]
 		local bld = d.edi
 		local param = {Building = bld, LeftClick = u4[d.esi + 4] == 12}
-		local BuildProc = m.Elements[town] >= 9 and m.Elements[town].OnBuildingClick
-		if BuildProc[-1] then
-			BuildProc[-1](param)
-		end
-		if BuildProc[bld] then
-			BuildProc[bld](param)
+		local f = (m.Elements[town] >= 9 and m.Elements[town].OnBuildingClick)
+		f = (type(f) == "table" and (f[bld] or f[-1]) or f)
+		if f then
+			f(param)
 		end
 		d.edi = param.Building
 	end)
@@ -944,6 +939,11 @@ local MonInfo = mem.struct(function(define)
 	assert(define.size == 0x74)
 end)
 
+----------- ??? ------------
+
+local function DoIt()
+	
+end
 
 
 --[[

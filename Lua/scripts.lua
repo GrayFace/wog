@@ -136,6 +136,9 @@ _G.package = nil
 
 function _G.GetModPath(mod)
 	mod = mod or getfenv(debug_getinfo(2, 'f').func).ModName
+	if string_lower(mod) == "zvsl" then
+		return path_setext(map.MapPath, '').."\\"
+	end
 	return internal.ModsPath..mod.."\\"
 end
 
@@ -394,7 +397,7 @@ local function LoadLocTxt(fname, ModName, name, first)
 			end,
 		})
 	end
-	LoadTextTable(fname, NewTxtLoc())
+	LoadTextTable(fname, NewTxtLoc(), nil, true)
 	table_copy(t, Localize, true)
 	_G.ModName, _G.ScriptName, _G.new = nil
 end

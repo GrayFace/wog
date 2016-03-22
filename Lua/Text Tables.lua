@@ -88,7 +88,7 @@ local function AssignVal(k, v, sym, t)
 	AssignToName(t, k, v)
 end
 
-local function ParseTextTable(s, r, SkipEmpty)
+local function ParseTextTable(s, r, SkipEmpty, AssignTables)
 	r = r or {}
 	local t1 = string_split(s, "\r\n", true)
 	local ht = string_split(t1[1], "\t", true)
@@ -110,8 +110,11 @@ local function ParseTextTable(s, r, SkipEmpty)
 							AssignVal(i, v, sym, r)
 						end
 						LastR[#LastR + 1] = r
-						-- r = AssignToName(r, i, nil, "local t = ...; local v = t%s or {}; t%s = v; return v")
-						r = AssignToName(r, i, nil, "local t = ...; local v = {}; t%s = v; return v")
+						if AssignTables then
+							r = AssignToName(r, i, nil, "local t = ...; local v = {}; t%s = v; return v")
+						else
+							r = AssignToName(r, i, nil, "local t = ...; local v = t%s or {}; t%s = v; return v")
+						end
 						-- for k = j, #t do
 						-- 	AssignVal(k - j + 1, t[k], sym, rt)
 						-- end
@@ -138,8 +141,8 @@ local function ParseTextTable(s, r, SkipEmpty)
 end
 _G.ParseTextTable = ParseTextTable
 
-function _G.LoadTextTable(s, r, SkipEmpty)
-	return ParseTextTable(io_LoadString(s), r, SkipEmpty)
+function _G.LoadTextTable(s, r, SkipEmpty, AssignTables)
+	return ParseTextTable(io_LoadString(s), r, SkipEmpty, AssignTables)
 end
 
 
