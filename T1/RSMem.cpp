@@ -85,6 +85,9 @@ static int CallMultyParam(void* callback, void* callwhat, int _size, int fastcou
 		pop ecx
 		jz _call
 		pop edx
+		dec eax
+		jz _call
+		pop eax
 _call:
 		call callwhat
 _ret:
@@ -207,8 +210,12 @@ static int Mem_GetNum(lua_State *L)
 		case -1:  v = (lua_Number)*(unsigned char*)p;               break;
 		case 5:   v = (lua_Number)*(float*)p;                       break;
 		case 6:   v = (lua_Number)*(double*)p;                      break;
-		case 7:   v = (lua_Number)GetLongDouble(p);                 break;
-		//case 7:   v = (lua_Number)*(long double*)p;                 break; // MSVS doesn't support 10 bytes long double
+		case 7:
+			if (sizeof(long double) == 10)
+				v = *(long double*)p;
+			else
+				v = (lua_Number)GetLongDouble(p); // MSVS doesn't support long double (10 bytes)
+			break;
 	}
 	lua_pushnumber(L, v);
 	return 1;
@@ -249,7 +256,7 @@ static int Mem_SetNum(lua_State *L)
 			if (sizeof(long double) == 10)
 				*(long double*)p = v;
 			else
-				SetLongDouble(p, v); // MSVS doesn't support 10 bytes long double
+				SetLongDouble(p, v); // MSVS doesn't support long double (10 bytes)
 			break;
 	}
 	lua_pushnumber(L, v);
