@@ -18,6 +18,6 @@ FU(MC("hexDistance"):S(11)).? = function()
 	arg[1] = P.distance(arg[2], arg[3]) or -1
 end
 
-FU(MC("hexIsClear"):S(610)).? = function()
-	arg[1] = P.isclear(arg[2], arg[3] ~= 0) and 1 or 0
-end
+-- FU(MC("hexIsClear"):S(610)).? = function()
+-- 	arg[1] = P.isclear(arg[2], arg[3] ~= 0) and 1 or 0
+-- end
