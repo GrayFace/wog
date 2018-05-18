@@ -4,13 +4,11 @@ Heroes 3.5: In the Wake of Gods 3.59 alpha.
 About
 ---
 
-This is Alpha, so anything may change in future.  
+This is Alpha, so anything may change in the future.  
 Team interaction would happen via Skype: sergroj_(my GitHub nickname). Everyone's welcome!
 WoG 3.59 is going to be a platform hosting different mods, somewhat like Era II in that sense, but different.  
 Alpha version executable is called WogT1.exe for historic reasons. Executable of final version will be called h3wog.exe as usual.
-WogDialogs.dll source code can be found in MMExtension source code archive: https://dl.dropboxusercontent.com/u/44735333/mm/MMExtensionSrc.rar
-
-===
+WogDialogs.dll source code can be found in MMExtension source code archive: https://www.dropbox.com/s/91xvgzbchx3h1bc/MMExtensionSrc.rar?dl=1
 
 Installing a release
 ---
@@ -26,18 +24,16 @@ ZELP.TXT
 
 Note: If you're building WoG from sources, the only things you'll need from a release is Data\p\ folder and dbghelp.dll file, plus you must get rid of text files mentioned above.
 
-===
-
 Testing
 ---
 
 'info' folder contains descriptions of new 3.59 stuff (and t1.map file for my own debugging convenience). Mods folder contains all scripts, Data\s\ isn't used anymore.  
-An intermediate version of ERM help is available at https://dl.dropboxusercontent.com/u/44735333/wog/erm_help_1_Mar_2006.zip  
+An intermediate version of ERM help is available at https://www.dropbox.com/s/uxoqylpuyh96iei/erm_help_1_Mar_2006.zip?dl=1  
 Currently no-one is taking care of it.
 
 Saved games from 3.58 are incompatible. From one version of 3.59a to another saves compatibility may break as well.
 
-If WoG happens to hang, don't kill the process. Instead, use this program: https://dl.dropboxusercontent.com/u/44735333/tmp/WindowMan.rar  
+If WoG happens to hang, don't kill the process. Instead, use this program: https://www.dropbox.com/s/zhf5sdq2e0e7m9t/WindowMan.rar?dl=1  
 Run it, then switch to WoG window and switch back to the program. It should pick up the window name of WoG. When you see it's correct, press the "Crash" button. This will make WoG create WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT files. The program itself will create CrashEIP.txt file in its own folder. Send me all 4 files.
 
 In addition to sending WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT don't forget to describe what exactly you did that lead to the issue and send the saved game and map if they're relevant.
@@ -45,8 +41,6 @@ In addition to sending WOGCRASHDUMP.DMP, WOGCRASHLOG.TXT and WOGERMLOG.TXT don't
 At some point you may find UnclosedStackLevels.txt file in your WoG folder. Send it to me if you do.
 
 Also, setting No32Bit=0 in [Common] of WoG.ini will let you run WoG windowed in 32-bit screen mode. However, 10-60 minutes into the game it will hang. That's ok, 32 bit mode code is temporary. Baratorch's HD Mod does it much better, so it should be the base of future proper 32 bit mode support.
-
-===
 
 Building
 ---
@@ -68,8 +62,6 @@ AllowMultipleCopies=1
 
 Done! Now you can build and run the project. Use "Dll" configugation for debugging. "Release" configuratin is used for deployment. The t1.map file found in Build folder can help you debug it.
 
-===
-
 About Code
 ---
 
@@ -83,15 +75,11 @@ Note the WogNew project. The reason it's there is because t1b project must be bu
 
 One thing absolutely necessary in coding style is use of tabs, not spaces (set up in Tools -> Options -> Text Editor -> C/C++ -> Tabs -> Keep Tabs).
 
-===
-
 IDA Database
 ---
 
-My database of executable can be found at https://dl.dropboxusercontent.com/u/44735333/wog/Heroes3f.rar  
+My database of executable can be found at https://www.dropbox.com/s/wl84icfyxz92ns0/Heroes3f.rar?dl=1  
 I update it very rarely.
-
-===
 
 About Git
 ---
